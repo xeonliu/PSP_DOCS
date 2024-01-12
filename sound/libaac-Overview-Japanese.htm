@@ -1,0 +1,384 @@
+<html lang="jp">
+<head>
+<title>libaac-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libaac
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能と特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">AACライブラリ(以下libaac)は、Media Engine上で動作するAACデコーダを制御するライブラリです。AAC形式で圧縮されたオーディオデータ(以下AACデータ)をリニアPCMデータへ、デコードすることができます。libaacは、以下の機能を持っています。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> AACデータからリニアPCMデータへのデコード
+<li> AACデータのストリーミング再生
+<li> AACデータのループ再生
+<li> AACデータの再生位置の頭出し
+</ul></div>
+<div style="margin-left:50px;"><br>再生可能なAACデータのフォーマットは、以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 対応サンプリング周波数は24000/32000/44100/48000Hz
+<li> 対応コーデックはMPEG4 AAC-LC(SBRなし)
+<li> ヘッダなし(raw_data_frame()のみ)のAACデータに対応
+<li> ステレオあるいはモノラルのみに対応
+</ul></div>
+<div style="margin-left:50px;"><br>出力可能なPCMデータのフォーマットは、ビット深度16ビットのステレオのみです。入力がモノラルのAACデータであってもデコード結果としては、左右同一のステレオデータが出力されます。また、libaacはデコードされたPCMデータをオーディオ出力する機能は、提供していません。PCMデータをオーディオ出力する場合には、vaudioを併せて利用する必要があります。libwaveまたはsimple audioは44100HzのPCMデータしか扱えないため、必ずvaudioを利用してください。PCMデータをオーディオ出力するための方法は、別資料の「サウンド概要」に記載されていますので必要に応じて参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacを使用するために必要なファイルは、以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libaac.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libaac_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libaac_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">また、libaacモジュール本体をロードするために、モジュールユーティリティを併用する必要があります。詳しくは、別資料「ユーティリティサービス」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacのサンプルプログラムは、以下のものがあります。必要な機能に応じて参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/aacplay/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libaacの基本的な利用方法を示したサンプルです。グラフィックスのサンプルプログラムであるdevkit/sample/graphic/stars/をベースにADIFヘッダを含んだAACファイルによるBGMを再生します。ループ再生、再生停止および一時停止処理の参考にしてください。また、ADIFヘッダの解析も行い、デコードに必要な情報の取得も行っています。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>動作解説</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>デコードまでの処理の流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デコード処理までに必要な手順を以下に示します。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> libaacに必要な計算資源を確保</li>
+<li VALUE=2> 入出力バッファを確保</li>
+<li VALUE=3> デコードに必要なパラメータをセットし、AACハンドルを取得</li>
+<li VALUE=4> 入力バッファへAACデータを読み込み</li>
+<li VALUE=5> AACデータをデコードし、結果を出力バッファに出力</li>
+</ol></div>
+<div style="margin-left:50px;"><br>まず、libaacを利用する前に、本ライブラリに必要な計算資源を確保します。本ライブラリは、この計算資源を利用し、複数個並列でデコード処理を実行することができます。個々のデコード処理に必要な計算資源を本ライブラリでは、<b>デコード資源</b>と呼びます。計算資源は処理したい個数分与えることにより、ライブラリ内部にFplとして確保されます。<br>次に、<b>AACハンドル</b>と呼ばれるデコード資源管理用IDを取得します。AACハンドルとデコード資源は、一対一に対応しています。AACハンドルを取得するときにデコードに必要なパラメータと初期値を与えることによってデコード資源の初期化を行います。初期化に必要な初期値は、大きく２つあります。１つは、入出力バッファに関する初期値、もう１つはデコードに必要なサンプリング周波数です。初期化処理実行後、AACハンドルを介してAACデータをデコードすることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>オンメモリ再生とストリーミング再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">入力バッファのサイズがAACデータのサイズよりも十分に大きい場合、手順(4)以降、AACデータを入力バッファに追加で読み込む必要はありません。この再生方法を<b>オンメモリ再生</b>と呼びます。逆に、入力バッファのサイズがAACデータのサイズよりも小さい場合、逐次データを追加で読み込む処理が必要になります。この再生方法を<b>ストリーミング再生</b>と呼びます。<br>ストリーミング再生に必要な手順を以下に示します。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> libaacに必要な計算資源を確保</li>
+<li VALUE=2> 入出力バッファを確保</li>
+<li VALUE=3> デコードに必要なパラメータをセットし、AACハンドルを取得</li>
+<li VALUE=4> 入力バッファへAACデータを読み込み</li>
+<li VALUE=5> AACデータをデコードし、結果を出力バッファに出力</li>
+<li VALUE=6> デコードされたPCMデータをオーディオ出力</li>
+<li VALUE=7> 入力データを追加で読み込む必要性をチェック</li>
+<li VALUE=8> データ追加の必要があれば手順(9)、必要がなければ手順(5)にジャンプ</li>
+<li VALUE=9> 追加データを指すAACファイル内シーク位置と追加先アドレスとサイズを取得</li>
+<li VALUE=10> 入力バッファに追加のAACデータを読み込み</li>
+<li VALUE=11> 追加したAACデータのサイズをlibaacに通知</li>
+<li VALUE=12> 手順(5)にジャンプ</li>
+</ol></div>
+<div style="margin-left:50px;"><br>以上の手順を繰り返し処理することによって、ストリーミング再生を行うことができます。<br>AACファイルの最後まで再生が終わった場合、残りループ再生回数の残りが0であれば、再生は停止されます。ループ再生回数の設定に関しては、3章の「ループ再生」を参照してください。再生停止中は、手順(6)におけるデコード処理がスキップされ、無音のPCMデータが出力されます。また、手順(8)でデータの追加要求がlibaacから通知されることはありません。<br>再生停止中、再生再開の合図をライブラリに送ることで、ファイル先頭から再びストリーミング処理を開始することができます。また、残りループ再生回数が1以上または無限回(負数)に設定されている場合には、AACファイルの最後まで再生が終わる場合でも、手順(5)から手順(12)を繰り返すことで、自動的にファイル先頭に再生位置が戻ります。<br>以上のlibaacの挙動を踏まえ、初期化処理後は常に手順(5)から手順(12)を繰り返してください。これによって再生制御が単純化されるとともに、正常なストリーミング再生が保証されます。以上のストリーミング再生手順を図 1に模式図としてまとめてありますので参考にしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ループ再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacは、ループ再生機能を提供しています。ループ開始位置および終了位置は、図 1に示す通り、AACデータのraw_data_frame()の先頭とAACデータの境界です。その他の位置をループ再生の開始・終了位置に設定することはできません。初期化終了後であれば、任意のタイミングでループ再生回数を設定することができます。ループ再生回数は、AACハンドルごとに独立に管理されます。ループ再生回数には、1から符号付整数型が許す最大値まで設定することができます。また、ループ再生回数に負数を設定することで無限回のループ再生が実現可能です。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libaac-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  ストリーミング再生</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>AACデータの準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PCMデータ(wavファイル)からAACデータにエンコードします。PCMデータからAACデータにエンコードするツールは、弊社では用意していません。また、libaacによってデコード可能なAACデータのフォーマットに関しては、制限があります。詳しくは、4章の「デコード可能なAACデー<b>タ</b>」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>デコードに必要な情報の取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacはADIFやADTSなどのヘッダ情報、またはMPEG4などのシステム層のデータをパースしません。そのため、libaacの初期化処理の前にヘッダなどを解析して必要な情報を求めておく必要があります。ADIFに関してはサンプルプログラムdevkit/sample/sound/aacplay/を参照してください。ADTSに関しては毎アクセスユニットごとにヘッダ情報がつくのでサポートされていません。<br>この情報は、<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()に与える初期値の集合<a href="../sound/libaac-Reference-Japanese.htm#SceAacInitArg">SceAacInitArg</a>の各メンバにセットします。ファイル先頭のタグとAACデータの境界位置は、<i>aacHeadPos</i>にセットします。ファイル末尾のタグとAACデータの境界位置は、<i>aacTailPos</i>にセットします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>初期化</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モジュールユーティリティ<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>()により、avcodecモジュールとlibaacモジュールをロードします。<br>続いてlibaacの初期化を行います。2章の「オンメモリ再生とストリーミング再生」に沿う形で各手順をプログラムで実現するための方法を示します。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../sound/libaac-Reference-Japanese.htm#sceAacInitResource">sceAacInitResource</a>()によってlibaac全体で必要な計算資源を確保</li>
+<li VALUE=2> メモリアラインメントとサイズの制約を満たす入出力バッファを確保</li>
+<li VALUE=3> 入出力バッファおよびデコードに必要な情報を<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()の引数に与えAACハンドルを取得</li>
+<li VALUE=4> 取得したAACハンドルを利用し、入力バッファにAACデータを読み込み</li>
+</ol></div>
+<div style="margin-left:50px;"><br>手順(2)では、Media Engine上でAACデータのデコードを行うため、入出力バッファのメモリアラインメントやサイズに関して制約があります。詳しくは、4章の「入出力バッファのメモリアラインメントとサイズ」を参照してください。<br>手順(3)では、初期値の集合である構造体<a href="../sound/libaac-Reference-Japanese.htm#SceAacInitArg">SceAacInitArg</a>のメンバに、入出力バッファの先頭アドレスとサイズ、およびAACファイル中のraw_data_frame()の先頭、AACデータとの境界位置とサンプリング周波数をセットします。さらに、この<a href="../sound/libaac-Reference-Japanese.htm#SceAacInitArg">SceAacInitArg</a>を<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()の引数に与え、初期値をセットして初期化されたAACハンドルを取得します。<br>このとき、同時に利用可能なAACハンドルの数には制限があり、AACハンドルを取得できない場合にはエラーが返ります。この場合には、<a href="../sound/libaac-Reference-Japanese.htm#sceAacExit">sceAacExit</a>()を呼び、利用していないAACハンドルをlibaacに返還してください。AACハンドル数の制約に関しては、4章の「同時に利用可能なAACハンドルの数」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>デコード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">続いて入力バッファに読み込まれたAACデータのデコードを行います。2章の「オンメモリ再生とストリーミング再生」に沿う形で、各手順をプログラムで実現するための方法を示します。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()によってAACデータをデコード</li>
+<li VALUE=2> vaudioによってデコードされたPCMデータをオーディオ出力</li>
+</ol></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()を実行することで出力バッファにデコードされたPCMデータが書き込まれます。また、<a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()の引数と返り値を介して以下の情報を受け取ることができます。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 出力バッファ内のPCMデータの読み出し元アドレス
+<li> 出力バッファ内のPCMデータの読み出しサイズ
+</ul></div>
+<div style="margin-left:50px;"><br>手順(2)では、この値を利用してオーディオ出力を行ってください。手順(1)によって与えられた出力データは、次に<a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()を実行するまで有効です。また、デコード処理において、1回目の<a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()はゼロが返り、2回目からPCMデータが取得されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>ストリーミング再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">続いてストリーミング再生のための制御を行います。2章の「オンメモリ再生とストリーミング再生」に沿う形で各手順をプログラムで実現するための方法を示します。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>()で入力データを追加で読み込む必要性をチェック</li>
+<li VALUE=2> データ追加の必要があれば手順(3)、必要がなければ「デコード」の手順(1)にジャンプ</li>
+<li VALUE=3> <a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()によって入力データを追加するための情報を取得</li>
+<li VALUE=4> 手順(3)で取得した情報を元にAACデータから入力バッファに追加データを読み込み</li>
+<li VALUE=5> <a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>()によって追加したAACデータのサイズをlibaacに通知</li>
+<li VALUE=6> 「デコード」の手順(1)にジャンプ</li>
+</ol></div>
+<div style="margin-left:50px;"><br>手順(3)では、<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()の引数を介して以下の情報を受け取ることができます。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> AACデータ内の追加データの読み出し元シーク位置
+<li> 入力バッファ内の追加データの書き込み先アドレス
+<li> 入力バッファ内の追加データの書き込みサイズ
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>ループ再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ループ再生回数の設定は、<a href="../sound/libaac-Reference-Japanese.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>()で行います。大まかな仕様に関しては、2章の「ループ再生」を参照してください。AAC再生時における再生位置の頭出し、およびループ再生回数消費による再生停止状態からの再生再開には、<a href="../sound/libaac-Reference-Japanese.htm#sceAacResetPlayPosition">sceAacResetPlayPosition</a>()を利用してください。ただし、<a href="../sound/libaac-Reference-Japanese.htm#sceAacResetPlayPosition">sceAacResetPlayPosition</a>()は、「デコード」の手順(1)の後、「ストリーミング再生」の手順(1)の前に実行する必要があります。この条件を満たさない場合、入力バッファにデータが充填されていない状態で<a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()が実行されます。このとき、無音が出力されてしまうため、実行タイミングを間違わないように注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>終了</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーション上のすべてのAACデータ再生の必要がなくなった場合、libaacの終了処理<a href="../sound/libaac-Reference-Japanese.htm#sceAacTermResource">sceAacTermResource</a>()を行ってください。これを実行することで、初期化時に取得したAACハンドルが強制的にlibaacに返還され、libaacのために確保した計算資源がすべて解放されます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>デコード可能なAACデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の仕様を満たさないAACデータに関しては、libaacで再生できません。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 対応サンプリング周波数は24000/32000/44100/48000Hz
+<li> 対応コーデックはMPEG4 AAC-LC(SBRなし)
+<li> ヘッダなし(raw_data_frame()のみ)のAACデータに対応
+<li> ステレオあるいはモノラルのみに対応
+</ul></div>
+<div style="margin-left:50px;"><br>サポート外のAACファイルを再生しようとした場合、初期化処理が失敗し、エラーが返ります。また、libwaveまたはsimple audioは44100HzのPCMデータしか扱えないため、PCMデータの出力には、必ずvaudioを利用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>入出力バッファのメモリアラインメントとサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Media Engineでデコード処理を行う際に、Media EngineとSystem Controllerの間で同一データのキャッシュが発生します。キャッシュのコヒーレンシを保証するため、入出力バッファのメモリアラインメントは、<b>64バイトアラインメント</b>である必要があります。これに加え、デコード対象となるフレームサイズの関係から、必要な入出力バッファサイズは、以下のようになります。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 入力(AAC)バッファサイズ<br><b>8192バイト以上、かつ64バイトの倍数</b>
+<li> 出力(PCM)バッファサイズ<br><b>8192バイト</b>(1024サンプル×2バイト×2チャネル×2バッファ)
+</ul></div>
+<div style="margin-left:50px;"><br>入出力バッファの確保の際には、以上のメモリアラインメント、バッファサイズにご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>同時に利用可能なAACハンドルの数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">同時に利用可能なAACハンドルの数は<a href="../sound/libaac-Reference-Japanese.htm#sceAacInitResource">sceAacInitResource</a>()の引数にて設定されます。ライブラリ内部にFplを利用して保持しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>出力可能なPCMデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">出力可能なPCMデータの形式は、ビット深度16ビットのステレオのみです。モノラル形式のPCMデータ出力は、サポートしていません。モノラル形式のAACデータをデコードする場合は、左右同一データの対から構成されるステレオ形式でPCMデータが出力されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>UMD&reg;/DVD上のAACデータ再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">sceIoRead()によってAACファイルをUMD&reg;/DVDから入力バッファに読み込む際、書き込み先アドレスを示す第2引数<i>*buf</i>は、4バイトのアラインメントに合致している必要があります。AACデータの書き込み先アドレスは、<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()の第2引数*<i>aacDstPtr</i>によって取得することができます。このとき、「入出力バッファのメモリアラインメントとサイズ」の条件にしたがって入出力バッファを確保している場合には、<i>*aacDstPtr</i>は必ず4バイトアラインメントに合致したアドレスを返します。以上を踏まえ、入力バッファ内のAACデータの書き込み先アドレスを取得する際は必ず<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()を利用するようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>libsasとの同時使用</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacのコアとなるAACデコーダは、Media Engine上で動作します。同様に、libsasのコアとなるSAS（ソフトウェアオーディオシンセサイザ）もMedia Engine上で動作します。このため、両者を同時に使用すると、Media Engine側の計算資源を取り合うことになり、最悪の場合、SASの出力音声が途切れてしまう可能性があります。特にデコードが成功するまで、数フレームに渡ってデコードを繰り返す場合、AACデータ破損箇所において一時的に演算負荷が高くなることがあります。このため、AACデータ破損箇所に注意して動作確認を行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>libaacを利用するスレッドのスタックサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacを利用するスレッドのスタックサイズを必要最低限まで削減したい場合には、thread.hにて定義されている<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetThreadStackFreeSize">sceKernelGetThreadStackFreeSize</a>()により必要なスタックサイズを確認してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>libaacを利用するスレッドの終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacは、Media Engine側CPUの機能を利用しており、Media Engine内の計算資源を管理するためにセマフォなどを利用しています。そのため、libaacの関数を実行中に、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>()および<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>()を使ってlibaacを呼び出しているスレッドを強制的に削除すると、タイミングによってはMedia Engine側の計算資源を確保した状態のまま、スレッドが削除されてしまう可能性があります。この結果、libaacだけでなく、他のMedia Engine側CPUを利用するライブラリが正しく動作しなくなる恐れがあります。スレッドを停止させる場合は、以下のスレッド管理方法にしたがってプログラムを設計してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> スレッド停止指示を与える側<br>イベントフラグなどを利用し、スレッドに対して終了を通知する。
+<li> 停止指示を受けるスレッド側<br>イベントフラグなどを定期的に監視し、停止指示の有無を確認する。停止指示が検出された場合、libaacが動作していないことを確認の上、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitThread">sceKernelExitThread</a>()によって自スレッドを停止させる。
+</ul></div>
+<div style="margin-left:50px;"><br>スレッドの終了処理の実装に関しては、libaacのサンプルプログラムを参考にしてください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

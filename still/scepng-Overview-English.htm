@@ -1,0 +1,258 @@
+<html lang="en">
+<head>
+<title>scepng-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PNG Library Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Function Overview and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The SCEPNG library is a library for handling PNG-format image files, which are defined by RFC-2083. PNG is an extremely flexible format, but in order to support it in its entirety, the library's code size would need to be quite large and the library would also be more difficult to use. Therefore, the SCEPNG library is implemented in a way that is necessary and sufficient to support only certain features.<br>Since the library source code is publicly available, its functionality can be easily extended to implement any missing features.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>Features</b><br><br></h4></div></a>
+
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Only commonly used formats (sequential scan, single IDAT format) can be decoded
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> RGB888 format is converted to the easy-to-use RGBA8888 format for output.
+<li> When a CLUT is used, transparent color information is merged and stored in the CLUT.
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> Supports uncompressed encoding format
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> Output data is always RGB888 (24-bit full color) format PNG.
+<li> The file size will be larger since the data is uncompressed, but encoding can be performed faster.
+<li> The data that is created complies with the PNG standard, so it can be used by the save data utility, etc. It can also be viewed correctly from system software.
+</ul></div>
+</ul>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the SCEPNG library.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libscepng.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scepng.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_1"><h4>
+(1)&nbsp;<b>devkit/sample/png/dec/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is a decoding sample. It decodes a PNG file and displays it on the screen.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_2"><h4>
+(2)&nbsp;<b>devkit/sample/png/enc/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is an encoding sample. It performs a screen capture, encodes it as PNG data, and passes it to the save data utility.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Encoding Procedure Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Prepare the Data to be Encoded</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Generally, the data in the frame buffer that is being displayed can be encoded directly. Since it is usually not necessary to draw this data in real time, the picture quality can also be specially increased (such as by increasing the number of polygons or increasing the bit depth).<br>Note that the image size cannot be changed during encoding. If you need to resize the image, use some other appropriate method.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Prepare the Storage Destination for the Encoding Result</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Prepare a buffer for storing the encoding result. The buffer size can be verified by calling the <a href="../still/scepng-Reference-English.htm#scePngGetEncSize">scePngGetEncSize</a>() function. Note that whenever this function is called with the same arguments, the same value will always be returned.<br>Also, the only arguments of this function are the image size. In other words, the output data size is always the same regardless of the pixel format.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1">
+<div style="margin-left:63px;"><h4><b>Example:  To encode an LCD-size image</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>char *pngbuf = malloc(<a href="../still/scepng-Reference-English.htm#scePngGetEncSize">scePngGetEncSize</a>(480,272));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Call the Encoding Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call the <a href="../still/scepng-Reference-English.htm#scePngEnc">scePngEnc</a>() function to perform the actual encoding.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_1">
+<div style="margin-left:63px;"><h4><b>Example: To encode the image that is displayed on the LCD</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *pFB;
+int pixformat;
+int pixelformat = <a href="../peripheral/Display-Reference-English.htm#sceDisplayGetFrameBuf">sceDisplayGetFrameBuf</a>(&amp;pFB, NULL, &amp;pixformat, 0);
+int res = <a href="../still/scepng-Reference-English.htm#scePngEnc">scePngEnc</a>(
+		pngbuf,
+		pFB,
+		480, 272, 512,
+		pixelformat);
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Decoding Procedure Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Load the Data to be Decoded</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PNG data to be decoded must be loaded in a contiguous area of memory (it cannot be divided and read in parts). Also, since all output is performed at one time, you cannot decode only part of the data.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_1">
+<div style="margin-left:63px;"><h4><b>Example:</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>char pngbuf[100*1024];
+int pngsize = sceIoRead(fd, sizeof(pngbuf));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Prepare the Output Buffer</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The output buffer is also used as an intermediate buffer during decoding. Therefore, an area larger than the image size that is actually output must be prepared. When the image size (number of pixels) is W*H and the number of bits per pixel is n, then only int((W*n+7)/8+1)*H is required for the image part of the output buffer, rather than int((W*n+7)/8)*H (where int(x) is the value of x truncated to its integer value).<br>Also, if a CLUT was used, then an area of (4&lt;&lt;n) bytes is required in order to record the contents of the CLUT. If the output buffer size is less than the total of these two amounts, an error will be returned during decoding.<br>If the image to be decoded has not been determined, then prepare a buffer with a size of approximately (W*4+1)*H for the maximum image size (W*H) assumed at that time, and perform error handling as appropriate (such as replacing the image with an alternate image to display).<br>Also, a 4-byte aligned area must be allocated for the decoding buffer. This can be accomplished either by allocating the output buffer as an int-type array or by specifying the aligned(4) attribute for the compiler.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Call the Decoding Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Perform decoding by calling the <a href="../still/scepng-Reference-English.htm#scePngDec">scePngDec</a>() function with the input/output buffer and its size specified.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_3_1">
+<div style="margin-left:63px;"><h4><b>Example:</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>int decbuf[80*(80*3+1)/sizeof(int)];
+int width, height, format;
+int res = <a href="../still/scepng-Reference-English.htm#scePngDec">scePngDec</a>(
+		decbuf, sizeof(decbuf),
+		pngbuf, pngsize,
+		&amp;width, &amp;height, &amp;format);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Decoding Result Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When decoding is successful, the output buffer begins with the contents of the CLUT (if it exists) followed by the image data.<br>The CLUT format is always RGBA8888, and if the input had a tRNS chunk, the alpha value is also written. If there was no tRNS chunk, the alpha value is 0 (all 0xff). If the bit depth of the image data is n, the number of CLUTs is (1&lt;&lt;n).<br>The image data is generally output directly without conversion in the pixel format contained in the PNG. However, only RGB888 format data is automatically converted to RGBA8888 format for output.<br>The image data has the same width as the PNG file that was input, and the part that is less than a byte is padded. In other words, if the number of bits per pixel is n and an image with a width of W pixels is decoded, then the amount of data (number of bytes) in one raster is int((n*W+7)/8).<br>If the pixel format is RGB888 full-color and there is a tRNS chunk, the alpha value of the color specified as the transparent color is 0 and the alpha value of every other color is 0xff (this feature is disabled when the pixel format is grayscale or RGB161616).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Precautions When Drawing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As mentioned earlier, PNG decoding results are only padded in byte units. Therefore, the graphics engine (GE) cannot always be used to directly manipulate the results. In this case, use the CPU to appropriately arrange or pad the data. In particular, if the bit depth is 1 or 2 bits, the data cannot be directly drawn with the GE. In order to use this type of data for input, it is necessary to devise a strategy such as using the CPU to expand the data so a 4-bit CLUT can be used before processing with the GE. <br>Also, to display the decoding result on the screen, be sure to write out the D-cache to ensure cache coherency.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Images With a Bit Depth of 4</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the bit depth is less than 8, the PNG standard stipulates that "pixels on the left are placed on the MSB side within the byte." Meanwhile, for a 4-bit CLUT of the GE, "pixels on the left are placed on the LSB side." Therefore, this data cannot be directly drawn. It must first be converted by the CPU.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Grayscale Display</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The GE cannot directly draw a monochrome image. Either a grayscale CLUT must be created by the CPU or the data must be converted to RGBA8888 before it is displayed.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

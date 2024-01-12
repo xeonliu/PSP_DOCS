@@ -1,0 +1,1153 @@
+<html lang="en">
+<head>
+<title>HTTPS-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+HTTPS Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="httpsCallback"></a>
+<table width="100%"><td width="70%"><font size=6>httpsCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Callback function that occurs during SSL communication<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+int *(*<b>httpsCallback</b>)(
+	unsigned int <i>verify_err</i>,
+	SceSslCert *const <i>ssl_cert[],</i>
+<i>	</i>int<i> cert_num,</i>
+<i>	</i>void<i> *user_arg</i>
+);
+</font></pre></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>verify_err</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;When there is a verification error in the certificate, the reason is &nbsp;&nbsp;<br>&nbsp;&nbsp;stored in a bit string. The values are the same as those used by &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsGetSslError">sceHttpsGetSslError</a>() when SCE_HTTPS_ERROR_CERT occurs. For details, refer to <a href="../network/HTTPS-Reference-English.htm#sceHttpsGetSslError">sceHttpsGetSslError</a>().&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to certificate-chain array. SceSslCert is as defined in libssl.h.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of certificates in the certificate chain.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>user_arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stores the value specified in <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(). Can be omitted.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0 or greater&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL communication OK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL communication not available&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a typedef for a callback function that is called when SSL communication occurs.<br>Based on the information in <i>verify_err, ssl_cert,</i> and <i>cert_num,</i> you should return a positive value when SSL communication is OK to start, and a negative value when you wish to block SSL communication. The certificate-chain information in <i>ssl_cert </i>cannot be referenced directly. Use functions such as <a href="../network/libssl-Reference-English.htm#sceSslGetSerialNumber">sceSslGetSerialNumber</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>(),<a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>() to get this information.<br>In order to free certificate-chain memory after exiting the callback function, you must save it to a separate region of memory within the callback function if you will need the certificate information.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When using libhttp with multithreading, the relevant functions must be multithread safe.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a> ()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceHttpsData"></a>
+<table width="100%"><td width="70%"><font size=6>SceHttpsData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTPS data structure<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>typedef struct SceHttpsData<b> </b>{
+	char *<i>ptr</i>;
+	unsigned int <i>size</i>;
+} <b>SceHttpsData;</b>
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ptr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to data area&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data size&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used to provide the certificate and private key data to <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>().<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a> ()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Initialize HTTPS configuration and configure certificates<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsInit</b>(
+<i>	</i>int <i>ca_cert_num</i>
+<i>	</i>const <a href="../network/HTTPS-Reference-English.htm#SceHttpsData">SceHttpsData</a><i> **ca_list,</i>
+<i>	</i>const <a href="../network/HTTPS-Reference-English.htm#SceHttpsData">SceHttpsData</a><i>*cert,</i>
+<i>	</i>const <a href="../network/HTTPS-Reference-English.htm#SceHttpsData">SceHttpsData</a><i> *priv_key</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_cert_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of elements in the structure array containing the root CA certificates.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_list</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure array containing the root CA certificates. &nbsp;&nbsp;<br>&nbsp;&nbsp;The number of elements is specified by <i>ca_cert_num</i>. &nbsp;&nbsp;<br>&nbsp;&nbsp;Only PEM-format certificates are supported.&nbsp;&nbsp;<br>&nbsp;&nbsp;If the structure array isn't needed, set this to NULL.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure containing the client certificate. &nbsp;&nbsp;<br>&nbsp;&nbsp;Only PEM-format certificates are supported.&nbsp;&nbsp;<br>&nbsp;&nbsp;If no client certificate is needed, set this to NULL. &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>priv_key</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure containing the private key. &nbsp;&nbsp;<br>&nbsp;&nbsp;Only PEM-format certificates are supported.&nbsp;&nbsp;<br>&nbsp;&nbsp;If no private key is needed, set this to NULL.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When processing completes normally, SCE_OK is returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Insufficient free memory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431020&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_ALREADY_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sceHttpsInit() was called a second time without calling <a href="../network/HTTPS-Reference-English.htm#sceHttpsEnd">sceHttpsEnd</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431075&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_SSL_ERROR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL layer error occurred&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes the HTTPS configuration. It must be called before <a href="../network/libhttp-Reference-English.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>() is used to create a connection that will use HTTPS.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libhttp owns a default RootCA certificate, which is kept in FLASH storage. To use that CA certificate, set <i>ca_list</i> to NULL when calling this function and use <a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>() to load the CA certificate separately.<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>()<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsLoadDefaultCert"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsLoadDefaultCert<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load default CA certificates<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsLoadDefaultCert</b>(
+	unsigned int <i>issuer,</i>
+<i>	</i>unsigned int<i> certs</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>issuer</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the issuer of the CA certificate to be loaded. The following values can be specified.&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_ALL                Loads all CA certificates of all issuers&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_RSA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_VERISIGN&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_GEOTRUST&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_ENTRUST&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_VALICERT&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_CYBERTRUST&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_THAWTE&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>certs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The certificates to be loaded for each issuer specified by <i>issuer</i> can be combined by a bitwise logical OR operation.&nbsp;&nbsp;<br>&nbsp;&nbsp;If SCE_HTTPS_ISSUER_ALL is specified for <i>issuer</i>, the <i>certs</i> value is ignored and all CA certificates of all issuers will be loaded.&nbsp;&nbsp;<br>&nbsp;&nbsp;If SCE_HTTPS_ALL_CERTS is specified for <i>certs</i>, all CA certificates of the specified issuer will be loaded.&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer:  Common]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ALL_CERTS         All certificates of the issuer are loaded&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_RSA]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_RSA_1024_V1_C3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_RSA_2048_V3&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_VERISIGN]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C1&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C1_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C2_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C4_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C1_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C2_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C4_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3_G5&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_TSA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_RSA_SS&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_SCE]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_01&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_02&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_03&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_04&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_05&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_ GEOTRUST]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ GEOTRUST_GLOBAL_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ GEOTRUST_EQUIFAX_S_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ GEOTRUST_EQUIFAX_S_EBIZ_CA1&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_ENTRUST]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ENTRUST_SS_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_VALICERT]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VALICERT_C2_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_CYBERTRUST]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_BALTIMORE_CT_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_GTE_CT_G_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_GTE_CT_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_GLOBALSIGN_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_THAWTE]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_THAWTE_PREMIUM_S_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_THAWTE_S_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_COMODO]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ADDTRUST_EXT_CA_ROOT&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_AAA_CERT_SERVICES&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_UTN_USERFIRST_HARDWARE&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When processing completes normally, the number of CA certificates that were loaded is returned.<br>If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Insufficient free memory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431075&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_SSL_ERROR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL layer error occurred&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function loads the default CA certificates to be used that are kept in FLASH storage. The certificate issuer is specified for <i>issuer</i> and the certificates to be loaded are specified for <i>certs</i>. libssl must be initialized and <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>() must be called before calling this function.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Load all CA certificates that are contained in FLASH storage */
+ret = sceHttpsLoadDefaultCert(SCE_HTTPS_ISSUER_ALL, 0);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+..
+
+/* Load all CA certificates that were issued from SCE_HTTPS_ISSUER_RSA among the CA
+certificates that are contained in FLASH storage */
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_RSA,
+ 				SCE_HTTPS_ALL_CERTS);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+..
+
+/* Load only the SCE_HTTPS_RSA_2048_V3 certificate that was issued from 
+SCE_HTTPS_ISSUER_RSA among the CA certificates that are contained in FLASH 
+storage */
+
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_RSA, 
+				SCE_HTTPS_RSA_2048_V3);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+..
+
+/* Load all CA certificates that were issued from SCE_HTTPS_ISSUER_RSA and 
+SCE_HTTPS_ISSUER_VERISIGN among the CA certificates that are contained in FLASH 
+storage */
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_RSA,
+ 				SCE_HTTPS_ALL_CERTS);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_VERISIGN,
+ 				SCE_HTTPS_ALL_CERTS);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">To use an independent CA certificate, the certificate can be set by using <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>().<br>Also, if SCE_HTTPS_ISSUER_ALL is specified for <i>issuer</i>, all root CA certificates for the version of the runtime library that is being used at that time by the application are loaded. Even if root CA certificates are added by a system software update, the number of root CA certificates that are loaded does not change.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsEnd"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsEnd<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Terminate HTTPS<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsEnd</b>(
+	void
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe <br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When processing completes normally, SCE_OK is returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS has not been initialized&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function frees memory used for HTTPS processing such as for certificate data.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">You must call <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>() to delete all objects used for HTTPS communication before calling this function.<br>sceHttpsEnd() differs from <a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>() in that unlike <a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>(), you do not need to delete all template configurations before calling sceHttpsEnd(). Also, you must call sceHttpsEnd() first, before calling <a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>().<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>(), <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpCreateTemplate">sceHttpCreateTemplate</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpCreateRequest">sceHttpCreateRequest</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteTemplate">sceHttpDeleteTemplate</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsGetCaList"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsGetCaList<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get the currently loaded RootCA certificate array<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsGetCaList</b>(
+	const SceSslCert <i>**ca_cert[],</i>
+	int<i> *ca_num</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory address for storing the array of pointers to&nbsp;&nbsp;<br>&nbsp;&nbsp;the RootCA certificates that are loaded. &nbsp;&nbsp;<br>&nbsp;&nbsp;RootCA certificates are loaded using &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>() and <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>().&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory address for storing number of elements in&nbsp;&nbsp;<br>&nbsp;&nbsp;loaded RootCA certificate array.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If the function completes normally, SCE_OK is returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the array and array count for the currently loaded RootCA certificates. The RootCA certificate information can be obtained via the various functions in libssl.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>(), <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetIssuerName">sceSslGetIssuerName</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetNotAfter">sceSslGetNotAfter</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetNotBefore">sceSslGetNotBefore</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsEnableOption"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsEnableOption<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[SSL Options]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Enable various checks related to HTTPS communication<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsEnableOption</b>(
+	int<i> ssl_flags</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe <br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>ssl_flags</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;By&nbsp;specifying&nbsp;the&nbsp;following&nbsp;bit&nbsp;definitions,&nbsp;various&nbsp;checks&nbsp;can&nbsp;be&nbsp;enabled&nbsp;when&nbsp;<br>&nbsp;performing&nbsp;HTTPS&nbsp;communication.&nbsp;<br>&nbsp;Multiple&nbsp;bits&nbsp;can&nbsp;be&nbsp;combined&nbsp;using&nbsp;logical&nbsp;OR.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;(0x01U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;server&nbsp;verification&nbsp;will&nbsp;&nbsp;<br>&nbsp;be&nbsp;performed&nbsp;during&nbsp;HTTPS&nbsp;&nbsp;<br>&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;<br>&nbsp;The&nbsp;root&nbsp;CA&nbsp;certificate&nbsp;for&nbsp;server&nbsp;<br>&nbsp;verification&nbsp;can&nbsp;be&nbsp;specified&nbsp;using&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()&nbsp;<br>&nbsp;or&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>().&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CLIENT_VERIFY&nbsp;<br>&nbsp;(0x02U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;client&nbsp;certification&nbsp;will&nbsp;&nbsp;<br>&nbsp;be&nbsp;performed&nbsp;during&nbsp;HTTPS&nbsp;&nbsp;<br>&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;off.&nbsp;<br>&nbsp;The&nbsp;client&nbsp;certificate&nbsp;and&nbsp;private&nbsp;&nbsp;<br>&nbsp;key&nbsp;are&nbsp;specified&nbsp;using&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>().&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CN_CHECK&nbsp;<br>&nbsp;(0x04U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;if&nbsp;the&nbsp;common&nbsp;&nbsp;<br>&nbsp;name&nbsp;field&nbsp;of&nbsp;the&nbsp;certificate&nbsp;that&nbsp;&nbsp;<br>&nbsp;was&nbsp;sent&nbsp;from&nbsp;the&nbsp;server&nbsp;matches&nbsp;&nbsp;<br>&nbsp;the&nbsp;host&nbsp;name&nbsp;of&nbsp;the&nbsp;connection&nbsp;destination&nbsp;URL&nbsp;during&nbsp;HTTPS&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;<br>&nbsp;This&nbsp;flag&nbsp;is&nbsp;valid&nbsp;only&nbsp;when&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;is&nbsp;on.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_AFTER_CHECK&nbsp;<br>&nbsp;(0x08U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;if&nbsp;it&nbsp;is&nbsp;before&nbsp;the&nbsp;<br>&nbsp;expiration&nbsp;date&nbsp;of&nbsp;the&nbsp;certificate&nbsp;&nbsp;<br>&nbsp;that&nbsp;was&nbsp;sent&nbsp;from&nbsp;the&nbsp;server&nbsp;&nbsp;<br>&nbsp;during&nbsp;HTTP&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;This&nbsp;flag&nbsp;is&nbsp;<br>&nbsp;valid&nbsp;only&nbsp;when&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;is&nbsp;on.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_BEFORE_CHECK&nbsp;<br>&nbsp;(0x10U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;if&nbsp;it&nbsp;is&nbsp;before&nbsp;the&nbsp;&nbsp;<br>&nbsp;expiration&nbsp;date&nbsp;of&nbsp;the&nbsp;certificate&nbsp;&nbsp;<br>&nbsp;that&nbsp;was&nbsp;sent&nbsp;from&nbsp;the&nbsp;server&nbsp;&nbsp;<br>&nbsp;during&nbsp;HTTP&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_KNOWN_CA_CHECK&nbsp;<br>&nbsp;(0x20U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;to&nbsp;see&nbsp;whether&nbsp;&nbsp;<br>&nbsp;the&nbsp;Root&nbsp;CA&nbsp;for&nbsp;which&nbsp;the&nbsp;server&nbsp;&nbsp;<br>&nbsp;certificate&nbsp;was&nbsp;issued&nbsp;is&nbsp;in&nbsp;the&nbsp;&nbsp;<br>&nbsp;local&nbsp;list&nbsp;of&nbsp;Root&nbsp;CAs&nbsp;during&nbsp;&nbsp;<br>&nbsp;HTTPS&nbsp;communication.&nbsp;The&nbsp;initial&nbsp;<br>&nbsp;value&nbsp;is&nbsp;on.&nbsp;Root&nbsp;CA&nbsp;certificates&nbsp;&nbsp;<br>&nbsp;can&nbsp;be&nbsp;specified&nbsp;using&nbsp;&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()&nbsp;or&nbsp;&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>().&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When processing completes normally, SCE_OK is returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS has not been initialized&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function can be used to control the behavior of HTTPS communication. To disable a setting, use the <a href="../network/HTTPS-Reference-English.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsDisableOption"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsDisableOption<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[SSL Options]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Disable checks related to HTTPS communication<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsDisableOption</b>(
+	int <i>ssl_flags</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe <br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>ssl_flags</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;By&nbsp;specifying&nbsp;the&nbsp;following&nbsp;bit&nbsp;definitions,&nbsp;various&nbsp;checks&nbsp;can&nbsp;be&nbsp;disabled&nbsp;when&nbsp;&nbsp;<br>&nbsp;performing&nbsp;HTTPS&nbsp;communication.&nbsp;<br>&nbsp;Multiple&nbsp;bits&nbsp;can&nbsp;be&nbsp;combined&nbsp;using&nbsp;logical&nbsp;OR.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;(0x01U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;server&nbsp;verification&nbsp;will&nbsp;be&nbsp;&nbsp;<br>&nbsp;performed&nbsp;during&nbsp;HTTPS&nbsp;&nbsp;<br>&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;<br>&nbsp;The&nbsp;root&nbsp;CA&nbsp;certificate&nbsp;for&nbsp;server&nbsp;&nbsp;<br>&nbsp;verification&nbsp;can&nbsp;be&nbsp;specified&nbsp;using&nbsp;&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()&nbsp;<br>&nbsp;or&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>().&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CLIENT_VERIFY&nbsp;<br>&nbsp;(0x02U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;client&nbsp;certification&nbsp;will&nbsp;be&nbsp;performed&nbsp;during&nbsp;HTTPS&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;off.&nbsp;<br>&nbsp;The&nbsp;client&nbsp;certificate&nbsp;and&nbsp;private&nbsp;key&nbsp;&nbsp;<br>&nbsp;are&nbsp;specified&nbsp;using&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>().&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CN_CHECK&nbsp;<br>&nbsp;(0x04U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;if&nbsp;the&nbsp;common&nbsp;name&nbsp;&nbsp;<br>&nbsp;field&nbsp;of&nbsp;the&nbsp;certificate&nbsp;that&nbsp;was&nbsp;sent&nbsp;&nbsp;<br>&nbsp;from&nbsp;the&nbsp;server&nbsp;matches&nbsp;the&nbsp;host&nbsp;name&nbsp;&nbsp;<br>&nbsp;of&nbsp;the&nbsp;connection&nbsp;destination&nbsp;URL&nbsp;during&nbsp;HTTPS&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;<br>&nbsp;This&nbsp;flag&nbsp;is&nbsp;valid&nbsp;only&nbsp;when&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;is&nbsp;on.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_AFTER_CHECK&nbsp;<br>&nbsp;(0x08U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;if&nbsp;it&nbsp;is&nbsp;before&nbsp;the&nbsp;&nbsp;<br>&nbsp;expiration&nbsp;date&nbsp;of&nbsp;the&nbsp;certificate&nbsp;that&nbsp;&nbsp;<br>&nbsp;was&nbsp;sent&nbsp;from&nbsp;the&nbsp;server&nbsp;during&nbsp;HTTP&nbsp;&nbsp;<br>&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;This&nbsp;flag&nbsp;is&nbsp;valid&nbsp;&nbsp;<br>&nbsp;only&nbsp;when&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;is&nbsp;on.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_BEFORE_CHECK&nbsp;<br>&nbsp;(0x10U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;if&nbsp;it&nbsp;is&nbsp;before&nbsp;the&nbsp;&nbsp;<br>&nbsp;expiration&nbsp;date&nbsp;of&nbsp;the&nbsp;certificate&nbsp;that&nbsp;&nbsp;<br>&nbsp;was&nbsp;sent&nbsp;from&nbsp;the&nbsp;server&nbsp;during&nbsp;HTTP&nbsp;&nbsp;<br>&nbsp;communication.&nbsp;<br>&nbsp;The&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_KNOWN_CA_CHECK&nbsp;<br>&nbsp;(0x20U)&nbsp;</td>
+<td valign="top">&nbsp;When&nbsp;set,&nbsp;checks&nbsp;to&nbsp;see&nbsp;whether&nbsp;the&nbsp;&nbsp;<br>&nbsp;Root&nbsp;CA&nbsp;for&nbsp;which&nbsp;the&nbsp;server&nbsp;certificate&nbsp;&nbsp;<br>&nbsp;was&nbsp;issued&nbsp;is&nbsp;in&nbsp;the&nbsp;local&nbsp;list&nbsp;of&nbsp;Root&nbsp;&nbsp;<br>&nbsp;CAs&nbsp;during&nbsp;HTTPS&nbsp;communication.&nbsp;The&nbsp;<br>&nbsp;initial&nbsp;value&nbsp;is&nbsp;on.&nbsp;Root&nbsp;CA&nbsp;certificates&nbsp;&nbsp;<br>&nbsp;can&nbsp;be&nbsp;specified&nbsp;using&nbsp;&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()&nbsp;or&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>().&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When processing completes normally, SCE_OK is returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS has not been initialized&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function can be used to control the behavior of HTTPS communication. To enable a setting, use the <a href="../network/HTTPS-Reference-English.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>()<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsGetSslError"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsGetSslError<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get detailed error code for SSL communication<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+#include &lt;libhttp_error.h&gt;
+
+int <b>sceHttpsGetSslError</b>(
+	int <i>*request_id,</i>
+	int<i> *err_num,</i>
+	unsigned int<i> *detail</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>request_id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Request ID for obtaining SSL-layer error information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>err_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address for storing error code.&nbsp;&nbsp;<br>&nbsp;&nbsp;Depending on the value of the error code, the detailed cause may be stored&nbsp;&nbsp;<br>&nbsp;&nbsp;in <i>detail</i>.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>detail</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address for storing details of cause for which the error code occurred.&nbsp;&nbsp;<br>&nbsp;&nbsp;May not be used depending on the error code.&nbsp;&nbsp;<br>&nbsp;&nbsp;When an error occurs that has multiple causes, those causes will be stored &nbsp;&nbsp;<br>&nbsp;&nbsp;as a bitwise OR of the values.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The correspondence between error codes stored in <i>err_num </i>and detail values stored in <i>detail </i>are as follows.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not enough memory to use SSL library.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>detail </i>is<i> </i>not used in the current version.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435060&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_CERT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid server certificate&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>detail </i>summary<br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_INTERNAL&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x01U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Internal library error (not returned in current version).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_INVALID_CERT&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x02U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid server certificate format&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_CN_CHECK&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x04U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Failed common-name check for server certificate.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_NOT_AFTER_CHECK&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x08U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Server certificate effective period expired.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_NOT_BEFORE_CHECK&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x10U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Server certificate effective period not yet begun.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_UNKNOWN_CA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x20U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;There is no certificate for the Root CA for which the server certificate was issued.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435061&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_HANDSHAKE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL handshake error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>detail </i>is<i> </i>not used in the current version.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435062&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_IO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL send/receive error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>detail </i>is<i> </i>not used in the current version.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435063&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_INTERNAL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Internal SSL library error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>detail </i>is<i> </i>not used in the current version.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435064&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_PROXY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The HTTP PROXY server returned an error before SSL communication&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>detail </i>is<i> </i>not used in the current version.<br><br></div>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the error code is successfully obtained, SCE_OK is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS not yet initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431100&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified <i>request_id</i> not valid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804311FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL specified for <i>err_num</i> or <i>detail.</i>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the detailed reason for an SCE_HTTP_SSL_ERROR generated by <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>() or <a href="../network/libhttp-Reference-English.htm#sceHttpReadData">sceHttpReadData</a>(). In <i>request_id,</i> specify the request ID for which the SCE_HTTP_SSL_ERROR was generated. The values indicating the error code and reason will be stored in the addresses specified by <i>err_num</i> and <i>detail</i>; 0 will be stored in <i>detail</i> if it is not used by the error code.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_1">
+<div style="margin-left:40px;"><h4><b>Precautions</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">When the HTTP Pipeline is used, in order to receive response headers using the get-response-status functions such as <a href="../network/libhttp-Reference-English.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>(), and <a href="../network/libhttp-Reference-English.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>(), note that these functions can also generate an SCE_HTTP_SSL_ERROR. Also, you cannot obtain detailed information when the SCE_HTTP_SSL_ERROR is generated by the <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>() or <a href="../network/HTTPS-Reference-English.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>() functions, which do not handle SSL communication internally.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpReadData">sceHttpReadData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsSetSslCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsSetSslCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set callback function to be called when SSL communication occurs<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsSetSslCallback</b>(
+	int <i>id</i>,
+	int (*<i><a href="../network/HTTPS-Reference-English.htm#httpsCallback">httpsCallback</a></i>)(unsigned int, SceSslCert *const sslCert[],int,void* ),
+<i>	void *user_arg</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID for either the target template setting or connection setting.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i><a href="../network/HTTPS-Reference-English.htm#httpsCallback">httpsCallback</a></i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to callback function&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>user_arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Can be set to any value by user. When the callback&nbsp;&nbsp;<br>&nbsp;&nbsp;function is called, the specified value is passed as &nbsp;&nbsp;<br>&nbsp;&nbsp;an argument.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If the function completes normally, SCE_OK is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431100&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function sets a callback function to be called when SSL communication occurs. If no callback function has been set, processing is as specified in <a href="../network/HTTPS-Reference-English.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>() and <a href="../network/HTTPS-Reference-English.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>().<br>The callback function can be returned to an unset state by specifying NULL for <i><a href="../network/HTTPS-Reference-English.htm#httpsCallback">httpsCallback</a></i>.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The callback function that is set is executed in the context of the thread that called the HTTP communication processing function. As long as communication is not performed in HTTP Pipeline mode, the callback function will be executed in the context of the thread that called <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>() or <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequestInCacheFirstMode">sceHttpSendRequestInCacheFirstMode</a>().<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>(), <a href="../network/HTTPS-Reference-English.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequestInCacheFirstMode">sceHttpSendRequestInCacheFirstMode</a>(),<br><a href="../network/HTTPS-Reference-English.htm#httpsCallback">httpsCallback</a>()<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

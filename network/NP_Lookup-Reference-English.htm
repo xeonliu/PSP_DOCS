@@ -1,0 +1,735 @@
+<html lang="en">
+<head>
+<title>NP_Lookup-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NP Lookup Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupCreateTransactionCtx"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupCreateTransactionCtx<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Create NP lookup transaction context<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupCreateTransactionCtx</b>(
+	const <a href="../network/NP_Common-Reference-English.htm#SceNpCommunicationId">SceNpCommunicationId</a> *<i>commId</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>commId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to NP communication ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Returns the NP lookup transaction context ID (&gt; 0) when the function completes normally.<br>Returns a negative value for errors. The main error codes are shown below. Note, however, that the application must not malfunction even if other error codes are returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_service library has not been &nbsp;&nbsp;<br>&nbsp;&nbsp;initialized&nbsp;&nbsp;<br>&nbsp;&nbsp;Call this function again after using &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() to initialize the &nbsp;&nbsp;<br>&nbsp;&nbsp;np_service library.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Insufficient free space in memory&nbsp;&nbsp;<br>&nbsp;&nbsp;The memory pool size specified in &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() is in use. Confirm &nbsp;&nbsp;<br>&nbsp;&nbsp;that you did not forget to call &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>().&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for <i>commId</i>&nbsp;&nbsp;<br>&nbsp;&nbsp;</i>Although communication processing &nbsp;&nbsp;<br>&nbsp;&nbsp;functions besides &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>() will &nbsp;&nbsp;<br>&nbsp;&nbsp;operate even if a legitimate NP &nbsp;&nbsp;<br>&nbsp;&nbsp;Communication ID is not specified, if &nbsp;&nbsp;<br>&nbsp;&nbsp;the official title uses NP lookup library &nbsp;&nbsp;<br>&nbsp;&nbsp;features for operation management, &nbsp;&nbsp;<br>&nbsp;&nbsp;you must obtain an NP Communication &nbsp;&nbsp;<br>&nbsp;&nbsp;ID via the PSP&trade; Developer Network.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User has not signed into NP&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function creates a transaction context for use by the NP lookup library.<br>A transaction context is used once and discarded for each communication processing function. A transaction context must be created before getting an NP ID or getting a user profile. Also, when you are finished using a context, it must be deleted by calling <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>().<br>All transaction contexts must be explicitly deleted before calling <a href="../network/NP_Service-Reference-English.htm#sceNpServiceTerm">sceNpServiceTerm</a>().<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupDestroyTransactionCtx"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupDestroyTransactionCtx<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Destroy NP lookup transaction context<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupDestroyTransactionCtx</b> (
+	int32_t <i>transId</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NP lookup transaction context ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Returns 0 when the function completes normally.<br>Returns a negative value for errors. The main error codes are shown below. Note, however, that the application must not malfunction even if other error codes are returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_service library has not been &nbsp;&nbsp;<br>&nbsp;&nbsp;initialized&nbsp;&nbsp;<br>&nbsp;&nbsp;Call this function again after using &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() to initialize the &nbsp;&nbsp;<br>&nbsp;&nbsp;np_service library.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID specified by <i>transId</i> does not exist&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function destroys a transaction context when use of that context is finished.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupAbortTransaction"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupAbortTransaction<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Interrupt communication processing<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupAbortTransaction</b>(
+	int32_t <i>transId,</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NP lookup transaction context ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Returns 0 when the function completes normally.<br>Returns a negative value for errors. The main error codes are shown below. Note, however, that the application must not malfunction even if other error codes are returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_service library has not been &nbsp;&nbsp;<br>&nbsp;&nbsp;initialized&nbsp;&nbsp;<br>&nbsp;&nbsp;Call this function again after using &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() to initialize the &nbsp;&nbsp;<br>&nbsp;&nbsp;np_service library.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID specified by <i>transId</i> does not exist&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function interrupts communication processing.<br>For <i>transId</i>, specify the transaction context ID of the communication processing to be interrupted.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupNpId"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupNpId<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Find NP ID (synchronous)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupNpId</b> (
+	int32_t <i>transId</i>,
+	const <a href="../network/NP_Common-Reference-English.htm#SceNpOnlineId">SceNpOnlineId</a> *<i>onlineId</i>,
+	<a href="../network/NP_Common-Reference-English.htm#SceNpId">SceNpId</a> *<i>npId</i>,
+	void *<i>option</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NP lookup transaction context ID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>onlineId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Relevant online ID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>npId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure for storing NP ID that was obtained (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Option for future expansion. Always specify NULL.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Returns 0 when the function completes normally.<br>Returns a negative value for errors. The main error codes are shown below. Note, however, that the application must not malfunction even if other error codes are returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_service library has not been &nbsp;&nbsp;<br>&nbsp;&nbsp;initialized&nbsp;&nbsp;<br>&nbsp;&nbsp;Call this function again after using &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() to initialize the &nbsp;&nbsp;<br>&nbsp;&nbsp;np_service library.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Insufficient free space in memory&nbsp;&nbsp;<br>&nbsp;&nbsp;The memory pool size specified in &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() is in use. Confirm &nbsp;&nbsp;<br>&nbsp;&nbsp;that you did not forget to call &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>().&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550704&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A value other than NULL was specified for <i>option</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_ABORTED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550707&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Transaction was interrupted by&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>() or&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for <i>onlineId</i> or <i>npId</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID specified by <i>transId</i> does not exist&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User has not signed in to NP&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_SERVER_ERROR_NO_SUCH_USER_NPID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055081b&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User does not exist&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function finds a user from the online ID string and obtains the user's NP ID.<br>This function performs synchronous processing. In other words, processing is blocked until communication is completed and the NP ID can be obtained. When control returns from this function, call <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>() to destroy the transaction context that was used.<br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupUserProfile"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupUserProfile<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get user profile (synchronous)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int32_t <b>sceNpLookupUserProfile</b> (
+	int32_t <i>transId</i>,
+	const <a href="../network/NP_Common-Reference-English.htm#SceNpId">SceNpId</a> *<i>npId</i>,
+	<a href="../network/NP_Common-Reference-English.htm#SceNpUserInfo">SceNpUserInfo</a><i> </i>*<i>userInfo</i>,
+	<a href="../network/NP_Common-Reference-English.htm#SceNpAboutMe">SceNpAboutMe</a> *<i>aboutMe</i>,
+	<a href="../network/NP_Common-Reference-English.htm#SceNpMyLanguages">SceNpMyLanguages</a> *<i>languages</i>,
+	<a href="../network/NP_Common-Reference-English.htm#SceNpCountryCode">SceNpCountryCode</a> *<i>countryCode</i>,
+	void *<i>option</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NP lookup transaction context ID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>npId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Relevant NP ID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>userInfo</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure for storing user information that was obtained (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aboutMe</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure for storing self-introduction that was obtained (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>languages</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure for storing frequently used languages that were obtained (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>countryCode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to structure for storing country or region that was obtained (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Option for future expansion. Always specify NULL.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Returns 0 when the function completes normally.<br>Returns a negative value for errors. The main error codes are shown below. Note, however, that the application must not malfunction even if other error codes are returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_service library has not been initialized&nbsp;&nbsp;<br>&nbsp;&nbsp;Call this function again after using &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() to initialize the &nbsp;&nbsp;<br>&nbsp;&nbsp;np_service library.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Insufficient free space in memory&nbsp;&nbsp;<br>&nbsp;&nbsp;The memory pool size specified in &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() is in use. Confirm &nbsp;&nbsp;<br>&nbsp;&nbsp;that you did not forget to call &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>().&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550704&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A value other than NULL was specified for <i>option</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_ABORTED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550707&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Transaction was interrupted by&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>() or&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for <i>npId</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID specified by <i>transId</i> does not exist&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User has not signed in to NP&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_SERVER_ERROR_NO_SUCH_USER_NPID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055081b&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User does not exist&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets user profile information from the server by specifying the user's NP ID.<br>If <i>userInfo</i>, <i>aboutMe</i>, <i>languages</i>, or <i>countryCode</i> are unnecessary, specify them as NULL.<br>This function performs synchronous processing. In other words, processing is blocked until communication is completed and the profile information can be obtained. When control returns from this function, call <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>() to destroy the transaction context that was used.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupTitleSmallStorage"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupTitleSmallStorage<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get title small storage (synchronous)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupTitleSmallStorage</b> (
+	int32_t <i>transId</i>,
+	void *<i>data</i>,
+	size_t <i>maxSize</i>,
+	size_t *<i>contentLength</i>,
+	void *<i>option</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NP lookup transaction context ID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>data</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory for storing title small storage data (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>maxSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of memory specified by <i>data</i>. Maximum: 64KB (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>contentLength</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of data stored in <i>data</i> (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Option for future expansion. Always specify NULL.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Returns 0 when the function completes normally.<br>Returns a negative value for errors. The main error codes are shown below. Note, however, that the application must not malfunction even if other error codes are returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_service library has not been &nbsp;&nbsp;<br>&nbsp;&nbsp;initialized&nbsp;&nbsp;<br>&nbsp;&nbsp;Call this function again after using &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() to initialize the &nbsp;&nbsp;<br>&nbsp;&nbsp;np_service library.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Insufficient free space in memory&nbsp;&nbsp;<br>&nbsp;&nbsp;The memory pool size specified in &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>() is in use. Confirm &nbsp;&nbsp;<br>&nbsp;&nbsp;that you did not forget to call <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>().&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550704&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A value other than NULL was specified for <i>option</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_ABORTED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550707&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Transaction was interrupted by&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>() or&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_BODY_TOO_LARGE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550709&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A greater amount of data than the size &nbsp;&nbsp;<br>&nbsp;&nbsp;specified by <i>maxSize</i> was placed on the &nbsp;&nbsp;<br>&nbsp;&nbsp;server&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for <i>data</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID specified by <i>transId</i> does not exist&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User has not signed in to NP&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the data (a single file with a maximum size of 64KB) that can be placed in title small storage for each NP Communication ID from the NP server. When the size of data on the server is less than or equal to the number of bytes specified by <i>maxSize</i>, the data is stored in the memory area specified by <i>data</i>, and the total size of data that was obtained is stored in <i>contentLength</i>. Make sure that the size of the memory area allocated for <i>data</i> is at least as large as the size specified by <i>maxSize</i>.<br>This function performs synchronous processing. In other words, processing is blocked until all of the data is obtained. When control returns from this function, call <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>() to destroy the transaction context that was used.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int32_t ret;
+int32_t transId;
+void *data=NULL;
+size_t dataSize=0;
+
+// Assume that a proper value is stored in transId
+// Assume that cellSysutilCheckCallback() is performing polling in a separate thread
+
+data = malloc(<a href="../network/NP_Lookup-Reference-English.htm#SCE_NET_NP_TSS_MAX_SIZE">SCE_NET_NP_TSS_MAX_SIZE</a>);
+if (data == NULL){
+	// Error handling
+}
+
+ret = sceNpLookupTitleSmallStorage(transId, 
+					data,
+					<a href="../network/NP_Lookup-Reference-English.htm#SCE_NET_NP_TSS_MAX_SIZE">SCE_NET_NP_TSS_MAX_SIZE</a>,
+					&amp;dataSize,
+					NULL);
+If (ret &lt; 0){
+	// Error handling
+}
+// Use data that was obtained. Be careful to prevent buffer overflow.
+
+</font></pre></div>
+
+<!-- Note -->
+<div style="margin-left:10px;"><b>Note</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If no file was placed on the server, this function executes as if a 0-byte file had been placed on the server. Specifically, 0 is set for <i>contentLength</i> and 0 is returned as the return value as if processing were successfully completed. Since this may happen as a result of an operational error, the application must not malfunction if this situation occurs.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_NET_NP_TSS_MAX_SIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_NET_NP_TSS_MAX_SIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Constant]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Maximum size of title small storage<br></div><br>
+
+<!-- Definition -->
+<div style="margin-left:10px;"><b>Definition</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+
+#define <b>SCE_NET_NP_TSS_MAX_SIZE</b>	(64 * 1024U)
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This constant represents the maximum number of bytes for title small storage.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

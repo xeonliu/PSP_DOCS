@@ -1,0 +1,275 @@
+<html lang="jp">
+<head>
+<title>Movie-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+動画データの作成と再生処理の概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>動画データの作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;用の動画データ（PSP&reg; Movie Format(for game)：略称PSMF）を作成するツールとして、「UMD&reg; Stream Composer(for Game Movie)」（以下「Stream Composer」と略記）と「PSMF Composer」を提供しています。「Stream Composer」はAVI形式またはWAV形式の素材に対してエンコードを行い、エンコード後の動画ファイルと任意に用意されたユーザデータを１つのファイルにするツールです。さらにその結果を「PSMF Composer」を用いて変換することによってPSMFファイルを作成することができます。<br>このドキュメントでは、これらのツールを使用してPSMFファイルを作成する工程の概略を説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>動画データの素材</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">動画データの素材としては、AVI形式のビデオデータ、AVIまたはWAV形式のオーディオデータおよび必要であれば任意のユーザデータを使用できます。適宜のオーサリングツールを使用して、以下の仕様に合致する素材データを作成してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>ビデオデータ</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>ファイル種別</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Item</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Specification</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 6  valign="top">&nbsp;AVI&nbsp;</td>
+<td>&nbsp;File&nbsp;format&nbsp;</td>
+<td>&nbsp;AVI&nbsp;1.0,&nbsp;AVI&nbsp;2.0&nbsp;(Open&nbsp;DML)&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;File&nbsp;codec&nbsp;</td>
+<td>&nbsp;Huffyuv,&nbsp;YUY2,&nbsp;RGB24&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Resolution&nbsp;</td>
+<td>&nbsp;Min&nbsp;64x64&nbsp;－&nbsp;Max&nbsp;480x272（16pixel単位）&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Frame&nbsp;rate&nbsp;</td>
+<td>&nbsp;29.97&nbsp;fps&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Scanning&nbsp;</td>
+<td>&nbsp;Progressive&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Duration&nbsp;</td>
+<td>&nbsp;1frame－4.97時間&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2">
+<div style="margin-left:40px;"><h4><b>オーディオデータ</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>ファイル種別</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Item</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Specification</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 6  valign="top">&nbsp;AVIまたは&nbsp;<br>&nbsp;WAV&nbsp;</td>
+<td>&nbsp;File&nbsp;format&nbsp;</td>
+<td>&nbsp;WAV,&nbsp;AVI&nbsp;1.0,&nbsp;AVI&nbsp;2.0&nbsp;(Open&nbsp;DML)&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;File&nbsp;codec&nbsp;</td>
+<td>&nbsp;PCM&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Sampling&nbsp;rate&nbsp;</td>
+<td>&nbsp;44.1kHz&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Bit&nbsp;length&nbsp;</td>
+<td>&nbsp;16bit&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Channel&nbsp;</td>
+<td>&nbsp;mono,&nbsp;stereo&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Duration&nbsp;</td>
+<td>&nbsp;最大4.97時間&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_3">
+<div style="margin-left:40px;"><h4><b>ユーザデータ</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>ファイル種別</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Item</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Specification</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  valign="top">&nbsp;任意のデータ&nbsp;</td>
+<td>&nbsp;File&nbsp;format&nbsp;</td>
+<td>&nbsp;任意のデータ&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;File&nbsp;size&nbsp;</td>
+<td>&nbsp;1つのデータにつき640kbyte以下でストリーム&nbsp;<br>&nbsp;としては多重化器が多重化レート(Max&nbsp;10Mbps)&nbsp;<br>&nbsp;で許す範囲&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;Duration&nbsp;</td>
+<td>&nbsp;最大4.97時間&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Stream Composerによるエンコード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Stream Composerは前段処理として、ビデオデータとオーディオデータをそれぞれエンコードを行い、その後多重化するツールです。ユーザデータが指定された場合にはエンコードされたビデオデータとオーディオデータと共に多重化を行います。<br>詳細は別ドキュメント「UMD&reg; Stream Composer(for Game Movie) User's manual」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>PSMF Composerによる変換処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSMF ComposerはStream Composerで作成したファイルをPSMFフォーマットに変換するツールです。<br>詳細は別ドキュメント「PSMF Composer User's manual」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>参考1：PSMFの構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSMFの構造はおおよそ次のようになっています。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Movie-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 PSMFのデータ構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">PSMFファイルヘッダには、各種の情報とEP mapおよびPSMFマークが含まれています。EP mapは頭出しポインタ、つまり動画データの途中から再生を開始するための位置情報をまとめたものです。PSMF Markはビデオストリーム中の特定の地点を指すマークでPSMFファイルヘッダにはこの管理テーブルが存在します。動画データそのものは、MPEG4 AVC形式のビデオストリームとATRAC3plus&trade;,PCM形式のオーディオストリームおよびユーザデータを多重化したMPEG2プログラムストリームとなっています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>参考2：EP mapと頭だしポインタの構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSMFファイルには、参考1のようにEP mapと呼ばれるビデオストリームへの頭だしポイントの情報を持っております。この頭だしポイントをRandom Access Point(以下 RAPと略記)といい、PSMFストリームのRAP位置にはRandom Access Point Info（以下 RAPIと略記)という付加情報が存在します。またRAPから続く最初のアクセスユニットはIDR-pictureで構成されておりこれをRecovery Point Access Unit(以下RpAUと略記)といいます。PSMFストリームの途中からデコードを開始したい場合には、任意のRAPからデコードを開始することができます。<br>EP mapでは、RAPまでの先頭からのオフセット、RpAUのPTS、RAPからN番目までのreference picture(<i>indexN</i>)までのPack単位で管理されたサイズ情報(<i>NthRefPictureOffset</i>)が格納されております。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Movie-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 EP mapとRAPのデータ構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">以上の情報を使用することで、PSMFストリームの途中からの頭だし再生や早送り・巻き戻しなどのトリックプレイを行うことができます。<br><br>またユーザデータストリームに対してもEP mapを設定する事ができます。この場合はビデオと異なりRAPI位置ではなくて、各アクセスユニット毎の先頭を指し示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_6">
+<h3>
+<a href="#Heading3_1"> 1. </a>6 
+<!-- hp1 --><b>参考3：PSMF Markについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSMF MarkはPSMFストリーム中のビデオストリームの特定の地点を指すマークでPSMFファイルヘッダに管理テーブルが存在します。PSMF MarkにはChapter Mark、Event Markの２種類存在します。<br>Chapter Markは、PSMFストリーム製作者が意図したシーンの切れ目などで設定します。一方Event Markはシーンの切れ目というよりは、PSMFストリーム中のある地点での特定のビデオストリームに対してなにか目印をつけておきPSMFファイル再生プログラム側でなにかをさせたいような場合に設定します。<br>Chapter MarkはPSMFストリーム中のすべてのエレメンタリストリームが対象になりますが、Event Markはビデオストリーム全体もしくは特定のビデオストリームのみに関連付ける事ができます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Movie-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 PSMF Markの例</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">図 3のようなビデオストリームが２本、オーディオが１本のような場合でそれぞれChapter MarkとEvent Markが存在するとします。Chapter Mark 1およびChapter Mark 2でPSMFストリームはシーンの切れ目がそれぞれ存在するので設定してあります。一方Event Mark ではシーンの切れ目ではなく別の任意の目印として使用します。例えば、Event Markをきっかけに表示しているメニューボタンを切り替えたりするようなものを想定します。この場合Event Mark1では Video Stream 0およびVideo Stream 1の両方での設定ですが、Event Mark 2ではVideo Stream 0 のみ設定されているので、Video Stream 1を再生中にはEvent Mark 2は参照しないでおきます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>動画データの再生</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>libmpeg, libpsmfによる動画再生処理の概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmpegは、ビデオとオーディオおよびユーザデータを多重化したPSMFストリームからエレメンタリストリームを分離しデコードするライブラリです。<br>libpsmfは、PSMFヘッダファイル中の各種情報およびEP mapを取得するライブラリです。<br>次の図は、libmpeg,libpsmfを用いて行う動画再生処理の流れを示したものです。<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/Movie-Overview-Japanese004.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4 libmpegによる動画再生処理の流れ</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">そのほかlibmpegを使用する手順などの詳細は別ドキュメント「MPEGライブラリ概要」をlibmpegのAPIの詳細は「libmpeg」を参照してください。<br>またlibpsmfを使用する手順などの詳細は別ドキュメント「PSMFライブラリ概要」をlibpsmfのAPIの詳細は「libpsmf」を参照してください。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2006 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

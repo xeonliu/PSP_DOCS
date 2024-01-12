@@ -1,0 +1,1498 @@
+<html lang="en">
+<head>
+<title>libp3da-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libp3da Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3da is a library for implementing Positional 3D Audio (P3DA) on the PSP&trade;. This feature enables a clear, 3D acoustic image to be oriented and reproduced in the stereo (2ch) playback environment of the PSP&trade;, by specifying the 3D coordinate positions of monaural waveform data. Since the coordinate positions can be controlled in real-time, the acoustic image space can be realistically linked to dynamic action from 3D graphics.<br><br>Some examples of how this might be used include:<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Simulating the groans and footsteps of a zombie and the sounds of a creaking door when the zombie approaches from behind the player.
+<li> Simulating the sounds of fighter aircraft flying above a battlefield, the sounds of passing tanks, and the sounds of approaching shells.
+<li> Simulating the sound of a rival's car that is overtaking a racing car driven by the player, and the cheers of the audience when the player leaves the rival behind in the home stretch.
+<li> Simulating the sounds of rocket cannons and laser beams during an aerial robot battle and the sounds of collisions reverberating inside a player's ship.
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1">
+<div style="margin-left:40px;"><h4><b>P3DA processing</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">By simulating the reflection or reverberation of sounds that are generated in a natural environment, P3DA performs processing so that the orientation of the sound can be heard at a distant position outside of the listener's head. Special simulation is also performed to make the position of the acoustic image approach the vicinity of the head or to orient it inside the head. This is needed because the difference in volume levels or sound quality delivered to the left and right ears increases due to the effect of the sound being obstructed by the listener's head.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Features</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> The acoustic image can be oriented in all directions of 3D space (X-, Y, and Z) relative to the position of the listener.
+<li> Up to four sounds can be oriented independently at the same time.
+<li> Supports Doppler effect.
+<li> A rolloff effect can be set in which the audible volume decreases with increasing distance.
+<li> Sound directionality can be implemented (sound cone).
+<li> The output mode (speakers or headphones) is not specified. If headphones are used, 3D effects are easier to perceive than with speakers.
+<li> The output format can be directly input to the libwave library for sound output.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Operating Environment</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> libp3da mainly runs on the Media Engine.
+<li> Phoneme edge data located in the Extended Memory of the PSP&trade; is assumed as the sound source. If the phoneme edge data is placed in the user area of Extended Memory, there is no restriction on the locations where the phoneme edges are placed.
+<li> 16-bit 44.1 KHz PCM monaural audio data is used as phoneme edge data.
+<li> The output frequency is 44.1 KHz, and the number of output channels is 2 (stereo).
+<li> Only batch processing is performed (there is no real-time processing).
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the libp3da library.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Weak import library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file (function definitions)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file (constant definitions)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da_values.h&nbsp;&nbsp;<br>&nbsp;&nbsp;(#included from libp3da.h)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file (structure definitions)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da_types.h&nbsp;&nbsp;<br>&nbsp;&nbsp;(#included from libp3da.h)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Module Loading and Unloading</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use libp3da, a module must be loaded that performs processing for libp3da.<br>This module is <b>sascore</b>, which is the same module used for the libsas software synthesizer (the libp3da module is contained in the sascore module).<br>To load the module, use the <b>utility</b> function. For details about module loading and unloading, refer to the <b>utility</b> Overview.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following sample program uses the libp3da library.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_5_2">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/p3da_revolve</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample program plays positional 3D audio effects in step with a revolving box. It also uses libsas multichannel mode to reproduce the Doppler Effect for four moving sound sources.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English001.jpg">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Sample Program</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_6">
+<h3>
+<a href="#Heading3_1"> 1. </a>6 
+<!-- hp1 --><b>Per-Channel Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3da performs the following processing for each input channel.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 3D processing based on the relative positions of the listener and each sound source.
+<li> Volume attenuation (rolloff) processing based on the relative distances between the listener and each sound source.
+<li> Volume attenuation processing based on the shape and direction of the sound (sound cone) between the listener and each sound source.
+<li> Calculation of pitch changes due to the Doppler effect from differences in the velocity vectors between the listener and each sound source. (Although libp3da can calculate pitch values that changed, it does not perform pitch variation processing on the PCM waveform data itself.)
+<li> Mixing to combine the outputs from all channels.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_7">
+<h3>
+<a href="#Heading3_1"> 1. </a>7 
+<!-- hp1 --><b>Notes</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although libp3da performs signal processing on the input waveform data, it cannot produce audio output on the PSP&trade;. To output audio, libp3da must be used together with another library such as <b>libwave</b>.<br><br>To use libp3da, batch processing is performed on a block of samples. Internal parameters are not changed in real-time. Instead, when the transformation processing function (<a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>) is explicitly called, internal parameters are updated in an interval corresponding to the sampling frequency of the waveform data.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Input/Output Data Format</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3da input is monaural in one to four channels, and the output is two channels (stereo).<br>Waveform data is passed and processing results are obtained by calling the <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>() function.<br><b>The term "sound source" that is used below refers to the sound that is input.</b><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Input Data Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The input data of libp3da consists of 16-bit 44.1 KHz monaural waveform data samples and is passed as an array of pointers. A buffer should be prepared to accommodate this sound data using a sample size specified by <a href="../sound/libp3da-Reference-English.htm#sceP3daInit">sceP3daInit</a>(), and for the number of sound sources (1 to 4). For example if 1024 is specified for the sample size and the number of sound sources is 4, then a sound buffer of<br>   1024 * 2 (16 bits) * 1 (monaural) * 4 (number of sound sources) = 8192 bytes<br>is processed each time <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>() is called. <br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_3">
+<div style="margin-left:40px;"><h4><b>Notes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">In the following figure, the starting memory address for each of the sound sources must be stored in advance in the inputs[] array, which is then passed to <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>().<br>Allocate an array in advance having a size equal to the number of sound sources that were specified with <a href="../sound/libp3da-Reference-English.htm#sceP3daInit">sceP3daInit</a>() and write NULL in the elements corresponding to sound sources that will not be used initially (if an element contains an invalid address, an error will be returned by the function).<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Input Data</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Output Data Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For the data output destination, the library user should prepare sufficient memory to accommodate two 44.1 KHz, 16-bit channels with the sample size previously specified with <a href="../sound/libp3da-Reference-English.htm#sceP3daInit">sceP3daInit</a>().<br>For example, if 1024 was specified for the sample size, the desired amount of memory is 1024 * 2 (16 bits) * 2 (stereo) = 4096 bytes.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Output Data</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_4">
+<div style="margin-left:40px;"><h4><b>Notes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The sample size that is specified with the initialization function <a href="../sound/libp3da-Reference-English.htm#sceP3daInit">sceP3daInit</a>() is effective until the termination function <a href="../sound/libp3da-Reference-English.htm#sceP3daExit">sceP3daExit</a>() is called. The sample size cannot be changed during processing.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Coordinate Representation</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3da uses Cartesian coordinates and polar coordinates to represent vectors in 3D space.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Cartesian Coordinates</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When Cartesian coordinates are used, the position, orientation (direction), and velocity of the listener and sound sources are specified by vectors that consist of elements corresponding to the X-, Y-, and Z-axes. The coordinate system is a right-handed coordinate system, which is the same as the coordinate system of the PSP&trade; standard graphics library.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  Cartesian Coordinates as a Right-Handed Coordinate System</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>Vector Quantity Units</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The vectors that specify the position, distance, and direction along each of the coordinate axes are in units of millimeters [mm].<br>Values are in the same range as that of 28-bit integers.<br>(Reason: This is the range that can be handled by 32-bit processing when the listener and sound source are at their furthest distance.)<br>Therefore, the range of values that can be specified is (2^28 -1 = (0x0fffffff<br>-268435455 to 0 to +268435455 [mm].<br><br>A velocity vector represents the velocity at which the sound source is moving.<br>Velocity is specified in units of [mm/sec].<br>The range of values is -268435455 to 0 to +268435455 [mm].<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_6">
+<div style="margin-left:40px;"><h4><b>Vector Structure</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The following structure is used to represent a vector in the Cartesian coordinate system.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct{
+	int <i>x</i>,
+	int <i>y</i>,
+	int <i>z</i>
+} <b><a href="../sound/libp3da-Reference-English.htm#SceP3daVector">SceP3daVector</a></b>;
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Polar Coordinates</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Polar coordinates are a relative vector representation based on angles and a distance from an origin.<br>libp3da uses polar coordinates for specifying the relative positions of sound sources.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  Polar Coordinate Representation</b><br>
+</div>
+<br>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Azimuth :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Parallel position angle &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Elevation :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertical direction angle&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Distance :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Distance&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_7">
+<div style="margin-left:40px;"><h4><b>Vector Structure</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The following structure is used to represent a vector in polar coordinates.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct{
+	int <i>azimuth</i>,
+	int <i>elevation</i>,
+	int <i>distance</i>
+} <b><a href="../sound/libp3da-Reference-English.htm#SceP3daPolar">SceP3daPolar</a></b>;
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>Azimuth</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Angles are specified in units of [degrees] (degrees are units in which one revolution is expressed as 360).<br>Azimuth indicates the angle in the horizontal plane between the listener and sound source. When viewed from above, the clockwise direction corresponds to positive angles, and the counterclockwise direction corresponds to negative angles.<br><a href="../sound/libp3da-Reference-English.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>() can set the azimuth in the range -180 to 0 to +180 [degrees].<br>If a value is entered that exceeds (180 [degrees], it will not cause an error, however, the specified position will be replaced by a setting within the range of 360 [degrees]. For example, 450 [degrees] has the same effect as +90 [degrees].<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English006.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6  Azimuth</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>Elevation</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Elevation indicates the angle in the vertical direction between the horizontal plane of the listener and the sound source. The up direction corresponds to positive angles, and the down direction corresponds to negative angles.<br><a href="../sound/libp3da-Reference-English.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>() can set the elevation in the range -90 to 0 to +90 [degrees]. If the value exceeds this range, an error is returned.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7  Elevation</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>Distance</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Distance indicates the linear distance from the listener. Distance is specified in units of millimeters.<br><a href="../sound/libp3da-Reference-English.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>() can set the distance in the range 0 to 0x0fffffff (=268435455) [mm].<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Listener Setup</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">There is only one listener.<br>The position of the listener is the position of the player in the virtual 3D environment. In the virtual environment of positional 3D audio, 3D sound processing depends on the positional relationship between the sound source and the point where the sound is received.<br><br>The following parameters can be set for the listener.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Position
+<li> Velocity
+<li> Orientation
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Listener's Position</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The position of the listener is specified from the origin in Cartesian coordinates using the function <a href="../sound/libp3da-Reference-English.htm#sceP3daSetUserPosition">sceP3daSetUserPosition</a>(). In the initial state, the positions of the listener and sound sources are at the origin (0,0,0).<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8  Initial Value of Listener's Position</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The corresponding function is:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../sound/libp3da-Reference-English.htm#sceP3daSetUserPosition">sceP3daSetUserPosition</a>();
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Listener's Orientation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The orientation of the listener is specified by a vector for the listener's front direction (UserOrientationFront) and a vector for the listener's up direction (UserOrientationUp) relative to the listener's current position, which is taken to be (0,0,0).<br>In the initial state, the listener's orientation has UserOrientationFront in the -Z axis direction and UserOrientationUp in the +Y direction (see the figure below).<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 9  Initial State of Listener's Orientation</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_8">
+<div style="margin-left:40px;"><h4><b>Note</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Only angle elements are used in internal processing. To reduce calculation error, set the vector length to a value that is not too small.<br></div>
+<div style="margin-left:50px;"><br>Corresponding function:.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../sound/libp3da-Reference-English.htm#sceP3daSetUserOrientation">sceP3daSetUserOrientation</a>();
+</font></pre></div>
+<div style="margin-left:50px;"><br>The initial values are as follows.<br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Front Orientation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: (0,0,-1000)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Up Orientation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: (0,1000,0)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Sound Source Setup</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A sound source is sound data that is subject to 3D processing. Data for the sound source is entered by the user.<br>A maximum of four sound sources can be supported simultaneously.<br><br>The following parameters can be set for a sound source.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Absolute position
+<li> Relative position from the listener (Cartesian coordinates or polar coordinates)
+<li> Directionality (sound cone)
+<li> Velocity (Doppler effect)
+<li> Attenuation of volume corresponding to distance from the listener (rolloff)
+<li> Starting and stopping of sound processing
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Sound Source Selection</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When making settings for a sound source, you must specify the desired sound source for which the setting is to be made. Sound source setting functions have an argument that is used for specifying the sound source.<br>libp3da uses an ID whose value ranges from <b>0 to 3 </b>to indicate which of the four sound sources is to be selected. <br>This value is the same as the sequence number in the pointer array ppsInputs that serves as input data for the <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>() function.<br>(*) For information about the waveform data format, see "Input/Output Data Format."<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English010.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 10  Sound Source Specification Number</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Absolute Position Specification</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This is a method for specifying the position of the sound source using absolute coordinates from the origin, regardless of the listener's position.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English011.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 11  Specifying the Absolute Position in Cartesian Coordinates</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The absolute coordinate position is specified by using the <a href="../sound/libp3da-Reference-English.htm#sceP3daSetPosition">sceP3daSetPosition</a>() function. When the position of the sound source is specified by absolute coordinates, it is not affected by a change in the listener's position or listener's orientation. Therefore, if the listener's position or orientation changes, the relative position between the listener and any sound sources that were specified with absolute coordinates will also change, and the resulting 3D effect will change. Although the value obtained by the position acquisition function <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPosition">sceP3daGetPosition</a>() will not change in this situation, the value obtained by <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPositionRelative">sceP3daGetPositionRelative</a>() will change.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English012.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 12  No Effect on Change in Listener's Orientation, but 3D Effect Will Change</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Relative Position Specification</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This is a method for specifying the position of the sound source with a vector relative to the listener's position. A relative position can be specified in Cartesian coordinates or in polar coordinates.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_1"><h4>
+(1)&nbsp;<b>Cartesian coordinate specification</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The sound source position relative to the listener is specified with the position and orientation of the listener as the reference point (0,0,0). Since the relative position does not change after the coordinates are specified even if the listener's orientation changes, the 3D effect heard by the listener will not change (see the figure below). Therefore, although the value obtained by using the position acquisition function <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPositionRelative">sceP3daGetPositionRelative</a>() does not change, the value obtained by using <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPosition">sceP3daGetPosition</a>() will change.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English013.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 13  Position of Sound Source Relative to Listener's Position and Orientation </b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_2"><h4>
+(2)&nbsp;<b>Polar coordinate specification</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The position of the sound source is specified in polar coordinates based on the current position and orientation of the listener. The corresponding function is <a href="../sound/libp3da-Reference-English.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>().<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English014.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 14  Specifying the Relative Position in Polar Coordinates</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Azimuth :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Horizontal direction angle from listener's front&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Elevation :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertical direction angle from listener's front&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Distance :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Distance between listener and sound source&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">When a relative coordinate position is specified, the position relative to the listener is preserved even when the listener's position or orientation is changed. Therefore, the 3D effect that can be heard by the listener does not change (see figure below).<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English015.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 15  Position is Preserved Relative to Listener's Orientation</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>Rolloff</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Rolloff is a phenomenon in which the volume perceived by the listener decreases as the sound source gets farther away from the listener. libp3da reproduces rolloff using the following calculation.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_9">
+<div style="margin-left:40px;"><h4><b>Rolloff Calculation</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The formula for calculating rolloff is as follows.<br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-English016.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;">The formula changes as follows according to various conditions.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> When Distance &lt; <i>minDistance</i> <br>&rarr; <i>Gain</i> = 1.0
+<li> When <i>minDistance</i>  ( Distance ( <i>maxDistance</i> <br>&rarr; <img src="gif/libp3da-Overview-English017.gif">
+<li> When Distance ( <i>maxDistance </i> (if muteAfterMax==False) <br>&rarr; <img src="gif/libp3da-Overview-English018.gif">
+<li> When Distance ( <i>maxDistance </i> (if muteAfterMax==True) <br>&rarr; <i>Gain</i> = 0.0
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>Gain </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;This is the result of the rolloff calculation. This value is multiplied by the volume.&nbsp;&nbsp;<br>&nbsp;&nbsp;0.0 (= -( [dB]) to 1.0 (= -0.0 [dB])&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>Distance </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;This is the linear distance between the listener and sound source.&nbsp;&nbsp;<br>&nbsp;&nbsp;The units are millimeters.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>minDistance </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;This sets the minimum distance.&nbsp;&nbsp;<br>&nbsp;&nbsp;It sets the distance between the listener and sound source after which the volume no longer increases even if the listener and sound source get closer together.&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daSetRolloffDistances">sceP3daSetRolloffDistances</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>maxDistance </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;This sets the maximum distance.&nbsp;&nbsp;<br>&nbsp;&nbsp;It sets the distance between the listener and sound source after which the volume no longer decreases even if the listener and sound source get farther apart (the volume corresponding to maxDistance is maintained).&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daSetRolloffDistances">sceP3daSetRolloffDistances</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>RolloffFactor </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;This sets the rolloff factor.&nbsp;&nbsp;<br>&nbsp;&nbsp;This argument is a 32-bit value and is represented as a 16-bit : 16-bit fixed-point number.&nbsp;&nbsp;<br>&nbsp;&nbsp;0x10000 represents 1.0.&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daSetRolloffFactor">sceP3daSetRolloffFactor</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>muteAfterMax </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;This sets whether or not to mute the volume when the distance between the listener and sound source is greater than maxDistance.&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daEnableMuteAfterMax">sceP3daEnableMuteAfterMax</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">Example 1.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English019.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 16  Varying <i>minDistance</i> </b><br>
+</div>
+<br>
+<div style="margin-left:67px;">Example 2.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English020.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 17  Varying <i>RolloffFactor</i> </b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_10">
+<div style="margin-left:40px;"><h4><b>Initial Values	</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The values immediately after the library is initialized are as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<i>minDistance</i> = 1000 [mm]
+<i>maxDistance</i> = 10000 [mm]
+<i>muteAfterMax</i> = true
+<i>RolloffFactor</i> = 0x10000 (=1.0)
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_4_1">
+<div style="margin-left:63px;"><h4><b>Notes:</b><br><br></h4></a></div>
+<div style="margin-left:70px;"><ul>
+<li> The total volume is the level that is obtained when the attenuation due to the sound cone is multiplied by the setting made with <a href="../sound/libp3da-Reference-English.htm#sceP3daSetLevel">sceP3daSetLevel</a>().
+<li> The formula for calculating rolloff attenuation conforms to JSR234. JSR234 is a standard that was defined as a supplemental specification for MMAPI (JSR-135), which is a multimedia API for mobile devices on the Java J2ME platform.
+<li> Since actual sound engine calculations are performed by taking into account the difference in volume levels delivered to the left and right ears, which occurs because the sound is obstructed by the listener's head, it does not follow the attenuation curve according to the formula. In particular, when the position for orienting the sound source is close to the listener's position, the difference between the left and right levels due to 3D processing becomes quite large.
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_1_11">
+<div style="margin-left:40px;"><h4><b>Specific Example</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">In this example, the volume changes from 0 [dB] to -36 [dB] for distances from 10 [m] to 200 [m].<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English021.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 18  Specific Example</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">To mute the volume when the distance is greater than or equal to 200 [m], set the following.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<i>minDistance</i> = 10[m] = 10000[mm]
+<i>maxDistance</i> = 200[m] = 200000[mm]
+<i>muteAfterMax</i> = TRUE
+
+</font></pre></div>
+<div style="margin-left:67px;"><i>RolloffFactor</i> can be obtained by substituting the above values in the following formula and solving for <i>RolloffFactor</i>.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-English022.gif">
+</div>
+<div style="margin-left:67px;"><br><i>Gain</i> is assumed to be -36 [dB] = 0.0158.<br><br>The result of this calculation is that <i>RolloffFactor</i> = 1.384 ( 0x0001624d (16-bit : 16-bit fixed-point number), so the function calls are as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../sound/libp3da-Reference-English.htm#sceP3daSetRolloffDistances">sceP3daSetRolloffDistances</a>( ssid, 10000, 200000);
+<a href="../sound/libp3da-Reference-English.htm#sceP3daEnableMuteAfterMax">sceP3daEnableMuteAfterMax</a>( ssid, <a href="../sound/libp3da-Reference-English.htm#SCE_P3DA_MUTEAFTERMAX_ENABLE">SCE_P3DA_MUTEAFTERMAX_ENABLE</a>);
+<a href="../sound/libp3da-Reference-English.htm#sceP3daSetRolloffFactor">sceP3daSetRolloffFactor</a>( ssid,<b> 0x0001624d</b>);
+
+</font></pre></div>
+<div style="margin-left:67px;">(*)  ssid is an arbitrary sound source number.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_5">
+<h3>
+<a href="#Heading3_5"> 5. </a>5 
+<!-- hp1 --><b>Sound Cone</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A sound cone is an effect that causes sound that is generated to have directionality. The sound can be caused to have the directionality of a cone (more precisely, this is a form that is cut from a spherical solid) as shown in the following figure.<br>This can be used for an effect in which the sound source has directionality or an effect in which sound is intercepted by an obstacle.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English023.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 19  Inner Cone and Outer Cone</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>Inside the inner cone, the stronger the directionality, the greater is the volume level.<br>If the distance from the sound source is the same, the volume level is the same within the cone. (The attenuation effect due to rolloff is added relative to the distance from the sound source.)<br>Outside of the outer cone, the volume level is the level that was set by Outer Level.<br>From the edge of the inner cone to the edge of the outer cone, the volume <b>decreases</b> linearly as a value in decibels until it becomes the volume that was set by Outer Level. The volume for Outer Level is set in the range 0 to -10000 [mB] when Inner Level = 0 [mB].<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English024.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 20  Volume Attenuation and Outer Level</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;OrientationFront :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Direction of sound source directionality.&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daSetOrientation">sceP3daSetOrientation</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Inner Angle :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Angle of conical directionality cone of sound source.&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daSetConeAngles">sceP3daSetConeAngles</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Outer Angle :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Angle of cone at which the internal volume level set by Inner Angle reaches Outer Level.&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daSetConeAngles">sceP3daSetConeAngles</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Outer Level :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Volume level outside of Outer Angle.&nbsp;&nbsp;<br>&nbsp;&nbsp;Corresponding function: <a href="../sound/libp3da-Reference-English.htm#sceP3daSetConeOuterLevel">sceP3daSetConeOuterLevel</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">If the angles of both Inner Angle and Outer Angle are set to 360 degrees, the sound becomes omnidirectional, and the Outer Level value is ignored. The sound also becomes omnidirectional when the angles of both Inner Angle and Outer Angle are set to 0 degrees, and in this case, the Outer Level value becomes the reference point.<br>In theory, the sound will also be omnidirectional by setting the Outer Level value to 0.<br>This is the same as the state immediately after initialization.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English025.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 21  Omnidirectional</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_5_12">
+<div style="margin-left:40px;"><h4><b>Initial Values</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The values immediately after the library is initialized are set as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Inner Angle = 360 degrees
+Outer Angle = 360 degrees
+rearLevel = 0 [mB]
+
+</font></pre></div>
+<div style="margin-left:67px;">Also, rearLevel is muted by a value less than or equal to -10000 [mB].<br>(*)  mB: Millibel = 1/100 decibel (ex. -10000 [mB] = -100 [dB])<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_6">
+<h3>
+<a href="#Heading3_5"> 5. </a>6 
+<!-- hp1 --><b>Sound Source Orientation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The orientation of the sound source is the same as the orientation of the sound cone. The sound source (sound cone) orientation differs from the listener's orientation in that it is specified by only a front direction vector. The sound source orientation is specified with the function <a href="../sound/libp3da-Reference-English.htm#sceP3daSetOrientation">sceP3daSetOrientation</a>(). The sound source orientation is specified by a composite vector in each Cartesian coordinate axis direction with the current sound source position as the reference point.<br><br>Note that when the sound source position is specified by relative coordinates, if the listener's position or orientation is changed, the sound source position will also change so that the position relative to the listener will not change, and the sound cone orientation will not change (see the figure below).<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English026.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 22  Listener Movement and Change in Orientation</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">When the sound source position is specified by absolute coordinates, the sound source position and orientation are not affected by a change in the listener's position or orientation (see the figure below).<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English027.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 23  Absolute Coordinate Position Specification</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Regardless of whether the sound source position is specified as relative or absolute, the value that is obtained from <a href="../sound/libp3da-Reference-English.htm#sceP3daGetOrientation">sceP3daGetOrientation</a>() is the same as the value that was specified because there is no change in the vector.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_7">
+<h3>
+<a href="#Heading3_5"> 5. </a>7 
+<!-- hp1 --><b>Total Volume</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The total volume of each sound source is a function of the parameters that were set by the user and is the product of the sound cone effect, the rolloff effect, and the parameters set by <a href="../sound/libp3da-Reference-English.htm#sceP3daSetLevel">sceP3daSetLevel</a>(). Consequently, if the level at some location drops to or below the mute level (-10000[mB]), that sound source will not produce any sound.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English028.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 24  Total Volume</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The volume that can actually be heard also includes additional effects such as the difference between the left and right channel levels due to 3D processing ("Core Process").<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_8">
+<h3>
+<a href="#Heading3_5"> 5. </a>8 
+<!-- hp1 --><b>Pitch Control</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3da has a <b>support function</b> for reproducing a Doppler effect in which the sound frequency that can be heard at the listener's position varies according to the velocity of motion of an object. libp3da does not directly perform pitch shift processing on the sound waveform data. Rather, it just uses the velocity and Doppler factor to calculate the <b>pitch factor</b>, which controls the variation in pitch. The actual transformation of the pitch must be performed for the waveform data outside of libp3da.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_8_13">
+<div style="margin-left:40px;"><h4><b>Pitch Value Versus Relative Velocity</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The amount that the pitch varies is determined by the difference between the velocity vectors of the sound source and listener (whether the sound source and listener are getting closer or farther apart in terms of linear distance) and the Doppler factor. If they are getting closer, the pitch rises, and if they are getting farther apart, the pitch falls. The velocity vectors are set by using the <a href="../sound/libp3da-Reference-English.htm#sceP3daSetUserVelocity">sceP3daSetUserVelocity</a>() and <a href="../sound/libp3da-Reference-English.htm#sceP3daSetVelocity">sceP3daSetVelocity</a>() functions. The Doppler factor is set with <a href="../sound/libp3da-Reference-English.htm#sceP3daSetDopplerFactor">sceP3daSetDopplerFactor</a>().<br>In the following figure, the pitch rises at Position 1 because the plane is getting closer to the listener with velocity <i>vls</i> relative to the listener's direction. There is no change in pitch at Position 2 because the distance from the listener does not change. At Position 3, the pitch falls because the plane is moving away from the listener with a velocity of <i>vls</i> relative to the listener's direction.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English029.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 25  Velocity Vector and Pitch</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>p </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Position vector in the direction of the sound source from the listener&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>v </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Velocity vector of sound source&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vls </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Velocity vector of sound source in the direction of the sound source from the listener&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">The pitch shift is defined according to the following equation.<br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-English030.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fl </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Listener's pitch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fs </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Sound source's pitch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>c </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Speed of sound (set to 342500 [mm/second] in libp3da)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uls </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Velocity of listener in the direction of the sound source from the listener&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vls </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Velocity of sound source in the direction of the sound source from the listener&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">For example, consider the case when a sound source is getting closer to a stationary listener with a velocity of half the speed of sound.<br>If the frequency of the sound source is 1000 [Hz], then the listener's pitch is as follows<br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-English031.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;">and the sound source's pitch (frequency) is perceived by the listener to be exactly doubled.<br><br><i>uls</i> and <i>vls</i> are calculated from the velocity vectors of the sound source and listener.<br>The velocity vector of the sound source is specified by using the function <a href="../sound/libp3da-Reference-English.htm#sceP3daSetVelocity">sceP3daSetVelocity</a>().<br>The velocity vector of the listener is specified by using the function <a href="../sound/libp3da-Reference-English.htm#sceP3daSetUserVelocity">sceP3daSetUserVelocity</a>().<br>The velocity vector specified by each function is a relative vector in each coordinate direction from the current position, in the Cartesian coordinate system.<br>libp3da obtains the relative velocity of the listener and each sound source from the difference between these two velocity vectors to calculate the pitch value.<br><br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_8_1">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">The velocity vector settings are used only to calculate the pitch for the Doppler effect. Therefore, the sound source coordinate position that was set is not changed by the velocity vector settings.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_8_1_14">
+<div style="margin-left:40px;"><h4><b>Doppler Factor</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The Doppler factor adjusts conditions related to the Doppler effect. It is specified with the <a href="../sound/libp3da-Reference-English.htm#sceP3daSetDopplerFactor">sceP3daSetDopplerFactor</a>() function as a 16-bit : 16-bit fixed-point number in the range from 0 to 10.0. Therefore, values of 0 to 1.0 to 10.0 correspond to settings of 0x00000000 to 0x00010000 to 0x000A0000. The Doppler factor is multiplied by an amount representing the difference in pitch from the fundamental tone resulting from the Doppler effect calculation described above. This is expressed by the following formula.<br><br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-English032.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>DoppFactor </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Doppler factor&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ScaleFactor </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pitch factor&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">The pitch factor in the above calculation can be obtained from <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>().<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_8_2">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">The pitch factor can be at most 0x00040000 (= 4.0). If the velocity towards the listener from the sound source exceeds the speed of sound due to processing circumstances, no simulation is performed. In this case, 0x00000001 is returned for the pitch factor. Conversely, if the velocity away from the listener and towards the sound source exceeds the speed of sound, 0x00040000 (= 4.0) is returned for the pitch factor.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_8_2_15">
+<div style="margin-left:40px;"><h4><b>Velocity Vector Orientation</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">In a similar manner as with the orientation of the sound source's sound cone, the velocity vector from the sound source is represented by a composite vector using absolute coordinates. It can be set with <a href="../sound/libp3da-Reference-English.htm#sceP3daSetVelocity">sceP3daSetVelocity</a>(),<br>When the sound source is specified with a relative position, the velocity vector orientation does not change even if the position or orientation of the listener changes.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English033.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 26  The Listener's Orientation Can Change When the Sound Source is Specified With a Relative Position</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Processing Flow</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>From Initialization to Termination</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_1_16">
+<div style="margin-left:40px;"><h4><b>Processing Flow Up to Output of PCM Data</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libp3da can be used in a simple configuration that combines together the usage styles of other libraries such as <b>libsas</b> or <b>libwave</b>.<br>Successive sound production can be implemented by preparing waveform data for input to libp3da, having libp3da process the waveform data, and then performing additional processing to output the resulting waveform data.<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English034.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 27  Adding libp3da to libsas Processing</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_6_1_1">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">The waveform that is input to libp3da may actually need to be transformed to match the input waveform format. For example, to use libsas stereo mode output (2-channel output) for libp3da input, it must be transformed to monaural x 2, and to use multichannel mode output (4-channel output), it must be transformed to monaural x 4.<br>For information about the input waveform format, see "Input/Output Data Format" in this document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Thread Safety</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Among the libp3da API functions, <a href="../sound/libp3da-Reference-English.htm#sceP3daInit">sceP3daInit</a> and <a href="../sound/libp3da-Reference-English.htm#sceP3daExit">sceP3daExit</a> are not thread safe. All other functions are thread safe. The thread safe property of libp3da API functions assumes that parameter manipulation functions will be called from a separate thread while waveform processing is being performed by repeatedly calling <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a> in a sound thread. Using the functions in this manner will ensure problem-free operation.<br><br>An example of the timing for function calls is shown below.<br>The sample program also has a similar structure.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English035.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 28  Thread Safety</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>Supporting Pitch Transformation Due to the Doppler Effect</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Although libp3da can calculate the pitch value due to the Doppler effect, it cannot perform pitch transformation processing on the waveform data. This section explains how to use libp3da together with <b>libsas</b> to perform this function.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>Processing Configuration</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The output of<b> libsas</b> is input to libp3da, and the resulting pitch value for each sound source calculated by libp3da is fed back and reflected in the corresponding voice pitch of <b>libsas</b>.<br>This operation must be performed by the library user.<br>The sample program devkit/sample/sound/p3da_revolve/ also has the same structure.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English036.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 29  Pitch Value is Reflected in libsas</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>Corresponding Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<b>libp3da</b> function for getting the pitch value:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libp3da-Reference-English.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<b>libsas</b> function for setting the pitch value:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libsas-Reference-English.htm#sceSasSetPitch">sceSasSetPitch</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>Delay in Processing Results</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The pitch value provided by <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>() is calculated by <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>().<br>Therefore, since the result is obtained by first setting the position and velocity vectors, and then calling <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>(), there is a delay from the time the position and velocity vectors are set to what the pitch value is obtained that is equivalent to a maximum of one block's worth of samples. Since the pitch is set for libsas after this, the waveform in which the pitch calculation result is reflected will be the one during or after the next sample block.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_4">
+<h3>
+<a href="#Heading3_7"> 7. </a>4 
+<!-- hp1 --><b>Transformation of the Pitch Value</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Pitch values and effects obtained from <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>() have a different range of values from those specified with <a href="../sound/libsas-Reference-English.htm#sceSasSetPitch">sceSasSetPitch</a>(), so they must be transformed before they can be used.<br><br>The pitch value that is specified in the libsas pitch setting function <a href="../sound/libsas-Reference-English.htm#sceSasSetPitch">sceSasSetPitch</a>() is a factor represented as a 12-bit fixed-point number. However, the pitch value that is obtained from <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>() is a factor represented as a 16-bit fixed point number.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_17">
+<div style="margin-left:40px;"><h4><b>Pitch Factor and Values Handled by Functions</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Pitch Factor</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value Obtained From <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a></b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value Set by <a href="../sound/libsas-Reference-English.htm#sceSasSetPitch">sceSasSetPitch</a></b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;x 0.25&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00004000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000400&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;x 0.5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00008000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000800&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;x 1.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00010000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00001000&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;x 2.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00020000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00002000&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;x 4.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00040000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00004000&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Therefore, to transform the pitch, multiply the value that is obtained from <a href="../sound/libp3da-Reference-English.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>() by 1/16 and specify it in <a href="../sound/libsas-Reference-English.htm#sceSasSetPitch">sceSasSetPitch</a>().<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_18">
+<div style="margin-left:40px;"><h4><b>Note</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Since the minimum value that can be specified in <a href="../sound/libsas-Reference-English.htm#sceSasSetPitch">sceSasSetPitch</a>() is 1 (if 0 is specified, an error occurs), when 1/16 of the value is 0, the result should be clipped at 1.<br>For a specific example, refer to the libp3da sample program.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_19">
+<div style="margin-left:40px;"><h4><b>Sample Program</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">In the sample program devkit/sample/sound/p3da_revolve/, the pitch is transformed by default without using libsas by a dedicated transformation program called pitch.c. To use libsas to transform the pitch, define the macro USE_SAS during compilation, This will enable libsas to independently transform the pitch for the four moving sound sources using multichannel mode. For information about stereo mode and multichannel mode, refer to the "SAS Overview" document.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>Starting and Stopping Sound Source Processing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3da enables processing to be started and stopped for each sound source.<br>The output of a stopped sound source is muted.<br>A stopped sound source hardly consumes any CPU load because there is no waveform processing.<br>A stopped sound source can be restarted.<br>Immediately after library initialization, all sound sources are stopped.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>Corresponding Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following functions stop and start a sound source.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stop input data&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libp3da-Reference-English.htm#sceP3daStop">sceP3daStop</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Prepare input waveform data&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libp3da-Reference-English.htm#sceP3daPlay">sceP3daPlay</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">It is assumed that these functions will be used for the following purposes.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Stopping a sound source that is not being used to reduce the CPU processing load 
+<li> Stopping sound processing temporarily when switching the timbre assigned to a sound source
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>Dealing with Noise When Turning Sound ON or OFF</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the <a href="../sound/libp3da-Reference-English.htm#sceP3daStop">sceP3daStop</a>() and <a href="../sound/libp3da-Reference-English.htm#sceP3daPlay">sceP3daPlay</a>() functions are used to stop and start sound, fade-in and fade-out processing is not performed, so minor noise may occur when these operations are performed during sound production. When performing these operations, be sure to stop and start sound when the input waveform level is low. <a href="../sound/libp3da-Reference-English.htm#sceP3daSetLevel">sceP3daSetLevel</a>() can be used to adjust the volume.<br><br>Another method of dealing with noise is to perform <b>libsas</b> Key ON/OFF processing before or after these operations.<br>libsas Key ON/OFF processing performs fade-in and fade-out processing.<br>If libsas is used for a sound source, the occurrence of minor noise can be prevented by calling functions in the following order.<br></div>
+<div style="margin-left:80px;"><a href="../sound/libp3da-Reference-English.htm#sceP3daPlay">sceP3daPlay</a>() &rarr; KeyON    … …    KeyOFF &rarr; <a href="../sound/libp3da-Reference-English.htm#sceP3daStop">sceP3daStop</a>()<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>Calculation Errors</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3da 3D geometry calculations are performed with 16-bit precision.<br>Therefore, some calculation error will result when calculating distances and angles.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>Recognizing Errors</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Errors in the output sound may be easy or difficult to perceive by our sense of hearing.<br>The displacement of the pseudo-sound position of a 3D effect, a minute change in volume, or a shift in pitch due to calculation error probably cannot be heard.<br>However, when a sudden change in the output audio occurs, the listener probably will be able to recognize that error more clearly. For example, if a setting is made to mute the volume when the distance between the listener and the sound source reaches the maximum distance, and if some error occurs in the length of the composite vector that was actually set, then the position where the volume is muted will be displaced by several millimeters to several dozen millimeters.<br>Also, if a setting is made to suddenly change the difference between the levels inside and outside of the sound cone (when the inner and outer angles are set to almost the same value to make the outer level extremely small), the error will be easier to recognize when the volume changes.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>Errors Due to Calculation Precision</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although geometry calculations are performed with 16-bit precision, since values that exceed 16 bits are scaled to a 16-bit range, the calculation error increases for values greater than 16 bits. If the internal calculation range does not exceed 16 bits, the error will remain sufficiently smaller than 1%.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_3">
+<h3>
+<a href="#Heading3_9"> 9. </a>3 
+<!-- hp1 --><b>Errors Due to the Position Setting Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The size of the error also varies depending on how the sound source position is set.<br>The following three methods of setting the position can be used:<br></div>
+<div style="margin-left:67px;">Specifying an absolute position in Cartesian coordinates (<a href="../sound/libp3da-Reference-English.htm#sceP3daSetPosition">sceP3daSetPosition</a>()), <br>Specifying a relative position in Cartesian coordinates (<a href="../sound/libp3da-Reference-English.htm#sceP3daSetPositionRelative">sceP3daSetPositionRelative</a>()), or Specifying a relative position in polar coordinates (<a href="../sound/libp3da-Reference-English.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>()).<br></div>
+<div style="margin-left:50px;"><br>The error is smallest when a relative position is specified in polar coordinates because its format is closest to the internal processing format.<br>The error tends to increase because of transformation processing starting with specifying a relative position in Cartesian coordinates, and is worst when an absolute position is specified in Cartesian coordinates.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_4">
+<h3>
+<a href="#Heading3_9"> 9. </a>4 
+<!-- hp1 --><b>Dealing With Errors</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although there seem to be very few situations in which errors become large enough to cause a problem in normal usage, when errors must be made as small as possible, be sure to take into consideration the values to be set and methods of setting the position as described above.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>Miscellaneous Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_1">
+<h3>
+<a href="#Heading3_10"> 10. </a>1 
+<!-- hp1 --><b>Sound Sources Which Do Not Require Positional 3D Audio Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Positional 3D audio effects are always applied during libp3da processing. If you want to play sound which does not require positional 3D audio effects at the same time as libp3da sound, it is better to mix the sound after performing libp3da processing as that will result in a reduced CPU load.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_2">
+<h3>
+<a href="#Heading3_10"> 10. </a>2 
+<!-- hp1 --><b>Effects Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If a sound effect (such as reverberation) is applied to a libp3da-processed waveform, the phase component of the sound will end up getting changed and the sense of orientation will be lost, so it will no longer be possible to achieve the desired positional 3D audio effect. Be careful when using libp3da together with other sound effects.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_3">
+<h3>
+<a href="#Heading3_10"> 10. </a>3 
+<!-- hp1 --><b>Granularity Setting</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The unit of libp3da sound processing is the sample size that is specified by <a href="../sound/libp3da-Reference-English.htm#sceP3daInit">sceP3daInit</a>(). To use libp3da sound processing together with other sound processing, be sure to adjust this sample size appropriately.<br>Note that the finer the unit of processing is, the heavier the CPU load will become. The CPU load will be affected by at least the difference in the sample size.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_4">
+<h3>
+<a href="#Heading3_10"> 10. </a>4 
+<!-- hp1 --><b>Granularity of 3D Effects</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A change in a setting by a parameter setting function is reflected in the output waveform during the processing of the <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>() function. For example, if the number of samples in a block was set to 2048 during initialization, the function <a href="../sound/libp3da-Reference-English.htm#sceP3daCore">sceP3daCore</a>() will also be called every 2048 samples (approximately every 46 [ms]), and changes in 3D effects, volume, and pitch will occur every 2048 samples. In other words, changes will not occur during the 2048-sample interval. Therefore, parameter changes that are made at shorter intervals than the block sample interval are meaningless.<br>Also, if the temporal variation of a 3D effect seems coarse, it may be necessary to reconsider the granularity setting.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_5">
+<h3>
+<a href="#Heading3_10"> 10. </a>5 
+<!-- hp1 --><b>Timing for Specifying the Number of Sound Sources</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The number of sound sources and block sample size that are specified by the initialization function <a href="../sound/libp3da-Reference-English.htm#sceP3daInit">sceP3daInit</a>() cannot be changed until libp3da is terminated by calling <a href="../sound/libp3da-Reference-English.htm#sceP3daExit">sceP3daExit</a>(). New values can be set when the library is initialized again.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_6">
+<h3>
+<a href="#Heading3_10"> 10. </a>6 
+<!-- hp1 --><b>Real-World Simulation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When specifying a position or velocity, it may be difficult to specify the same value as a real-world position or velocity. For example, to represent the Doppler effect and rolloff effect of a jet plane, overflow will occur if an attempt is made to specify a distance of several dozen kilometers or a velocity of 600 kilometers per hour. To keep the position coordinates and velocity vector settings within the range of the calculation processing bit length, specify the position data or velocity vector at a reduced scale. Then, combine them with the rolloff factor or pitch factor setting to make adjustments so that the desired effect is obtained.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>Alternative Usage Method</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This section introduces simulated surround as another method of using positional 3D audio effects.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_1">
+<h3>
+<a href="#Heading3_11"> 11. </a>1 
+<!-- hp1 --><b>Simulated Surround</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simulated surround is a special example of how to use libp3da.<br>In this setup, four libp3da sound sources are arranged to simulate four surround speakers. Waveform data that was mixed down for four-channel surround is provided as the input waveforms for the four sound sources. This method can be used to implement four-channel simulated surround. Since an unlimited number of superimposed waveforms can be mixed down, sound sources that exceed four channels can be supported.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-English037.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 30  Simulated Speaker Arrangement</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Using simulated surround has the following advantages and disadvantages.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_11_1_1"><h4>
+(1)&nbsp;<b>Advantages</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> The number of sound sources is unlimited. <br>When libsas is used for the sound sources, all 32 voices can be positioned for surround.
+<li> Data that was authored for sound is easily supported.
+<li> The positions of simulated speakers can easily be changed.
+<li> The listening point can easily be changed.
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_11_1_2"><h4>
+(2)&nbsp;<b>Disadvantages</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> The positioning is planar (no vertical positioning).
+<li> The sense of positioning is weaker than the positioning of each libp3da sound source.
+<li> libp3da pitch calculations are not supported.
+<li> The processing load is always at the maximum (4ch processing must continue).<br>
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

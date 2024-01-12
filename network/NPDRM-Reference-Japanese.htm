@@ -1,0 +1,888 @@
+<html lang="jp">
+<head>
+<title>NPDRM-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NPDRMライブラリ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceNpDrmKey"></a>
+<table width="100%"><td width="70%"><font size=6>SceNpDrmKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>暗号鍵の構造体<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+typedef struct {
+	unsigned char <i>keydata</i>[16];
+} <b>SceNpDrmKey</b>;
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">鍵つきのNPDRM EDATAおよびNPDRM PRXを扱うために必要な、ライセンシ指定鍵（<i>k_licensee</i>）を指定する構造体です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmSetLicenseeKey"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmSetLicenseeKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ライセンシ指定の暗号鍵の設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmSetLicenseeKey </b>(
+	const <a href="../network/NPDRM-Reference-Japanese.htm#SceNpDrmKey">SceNpDrmKey</a> *<i>k_licensee</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>k_licensee</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データ作成時に指定する鍵データを設定します&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー値(詳細は<a href="../network/NPDRM-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">NPDRMライブラリによるアクセス権管理とは別に、ライセンシが任意に決定する暗号鍵があり、この鍵を<i>k_licensee</i>と呼んでいます。<br>NPDRM EDATAを作成するときに<i>k_licensee</i>を指定して生成すると鍵がかかったNPDRM EDATAになり、他のプログラムから内容を読み取られることを防止できます。鍵がかかったNPDRM EDATAにアクセスするためには、あらかじめ本関数で正しい<i>k_licensee</i>を設定した上で、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()（または<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmOpen">sceNpDrmOpen</a>()）を呼び出す必要があります。<br><br>NPDRM SPRXを作成するときは<i>k_licensee</i>の指定が必須です。NPDRM SPRXを<a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>()や<a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>()でロードするためには、あらかじめ本関数で正しい<i>k_licensee</i>を設定しておく必要があります。<br><br>一度本関数で設定した<i>k_licensee</i>は、NPDRMライブラリをアンロードするか<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmClearLicenseeKey">sceNpDrmClearLicenseeKey</a>()で明示的にクリアするまで有効です。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数はスレッドセーフではありません。通常はタイトルごとにひとつの<i>k_licensee</i>を使用し、初期化手順の中でNPDRMライブラリのロード直後に一度だけ本関数を呼び出すものと想定して実装されています。<br>ひとつのタイトルでNPDRMファイルごとに異なる<i>k_licensee</i>を設定したい場合は、本関数の呼び出しから<i>k_licensee</i>を使う操作（<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>(), <a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>(), <a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>()の呼び出し）の終了まで、アプリケーション側で排他管理を行ってください。<br><br><i>k_licensee</i>を設定せずに作成したNPDRM EDATAは、本関数で<i>k_licensee</i>を設定してもしなくても<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()（または<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmOpen">sceNpDrmOpen</a>()）で復号鍵が設定されます。<br>すなわち、ユーザーがそのNPDRM EDATAへのアクセス権を持っていれば、そのPSP&reg;上で起動した他のプログラムから内容が読み出せることになります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmClearLicenseeKey">sceNpDrmClearLicenseeKey</a>(), <a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>(),<a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>(), <a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmClearLicenseeKey"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmClearLicenseeKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ライセンシ指定の暗号鍵のクリア<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmClearLicenseeKey </b>(
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()で設定した<i>k_licensee</i>をクリアします。<br><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()で、<i>k_licensee</i>としてall-0の鍵を設定したのと等価です。<br>積極的に利用する機会はあまりないと思われます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>(), <a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmRenameCheck"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmRenameCheck<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NPDRM管理されたファイルのリネーム検出<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmRenameCheck </b>(
+	const char *<i>file_name</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象ファイルのパス名（大文字小文字が区別される）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー値(詳細は<a href="../network/NPDRM-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数は、NPDRMファイルの正当性を簡便に判断する方法として、ファイル名が変更されていないことを検査する関数です。NPDRMファイル作成時に埋め込まれているファイル名のハッシュ値を確認し、現在のファイル名から求めたハッシュ値と一致しなかった場合はエラー（<a href="../network/NPDRM-Reference-Japanese.htm#SCE_NP_DRM_ERROR_FILENAME">SCE_NP_DRM_ERROR_FILENAME</a>）を返します。NPDRM SPRXをロードする前などに、別のプログラムファイルをリネームしたものでないことを比較的簡便にチェックすることができます。<br>NPDRM EDATAに対しても使用できますが、読み出したデータ内容のチェックもあわせて行うことを推奨します。<br><br>本関数では、所有権の有無や<i>k_licensee</i>の適合はチェックされません。<br>また、確認範囲にはパスのディレクトリ部分を含まないため、同じファイル名のNPDRMファイルを別ディレクトリからコピーされた場合は判定できません。同名のファイルを判別するためには、秘密鍵<i>k_licensee</i>を設定し、アクセス権確認時のエラーで検出してください。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Memory Stick&trade;のFATファイルシステムでは、ファイル名の大文字と小文字が区別されませんが、本関数に引数として与えるファイル名は、NPDRMファイル作成時のファイル名を表すため、例外的に大文字と小文字が区別されるので注意してください。例えば、"ms0:/PSP/GAME/ABCD12345/sample.edat"を指定した場合と"ms0:/PSP/GAME/ABCD12345/SAMPLE.EDAT"を指定した場合では、同じファイルについて変名の検査を行いますが、結果が異なる可能性があります。<br>検査対象のファイル名をプログラムに埋め込まずに、ファイル検索で取得して使用する場合は特に注意してください。ファイル作成もファイル名確認もすべて大文字で扱うなど、正規化ルールを決めておくことが推奨されます。<br><br>本関数によるファイル名確認は必須ではありません。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmEdataSetupKey"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmEdataSetupKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>アクセス権の確認と復号鍵の設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmEdataSetupKey </b>(
+	SceUID <i>fd</i>
+);
+</font></pre></div>
+<br>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM EDATAをオープンしたときに得たファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功（ファイルアクセス権取得済み）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー値(詳細は<a href="../network/NPDRM-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">NPDRM権利情報ファイルを参照してユーザーがアクセス権を持っていることを確認し、NPDRMへのアクセスに必要な復号鍵を設定します。<br><br><i>fd</i>には、sceIoOpen()の<i>flag</i>にSCE_FGAMEDATAを論理和で指定して得たファイルディスクリプタを指定する必要があります。SCE_FGAMEDATAを指定せずにオープンした<i>fd</i>を指定すると、<a href="../network/NPDRM-Reference-Japanese.htm#SCE_NP_DRM_ERROR_ARG">SCE_NP_DRM_ERROR_ARG</a>が返ります。<br>本関数が成功を返したら、sceIoRead()やsceIoLseek()を用いて通常のファイルと同じようにアクセスしてください。内容は自動的に復号されて読み出されます。アクセス終了したらsceIoClose()で閉じてください。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">NPDRM権利情報ファイルの実体は、ms0:/PSP/LICENSE/content-id.rifです。このファイルが存在すれば、ユーザーがアクセス権を持っているものとみなされます。逆にこのファイルが存在しなければ本関数が<a href="../network/NPDRM-Reference-Japanese.htm#SCE_NP_DRM_ERROR_NO_ENTITLEMENT">SCE_NP_DRM_ERROR_NO_ENTITLEMENT</a>エラーを返しますので、ユーザーがアクセス権を持たないときのアプリケーションの挙動をテストするためにはこのエラーを利用してください。<br><br>sceIoOpen()の<i>flag</i>にSCE_FGAMEDATAを指定して同時にオープンできるファイル数は、最大で8ファイルです。また、FATファイルシステムによる同時オープン数の制約も受けることに注意してください。本関数の内部でNPDRM権利情報ファイルにアクセスするため、一時的にMemory Stick&trade;上のファイルをもう1つオープンします。<br><br>運用上、NPDRM EDATAの拡張子は「.edat」に固定です。大文字・小文字のバリエーション（.EDATや.Edatなど）は許容されます。<br><br>本関数が成功を返したら、NPDRMモジュールをアンロードしてもかまいません。アンロードした後でもNPDRMファイルへのアクセスは行えます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int ret;
+SceUID fd;
+const char* filename = "ms0:/PSP/GAME/AAAA12345/test_edata.dat";
+char read_buf[1024];
+
+fd = sceIoOpen(filename, SCE_O_RDONLY|SCE_FGAMEDATA, 0);
+if (fd &lt; 0) {
+	printf("open error: 0x%08x\n", fd);
+	return fd;
+}
+
+ret = sceNpDrmEdataSetupKey(fd);
+if (ret &lt; 0) {
+	printf("access rights error: 0x%08x\n", ret);
+	sceIoClose(fd);
+	return ret;
+}
+
+ret = sceIoRead(fd, read_buf, sizeof(read_buf));
+
+	(通常のファイルアクセス：省略)
+
+ret = sceIoClose(fd);
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmEdataGetDataSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmEdataGetDataSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NPDRM EDATAの復号後のサイズの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmEdataGetDataSize </b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM EDATAをオープンしたときに得たファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;復号後のデータサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー値(詳細は<a href="../network/NPDRM-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">暗号化のためのエンベロープを除いた、NPDRM EDATAファイルの正味のデータサイズを返します。<br><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()関数によって権利の確認と復号鍵の設定が完了している必要があります。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">明示的にデータサイズを確認しなくても、sceIoRead()で読み出せるのは有効データサイズの範囲に限られます。また、sceIoLseek()でシークできる範囲も同様です。<br>sceIoGetstat()にファイル名を与えて得られるファイルサイズは、暗号化エンベロープを含むサイズです。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmOpen"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmOpen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NPDRM EDATAのオープン（インライン関数）<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np_drm_inline.h&gt;
+__inline__ int <b>sceNpDrmOpen</b>(
+	const char* <i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM EDATAのファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルのオープンモード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;作成するファイルのモード（無視される）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd (fd &gt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー値(詳細は<a href="../network/NPDRM-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>filename</i>で指定されたファイルを、指定された<i>flag</i>にSCE_FGAMEDATAを加えてオープンし、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()でアクセス権を確認する処理をインライン関数にまとめたものです。<br><i>filename</i>はMemory Stick&trade;上のファイル名を指定する必要があります。<br><i>flag</i>にはSCE_O_RDONLYを指定してください。他にはスレッド排他制御などの指定が可能です。詳細は「IO/File マネージャリファレンス」を参照してください。<br><br>本関数でエラーが返ったとき、アクセス権に関するエラーは回復できないため、sceIoOpen()と同じように無限リトライすると無限ループに陥るおそれがあります。ファイルオープンエラーのリトライを行いたいとき、またオープン処理中のコールバック通知を処理したいときは、本関数ではなく、sceIoOpen()または<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpenCB">sceIoOpenCB</a>()と<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()を組み合わせて使用してください。<br><br>アクセス権の確認に使用される権利情報ファイルについて、また同時オープン数の制限については、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()の説明を参照してください。<br><br>返り値として得たfdをsceIoRead()やsceIoLseek()などに指定することで、ファイルにアクセスできます。処理が終了したらsceIoClose()でファイルを閉じてください。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">運用上、NPDRM EDATAの拡張子は「.edat」に固定です。<br>大文字・小文字のバリエーション（.EDATや.Edatなど）は許容されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadModuleNpDrm"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadModuleNpDrm<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NPDRM SPRXのロード<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;modulemgr.h&gt;
+int <b>sceKernelLoadModuleNpDrm </b>(
+	const char *<i>path</i>,
+	int <i>flags</i>,
+	const <a href="../kernel/Module_Manager-Reference-Japanese.htm#SceKernelLMOption">SceKernelLMOption</a> *<i>pOpt</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>path</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロードするモジュールのファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flags</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フラグ（未使用：0を指定すること）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロード時のオプション動作の指定（不要な場合はNULL）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロードしたモジュールのUID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー値(詳細は<a href="../network/NPDRM-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照)&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModule">sceKernelLoadModule</a>()のエラーも返ります。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数は、NPDRM SPRXモジュールをロードする関数です。<br>本関数を呼び出す前に、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()で<i>k_licensee</i>を設定しておく必要があります。<br>その他の使用方法についての注意は<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModule">sceKernelLoadModule</a>()とほぼ同じなので、詳細については「PSP&reg;モジュールマネージャ リファレンス」も参照してください。<br><br>運用上、NPDRM PRXの拡張子は「.sprx」に固定です。大文字・小文字のバリエーション（.SPRXや.Sprxなど）は許容されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>(), <a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModule">sceKernelLoadModule</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadExecNpDrm"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadExecNpDrm<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>再起動とNPDRM SPRXプログラムの実行<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+int <b>sceKernelLoadExecNpDrm </b>(
+	const char *<i>file</i>, 
+	const <a href="../kernel/Loadexec-Reference-Japanese.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a> *<i>pParam</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再起動後実行されるプログラムのファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pParam</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再起動時の挙動を指定するパラメータ（不要な場合はNULL）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー値(詳細は<a href="../network/NPDRM-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照)&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../kernel/Loadexec-Reference-Japanese.htm#sceKernelLoadExec">sceKernelLoadExec</a>()のエラーも返ります。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>file</i>で指定されたNPDRM SPRXファイルについてユーザーがアクセス権を持つことを確認した後、PSP&reg;を再起動してそのNPDRM SPRXプログラムを起動します。正常実行時には関数から戻りません。<br>本関数を呼び出す前に、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()で<i>k_licensee</i>を設定しておく必要があります。<br>その他の使用方法は<a href="../kernel/Loadexec-Reference-Japanese.htm#sceKernelLoadExec">sceKernelLoadExec</a>()とほぼ同じなので、詳細については「PSP&reg;モジュールマネージャ リファレンス」も参照してください。<br><br>運用上、NPDRM PRXの拡張子は「.sprx」に固定です。<br>大文字・小文字のバリエーション（.SPRXや.Sprxなど）は許容されます。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">再起動によってNPDRMライブラリがアンロードされます。起動されたNPDRM SPRXプログラム内でNPDRMファイルにアクセスするのであれば、あらためてNPDRMライブラリの初期化や<i>k_licensee</i>の設定を行ってください。<br><br>現在の実装では、デバッガからリモート起動で開発している段階であってもUMD&reg;/DVDドライブになんらかのゲームディスクを挿入しておく必要があります。ドライブが空だと、ターゲットプログラムの起動に失敗してシステムソフトウェアに戻ります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>(), <a href="../kernel/Loadexec-Reference-Japanese.htm#sceKernelLoadExec">sceKernelLoadExec</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NPDRMライブラリの返すエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_OK">SCE_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_ARG">SCE_NP_DRM_ERROR_ARG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550901&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_UNEXPECTED">SCE_NP_DRM_ERROR_UNEXPECTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550902&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ハードウェアエラーなど&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_ACT_SIGN">SCE_NP_DRM_ERROR_ACT_SIGN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550903&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;機器認証情報の破損&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_RIF_SIGN">SCE_NP_DRM_ERROR_RIF_SIGN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550904&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;権利情報ファイルの破損&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_DIFF_ACCT_ID">SCE_NP_DRM_ERROR_DIFF_ACCT_ID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550905&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;権利情報ファイルの所有者が&nbsp;&nbsp;<br>&nbsp;&nbsp;機器認証情報と異なる&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_UNKNOWN_VERSION">SCE_NP_DRM_ERROR_UNKNOWN_VERSION</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550906&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未知のバージョンが検出された&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_FILE_IO">SCE_NP_DRM_ERROR_FILE_IO</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550907&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;権利情報ファイルの読み出しに&nbsp;&nbsp;<br>&nbsp;&nbsp;関連したその他のエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_DIFF_MG_ID">SCE_NP_DRM_ERROR_DIFF_MG_ID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550908&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアIDに起因するエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_DIFF_PRODUCT_ID">SCE_NP_DRM_ERROR_DIFF_PRODUCT_ID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550909&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;権利情報ファイルの&nbsp;&nbsp;<br>&nbsp;&nbsp;プロダクトIDに起因するエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_NO_ENTITLEMENT">SCE_NP_DRM_ERROR_NO_ENTITLEMENT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550910&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;権利情報ファイルがない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_BAD_ACT">SCE_NP_DRM_ERROR_BAD_ACT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550911&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;機器認証されていない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_BAD_PERM">SCE_NP_DRM_ERROR_BAD_PERM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550912&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;で開発用の&nbsp;&nbsp;<br>&nbsp;&nbsp;NPDRM EDATAに&nbsp;&nbsp;<br>&nbsp;&nbsp;アクセスした&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_ILLEGAL_FORMAT">SCE_NP_DRM_ERROR_ILLEGAL_FORMAT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550913&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルが壊れている&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_TIME_LIMIT">SCE_NP_DRM_ERROR_TIME_LIMIT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550914&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;権利情報ファイルに設定された&nbsp;&nbsp;<br>&nbsp;&nbsp;有効期間を過ぎている&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_SERVICE_NOT_STARTED">SCE_NP_DRM_ERROR_SERVICE_NOT_STARTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550915&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;権利情報ファイルに設定された&nbsp;&nbsp;<br>&nbsp;&nbsp;有効期間がまだ来ていない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_K_LICENSEE">SCE_NP_DRM_ERROR_K_LICENSEE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550916&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>k_licensee</i>の値が&nbsp;&nbsp;<br>&nbsp;&nbsp;設定されていない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_FILENAME">SCE_NP_DRM_ERROR_FILENAME</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550917&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmRenameCheck">sceNpDrmRenameCheck</a>()で、&nbsp;&nbsp;<br>&nbsp;&nbsp;指定されたファイル名が&nbsp;&nbsp;<br>&nbsp;&nbsp;作成されたときの名前と異なる&nbsp;&nbsp;<br>&nbsp;&nbsp;(大文字小文字が区別される)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>権利情報ファイルに有効期間が設定してある場合、以下のエラーが返る場合があります。<br><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_NOT_INITIALIZED">SCE_ERROR_NOT_INITIALIZED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80000001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;有効期間が設定されているが、時計が初期化&nbsp;&nbsp;<br>&nbsp;&nbsp;されていない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>NPDRM EDATAにI/O File managerのインタフェースでアクセスするときに、通常のファイルアクセスエラーのほかに、以下のエラーが返ることがあります。<br><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_INVALID_ARG">SCE_GAMEDATA_ERROR_INVALID_ARG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510201&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が有効範囲外&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_MFILE">SCE_GAMEDATA_ERROR_MFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510202&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームデータファイルとしての&nbsp;&nbsp;<br>&nbsp;&nbsp;同時オープン数が多すぎる&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_INVALID_FORMAT">SCE_GAMEDATA_ERROR_INVALID_FORMAT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510204&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル形式が不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_BROKEN_DATA">SCE_GAMEDATA_ERROR_BROKEN_DATA</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510207&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データが壊れている&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

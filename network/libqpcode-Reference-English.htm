@@ -1,0 +1,230 @@
+<html lang="en">
+<head>
+<title>libqpcode-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libqpcode Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceQPrintableEncoder"></a>
+<table width="100%"><td width="70%"><font size=6>sceQPrintableEncoder<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Encode quoted-printable<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libqpcode.h&gt;
+int <b>sceQPrintableEncoder </b>(
+	<a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> <i>*out</i>,
+	const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> <i>*in</i>,
+	SceSize <i>src_len</i>,
+	SceSize *<i>require</i>,
+	SceSize <i>prepare</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-enabled or -disabled state)<br>Multithread safe <br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>in</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to input byte sequence&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>out</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to output byte sequence&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>src_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Input length&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>require</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory for storing number of output bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>prepare</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of memory prepared for output byte sequence&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80434022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of bytes required for&nbsp;&nbsp;<br>&nbsp;&nbsp;output exceeded value&nbsp;&nbsp;<br>&nbsp;&nbsp;specified by <i>prepare</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804341FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was set for both <i>out</i> and&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>require</i>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function performs quoted-printable encoding of the input byte sequence specified by <i>in</i> and <i>src_len</i>, outputs the result to the memory area specified by <i>out</i>, and stores the number of output bytes in <i>require</i>. If the number of output bytes exceeds <i>prepare</i>, an error is returned. The application must provide the memory area for output. If <i>out</i> is set to NULL, the size of the memory area required for output will be stored in <i>require</i> and can be retrieved.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceQPrintableLineDecoder"></a>
+<table width="100%"><td width="70%"><font size=6>sceQPrintableLineDecoder<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Line decode quoted-printable<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libqpcode.h&gt;
+int <b>sceQPrintableLineDecoder </b>(
+	<a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a>*<i>out</i>,
+	const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> *<i>in</i>,
+	SceSize <i>src_len</i>,
+	SceSize *<i>require</i>,
+	SceSize <i>prepare</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-enabled or -disabled state)<br>Multithread safe <br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>out</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to output byte sequence&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>in</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to input byte sequence&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>src_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Input length&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>require</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory for storing number of output bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>prepare</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of memory prepared for output byte sequence&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80434022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of bytes required for&nbsp;&nbsp;<br>&nbsp;&nbsp;output exceeded value specified&nbsp;&nbsp;<br>&nbsp;&nbsp;by <i>prepare</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804341FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was set for both <i>out</i> and&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>require</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80434108&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A byte sequence having an&nbsp;&nbsp;<br>&nbsp;&nbsp;invalid format was specified for <i>in</i>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function decodes the input byte sequence (one line of data that was encoded using quoted-printable encoding) specified by <i>in</i> and <i>src_len</i>, outputs the result to the memory area specified by <i>out</i>, and stores the number of output bytes in <i>require</i>. If the number of output bytes exceeds <i>prepare</i>, an error is returned. The length of the input byte sequence including the terminating RFC822 newline code (consecutive CR and LF) must not exceed 78. If a larger value is set for <i>ilen</i>, it is ignored. The application must provide the memory area for output. If <i>out</i> is set to NULL, the size of the memory area required for output will be stored in <i>require</i> and can be retrieved.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

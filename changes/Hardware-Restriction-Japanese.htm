@@ -1,0 +1,593 @@
+<html lang="jp">
+<head>
+<title>Hardware-Restriction</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+制限事項
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>PSP&reg;最終仕様におけるCPUエラッタ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>CPUのCACHE命令のFill(D)またはFill with Lock(D)を使用したとき、キャッシュラインがダーティになることがある</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">すでにDキャッシュにキャッシュされているアドレスを指定してCACHE命令のFill(D)またはFill with Lock(D)機能を使用すると、当該ラインに対して書き込み動作を行っていないにもかかわらずラインがダーティであるとマークされてしまいます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ありません。<br><br>すでにDキャッシュにヒットしていることが予見できるエリアに対してCACHE命令のFill(D)またはFill with Lock(D)機能を使用しないで下さい。もし使用すると、本来必要のなかったライトバックが発生してしまい、CPUサイクルとバスサイクルが無駄に消費されます。ライトバックされるデータはDキャッシュの内容に基づくのでメモリ破壊は発生しません。性能上のペナルティにのみ影響します。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>PSP&reg;最終仕様におけるVFPUエラッタ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>lvl.qまたはlvr.q命令を使用すると、FPUが不正動作する</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_3">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUのlvl.q, lvr.q命令を使用したとき、FPUに対して誤った命令発行が行われてしまうハードウェアバグがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_4">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">lvl.q, lvr.q命令が一切発行されないようにする必要があります。<br>lvl.q, lvr.q命令はVFPU命令セットから削除されました。従来lvl.q, lvr.q命令を用いていた箇所はlv.s, lv.q命令等で置き換えてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_5">
+<div style="margin-left:40px;"><h4><b>psp-asによる対策</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">psp-as 1.7.1以降でlvl.q, lvr.q命令をアセンブルできないように変更しました。<br>アセンブラのマクロ命令ulv.qがlvl.q, lvr.q命令を生成しないようにしました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>VFPUライトバッファ使用後、後続のVFPU命令が不正な演算結果になることがある</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_6">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUのライトバッファ経由でバスアクセスを行うアンキャッシュ領域に対するsv.q ,wb命令でVFPUライトバッファがフル状態になったとき、次のVFPU命令がマトリクスレジスタファイルに対する書き込みを行う演算命令だった場合、演算結果として正しくない値がディスティネーションレジスタに書き込まれます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_7">
+<div style="margin-left:40px;"><h4><b>問題の発生するシーケンスの例</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">以下のような命令発行順のとき問題が発生します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>sv.q    c000, 0(t0), wb     // アンキャッシュ領域に対するライトバッファ書き込み
+vadd.s  s100, s101, s102    // s100が正しくない演算結果
+vadd.s  s200, s201, s202    // s200は正しい演算結果
+</font></pre></div>
+<div style="margin-left:67px;"><br>また、sv.q,wb命令の間にALLEGREX CPU,FPU命令が挟まれていた場合でも発生します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>sv.q    c000, 0(t0), wb     // アンキャッシュ領域に対するライトバッファ書き込み
+addu    t1, t2, t3          // 間に挟まれるCPU,FPU命令は関係なし
+vadd.s  s100, s101, s102    // s100が正しくない演算結果
+vadd.s  s200, s201, s202    // s200は正しい演算結果
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_8">
+<div style="margin-left:40px;"><h4><b>解説</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUライトバッファは、CPU,FPU命令で用いられるALLEGREX CPUの通常のロードストアユニットとは独立した書き込み専用バスマスタです。<br>VFPUのsv.q,wb命令をアンキャッシュ領域に対して実行すると、CPUのロードストアユニットを経由せず直接バスに対してアクセスが行われるため、CPUに負荷をかけず演算結果をメモリに書き出すことができます。<br>VFPUライトバッファは8段FIFO構造になっており、ライトバッファに空きがなかった場合sv.q,wb命令はストールする可能性があります。<br><br>VFPUライトバッファがバスアクセスを行おうとした時、VFPU以外のバスマスタ(CPU, GraphicsEngine, DMAC)がバスを占有していると、VFPUライトバッファのアクセスが遅延する場合があります。また、VFPUライトバッファ部はバスクロック(最高166MHz)で動作していますが、VFPU命令は通常CPUクロック(最高333MHz)で発行されていますので、連続したsv.q, wb命令の実行はすぐにVFPUライトバッファをフル状態にします。<br><br>このエラッタは、VFPUライトバッファがフル状態になったとき、sv.q, wb命令の次に発行されたVFPU命令が、ライトバッファのストールが解除されるまでの間にVFPUパイプラインに進入すると、正しくストール制御が行われず演算結果が破壊されてしまうというものです。VFPUライトバッファがフル状態になるかどうかは、バスの混雑具合や、キャッシュヒット/ミスヒット状態等に依存するため、問題が発生するかどうか静的に解析することは困難です。VFPUライトバッファを使用する場合、必ず以下のような対策を行ってください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_9">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">sv.q, wb命令の後に発行されるVFPU命令がlv.s, lv.q以外のマトリクスレジスタファイルに対する書き込みを伴う命令である場合、先行してvnop命令を挿入してください。sv.q,wb命令の後にCPU,FPU命令が挿入されている場合でも、後続VFPU命令が問題を受ける可能性がありますので、vnop命令が必要です。<br>sv.q,wb命令に続くVFPU命令のうち、vnopなしでも配置する事が出来る命令は以下の通りです。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>sv.s / sv.q / sv.q,wb
+mfv
+mfvc
+vnop / vsync / vflush / vsync2
+vpfxd / vpfxs / vpfxt
+</font></pre></div>
+<div style="margin-left:67px;"><br>なおsv.q, wb命令の後に発行されるVFPU命令がlv.s, lv.q命令の場合は後述する別のエラッタの影響も受けるため、lv.s, lv.q命令に先行してvsync2命令を挿入してください。上記のVFPUレジスタファイルに書き込みを行う命令に先行してvnopを挿入するワークアラウンドを実行した場合でも、その後に実行するlv.s, lv.qに対してvsync2命令を先行するワークアラウンドは省略できません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_10">
+<div style="margin-left:40px;"><h4><b>psp-asによる対策</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">psp-as 1.10.4以降のバージョンでは、後述するエラッタに対するワークアラウンドとあわせてvnopを自動的に挿入する処理が行われます。詳細は後述します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>vhtfm2.p, vhtfm3.t, vhtfm4.q命令のディスティネーションレジスタに制約がある</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_11">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">vhtfm2.p, vhtfm3.t, vhtfm4.qのディスティネーションレジスタに$64～$127の範囲のレジスタ番号を指定すると演算結果が不正になります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_12">
+<div style="margin-left:40px;"><h4><b>問題の発生するコードの例</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>vhtfm2.p      c002, e100, c200
+vhtfm2.p      c012, e100, c200
+vhtfm2.p      c022, e100, c200
+vhtfm2.p      c032, e100, c200
+vhtfm2.p      r020, e100, c200
+vhtfm2.p      r021, e100, c200
+vhtfm2.p      r022, e100, c200
+vhtfm2.p      r023, e100, c200
+      :
+vhtfm3.t      c001, e100, c200
+vhtfm3.t      c011, e100, c200
+vhtfm3.t      c021, e100, c200
+vhtfm3.t      c031, e100, c200
+vhtfm3.t      r010, e100, c200
+vhtfm3.t      r011, e100, c200
+vhtfm3.t      r012, e100, c200
+vhtfm3.t      r013, e100, c200
+      :
+vhtfm3.q      c002, e100, c200
+vhtfm4.q      c012, e100, c200
+vhtfm4.q      c022, e100, c200
+vhtfm4.q      c032, e100, c200
+vhtfm4.q      r020, e100, c200
+vhtfm4.q      r021, e100, c200
+vhtfm4.q      r022, e100, c200
+vhtfm4.q      r023, e100, c200
+</font></pre></div>
+<div style="margin-left:67px;"><br>問題となるのは、ディスティネーションレジスタに$64～$127を指定した場合のみです。つまりvhtfm命令でオペコードのbit 6が1となるインストラクションが無効となります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_13">
+<div style="margin-left:40px;"><h4><b>解説</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">たとえば、4次元ベクトルc000(レジスタ番号$0)を構成するスカラレジスタは、[s000, s001, s002, s003]要素ですが、この4つのレジスタを参照するベクトルレジスタ形式としては以下のような表現が存在します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>2次元ベクトルc000    $0       (s000, s001)
+2次元ベクトルc002    $64      (s002, s003)
+3次元ベクトルc000    $0       (s000, s001, s002)
+3次元ベクトルc001    $64      (s001, s002, s003)
+4次元ベクトルc000    $0       (s000, s001, s002, s003)
+4次元ベクトルc002    $64      (s002, s003, s000, s001)
+</font></pre></div>
+<div style="margin-left:67px;"><br>各次元についてレジスタ番号$0であらわされる形式と、レジスタ番号$64であらわされる形式があります。<br>このエラッタにより影響をうけるのは、レジスタ番号$64であわらわされるベクトル形式です。つまり2次元ベクトルc002、3次元ベクトルc001, 4次元ベクトルc002の各形式がvhtfm命令のディスティネーションとして使えなくなります。<br><br>r形式についても同様の事が言えます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>2次元ベクトルr000    $32      (s000, s010)
+2次元ベクトルr020    $96      (s020, s030)
+3次元ベクトルr000    $32      (s000, s010, s020)
+3次元ベクトルr010    $96      (s010, s020, s030)
+4次元ベクトルr000    $32      (s000, s010, s020, s030)
+4次元ベクトルr020    $96      (s020, s030, s000, s010)
+</font></pre></div>
+<div style="margin-left:67px;"><br>このうち、レジスタ番号$96をvhtfm命令のディスティネーションとすることができません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_14">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ありません。<br>vhtfm命令のディスティネーションレジスタには、上記のようなレジスタを指定しないでください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_15">
+<div style="margin-left:40px;"><h4><b>psp-asによる対策</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">現在のpsp-asアセンブラでは、ベクトル形式で$64～$127の範囲のレジスタ番号を指定することを許していないため、特に対策は行っていません。将来この範囲のレジスタ番号を使用できるようにアセンブラを変更する場合には、vhtfm命令のディスティネーションレジスタのレジスタ番号をチェックし、$64～$127に相当する形式はエラーにする予定です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>vdiv.p, vdiv.t, vdiv.q, sv.q,wb, vflush命令の後に実行したlv.s, lv.q命令が壊れた値をロードすることがある</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_4_16">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">vdiv.p, vdiv.t, vdiv.q, sv.q,wb, vflushのいずれかの命令に後続するVFPU命令としてlv.sまたはlv.q命令を使用すると、lv.sまたはlv.q命令でDキャッシュミスが発生していた場合にlv.s, lv.qのディスティネーションに不正な値がロードされることがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_4_17">
+<div style="margin-left:40px;"><h4><b>問題の発生するコードの例</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>vdiv.t        c000, c010, c020
+lv.q          c030, 0(a0)
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vdiv.q        c000, c010, c020
+move          t0, t1
+lv.q          c030, 0(a0)
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vdiv.p        c000, c010, c020
+vnop
+lv.q          c030, 0(a0)
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>sv.q          c010, 0(t0), wb
+lv.q          c030, 0(a0)
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vflush
+lv.q          c030, 0(a0)
+</font></pre></div>
+<div style="margin-left:67px;"><br>vdiv.p, vdiv.t, vdiv.q, sv.q,wb, vflush命令に後続するlv.s, lv.q命令の前に、CPU命令やFPU命令やlv.s, lv.q以外のVFPU命令が挟まっていた場合でもこの問題が発生する可能性があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_4_18">
+<div style="margin-left:40px;"><h4><b>解説</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">lv.s, lv.qなどのロード命令は、Dキャッシュミスヒット時にDキャッシュのリフィルが完了するまでロード命令をストールさせるビジー信号(DC_STALL)を発生させる事があります。また、vdiv.pt, vdiv.t, vdiv.qなどピッチ数の長いVFPU命令や、バスの状態に依存するsv.q,wb命令やvflush命令はCPUに対して後続するVFPU命令の発行を抑制するために比較的長い時間コプロセッサビジー信号(COP_STALL)を発生させる事があります。この2つのビジー信号の取り扱いに不具合があり、後続するロード命令のDキャッシュミスヒットによるリフィル完了(DC_STALLが消えるタイミング)が、先行するVFPU命令のビジー解除(COP_STALLが消えるタイミング)よりも先になってしまった場合、CPUがVFPUに送るデータが不正になります。<br><br>Dキャッシュミスヒット発生時にリフィルが完了するまでのサイクル数は、バスの利用状況により変化するため正確に予測する事ができません。vdiv.p, vdiv.t, vdiv.qはとくにピッチサイクル数が長いため、Dキャッシュのリフィルが理論的に最速のタイミングで完了した場合に、この問題を発生させる条件を満たしてしまう可能性があります。<br>sv.q,wb命令およびvflush命令はバス使用状態という外的要因により実行サイクル数が変動することがあるため、問題になるタイミングの条件を満たしてしまう可能性が理論的にはあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_4_19">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>vdiv.p, vdiv.t, vdiv.q命令を使用しないで下さい。vdiv.s命令を複数回発行することで代替してください。</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>vdiv.q        c000, c010, c020
+lv.q          c100, 0(a0)
+            &darr;
+vdiv.s        s000, s010, s020
+vdiv.s        s001, s011, s021
+vdiv.s        s002, s012, s022
+vdiv.s        s003, s013, s023
+lv.q          c100, 0(a0)
+</font></pre></div>
+<div style="margin-left:67px;"><br>vdiv.p, vdiv.t, vdiv.q命令はVFPU命令セットから削除されました。従来vdiv.s, vdiv.t, vdiv.q命令を用いていた箇所はvdiv.s命令で置き換えてください。またはvdiv命令の代わりにvrcp + vmul命令を使う事が可能な場合もあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>sv.q,wb命令の後にlv.s, lv.q命令を使用する場合、先行してvsync2命令を挿入してください。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">sv.q, wb命令の後に発行されるVFPU命令がlv.s, lv.q命令の場合はlv.s, lv.q命令に先行してvsync2命令を挿入してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+sv.q          c000, 0(t0), wb
+sv.q          c000, 16(t0), wb
+lv.q          c100, 0(a0)
+            &darr;
+sv.q          c000, 0(t0), wb
+sv.q          c000, 16(t0), wb
+vsync2
+lv.q          c100, 0(a0)
+
+</font></pre></div>
+<div style="margin-left:67px;">この場合のvsync2命令はvnop命令5個で代用する事ができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+sv.q          c000, 0(t0), wb
+sv.q          c000, 16(t0), wb
+lv.q          c100, 0(a0)
+            &darr;
+sv.q          c000, 0(t0), wb
+sv.q          c000, 16(t0), wb
+vnop
+vnop
+vnop
+vnop
+vnop
+lv.q          c100, 0(a0)
+
+</font></pre></div>
+<div style="margin-left:67px;">なおsv.q, wb命令の後、lv.s, lv.q命令を実行するよりも前にVFPUレジスタファイルに対して書き込みを行う命令が発行される場合、前述した別のエラッタの影響も受けるため、その命令に先行してvnop命令を挿入する必要もあります。VFPUレジスタファイルに書き込みを行う命令に先行してvnop命令を挿入するワークアラウンドを実行した場合でも、その後に実行するlv.s, lv.q命令に対してvsync2命令を先行するワークアラウンドは省略できません。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+sv.q          c000, 0(t0), wb
+sv.q          c000, 16(t0), wb
+vnop                                    // vadd.sのために必要
+vadd.q        c010, c020, c030
+vsync2                                  // lv.qのために必要
+lv.q          c100, 0(a0)
+
+</font></pre></div>
+<div style="margin-left:67px;">逆に、先にvsync2を挿入するワークアラウンドを実行した場合は、vnopを挿入するワークアラウンドは省略できます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+sv.q          c000, 0(t0), wb
+sv.q          c000, 16(t0), wb
+vsync2                                 // lv.qのために必要
+lv.q          c100, 0(a0)
+vadd.q        c010, c020, c030
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_3"><h4>
+(3)&nbsp;<b>vflush命令の後にlv.s, lv.q命令を使用する場合、先行してvsync2命令を挿入してください。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">vflush命令の後に発行されるVFPU命令がlv.s, lv.q命令の場合はlv.s, lv.q命令に先行してvsync2命令を挿入してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+vflush
+lv.q          c100, 0(a0)
+            &darr;
+vflush
+vsync2
+lv.q          c100, 0(a0)
+
+</font></pre></div>
+<div style="margin-left:67px;">この場合のvsync2命令はvnop命令4個で代用する事ができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+vflush
+lv.q          c100, 0(a0)
+            &darr;
+vflush
+vnop
+vnop
+vnop
+vnop
+lv.q          c100, 0(a0)
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_4_3_20">
+<div style="margin-left:40px;"><h4><b>psp-asによる対策</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> psp-as 1.10.4以降のバージョンでは、vdiv.p, vdiv.t, vdiv.q命令をマクロ命令として、自動的にvdiv.s命令に分割されます。
+<li> sv.q,wb命令の後にlv.s, lv.q命令が後続する場合、自動的にvsync2命令を挿入します。
+<li> vflush命令の後にlv.s, lv.q命令が後続する場合、自動的にvsync2命令を挿入します。
+<li> sv.q,wb, vflush命令を実行した後vsync2命令を実行しないままジャンプ/ブランチ命令を実行する場合は、自動的にvsync2命令を挿入します。
+</ul></div>
+<div style="margin-left:67px;"><br>インストラクションとしてのvdiv.p, vdiv.t, vdiv.q命令はVFPU仕様から削除しますが、これらの命令がブランチ遅延スロットに置かれていた場合以外ではソースコードコンパチは維持されます。<br>vsync2命令はpsp-as 1.10.4以降のバージョンでアセンブルできます。<br><br>psp-as 1.10.4以降のpsp-asアセンブラでは、以下のようなアルゴリズムでvsync2, vnop挿入を実行します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> sv.q, wb命令が現れたとき、vsync2挿入フラグおよびvnop挿入フラグをセット。
+<li> vflush命令が現れたとき、vsync2挿入フラグをセット。
+<li> vsync2挿入フラグがセットされた状態でlv.s命令またはlv.q命令が現れたとき、vsync2命令を挿入し、vsync2挿入フラグおよびvnop挿入フラグをクリア。
+<li> vsync2挿入フラグがセットされた状態でsv.?, mfv, mfvc, vpfx?, vsync2命令が現れたとき、vsync2挿入フラグおよびvnop挿入フラグをクリア。
+<li> vnop挿入フラグがセットされた状態でsv.?, mfv, mfvc, vpfx?ではないVFPU命令が現れたとき、vnop命令を挿入し、vnop挿入フラグだけをクリア。
+<li> vnop挿入フラグがセットされた状態でvnop, vsync命令が現れたとき、vnop命令を挿入し、vnop挿入フラグだけをクリア。
+<li> vsync2挿入フラグがセットされた状態で、ブランチ/ジャンプ命令が現れたとき、vsync2コマンドを挿入します。挿入する位置は.set reorderの場合はブランチ/ジャンプ命令の遅延スロットに、.set noreorderの場合はブランチ/ジャンプ命令の前になります。ただし.set noreorder設定時、遅延スロットに手動でvsync2命令等がおかれていた場合は、vsync2挿入はキャンセルされます。
+<li> .set noreorder設定時、遅延スロットにsv.q,wb命令が現れた場合、ブランチ/ジャンプ命令の前にvsync2命令を挿入します。
+<li> .set noreorder設定時、ブランチライクリ命令の遅延スロットにdiv.p, div.t, div.q, vflush, sv.q,wb命令が現れたとき、アセンブルエラーにします。
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>PSP&reg;最終仕様におけるGraphicsEngineエラッタ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>削除されたコマンド</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_21">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">初期のマニュアルに記述されたコマンドのうち、以下のコマンドは削除されています。<br></div>
+<div style="margin-left:80px;">CMD_X2 / CMD_Y2 / CMD_Z2 / CMDS2 / CMD_T2 / CMD_Q2 / <br>CMD_RGB2 / CMD_AP2 / CMD_F2 / CMD_I2<br></div>
+<div style="margin-left:67px;"><br>これらのコマンドの使用は禁止されています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_22">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">これらのコマンドは使用しないで下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>スキニング,モーフィングを使用するときダミーコマンドが必要</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_23">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">スキニングもしくはモーフィングを伴う描画コマンドの直後にCMD_BONEDもしくはCMD_WEIGHT0-7を使用した場合、使用中のマトリクスやウェイトを上書きする場合があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_24">
+<div style="margin-left:40px;"><h4><b>問題の発生するシーケンスの例</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">スキニングもしくはモーフィングを伴う以下の描画コマンドの直後４コマンド以内に描画コマンドを挿まずにCMD_BONEDもしくはCMD_WEIGHT0-7を使用した場合、使用中のマトリクスやウェイトを上書きする場合があります。<br></div>
+<div style="margin-left:80px;">CMD_PRIM / CMD_BEZIER / CMD_SPLINE<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_25">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">スキニングもしくはモーフィングを伴う描画コマンドの直後に、CMD_BONEDもしくはCMD_WEIGHT0-7を使用してマトリクスやウェイトを更新する場合には、該当する描画コマンドの後に、0xFF000000というダミーコマンドを１つ挿入してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+CMD_BONEN
+CMD_BONED
+　　:
+CMD_BONED
+CMD_PRIM
+0xFF000000　　　　// dummy command
+CMD_BONEN
+　　:
+CMD_BONED
+
+</font></pre></div>
+<div style="margin-left:67px;">このダミーコマンドは、その他の目的で使用することは禁止されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>インデックス頂点のベジェ,スプライン曲面を使用するときダミーコマンドが必要</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_26">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">インデックス頂点でベジェもしくはスプライン曲面を描画する場合、不正なインデックスを参照してしまうことがあります。この結果、バスエラーが発生したり、不正な描画結果になったりする場合があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_27">
+<div style="margin-left:40px;"><h4><b>問題の発生するシーケンスの例</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">先行したCMD_BBOX, CMD_PRIMで8ビットまたは16ビットのインデックス頂点が使用されている状態で、CMD_BEZIERまたはCMD_SPLINEでインデックス頂点を使用した描画を発行すると、特定の条件でベジェまたはスプライン描画で不正なインデックスが参照されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_28">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">インデックス頂点を使用するCMD_BEZIERまたはCMD_SPLINEを発行する場合には、CMD_VTYPE, CMD_IADR,CMD_VADRで頂点タイプおよび頂点アドレスを設定した後、ダミーで1頂点の独立三角形のCMD_PRIM、インデックスアドレスを再設定するCMD_IADRを発行してから、CMD_BEZIERまたはCMD_SPLINEを発行してください。<br>1頂点の独立三角形を指定したCMD_PRIMは実際には描画動作をしませんが、インデックス頂点ポインタ(IADR)は更新されるため、CMD_IADRによる再設定が必要です。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+CMD_VTYPE
+CMD_BASE
+CMD_IADR
+CMD_BASE
+CMD_VADR
+CMD_PRIM　　　　　// TRIANGLES, COUNT=1
+CMD_BASE　　　　　// IADR再設定
+CMD_IADR　　　　　// IADR再設定
+CMD_SPLINE
+
+</font></pre></div>
+<div style="margin-left:67px;">このダミーコマンドは、その他の目的で使用することは禁止されています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_29">
+<div style="margin-left:40px;"><h4><b>libgu, gmo_modelによる対策</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">devkit3.95より、該当するベジェ,スプライン描画を行うコマンドが発行される場合は、自動的にダミーのCMD_PRIM, CMD_BASE, CMD_IADRを挿入するようにしました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>ピクセルフォーマットDXT1を選択した状態でCLUTのロードに失敗する</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_30">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">テクスチャバッファのピクセルフォーマットをDXT1に設定した状態でCLUT(Color Look Up Table)のロードを行うと、CLUTのロードに失敗する場合があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_31">
+<div style="margin-left:40px;"><h4><b>解説</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">DXT1のデータを展開した後にCLUTをロードさせた場合、S3TCのデコード処理が終了せず、CLUTロード時にも機能してしまうことにより、期待するCLUTの取得ができない場合があります。<br>CLUTのロードを行う前に、必ずテクスチャバッファのピクセルフォーマットをDXT1以外へ設定することで回避可能です。<br>なお、テクスチャバッファのピクセルフォーマットがDXT3 / DXT5の場合は、この問題は発生しません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_32">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">CLUTのロードを行う前に、必ずテクスチャバッファのピクセルフォーマットをDXT1以外へ設定することで回避してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>サイズが非常に大きなプリミティブの描画でゴミが出る</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_33">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">以下のプリミティブを使用した時、スクリーン座標系上のプリミティブの大きさが非常に大きい場合、プリミティブの辺上にゴミが出る場合があります。<br>PRIM_LINES<br>PRIM_LINE_STRIP<br>PRIM_TRIANGLES<br>PRIM_TRIANGLE_STRIP<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_34">
+<div style="margin-left:40px;"><h4><b>解説</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ラインプリミティブまたはトライアングルプリミティブで、ある２つの頂点を透視変換後、スクリーン座標系上のY座標の差分が16bit符号無し固定小数点で0xAAAA(2730.625)以上ある場合に問題が発生します。スルーモードの場合も、同様に発生することがあります。<br>X,Z方向に関しては、プリミティブにゴミがでることはありません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_35">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Y方向に非常に大きくなる可能性のある上記プリミティブは、プリミティブを分割してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Graphics Engineの領域転送が終了しないことがある</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_36">
+<div style="margin-left:40px;"><h4><b>問題点</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">GEの領域転送コマンド(CMD_XSTART)実行時に、<br></div>
+<div style="margin-left:80px;">XBW1+SX1 &gt; 1024<br></div>
+<div style="margin-left:67px;">または<br></div>
+<div style="margin-left:80px;">XBW2+SX2 &gt; 1024<br></div>
+<div style="margin-left:67px;">となるようなパラメータが設定されていると、領域転送が行われず、GEがハングします。<br><br>ここで、XBW1,XBW2は転送バッファの水平方向サイズで、CMD_XBW1およびCMD_XBW2で指定するパラメータ、SX1,SX2は転送領域の左上端点で、CMD_XPOS1およびCMD_XPOS2で指定するパラメータです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_37">
+<div style="margin-left:40px;"><h4><b>対策方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">上記条件を満たすような転送が必要な場合は、領域を分割して転送するか、GEの領域転送以外の方法でメモリ転送を行うようにしてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_38">
+<div style="margin-left:40px;"><h4><b>libguによる対策</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">devkit2.8より、該当する領域転送を行うコマンドが発行される場合は、エラーを返すようにしました。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

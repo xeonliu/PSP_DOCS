@@ -1,0 +1,451 @@
+<html lang="en">
+<head>
+<title>System_Memory_Manager-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&trade; System Memory Manager Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceKernelMemoryBlockOptParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceKernelMemoryBlockOptParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Memory block additional data<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+typedef struct SceKernelMemoryBlockOptParam {
+	SceSize <i>size</i>;
+} <b>SceKernelMemoryBlockOptParam</b>;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of this structure (sizeof(SceKernelMemoryBlockOptParam))&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used for storing additional data when <a href="../kernel/System_Memory_Manager-Reference-English.htm#sceKernelAllocMemoryBlock">sceKernelAllocMemoryBlock</a>() is used to allocate a memory block.<br>It is provided for a future extension.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/System_Memory_Manager-Reference-English.htm#sceKernelAllocMemoryBlock">sceKernelAllocMemoryBlock</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelAllocMemoryBlock"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelAllocMemoryBlock<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Allocate a memory block<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelAllocMemoryBlock</b>(
+	const char *<i>name</i>,
+	SceKernelSysMemAlloc_t <i>type</i>,
+	SceSize <i>size</i>,
+	const <a href="../kernel/System_Memory_Manager-Reference-English.htm#SceKernelMemoryBlockOptParam">SceKernelMemoryBlockOptParam</a> *<i>optParam</i>
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>name</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Name&nbsp;of&nbsp;the&nbsp;memory&nbsp;block.&nbsp;<br>&nbsp;Only&nbsp;used&nbsp;for&nbsp;visual&nbsp;identification&nbsp;by&nbsp;the&nbsp;operator&nbsp;during&nbsp;debugging,&nbsp;so&nbsp;<i>name&nbsp;<br>&nbsp;</i>is&nbsp;not&nbsp;specifically&nbsp;checked&nbsp;for&nbsp;uniqueness.&nbsp;<br>&nbsp;Maximum&nbsp;length&nbsp;is&nbsp;31&nbsp;bytes.&nbsp;<br>&nbsp;Do&nbsp;not&nbsp;specify&nbsp;NULL.&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  valign="top">&nbsp;<i>type</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Memory&nbsp;block&nbsp;allocation&nbsp;type.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_KERNEL_SMEM_LOW&nbsp;</td>
+<td valign="top">&nbsp;Search&nbsp;for&nbsp;an&nbsp;empty&nbsp;area&nbsp;from&nbsp;the&nbsp;low-order&nbsp;<br>&nbsp;addresses.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_KERNEL_SMEM_HIGH&nbsp;</td>
+<td valign="top">&nbsp;Search&nbsp;for&nbsp;an&nbsp;empty&nbsp;area&nbsp;from&nbsp;the&nbsp;high-order&nbsp;<br>&nbsp;addresses.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>size</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Size&nbsp;of&nbsp;the&nbsp;memory&nbsp;block&nbsp;(in&nbsp;bytes).&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>optParam</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Reserved&nbsp;for&nbsp;a&nbsp;future&nbsp;extension.&nbsp;Specify&nbsp;NULL.&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;mbid (mbid &gt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory block ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_ERROR<br>SCE_KERNEL_ERROR_ILLEGAL_ADDR<br>SCE_KERNEL_ERROR_ILLEGAL_ARGUMENT<br>SCE_KERNEL_ERROR_ILLEGAL_MEMBLOCKTYPE<br>SCE_KERNEL_ERROR_MEMBLOCK_ALLOC_FAILED<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function allocates a memory block.<br>SCE_KERNEL_SMEM_LOW and SCE_KERNEL_SMEM_HIGH can be specified as the memory block allocation type.<br>When SCE_KERNEL_SMEM_LOW is specified, the memory block is allocated in an empty area from low-order addresses.<br>When SCE_KERNEL_SMEM_HIGH is specified, the memory block is allocated in an empty area from high-order addresses.<br>If an empty area of at least <i>size</i> bytes is not found, an error will occur.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelFreeMemoryBlock"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelFreeMemoryBlock<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Free a memory block<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelFreeMemoryBlock</b>(
+	SceUID <i>mbid</i>
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of the memory block to be freed.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_UNKNOWN_UID<br>SCE_KERNEL_ERROR_ILLEGAL_PERM<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function frees a memory block.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelGetMemoryBlockAddr"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelGetMemoryBlockAddr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get memory block address<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelGetMemoryBlockAddr</b>(
+	SceUID <i>mbid</i>,
+	void **<i>blockp</i>
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on an interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of the memory block whose address is to be obtained.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>blockp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to a variable where the memory block address will be stored.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_UNKNOWN_UID<br>SCE_KERNEL_ERROR_ILLEGAL_PERM<br>SCE_KERNEL_ERROR_ILLEGAL_ADDR<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the address of a memory block.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelTotalFreeMemSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelTotalFreeMemSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get total size of user allocatable area<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelTotalFreeMemSize</b>(
+	void
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The total size of free space is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns the total size of all free space that can be allocated by the user.<br>This function is provided as a debugging aid, so do not use it in applications. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelMaxFreeMemSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelMaxFreeMemSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get size of largest contiguous area in user allocatable area<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelMaxFreeMemSize</b>(
+	void
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The size of the largest contiguous free space is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns the size of the largest contiguous area within the area that can be allocated by the user. <br>This function is provided as a debugging aid, so do not use it in applications. <br></div>
+
+<!-- sce_hd2 -->
+<div style="margin-left:50px;"><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelSetCompiledSdkVersion"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelSetCompiledSdkVersion<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Register version of SDK with which the application was compiled<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelSetCompiledSdkVersion</b>(
+	unsigned int
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (regardless of whether interrupts are enabled or disabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Value of the version of the SDK with which the application was compiled.<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_OK<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function notifies the system software of the version of the SDK with which the application itself was compiled. The system software must perform its processing in accordance with the SDK version, so be sure to specify the version number. In addition, if a standard CRT is to be used, this function is called internally as follows.<br><br>sceKernelSetCompiledSdkVersion(SCE_DEVKIT_VERSION)<br><br>If non-standard CRT code is to be used, call this function in the same manner.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelSetCompilerVersion"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelSetCompilerVersion<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Register version of compiler with which the application was compiled<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelSetCompilerVersion</b>(
+	unsigned int
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (regardless of whether interrupts are enabled or disabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Value of the version of the compiler with which the application was compiled.<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_OK<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function notifies the system software of the version of the compiler with which the application itself was compiled. Currently, this is not used for anything in particular. In addition, if a standard CRT is to be used, the function is called internally as follows.<br><br>sceKernelSetCompilerVersion((__GNUC__ &lt;&lt;16) | <br>(__GNUC_MINOR__ &lt;&lt; 8) | <br>__GNUC_PATCHLEVEL__)<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

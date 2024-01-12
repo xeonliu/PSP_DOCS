@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>libheap-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libheap Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libheap is a library for managing in smaller chunks, memory that is first allocated using the fixed-length memory pool (FPL) of the thread manager.<br>libheap is useful when you want to perform malloc()/free()-like memory management without depending on libc. It can also be used when you want to allocate multiple independent heaps.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libheap.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Static link library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRX module file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Using the Library</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Create heap memory</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">First, create heap memory.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *pHeap;
+
+pHeap = <a href="../kernel/libheap-Reference-English.htm#sceHeapCreateHeap">sceHeapCreateHeap</a>(&quot;heap1&quot;, 1048576, SCE_HEAP_AUTO_EXTEND, NULL);
+
+</font></pre></div>
+<div style="margin-left:67px;">Heap memory named "heap1" is created here with an initial size of 1MB and heap automatic extension mode in effect. libheap uses the specified name and initial size to allocate memory by creating a fixed-length memory pool. Memory is allocated in the user partition.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Allocate memory from the heap</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To allocate memory from the heap that was created, call the <a href="../kernel/libheap-Reference-English.htm#sceHeapAllocHeapMemory">sceHeapAllocHeapMemory</a>() function, and specify the heap that was returned by <a href="../kernel/libheap-Reference-English.htm#sceHeapCreateHeap">sceHeapCreateHeap</a>() as an argument.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+void *buf;
+
+buf = <a href="../kernel/libheap-Reference-English.htm#sceHeapAllocHeapMemory">sceHeapAllocHeapMemory</a>(pHeap, 1024);
+
+</font></pre></div>
+<div style="margin-left:67px;">In this example, 1024 bytes of memory are allocated from the heap. When the heap is created with the SCE_HEAP_AUTO_EXTEND flag, an attempt will be made to extend the heap if the remaining heap size is insufficient.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Return memory to the heap</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call <a href="../kernel/libheap-Reference-English.htm#sceHeapFreeHeapMemory">sceHeapFreeHeapMemory</a>() to return the memory to the heap that was previously allocated with the <a href="../kernel/libheap-Reference-English.htm#sceHeapAllocHeapMemory">sceHeapAllocHeapMemory</a>() function. When memory is returned to the heap, it must be returned to the same heap from which it was originally allocated.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../kernel/libheap-Reference-English.htm#sceHeapFreeHeapMemory">sceHeapFreeHeapMemory</a>(pHeap, buf);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Delete heap memory</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A heap that was created with the <a href="../kernel/libheap-Reference-English.htm#sceHeapCreateHeap">sceHeapCreateHeap</a>() function can be deleted by calling <a href="../kernel/libheap-Reference-English.htm#sceHeapDeleteHeap">sceHeapDeleteHeap</a>().<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../kernel/libheap-Reference-English.htm#sceHeapDeleteHeap">sceHeapDeleteHeap</a>(pHeap);
+
+</font></pre></div>
+<div style="margin-left:67px;">When a heap is deleted, the memory that was being used by the heap is returned to the kernel's system memory manager so that it is available for other uses.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2006 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

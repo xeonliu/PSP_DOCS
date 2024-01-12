@@ -1,0 +1,663 @@
+<html lang="en">
+<head>
+<title>USB_Serial-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+USB Serial Driver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Purpose</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The USB serial driver enables the TOOL (DTP-T1000 / DTP-H1500) to communicate with a PC via serial communication over USB using the Abstract Control Model (ACM) of the USB Communication Device Class (CDC).<br><br>The TOOL is seen as the COM port when it is connected to a Windows PC. It appears as /dev/ttyACM0, etc. when connected to a Linux PC. Data can be exchanged via ordinary serial communication transfer. Transfers using ZMODEM, Kermit, etc. are not supported.<br><br>The USB serial driver can only be used with the TOOL; it cannot be used on a PSP&trade;. Also, the CDC specification stipulates that the USB serial driver cannot be used at the same time as another USB driver such as the USB camera driver or USB GPS driver.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Configuration Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the USB serial driver.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usbser.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;stub file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usbser_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following USB serial driver sample program is available for your reference.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> devkit/sample/tool/usbser/echoback<br>This program receives data from a USB host and returns the identical data back to the host.
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Initialization and Termination Processing</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Configuring the TOOL</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use the USB serial driver, enable "USB Serial" in the system software's "Debug Settings".<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Start up system software.</li>
+<li VALUE=2> Set the "Settings" -&gt; "Debug Settings" -&gt; "USB Serial" item to ON.</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Loading the Driver</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When "USB Serial" is enabled in "Debug Settings", the USB serial driver will be loaded and made resident on boot up. The driver does not need to be explicitly loaded from an application.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Initialization Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerInit">sceUsbSerInit</a>() to initialize the USB serial driver.<br>By passing <a href="../debug_support/USB_Serial-Reference-English.htm#SceUsbSerInitParam">SceUsbSerInitParam</a> as the argument to this function, you can specify the read and write buffers which will be used internally by the USB serial driver.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define INTERNAL_BUF_SIZE (8 * 1024)
+static char readBuf[INTERNAL_BUF_SIZE];
+static char writeBuf[INTERNAL_BUF_SIZE];
+
+<a href="../debug_support/USB_Serial-Reference-English.htm#SceUsbSerInitParam">SceUsbSerInitParam</a> param;
+
+// Set the size of the structure in the size field
+param.size = sizeof(<a href="../debug_support/USB_Serial-Reference-English.htm#SceUsbSerInitParam">SceUsbSerInitParam</a>);
+
+// Use readBuf as the read buffer
+param.pReadBuf = readBuf;
+param.sizeReadBuf = INTERNAL_BUF_SIZE;
+
+// Use writeBuf as the write buffer
+param.pWriteBuf = writeBuf;
+param.sizeWriteBuf = INTERNAL_BUF_SIZE;
+
+// Initialize the USB serial driver
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerInit">sceUsbSerInit</a>(&amp;param);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">If no internal buffers are specified, 4KiB of memory will be allocated from kernel space for each of the internal buffers.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Initialize USB serial driver
+// Have the driver allocate buffers for internal use
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerInit">sceUsbSerInit</a>(NULL);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">The USB serial driver cannot be used at the same time as another USB driver. Therefore, if another USB driver was already started with the USB bus driver's sceUsbStart() function, it will not be possible to initialize the USB serial driver.<br>Consequently, to use the USB serial driver, you must first stop all USB drivers and then initialize the USB serial driver.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerEnd">sceUsbSerEnd</a>() to terminate the USB serial driver.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Terminate the USB serial driver
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerEnd">sceUsbSerEnd</a>();
+if (ret &lt; 0) {
+	// Error handling
+} 
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Communication Processing</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Opening the USB Serial Port</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerOpen">sceUsbSerOpen</a>() to open the USB serial port.<br>Depending on the value specified for the argument, the behavior will change when DTR (Data Terminal Ready) is OFF. DTR represents the communicable state of the USB host.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_1">
+<div style="margin-left:40px;"><h4><b>Check DTR mode (SCE_USBSER_OPEN_MODE_CHECK_DTR)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If DTR changes to OFF while <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRead">sceUsbSerRead</a>(), <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>(), or <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerFlush">sceUsbSerFlush</a>() is executing or if DTR is OFF when any of these functions is called, an <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a> error will be returned.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Open the port in CHECK_DTR mode
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerOpen">sceUsbSerOpen</a>(<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OPEN_MODE_CHECK_DTR">SCE_USBSER_OPEN_MODE_CHECK_DTR</a>);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_2">
+<div style="margin-left:40px;"><h4><b>Ignore DTR mode (SCE_USBSER_OPEN_MODE_IGNORE_DTR)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">An <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a> error will not be returned.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Open the port in IGNORE_DTR mode
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerOpen">sceUsbSerOpen</a>(<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OPEN_MODE_IGNORE_DTR">SCE_USBSER_OPEN_MODE_IGNORE_DTR</a>);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">When the port is opened, the USB serial driver sets DCD (Data Carrier Detect) and DSR (Data Set Ready) to ON and reports that preparations for communication to the USB host have been completed. After the port is opened and DTR changes to ON, communication with the USB host can be performed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Reading Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Data that was received from the USB host is temporarily stored in the USB serial driver's internal read buffer. <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRead">sceUsbSerRead</a>() can be executed to read data from this buffer.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define BUF_SIZE  (8 * 1024)
+char buf[BUF_SIZE];
+int ret;
+
+// Read data in Blocking mode with no timeout
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRead">sceUsbSerRead</a>(buf, BUF_SIZE, <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>, -1);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">The following three modes can be specified for the third argument of <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRead">sceUsbSerRead</a>().<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Blocking mode (<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>)<br>The function will enter a wait state until data of the specified size is read.
+<li> Blocking/Non-Blocking mode (<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_B_NB">SCE_USBSER_OP_MODE_B_NB</a>)<br>If there is no data in the internal buffer, the function will enter a wait state until data is received. When data is received and stored in the internal buffer, only the data in the internal buffer will be read and then the function will complete.
+<li> Non-Blocking mode (<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_NONBLOCKING">SCE_USBSER_OP_MODE_NONBLOCKING</a>)<br>Only the data in the internal buffer will be read and then the function will complete. If there is no data in the internal buffer, the function will return 0 without reading data.
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">For Blocking and Blocking/Non-Blocking modes, you can specify an idle timeout interval in microseconds for the fourth argument. This will cause a timeout to occur if no data is received from the USB host within the specified period. Note that this is not the amount of time from when <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRead">sceUsbSerRead</a>() was executed. If a negative number is specified, timeouts will be disabled.<br><br>If the port was opened in the check DTR mode, an <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a> error will be returned when DTR is OFF.<br>If the port was opened in the ignore DTR mode, no data will be received from the USB host until DTR changes to ON. During this time, execution will be blocked in Blocking and Blocking/Non-Blocking modes, and in Non-Blocking mode, the function will return 0.<br><br>For Blocking and Blocking/Non-Blocking modes, you can also use <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerReadCB">sceUsbSerReadCB</a>(), which has additional functionality for checking whether a callback notification exists while processing is in a wait state.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Writing Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>() is used to write data and send it to the USB host. After the data is written, it is temporarily stored in the USB serial driver's internal write buffer and then sent to the USB host in order.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define BUF_SIZE  (8 * 1024)
+char buf[BUF_SIZE];
+int ret;
+
+memset(buf, 0xFF, BUF_SIZE);
+
+// Write data in Blocking mode with no timeout
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>(buf, BUF_SIZE, <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>, -1);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">Note that even after <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>() ends, there may still be data left in the internal buffer that was not sent to the USB host. To guarantee that all data is sent to the USB host, you must explicitly flush the buffer (see description below).<br><br>The following three modes can be specified for the third argument of <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>().<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Blocking mode (<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>)<br>The function will enter a wait state until the specified amount of data is written.
+<li> Blocking/Non-Blocking mode (<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_B_NB">SCE_USBSER_OP_MODE_B_NB</a>)<br>If there is no free space left in the internal buffer, the function will enter a wait state until data is sent and free space becomes available. After free space becomes available, only data with a size that is equal to the amount of free space in the internal buffer will be written, and then the function will complete.
+<li> Non-Blocking mode (<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_OP_MODE_NONBLOCKING">SCE_USBSER_OP_MODE_NONBLOCKING</a>)<br>If there is free space in the internal buffer, only data with a size that is equal to the amount of free space will be written and then the function will complete. If there is no free space in the internal buffer, the function will return 0 without writing data.
+</ul></div>
+<div style="margin-left:50px;"><br>For Blocking and Blocking/Non-Blocking modes, you can specify an idle timeout interval in microseconds for the fourth argument. This will cause a timeout to occur if no data could be sent to the USB host within the specified period. Note that this is not the amount of time from when <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>() was executed. If a negative number is specified, timeouts will be disabled.<br><br>If the port was opened in the check DTR mode, an <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a> error will be returned when DTR is OFF.<br>If the port was opened in the ignore DTR mode, all data will be written, and the value returned will be the same as the specified size. However, as long as DTR is OFF, data cannot be sent to the USB host, so the written data will not be sent and will be discarded instead.<br><br>For Blocking and Blocking/Non-Blocking modes, you can also use <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWriteCB">sceUsbSerWriteCB</a>(), which has additional functionality for checking whether a callback notification exists while processing is in a wait state.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Flushing the Buffer</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following three methods can be used to verify that the data that was written with <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>() was sent to the USB host.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_3">
+<div style="margin-left:40px;"><h4><b>sceUsbSerFlush() or sceUsbSerFlushCB()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerFlush">sceUsbSerFlush</a>() to cause processing to wait until all data in the internal write buffer is sent to the USB host.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Wait until all data is sent with no timeout
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerFlush">sceUsbSerFlush</a>(-1);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:67px;">Specify an interval in microseconds in the argument to cause a timeout to occur if the buffer could not be flushed within the specified period. If a negative number is specified, timeouts will be disabled.<br><br>If the port was opened in the check DTR mode, an <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a> error will be returned when DTR is OFF.<br>If the port was opened in the ignore DTR mode, while DTR is off, any data written with <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>() will be discarded, so the function will terminate immediately with normal completion.<br><br>The <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerFlushCB">sceUsbSerFlushCB</a>()function has additional functionality for checking whether a callback notification exists while processing is in a wait state.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_4">
+<div style="margin-left:40px;"><h4><b>sceUsbSerGetWriteDataSize()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerGetWriteDataSize">sceUsbSerGetWriteDataSize</a>() can be used to check that all data was sent. This function polls until the data size of the internal write buffer is zero.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+while (1) {
+	// Loop until the data size in the internal write buffer is zero
+	if (<a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerGetWriteDataSize">sceUsbSerGetWriteDataSize</a>() == 0) {
+		break;
+	}
+
+	// Enter a delay so that a busy loop will not occur
+	<a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDelayThread">sceKernelDelayThread</a>(10 * 1000);
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_5">
+<div style="margin-left:40px;"><h4><b>sceUsbSerRegisterSentCallback()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>() can also be used to check that all data was sent. This function works by having a callback reported when the size of the free space in the internal write buffer has reached a maximum value.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define INTERNAL_BUF_SIZE   (8 * 1024)
+
+// Callback function
+static int FlushCallback(int count, int arg, void *common)
+{
+	printf(&quot;Sent all data\n&quot;);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// Create callback
+ret = <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;FlushCallback&quot;, FlushCallback, NULL);
+if (ret &lt; 0) {
+	// Error handling
+}
+cbId = ret;
+
+// Register callback and specify the internal buffer size for the threshold value
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>(cbId, INTERNAL_BUF_SIZE);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+while (1) {
+	// Use API with CB to check whether callback notification exists
+	<a href="../peripheral/Display-Reference-English.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Cancelling Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerCancel">sceUsbSerCancel</a>() to cancel the processing of a <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRead">sceUsbSerRead</a>(), <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>(), or <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerFlush">sceUsbSerFlush</a>() function that is executing. Specify one of the following macros for the argument to cancel the indicated processing.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CANCEL_MODE_READ">SCE_USBSER_CANCEL_MODE_READ</a> (read processing)
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CANCEL_MODE_WRITE">SCE_USBSER_CANCEL_MODE_WRITE</a> (write processing)
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CANCEL_MODE_FLUSH">SCE_USBSER_CANCEL_MODE_FLUSH</a> (flush processing)
+</ul></div>
+<div style="margin-left:50px;">Macros can be ORed together to cancel more than one kind of processing at once.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Cancel read, write, or flush processing
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerCancel">sceUsbSerCancel</a>(<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CANCEL_MODE_READ">SCE_USBSER_CANCEL_MODE_READ</a> |
+			<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CANCEL_MODE_WRITE">SCE_USBSER_CANCEL_MODE_WRITE</a> |
+			<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CANCEL_MODE_FLUSH">SCE_USBSER_CANCEL_MODE_FLUSH</a>);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Clearing Internal Buffers</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerClear">sceUsbSerClear</a>() to clear an internal buffer. Specify one of the following macros for the argument to clear the indicated buffer.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CLEAR_MODE_READ">SCE_USBSER_CLEAR_MODE_READ</a> (internal read buffer)
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CLEAR_MODE_WRITE">SCE_USBSER_CLEAR_MODE_WRITE</a> (internal write buffer)
+</ul></div>
+<div style="margin-left:50px;">You can also OR the two macros to clear both buffers at the same time.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Clear both the internal read and write buffers
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerClear">sceUsbSerClear</a>(<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CLEAR_MODE_READ">SCE_USBSER_CLEAR_MODE_READ</a> |
+			<a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_CLEAR_MODE_WRITE">SCE_USBSER_CLEAR_MODE_WRITE</a>);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Closing the USB Serial Port</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerClose">sceUsbSerClose</a>() to close the USB serial port.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerClose">sceUsbSerClose</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">When the port is closed, the USB serial driver sets DCD and DSR to OFF to report that communication with the USB host cannot be performed. It then clears the USB serial driver's internal buffers. While the port remains closed, any data sent from the USB host will be discarded.<br><br>If the port is closed while <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRead">sceUsbSerRead</a>(), <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerWrite">sceUsbSerWrite</a>(), or <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerFlush">sceUsbSerFlush</a>() are executing, the executing function will return an <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_ERROR_CLOSED">SCE_USBSER_ERROR_CLOSED</a> error.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Getting Status</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Getting Internal Buffer Status</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call the following functions to get the amount of data and amount of free space in the internal buffers.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerGetReadDataSize">sceUsbSerGetReadDataSize</a>():  Get amount of data in internal read buffer
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerGetReadFreeSize">sceUsbSerGetReadFreeSize</a>():  Get amount of free space in internal read buffer
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerGetWriteDataSize">sceUsbSerGetWriteDataSize</a>():  Get amount of data in internal write buffer
+<li> <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerGetWriteFreeSize">sceUsbSerGetWriteFreeSize</a>():  Get amount of free space in internal write buffer
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Getting DTR Status</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerGetDTR">sceUsbSerGetDTR</a>() to get the current DTR status.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Callbacks</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Callback for Reporting Change in DTR Status</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can use <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterDTRCallback">sceUsbSerRegisterDTRCallback</a>() to register a callback for reporting a change in the DTR status and <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerUnregisterDTRCallback">sceUsbSerUnregisterDTRCallback</a>() to unregister it.<br><a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_DTR_ON">SCE_USBSER_DTR_ON</a> or <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_DTR_OFF">SCE_USBSER_DTR_OFF</a>, which represents the DTR status, is passed in the second argument <i>arg</i> of the callback function.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Callback function
+static int DTRCallback(int count, int arg, void *common)
+{
+	printf(&quot;DTR %s\n&quot;, (arg == <a href="../debug_support/USB_Serial-Reference-English.htm#SCE_USBSER_DTR_ON">SCE_USBSER_DTR_ON</a>) ? &quot;ON&quot; : &quot;OFF&quot;);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// Create callback
+ret = <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;DTRCallback&quot;, DtrCallback, NULL);
+if (ret &lt; 0) {
+	// Error handling
+}
+cbId = ret;
+
+// Register callback
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterDTRCallback">sceUsbSerRegisterDTRCallback</a>(cbId);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+while (1) {
+	// Use API with CB to check whether a callback notification exists
+	<a href="../peripheral/Display-Reference-English.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Callback for Reporting When Data is Received</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can use <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterRecvCallback">sceUsbSerRegisterRecvCallback</a>() to register a callback for reporting when data is received and <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerUnregisterRecvCallback">sceUsbSerUnregisterRecvCallback</a>() to unregister it.<br>By specifying a threshold value in the second argument, the callback will be reported when data with a size that equals or exceeds the threshold value is stored in the internal read buffer. The size of the data is passed in the argument <i>arg</i> of the callback function.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define RECV_THRESHOLD  4  // Report callback when at least 4 bytes is received
+
+// Callback function
+static int ReceivedCallback(int count, int arg, void *common)
+{
+	printf(&quot;Data size : %d bytes\n&quot;, arg);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// Create callback
+ret = <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;ReceivedCallback&quot;, ReceivedCallback, NULL);
+if (ret &lt; 0) {
+	// Error handling
+}
+cbId = ret;
+
+// Register callback
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterRecvCallback">sceUsbSerRegisterRecvCallback</a>(cbId, RECV_THRESHOLD);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+while (1) {
+	// Use API with CB to check whether callback notification exists
+	<a href="../peripheral/Display-Reference-English.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">Once the callback is reported, it will not be reported again even if the threshold value is exceeded until the data size in the internal buffer temporarily falls below the threshold value.<br><br>You can also use <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerSetRecvCBThreshold">sceUsbSerSetRecvCBThreshold</a>() to change the threshold value.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Callback for Reporting When Data is Sent</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can use <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>() to register a callback for reporting when data is sent and <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerUnregisterSentCallback">sceUsbSerUnregisterSentCallback</a>() to unregister it.<br>By specifying a threshold value in the second argument, the callback will be reported when the amount of free space in the internal write buffer equals or exceeds the threshold value after data is sent. The amount of free space in the internal buffer is passed in the argument <i>arg</i> of the callback function.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define SENT_THRESHOLD  4  // Report callback when at least 4 bytes of free space is created
+
+// Callback function
+static int SentCallback(int count, int arg, void *common)
+{
+	printf(&quot;Free space size : %d bytes\n&quot;, arg);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// Create callback
+ret = <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;SentCallback&quot;, SentCallback, NULL);
+if (ret &lt; 0) {
+	// Error handling
+}
+cbId = ret;
+
+// Register callback
+ret = <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>(cbId, SENT_THRESHOLD);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+while (1) {
+	// Use API with CB to check whether callback notification exists
+	<a href="../peripheral/Display-Reference-English.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">Once the callback is reported, it will not be reported again even if the threshold value is exceeded until the amount of free space in the internal buffer temporarily falls below the threshold value.<br><br>You can also use <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerSetSentCBThreshold">sceUsbSerSetSentCBThreshold</a>() to change the threshold value.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Verification When Submitting the Master</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The USB serial driver cannot be used with the PSP&trade;. Prior to submitting the master, be sure to confirm that the application runs correctly when "USB Serial" is disabled in the "Debug Settings" of system software.<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Start up system software.</li>
+<li VALUE=2> Set the "Settings" -&gt; "Debug Settings" -&gt; "USB Serial" item to OFF.</li>
+</ol></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>Reference Information</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>When Connecting to a Windows PC</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can use the USB serial driver with a Windows PC running Windows XP SP1 or later.<br><br>To connect the TOOL to a Windows PC, you must first install the driver using devkit/sample/tool/usbser/psp_usbser.inf. The procedure for Windows XP is shown below.<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Execute the program on the TOOL that will use the USB serial driver so that <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerInit">sceUsbSerInit</a>() will be called to initialize the driver.</li>
+<li VALUE=2> Connect the TOOL and PC with a USB cable.</li>
+<li VALUE=3> A wizard will start up on the PC. Select the following items sequentially. <br>1. "No, not this time"<br>2. "Install from a list or specific location (advanced)" <br>3. "Don't search. I will choose the driver to install."</li>
+<li VALUE=4> The driver selection screen will be displayed. Select "Have Disk" and select the folder that contains the psp_usbser.inf file.</li>
+<li VALUE=5> The driver with the model name "PSP USB Serial" will be displayed. Select it.</li>
+<li VALUE=6> A warning indicating that the driver has not passed the Windows logo test will be displayed. Select "Continue anyway."</li>
+<li VALUE=7> The installation completion screen will be displayed.</li>
+</ol></div>
+<div style="margin-left:50px;"><br>The following method can be used to check the port number the TOOL is connected to.<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Execute the program on the TOOL that will use the USB serial driver so that <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerInit">sceUsbSerInit</a>() will be called to initialize the driver. </li>
+<li VALUE=2> Connect the TOOL and PC with a USB cable.</li>
+<li VALUE=3> Open "Control Panel" -&gt; "System" and open "Device Manager" on the "Hardware" tab.</li>
+<li VALUE=4> Find the port named "PSP USB Serial" on the list of "Ports (COM and LPT)."</li>
+<li VALUE=5> The port number is displayed after the name such as "PSP USB Serial (COM3)."</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>When Connecting to a Linux PC</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can use the USB serial driver with a Linux PC that supports USB CDC ACM.<br><br>The Linux standard CDC ACM driver creates device files named ttyACM*. For a Linux PC running kernel 2.6, use the following procedure to check the port number that the TOOL is connected to.<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Execute the program on the TOOL that will use the USB serial driver so that <a href="../debug_support/USB_Serial-Reference-English.htm#sceUsbSerInit">sceUsbSerInit</a>() will be called to initialize the driver.</li>
+<li VALUE=2> Connect the TOOL and PC with a USB cable.</li>
+<li VALUE=3> Execute the following command on the PC. Communication with the TOOL is performed by accessing /dev/ttyACM0.</li>
+</ol></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+# dmesg | grep ttyACM
+cdc_acm 5-2:1.0: ttyACM0: USB ACM device
+
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

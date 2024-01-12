@@ -1,0 +1,160 @@
+<html lang="jp">
+<head>
+<title>Downloadable_Game-Notes</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Downloadable Game Package</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;ダウンローダブルゲーム 作成時の注意点
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>はじめに</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">このドキュメントは、PSP&reg;開発全般に適用できる注意点のうち、特にダウンローダブルゲーム開発時において問題になりやすい点、ダウンローダブルゲームにのみ存在する制限事項と、特別なテスト方法について、解説するものです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSP&reg;カーネル<br>非同期I/Oアクセス機能
+<li> PSP&reg;ダウンローダブルゲームパッケージ作成ガイド
+<li> PlayStation&reg;Network SMT シンプルオーサリングサービスユーザガイド
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>開発時の注意</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、問題となりやすいダウンローダブルゲームとUMD&reg;ゲームの動作の差異について述べます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>アクセスタイミングの差異について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームはUMD&reg;に対するアクセスのエミュレートを行い、更にデータのRead時に、復号署名検証処理、圧縮展開処理を行っています。その為、読み出し速度やレイテンシが実際のUMD&reg;へのアクセスとは異なります。特にUMD&reg;と比べて、シークは短時間で行える一方、UMD&reg;の外周にあたるセクタにデータを配置した場合、PSP&reg;ダウンローダブルゲームでは実際のUMD&reg;よりも読み出し速度が低下する可能性があります。<br>しかしながら、もともと厳密なアクセスタイミング等は保証されていません。ゲームアプリケーションは読み出し速度やレイテンシが変動しても正しく動作するように作成して下さい。<br>そして、それはUMD&reg;ゲームでもPSP&reg;ダウンローダブルゲームでも同じです。特に、通信対戦を行うゲームアプリケーションでは、対戦相手の環境と読み出し速度が大幅に異なる可能性を考慮したプログラミングとテストが必要です。<br>また、UMD&reg;の長いロードを見越して、バックグラウンドで別処理を行うような場合にもタイミングが異なる事によって問題が発生しないか注意して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ディスクI/Oに関わるスレッドの挙動差について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;ゲームの場合とPSP&reg;ダウンローダブルゲームの場合とではシステムソフトウェアのスレッド構成が異なるため、UMD&reg;では発生しなかった不具合が顕在化し、ゲームアプリケーションが正しく動作しなくなることがあります。<br>例えば、非同期I/OリクエストをsceIoPollAsync()だけで完了待ちしている場合がこれにあたります。PSP&reg;ランタイムライブラリドキュメント「PSP&reg;カーネル」で説明している通り、これはデッドロックの原因となりますが、現在のPSP&reg;ランタイムライブラリでは、UMD&reg;へI/Oアクセスで、かつ、ワーカスレッドの優先度を上げている場合はデッドロックせず動作してしまうことがあります。<br>しかし、PSP&reg;ダウンローダブルゲームとして動作させた場合には、同様の方法でデッドロックを回避することはできません。なお、この例に限らず、実行権をリリースせずにポーリングし続けるようなコーディングで、問題となる場合があります。正しくスレッドの実行権をリリースしながら、完了待ちを行ってください。<br>また、disc0のファイルに対して読み出しを行うスレッドは、ドライバ内の処理によりその優先度が一時的に変更される場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ディスクI/O中のバッファに格納されるデータについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームは、ユーザのMemory Stick&trade;には暗号化されたファイルとしてインストールされます。ゲームアプリケーションがdisc0のファイルを読み出したとき、APIに渡したバッファに、この暗号化されたままのデータが一時的に書き込まれることがあります。これらは読み込み完了までに、正しく復号されたデータに置換されます。非同期で読み込みを行う際、完了を待たずにバッファのデータを扱うバグが存在すると、暗号化されたままのデータを読み出すことになり、異常動作の原因となりますので注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Memory Stick&trade;へのアクセスについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;上でゲームアプリケーションが実行される時と同様にMemory Stick&trade;へのアクセスもできます。エミュレートされているUMD&reg;と同時にMemory Stick&trade;へアクセスしても差し支えありません。<br>ただし、同時にアクセスした場合、それぞれのアクセスに要する時間は、一方のみの場合に比べて増加します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>UMD&reg;挿抜に関する通知について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームの動作中にMemory Stick&trade;が抜き取られた場合は、UMD&reg;ゲームの動作中にUMD&reg;が抜き取られたときと同様に、ゲーム終了確認画面がインポーズ表示されます。<br>SCE_UMD_MEDIA_OUTやSCE_UMD_READABLE等のコールバックや<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdWaitDriveStat">sceUmdWaitDriveStat</a>()等に対するイベントもMemory Stick&trade;の抜き差しと共に発生します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>UMD&reg;とPSP&reg;ダウンローダブルゲームにおける状態遷移のタイミング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームでは、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>()を用いて登録したコールバック関数に通知される状態の順番やタイミングが、UMD&reg;で同じゲームアプリケーションを動作させた際と異なる場合があります。<br>特に、UMD&reg;と比較して、SCE_UMD_READYやSCE_UMD_READABLE以外の状態から、これらの状態に遷移するタイミングは早くなります。そのため、パワーサービスによるコールバック(SCE_POWER_CALLBACKARG_RESUME_COMP等）より先に上記の状態が通知されることもあります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>制限事項</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、ダウンローダブルゲーム特有の制限事項について、説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>UMD&reg;へのアクセスについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲーム動作中は、UMD&reg;へのアクセスはできません。<br>また、PSP&reg;ダウンローダブルゲームの動作中にUMD&reg;が抜き差しされた場合は、コールバックやイベントは発生しません（無視されます）。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>複数枚組みタイトルへの対応について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">複数枚組みのタイトルは、PSP&reg;ダウンローダブルゲームでは対応しておりません。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>テスト</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">開発中のゲームアプリケーションは、開発ツールとMemory Stick&trade;を用いて、ダウンローダブルゲームとしてMemory Stick&trade;にインストールされた状態での動作確認が可能です。<br>このテストを行うために、弊社の提供するPSP&reg;開発者向けオーサリングサービス（以下SAS）を用いてPSP&reg;開発ツールでMemory Stick&trade;から起動できるファイルを得ることができます。<br>オーサリングサービスを利用する際に準備するファイルや、オーサリングで得られたファイルの利用方法については「PSP&reg;ダウンローダブルゲームパッケージ作成ガイド」を、オーサリングサービスの利用方法ついては、「PlayStation&reg;Network SMT シンプルオーサリングサービスユーザガイド」を参照してください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

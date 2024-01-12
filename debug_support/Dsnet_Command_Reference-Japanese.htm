@@ -1,0 +1,2579 @@
+<html lang="jp">
+<head>
+<title>Dsnet_Command_Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+dstdbコマンドリファレンス
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>行入力</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">コマンド入力時には矢印キーの他に以下の編集キーが使えます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>編集キー</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-P&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;前の行への移動&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-N&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;次の行への移動&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-B&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;前の文字（左）への移動&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-F&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;次の文字（右）への移動&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-A&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレント行の先頭への移動&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-E&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレント行の最後への移動&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BS, DEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;前の文字の削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-D&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレント文字の削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレント行すべての削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-U&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレント行すべての削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-K&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレント行のカレント文字から行末までの削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-C&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力の中断（^Cのエコーあり）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-G&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力の中断（^Gのエコーなし）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LF, CR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力の終了、カレント行をコマンドとして実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TAB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンド名、ファイル名、シンボル名など補完&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-R&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;逆方向サーチ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-S&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;順方向サーチ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-Y&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CTRL-Kで削除した文字列の挿入&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">TABによる補完は、行の最後でTABを入力した場合にのみ可能で、以下の4つのケースをサポートしています。<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> 空白を含まない文字列<br>コマンド名として補完を試みます。</li>
+<li VALUE=2> setコマンドの引数<br>オプション名として補完を試みます。</li>
+<li VALUE=3> helpコマンドの引数<br>ヘルプのキーワードとして補完を試みます。</li>
+<li VALUE=4> その他のコマンドの引数<br>'/' もしくは '.' が含まれていた時はファイル名として、それ以外はシンボルとして補完を試みます。</li>
+</ol></div>
+<div style="margin-left:50px;">プログラム実行時には、CTRL-Cでbreakコマンドをターゲットに送ります。<br>CTRL-Gでは、breakコマンドを送らないで単にdstdbに制御が戻ります。<br>RETURNキーで、メモリ内容の表示やステップ実行など、直前に実行したコマンドを再実行できます。このとき、メモリの表示などはアドレスを増加させたうえで再実行されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>表現式</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ファイル名以外の一般的な値を持つコマンド引数には、以下の表現式（expr）を使用することができます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>表現式</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;16進数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 0xはシンボルと重複しない限り省略可能&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;symbol&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# シンボル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;fname&gt;:&lt;lineno&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 行番号による指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;fname&gt;:&lt;func&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# staticで重複する名前の関数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 現在のアドレス（ドットアドレス）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;.&lt;digit&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# C言語と同じ形式での数値（8,10,16進数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$&lt;reg&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 現在のレジスタ値またはユーザ変数値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(expr)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 式としての括弧&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;+expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 正の符号の明示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 符号反転&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;~expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# ビット反転&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;*expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# アドレス間接指定（アドレスが指す先は常にワード）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# *(expr1 + ((expr2) &lt;&lt; 2))と等価&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,b]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1+((expr2) &lt;&lt; 0)のアドレス間接(byte)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,h]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1+((expr2) &lt;&lt; 1)のアドレス間接(half)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,w]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1+((expr2) &lt;&lt; 2)のアドレス間接(word)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,d]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1+((expr2) &lt;&lt; 3)のアドレス間接(double)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,q]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1+((expr2) &lt;&lt; 4)のアドレス間接(quad)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,expr3]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# アドレス間接指定（expr3はバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;!expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 論理反転&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 || expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 論理OR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &amp;&amp; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 論理AND&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 | expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# ビットOR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 ^ expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# ビットXOR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &amp; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# ビットAND&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 == expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 等しい場合に真(=1)、それ以外は偽(=0)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 != expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 等しくない場合に真(=1)、それ以外は偽(=0)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &lt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 符号なし比較(less than)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &lt;= expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 符号なし比較(less than or equal)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &gt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 符号なし比較(greater than)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &gt;= expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 符号なし比較(greater than or equal)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &gt;&gt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1を右へexpr2ビットシフト（両方とも符号なし）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &lt;&lt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1を左へexpr2ビットシフト（両方とも符号なし）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 + expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1,expr2の算術的加算（両方とも符号なし）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 - expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1,expr2の算術的減算（両方とも符号なし）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 * expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1,expr2の算術的乗算（両方とも符号なし）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 / expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1,expr2の算術的除算（両方とも符号なし）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 % expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1,expr2の算術的剰余（両方とも符号なし）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">括弧、単項演算子および二項演算子の優先順位はC言語と同じであり、以下のようになっています。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>括弧、単項演算子および二項演算子</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>優先度</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;() []&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;高い&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;! + - ~ * (単項演算子)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;* / %&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;+ - (二項演算子)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;&lt; &gt;&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; &lt;= &gt; &gt;=&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;== !=&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&amp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;^&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;|&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&amp;&amp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;||&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;低い&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">表現式（expr）中の数値は、特に指定がない限り16進として解釈します。<br>例外は、$10の '10' や、シンボル中の行番号などです。<br><br>16進数の定義は、[0[xX]][0-9a-fA-F]+であり、大文字と小文字の区別はありません。16進数が使える箇所で10進数を指定するには、数字の前に'.'を置いてください。8進数を指定するには、'.0'を前置します。<br>'.'と数字の間に空白を空けることはできません。<br><br>シンボルの指定形式は、以下のいずれかです。<br><br></div>
+</ol>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1> &lt;symbol&gt;</li>
+<li VALUE=2> :&lt;symbol&gt;</li>
+</ol></div>
+<div style="margin-left:50px;"><br>'a123'のように16進数としてもシンボルとしても解釈可能で、そのシンボルが実際に存在する場合には、エラーとしています。このような場合には、16進なら'0x'を前置し、シンボルならば':a123'と':' を前置し、どちらであるかを明示してください。<br><br>レジスタ名には、'$a0'のようにシンボリックな表現の他に'$4'のような番号指定も使えます。レジスタ番号指定時の数値部分は、10進数です。<br><br>表現式中の "." は特殊なシンボルで、メモリの表示や設定、di、as等の各コマンド実行中は「現在のアドレス」の値を持ち、コマンド終了時には「次のアドレス」の値となります。<br><br>以下は、表現式の指定例です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>db 80100000
+di main+0x100
+di (main + 100 + *(1002 + 4) * 5)
+di $epc-8
+db $t0+0x124+$v0+buf
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>コマンド一覧</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コマンド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_1">dr [-hf] [&lt;reg&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レジスタの表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_2">sr [&lt;reg&gt; [&lt;val&gt;]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レジスタの設定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_3">rload &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レジスタのロード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_4">rsave &lt;fname&gt; [&lt;reg&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レジスタのセーブ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_5">dq [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_5">dd [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_5">dw [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_5">dh [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_5">db [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_5">db [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ内容の表示 (quad)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の表示 (double)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の表示 (word)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の表示 (half)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の表示 (byte)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の表示 (float)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_6">sq &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_6">sd &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_6">sw &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_6">sh &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_6">sb &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_6">sb &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ内容の設定 (quad)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の設定 (double)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の設定 (word)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の設定 (half)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の設定 (byte)&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリ内容の設定 (float)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_7">bload &lt;fname&gt; &lt;adr&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バイナリデータのロード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_8">bloadp &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;ブートコードのロード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_9">start &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;ブートコードのロードと&nbsp;&nbsp;<br>&nbsp;&nbsp;ターゲットのリセット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_10">bsave &lt;fname&gt; &lt;adr&gt; &lt;cnt&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バイナリデータのセーブ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_11">di [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;逆アセンブル表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_12">as &lt;adr&gt; &lt;inst&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;行単位の簡易アセンブラ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_13">list [&lt;adr&gt; [&lt;cnt&gt; [&lt;back&gt;]]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ソース行の表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_14">bt [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バックトレースの表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_15">bp [&lt;adr&gt;[,&lt;cnt&gt;]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレークポイントの設定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_16">ub [all|&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレークポイントの解除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_17">be [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレークポイントの有効化&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_18">bd [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレークポイントの無効化&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_19">hbp pc&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;]]]...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_19">hbp pc&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;]]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ハードウェアブレークポイントの設定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_20">hub {pc|da|dr|dw}...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ハードウェアブレークポイントの解除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_21">cont [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットプログラムの継続&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_22">step [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットプログラムのステップ実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_23">next [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットプログラムのネクスト実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_24">lstep [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ソース行単位でのステップ実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_25">lnext [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ソース行単位でのネクスト実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_26">until &lt;adr&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定アドレスまでの一時的ブレーク&nbsp;&nbsp;<br>&nbsp;&nbsp;ポイントによる継続実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_27">break</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットプログラムの中断&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_28">wait</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットプログラムの停止を待つ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_29">gdi [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストの逆アセンブル表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_30">gbp [&lt;adr&gt;[,&lt;cnt&gt;]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストブレークポイントの設定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_31">gub [all|&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストブレークポイントの削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_32">gbe [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストブレークポイントの有効化&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_33">gbd [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストブレークポイントの無効化&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_34">gcont [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストの継続&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_22">step [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストのステップ実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_23">next [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストのネクスト実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_26">until &lt;adr&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定アドレスまでの一時的ブレーク&nbsp;&nbsp;<br>&nbsp;&nbsp;ポイントによるディスプレイリスト継続実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_38">reset [-i] [&lt;sbootp&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットのリセット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_39">trace [get|discard|[option]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サンプルプロファイラの設定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_42">pon</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットの電源オン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_43">poff</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットの電源オフ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_44">powsw [&lt;time&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットの電源スイッチ操作&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_45">suspend</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットをサスペンド状態にする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_46">standby</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットをスタンバイ状態にする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_47">set [all] [&lt;var&gt;[=&lt;val&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オプション/ユーザ変数の表示と設定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_48">alias [-r] [&lt;name&gt; [&lt;value&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;別名の表示、設定、削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_49">subst [-r] [&lt;pattern&gt; &lt;replace&gt;...]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンド入力行置換の表示、設定、削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_50">source &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルからのコマンド実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_51">![&lt;cmd&gt; [&lt;args&gt;]...]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シェル呼び出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_52">cd [&lt;directory&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレントディレクトリの変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_53">printf "&lt;fmt&gt;" [&lt;args&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書式付きメッセージ出力&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_54">record [[-a] &lt;fname&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;画面出力内容の記録開始と終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_55">if &lt;expr&gt; &lt;cmd&gt; [elif &lt;expr&gt; &lt;cmd&gt;]... [else &lt;cmd&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;条件付きコマンド実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_56">repeat [-c &lt;cnt&gt;] [-i &lt;sec&gt;] [-while &lt;expr&gt;] &lt;cmd&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドの繰り返し実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_57">sleep &lt;sec&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;時間経過を待つ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_58">show [&lt;show_args&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;内部情報の表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_59">mload &lt;fname&gt; [&lt;args&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットプログラムモジュールの&nbsp;&nbsp;<br>&nbsp;&nbsp;ロード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_60">mstart [-d] [&lt;fname&gt; [&lt;args&gt;]...]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットプログラムモジュールの実行&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_61">mremove &lt;id&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;モジュールの削除&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_62">minfo [-i] [-a] [-uk] [&lt;id&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;モジュールの情報表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_63">memlist [-s] [-f] [-a &lt;adr&gt;] [-r &lt;range&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリブロックの一覧表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_64">sload [-id &lt;id&gt;] [-b &lt;base&gt;] [&lt;fname&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プログラムのシンボルのみのロード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_65">help [&lt;keyword&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘルプメッセージの表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_4_66">quit</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dstdbの終了&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>コマンド詳細</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>dr [-hf] [&lt;reg&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">&lt;reg&gt;にはレジスタ名または、レジスタのグループ名を指定します。<br>指定できるレジスタグループ名は、以下のとおりです。<br></div>
+<br>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>レジスタグループ名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;all&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;gpr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;General Purpose Registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;hl&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HI、LO&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;scc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;System Coprocessor Registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fpr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FPU registers (c1r)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fcr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FPU control registers (c1c)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fpu&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All FPU registers (cop1, cp1)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vfr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VFPU registers (c2r)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vfc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VFPU control registers (c2c)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vfpu&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All VFPU registers (cop2, cp2)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All Graphics Engine registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_reg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine control registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_cmd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine command registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_bone&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine bone matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_world&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine world matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_view&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine view matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_proj&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine projection matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_tgen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine texture generation matrix registers&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">なお、汎用レジスタについてはレジスタ番号形式（例: $a0は$4）が、またVFPUマトリクスレジスタについては、スカラー形式（例: s000）やベクトル形式（例: c000, r000）、マトリクス形式（例: m000, e000）も使用可能です。<br>&lt;reg&gt;を省略した場合には、汎用レジスタと$lo、$hi、$PC、$badaおよび$PC前後の逆アセンブル表示を行います。<br>$PCは、疑似レジスタで$epcと$causeの2つのレジスタ値から計算されたプログラムカウンタの値を持ちます。<br>VFPUマトリクスレジスタをs*** / c*** / r*** / m*** / e***形式で表示するには、以下のようにしてください。スカラー形式以外で、次元指定がなく、かつ次元が自明ではない場合、デフォルトでは4次元となります。<br></div>
+<div style="margin-left:67px;"><b>例）</b><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr s000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr c000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&rarr; 4次元で表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr r000.p&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&larr; 2次元指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr m000.t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&larr; 3次元指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr e000.q&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&larr; 4次元指定&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">-hまたは-fオプションでレジスタグループ指定時の表示指定ができます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32bit値を16進数で表示します。[default]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-f&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32bit値を16進数および浮動小数で表示します。(fpr,vfr,gpr)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">VFPUマトリクスレジスタの場合、.dstdbrcにvfpu_display_floatをセットすることにより、浮動小数表示をデフォルトに設定することができます。また、-vオプションで、ベクトル形式、マトリクス形式の各要素に対応するvfr*レジスタを表示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>sr [&lt;reg&gt; [&lt;val&gt;]]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">&lt;reg&gt;で指定されたレジスタに値&lt;val&gt;を設定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>rload &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定されたファイル&lt;fname&gt;からレジスタ値をロードします。一般には、rsaveコマンドでセーブしたファイル名を指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>rsave &lt;fname&gt; [&lt;reg&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定されたファイル&lt;fname&gt;に、指定レジスタ&lt;reg&gt;...のレジスタ名と値をセーブします。<br>&lt;reg&gt;...を省略するとdrの省略時と同じレジスタをセーブします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>dq [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>dd [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>dw [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>dh [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>db [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>df [&lt;adr&gt; [&lt;cnt&gt;]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;からメモリの内容を表示します。<br>&lt;adr&gt;のデフォルトは、ドットアドレス（現在のアドレス）です。<br>&lt;cnt&gt;は、一度に表示するバイト数で、dqなどで端数がある場合には切り上げられます。32bit単位でアクセスしなければならないI/Oレジスタなどに対して、dw以外のコマンド等でアクセスした場合の値は保証できません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>sq &lt;adr&gt; &lt;val&gt;...</b><br><b>sd &lt;adr&gt; &lt;val&gt;...</b><br><b>sw &lt;adr&gt; &lt;val&gt;...</b><br><b>sh &lt;adr&gt; &lt;val&gt;...</b><br><b>sb &lt;adr&gt; &lt;val&gt;...</b><br><b>sf &lt;adr&gt; &lt;fval&gt;...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;以降のメモリに指定データ&lt;val&gt;...を設定します。<br>sfコマンドの指定データ&lt;fval&gt;は浮動小数を含む表現式で、以下の表現式のみが指定可能です。<br></div>
+<div style="margin-left:80px;">&lt;floating_point_number&gt;<br>(&lt;fexpr&gt;)<br>+&lt;fexpr&gt;<br>-&lt;fexpr&gt;<br>*&lt;fexpr&gt;<br>&lt;fexpr1&gt; + &lt;fexpr2&gt;<br>&lt;fexpr1&gt; - &lt;fexpr2&gt;<br>&lt;fexpr1&gt; * &lt;fexpr2&gt;<br>&lt;fexpr1&gt; / &lt;fexpr2&gt;<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>bload &lt;fname&gt; &lt;adr&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイル&lt;fname&gt;のすべての内容をバイナリデータとして、開始アドレス&lt;adr&gt;で指定された領域にロードします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>bloadp &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ブートコードを格納したファイル&lt;fname&gt;のすべての内容をバイナリデータとして、規定の領域にロードします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_9">
+<h3>
+<a href="#Heading3_4"> 4. </a>9 
+<!-- hp1 --><b>start &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ブートコードを格納したファイル&lt;fname&gt;のすべての内容をバイナリデータとして、規定の領域にロードし、ターゲットをリセットします。<br>bloadpコマンド＋resetコマンドと同等の機能をもちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_10">
+<h3>
+<a href="#Heading3_4"> 4. </a>10 
+<!-- hp1 --><b>bsave &lt;fname&gt; &lt;adr&gt; &lt;cnt&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイル&lt;fname&gt;に、アドレス&lt;adr&gt;からバイト数&lt;cnt&gt;の領域の内容をバイナリデータとしてセーブします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_11">
+<h3>
+<a href="#Heading3_4"> 4. </a>11 
+<!-- hp1 --><b>di [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;から逆アセンブル表示を行います。<br>&lt;adr&gt;のデフォルトは、ドットアドレス（現在のアドレス）です。<br>&lt;cnt&gt;は、一度に表示する命令数で、デフォルトは20命令です。<br>-m &lt;mark&gt;が指定された場合は、アドレス&lt;mark&gt;の行に"-&gt;"のマークを表示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_12">
+<h3>
+<a href="#Heading3_4"> 4. </a>12 
+<!-- hp1 --><b>as &lt;adr&gt; &lt;inst&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;に命令&lt;inst&gt;を書き込みます。<br>たとえば以下のように指定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb &gt; as 10000 lw $v0,10($s0)
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_13">
+<h3>
+<a href="#Heading3_4"> 4. </a>13 
+<!-- hp1 --><b>list [&lt;adr&gt; [&lt;cnt&gt; [&lt;back&gt;]]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;に該当する前後のソース行を表示します。<br>&lt;adr&gt;のデフォルト値は、$PCです。<br>指定行数&lt;cnt&gt;は、表示するソース行数でデフォルトは21行です。<br>&lt;back&gt;は、指定アドレスに該当するソース行と表示開始行との差分でデフォルトは10行です。（10行前から表示を開始します）<br>listコマンド実行後にRETのみで継続を指定した場合には、最後に表示した次のソース行から、最後に実行した表示行数分の表示を行います。<br>ソース行表示の左端の"-&gt;"は、$PCに該当するソース行である事を示します。<br>ソース行表示を行うには、実行ファイルをgcc -gで作成して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_14">
+<h3>
+<a href="#Heading3_4"> 4. </a>14 
+<!-- hp1 --><b>bt [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在のプログラムカウンタからスタックフレームを遡り、スタックフレーム中のプログラムカウンタ値を表示します。<br>スタックフレーム数&lt;cnt&gt;が指定された場合にはその数だけ、指定がない場合にはすべてのスタックフレームを表示します。<br>バックトレースを表示すると以下の疑似変数が設定され、以降のコマンドで参照が可能となります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>類似変数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$BT&lt;n&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バックトレースアドレス&nbsp;&nbsp;<br>&nbsp;&nbsp;&lt;n&gt;が1以上の場合はそのスタックフレームから該当する&nbsp;&nbsp;<br>&nbsp;&nbsp;関数呼び出し命令のアドレス。&lt;n&gt;が0の場合は$PCの値。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$SFA&lt;n&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スタックフレームアドレス&nbsp;&nbsp;<br>&nbsp;&nbsp;&lt;n&gt;番目のスタックフレームの最小値。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$SFS&lt;n&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スタックフレームサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;&lt;n&gt;番目のスタックフレームの最大値から最小値を引いた値。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">例えば2番目のスタックフレーム位置に戻った場所に、ブレークポイントを設定するには、bp$BT2+0x8のように指定します。<br><br>&lt;n&gt;番目のスタックフレームをdwでダンプする命令dsfをsubstコマンドで定義し、実行するには、以下のように指定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb &gt; subst "^dsf  *\([0-9][0-9]*\) *$" dw $SFA\1 $SFS\1
+dstdb &gt; dsf 2
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_15">
+<h3>
+<a href="#Heading3_4"> 4. </a>15 
+<!-- hp1 --><b>bp [&lt;adr&gt;[,&lt;cnt&gt;]]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;にブレークポイントを設定します。<br>引数を省略すると現在設定されているブレークポイントをすべて表示します。<br>カウント値&lt;cnt&gt;は、ブレークポイントの指定通過回数で、省略時には1となります。<br>ブレークポイントを設定すると、そのアドレスに対応するブレークポイント疑似変数$BP&lt;n&gt;にそのアドレスが設定され、以降のubコマンド等で$BP&lt;n&gt;を用いた指定が可能となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_16">
+<h3>
+<a href="#Heading3_4"> 4. </a>16 
+<!-- hp1 --><b>ub [all|&lt;adr&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;のブレークポイントを解除します。<br>引数を省略するかallを指定すると、すべてのブレークポイントを解除します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_17">
+<h3>
+<a href="#Heading3_4"> 4. </a>17 
+<!-- hp1 --><b>be [&lt;adr&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;のブレークポイントを有効化します。<br>&lt;adr&gt;を省略するとすべてのブレークポイントを有効化します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_18">
+<h3>
+<a href="#Heading3_4"> 4. </a>18 
+<!-- hp1 --><b>bd [&lt;adr&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;のブレークポイントを無効化します。<br>&lt;adr&gt;を省略するとすべてのブレークポイントを無効化します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_19">
+<h3>
+<a href="#Heading3_4"> 4. </a>19 
+<!-- hp1 --><b>hbp pc&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;]]]...</b><br><b>hbp {da|dr|dw}&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;][=&lt;val&gt;[,&lt;vmsk&gt;]]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;に対してハードウェアブレークポイントの設定や状態を表示します。<br>引数をすべて省略すると、現在のハードウェアブレークポイントを表示します。<br>pc,da,dr,dwは、ハードウェアブレークポイントのアクセスタイプで以下の意味を持ちます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プログラムカウンタ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（DFステージ時）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;da&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データアクセス&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（drまたはdw）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データリードアクセス&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（DFステージ時）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dw&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データライトアクセス&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（WBステージ時）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">da,dr,dwは、一度に一つのみ設定可能です。<br><br>&lt;amsk&gt;は、指定アドレスに対するマスク値です。<br>（default値は0xffffffffで、&lt;adr&gt;値のすべての値を比較します）<br>&lt;nt&gt;はトリガー信号発生の有無、およびブレーク例外を発生させるかどうかの指定です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;無指定&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレーク例外を発生させる。トリガー信号を発生させない。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレーク例外を発生させる。トリガー信号を発生させる。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;nt&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレーク例外を発生させない。トリガー信号を発生させる。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">&lt;adr&gt;を省略するとそのタイプの前回のアドレス値となります。<br>da,dr,dwの場合には、さらに指定データ値&lt;val&gt;およびそのマスク値&lt;vmsk&gt;が指定可能です。<br>hbp,hubコマンドは、最初に起動したdstdbでのみ使用可能です。<br><br>指定例）アドレス0x08000000へのデータリードの場合<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>  dstdb &gt; hbp dr:0x08000000
+</font></pre></div>
+<div style="margin-left:50px;"><br>ハードウェアブレークポイントによる停止が発生した場合、contで再実行することができない場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_20">
+<h3>
+<a href="#Heading3_4"> 4. </a>20 
+<!-- hp1 --><b>hub {pc|da|dr|dw}...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定されたタイプ {pc|da|dr|dw} のハードウェアブレークポイントを解除します。<br>引数をすべて省略すると、すべてのハードウェアブレークポイントを解除します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_21">
+<h3>
+<a href="#Heading3_4"> 4. </a>21 
+<!-- hp1 --><b>cont [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲットプログラムを現在の状態から継続実行します。<br>ブレークポイントに達するか、何らかのexceptionが発生するまで待ちます。<br>引数の&lt;cnt&gt;は、継続回数の指定でデフォルトは1です。<br>画面にはターゲットプログラムからの標準出力が表示されます。<br>ターゲットプログラムの中断はCTRL-C、中断しないでデバッガに制御を戻すにはCTRL-Gを入力します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_22">
+<h3>
+<a href="#Heading3_4"> 4. </a>22 
+<!-- hp1 --><b>step [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$PCから指定回数&lt;cnt&gt; (defaultは1)のステップ実行を行います。<br>ステップ回数は、CPUの命令数と一致しています。遅延分岐を含む場合もそれらをCPUが実行するそのままの順序でステップ実行を行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_23">
+<h3>
+<a href="#Heading3_4"> 4. </a>23 
+<!-- hp1 --><b>next [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$PCから指定回数&lt;cnt&gt; (defaultは1)のネクスト実行を行います。<br>ネクスト回数は、CPUの命令数と一致しています。遅延分岐を含む場合もそれらをCPUが実行するそのままの順序でネクスト実行を行います。<br>ステップ実行との違いは、jal、jalr命令による関数呼び出しの中までトレース対象とするかどうかだけです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_24">
+<h3>
+<a href="#Heading3_4"> 4. </a>24 
+<!-- hp1 --><b>lstep [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$PCから指定行数&lt;cnt&gt; (defaultは1)のステップ実行を行います。<br><br>コマンド実行時、または内部の1命令ステップ実行後の$PCが行番号を持たない場合にはその旨を表示し、コマンドを終了します（デフォルト）。<br>オプション変数lstep_stop_at_no_lineを設定すると行番号情報を持たない場所でもエラーとならずに内部で行番号情報を持つ場所までステップ実行を行います。<br>lstepを行うには、実行ファイルをgcc -gで作成して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_25">
+<h3>
+<a href="#Heading3_4"> 4. </a>25 
+<!-- hp1 --><b>lnext [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$PCから指定行数&lt;cnt&gt; (defaultは1)のネクスト実行を行います。<br>コマンド実行時、または内部の1命令ネクスト実行後の$PCが行番号を持たない場合にはその旨を表示し、コマンドを終了します。（デフォルト）<br>オプション変数lstep_stop_at_no_lineを設定すると行番号情報を持たない場所でもエラーとならずに内部で行番号情報を持つ場所までネクスト実行を行います。<br>lnextを行うには、実行ファイルをgcc -gで作成して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_26">
+<h3>
+<a href="#Heading3_4"> 4. </a>26 
+<!-- hp1 --><b>until &lt;adr&gt;...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$PCから指定アドレス&lt;adr&gt;...まで、その順序で一時的ブレークポイントを用いて継続実行を行います。このuntilコマンドは、bpコマンドによるブレークポイントの影響は受けません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_27">
+<h3>
+<a href="#Heading3_4"> 4. </a>27 
+<!-- hp1 --><b>break</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムの実行を中断します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_28">
+<h3>
+<a href="#Heading3_4"> 4. </a>28 
+<!-- hp1 --><b>wait</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムが実行中の時に例外が発生するのを待ちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_29">
+<h3>
+<a href="#Heading3_4"> 4. </a>29 
+<!-- hp1 --><b>gdi [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;からをGraphics Engineディスプレイリストとして逆アセンブル表示を行います。<br>&lt;adr&gt;のデフォルトは、ドットアドレス（現在のアドレス）です。<br>&lt;cnt&gt;は一度に表示する命令数で、デフォルトは20命令です。<br>-m &lt;mark&gt;が指定された場合は、アドレス&lt;mark&gt;の行に "-&gt;" のマークを表示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_30">
+<h3>
+<a href="#Heading3_4"> 4. </a>30 
+<!-- hp1 --><b>gbp [&lt;adr&gt;[,&lt;cnt&gt;]]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;にディスプレイリストのブレークポイントを設定します。<br>引数を省略すると現在設定されているブレークポイントをすべて表示します。<br>カウント値&lt;cnt&gt;は、ブレークポイントの指定通過回数で、省略時には1となります。<br>ブレークポイントを設定すると、そのアドレスに対応するブレークポイント疑似変数$GBP&lt;n&gt;にそのアドレスが設定され、以降のgubコマンド等で$GBP&lt;n&gt;を用いた指定が可能となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_31">
+<h3>
+<a href="#Heading3_4"> 4. </a>31 
+<!-- hp1 --><b>gub [all|&lt;adr&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;のディスプレイリストのブレークポイントを解除します。<br>引数を省略するかallを指定すると、すべてのブレークポイントを解除します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_32">
+<h3>
+<a href="#Heading3_4"> 4. </a>32 
+<!-- hp1 --><b>gbe [&lt;adr&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;のディスプレイリストのブレークポイントを有効化します。<br>&lt;adr&gt;を省略すると、すべてのブレークポイントを有効化します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_33">
+<h3>
+<a href="#Heading3_4"> 4. </a>33 
+<!-- hp1 --><b>gbd [&lt;adr&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定アドレス&lt;adr&gt;のディスプレイリストのブレークポイントを無効化します。<br>&lt;adr&gt;を省略すると、すべてのブレークポイントを無効化します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_34">
+<h3>
+<a href="#Heading3_4"> 4. </a>34 
+<!-- hp1 --><b>gcont [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ディスプレイリストを現在の状態から継続実行します。<br>ブレークポイントに達するか、何らかのexceptionが発生するまで待ちます。<br>引数の&lt;cnt&gt;は、継続回数の指定でデフォルトは1です。<br>画面には、ターゲットプログラムからの標準出力が表示されます。<br>ターゲットプログラムの中断はCTRL-C、中断しないでデバッガに制御を戻すにはCTRL-Gを入力します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_35">
+<h3>
+<a href="#Heading3_4"> 4. </a>35 
+<!-- hp1 --><b>gstep [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$ge_madrから指定回数&lt;cnt&gt; (defaultは1)のステップ実行を行います。<br>ステップ回数は、ディスプレイリストの命令数とほぼ一致しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_36">
+<h3>
+<a href="#Heading3_4"> 4. </a>36 
+<!-- hp1 --><b>gnext [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$ge_madrから指定回数&lt;cnt&gt; (defaultは1)のネクスト実行を行います。<br>ネクスト回数はディスプレイリストの命令数とほぼ一致しています。<br>ステップ実行との違いは、CMD_CALL命令によるサブルーチン呼び出しの中までトレース対象とするかどうかだけです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_37">
+<h3>
+<a href="#Heading3_4"> 4. </a>37 
+<!-- hp1 --><b>guntil &lt;adr&gt;...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在の$ge_madrから指定アドレス&lt;adr&gt;...まで、その順序で一時的ブレークポイントを用いて継続実行を行います。このguntilコマンドは、gbpコマンドによるブレークポイントの影響は受けません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_38">
+<h3>
+<a href="#Heading3_4"> 4. </a>38 
+<!-- hp1 --><b>reset [-i] [&lt;sbootp&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">すべてのブレークポイントを無効化し、シンボル情報をクリアした後にターゲット全体をリセットします。<br><br>-iオプションを指定すると、initial_sbootp変数値をcurrent_sbootp変数に設定します。<br>ブートパラメータ&lt;sbootp&gt;を指定すると、その値をcurrent_sbootpに設定します。<br>ターゲットのブートパラメータは、current_sbootp変数値を使用します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_38_1">
+<div style="margin-left:40px;"><h4><b>ブートパラメータ</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>bit</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ設定32MiB/64MiB切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= 32MiB&nbsp;&nbsp;<br>&nbsp;&nbsp;1= 64MiB&nbsp;&nbsp;<br>&nbsp;&nbsp;ただし、上記メモリ領域の内、ともに8MiBはシステムが使用しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;また64MiBモードでは、さらに8MiBを予約領域として設定しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;従って、それぞれのモードでユーザが自由に使えるのは、&nbsp;&nbsp;<br>&nbsp;&nbsp;OFF時24MiB、ON時48MiBとなります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WLANと共存可能なPLLクロック起動切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= 222MHz（PSP-1000相当）&nbsp;&nbsp;<br>&nbsp;&nbsp;1= 333MHz（PSP-2000以降相当）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 12&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;キャッシュ切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= UMD&reg;キャッシュ無効&nbsp;&nbsp;<br>&nbsp;&nbsp;1= UMD&reg;キャッシュ有効&nbsp;&nbsp;<br>&nbsp;&nbsp;ただしbit 10が1だった場合はbit 12の設定は無効になります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 15&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ether over DECI2p切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= WLAN使用&nbsp;&nbsp;<br>&nbsp;&nbsp;1= Ether over DECI2p使用&nbsp;&nbsp;<br>&nbsp;&nbsp;Ether over DECI2pを選択するとWLANの代わりにDECI2p経由で&nbsp;&nbsp;<br>&nbsp;&nbsp;イーサパケットを送受信するようになります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 17&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GPI6によるMemory Stick&trade; LOCKスイッチエミュレーション&nbsp;&nbsp;<br>&nbsp;&nbsp;0= LOCKスイッチエミュレーションなし&nbsp;&nbsp;<br>&nbsp;&nbsp;1= LOCKスイッチエミュレーション有効&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 18&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DVD使用時の読み込み速度選択&nbsp;&nbsp;<br>&nbsp;&nbsp;0= UMD&reg;相当&nbsp;&nbsp;<br>&nbsp;&nbsp;1= DVDドライブの最高速度&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 19&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;/DVDの読み込みランダム遅延&nbsp;&nbsp;<br>&nbsp;&nbsp;0= ランダム遅延なし&nbsp;&nbsp;<br>&nbsp;&nbsp;1= ランダム遅延あり&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 20&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WLANパケットロス&nbsp;&nbsp;<br>&nbsp;&nbsp;0= ランダムパケットロスなし&nbsp;&nbsp;<br>&nbsp;&nbsp;1= ランダムパケットロスあり&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 22&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラモード切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= グローバルモード&nbsp;&nbsp;<br>&nbsp;&nbsp;（スレッドマネージャはプロファイラレジスタを管理しない）&nbsp;&nbsp;<br>&nbsp;&nbsp;1= スレッドモード（プロファイラレジスタをスレッドごとに管理する）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 23&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのenable/disable切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= プロファイラdisable&nbsp;&nbsp;<br>&nbsp;&nbsp;1= プロファイラenable&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 24&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリブロックのオーバーフローチェックのenable/disable切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= オーバーフローチェックdisable&nbsp;&nbsp;<br>&nbsp;&nbsp;1= オーバーフローチェックenable&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 29&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;開発環境/システムソフトウェア切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= 開発環境&nbsp;&nbsp;<br>&nbsp;&nbsp;1= システムソフトウェア&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他のbit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reserved&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">resetコマンドの引数を省略した場合、TOOL内で動作しているdsnetm_pspに記憶されている、前回指定されたときの設定がそのまま使用されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_39">
+<h3>
+<a href="#Heading3_4"> 4. </a>39 
+<!-- hp1 --><b>trace [get|discard|[option]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">トレース、サンプルプロファイラの設定を行います。<br>引数をすべて省略すると、現在のトレース,サンプルプロファイラ設定を表示します。<br>trace getで現在まで記録されているレコードを表示します。<br>trace noneでプロファイラを停止します。記録されているレコードは保存されているので、trace getで表示する事ができます。<br>trace discardで現在まで記録されているレコードを破棄し、プロファイラを停止します。<br><br>&lt;option&gt;で指定可能なトレース、サンプルプロファイラ設定は、以下の通りです。&lt;option&gt;には、以下のオプションを複数個同時に設定できます。<br></div>
+<div style="margin-left:67px;">[bs &lt;bs&gt;]<br></div>
+<div style="margin-left:80px;">トレース、サンプルプロファイラ情報を記録するバッファをバイト単位で指定します。<br></div>
+<div style="margin-left:67px;">[ew]<br></div>
+<div style="margin-left:80px;">プロファイラバッファをリングバッファ形式で試用することを指定します。<br></div>
+<div style="margin-left:67px;">[sc &lt;sc&gt;]<br></div>
+<div style="margin-left:80px;">$pcサンプリングのためのタイマ割り込み周期をusec単位で指定します。デフォルトは、40usec間隔です。<br></div>
+<div style="margin-left:67px;">[ctxsw|thread|syscall|intr|ge|tmrepc|tmrprof|tmrge|none]<br></div>
+<div style="margin-left:80px;">トレース、サンプルプロファイラが記録する情報を指定します。ctxswを指定すると、スレッドのコンテキスト切り替え履歴を記録します。threadを指定すると、スレッドの生成/削除などの履歴を記録します。syscallを指定すると、カーネルモードで提供されるカーネル,ライブラリ関数の呼び出し履歴を記録します。intrを指定すると、割り込み発生の履歴を記録します。geを指定すると、Graphics Engineのディスプレイリスト動作の履歴を記録します。<br>tmrepcを指定すると、タイマ割り込み発生時の$epcレジスタを記録します。tmrprofを指定すると、タイマ割り込み発生時のプロファイラを記録します。tmrgeを指定すると、タイマ割り込み発生時のGraphics Engineレジスタを記録します。<br>noneを指定すると、トレース,サンプリングプロファイラの動作を停止します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_40">
+<h3>
+<a href="#Heading3_4"> 4. </a>40 
+<!-- hp1 --><b>vcp [save|freeze|bgcolor]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">DTP-T1000のビデオキャプチャを制御します。<br>vcp saveで現在表示されている映像をキャプチャしてBMP形式で保存します。<br>vcp freezeで現在表示されている映像のフリーズon/offを制御します。<br>vcp bgcolorで背景色を指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_41">
+<h3>
+<a href="#Heading3_4"> 4. </a>41 
+<!-- hp1 --><b>footsw [autosave|autobreak|freeze|disable]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">DTP-T1000のフットスイッチを制御します。<br>footsw autosaveでフットスイッチが押されるたびに、自動的にスクリーンキャプチャを保存します。automatic_prefix_screenshot変数で、ファイル名にプレフィクスを指定できます。<br>footsw autobreakでフットスイッチが押されるたびに、ターゲットの実行制御（break/cont）をします。<br>footsw freezeでフットスイッチが押されるたびに、映像のフリーズ/フリーズ解除を行います。デフォルトの動作です。<br>footsw disableでフットスイッチの動作を無効にします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_42">
+<h3>
+<a href="#Heading3_4"> 4. </a>42 
+<!-- hp1 --><b>pon</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">通常のreset処理と異なり、ターゲットの電源オンのみ行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_43">
+<h3>
+<a href="#Heading3_4"> 4. </a>43 
+<!-- hp1 --><b>poff</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲットの電源オフのみ行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_44">
+<h3>
+<a href="#Heading3_4"> 4. </a>44 
+<!-- hp1 --><b>powsw [&lt;time&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲットの電源スイッチ操作をエミュレートします。<br>time(ms)は、電源スイッチ押下時間をms単位で指定します。省略時は、500(ms)が設定されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_45">
+<h3>
+<a href="#Heading3_4"> 4. </a>45 
+<!-- hp1 --><b>suspend</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲットをサスペンド状態にします。電源スイッチ押下時間は、500(ms)の固定値が内部で設定されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_46">
+<h3>
+<a href="#Heading3_4"> 4. </a>46 
+<!-- hp1 --><b>standby</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲットをスタンバイ状態にします。電源スイッチ押下時間は、5000(ms)の固定値が内部で設定されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_47">
+<h3>
+<a href="#Heading3_4"> 4. </a>47 
+<!-- hp1 --><b>set [all] [&lt;var&gt;[=&lt;val&gt;]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デフォルト値から変更されたオプションのみを表示するには、setだけを指定します。すべてのオプションを表示するには、set allと指定します。<br>オプションが文字列か数値を値として持つ場合に、オプション名&lt;var&gt;の値を&lt;val&gt;に設定するにはset &lt;var&gt;=&lt;val&gt;と指定します。<br>オプションがブール値を持つ場合に、trueの値に設定するにはset &lt;var&gt;を指定し、falseの値を設定するにはset no&lt;var&gt;と指定します。<br>それぞれのオプションの意味に関しては、「5 オプション一覧」「6 オプション詳細」の項を参照して下さい。<br><br>setコマンドには、ユーザ変数の表示と設定機能もあります。<br>ユーザ変数として使える変数名は、オプション名に含まれずかつdstdbのレジスタ名でもない名前です。ユーザ変数は、常に32bitの数値を値として持ち、allを指定しない時でも常に表示されます。ユーザ変数値への参照は、表現式中で$&lt;var&gt;の形式で可能です。<br>ユーザ変数に対してset &lt;var&gt;=のように&lt;val&gt;を省略すると、そのユーザ変数を削除します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_48">
+<h3>
+<a href="#Heading3_4"> 4. </a>48 
+<!-- hp1 --><b>alias [-r] [&lt;name&gt; [&lt;value&gt;]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定された別名&lt;name&gt;がコマンド名として指定された時にコマンド文字列&lt;value&gt;を実行します。<br>現在設定されているすべての別名を表示するには、aliasのみを指定します。<br>現在設定されているすべての別名を削除するには、alias -rと指定します。<br>別名&lt;name&gt;の設定のみを表示するには、alias &lt;name&gt;と指定します。<br>新しい別名&lt;name&gt;を&lt;value&gt;に設定するには、alias &lt;name&gt; &lt;value&gt;と設定します。&lt;value&gt;中には、このaliasのみで使用可能な${*}と${N}という表現が使え、${*}は実行時に指定された引数すべてに、${N}は実行時に指定されたN番目の引数に展開されます。<br><br>&lt;value&gt;中に複数のコマンドを指定するには、alias dr2 (dr;dr)のように指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_49">
+<h3>
+<a href="#Heading3_4"> 4. </a>49 
+<!-- hp1 --><b>subst [-r] [&lt;pattern&gt; &lt;replace&gt;...]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コマンド入力行を文字列として扱い、その文字列中に含まれるパターン&lt;pattern&gt;をすべて置換文字列&lt;replace&gt;...で置き換えます。<br>現在設定されているすべての置換を表示するには、substのみを指定します。<br>現在設定されているすべての置換を削除するには、subst -rと指定します。<br>現在設定されている&lt;pattern&gt; &lt;replace&gt;...の置換を削除するには、subst -r &lt;pattern&gt; &lt;replace&gt;...と指定します。<br>aliasとは異なり、同じ&lt;pattern&gt;への置換が設定されていた場合にも、前の設定を削除することは行いません。また&lt;replace&gt;...が省略された場合には、空の文字列への置換（つまり削除）の設定となります。<br>複数の置換定義がある場合、指定された順序ですべてが適用されます。<br><br>&lt;pattern&gt;は、一般には '"' で囲まれた文字列形式で指定しますが、空白を含まない場合には前後の '"' は省略しても構いません。<br>&lt;pattern&gt;は、以下の正規表現で指定します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字X（Xが以下の表現に含まれない場合）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字X（Xが '(',')' でない場合）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意の1文字&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;X*&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Xの繰り返し（0回の繰り返しを含む）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;[abc]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'a','b','c'のいずれかの1文字&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;[x-y]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'x' から 'y' までのいずれかの1文字&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;[^abc]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'a','b','c' のいずれでもない1文字&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;^&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;行の先頭（&lt;pattern&gt;の先頭にある場合のみ一致）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;行の最後（&lt;pattern&gt;の最後のある場合のみ一致）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\(&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;タグの開始記録&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;タグの終了記録&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">&lt;replace&gt;...は、通常の文字列の他、以下の特殊文字も指定できます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字X（Xが '1'-'9' でない場合）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&amp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現在一致している文字列全体&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1番目のタグ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2番目のタグ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;9番目のタグ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">以下は、指定例です。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ブレークポイント番号を$bp&lt;n&gt;で入力可能に設定する
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+dstdb&gt; subst "$bp\([0-9]*\)" $BP\1
+
+</font></pre></div>
+<div style="margin-left:40px;"><ul>
+<li> show historyを単にhistoryだけで実行可能と設定する
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+dstdb&gt; subst "^ *history *$" show history
+
+</font></pre></div>
+<div style="margin-left:50px;">コマンド入力行の先頭が '\' である時には、置換処理は行いません。<br>間違って subst ".*" のような設定をしてしまった時には、たとえば\quitと入力すれば常にquitを実行できます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_50">
+<h3>
+<a href="#Heading3_4"> 4. </a>50 
+<!-- hp1 --><b>source &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定ファイル&lt;fname&gt;の内容をコマンド列として実行します。<br>ファイル中の行の最後が '\' である場合には次の行との連結が行われます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_51">
+<h3>
+<a href="#Heading3_4"> 4. </a>51 
+<!-- hp1 --><b>![&lt;cmd&gt; [&lt;args&gt;]...]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">'!' 以降のコマンド&lt;cmd&gt;および引数 &lt;args&gt;...をシェルに渡し実行します。&lt;cmd&gt;、&lt;args&gt;は何も評価もせずにそのままシェルに渡します。<br>使用されるシェルは、環境変数SHELLによって決まり、設定されていない場合には、"/bin/sh" になります。<br>&lt;cmd&gt;を省略すると、シェルそのものを呼び出します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_52">
+<h3>
+<a href="#Heading3_4"> 4. </a>52 
+<!-- hp1 --><b>cd [&lt;directory&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">カレントディレクトリを&lt;directory&gt;に変更します。引数が省略された場合は、環境変数HOMEで示されるディレクトリへ変更します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_53">
+<h3>
+<a href="#Heading3_4"> 4. </a>53 
+<!-- hp1 --><b>printf "&lt;fmt&gt;" [&lt;args&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">メッセージを画面に出力します。<br>&lt;fmt&gt;には、printf(3)と同じ書式が使えます。ただしfloating関係（e, E, f, g）と%nは未サポートです。&lt;args&gt;は常に式として評価され、その値が使われます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_54">
+<h3>
+<a href="#Heading3_4"> 4. </a>54 
+<!-- hp1 --><b>record [[-a] &lt;fname&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定されたファイル &lt;fname&gt; に、以後の画面出力内容を保存します。<br>&lt;fname&gt;を省略すると記録の終了となります。<br>-aオプションを指定した場合は、ファイルには追加モードで書き込まれます。<br>記録終了せずに次のrecordを指定すると、自動的に前のファイルをクローズします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_55">
+<h3>
+<a href="#Heading3_4"> 4. </a>55 
+<!-- hp1 --><b>if &lt;expr&gt; &lt;cmd&gt; [elif &lt;expr&gt; &lt;cmd&gt;]... [else &lt;cmd&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">条件付きでコマンドを実行します。<br>まず最初にif &lt;expr&gt; &lt;cmd&gt;の&lt;expr&gt;を評価し、その値が0ではない場合に&lt;cmd&gt;を実行します。<br>if &lt;expr&gt; &lt;cmd&gt;の&lt;expr&gt;の値が0の時にはelifやelse部分を評価し、elseの場合には無条件に、elifの場合には条件付きで&lt;cmd&gt;を実行します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_56">
+<h3>
+<a href="#Heading3_4"> 4. </a>56 
+<!-- hp1 --><b>repeat [-c &lt;cnt&gt;] [-i &lt;sec&gt;] [-while &lt;expr&gt;] &lt;cmd&gt;...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定されたコマンド&lt;cmd&gt;...を繰り返し実行します。<br>繰り返し回数&lt;cnt&gt;が -c オプションで指定されている場合にはその回数だけ、指定されていない場合にはエラーが発生するかCTRL-Cが入力されるまで無限に繰り返します。<br><br>繰り返し実行の間に、一度パケットの送受信処理等を行います。<br>-iオプションによる秒数&lt;sec&gt;（デフォルト値は 1 [sec]）の時間内にパケットの送受信やキー入力等がない場合には、次の繰り返しを開始します。<br>もし、パケットの送受信またはキー入力があった時には、その時間を待たずに次の繰り返しを実行します。<br>-while &lt;expr&gt;オプションが指定された場合には、&lt;cmd&gt;...の実行前にその都度&lt;expr&gt;を評価し、その値が0である時にはrepeatコマンドを終了します。また-whileオプションが指定され-iオプションが指定されていない場合には、タイムアウト時間は0となります。<br>複数のコマンドを繰り返し実行するには、repeat (dr;dr)のように指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_57">
+<h3>
+<a href="#Heading3_4"> 4. </a>57 
+<!-- hp1 --><b>sleep &lt;sec&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定された秒数&lt;sec&gt;の間待ちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_58">
+<h3>
+<a href="#Heading3_4"> 4. </a>58 
+<!-- hp1 --><b>show [&lt;show_args&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">show log ...でDECI2パケットの送受信ログを表示します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+show log [[-]&lt;option&gt;]...
+
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>&lt;option&gt;</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;l[ong]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;時刻の差分、IPアドレス等も表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;n[um]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DECI2パケットをすべて16進で表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;r[emove]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ログデータをすべて削除する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;a[ll]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;すべて表示する（tail, headとの対比）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;t[ail] &lt;N&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;最後の&lt;N&gt;個だけ表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;h[ead] &lt;N&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;最初の&lt;N&gt;個だけ表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;i[d] &lt;ID&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;ID&gt;に関するものだけ表示対象とする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;m[sg] &lt;msg&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;msg&gt;に関するものだけ表示対象とする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;p[roto] &lt;proto&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロトコル&lt;proto&gt;に関するものだけ表示対象とする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;s[rc] &lt;src&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;送信元ノードが&lt;src&gt;に関するものだけ表示対象とする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;d[st] &lt;dst&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;送信先ノードが&lt;dst&gt;に関するものだけ表示対象とする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;v[erbose]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;冗長モードによる表示&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">long、numは表示形式、removeは削除、all、tail、headは個数指定、残りは表示条件で、複数指定は常にANDとして解釈されます。<br><br>show status ...で内部ステータスの表示を行います。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+show status [-m] [-d]
+
+</font></pre></div>
+<div style="margin-left:50px;">-mを指定すると、メモリステータスを表示します。<br>-dを指定すると、DECI2を扱うすべての接続ステータスを表示します。<br>-m、-dがともに省略された場合は、両方を表示します。<br><br>show historyで過去の入力行の表示を行います。<br><br>show dbconfでターゲットから返された設定情報を表示します。<br><br>show symbol [&lt;str&gt;]でシンボル情報を表示します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>&lt;str&gt;が省略された場合にはすべての情報を表示します。
+&lt;str&gt;が指定された場合には名前に&lt;str&gt;が含まれる情報のみを表示します。
+</font></pre></div>
+<div style="margin-left:50px;"><br>show dwarf ...でDWARF情報を表示します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+show dwarf [&lt;option&gt;]... [&lt;key&gt;]
+
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>&lt;option&gt;</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-id &lt;id&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;モジュールIDが&lt;id&gt;であるもののみを表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-ba[se] &lt;base&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;base addressが&lt;base&gt;であるもののみを表示&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-al[l]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;すべてのセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-ar[anges]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Aragnesセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-pu[bnames]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pubnamesセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-in[fo]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Infoセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-ab[brev]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Abbrevセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-li[ne]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Lineセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-fr[ame]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Frameセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-st[r]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Strセクション表示ビットをトグル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">show thr [-[acdefhrqstuvw]*] [&lt;tid&gt;]でスレッド一覧を表示します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;引数なし&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッド一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コンテキストの詳細を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;すべてのスレッドの一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RUN状態のスレッド一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-r&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;READY状態のスレッド一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-w&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WAIT状態のスレッド一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-s&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SUSPEND状態のスレッド一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-u&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WAIT-SUSPEND状態のスレッド一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-d&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DORMANT状態のスレッド一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-q&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッドレディキュー一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;詳細を表示するとき浮動小数点レジスタを16進表記します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-f&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;詳細を表示するとき浮動小数点レジスタを浮動小数表記します。[default]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッドがRUN状態になった回数countを0に初期化します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッドのバックトレースを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;tid&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;tid&gt;で指定されたスレッドのコンテキストの詳細を表示します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">show sem [-v] [&lt;semid&gt;]でセマフォ情報を表示します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;引数なし&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;全てのセマフォを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;semid&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;semid&gt;で指定されたセマフォのみを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;待ちスレッドIDを表示します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">show int [-v] [&lt;intrcode&gt;]で割り込みハンドラ情報を表示します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;引数なし&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;すべての割り込みハンドラの情報を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;intrcode&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定された割り込みハンドラの情報のみを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CPU clockの総計、最小、最大とGPレジスタ値を表示します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">show evf [-v] [&lt;id&gt;]でイベントフラグ情報を表示します。<br><br>show mtx [-v] [&lt;id&gt;]でミューテックス情報を表示します。<br><br>show lwmtx [-v] [&lt;id&gt;]で軽量ミューテックス情報を表示します。<br><br>show mbx [-v] [&lt;id&gt;]でメッセージボックス情報を表示します。<br><br>show vpl [-v] [&lt;id&gt;]で可変長メモリプール情報を表示します。<br><br>show fpl [-v] [&lt;id&gt;]で固定長メモリプール情報を表示します。<br><br>show tlspl [-v] [&lt;id&gt;]でTLSメモリプール情報を表示します。<br><br>show mpp [-v] [&lt;id&gt;]でメッセージパイプ情報を表示します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;引数なし&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;すべての情報を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;待ちスレッドIDを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;id&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;id&gt;で指定された情報のみを表示します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">show cb [-v] [&lt;id&gt;]でコールバック情報を表示します。<br><br>show thevh [-v] [&lt;id&gt;]でスレッドイベントハンドラ情報を表示します。<br><br>show alarm [-v] [&lt;id&gt;]でアラーム情報を表示します。<br><br>show vtimer [-v] [&lt;id&gt;]で仮想タイマ情報を表示します。<br><br>show gelist [-v] [&lt;id&gt;]でディスプレイリストのキューイング情報を表示します。<br><br>show fd [-v] [&lt;id&gt;]でオープン中のファイルディスクリプタ情報を表示します。<br><br>show mem [-g]でメモリブロックおよびヒープの使用状況を表示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_59">
+<h3>
+<a href="#Heading3_4"> 4. </a>59 
+<!-- hp1 --><b>mload &lt;fname&gt; [&lt;args&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定実行ファイル&lt;fname&gt;をターゲットのメモリへロードし、開始アドレスなどの情報をデバッガ内部に保存します。&lt;args&gt;...は、実行時にターゲットプログラムへ引数として渡されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_60">
+<h3>
+<a href="#Heading3_4"> 4. </a>60 
+<!-- hp1 --><b>mstart [-d] [&lt;fname&gt; [&lt;args&gt;]...]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムモジュールのエントリポイントを呼び出します。すでにmloadを行っている場合は引数なしで呼び出せます。mloadを行っていない場合は、引数にファイル名を指定することでプログラムモジュールのロードとエントリポイントを呼び出します。<br><br>-dオプションをつけるとデバッグモードでエントリポイントを呼び出します。<br>具体的には、ブレークポイントを設定し、エントリポイントを呼び出しprogramの中断はCTRL-C、中断しないでdebuggerに制御を戻すにはCTRL-Gを入力します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_61">
+<h3>
+<a href="#Heading3_4"> 4. </a>61 
+<!-- hp1 --><b>mremove &lt;id&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">&lt;id&gt;で指定されたモジュールを削除します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_62">
+<h3>
+<a href="#Heading3_4"> 4. </a>62 
+<!-- hp1 --><b>minfo [-i] [-a] [-uk] [&lt;id&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲットのメモリ上に常駐しているモジュールの情報を表示します。<br>&lt;id&gt;を指定すると、指定されたモジュールの情報をすべて表示します。<br>&lt;id&gt;を指定しない場合には、モジュールの一覧を表示します。<br><br>-iオプションを指定すると、mload/mstartコマンドでロードしたモジュールの一覧のみを表示します。<br>-aオプションを指定すると、アドレス順に表示します。<br>-aオプションを指定しない場合には、ID順となります。<br>-uオプションを指定すると、一覧表示はユーザモジュールのみとなります。<br>-kオプションを指定すると、一覧表示はカーネルモジュールのみとなります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_63">
+<h3>
+<a href="#Heading3_4"> 4. </a>63 
+<!-- hp1 --><b>memlist [-s] [-f] [-a &lt;adr&gt;] [-r &lt;range&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲット上に存在するメモリブロックの一覧を表示します。<br>-sオプションを指定すると、モジュール名は表示しません。<br>-fオプションを指定すると、空きメモリブロックのみを表示します。<br>-a &lt;adr&gt;と-r &lt;range&gt;オプションで表示するメモリ範囲を指定する事もできます。<br>-rオプションを指定しない時の&lt;range&gt;の値は1 [byte]です。<br>-aオプションを指定すると、そのメモリ範囲に含まれるもののみを表示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_64">
+<h3>
+<a href="#Heading3_4"> 4. </a>64 
+<!-- hp1 --><b>sload [-id &lt;id&gt;] [-b &lt;base&gt;] [&lt;fname&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定実行ファイル&lt;fname&gt;のシンボル情報をデバッガの内部のシンボル情報に追加します。ターゲットのメモリへのロードは行いません。<br>&lt;fname&gt;を省略すると、デバッガ内部のシンボル情報をすべてクリアします。<br>-id &lt;id&gt;オプションと-b &lt;base&gt;オプションの可能な組合せおよび意味は、以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sload &lt;fname&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;モジュールファイル&lt;fname&gt;中のモジュール名とバージョンで&nbsp;&nbsp;<br>&nbsp;&nbsp;ターゲットに問い合わせを行い、モジュールベースアドレスを&nbsp;&nbsp;<br>&nbsp;&nbsp;決定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sload -id &lt;id&gt; &lt;fname&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたモジュールID &lt;id&gt;によるモジュールベース&nbsp;&nbsp;<br>&nbsp;&nbsp;アドレスを使用します。モジュールファイル&lt;fname&gt;中の&nbsp;&nbsp;<br>&nbsp;&nbsp;モジュール名とバージョンがターゲットが持つ情報と&nbsp;&nbsp;<br>&nbsp;&nbsp;一致しない場合にはエラーとなります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sload -b &lt;base&gt; &lt;fname&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲットへの問い合わせを行わずに指定された&nbsp;&nbsp;<br>&nbsp;&nbsp;モジュールベースアドレス&lt;base&gt;を使用します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">-idオプションと-bオプションを同時に指定することはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_65">
+<h3>
+<a href="#Heading3_4"> 4. </a>65 
+<!-- hp1 --><b>help [&lt;keyword&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">&lt;keyword&gt;を省略した場合には、dstdbのコマンドの一覧を表示します。<br>キーワード&lt;keyword&gt;が指定された場合には、そのキーワードに関するヘルプのみを表示します。<br>キーワード&lt;keyword&gt;には、以下が指定できます。<br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;cmd&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンド名&lt;cmd&gt;に関するヘルプを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定可能なレジスタグループを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;edit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;行編集に使用可能なキーを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;var&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;setコマンドで設定可能なオプション変数の一覧を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;var&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;setコマンドで設定可能なオプション変数&lt;var&gt;に関して表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;使用可能な表現式に関して表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;keyword&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;helpコマンドで指定できるすべてのキーワードを表示します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_66">
+<h3>
+<a href="#Heading3_4"> 4. </a>66 
+<!-- hp1 --><b>quit</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dstdbを終了します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>オプション一覧</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値の形式</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_1">target_name</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dsnetm_pspのホスト名およびポート(OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_2">file_priority</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Remote File Accessの優先順位(OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_3">reset_on_start</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブール&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;起動時のリセットの有無(OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_4">check_manager_version</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブール&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;manager versionチェックの有無(OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_5">target_exec_ctl_config</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲット実行制御の状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_6">target_exec_ctl_override</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ターゲット実行制御の上書き&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_7">dr_default_format</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;drコマンドのデフォルト表示形式指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_8">dr_default_di</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;drコマンド時のdi実行内容指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_10">ex_default_dr</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;例外発生時のdr実行内容指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_12">lstep_default_list</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;lstep,lnext実行後のlist実行指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_13">lstep_stop_at_no_line</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;lstep,lnextで行番号がない場合に停止&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_14">source_directories</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ソース探索ディレクトリリストの指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_15">initial_sbootp</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブートパラメータの初期値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_15">initial_sbootp</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブートパラメータの現在値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_16">boot_filename</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロードするブートコードのファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_17">automatic_prefix_breakpoint</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブール&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブレークポイント番号形式への自動前置&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_18">describe_ub_all</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブール&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ubでall指定時のみに全削除を行う&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_19">di_address</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;diコマンドのアドレス表示方式&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_20">di_instruction_word</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;diコマンドの命令ワードの表示方式&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_21">di_branch_address</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;diコマンドの分岐アドレス表示方式&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_22">di_macro</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;di/asコマンドのマクロ命令制御&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_23">help_lang</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘルプ表示の言語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_24">help_pager</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘルプ表示に使用するページャ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_25">hex_radix</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブール&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値を0xなしで16進数とみなす&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_26">log_total_size</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;送受信ログの最大合計バイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_27">log_packet_size</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;送受信ログのパケットごとの最大バイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_28">histfile</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒストリセーブファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_29">histfilesize</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;セーブするヒストリ数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_30">histsize</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒストリの上限数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-Japanese.htm#Heading4_6_31">tty_max_size</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;数値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;TTYパケットの最大保留バイト数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">dstdbは、起動時に~/.dstdbrcと./.dstdbrcの存在を調べ、それらのファイルが存在した時は、その順序で起動時に自動実行ファイルとして実行します。<br>上記のオプションのうち(OPTION)と書かれているオプションは、その自動実行ファイル内のoption文によってのみ、設定可能なオプションで、起動後にのみ意味を持つため、後から変更することはできません。<br>optionの引数は、setコマンドと同じ引数を持ちます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>オプション詳細</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>target_name</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dsnetm_pspのホスト名およびポートは、以下の4つの方法のいずれかで設定できます。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> 環境変数"DSNETM_PSP"の値</li>
+<li VALUE=2> 環境変数"DSNETM"の値</li>
+<li VALUE=3> 起動時の自動実行ファイル中のoption文</li>
+<li VALUE=4> dstdbの起動オプションの-d &lt;host&gt;[:&lt;port&gt;]</li>
+</ol></div>
+<div style="margin-left:50px;">複数が指定されている場合には、1)-&gt;2)-&gt;3)-&gt;4)の順序で設定を上書きします。<br>このオプションのデフォルト値は""（空の文字列）で、dstdbを実行した同じホストのデフォルトポート指定の意味を持ちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>file_priority</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ターゲットからのRemote File Accessをdstdbで扱うかどうかの設定を行います。dstdbでターゲットからのRemote File Accessを扱いたくない場合には、-1を指定します。<br>このオプションのデフォルト値は、0xd0です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>reset_on_start</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dstdbが起動時にターゲットをリセットするかどうかを指定します。<br>この指定は、コマンドラインオプションの-rや-nrのどちらも指定されていない時に有効となります。このオプションのデフォルト値は、falseです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>check_manager_version</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dstdbが起動時にdsnetm_pspのバージョン情報をチェックするかどうかを指定します。trueならチェックし、異なるならエラー終了します。falseならバージョン情報は、チェックしません。<br>このオプションのデフォルト値は、falseです。コマンドラインで-cmvが指定されている場合には、trueに上書きされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>target_exec_ctl_config</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">cont,step,next等の実行コマンドの実行制御状態を示します。<br>0の時はホスト側での制御、それ以外はターゲット側での制御を意味します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_6">
+<h3>
+<a href="#Heading3_6"> 6. </a>6 
+<!-- hp1 --><b>target_exec_ctl_override</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">target_exec_ctl_configの値への上書き指定で、0以上の値の時上書きを行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_7">
+<h3>
+<a href="#Heading3_6"> 6. </a>7 
+<!-- hp1 --><b>dr_default_format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デフォルト値はoption dr_default_format=""であり、これは内部で固定的に持っている表示形式を使用する事を意味します。これと等価な明示的設定を行うには、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+option dr_default_format="\
+at=%at  v0-1=%v0,%v1  a0-3=%a0,%a1,%a2,%a3\n\
+t0-7=%t0,%t1,%t2,%t3, %t4,%t5,%t6,%t7\n\
+s0-7=%s0,%s1,%s2,%s3, %s4,%s5,%s6,%s7\n\
+t8=%t8 t9=%t9   k0=%k0 k1=%k1   gp=%gp sp=%sp\n\
+fp=%fp ra=%ra   lo=%lo hi=%lo   PC=%PC bada=%bada\n\
+$cr=0x%cr [%symcr]\n\
+$fcr31=0x%fcr31 [%symfcr31]\n\
+$sr=0x%sr [%symsr]\n"
+</font></pre></div>
+<div style="margin-left:50px;">とします。<br>変換の対象となるものは、以下に限られます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>%%          - '%' を意味する。
+
+%&lt;reg&gt;      - レジスタ名 &lt;reg&gt; を printf("%08x",...) で表示。
+</font></pre></div>
+<div style="margin-left:50px;">&lt;reg&gt;には、以下のいずれも指定「できません」。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> レジスタグループ名
+<li> $&lt;n&gt;の数値表現に対応するもの
+<li> 疑似レジスタ名
+<li> '$'の前置
+<li> '_'の前置
+<li> sr -&gt; statusの別名(dstdb)
+</ul></div>
+<div style="margin-left:50px;"><br>指定できない名前が指定された場合には、%&lt;reg&gt;は変換せずに表示します。<br>cause, status, fcr31レジスタのシンボリックな表示は、上の例のように%symcr, %symsr, %symfcr31という指定が可能で、必ず前後に1つのスペースが表示されます。<br>また%08x以外の128bitレジスタや16bit表示は、未サポートであり、dstdbのdr -vu[01]の場合の設定オプションは、存在しません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_8">
+<h3>
+<a href="#Heading3_6"> 6. </a>8 
+<!-- hp1 --><b>dr_default_di</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">drコマンドを引数なしで指定すると、現在の$PCの前後を逆アセンブル表示を行いますが、その表示方法は、このオプションの値で決まります。<br>設定がない場合のデフォルト値は、"\\di -m $PC $_PC-8 7"です。<br>（先頭の '\' はalias展開をしない、という指定です）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_9">
+<h3>
+<a href="#Heading3_6"> 6. </a>9 
+<!-- hp1 --><b>drge_default_gdi</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">drコマンドで-geオプションを指定すると、現在の $ge_madrの前後をディスプレイリストとして逆アセンブル表示を行いますが、その表示方法は、このオプションの値で決まります。<br>設定がない場合のデフォルト値は、"\\gdi -m $ge_madr $_ge_madr-10 8"です。<br>（先頭の '\' は alias展開をしない、という指定です）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_10">
+<h3>
+<a href="#Heading3_6"> 6. </a>10 
+<!-- hp1 --><b>ex_default_dr</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">cont、step、next 等で実行を開始し、ブレークポイントや例外発生によって停止した場合にdr表示を行いますが、その表示方法は、このオプションの値で決まります。設定がない場合のデフォルト値は、"\\dr"です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_11">
+<h3>
+<a href="#Heading3_6"> 6. </a>11 
+<!-- hp1 --><b>exge_default_drge</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">cont、step、next等で実行を開始し、ディスプレイリストのブレークポイントによって停止した場合にdr -ge表示を行いますが、その表示方法は、このオプションの値で決まります。設定がない場合のデフォルト値は、"\\dr -ge"です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_12">
+<h3>
+<a href="#Heading3_6"> 6. </a>12 
+<!-- hp1 --><b>lstep_default_list</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">lstep、lnextの正常終了時に実行するリスト表示方法を指定します。<br>設定がない場合のデフォルト値は、"\\list"です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_13">
+<h3>
+<a href="#Heading3_6"> 6. </a>13 
+<!-- hp1 --><b>lstep_stop_at_no_line</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">lstep、lnextの開始時または実行中の$PCが行番号を持たない場所であった場合に、コマンドを終了させるかどうかの指定です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;行番号を持つ場所まで内部でstep, next動作を続けます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;その旨を表示し、コマンドを終了します。（デフォルト）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_14">
+<h3>
+<a href="#Heading3_6"> 6. </a>14 
+<!-- hp1 --><b>source_directories</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">diおよびlistコマンドで参照されるソースファイルの探索ディレクトリを指定します。<br>実行ファイルのデバッグデータ中に含まれるソースファイル名の先頭が '/'（絶対パス）である場合や、source_directories変数が "" である場合には、ソースファイル名そのままのみを参照します。<br>それ以外の場合には、単独または複数（区切りは ':'）のディレクトリ名をソースファイル名に前置して参照を試みます。なお空の区切りは、空の前置を意味します。例えば ".:" は "." の次に "" の前置となります。<br>指定ディレクトリ名が '@' で始まる場合には、'@' 部分をオブジェクトファイル名の絶対パスに変換されたディレクトリ名で置換します。<br>このオプションのデフォルト値は、""です。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> オブジェクトのあるディレクトリのみの場合の指定例）
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>set source_directories="@"
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> カレントディレクトリ -&gt; オブジェクト位置 -&gt; ABC -&gt; DEF の順の指定例）
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>set source_directories=".:@:ABC:DEF"
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_15">
+<h3>
+<a href="#Heading3_6"> 6. </a>15 
+<!-- hp1 --><b>initial_sbootp / current_sbootp</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">resetコマンドで参照されるブートパラメータ値です。<br>それぞれの意味については、resetコマンドの説明部分を参照して下さい。<br>initial_sbootpのデフォルト値は"-1"、<br>current_sbootpのデフォルト値は"-1"です。<br>（"-1"は現在の値を変更しない、という意味を持ちます）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_16">
+<h3>
+<a href="#Heading3_6"> 6. </a>16 
+<!-- hp1 --><b>boot_filename</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dstdb起動時にターゲットをリセットさせる場合、ロードするブートコードのファイル名を指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_17">
+<h3>
+<a href="#Heading3_6"> 6. </a>17 
+<!-- hp1 --><b>automatic_prefix_breakpoint</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ub,be,bdコマンドの引数はアドレスですが、そのアドレス指定中の表現式中には$BP&lt;n&gt;の形式の疑似レジスタを指定できます。<br>このautomatic_prefix_breakpoint変数がtrueの場合、ub, be, bdコマンドの引数がすべて10進数での数値のみで構成されている場合に、自動的に"$BP"を指定引数に前置します。<br>デフォルト値は、falseです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_18">
+<h3>
+<a href="#Heading3_6"> 6. </a>18 
+<!-- hp1 --><b>describe_ub_all</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ubコマンドでは、引数を省略した場合全てのブレークポイントを削除の指定になりますが、describe_ub_all変数がtrueの場合には、全削除は禁止されます。<br>デフォルト値は、falseです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_19">
+<h3>
+<a href="#Heading3_6"> 6. </a>19 
+<!-- hp1 --><b>di_address</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">diコマンドのアドレス（ラベル）部分の表示方式指定です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x0の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16進数とシンボルの両方を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x1の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16進数のみで表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x2の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シンボルが存在するならシンボルのみ、それ以外は16進数。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x3の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;同じシンボルに関して一度だけ独立した行で表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x4の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x0の時に加えて行番号も表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x5の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x1の時に加えて行番号も表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x6の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x2の時に加えて行番号も表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x7の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x3の時に加えて行番号も表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x8の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x4の時に加えてソース行も表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x9の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x5の時に加えてソース行も表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0xaの時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x6の時に加えてソース行も表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0xbの時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x3の時に加えてソース行も表示します。&nbsp;&nbsp;<br>&nbsp;&nbsp;ソースファイルがアクセスできない場合には&nbsp;&nbsp;<br>&nbsp;&nbsp;0x7の時と同一です（デフォルト）。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">行番号やソース行を表示するには、gcc -gで実行ファイルを作成して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_20">
+<h3>
+<a href="#Heading3_6"> 6. </a>20 
+<!-- hp1 --><b>di_instruction_word</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">diコマンドの命令ワード部分の表示方式指定です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;命令ワードを16進数表示を行います（デフォルト）。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;命令ワードの16進数表示は行いません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_21">
+<h3>
+<a href="#Heading3_6"> 6. </a>21 
+<!-- hp1 --><b>di_branch_address</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">diコマンドの分岐アドレス部分の表示方式指定です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16進数とシンボルの両方を表示します（デフォルト）。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16進数のみで表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;2の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シンボルが存在するならシンボルのみ、&nbsp;&nbsp;<br>&nbsp;&nbsp;それ以外は16進数で表示します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_22">
+<h3>
+<a href="#Heading3_6"> 6. </a>22 
+<!-- hp1 --><b>di_macro</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">di/asコマンドでli,move等のマクロ命令を扱うかどうかを指定します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マクロ命令は扱いません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1の時 :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;li, move, b, bal, dmoveのマクロ命令を扱います（デフォルト）。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_23">
+<h3>
+<a href="#Heading3_6"> 6. </a>23 
+<!-- hp1 --><b>help_lang</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">helpコマンドで表示する言語を指定します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"eng"&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 英語（デフォルト）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"euc"&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 日本語（EUCコード）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"jis"&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 日本語（JISコード）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"sjis"&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 日本語（シフトJISコード）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"utf-8"&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 日本語（UTF-8コード）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_24">
+<h3>
+<a href="#Heading3_6"> 6. </a>24 
+<!-- hp1 --><b>help_pager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">helpコマンドで表示するページャを指定します。<br>デフォルトは、""（空の文字列）でページャは使用しません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_25">
+<h3>
+<a href="#Heading3_6"> 6. </a>25 
+<!-- hp1 --><b>hex_radix</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dstdbの数値指定の解釈の方法を設定します。<br>デフォルト値はtrueで、数値は0xなしで16進数と解釈されます。<br>falseの場合は、C言語と同じく16進数は0xを前置しなければなりません。<br>シンボルがなければtrueの方が便利ですが、シンボルがあり例えばdb abcのように指定された場合に、abcというシンボルもあるとdb 0xabcと入力し直す必要があり、あいまいさが残ります。<br>falseの場合には、db abcは常にシンボルのみをサーチするため、このような「場合によっては入力しなおす」必要は生じません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_26">
+<h3>
+<a href="#Heading3_6"> 6. </a>26 
+<!-- hp1 --><b>log_total_size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デフォルトでは、合計バイト数が128KBまでDECI2パケットのログを保存します。送受信ログが不要の場合には、0を設定して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_27">
+<h3>
+<a href="#Heading3_6"> 6. </a>27 
+<!-- hp1 --><b>log_packet_size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デフォルトでは、パケットの先頭から128バイトまでのデータをログに保存します。すべてのデータをログに保存したい場合には、65535以上の値を設定して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_28">
+<h3>
+<a href="#Heading3_6"> 6. </a>28 
+<!-- hp1 --><b>histfile</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デフォルトでは"~/.dstdb_history"で、この文字列が示すファイルへdstdbの終了時にヒストリをセーブし、起動時にそのファイルからヒストリをロードします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_29">
+<h3>
+<a href="#Heading3_6"> 6. </a>29 
+<!-- hp1 --><b>histfilesize</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">histfileへセーブするヒストリ数です。デフォルト値は、256です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_30">
+<h3>
+<a href="#Heading3_6"> 6. </a>30 
+<!-- hp1 --><b>histsize</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コマンド操作中に記憶するヒストリ数の上限数です。デフォルト値は、256です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_31">
+<h3>
+<a href="#Heading3_6"> 6. </a>31 
+<!-- hp1 --><b>tty_max_size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dstdbが送信するTTYパケットの最大保留バイト数で、デフォルト値は、8MiBです。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<html lang="en">
+<head>
+<title>libhttp-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libhttp Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The HTTP library (libhttp) is a library that provides support for applications that use HTTP. The library can send an HTTP request to a URI specified by an application, and subsequently receive the response to that request. libhttp runs on top of the PSP&trade; network libraries (PSPNET).<br>libhttp supports the following functions.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> HTTP/1.0, 1.1
+<li> GET, HEAD, POST
+<li> Redirect
+<li> Keep-Alive
+<li> Cookie
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNET is required in order to use libhttp. For the files required by PSPNET, please refer to the PSP&trade; network library documentation.<br>The files which are specifically required by libhttp are shown below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp/http_methods.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp/schemes.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>References</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The libhttp library is compliant with HTTP/1.1.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Overview of Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Loading Modules</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The libhttp module is included in the HTTP module set.<br>The following module sets must be loaded before loading the HTTP module set:<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET shared module set
+<li> PSPNET infrastructure mode module set
+<li> libparse_uri module
+<li> libparse http module
+</ul></div>
+<div style="margin-left:50px;">Refer to the PSPNET Overview document and Utility Overview document for information on how to load modules sets. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Initializing the Network Library and Connecting to the Network </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Prior to using libhttp, it is necessary to initialize the network library and connect to the network. For details regarding these procedures, please refer to the documentation on the PSP&trade; network library.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Library Initialization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To initialize the library, first load the libparse_uri module, libparse_http module, and HTTP module set by using the network module utility API, and then call <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>().<br>Specify as an argument the size of the memory pool to be used internally by libhttp.<br>libhttp allows an application to provide its own memory management functions. This is accomplished by calling <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>() with the argument set to 0, and then after initialization has completed, specifying the desired functions using <a href="../network/libhttp-Reference-English.htm#sceHttpSetMallocFunction">sceHttpSetMallocFunction</a>(). The APIs of the functions provided by the application must be the same as those for malloc() and free().<br>A realloc function must also be specified as an argument, but the realloc function is not currently used, so a dummy function may be specified instead.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *my_malloc(size_t);
+void my_free(void *);
+void *my_realloc(void *, size_t);
+
+	...
+
+/* Initialization of libhttp */
+<a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>(0);
+
+/* User specification of dynamic memory management functions */
+<a href="../network/libhttp-Reference-English.htm#sceHttpSetMallocFunction">sceHttpSetMallocFunction</a>(my_malloc, my_free, my_realloc); 
+
+/* From here on, call the libhttp APIs */
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>HTTP Processing Procedures</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>Creating Templates and Connections</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">First, perform the settings which are required for sending HTTP requests. With libhttp, settings for sending HTTP requests are managed in two stages: templates and connections.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Details</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Template&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Template settings for creating connections.&nbsp;&nbsp;<br>&nbsp;&nbsp;Comprises the settings which do not change from&nbsp;&nbsp;<br>&nbsp;&nbsp;connection to connection.&nbsp;&nbsp;<br>&nbsp;&nbsp;- HTTP version&nbsp;&nbsp;<br>&nbsp;&nbsp;- User agent value&nbsp;&nbsp;<br>&nbsp;&nbsp;- Whether or not to use system settings&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Connection&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Per-connection settings.&nbsp;&nbsp;<br>&nbsp;&nbsp;- Host name of the server&nbsp;&nbsp;<br>&nbsp;&nbsp;- Connection scheme (HTTP)&nbsp;&nbsp;<br>&nbsp;&nbsp;- Port number&nbsp;&nbsp;<br>&nbsp;&nbsp;- Whether or not to use keep-alive&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">Templates and connections are created by calling <a href="../network/libhttp-Reference-English.htm#sceHttpCreateTemplate">sceHttpCreateTemplate</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>(). Unique IDs are assigned by the library to created templates and connections. Hereafter, these IDs will be referred to as the template ID and the connection ID.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>Creating a Request</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Next, create requests which correspond to actual HTTP requests. Requests are created by calling <a href="../network/libhttp-Reference-English.htm#sceHttpCreateRequest">sceHttpCreateRequest</a>(). Specify a connection ID, method, path, etc. as arguments. Unique IDs are assigned by the library to created requests. Hereafter, this ID will be referred to as the request ID.<br>The relationship between templates, connections, and requests can be illustrated as follows.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libhttp-Overview-English001.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_3"><h4>
+(3)&nbsp;<b>Sending an HTTP Request and Receiving the Response Header</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Actual communication with a server is carried out by creating a request and then calling <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>(). If a TCP connection with the server is already open, then the request will be sent on this same connection using keep-alive.<br>Since libhttp does not create internal threads, <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>() blocks until processing is completed. Specifically, the function returns after the HTTP request is sent and the response header is received from the server.<br>After calling <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>(), the request ID can be used to obtain the response data from the server. The status code (such as 200 (OK)) can be obtained using <a href="../network/libhttp-Reference-English.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>(), the content length of the body of the response from the server can be obtained using <a href="../network/libhttp-Reference-English.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>(), and other headers can be obtained using <a href="../network/libhttp-Reference-English.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_4"><h4>
+(4)&nbsp;<b>Receiving the Message Body </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Once the response header has been received, call <a href="../network/libhttp-Reference-English.htm#sceHttpReadData">sceHttpReadData</a>() to receive the message body from the server. The size of the message body can be obtained beforehand by calling <a href="../network/libhttp-Reference-English.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>(). After reading <i>content_length</i> bytes of the message body, HTTP request processing is complete.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_5"><h4>
+(5)&nbsp;<b>Deleting the Request</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To delete the request, call <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>() and specify the request ID.<br><br></div>
+<div style="margin-left:50px;">To send the HTTP request again, repeat the process starting with request creation. To change the connection target, create a connection corresponding to the new target, and then create the request.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+/* Example of the HTTP processing procedure */
+#define LIBHTTP_POOLSIZE	(20 * 1000)
+#define USER_AGENT		"PSPHTTP/0.1 test/0.1&quot;
+#define SCHEME			&quot;http&quot;
+#define SERVER			&quot;www.scei.co.jp&quot;
+#define PATH			&quot;/&quot;
+#define PORT			(80)
+#define URL			&quot;http://www.scei.co.j&quot;
+int		ret, template_id, connection_id, request_id, status_code, counter;
+unsigned char	buf[128];
+<a href="../kernel/Types-Reference-English.htm#SceULong64">SceULong64</a>	content_length;
+(Network library initialization processing)
+...
+/* Initialize libhttp */
+<a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>(LIBHTTP_POOLSIZE);
+/* Create template */
+template_id = <a href="../network/libhttp-Reference-English.htm#sceHttpCreateTemplate">sceHttpCreateTemplate</a>(USER_AGENT, SCE_HTTP_VERSION_1_1,
+ 	SCE_HTTP_DISABLE);
+if (template_id &lt; 0){
+	ERROR;
+}
+/* Create connection */
+connection_id = <a href="../network/libhttp-Reference-English.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>(template_id, SERVER, SCHEME,
+	PORT, SCE_HTTP_ENABLE);
+/* A connection can also be created using a URL string.
+connection_id = <a href="../network/libhttp-Reference-English.htm#sceHttpCreateConnectionWithURL">sceHttpCreateConnectionWithURL</a>(template_id, URL, SCE_HTTP_ENABLE);
+*/
+if (connection_id) &lt; 0){
+	ERROR;
+}
+/* Create request */
+request_id = <a href="../network/libhttp-Reference-English.htm#sceHttpCreateRequest">sceHttpCreateRequest</a>(connection_id, SCE_HTTP_METHOD_GET, PATH, 0);
+/* A request can also be created using a URL string.
+request_id = <a href="../network/libhttp-Reference-English.htm#sceHttpCreateRequestWithURL">sceHttpCreateRequestWithURL</a>(connection_id, SCE_HTTP_METHOD_GET, 
+	URL, 0);
+*/
+if (request_id &lt; 0){
+	ERROR;
+}
+/* Send request and receive response header */
+ret = <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>(request_id);
+if (ret &lt; 0){
+	ERROR;
+}
+ret = <a href="../network/libhttp-Reference-English.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>(request_id, &amp;status_code);
+if ( (ret &lt; 0) || (status_code != 200) ){
+	ERROR;
+}
+ret = <a href="../network/libhttp-Reference-English.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>(request_id, &amp;content_length);
+if (ret &lt; 0){
+	ERROR;
+}
+/* Receive message body */
+while (content_length &gt; 0){
+	ret = <a href="../network/libhttp-Reference-English.htm#sceHttpReadData">sceHttpReadData</a>(request_id, buf, sizeof(buf));
+	if (ret &lt; 0){
+		ERROR;
+	} else if (ret == 0){
+		break; /* The connection was closed */
+	} else {
+		for (counter = 0; counter &lt; ret; counter++){
+			putchar(buf[counter]);
+		}
+	}
+}
+printf(&quot;\n&quot;);
+/* Delete request */
+<a href="../network/libhttp-Reference-English.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>(request_id);
+/* Library termination processing */
+<a href="../network/libhttp-Reference-English.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>(connection_id);
+<a href="../network/libhttp-Reference-English.htm#sceHttpDeleteTemplate">sceHttpDeleteTemplate</a>(template_id);
+<a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>();
+(Network termination processing)
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Library Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Prior to terminating libhttp, applications must delete templates, connections, and requests using <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteTemplate">sceHttpDeleteTemplate</a>(), <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>(), and <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>(). First delete requests, then delete connections, and finally delete templates, in that order.<br>After these deletions have been completed, call <a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>() to exit the library.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* Delete all previously created templates, connections, and requests */
+
+/* Termination processing for libhttp */
+<a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>();
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Description of Operation</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Keep-Alive Handling Mechanism</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In the interest of improving communication efficiency, starting with HTTP version 1.1, a feature called keep-alive was adopted which performs multiple HTTP exchanges without closing the TCP connection.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libhttp-Overview-English002.gif">
+</div>
+<div style="margin-left:50px;"><br>The libhttp library has the capability to automatically perform keep-alive. The libhttp library will carry out communication using keep-alive when all of the following conditions are met.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> The keep-alive feature is enabled in the connection settings.
+<li> The connected server supports keep-alive.
+<li> A request object is being used that uses the same connection settings.
+</ul></div>
+<div style="margin-left:50px;">Keep-alive can be enabled or disabled for each individual set of connection settings. In addition, the information as to whether or not the connection to the current server is being kept alive is managed within the connection settings, so when the <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>() function is called, the connectivity with the server is checked, and a connection is created only when a connection does not already exist.<br>When keep-alive is used, multiple requests and responses can be exchanged over a single TCP connection. Furthermore, a server will send responses in the same order as it receives requests. Please be aware that, for this reason, deadlock can occur if software is structured such that an application sends multiple requests using the same connection settings, and a receiving thread for a prior request ends up waiting to receive a response to a subsequent request.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Redirection Handling Mechanism</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In HTTP, in order to notify a client that a URL has been changed, a type of response called a redirection can be returned from the server. The libhttp library has the capability to automatically send a new request to the specified URL when a redirection response is received from a server, Specifically, when a response status of 300, 301, 302, 303 or 307 is returned from a server, a request is again sent to the specified URL. If the status is 305, communication is performed with the specified URL via its proxy server. This functionality can be enabled or disabled using the <a href="../network/libhttp-Reference-English.htm#sceHttpEnableRedirect">sceHttpEnableRedirect</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpDisableRedirect">sceHttpDisableRedirect</a>() functions. It is enabled by default. When this functionality has been disabled, the application must analyze the response from the server, and then explicitly create and send a request to the redirection target.<br>How storage of the redirection target is handled differs depending on the response status of the server.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> For 300, 302, 303, 305 and 307, the redirection target is not stored.
+<li> For 301, the redirection target is stored, and when there are subsequent accesses to the same URL, they are automatically converted within the library into requests to the redirection target.
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_1">
+<div style="margin-left:40px;"><h4><b>Concerning Method Changes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Note that although libhttp basically changes the method based on the RFCs when redirection occurs, behavior that deviates from the RFCs is also incorporated. This is because there also exists a service for sending the user ID and password via POST in anticipation that the method will be changed to GET. You can use <a href="../network/libhttp-Reference-English.htm#sceHttpSetRedirectCallback">sceHttpSetRedirectCallback</a>() to control the method change in the application.<br><br>RFC Provisions<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> For 301, 302, 305, and 307, the method is not changed.
+<li> For 303, the method is changed to GET.
+</ul></div>
+<div style="margin-left:67px;">libhttp-Specific Provisions (portion violating RFC)<br></div>
+<div style="margin-left:70px;"><ul>
+<li> For a HEAD method, HEAD is used for redirection even for 303.
+<li> When the method is POST while redirection is from an https to an http site, it is changed to GET even for 301 and 302.
+</ul></div>
+<div style="margin-left:67px;"><br>There are also restrictions for redirection when POST is used. When the request body is divided up and sent by calling <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>() multiple times, automatic redirection is valid only for types of redirection in which the method is changed to GET. Note that this is done so that the request body that will be used for resending can be saved. As a specific example, when 307 is returned from the server as the result of sending POST data that was divided into multiple transmissions, automatic redirection will not occur, and <a href="../network/libhttp-Reference-English.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>() will return 307 directly.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Basic/Digest Authentication</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttp supports basic authentication and digest authentication. By specifying the callback function beforehand to obtain a user and password in <a href="../network/libhttp-Reference-English.htm#sceHttpSetAuthInfoCallback">sceHttpSetAuthInfoCallback</a>() function, the callback function is called to set a user and the password when these authentications are required. In addition to the callback function, a user name and password can be included in the URL specified in <a href="../network/libhttp-Reference-English.htm#sceHttpCreateConnectionWithURL">sceHttpCreateConnectionWithURL</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpCreateRequestWithURL">sceHttpCreateRequestWithURL</a>(). Use the <a href="../network/libhttp-Reference-English.htm#sceHttpEnableAuth">sceHttpEnableAuth</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpDisableAuth">sceHttpDisableAuth</a>() functions to enable and disable authentication. <br>The username and password passed by the callback function are stored within the library and reused when necessary. There can be up to 16 stored username/password combinations; exceeding this number causes username/password combinations to be deleted in order starting with the oldest one referenced. In addition, calling <a href="../network/libhttp-Reference-English.htm#sceHttpFlushAuthList">sceHttpFlushAuthList</a>() deletes all information stored within the library.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Cookie Processing Mechanism </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttp has a function to automatically save and send cookies. Use <a href="../network/libhttp-Reference-English.htm#sceHttpEnableCookie">sceHttpEnableCookie</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpDisableCookie">sceHttpDisableCookie</a>() to enable and disable this function. It is enabled by default. Since cookie data is placed in memory, cookies are enabled until <a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>() is called. <br>Use <a href="../network/libhttp-Reference-English.htm#sceHttpSaveSystemCookie">sceHttpSaveSystemCookie</a> and <a href="../network/libhttp-Reference-English.htm#sceHttpLoadSystemCookie">sceHttpLoadSystemCookie</a>() to save cookies beyond their lifetime in libhttp. Calling these functions requires up to 100 KB of cookie-management space (depending on the user's environment), which in turn requires that the memory size set using <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>() be a value greater than SCE_HTTP_LOAD_COOKIE_LEAST_HEAP_SIZE.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>HTTP Proxy</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttp supports communication through an HTTP proxy server. There are two methods to set a proxy. The first method is to automatically read the setting from the PSP&trade; connection settings. The other method is to have the application set up the proxy server. Both the <a href="../network/libhttp-Reference-English.htm#sceHttpSetProxy">sceHttpSetProxy</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpGetProxy">sceHttpGetProxy</a>() functions can be used to set up the proxy server. For the first method, when the template settings are created, you can specify in an argument whether to enable or disable the proxy. Reading the setting automatically from the PSP&trade; connection settings is recommended because it is likely that whether or not a proxy server is used, as well as which proxy server is used, at the base station to which to connect, is likely to change due to the nature of wireless LANs. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Caching Mechanism</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The libhttp library can use a simple in-memory cache. To use the cache, first call <a href="../network/libhttp-Reference-English.htm#sceHttpInitCache">sceHttpInitCache</a>() and specify the memory to use for the cache, and then call <a href="../network/libhttp-Reference-English.htm#sceHttpEnableCache">sceHttpEnableCache</a>() to specify the template settings, connection settings, and request object that will use the cache. The memory used by the cache is shared by all of libhttp, and can be any amount up to the value specified with <a href="../network/libhttp-Reference-English.htm#sceHttpInitCache">sceHttpInitCache</a>(). Accordingly, when using the cache, you must increase the size specified with <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>() by that amount.<br>Currently, an object that is cached will return a response to a GET request that includes a Content-Length header. You can also set the maximum length of a response body that should be cached using <a href="../network/libhttp-Reference-English.htm#sceHttpSetCacheContentLengthMaxSize">sceHttpSetCacheContentLengthMaxSize</a>(). The default value is the specified size of the cache. If the cache data exceeds this size, then existing cached items not currently being referenced are deleted, oldest first, regardless of the validity period of the entry. To invalidate all the cache data, use <a href="../network/libhttp-Reference-English.htm#sceHttpFlushCache">sceHttpFlushCache</a>().<br>When finished using the cache, delete all of the request objects that are using the cache, and then call <a href="../network/libhttp-Reference-English.htm#sceHttpEndCache">sceHttpEndCache</a>().<br><br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Stack Size</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>Stack size required to call the API</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The stack size needed to call the libhttp API varies depending on the API.<br></div>
+</ol>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1> The following APIs require 10240 bytes (SCE_HTTP_NET_LEAST_STACK_SIZE)</li>
+</ol></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequestInCacheFirstMode">sceHttpSendRequestInCacheFirstMode</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpAbortRequest">sceHttpAbortRequest</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpReadData">sceHttpReadData</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpSetProxy">sceHttpSetProxy</a>()
+</ol></div>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=2> The following APIs require 2048 bytes (SCE_HTTP_LEAST_STACK_SIZE).</li>
+</ol></div>
+<div style="margin-left:70px;"><ul>
+<li> All other APIs
+</ul></div>
+</ol>
+<div style="margin-left:67px;">If the stack size is too small, the error SCE_HTTP_INSUFFICIENT_STACKSIZE will be returned.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>Stack size of callback functions</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The stack size of callback functions that are set using the following libhttp functions is 4096 bytes (SCE_HTTP_CALLBACK_LEAST_STACK_SIZE).<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpSetAuthInfoCallback">sceHttpSetAuthInfoCallback</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpSetRedirectCallback">sceHttpSetRedirectCallback</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpSetCookieSendCallback">sceHttpSetCookieSendCallback</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpSetCookieRecvCallback">sceHttpSetCookieRecvCallback</a>()
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Restrictions in Multithreaded Environments</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">Note that a connection ID can be assigned to only one TCP socket, excluding special cases such as redirection. For that reason, calling functions that invoke communication, such as <a href="../network/libhttp-Reference-English.htm#sceHttpReadData">sceHttpReadData</a>() and <a href="../network/libhttp-Reference-English.htm#sceHttpSendRequest">sceHttpSendRequest</a>(), simultaneously from multiple threads will return an error. To avoid creating a situation such as this, you must create only one connection for each thread. As long as you don't call these functions at the same time from multiple threads, or if the requests created by different threads use different connection IDs, you won't have a problem. You can also call <a href="../network/libhttp-Reference-English.htm#sceHttpAbortRequest">sceHttpAbortRequest</a>() at the same time as a function that invokes communication.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

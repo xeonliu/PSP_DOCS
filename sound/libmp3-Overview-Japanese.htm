@@ -1,0 +1,485 @@
+<html lang="jp">
+<head>
+<title>libmp3-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libmp3
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能と特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">MP3ライブラリ(以下libmp3)は、Media Engine上で動作するMP3デコーダを制御するライブラリです。MP3形式で圧縮されたオーディオデータ(以下MP3データ)をリニアPCMデータへ、デコードすることができます。libmp3は、以下の機能を持っています。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> MP3データからリニアPCMデータへのデコード
+<li> MP3データのストリーミング再生
+<li> MP3データのループ再生
+<li> MP3データの再生位置の頭出し
+</ul></div>
+<div style="margin-left:50px;"><br>再生可能なMP3データのフォーマットは、以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 対応コーデックはMPEG1/ 2/ 2.5 Layer3
+<li> 対応サンプリング周波数は32000/ 44100/ 48000Hz(MPEG1 Layer3)、16000/ 22050/ 24000Hz(MPEG2 Layer3)、8000/ 11025/ 12000Hz(MPEG2.5 Layer3)
+<li> MP3データ(モノラル、ステレオ)の対応ビットレートは32/ 40/ 48/ 56/ 64/ 80/ 96/ 112/ 128/ 160/ 192/ 224/ 256/ 320kbps(MPEG1 Layer3)、8/ 16/ 24/ 32/ 40/ 48/ 56/ 64/ 80/ 96/ 112/ 128/ 144/ 160kbps(MPEG2/2.5 Layer3)およびVBR(Variable Bit Rate)
+</ul></div>
+<div style="margin-left:50px;"><br>出力可能なPCMデータのフォーマットは、ビット深度16ビットのステレオのみです。入力がモノラルのMP3データであってもデコード結果としては、左右同一のステレオデータが出力されます。また、libmp3はデコードされたPCMデータをオーディオ出力する機能は、提供していません。PCMデータをオーディオ出力する場合には、vaudioを併せて利用する必要があります。libwaveまたはsimple audioは44100HzのPCMデータしか扱えないため、必ずvaudioを利用してください。PCMデータをオーディオ出力するための方法は、別資料の「サウンド概要」に記載されていますので必要に応じて参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3を使用するために必要なファイルは、以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp3.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp3_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp3_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">また、libmp3モジュール本体をロードするために、モジュールユーティリティを併用する必要があります。詳しくは、別資料「ユーティリティサービス」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3のサンプルプログラムは、以下のものがあります。必要な機能に応じて参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/mp3play/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libmp3の基本的な利用方法を示したサンプルです。グラフィックスのサンプルプログラムであるdevkit/sample/graphic/stars/をベースにMP3ファイルによるBGMを再生します。ループ再生、再生停止、一時停止、ID3タグの読み飛ばし処理の参考にしてください。また、ID3タグの解析による主要な音楽情報(トラック名、アーティスト名など)の取得も行っています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_2">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/at3mp3play/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libmp3、libatrac3plusを使って、MP3、ATRAC3plus&trade;ファイルによるBGM同時再生を行います。基本的な機能は、devkit/sample/sound/mp3playに準じます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_3">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/mp3lowlevel/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libmp3の低レベルAPIを使って、MP3ファイルによるBGMのオンメモリ再生を行います。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>動作解説</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>デコードまでの処理の流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デコード処理までに必要な手順を以下に示します。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> libmp3に必要な計算資源を確保</li>
+<li VALUE=2> 入出力バッファを確保</li>
+<li VALUE=3> MP3ハンドルを取得し、入出力バッファに関する初期値をセット</li>
+<li VALUE=4> 入力バッファへMP3データを読み込み</li>
+<li VALUE=5> 読み込んだMP3データを元に初期化</li>
+<li VALUE=6> MP3データをデコードし、結果を出力バッファに出力</li>
+</ol></div>
+<div style="margin-left:50px;"><br>まず、libmp3を利用する前に、本ライブラリに必要な計算資源を確保します。本ライブラリは、この計算資源を利用し、複数個並列でデコード処理を実行することができます。個々のデコード処理に必要な計算資源を本ライブラリでは、<b>デコード資源</b>と呼びます。<br>次に、<b>MP3ハンドル</b>と呼ばれるデコード資源管理用IDを取得します。MP3ハンドルとデコード資源は、一対一に対応しています。取得したMP3ハンドルと初期値を関連付けることにより、デコード資源の初期化を行うことができます。初期化に必要な初期値は、大きく２つあります。１つは、手順(3)で与える入出力バッファに関する初期値、もう１つは手順(4)で入力バッファへ読み込むMP3データのMpeg/Audioフレームヘッダです。初期化処理実行後、MP3ハンドルを介してMP3データをデコードすることができます。また、同時に利用できるMP3ハンドルの数には、制限があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>タグの読み飛ばし</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">MP3ファイルには、しばしば<b>タグ</b>と呼ばれる音楽情報が付加されます。タグには、アーティスト名やアルバム名などを記録することができます。タグには、さまざまな種類があり、種別によって保持可能な情報量が異なります。<br>libmp3は、タグを読み飛ばすことができません。したがって、手順(4)における<b>入力バッファにはタグを除いたMP3データを読み込む必要があります</b>。本節では、タグの一種であるID3タグを取り上げ、これを読み飛ばす方法について概説します。この方法は、サンプルプログラム<b>devkit/sample/sound/mp3play/</b>で実装されているので、併せて参考にしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ID3タグver.1.0/1.1</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ID3タグver.1.0/1.1(以下ID3タグv1.x)は、MP3ファイルの末尾に付加されます。タグのサイズは、128バイトで固定です。ID3タグ v1.xの仕様を図 1に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp3-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  ID3タグv1.xの仕様</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">ID3タグv1.xの先頭には、必ず"TAG"という文字列が埋め込まれています。したがって、このタグが付加されているかどうかを判断するためには、MP3ファイル末尾から128バイト前の3バイト分データを読み込み、読み込んだデータが文字列"TAG"と一致するかどうかを調べます。タグが存在する場合には、MP3ファイル末尾から128バイトは、入力バッファに読み込まないようにする必要があります。これを実現するためには、MP3ハンドル取得関数に与える引数に以下の値をセットしてください。ただし、MP3ファイルサイズを<i>filesize</i>バイトとします。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ID3タグ v1.xが存在する場合、(<i>filesize</i> - 128)をセット
+<li> ID3タグ v1.xが存在しない場合、<i>filesize</i>をセット
+</ul></div>
+<div style="margin-left:50px;">ただし、ID3タグv1.xは、データの末尾に存在しているため、このタグが存在してもMP3データを最後までデコードした後にエラーが返るだけで、ループ再生などを行わない場合には、特に問題にならないこともあります。シークができない、あるいはネットワーク経由のストリーミングなど、シークの遅いメディア上にデータがある場合は、ID3タグv1.xを考慮しないという手段も選択できます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>ID3タグ ver.2.2/2.3/2.4</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp3-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  ID3タグv2.xの仕様</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">ID3タグver.2.2/2.3/2.4(以下ID3タグv2.x)はMP3の先頭に付加されます。タグのサイズは、可変長です。ただし、ファイル先頭から10バイトまでのデータは、固定フォーマットです。ID3タグv2.xの仕様を図 2に示します。<br>タグの先頭には、必ず"ID3"という文字列が埋め込まれています。したがって、ID3タグv2.xが付加されているかどうかを判断するためには、MP3ファイル先頭から3バイト分データを読み込み、読み込んだデータが文字列"ID3"と一致するかどうかを調べます。<br>タグが存在する場合には、読み飛ばすタグのサイズを調べます。タグのサイズは図 2のSizeの領域、すなわちMP3ファイル先頭から6バイト先の4バイト分データを変換することで得られます。データの変換過程を以下に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp3-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  ID3タグv2.xにおけるタグサイズ(タグヘッダサイズを除く)の導出方法</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">仕様によると、有効な値は各バイトの下７ビットなので、まずはビット詰めを行います。このとき、データ並びがビッグエンディアンであることに注意してください。続いて、これを4バイト整数型として利用します。しかし、PSP&reg;のプロセッサは<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a>型をリトルエンディアン形式で読むため、誤った値になってしまいます。正しい値として読むためには、ビットシフトなどを利用してデータをビッグエンディアン形式に変換してください。<br>以上のデータ変換によって得られたタグのサイズを<i>tagSize</i>バイトとします。<i>tagSize</i>はタグ先頭の固定フォーマットのデータサイズ10バイト分は、含みません。そのため、ID3タグv2.xのサイズは(<i>tagSize</i>+10)バイトになります。タグが存在する場合には、MP3ファイル先頭から(<i>tagSize</i>+10)バイトは、入力バッファに読み込まないようにする必要があります。これを実現するためには、MP3ハンドル取得関数に与える引数に以下の値をセットしてください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ID3タグ v2.xが存在する場合、(<i>tagSize</i>+10)をセット
+<li> ID3タグ v2.xが存在しない場合、0をセット
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>オンメモリ再生とストリーミング再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">入力バッファのサイズがMP3データのサイズよりも十分に大きい場合、手順(4)以降、MP3データを入力バッファに追加で読み込む必要はありません。この再生方法を<b>オンメモリ再生</b>と呼びます。逆に、入力バッファのサイズがMP3データのサイズよりも小さい場合、逐次データを追加で読み込む処理が必要になります。この再生方法を<b>ストリーミング再生</b>と呼びます。<br>ストリーミング再生に必要な手順を以下に示します。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> libmp3に必要な計算資源を確保</li>
+<li VALUE=2> 入出力バッファを確保</li>
+<li VALUE=3> MP3ハンドルを取得し、入出力バッファに関する初期値をセット</li>
+<li VALUE=4> 入力バッファへMP3データを読み込み</li>
+<li VALUE=5> 読み込んだMP3データを元に初期化</li>
+<li VALUE=6> MP3データをデコードし、結果を出力バッファに出力</li>
+<li VALUE=7> デコードされたPCMデータをオーディオ出力</li>
+<li VALUE=8> 入力データを追加で読み込む必要性をチェック</li>
+<li VALUE=9> データ追加の必要があれば手順(10)、必要がなければ手順(6)にジャンプ</li>
+<li VALUE=10> 追加データを指すMP3ファイル内シーク位置と追加先アドレスとサイズを取得</li>
+<li VALUE=11> 入力バッファに追加のMP3データを読み込み</li>
+<li VALUE=12> 追加したMP3データのサイズをlibmp3に通知</li>
+<li VALUE=13> 手順(6)にジャンプ</li>
+</ol></div>
+<div style="margin-left:50px;"><br>以上の手順を繰り返し処理することによって、ストリーミング再生を行うことができます。<br>MP3ファイルの最後まで再生が終わった場合、残りループ再生回数の残りが0であれば、再生は停止されます。ループ再生回数の設定に関しては、3章の「ループ再生」を参照してください。再生停止中は、手順(7)におけるデコード処理がスキップされ、無音のPCMデータが出力されます。また、手順(9)でデータの追加要求がlibmp3から通知されることはありません。<br>再生停止中、再生再開の合図をライブラリに送ることで、ファイル先頭から再びストリーミング処理を開始することができます。また、残りループ再生回数が1以上または無限回(負数)に設定されている場合には、MP3ファイルの最後まで再生が終わる場合でも、手順(6)から手順(13)を繰り返すことで、自動的にファイル先頭に再生位置が戻ります。<br>以上のlibmp3の挙動を踏まえ、初期化処理後は常に手順(6)から手順(13)を繰り返してください。これによって再生制御が単純化されるとともに、正常なストリーミング再生が保証されます。以上のストリーミング再生手順を図 4に模式図としてまとめてありますので参考にしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>ループ再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3は、ループ再生機能を提供しています。ループ開始位置および終了位置は、図 4に示す通り、MP3ファイル先頭および末尾のタグとMP3データの境界です。その他の位置をループ再生の開始・終了位置に設定することはできません。初期化終了後であれば、任意のタイミングでループ再生回数を設定することができます。ループ再生回数は、MP3ハンドルごとに独立に管理されます。ループ再生回数には、1から符号付整数型が許す最大値まで設定することができます。また、ループ再生回数に負数を設定することで無限回のループ再生が実現可能です。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp3-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  ストリーミング再生</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>MP3データの準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PCMデータ(wavファイル)からMP3データにエンコードします。PCMデータからMP3データにエンコードするツールは、弊社では用意していません。また、libmp3によってデコード可能なMP3データのフォーマットに関しては、制限があります。詳しくは、4章の「デコード可能なMP3デー<b>タ</b>」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>タグを読み飛ばすための情報の取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3は、ID3タグなどのタグを読み飛ばすことができません。そのため、libmp3の初期化処理の前にタグを読み飛ばすための情報を求めておく必要があります。この方法に関しては、2章の「タグの読み飛ばし」およびサンプルプログラム<b>devkit/sample/sound/mp3play/</b>を参照してください。<br>この情報は、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()に与える初期値の集合<b><a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a></b>の各メンバにセットします。ファイル先頭のタグとMP3データの境界位置は、<i>mp3HeadPos</i>にセットします。ファイル末尾のタグとMP3データの境界位置は、<i>mp3TailPos</i>にセットします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>初期化</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モジュールユーティリティ<b><a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a></b>()により、avcodecモジュールとlibmp3モジュールをロードします。<br>続いてlibmp3の初期化を行います。2章の「オンメモリ再生とストリーミング再生」に沿う形で各手順をプログラムで実現するための方法を示します。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3InitResource">sceMp3InitResource</a></b>()によってlibmp3全体で必要な計算資源を確保</li>
+<li VALUE=2> メモリアラインメントとサイズの制約を満たす入出力バッファを確保</li>
+<li VALUE=3> 入出力バッファおよびタグを読み飛ばすための情報を<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()の引数に与え、それらの初期値をセットしたMP3ハンドルを取得</li>
+<li VALUE=4> 取得したMP3ハンドルを利用し、入力バッファにMP3データを読み込み</li>
+<li VALUE=5> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によって指定したMP3ハンドルのデコード資源を初期化</li>
+</ol></div>
+<div style="margin-left:50px;"><br>手順(2)では、Media Engine上でMP3データのデコードを行うため、入出力バッファのメモリアラインメントやサイズに関して制約があります。詳しくは、4章の「入出力バッファのメモリアラインメントとサイズ」を参照してください。<br>手順(3)では、初期値の集合である構造体<b><a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a></b>のメンバには、入出力バッファの先頭アドレスとサイズ、およびMP3ファイル中のタグとMP3データとの境界位置をセットします。さらに、この<b><a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a></b>を<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()の引数に与え、初期値をセットしたMP3ハンドルを取得します。<br>このとき、同時に利用可能なMP3ハンドルの数には制限があり、MP3ハンドルを取得できない場合にはエラーが返ります。この場合には、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReleaseMp3Handle">sceMp3ReleaseMp3Handle</a></b>()を呼び、利用していないMP3ハンドルをlibmp3に返還してください。MP3ハンドル数の制約に関しては、4章の「同時に利用可能なMP3ハンドルの数」を参照してください。<br>手順(4)では、取得したMP3ハンドルを利用し、「ストリーミング再生」の手順(3)から(5)と同様の手順にしたがってMP3データを読み込んでください。<br>手順(5)の初期化処理<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()では、入力バッファに読み込まれたMP3データのMpeg/Audioフレームヘッダからサンプリング周波数などのオーディオ情報を解釈します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>デコード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">続いて入力バッファに読み込まれたMP3データのデコードを行います。2章の「オンメモリ再生とストリーミング再生」に沿う形で、各手順をプログラムで実現するための方法を示します。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a></b>()によってMP3データをデコード</li>
+<li VALUE=2> vaudioによってデコードされたPCMデータをオーディオ出力</li>
+</ol></div>
+<div style="margin-left:50px;"><br><b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a></b>()を実行することで出力バッファにデコードされたPCMデータが書き込まれます。また、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a></b>()の引数と返り値を介して以下の情報を受け取ることができます。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 出力バッファ内のPCMデータの読み出し元アドレス
+<li> 出力バッファ内のPCMデータの読み出しサイズ
+</ul></div>
+<div style="margin-left:50px;"><br>手順(2)では、この値を利用してオーディオ出力を行ってください。手順(1)によって与えられた出力データは、次に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a></b>()を実行するまで有効です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>ストリーミング再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">続いてストリーミング再生のための制御を行います。2章の「オンメモリ再生とストリーミング再生」に沿う形で各手順をプログラムで実現するための方法を示します。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a></b>()で入力データを追加で読み込む必要性をチェック</li>
+<li VALUE=2> データ追加の必要があれば手順(3)、必要がなければ「デコード」の手順(1)にジャンプ</li>
+<li VALUE=3> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>()によって入力データを追加するための情報を取得</li>
+<li VALUE=4> 手順(3)で取得した情報を元にMP3ファイルから入力バッファに追加データを読み込み</li>
+<li VALUE=5> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a></b>()によって追加したMP3データのサイズをlibmp3に通知</li>
+<li VALUE=6> 「デコード」の手順(1)にジャンプ</li>
+</ol></div>
+<div style="margin-left:50px;"><br>手順(3)では、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>()の引数を介して以下の情報を受け取ることができます。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> MP3ファイル内の追加データの読み出し元シーク位置
+<li> 入力バッファ内の追加データの書き込み先アドレス
+<li> 入力バッファ内の追加データの書き込みサイズ
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>ループ再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ループ再生回数の設定は、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>()で行います。大まかな仕様に関しては、2章の「ループ再生」を参照してください。MP3再生時における再生位置の頭出し、およびループ再生回数消費による再生停止状態からの再生再開には、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a></b>()を利用してください。ただし、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a></b>()は、「デコード」の手順(1)の後、「ストリーミング再生」の手順(1)の前に実行する必要があります。この条件を満たさない場合、入力バッファにデータが充填されていない状態で<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a></b>()が実行されます。このとき、無音が出力されてしまうため、実行タイミングを間違わないように注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>終了</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーション上のすべてのMP3データ再生の必要がなくなった場合、libmp3の終了処理<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3TermResource">sceMp3TermResource</a></b>()を行ってください。これを実行することで、初期化時に取得したMP3ハンドルが強制的にlibmp3に返還され、libmp3のために確保した計算資源がすべて解放されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>デコード可能なMP3データ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の仕様を満たさないMP3データに関しては、libmp3で再生できません。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 対応コーデックはMPEG1/ 2/ 2.5 Layer3
+</ul></div>
+<div style="margin-left:50px;"><br>サポート外のMP3ファイルを再生しようとした場合、初期化処理が失敗し、エラーが返ります。また、libwaveまたはsimple audioは44100HzのPCMデータしか扱えないため、PCMデータの出力には、必ずvaudioを利用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>入出力バッファのメモリアラインメントとサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Media Engineでデコード処理を行う際に、Media EngineとSystem Controllerの間で同一データのキャッシュが発生します。キャッシュのコヒーレンシを保証するため、入出力バッファのメモリアラインメントは、<b>64バイトアラインメント</b>である必要があります。これに加え、デコード対象となるフレームサイズの関係から、必要な入出力バッファサイズは、以下のようになります。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 入力(MP3)バッファサイズ<br><b>8192バイト以上、かつ64バイトの倍数</b>
+<li> 出力(PCM)バッファサイズ<br><b>9216バイト</b>(最大1152サンプル×2バイト×2チャネル×2バッファ)
+</ul></div>
+<div style="margin-left:50px;"><br>入出力バッファの確保の際には、以上のメモリアラインメント、バッファサイズにご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>同時に利用可能なMP3ハンドルの数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">同時に利用可能なMP3ハンドルの数は、<b>2</b>です。このMP3ハンドル数を変えることはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>出力可能なPCMデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">出力可能なPCMデータの形式は、ビット深度16ビットのステレオのみです。モノラル形式のPCMデータ出力は、サポートしていません。モノラル形式のMP3データをデコードする場合は、左右同一データの対から構成されるステレオ形式でPCMデータが出力されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>UMD&reg;/DVD上のMP3データ再生</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><b>sceIoRead</b>()によってMP3ファイルをUMD&reg;/DVDから入力バッファに読み込む際、書き込み先アドレスを示す第2引数<i>*buf</i>は、4バイトのアラインメントに合致している必要があります。MP3データの書き込み先アドレスは、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>()の第2引数<i>*mp3DstPtr</i>によって取得することができます。このとき、「入出力バッファのメモリアラインメントとサイズ」の条件にしたがって入出力バッファを確保している場合には、<i>*mp3DstPtr</i>は必ず4バイトアラインメントに合致したアドレスを返します。以上を踏まえ、入力バッファ内のMP3データの書き込み先アドレスを取得する際は必ず<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>()を利用するようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>libsasとの同時使用</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3のコアとなるMP3デコーダは、Media Engine上で動作します。同様に、libsasのコアとなるSAS（ソフトウェアオーディオシンセサイザ）もMedia Engine上で動作します。このため、両者を同時に使用すると、Media Engine側の計算資源を取り合うことになり、最悪の場合、SASの出力音声が途切れてしまう可能性があります。特にデコードが成功するまで、数フレームに渡ってデコードを繰り返す場合、MP3データ破損箇所において一時的に演算負荷が高くなることがあります。このため、MP3データ破損箇所に注意して動作確認を行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>libmp3を利用するスレッドのスタックサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3を利用するスレッドのスタックサイズを必要最低限まで削減したい場合には、thread.hにて定義されている<b><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetThreadStackFreeSize">sceKernelGetThreadStackFreeSize</a></b>()により必要なスタックサイズを確認してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>libmp3を利用するスレッドの終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3は、Media Engine側CPUの機能を利用しており、Media Engine内の計算資源を管理するためにセマフォなどを利用しています。そのため、libmp3の関数を実行中に、<b><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateThread">sceKernelTerminateThread</a></b>()および<b><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a></b>()を使ってlibmp3を呼び出しているスレッドを強制的に削除すると、タイミングによってはMedia Engine側の計算資源を確保した状態のまま、スレッドが削除されてしまう可能性があります。この結果、libmp3だけでなく、他のMedia Engine側CPUを利用するライブラリが正しく動作しなくなる恐れがあります。スレッドを停止させる場合は、以下のスレッド管理方法にしたがってプログラムを設計してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> スレッド停止指示を与える側<br>イベントフラグなどを利用し、スレッドに対して終了を通知する。
+<li> 停止指示を受けるスレッド側<br>イベントフラグなどを定期的に監視し、停止指示の有無を確認する。停止指示が検出された場合、libmp3が動作していないことを確認の上、<b><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitThread">sceKernelExitThread</a></b>()によって自スレッドを停止させる。
+</ul></div>
+<div style="margin-left:50px;"><br>スレッドの終了処理の実装に関しては、libmp3のサンプルプログラムを参考にしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_9">
+<h3>
+<a href="#Heading3_4"> 4. </a>9 
+<!-- hp1 --><b>libmp3の低レベルAPI</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">低レベルAPIを利用することで、アプリケーション側でファイルストリーミングを自由に実装することが可能です。ただし、利用可能なlibmp3のAPIは大きく制限されますので、ご注意ください。利用可能なAPIの制限事項に関しては、別資料の「libmp3リファレンス」を参照してください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<html lang="jp">
+<head>
+<title>libsha256-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsha256
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceSha256Context"></a>
+<table width="100%"><td width="70%"><font size=6>SceSha256Context<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SHA-256ダイジェスト値計算のコンテキスト情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+typedef struct SceSha256Context {
+	unsigned int <i>h</i>[8];
+	unsigned int <i>pad</i>;
+	unsigned short <i>usRemains</i>;
+	unsigned short <i>usComputed</i>;
+	unsigned long long <i>ulTotalLen</i>;
+	unsigned char <i>buf</i>[SCE_SHA256_BLOCK_SIZE];
+} <b>SceSha256Context</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>h</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ワークエリア&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pad</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アラインメント調整用パディング&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usRemains</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SceSha256Context構造体内に一時コピーされた、64バイト未満の余りデータ数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usComputed</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値計算済みフラグ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ulTotalLen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;総データサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;64バイト未満のデータの一時コピー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SHA-256ダイジェスト値の計算を分割して行う場合のワークエリアとして用いられます。<a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockInit">sceSha256BlockInit</a>()関数, <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>()関数, <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockResult">sceSha256BlockResult</a>()関数がワークエリアとして使用しますので、アプリケーションがこの構造体のメンバに直接アクセスしてはいけません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockInit">sceSha256BlockInit</a>(), <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>(), <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockResult">sceSha256BlockResult</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256Digest"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256Digest<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SHA-256ダイジェストの計算<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256Digest</b> (
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値を計算する平文のデータへのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値を計算する平文のデータサイズ(バイト数)を指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;算出されたダイジェスト値(32バイト)を返します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">エラーの場合、負の値が返ります。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SHA-256ダイジェスト値を計算します。<br>この関数はダイジェスト値を計算する平文のデータがすべてメモリ上に展開されている場合に用います。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256BlockInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256BlockInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ダイジェスト値計算ワークの初期化<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256BlockInit </b>(
+	<a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a> *<i>pContext</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値計算ワークのアドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">エラーの場合、負の値が返ります。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>のアドレスが不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SHA-256ダイジェスト値計算に用いるワークエリアを初期化します。<br>この関数は<a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>()関数に先立って呼び出しを行ってください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>, <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>(), <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockResult">sceSha256BlockResult</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256BlockUpdate"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256BlockUpdate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SHA-256ダイジェスト値計算処理<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256BlockUpdate</b> (
+	<a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a> *<i>pContext</i>,
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値計算ワークのアドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値を計算する平文のデータへのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値を計算する平文のデータサイズ(バイト数)を指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">エラーの場合、負の値が返ります。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_BUSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値が計算済みの<i>pContext</i>だった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>または<i>plain</i>のアドレスが不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>plain</i>, <i>len</i>で指定された平文を使って<a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>構造体内のワークを更新します。sceSha256BlockUpdate()関数は、<a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockInit">sceSha256BlockInit</a>()関数と<a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockResult">sceSha256BlockResult</a>()関数のあいだで何回でも呼び出すことが可能で、複数回に分けてsceSha256BlockUpdate()関数を呼び出すことでメモリに入りきらない巨大なデータに対してもダイジェスト値を計算することが可能です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>, <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockInit">sceSha256BlockInit</a>(), <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockResult">sceSha256BlockResult</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256BlockResult"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256BlockResult<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>計算されたSHA-256ダイジェストを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256BlockResult</b> (
+	<a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a> *<i>pContext</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダイジェスト値計算ワークのアドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;算出されたダイジェスト値(32バイト)を返します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">エラーの場合、負の値が返ります。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>または<i>digest</i>のアドレスが不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">計算されたダイジェスト値を<a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>構造体から取り出します。SHA-256は64バイト単位でダイジェスト値を計算するアルゴリズムであるため、<a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>()関数では64バイトに満たなかった余剰バイトを<a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>構造体内に一時コピーすることがあります。<a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>構造体内に一時コピーされたデータが残っていた場合には、sceSha256BlockResult()関数の呼び出しで最終的なダイジェスト値が決定されます。かならず、sceSha256BlockResult()関数でダイジェスト値を取得してください。<br><a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>構造体内のダイジェスト値は、次に<a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockInit">sceSha256BlockInit</a>()関数を呼び出すまで有効です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-Japanese.htm#SceSha256Context">SceSha256Context</a>, <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockInit">sceSha256BlockInit</a>(), <a href="../others/libsha256-Reference-Japanese.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

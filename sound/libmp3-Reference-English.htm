@@ -1,0 +1,2501 @@
+<html lang="en">
+<head>
+<title>libmp3-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libmp3 Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceMp3InitArg"></a>
+<table width="100%"><td width="70%"><font size=6>SceMp3InitArg<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Decoding resource initialization variables<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+typedef struct {
+	SceOff <i>mp3HeadPos</i>;
+	SceOff <i>mp3TailPos</i>;
+	<a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> <i>*mp3Buf</i>;
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>mp3BufByte</i>;
+	<a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> <i>*pcmBuf</i>;
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>pcmBufByte</i>;
+} <b>SceMp3InitArg</b>;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3HeadPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Starting position of first audio data of MP3 file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3TailPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ending position of last audio data of MP3 file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3Buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Input buffer starting address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3BufByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Input buffer byte count&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmBuf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Output buffer starting address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmBufByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Output buffer byte count&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used for initializing an MP3 handle. It is used as an argument of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>(). It contains the addresses and sizes of the input/output buffers and file information for loop playback.<br>For <i>mp3HeadPos</i>, specify the starting position of the first audio data excluding the tag at the beginning of the file. For <i>mp3TailPos</i>, specify the ending position of the last audio data excluding the tag at the end of the file. For information about how to determine whether tags are present and how to obtain the size of tags, refer to the "libmp3 Overview."<br>The input and output buffers must be aligned on a <b>64-byte boundary</b>. The required sizes of the input and output buffers is as follows.<br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> Input (MP3) buffer size<br>A multiple of 64 bytes that is at least 8192 bytes 
+<li> Output (PCM) buffer size<br>9216 bytes (Maximum 1152 samples x 2 bytes x 2 channels x 2 buffers)
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3InitResource"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3InitResource<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Allocate libmp3 computational resources<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3InitResource</b>(
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function allocates computational resources required for libmp3. To use the various functions of libmp3, this function must be executed first. Using these computational resources, multiple sets of MP3 stream data can be decoded in parallel. The computational resources required for an individual instance of decoding are referred to as <b>decoding resources</b> in libmp3. The number of decoding resources that can be used simultaneously is <b>2</b>. Since there is a one-to-one correspondence between decoding resources and MP3 handles, which are described later, the number of decoding resources always equals the number of MP3 handles.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Allocate computational resources required for libmp3 */
+sceMp3InitResource ();
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3TermResource">sceMp3TermResource</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3TermResource"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3TermResource<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Release libmp3 computational resources<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3TermResource</b>(
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function releases all computational resources that were allocated for libmp3. When this function is executed, all decoding resources that were obtained are forcibly returned to libmp3.<br>Execute this function only when the application no longer needs to play MP3 data.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Release all computational resources that were allocated for libmp3 */
+status = sceMp3TermResource ();
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3InitResource">sceMp3InitResource</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ReserveMp3Handle"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ReserveMp3Handle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get decoding resource usage rights<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3ReserveMp3Handle</b>(
+	const <a href="../sound/libmp3-Reference-English.htm#SceMp3InitArg">SceMp3InitArg</a> <i>*mp3InitArg</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3InitArg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to decoding resource initialization variable&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Nonnegative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Acquired MP3 handle&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the usage rights for the decoding resources that were allocated by <b><a href="../sound/libmp3-Reference-English.htm#sceMp3InitResource">sceMp3InitResource</a></b>(). These usage rights are managed by IDs called <b>MP3 handles</b>, which have a one-to-one correspondence with decoding resources. An MP3 handle must be obtained before MP3 data can be decoded.<br>There are two methods available for setting the <i>mp3InitArg</i> argument, and each method will cause a different type of MP3 handle to be obtained. In the first method, <i>mp3InitArg</i> is assigned a pointer to an <a href="../sound/libmp3-Reference-English.htm#SceMp3InitArg">SceMp3InitArg</a> variable in which the initial values of the MP3 handle have been set. With this type of MP3 handle, all APIs can be used except the low-level APIs sceMp3LowLevelXxx(), With the other method, NULL is assigned to <i>mp3InitArg</i> and no initial values are assigned for the MP3 handle. In this case, only the low-level APIs sceMp3LowLevelXxx() and some other APIs can be used. Therefore, the first method of assigning initial values is recommended. For API usage restrictions, see the Notes.<br>Also, since the number of decoding resources that can be used simultaneously is restricted, once this limit has been reached, an error will be returned and new decoding resources will not be able to be obtained if this function is executed. In that case, call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReleaseMp3Handle">sceMp3ReleaseMp3Handle</a></b>() to return any MP3 handle to libmp3 that is not being used.<br>This function is multithread safe regarding the procedure for getting an MP3 handle. Therefore, duplicate MP3 handles will not be assigned to multiple threads even if this function is called from multiple threads. However, subsequent processing such as decoding is not multithread safe. Note that operation is not guaranteed if decoding is performed using an MP3 handle that was not obtained by this function, as an argument.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> handle;
+<a href="../sound/libmp3-Reference-English.htm#SceMp3InitArg">SceMp3InitArg</a> mp3InitArg;
+/* Set initial values for mp3InitArg members*/
+/* Get MP3 handle for managing decoding resource usage rights */
+handle = sceMp3ReserveMp3Handle(&amp;mp3InitArg);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>API</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>When Initial Values are Assigned</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>When NULL is Assigned</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3ReleaseMp3Handle">sceMp3ReleaseMp3Handle</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3Decode">sceMp3Decode</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3ResetPlayPositionByFrame">sceMp3ResetPlayPositionByFrame</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetFrameNum">sceMp3GetFrameNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used with conditions (*)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used with conditions (*)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetSamplingRate">sceMp3GetSamplingRate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used with conditions (*)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetBitRate">sceMp3GetBitRate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used with conditions (*)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3GetMp3ChannelNum">sceMp3GetMp3ChannelNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used with conditions (*)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-English.htm#sceMp3LowLevelDecode">sceMp3LowLevelDecode</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be used&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>Can be used</b>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">(*) The correct value can be obtained only when a buffer loaded with MP3 data from the beginning of the MP3 file is assigned in the argument when <a href="../sound/libmp3-Reference-English.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a>() is executed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#SceMp3InitArg">SceMp3InitArg</a><br><a href="../sound/libmp3-Reference-English.htm#sceMp3ReleaseMp3Handle">sceMp3ReleaseMp3Handle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ReleaseMp3Handle"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ReleaseMp3Handle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Return decoding resource usage rights<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3ReleaseMp3Handle</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns decoding resources that were obtained by <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>() to libmp3. Decoding resources that were returned can be reused by obtaining an MP3 handle again. When an MP3 handle that has not been obtained is provided as the argument, an error is returned.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Return an MP3 handle to libmp3 that had been previously obtained */
+sceMp3ReleaseMp3Handle(handle);
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3Init"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3Init<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Initialize decoding resources<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3Init</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes the decoding resources corresponding to the specified MP3 handle based on the MPEG/Audio frame header in the MP3 data that was read into the input buffer. Before this function is executed, MP3 data must be read into the input buffer that was provided as an argument of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>().<br>The method of reading MP3 data from an MP3 file into the input buffer is as follows. First, execute <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>() to get information for reading the MP3 data into the input buffer. Next, use this information to read the MP3 data into the input buffer. Also, execute <b><a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a></b>() to report the data size of the MP3 data that was read in to libmp3.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Read MP3 data into input buffer */
+<a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+/* Report MP3 data size that was read into the input buffer to libmp3 */
+<a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+/* Initialize decoding resources */
+sceMp3Init(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">For the argument of this function, specify the MP3 handle that was previously obtained with the <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3Decode"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3Decode<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Decode MP3 data<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3Decode</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceShort16">SceShort16</a> <i>**pcmDstPtr</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmDstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the output destination address for the decoding results&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Nonnegative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of bytes that can be read from <i>*pcmDstPtr</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function decodes one frame of MP3 data that was read into the input buffer and writes it to the output buffer as linear PCM data. The output PCM data format is stereo with a bit depth of 16 bits, regardless of the input MP3 data format. The PCM data is alternately output to the left and right channels in an interleaved format of left, right, left, ... ... with the address pointed to by <i>pcmDstPtr</i> as the starting address. The size of the PCM data that is output can be obtained from the return value. The output PCM data is valid until the next time <b>sceMp3Decode</b>() is executed.<br>Decoding consumes MP3 data in the input buffer. Always execute <b><a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a></b>() before performing decoding and add MP3 data when necessary.<br>MP3 data can be read synchronously or asynchronously. If MP3 data is added too late and not even a single frame of MP3 data is left in the input buffer, <b>sceMp3Decode</b>() will output silent PCM data.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>The following example sends decoded PCM data to audio output via vaudio.
+
+/* Decode MP3 data */
+sceMp3Decode(handle, &amp;pcmDstPtr);
+/* Pass PCM data to vaudio */
+<a href="../sound/Vaudio-Reference-English.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>(vol, pcmDstPtr);
+
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed. Call <a href="../sound/Vaudio-Reference-English.htm#sceVaudioChReserve">sceVaudioChReserve</a>() in advance to specify the sampling frequency and number of PCM samples for vaudio.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3CheckStreamDataNeeded"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3CheckStreamDataNeeded<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Check necessity of adding MP3 data to input buffer<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3CheckStreamDataNeeded</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;When it is necessary to add MP3 data to the input buffer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;When it is not necessary to add MP3 data to the input buffer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function checks to see if more MP3 data needs to be added to the input buffer. Specifically, it is considered necessary to add MP3 data to the input buffer when the undecoded MP3 data size is less than half of the input buffer size. Always execute this function before performing decoding to determine if MP3 data needs to be added to the input buffer from the MP3 file. For information concerning the procedure for adding MP3 data, see the description of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>().<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Check the need to add MP3 data to the input buffer */
+if (sceMp3CheckStreamDataNeeded(handle) &gt; 0) {
+         /* Read MP3 data into the input buffer */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* Report MP3 data size that was read into the input buffer to libmp3 */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">For the argument of this function, specify the MP3 handle that was previously obtained with the <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3Decode">sceMp3Decode</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetInfoToAddStreamData"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetInfoToAddStreamData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get information for adding MP3 data to the input buffer<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetInfoToAddStreamData </b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>,
+<i>	</i><a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a><i> **mp3DstPtr,</i>
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a><i> *writableByte</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a><i> *mp3SrcPos</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3DstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to write destination address for additional MP3 data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>writableByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to number of writable bytes from<i>*mp3DstPtr</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3SrcPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to read seek position in MP3 file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets information for adding MP3 data to the input buffer. After this function is executed, the write destination address of the additional MP3 data <i>*mp3DestPtr</i>, the data size <i>*writableByte</i>, and the read seek position in the MP3 file <i>*mp3SrcPos</i> can be obtained through the arguments. After this information is obtained, add MP3 data to the input buffer according to the following method.<br>First, move the file descriptor by <i>*mp3SrcPos</i> from the beginning of the MP3 file. Then, use the moved file descriptor to read <i>*writableByte</i> bytes of MP3 data to the add destination address *<i>mp3DstPtr</i>. The data can also be read asynchronously.<br>After the additional MP3 data has been read from the MP3 file, call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a></b>() to report the addition of MP3 data to libmp3. For details, see the description of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a></b>(). Note that when all MP3 data has been read from the MP3 file into the input buffer or if it is not necessary to read more MP3 data into the input buffer, NULL will be returned in <i>*mp3DstPtr</i> and 0 will be returned in <i>*writableByte</i>.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Check the need to add MP3 data to the input buffer */
+if (<a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* Read MP3 data into the input buffer */
+         sceMp3GetInfoToAddStreamData(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* Report MP3 data size that was read into the input buffer to libmp3 */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">For the argument of this function, specify the MP3 handle that was previously obtained with the <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()</b> function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Decode">sceMp3Decode</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3NotifyAddStreamData"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3NotifyAddStreamData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Report added MP3 data size to libmp3<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3NotifyAddStreamData</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>mp3AddByte</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3AddByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of bytes of MP3 data that were added to the input buffer&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function reports the size (<i>mp3AddByte</i>) of the MP3 data that was actually added to the input buffer to libmp3. Always execute this function after MP3 data is added to the input buffer.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Check the need to add MP3 data to the input buffer */
+if (<a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* Read MP3 data into the input buffer */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* Report MP3 data size that was read into the input buffer to libmp3 */
+         sceMp3NotifyAddStreamData(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">For the argument of this function, specify the MP3 handle that was previously obtained with the <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()</b> function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ResetPlayPosition"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ResetPlayPosition<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Reset playback position<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3ResetPlayPosition</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function resets the playback position to the beginning of the MP3 file. If playback is stopped at this time due to the loop playback count being exhausted, playback is restarted. The value of the "loop playback count" that had previously been set is not changed by executing this function. Also, the value of the "total number of decoded output samples," which can be obtained by using <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a></b>(), is reset to 0. <br>Note that this function need not be explicitly called when executing loop playback. When a non-zero number is specified for the loop playback count with <b><a href="../sound/libmp3-Reference-English.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>(), the output of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>() is changed and playback will start from the beginning of the file after the last data from the MP3 file has been decoded, thereby implementing loop playback. <br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Reset playback position to the beginning of the MP3 file */
+status = sceMp3ResetPlayPosition(handle);
+/* Check the need to add MP3 data to the input buffer */
+if (<a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* Read MP3 data into the input buffer */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* Report MP3 data size that was read into the input buffer to libmp3 */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ResetPlayPositionByFrame"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ResetPlayPositionByFrame<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Reset playback position by specifying MPEG/Audio frame number<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3ResetPlayPositionByFrame</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceUInt32">SceUInt32</a> <i>frameIndex</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>frameIndex</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG/Audio frame number&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function resets the playback position to the beginning of the specified MPEG/Audio frame. If playback is stopped at this time due to the loop playback count being exhausted, playback is restarted. The value of the loop playback count that was previously set will not be changed by executing this function. Also, the total number of decoded output samples which can be obtained is reset to <i>frameIndex</i> ( the number of output samples obtained by decoding one frame. Note that you can find the number of output samples obtained by decoding one frame by calling <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a></b>(). The value returned is 1152 for MPEG1 and 576 for MPE2/2.5. You can find the total number of decoded output samples by calling <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a></b>(),<br>The specified <i>frameIndex</i> value must be greater than or equal to 0 and less than the value obtained from <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetFrameNum">sceMp3GetFrameNum</a></b>(). If 0 is specified for <i>frameIndex</i>, this function obtains a result equivalent to that of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a></b>().<br>For a VBR MP3 file, the playback position can be changed more precisely than for CBR since the XING and VBRI headers at the beginning of the file contain a jump table which is used to identify the specified MPEG/Audio frame. However, since the size of each frame can vary, there will be a difference between the specified <i>frameIndex</i> and the actual MPEG/Audio frame number. Note that a difference will also occur in the current playback time as a result.<br>If the specified MPEG/Audio frame cannot be found because the jump table in the XING and VBRI headers is corrupted, an <a href="../sound/libmp3-Reference-English.htm#SCE_MP3_ERROR_FRAME_NOT_FOUND">SCE_MP3_ERROR_FRAME_NOT_FOUND</a> error will be returned. No other libmp3 APIs will be affected by this.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Reset playback position to frameIndex */
+status = sceMp3ResetPlayPositionByFrame(handle, frameIndex);
+/* Check if MP3 data needs to be added to the input buffer */
+if (<a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* Read MP3 data into the input buffer */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* Report MP3 data size that was read into the input buffer to libmp3 */
+         <a href="../sound/libmp3-Reference-English.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetFrameNum">sceMp3GetFrameNum</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetFrameNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetFrameNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get number of MPEG/Audio frames<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetFrameNum</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Non-negative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of MPEG/Audio frames&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the number of MPEG/Audio frames in the MP3 file.<br>When an XING header or VBRI header is added to the beginning of the file, the number of MPEG/Audio frames specified in the headers can be obtained. If neither of these headers is present, the file is considered to be a CBR file, and an estimated value for the number of MPEG/Audio frames in the file is obtained based on the total MP3 data size.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get number of MPEG/Audio frames */
+frameNum = sceMp3GetFrameNum(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>() and make sure that the initialization of decoding resources has completed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3ResetPlayPositionByFrame">sceMp3ResetPlayPositionByFrame</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3SetLoopNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3SetLoopNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set remaining loop playback count<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3SetLoopNum</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle,</i>
+<i>	</i><a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a><i> loopNum</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>loopNum</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Remaining loop playback count&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function sets the remaining loop playback count. The loop playback count is managed independently for each MP3 handle. The default loop playback count is "infinite".<br>The following table shows the correspondence between the <i>loopNum</i> argument and the interpretation of the loop playback count.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Positive (&gt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>loopNum</i> times&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No loop&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Infinite times&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">When a positive number is specified for the loop playback count by using this function, the output of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>() is changed so that playback begins from the beginning of the file after the last data from the MP3 file has been decoded.<br>Also, the loop starting and ending positions are the boundaries between the MP3 file beginning and ending tags and the MP3 data, respectively. Other positions cannot be set for the loop playback starting and ending positions. <br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Set the loop playback count to 10 */
+status = sceMp3SetLoopNum(handle, 10);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">For the argument of this function, specify the MP3 handle that was previously obtained with the <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()</b> function.<br>Although an infinite loop can be implemented by setting an arbitrary negative number for <i>loopNum</i>, libmp3 provides the negative number macro <a href="../sound/libmp3-Reference-English.htm#SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a>. Use this macro to set the loop playback count to infinity.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a>()<br><a href="../sound/libmp3-Reference-English.htm#Loop Playback Count Identifier">Loop Playback Count Identifier</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetLoopNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetLoopNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get remaining loop count<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetLoopNum</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&gt;= -1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Remaining loop count&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; -1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the remaining loop playback count. For the correspondence between the value that is obtained and the interpretation of the remaining loop playback count, see the description of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>(). However, if the remaining loop playback count is set to infinity, the negative number macro <a href="../sound/libmp3-Reference-English.htm#SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a> is always returned.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get the remaining loop playback count */
+loopNum = sceMp3GetLoopNum(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">For the argument of this function, specify the MP3 handle that was previously obtained with the <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()</b> function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a>()<br><a href="../sound/libmp3-Reference-English.htm#Loop Playback Count Identifier">Loop Playback Count Identifier</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetMaxOutputSample"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetMaxOutputSample<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get maximum number of decoded output samples<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetMaxOutputSample</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Nonnegative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Maximum number of output samples in a single decoding&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the maximum number of samples per channel that are output by a single execution of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Decode">sceMp3Decode</a></b>().<br>The number of samples returned for MPEG1 Layer3 is 1152 and for MPEG2/2.5 Layer 3 is 576. Note that libmp3 handles the output buffer as a double buffer. Therefore, to enable all MP3 data to be decoded, the required output buffer size is 1152 samples x 2 bytes x 2 channels x 2 buffers = 9216 bytes. See also the description of <b><a href="../sound/libmp3-Reference-English.htm#SceMp3InitArg">SceMp3InitArg</a></b>.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get the maximum number of output samples required for libmp3 */
+maxOutputSample = sceMp3GetMaxOutputSample(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed.<br>The same value is always returned for the same MP3 file format.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#SceMp3InitArg">SceMp3InitArg</a><br><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetSumDecodedSample"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetSumDecodedSample<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get total number of decoded output samples<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetSumDecodedSample</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Nonnegative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Total number of decoded output samples&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the total number of decoded output samples at the time this function is executed. The count of the number of samples begins at 0. Also, the total number of decoded output samples is reset to 0 when the MP3 data at the beginning of the file is played again by calling <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a></b>() or due to loop playback.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get the total number of decoded output samples */
+sumDecodedSample = sceMp3GetSumDecodedSample(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed.<br>The value that can be obtained by this function is the total number of decoded output samples, not the sample position that is being played. If you want to use a precise playback position, you must take into consideration the number of output samples sent to the audio driver.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3ResetPlayPositionByFrame">sceMp3ResetPlayPositionByFrame</a>()<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetMPEGVersion"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetMPEGVersion<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get MPEG version<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetMPEGVersion</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Non-negative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG version identifier&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the MPEG version identifier. The relationship between the value that is obtained and the actual MPEG version conforms to MPEG standards. Specifically, see the section about the MPEG version identifier.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get MPEG version */
+version = sceMp3GetMPEGVersion(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>() and make sure that the initialization of decoding resources has completed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br>MPEG version identifier<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetSamplingRate"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetSamplingRate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get sampling frequency of PCM data<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetSamplingRate</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Nonnegative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PCM data sampling frequency&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the sampling frequency of the PCM data that is to be output. The units are Hz. <br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get sampling frequency */
+fs = sceMp3GetSamplingRate(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetBitRate"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetBitRate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get bit rate of MP3 data<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetBitRate</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Nonnegative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 data bit rate&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the bit rate of the MP3 data that was input. The units are kbps. <br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get bit rate */
+fs = sceMp3GetBitRate(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetMp3ChannelNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetMp3ChannelNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get number of channels of MP3 data<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3GetMp3ChannelNum</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Nonnegative (&gt;= 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of channels of MP3 data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the number of channels of the MP3 data that was input. This function returns 1 for a monaural sound source or 2 for a stereo sound source. However, the number of channels of PCM data that are output is currently always 2.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Get number of channels */
+channelNum = sceMp3GetMp3ChannelNum(handle);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a></b>() and make sure that the initialization of decoding resources has completed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3Init">sceMp3Init</a>()<br><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3LowLevelInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3LowLevelInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Initialize decoding resources for low-level APIs<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3LowLevelInit</b> (
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> *<i>mp3DstPtr</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources for low-level APIs&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3DstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to MP3 data at the beginning of the MP3 file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes decoding resources for the specified MP3 handle. However, this function can only be executed for an MP3 handle for low-level APIs, which is obtained by assigning NULL as the argument of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()</b>.<br>Although the APIs that can be used by an MP3 handle for low-level APIs are restricted, additional APIs can be used by passing the data from the beginning of the MP3 file in the <i>mp3DstPtr</i> argument of this function. By performing this operation, the following additional APIs can be used.<br></div>
+<div style="margin-left:60px;"><ul>
+<li> <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a>()</b>
+<li> <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a>()</b>
+<li> <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetSamplingRate">sceMp3GetSamplingRate</a>()</b>
+<li> <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetBitRate">sceMp3GetBitRate</a>()</b>
+<li> <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetMp3ChannelNum">sceMp3GetMp3ChannelNum</a>()</b>
+</ul></div>
+<div style="margin-left:50px;">This operation is optional and NULL can also be passed in <i>mp3DstPtr</i>. Also, note that if tag information has been added at the beginning of the MP3 file, the MP3 data must be passed without it.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* Initialize decoding resources for low-level APIs */
+sceMp3LowLevelInit(handle, NULL);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">For the argument of this function, specify the MP3 handle previously obtained by calling <b><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>().<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3LowLevelDecode"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3LowLevelDecode<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Decode MP3 data for low-level APIs<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <b>sceMp3LowLevelDecode</b>(
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> *<i>mp3DstPtr</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceUInt32">SceUInt32</a> *<i>mp3UsedByte</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceShort16">SceShort16</a> *<i>pcmDstPtr</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceUInt32">SceUInt32</a> *<i>pcmOutByte</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 handle for managing decoding resources&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3DstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to MP3 data to be decoded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3UsedByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3 data size consumed by decoding&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmDstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to destination address for writing PCM data output by decoding&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmOutByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of PCM data output by decoding&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative (&lt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For return values when errors occur, see the "<a href="../sound/libmp3-Reference-English.htm#List of Error Codes">List of Error Codes</a>" at the end of this document.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function decodes one frame of MP3 data pointed to by <i>mp3DstPtr</i> and writes it to the area pointed to by <i>pcmDstPtr</i> as linear PCM data. The output PCM data format is stereo with a bit depth of 16 bits, regardless of the input MP3 data format. The PCM data is alternately output to the left and right channels in an interleaved format of left, right, left, ... ... with the address pointed to by <i>pcmDstPtr</i> as the starting address. The size of the MP3 data consumed by decoding can be obtained from <i>mp3UsedByte</i>. The size of the PCM data that is output can be obtained from <i>pcmOutByte</i>.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>The following example sends decoded PCM data to the audio output via vaudio.
+
+/* Decode MP3 data */
+sceMp3LowLevelDecode(handle, mp3DstPtr, &amp;mp3UsedByte, pcmDstPtr, &amp;pcmOutByte);
+/* Pass PCM data to vaudio */
+<a href="../sound/Vaudio-Reference-English.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>(vol, pcmDstPtr);
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Before executing this function, always call <b><a href="../sound/libmp3-Reference-English.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a></b>() and make sure that the initialization of decoding resources has completed.<br>Call <b><a href="../sound/Vaudio-Reference-English.htm#sceVaudioChReserve">sceVaudioChReserve</a></b>() in advance to specify the sampling frequency and number of PCM samples for vaudio.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="Loop Playback Count Identifier"></a>
+<table width="100%"><td width="70%"><font size=6>Loop Playback Count Identifier<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Constant Definitions]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Loop playback count identifier<br></div><br>
+
+<!-- Definition -->
+<div style="margin-left:10px;"><b>Definition</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Identifier</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>State</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Loop playback count is infinity&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This constant represents the remaining loop playback count, which is the <i>loopNum</i> argument of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>() or the return value of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a></b>(), as infinity. Note that the loop playback count is set to infinity by passing an arbitrary negative number to the <i>loopNum</i> argument of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>(). On the other hand, when the loop playback count is set to infinity, <a href="../sound/libmp3-Reference-English.htm#SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a> is always returned as the return value of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a></b>(). Although this macro need not always be used, it should be used to increase program code legibility.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a>()<br><a href="../sound/libmp3-Reference-English.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="MPEG Version Identifier"></a>
+<table width="100%"><td width="70%"><font size=6>MPEG Version Identifier<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Constant Definitions]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MPEG version identifier<br></div><br>
+
+<!-- Definition -->
+<div style="margin-left:10px;"><b>Definition</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Identifier</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Value</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>State</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<a name="SCE_MP3_MPEG_VERSION_2_5">SCE_MP3_MPEG_VERSION_2_5</a>&nbsp;</td>
+<td valign="top">&nbsp;0&nbsp;</td>
+<td valign="top">&nbsp;MPEG2.5&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<a name="SCE_MP3_MPEG_VERSION_2">SCE_MP3_MPEG_VERSION_2</a>&nbsp;</td>
+<td valign="top">&nbsp;2&nbsp;</td>
+<td valign="top">&nbsp;MPEG2&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<a name="SCE_MP3_MPEG_VERSION_1">SCE_MP3_MPEG_VERSION_1</a>&nbsp;</td>
+<td valign="top">&nbsp;3&nbsp;</td>
+<td valign="top">&nbsp;MPEG1&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">These values can be obtained as the return value of <b><a href="../sound/libmp3-Reference-English.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a></b>(). The correspondence with the actual MPEG versions is shown in the table above. This conforms to MPEG standards.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-English.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a>()<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="List of Error Codes"></a>
+<table width="100%"><td width="70%"><font size=6>List of Error Codes<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Error Codes]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Error codes returned by libmp3<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_SUCCESS">SCE_MP3_SUCCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Processing was successful&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_ARG_MP3HANDLE_INVALID">SCE_MP3_ERROR_ARG_MP3HANDLE_INVALID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified MP3 handle is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_ARG_PTR_INVALID">SCE_MP3_ERROR_ARG_PTR_INVALID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671002&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified address is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_ARG_OUTOFRANGE">SCE_MP3_ERROR_ARG_OUTOFRANGE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671003&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified value is out of range&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_RSRC_RESERVED">SCE_MP3_ERROR_RSRC_RESERVED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671101&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;There exist decoding resources&nbsp;&nbsp;<br>&nbsp;&nbsp;that have been acquired&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_RSRC_NOT_RESERVED">SCE_MP3_ERROR_RSRC_NOT_RESERVED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671102&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Decoding resources have not &nbsp;&nbsp;<br>&nbsp;&nbsp;been acquired&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_RSRC_NOT_INITIALIZED">SCE_MP3_ERROR_RSRC_NOT_INITIALIZED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671103&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Decoding resources have not &nbsp;&nbsp;<br>&nbsp;&nbsp;been initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_NO_MORE_MP3HANDLE">SCE_MP3_ERROR_NO_MORE_MP3HANDLE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671201&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;There are no MP3 handles &nbsp;&nbsp;<br>&nbsp;&nbsp;that can be acquired&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_MP3">SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_MP3</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671301&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The MP3 data that was read is&nbsp;&nbsp;<br>&nbsp;&nbsp;not MPEG1/ 2/ 2.5 Layer3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_SAMPLING_RATE">SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_SAMPLING_RATE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671302&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The MP3 data that was read &nbsp;&nbsp;<br>&nbsp;&nbsp;cannot be played because the &nbsp;&nbsp;<br>&nbsp;&nbsp;sampling frequency is not &nbsp;&nbsp;<br>&nbsp;&nbsp;supported.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_DECODE_NO_PCM">SCE_MP3_ERROR_DECODE_NO_PCM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671401&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No decoded PCM data exists&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_DECODE_NEXT_FRAME_HEADER">SCE_MP3_ERROR_DECODE_NEXT_FRAME_HEADER</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671402&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Moved to the next frame &nbsp;&nbsp;<br>&nbsp;&nbsp;because the current frame of &nbsp;&nbsp;<br>&nbsp;&nbsp;MP3 data is corrupted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_FRAME_NOT_FOUND">SCE_MP3_ERROR_FRAME_NOT_FOUND</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671501&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified frame was not found&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_LOWLEVEL_API_FAIL">SCE_MP3_ERROR_LOWLEVEL_API_FAIL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80672001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Execution of the low-level API failed&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

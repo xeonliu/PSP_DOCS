@@ -1,0 +1,190 @@
+<html lang="jp">
+<head>
+<title>libgum-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgum
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgumは3Ｄ演算をサポートするライブラリです。回転 / スケーリング / 透視変換などの行列計算を行う関数とともに、計算結果の行列をlibguで作成しているディスプレイリストに反映する機能を持っています。<br>libgumの行列計算は、ライブラリ内部で保持しているカレントマトリクスに対して行う形式になっています。カレントマトリクスがプロジェクション行列 / ビュー行列 / ワールド行列 / テクスチャ行列のいずれであるかを設定しておくと、適切にディスプレイリストに反映することができます。また、これら４種の行列を別々に保持する行列スタックの機能を持ち、一括してディスプレイリストに反映することもできます。さらに、カレントマトリクスの反映とプリミティブ描画を合わせて行う関数も用意されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgumを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgum.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libgu.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgum.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libgu.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgu<br>Graphics Engine Users Manual<br>Graphics Engine Command Reference Manual<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>行列スタックの初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libgum自体には特別な初期化は不要ですが、通常の用途では、行列スタックの初期化が必要になります。<a href="../graphics/libgum-Reference-Japanese.htm#sceGumSetMatrixStack">sceGumSetMatrixStack</a>()を用いてバッファを割り当てるとともに、スタック段数を設定してください。スタック段数は、プロジェクション行列 / ビュー行列 / ワールド行列 / テクスチャ行列のそれぞれについて別々に設定することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>モード選択と行列演算</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libgumの行列演算は、ライブラリ内部で保持しているカレントマトリクスに対して行います。演算を行う際には、カレントマトリクスがプロジェクション行列 / ビュー行列 / ワールド行列 / テクスチャ行列のいずれであるかを、<a href="../graphics/libgum-Reference-Japanese.htm#sceGumMatrixMode">sceGumMatrixMode</a>()で指定してください。<br>カレントマトリクスに対して演算を行う関数として、次の関数が用意されています。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>演算</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumLoadMatrix">sceGumLoadMatrix</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意の行列をカレントマトリクスにロードする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumPopMatrix">sceGumPopMatrix</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;行列スタックからカレントマトリクスにポップする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;単位行列をカレントマトリクスにロードする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumMultMatrix">sceGumMultMatrix</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意の行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumRotateX">sceGumRotateX</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;回転行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumRotateY">sceGumRotateY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;回転行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumRotateZ">sceGumRotateZ</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;回転行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumRotateXYZ">sceGumRotateXYZ</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;回転行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumRotateZYX">sceGumRotateZYX</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;回転行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumScale">sceGumScale</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スケーリング行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumTranslate">sceGumTranslate</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;平行移動行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumLookAt">sceGumLookAt</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;視点行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumOrtho">sceGumOrtho</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正射影行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumPerspective">sceGumPerspective</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;透視変換行列をカレントマトリクスに乗算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumPushMatrix">sceGumPushMatrix</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレントマトリクスを行列スタックにプッシュする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumStoreMatrix">sceGumStoreMatrix</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレントマトリクスを任意の領域に保存する&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">演算結果はすぐにディスプレイリストへ反映することもできますが、行列スタックに保存しておくこともできます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>libguへの反映</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libgumで行った行列計算の結果を、libguで作成中のディスプレイリストに反映することができます。<br>カレントマトリクスを反映する関数として<a href="../graphics/libgum-Reference-Japanese.htm#sceGumSetCurMatrix">sceGumSetCurMatrix</a>()、行列スタックのうち更新された行列を一括して反映する関数として<a href="../graphics/libgum-Reference-Japanese.htm#sceGumUpdateMatrix">sceGumUpdateMatrix</a>()が用意されています。<br>また、更新された行列を反映したうえでプリミティブを描画する関数として<a href="../graphics/libgum-Reference-Japanese.htm#sceGumDrawArray">sceGumDrawArray</a>() / <a href="../graphics/libgum-Reference-Japanese.htm#sceGumDrawArrayN">sceGumDrawArrayN</a>() / <a href="../graphics/libgum-Reference-Japanese.htm#sceGumDrawBezier">sceGumDrawBezier</a>() / <a href="../graphics/libgum-Reference-Japanese.htm#sceGumDrawSpline">sceGumDrawSpline</a>()が用意されています。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

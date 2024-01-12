@@ -1,0 +1,1707 @@
+<html lang="en">
+<head>
+<title>FATMS-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+FAT Filesystem For Memory Stick&trade; Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceFatMsDirent"></a>
+<table width="100%"><td width="70%"><font size=6>SceFatMsDirent<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Filename information<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;fatms.h&gt;
+
+#define SCE_FATMS_DIRENT_SFN_LEN	13
+#define SCE_FATMS_DIRENT_LFN_LEN	1024
+
+typedef struct {
+	SceSize <i>size</i>;
+	char<i> shortFileName</i>[SCE_FATMS_DIRENT_SFN_LEN];
+	char <i>__padding__</i>[3];
+	char <i>longFileName</i>[SCE_FATMS_DIRENT_LFN_LEN];
+} <b>SceFatMsDirent</b>;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Structure size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>shortFileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Short filename(13 bytes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>__padding__</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unused&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>longFileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Long filename(1024 bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure stores the filename that is read by <a href="../peripheral/FATMS-Reference-English.htm#sceIoDread">sceIoDread</a>().<br><br>Before calling <a href="../peripheral/FATMS-Reference-English.htm#sceIoDread">sceIoDread</a>(), assign the memory area pointer for the SceFatMsDirent structure to the <i>d_private</i> member of the SceIoDirent structure. Also, assign the value  sizeof(SceFatMsDirent) to the <i>size</i> member of the SceFatMsDirent structure. For details regarding the SceIoDirent structure, see the &quot;IO/File Manager Reference.&quot;<br><br>Long filenames are filenames which exceed 11 characters. (8 characters + &quot;.&quot; + 3 characters; 12 characters including the period.) In addition, filenames which contain lowercase characters are also considered long filenames, even if their length is 11 characters or less. <br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-English.htm#sceIoDread">sceIoDread</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="Sce_getdev_command_t"></a>
+<table width="100%"><td width="70%"><font size=6>Sce_getdev_command_t<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Device capacity acquisition configuration information<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;fatms.h&gt;
+typedef struct Sce_getdev_command_t{
+		<a href="../peripheral/FATMS-Reference-English.htm#SceDevInf">SceDevInf</a> *<i>dev_inf</i>;
+}<b>Sce_getdev_command_t</b>;
+
+
+</font></pre></div>
+
+<!-- Memebers -->
+<div style="margin-left:10px;"><b>Memebers</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dev_inf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A pointer to the device capacity information&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used when obtaining the device capacity with <a href="../peripheral/FATMS-Reference-English.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a> in <a href="../peripheral/FATMS-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>(). <br>Before calling <a href="../peripheral/FATMS-Reference-English.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a> in <a href="../peripheral/FATMS-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>(), assign the memory area pointer for the <a href="../peripheral/FATMS-Reference-English.htm#SceDevInf">SceDevInf</a> structure, which was previously allocated by the user, to the <i>dev_inf</i> member.  <br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>()<br><a href="../peripheral/FATMS-Reference-English.htm#SceDevInf">SceDevInf</a> structure <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceDevInf"></a>
+<table width="100%"><td width="70%"><font size=6>SceDevInf<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Device capacity information <br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;fatms.h&gt;
+typedef struct	SceDevInf {
+	SceFatMSULong <i>cls</i>;
+	SceFatMSULong <i>ecl</i>;
+	SceFatMSULong <i>ebc</i>;
+	int <i>bps</i>;
+	int <i>spc</i>;
+} <b>SceDevInf</b>;
+*SceFatMSULong is unsigned long.
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cls</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Total number of clusters&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ecl</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of unused clusters&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ebc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;*Internal Use*&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bps</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of bytes per sector&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>spc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of sectors per cluster&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure stores the device capacity which is read by the <a href="../peripheral/FATMS-Reference-English.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a> command of <a href="../peripheral/FATMS-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>(). <br>Before calling <a href="../peripheral/FATMS-Reference-English.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a> in <a href="../peripheral/FATMS-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>(), assign the memory area pointer for the SceDevInf structure, which was previously allocated by the user, to the <i>dev_inf </i>member of <a href="../peripheral/FATMS-Reference-English.htm#Sce_getdev_command_t">Sce_getdev_command_t</a> structure. <br><br></div>
+
+<!-- See also -->
+<div style="margin-left:10px;"><b>See also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>()<br><a href="../peripheral/FATMS-Reference-English.htm#Sce_getdev_command_t">Sce_getdev_command_t</a> structure <br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Open a file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceIoOpen</b> (
+	const char *<i>filename</i>, 
+	int <i>flag</i>, 
+	SceMode<i> mode</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Full path of the target filename.&nbsp;&nbsp;<br>&nbsp;&nbsp;For details, see the note "File and Full Path Specifications" in the Overview document.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Mode to be used when opening the file. &nbsp;&nbsp;<br>&nbsp;&nbsp;For details, see the sceIoOpen() function in the &quot;IO/File Manager Reference.&quot;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Mode of the file to be created when <i>flag</i> is SCE_O_CREAT.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, a file descriptor is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function either opens an existing file, or creates and opens a new file.<br>The archive attribute is set for a newly created file. The attributes can be changed by using <a href="../peripheral/FATMS-Reference-English.htm#sceIoChstat">sceIoChstat</a>().<br>A file that has already been opened can be opened again by using this function. However, since each open file will have its own file registration table, a data inconsistency may occur if write accesses to the same file are performed at the same time. Therefore, be sure not to perform write accesses to the same file simultaneously.<br>(For details, refer to the IO/File Manager documentation).<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoClose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoClose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Close a file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int<b> sceIoClose</b> (
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the file was opened&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function closes a file which was opened using the <a href="../peripheral/FATMS-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function. <br>(For details, see the &quot;IO/File Manager Document.&quot;)<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRead"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRead<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Read data<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceSSize <b>sceIoRead</b> (
+	SceUID <i>fd</i>,
+	void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address of read buffer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of data to read(bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, a non-negative number, which indicates the number of bytes read, is returned.<br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function reads data from a file that was opened using the <a href="../peripheral/FATMS-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function.<br><br>When the return value is a positive integer less than <i>nbyte</i>, it indicates the size of the data that was read. If the return value is a negative number, that means either the end of the file was reached or the read operation failed. <br>Since no address checking is done for the buffer pointer <i>buf</i>, proper operation cannot be guaranteed if the argument <i>buf</i> points to an invalid area.<br>When the address of <i>buf </i>is not 64-byte-aligned, reading may become slower due to system restrictions. <br>(For details, refer to the IO/File Manager documentation).<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWrite"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWrite<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Write data<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceSSize <b>sceIoWrite</b> (
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to storage area containing data to be written&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of data to be written (bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, a non-negative number, which indicates the number of bytes written, is returned.<br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function writes data to a file that was opened using the <a href="../peripheral/FATMS-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function. .<br><br>When the return value is a positive integer less than <i>nbyte</i>, it indicates the size of the data that was written.<br>Since no address checking is done for the buffer pointer <i>buf</i>, proper operation cannot be guaranteed if the argument <i>buf</i> points to an invalid area<br>When the address of <i>buf</i> is not 64-byte-aligned, writing may become slower due to system restrictions. <br>(For details, refer to the IO/File Manager documentation).<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseek"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseek<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Move file I/O pointer<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceOff <b>sceIoLseek</b> (
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>offset</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of bytes from base point&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>whence</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Base point&nbsp;&nbsp;<br>&nbsp;&nbsp;(*) For details, refer to the &quot;IO/File Manager&quot; documentation.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, a non-negative number, which indicates the number of bytes read, is returned.<br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function moves the I/O pointer in the file data.<br>If a pointer is specified that is not 64-byte-aligned, reading or writing may become slower due to system restrictions.  <br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDopen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDopen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Open a directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceIoDopen</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Full path of the target directory name.&nbsp;&nbsp;<br>&nbsp;&nbsp;For details, see the note "File and Full Path Specifications" in the Overview document.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, a file descriptor is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function opens the directory whose path has been specified in the <i>dirname</i> argument.<br>(For details, see the &quot;IO/File Manager Document.&quot;)<br><br>Once a directory is open, information in the directory can be read using the <a href="../peripheral/FATMS-Reference-English.htm#sceIoDread">sceIoDread</a>() function. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDclose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDclose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Close a directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoDclose</b>(
+	SceUID<i> fd</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function closes an open directory.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDread"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDread<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Read directory information<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoDread</b> (
+	SceUID <i>fd</i>, 
+	struct SceIoDirent *<i>buf</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Directory information storage address&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, an integer greater than 0 is returned. <br>If there are no entries which should be read, 0 is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns directory entries one at a time starting with the first entry from the specified directory.<br><br>The buffer address of the <a href="../peripheral/FATMS-Reference-English.htm#SceFatMsDirent">SceFatMsDirent</a> structure should be assigned to the <i>d_private</i> member of the SceIoDirent structure, and the value sizeof(<a href="../peripheral/FATMS-Reference-English.htm#SceFatMsDirent">SceFatMsDirent</a>) should be assigned to the <i>size </i>member of the <a href="../peripheral/FATMS-Reference-English.htm#SceFatMsDirent">SceFatMsDirent</a> structure. If the <a href="../peripheral/FATMS-Reference-English.htm#SceFatMsDirent">SceFatMsDirent</a> structure will not be used, set the <i>d_private</i> member to NULL.<br>For information regarding SceIoDirent, see the &quot;IO/File Manager Reference.&quot; <br><br>If the file that was found has a long filename, the long filename is stored in the <i>longFileName</i> member of the <a href="../peripheral/FATMS-Reference-English.htm#SceFatMsDirent">SceFatMsDirent</a> structure and the short filename is stored in the <i>shortFileName</i> member. If the file does not have a long filename, the short filename is stored in both the <i>longFileName</i> and <i>shortFileName</i> members.<br>A long filename is one which contains more than 11 characters. (8 characters + &quot;.&quot; + 3 characters; 12 characters including the period.), or that the number of characters is within the 8.3 format but the filename contains lowercase letters <br><br>Although the character code of the long filename that is stored in the <i>longFileName</i> member is UTF-8 (without BOM), the character code of the short filename that is stored in the <i>shortFileName</i> member depends on the environment when the file was saved to the Memory Stick&trade;. To handle filenames that contain non-ASCII characters, you should use a long filename (<i>d_name</i> member of the SceIoDirent structure or <i>longFileName</i> member of the <a href="../peripheral/FATMS-Reference-English.htm#SceFatMsDirent">SceFatMsDirent</a> structure).<br><br>The contents of the <i>longFileName</i> member of the <a href="../peripheral/FATMS-Reference-English.htm#SceFatMsDirent">SceFatMsDirent</a> structure are also copied to the <i>d_name</i> member of the SceIoDirent structure. However, if there is no <i>longFileName</i> member, the contents of the <i>shortFileName</i> member are converted to UTF-8 (without BOM) and copied to the <i>d_name</i> member of the SceIoDirent structure. Also, if the long filename is longer than the <i>d_name </i>member of the SceIoDirent structure, the contents of the <i>shortFileName</i> member are converted to UTF-8 (without BOM) and copied to the <i>d_name</i> member of the SceIoDirent structure. <br><br>The following are the valid file attributes for the <i>st_attr</i> member of the SceIoStat structure.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATRO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read-only&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATHD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Hidden file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;System file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATVL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Volume label&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATDR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Subdirectory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Archive&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Only the <i>st_mtime</i> member of the SceIoStat structure is valid for the file modification time.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRemove"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRemove<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Delete a file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoRemove</b> (
+	const char *<i>filename</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Full path of filename to be deleted.&nbsp;&nbsp;<br>&nbsp;&nbsp;For details, see the note "File and Full Path Specifications" in the Overview document.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function deletes the specified file.<br>A file cannot be deleted if it is currently open, or if it has a read only, volume label, or subdirectory attribute.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRename"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRename<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Rename a file or directory <br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoRename</b> (
+	const char *<i>oldname</i>, 
+	const char *<i>newname</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oldname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Full path of target filename (directory name).&nbsp;&nbsp;<br>&nbsp;&nbsp;For details, see the note "File and Full Path Specifications" in the Overview document.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>newname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New filename (directory name).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function renames the specified file or directory.<br><br>A file or a directory cannot be moved by renaming it. Consequently, the <i>newname</i> argument should contain only a filename without a path. <br>The file specified by <i>oldname</i> cannot be renamed if it is currently open or if it has a read-only file attribute.<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoMkdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoMkdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Create a directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoMkdir</b>(
+	const char *<i>dirname</i>, 
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Full path of name of the directory to be created. For details, see the note "File and Full Path Specifications" in the Overview document.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function creates a directory<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRmdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRmdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Delete a directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoRmdir</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Full path of name of the directory to be deleted.&nbsp;&nbsp;<br>&nbsp;&nbsp;For details, see the note "File and Full Path Specifications" in the Overview document.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function deletes a directory.<br><br>If the directory specified by the argument <i>dirname</i> contains a file or directory, the specified directory is not deleted, and an error is returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get file or directory status<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoGetstat</b>(
+	const char *<i>name</i>, 
+	struct SceIoStat *<i>buf</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Full path of target filename (directory name).&nbsp;&nbsp;<br>&nbsp;&nbsp;For details, see the note "File and Full Path Specifications" in the Overview document.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File information area storage address&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the status of a file or directory.<br>The following are the valid file attributes for the <i>st_attr</i> member of the SceIoStat structure.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATRO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read only&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATHD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Hidden file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATSY &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;System file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATVL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Volume label&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATDR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Subdirectory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Archive&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Change file or directory attributes<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoChstat</b>(
+	const char *<i>name</i>, 
+	const struct SceIoStat *<i>buf</i>, 
+	unsigned int <i>cbit</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>name</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Full&nbsp;path&nbsp;of&nbsp;target&nbsp;filename&nbsp;(directory&nbsp;name).&nbsp;<br>&nbsp;For&nbsp;details,&nbsp;see&nbsp;the&nbsp;note&nbsp;"File&nbsp;and&nbsp;Full&nbsp;Path&nbsp;Specifications"&nbsp;in&nbsp;the&nbsp;Overview&nbsp;document.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>buf</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Address&nbsp;where&nbsp;status&nbsp;information&nbsp;is&nbsp;stored&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>cbit</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Specification&nbsp;bits&nbsp;for&nbsp;fields&nbsp;to&nbsp;be&nbsp;changed&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;  SCE_CST_MODE&nbsp;<br>&nbsp;  SCE_CST_ATTR&nbsp;<br>&nbsp;  SCE_CST_CT&nbsp;<br>&nbsp;  SCE_CST_MT&nbsp;</td>
+<td valign="top">&nbsp;0x0001&nbsp;<br>&nbsp;0x0002&nbsp;<br>&nbsp;0x0008&nbsp;<br>&nbsp;0x0020&nbsp;</td>
+</tr></table>
+</div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function changes the attributes of a file. <br><br>If the specified file is open, its attributes cannot be changed.<br>If the SCE_CST_ATTR flag is set in <i>cbit</i>, the value of the <i>st_attr</i> member of the SceIoStat structure will be reflected directly in the attributes of the file.<br>If<i> </i>only the SCE_CST_MODE flag is set in <i>cbit</i>, the attributes of the file will be determined from the <i>st_mode</i> member of the SceIoStat structure. <br>If the write flags of the <i>st_mode</i> member are all 0, then the attribute will be set to SCE_EATRO (read only); otherwise, no attributes will be set.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDevctl"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDevctl<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Device control function<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoDevctl</b>(
+	const char * <i>aliasname</i>, 
+	int <i>cmd</i>, 
+	const void *<i>arg</i>, 
+	SceSize <i>arglen</i>, 
+	void *<i>bufp</i>, 
+	SceSize <i>buflen</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled) <br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aliasname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Name of the alias that is assigned&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Command code&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to parameter block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of bytes in parameter block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to return data storage block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of return data storage block&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function obtains the device capacity.<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Synchronize filesystem and device<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoSync</b>(
+	const char * <i>devicename,</i> 
+	int <i>flag</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>devicename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device name (&quot;ms0:&quot;)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function writes out the internal state of the filesystem and the Memory Stick&trade; buffer to the FLASH memory of the Memory Stick&trade;.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsRegisterNotifyCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsRegisterNotifyCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Callback registration<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceFatmsRegisterNotifyCallback</b>(
+	SceUID <i>cb_id</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cb_id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Callback ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, <a href="../peripheral/FATMS-Reference-English.htm#SCE_ERROR_ERRNO_EINVAL">SCE_ERROR_ERRNO_EINVAL</a> is returned. <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function registers a callback that is called during a FAT ForMS state transition.<br>Be sure to provide the callback ID obtained from <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>() to this function.<br>A callback registered with this function is not called immediately during a FAT ForMS state transition. Rather, the callback is called when the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>() and sceXXXXXXCB() functions are executed.<br><br>The following is the prototype for a callback registered using <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>().<br><br></div>
+<div style="margin-left:70px;">int callback(int count, int arg, void *param);<br></div>
+<div style="margin-left:50px;"><br>When a callback is called during a FAT ForMS state transition, the value set in the second argument, <i>arg</i>, can be used to determine the state.<br>The values are as follows.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_NOTIFY_ASSIGNED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FAT ForMS assigned&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_NOTIFY_UNASSIGNED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FAT ForMS unassigned&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Negative value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Assignment failed&nbsp;&nbsp;<br>&nbsp;&nbsp;Please see the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">For details on callbacks, refer to the description of callback functions in the thread manager documentation.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsUnRegisterNotifyCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsUnRegisterNotifyCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Cancel callback registration<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceFatmsUnRegisterNotifyCallback</b>(
+	SceUID <i>cb_id</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cb_id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Callback ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, <a href="../peripheral/FATMS-Reference-English.htm#SCE_ERROR_ERRNO_EINVAL">SCE_ERROR_ERRNO_EINVAL</a> is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function cancels the registration of a callback called during a FAT ForMS state transition.<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsIsAssigned"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsIsAssigned<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Query whether assigned<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceFatmsIsAssigned</b>(void);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be in interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, the following values are returned. <br>.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not assigned&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Assigned&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative number is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a>.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function inquires whether or not FAT ForMS is assigned. <br>If it is assigned, it can be accessed as &quot;ms0:&quot;.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsGetMediumWPSwitchStat"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsGetMediumWPSwitchStat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get media Write Protect switch state<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceFatmsGetMediumWPSwitchStat</b>(void);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, one of the following values is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_MEDIUM_WP_SWITCH_OFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write Protect switch is OFF&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_MEDIUM_WP_SWITCH_ON&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write Protect switch is ON &nbsp;&nbsp;<br>&nbsp;&nbsp;(cannot write to the media)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned. (See the <a href="../peripheral/FATMS-Reference-English.htm#List of Error Codes">List of Error Codes</a> and  msstor_error.h.)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the media Write Protect switch state.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_PR_GETDEV"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_PR_GETDEV<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Devctl Command]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get device capacity<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b><a href="../peripheral/FATMS-Reference-English.htm#sceIoDevctl">sceIoDevctl</a></b>(
+	const char * <i>aliasname</i>, 
+	int <i>cmd</i>, 
+	void *<i>arg</i>, 
+	SceSize <i>arglen</i>, 
+	void *<i>bufp</i>, 
+	SceSize <i>buflen</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from a thread (interrupts must be enabled)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aliasname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Name of the alias that is assigned&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PR_GETDEV&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to user-allocated <a href="../peripheral/FATMS-Reference-English.htm#Sce_getdev_command_t">Sce_getdev_command_t</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(<a href="../peripheral/FATMS-Reference-English.htm#Sce_getdev_command_t">Sce_getdev_command_t</a>)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, <a href="../peripheral/FATMS-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. <br>If an error occurs, a negative number is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This command gets the device capacity.<br><br>When calling this command, be sure to set a pointer to the user allocated <a href="../peripheral/FATMS-Reference-English.htm#SceDevInf">SceDevInf</a> structure in the <i>dev_inf</i> member of the <a href="../peripheral/FATMS-Reference-English.htm#Sce_getdev_command_t">Sce_getdev_command_t</a> structure.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="List of Error Codes"></a>
+<table width="100%"><td width="70%"><font size=6>List of Error Codes<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Error Codes]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>FAT ForMS Error Codes<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOENT">SCE_ERROR_ERRNO_ENOENT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Relevant file or directory could not be found&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EBADF">SCE_ERROR_ERRNO_EBADF</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File number is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOMEM">SCE_ERROR_ERRNO_ENOMEM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot allocate required memory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EACCESS">SCE_ERROR_ERRNO_EACCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File access is not permitted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EEXIST">SCE_ERROR_ERRNO_EEXIST</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A file or directory having the same name already exists&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENODEV">SCE_ERROR_ERRNO_ENODEV</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The Memory Stick&trade; was removed or the driver was deleted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOTDIR">SCE_ERROR_ERRNO_ENOTDIR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not a directory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EINVAL">SCE_ERROR_ERRNO_EINVAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid argument&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EMFILE">SCE_ERROR_ERRNO_EMFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Too many files are open&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOSPC">SCE_ERROR_ERRNO_ENOSPC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No space on the device&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EMEDIUMTYPE">SCE_ERROR_ERRNO_EMEDIUMTYPE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid media&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_DFUNC">SCE_ERROR_DFUNC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Internal driver error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Refer to the IO/File Manager reference&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The error codes are defined in psperror.h and kerror.h. <br>Error Codes From a Block Device<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_CRC">SCE_MSCM_ERR_CRC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A CRC error occurred during an access to the media&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_TOE">SCE_MSCM_ERR_TOE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A timeout error occurred during an access to the media&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_TIMEOUT">SCE_MSCM_ERR_TIMEOUT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A timeout error occurred due to a cause other than an access to the media&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_CMDNK">SCE_MSCM_ERR_CMDNK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;An invalid command error occurred due to an access to the media&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_FLASH">SCE_MSCM_ERR_FLASH</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Flash memory error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_WARN">SCE_MSSTOR_WARN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Media status may be invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR">SCE_MSSTOR_ERR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Abnormal error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_FATAL">SCE_MSSTOR_FATAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Fatal error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_EEXIST">SCE_MSSTOR_EEXIST</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Already exists&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_EACCESS">SCE_MSSTOR_EACCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Access error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_EINVAL">SCE_MSSTOR_EINVAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A parameter or mode is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ETIMEDOUT">SCE_MSSTOR_ETIMEDOUT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A timeout error occurred&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_WRITEPROTECTED">SCE_MSSTOR_ERR_WRITEPROTECTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The media is write protected&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_READONLY">SCE_MSSTOR_ERR_READONLY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The media is a read-only media&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_NOBLOCK">SCE_MSSTOR_ERR_NOBLOCK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No block can be allocated&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_INVALID_PARAM">SCE_MSSTOR_ERR_INVALID_PARAM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Parameter is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Error codes from the block device driver are defined in msstor_error.h and mscm_error.h.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

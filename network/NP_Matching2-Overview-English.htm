@@ -1,0 +1,741 @@
+<html lang="en">
+<head>
+<title>NP_Matching2-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NP Matching 2 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The NP matching 2 utility supports applications that implement network functions, such as online game play and chats. Applications can use this utility to utilize the NP matching 2 system that is provided via the PlayStation&reg;Network (NP hereafter).<br><br>The NP matching 2 utility provides the following functions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Room search
+<li> Dynamic room creation
+<li> In-room chat<br>A vulgarity filter (filter to conceal inappropriate language) can be enabled for this function.
+<li> Data exchange between users in a room
+<li> Room entrance restriction
+<li> Support for team play
+<li> User search using the NP ID
+<li> P2P connection establishment between room members
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The files required to use the NP matching 2 utility are as follows.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_matching2.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Matching2 header file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_upnp.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UPnP header file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_matching2_stub_weak.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Matching2 stub library file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_upnp_stub_weak.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UPnP stub library file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The NP matching 2 utility is provided as a module in the PRX format. To use the NP matching 2 module, you need to statically link np_matching2_stub_weak.a and load/unload the module using the module utility APIs.<br>For details on loading/unloading modules, refer to the "Module Utility Reference."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following sample programs are provided with the NP matching 2 utility.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1">
+<div style="margin-left:40px;"><h4><b>np_matching2_allow_block_list Sample</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample shows how users who have permission to enter a room and users who do not can be handled. Users on a friends list are allowed to enter a room and users on a blocked list are denied entry to the room.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_2">
+<div style="margin-left:40px;"><h4><b>np_matching2_room_password Sample</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample shows how to use a room password. Room entry is limited by password input.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_3">
+<div style="margin-left:40px;"><h4><b>np_matching2_group_room Sample</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample shows how to use room group functions, which support the team play functions and the functions to limit the members that join a room.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_4">
+<div style="margin-left:40px;"><h4><b>np_matching2_team_id Sample</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample shows how to use the team ID, which is one of the basic information of a room member. It explains how to use the team ID to specify message destinations and how to use the update notification function.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Operation Overview and Characteristic Usage</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter provides an overview of the utility's operations and an explanation of the usage procedure that is characteristic and common to several of the processing.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>UPnP Library</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP matching 2 utility depends on the UPnP library. Be sure to initialize and terminate the UPnP library and to start and stop internal threads of the UPnP library together with NP matching 2 initialization and termination processing<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Creating a Context</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A context must first be created to use the NP matching 2 utility. The NP Communication ID and communication pass phrase - obtained when registering to use the NP and NP matching 2 system - are required for creating a context.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Registering a Callback</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In the NP matching 2 utility, execution results - when executing matching processing that entails access to the server, and events that occur within a session - such as a user joining or leaving, or receiving a message, are notified as events in the callback functions that are registered by the application. There are four types of callback functions, as explained below, and the application must prepare all of them.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_1"><h4>
+(1)&nbsp;<b>Request callback</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Of the functions that are provided by the NP matching 2 utility, those that access the server are called request functions. The execution result of a request function is notified to the request callback function. The application must register a default request callback function before a request function is executed or specify a request callback function every time a request function is executed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_2"><h4>
+(2)&nbsp;<b>Room event callback</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When an event occurs while in a room - such as, a member joining or leaving the room, the room owner changing, or a room (member) internal binary attribute being updated, the event is notified to the room event callback function. The application must register the room event callback function before a member joins the room.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_3"><h4>
+(3)&nbsp;<b>Room message callback</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When a room message or room chat message is received while in a room, the room message callback is notified. The application must register the room message callback function before a member joins the room.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_4"><h4>
+(4)&nbsp;<b>Signaling callback</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When a room has its signaling option parameter set, processing will be executed for that room that will allow P2P connections to be established between room members. When these connections are established or broken, a corresponding event is reported to the signaling callback function. The application must register the signaling callback function before a member joins the room or before the signaling option parameter is set.<br></div>
+<div style="margin-left:50px;">For details on each callback function, refer to the "NP Matching 2 Reference".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Request Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Of the functions provided by the NP matching 2 utility, those that access the server are called the request functions. Although there are various request functions, the calling procedure is the same for all of them.<br>The procedure for calling a request function is explained using the example of <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerInfo">sceNpMatching2GetServerInfo</a>(), which obtains server information.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int
+<a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerInfo">sceNpMatching2GetServerInfo</a>(
+	<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2ContextId">SceNpMatching2ContextId</a> <i>ctxId</i>,
+	const <a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2GetServerInfoRequest">SceNpMatching2GetServerInfoRequest</a> *<i>reqParam</i>,
+	const <a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestOptParam">SceNpMatching2RequestOptParam</a> *<i>optParam</i>,
+	<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestId">SceNpMatching2RequestId</a> *<i>assignedReqId</i>
+	);
+
+</font></pre></div>
+<div style="margin-left:50px;">For the <i>ctxId</i> argument, specify the context ID obtained as a result of creating the context.<br><br>The <i>reqParam</i> argument is a pointer to the parameter structure of the request function. The name of this parameter structure is, "(the name of the request function) + Request". For example, the request parameter structure for <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerInfo">sceNpMatching2GetServerInfo</a>() is <a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2GetServerInfoRequest">SceNpMatching2GetServerInfoRequest</a>.<br><br>The use of the <i>optParam</i> argument is optional. It can be NULL. When option parameters are specified, you can register a request callback function or set the timeout time per request and specify the upper 16 bits of the request ID to be allocated.<br>The structure for the option parameters is as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct <a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestOptParam">SceNpMatching2RequestOptParam</a> {
+	<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestCallback">SceNpMatching2RequestCallback</a> <i>cbFunc</i>;
+	void *<i>cbFuncArg</i>;
+	uint32_t <i>timeout</i>;
+	uint16_t <i>appReqId</i>;
+	uint8_t <i>padding</i>[2];
+} <a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestOptParam">SceNpMatching2RequestOptParam</a>;
+
+</font></pre></div>
+<div style="margin-left:50px;">Specify the request callback function to which the result of the request function is to be notified in <i>cbFunc</i>, and specify the data to be passed to the argument of the request callback function in <i>cbFuncArg</i>. For timeout, specify the timeout time. The request callback function and timeout time specified in <i>optParam</i> will be prioritized over the default request callback function and timeout time.<br><br>The upper 16 bits of the request ID can be specified in <i>appReqId</i>. The NP matching 2 utility creates the lower 16 bits and combines this with the value specified in <i>appReqId</i> to make up the 32-bit request ID value. Specification of the upper 16 bits by the application enables the application to set up its own rules when grouping the request IDs, such as, upon queuing for events.<br><br>When the call of a request function succeeds, the request ID allocated to that request by the NP matching 2 utility in the above-described manner will be stored in the variable specified in the <i>assignedReqId</i> argument. The request ID is also notified to the request callback in addition to the event so the application can identify which request the event corresponds to, from the request ID.<br><br>For details on each request function, refer to the "NP Matching 2 Reference".<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Processing Flow and Examples</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter explains the typical processing flow for applications that use the NP matching 2 utility. Examples are also provided.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Processing Flow</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">In the code example of this chapter, the variable that stores the return value of a function is declared as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int ret;
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Common Startup Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">All applications that use the NP matching 2 utility must first perform the following.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>Load the NP matching 2 module</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To use the NP matching 2 utility, load the NP matching 2 module.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NP_MATCHING2);
+if (ret &lt; 0) {
+    //E Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>Initialize</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Initialize the NP matching 2 utility.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+//E Initialize the NP matching 2 utility
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2Init">sceNpMatching2Init</a>(NP_MATCHING2_POOL_SIZE, NP_MATCHING2_TPL, NP_MATCHING2_STACKSIZE, NP_SIGNALING_TPL);
+if (ret &lt; 0) {
+    //E Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>Initialize the UPnP library</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Initialize the UPnP library.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNetUpnpInit">sceNetUpnpInit</a>(SCE_NET_UPNP_INTERNAL_THREAD_LEAST_STACK_SIZE,1000);
+if (ret &lt; 0) {
+    //E Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>Start the UPnP library</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Start the UPnP library.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNetUpnpStart">sceNetUpnpStart</a>();
+if (ret &lt; 0) {
+    //E Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>Create and start context</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Create a context of the NP matching 2 utility and execute processing to start it.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+//E Parameters required for creating a context
+//  Assuming that appropriate values are stored
+<a href="../network/NP_Common-Reference-English.htm#SceNpCommunicationId">SceNpCommunicationId</a> commId;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpCommunicationPassphrase">SceNpCommunicationPassphrase</a> passPhrase;
+int option;
+
+//E Variable to store the ID of the created context
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2ContextId">SceNpMatching2ContextId</a> ctxId;
+
+//E Create a context
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2CreateContext">sceNpMatching2CreateContext</a>(
+	&amp;commId, &amp;passPhrase, &amp;ctxId, option);
+if (ret &lt; 0) {
+    //E Error handling
+}
+
+//E Start the context
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2ContextStart">sceNpMatching2ContextStart</a>(ctxId);
+if (ret &lt; 0) {
+    //E Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Registering Callbacks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Execute <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetDefaultRequestOptParam">sceNpMatching2SetDefaultRequestOptParam</a>(),<br><a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetDefaultRoomEventOptParam">sceNpMatching2SetDefaultRoomEventOptParam</a>(), <br><a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetDefaultRoomMessageOptParam">sceNpMatching2SetDefaultRoomMessageOptParam</a>(), and <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2RegisterSignalingCallback">sceNpMatching2RegisterSignalingCallback</a>() to register the request callback, room event callback, room message callback, and signaling callback, respectively.<br><br>For details on each function, refer to the "NP Matching 2 Reference".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Obtaining Server Information and Selecting a Server</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Select a server from among the available servers. It is up to the application to either delegate the user to make a selection from a displayed list of servers or to select one automatically.<br><br>Execute <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerIdListLocal">sceNpMatching2GetServerIdListLocal</a>() to let the application obtain a list of server IDs for the usable servers. Next, obtain server information for each of the servers using <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerInfo">sceNpMatching2GetServerInfo</a>().<br><br>When selecting a server, make sure the status of that server is "usable". If none of the servers are "usable", the NP matching 2 system cannot be used.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int i;
+int serverIdNum;
+//E Assuming that appropriate values are stored
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2ContextId">SceNpMatching2ContextId</a> ctxId;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2GetServerInfoRequest">SceNpMatching2GetServerInfoRequest</a> reqParam;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2GetServerInfoResponse">SceNpMatching2GetServerInfoResponse</a> respParam;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestOptParam">SceNpMatching2RequestOptParam</a> optParam;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestId">SceNpMatching2RequestId</a> assignedReqId;
+//E Suppose the total number of servers that can be allocated to an
+//  application is 4 or less:
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2ServerId">SceNpMatching2ServerId</a>  serverId[4];
+
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerIdListLocal">sceNpMatching2GetServerIdListLocal</a>(
+	ctxId, serverId, 4);
+if (ret &lt; 0) {
+    //E Error handling
+}
+serverIdNum = ret;
+
+for (i = 0; i &lt; serverIdNum; i++) {
+    //E Request parameters
+	memset(&amp;reqParam, 0, sizeof(reqParam));
+	reqParam.serverId = serverId[i]; //E Specify ID of the target server
+    
+	ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerInfo">sceNpMatching2GetServerInfo</a>(
+        ctxId, &amp;reqParam, &amp;optParam, &amp;assignedReqId);
+	if (ret &lt; 0) {
+        /* Error handling */
+	}
+
+    //E Wait for <a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_REQUEST_EVENT_GetServerInfo">SCE_NP_MATCHING2_REQUEST_EVENT_GetServerInfo</a> to be notified
+    //  to the request callback
+
+    //E Select a server in the usable state
+    if (respParam.server.status == <a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_SERVER_STATUS_AVAILABLE">SCE_NP_MATCHING2_SERVER_STATUS_AVAILABLE</a>)
+        break;
+    else
+        continue;
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">For details on each function, refer to the "NP Matching 2 Reference".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Selecting a World</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Select a world from the available worlds in the selected server. It is up to the application to either let the user make a selection from a displayed list of worlds or to select one automatically.<br><br>Execute <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetWorldInfoList">sceNpMatching2GetWorldInfoList</a>() to obtain a list of information regarding worlds belonging to the selected server. It is also possible to set the session or number of session members (included in the world information) as a criteria to select a world.<br><br>For details on the above function, refer to the "NP Matching 2 Reference".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Selecting and Joining a Room</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After selecting the server and world, carry out processing to join a room. Use <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2CreateJoinRoom">sceNpMatching2CreateJoinRoom</a>() to create a new room, or use <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SearchRoom">sceNpMatching2SearchRoom</a>() to search from existing rooms and to select one of them to join.<br><br>It is possible to obtain a list of external room data using <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetRoomDataExternalList">sceNpMatching2GetRoomDataExternalList</a>() or to obtain a list of external room members using <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetRoomMemberDataExternalList">sceNpMatching2GetRoomMemberDataExternalList</a>() to use them as criteria for selecting a room.<br><br>For details on each function, refer to the "NP Matching 2 Reference".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Establishing a P2P Connection</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">P2P connections are established between room members either by specifying the signaling option parameter for the request parameter of <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2CreateJoinRoom">sceNpMatching2CreateJoinRoom</a>() or by setting the signaling option parameter in <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetSignalingOptParam">sceNpMatching2SetSignalingOptParam</a>() after the room is created.<br><br>For example, to establish P2P connections in a star topology with the room owner as the hub, set the signaling option parameter as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2SignalingOptParam">SceNpMatching2SignalingOptParam</a> sigOptParam;
+
+memset(&amp;sigOptParam, 0, sizeof(sigOptParam));
+sigOptParam.type = <a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_SIGNALING_TYPE_STAR">SCE_NP_MATCHING2_SIGNALING_TYPE_STAR</a>;
+sigOptParam.hubMemberId = 0; //E 0 indicates that the room owner is the hub
+
+</font></pre></div>
+<div style="margin-left:50px;">Processing for establishing P2P connections is started as soon as the signaling option parameter is set. When P2P connections are established or disconnected, the event is reported to the signaling callback function. The signaling callback function is registered by executing <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2RegisterSignalingCallback">sceNpMatching2RegisterSignalingCallback</a>().<br><br>The events for establishing and disconnecting P2P connections are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Establishing P2P connections:   <a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_SIGNALING_EVENT_Established">SCE_NP_MATCHING2_SIGNALING_EVENT_Established</a>
+<li> Disconnecting P2P connections:  <a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_SIGNALING_EVENT_Dead">SCE_NP_MATCHING2_SIGNALING_EVENT_Dead</a>
+</ul></div>
+<div style="margin-left:50px;"><br>For details concerning each function or definition, refer to the "NP Matching 2 Reference."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Common Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To terminate the NP matching 2 utility, perform the following procedure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_1"><h4>
+(1)&nbsp;<b>Stopping the UPnP library</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Stop the UPnP library.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNetUpnpStop">sceNetUpnpStop</a>();
+if (ret &lt; 0) {
+    //E Error handling
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_2"><h4>
+(2)&nbsp;<b>Terminating the UPnP library</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Terminate the UPnP library.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNetUpnpTerm">sceNetUpnpTerm</a>();
+if (ret &lt; 0) {
+    //E Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_3"><h4>
+(3)&nbsp;<b>Stopping and destroying the context</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Execute processing for stopping and destroying the context.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//E Assume that an appropriate value is stored
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2ContextId">SceNpMatching2ContextId</a> ctxId;
+
+//E Stop the context
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2ContextStop">sceNpMatching2ContextStop</a>(ctxId);
+if (ret &lt; 0) {
+    //E Error handling
+}
+
+//E Destroy the context
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2DestroyContext">sceNpMatching2DestroyContext</a>(ctxId);
+if (ret &lt; 0) {
+    //E Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_4"><h4>
+(4)&nbsp;<b>Termination processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Execute processing for terminating the NP matching 2 utility.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//E Terminate the NP matching 2 utility
+<a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2Term">sceNpMatching2Term</a>();
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_5"><h4>
+(5)&nbsp;<b>Unloading the NP matching 2 module</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Unload the NP matching 2 module.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NP_MATCHING2);
+if (ret &lt; 0) {
+    //E Error handling
+}
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Use Cases and Implementation</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes use cases of applications that use the NP matching 2 utility and how to implement them.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Displaying the Server and World Names</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When displaying server or world names for the user to make a selection, the server IDs or world numbers and names must be statically bound to the names on the application.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//E World numbers
+#define WORLD_NUMBER_1 (1)
+#define WORLD_NUMBER_2 (2)
+
+//E Return names bound to the world numbers 
+char *
+get_world_name(
+    <a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2WorldId">SceNpMatching2WorldId</a> worldId
+    )
+{
+    switch(<a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_GET_WORLD_NUMBER">SCE_NP_MATCHING2_GET_WORLD_NUMBER</a>(worldId)) {
+    case WORLD_NUMBER_1:
+        return(&quot;World Name 1&quot;);
+    case WORLD_NUMBER_2:
+        return (&quot;World Name 2&quot;);
+    default:
+        return (&quot;Unknown&quot;);
+    }
+
+    return (&quot;Unknown&quot;);
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Reserve Some Room Slots</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To reserve some room slots, create a room without setting room groups. Set a room password and a room password slot mask for representing the slots to be reserved.<br><br>The following is an example where a room with 8 slots is created, of which slots 5 to 8 are reserved.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2WorldId">SceNpMatching2WorldId</a> worldId;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2SessionPassword">SceNpMatching2SessionPassword</a> sessionPassword;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RoomPasswordSlotMask">SceNpMatching2RoomPasswordSlotMask</a> roomPasswordSlotMask;
+
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2ContextId">SceNpMatching2ContextId</a> ctxId;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2CreateJoinRoomRequest">SceNpMatching2CreateJoinRoomRequest</a> reqParam;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestOptParam">SceNpMatching2RequestOptParam</a> optParam;
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2RequestId">SceNpMatching2RequestId</a> assignedReqId;
+
+//E Total slots
+int maxSlot = 8;
+
+//E Room password
+memset(&amp;sessionPassword, 0, sizeof(sessionPassword));
+memcpy(sessionPassword.data, &quot;PASSWORD&quot; strlen(&quot;PASSWORD&quot;));
+
+//E Room password slot mask
+memset(&amp;roomPasswordSlotMask, 0, sizeof(roomPasswordSlotMask));
+for (int i = 0; i &lt; 4; i++) {
+	<a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_ADD_SLOTNUM_TO_ROOM_PASSWORD_SLOT_MASK">SCE_NP_MATCHING2_ADD_SLOTNUM_TO_ROOM_PASSWORD_SLOT_MASK</a>(
+	roomPasswordSlotMask, (maxSlot - i));
+}
+
+//E Request parameters
+memset(&amp;reqParam, 0, sizeof(reqParam));
+reqParam.worldId = worldId; //E Specify world to which the created room will belong
+//E Parameters for creating a room
+reqParam.maxSlot = maxSlot;
+reqParam.groupConfig = NULL;
+reqParam.groupConfigNum = 0;
+reqParam.roomPassword = &amp;sessionPassword;
+reqParam.passwordSlotMask = &amp;roomPasswordSlotMask;
+reqParam.flagAttr = 0;
+reqParam.roomSearchableIntAttrExternal = NULL;
+reqParam.roomSearchableIntAttrExternalNum = 0;
+reqParam.roomBinAttrInternal = NULL;
+reqParam.roomBinAttrInternalNum = 0;
+reqParam.roomSearchableBinAttrExternal = NULL;
+reqParam.roomSearchableBinAttrExternalNum = 0;
+reqParam.roomBinAttrExternal = NULL;
+reqParam.roomBinAttrExternalNum = 0;
+reqParam.allowedUser = NULL;
+reqParam.allowedUserNum = 0;
+reqParam.blockedUser = NULL;
+reqParam.blockedUserNum = 0;
+//E Parameters for joining the room
+reqParam.roomMemberBinAttrInternal = NULL;
+reqParam.roomMemberBinAttrInternalNum = 0;
+reqParam.teamId = 0;
+reqParam.joinRoomGroupLabel = NULL;
+//E Signaling parameter
+reqParam.sigOptParam = NULL;
+
+//E Assuming that appropriate values are stored in ctxId and optParam
+
+ret = <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2CreateJoinRoom">sceNpMatching2CreateJoinRoom</a>(
+    ctxId, &amp;reqParam, &amp;optParam, &amp;assignedReqId);
+if (ret &lt; 0) {
+    /* Error handling */
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Preventing Users Registered on the Block List from Joining a Room</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Obtain users registered on the block list using a function of the NP basic utility. Specify them upon creating a room to prevent them from joining the room.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int i;
+int count;
+<a href="../network/NP_Common-Reference-English.htm#SceNpId">SceNpId</a> blockedUser[SCE_NP_MATCHING2_ROOM_BLOCKED_USER_MAX];
+<a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2CreateJoinRoomRequest">SceNpMatching2CreateJoinRoomRequest</a> reqParam;
+
+memset(blockedUser, 0, sizeof(blockedUser));
+
+ret = <a href="../network/NP_Roster-Reference-English.htm#sceNpRosterGetBlockListEntryCount">sceNpRosterGetBlockListEntryCount</a>(reqId, NULL);
+if (ret &lt; 0) {
+    //E Error handling
+}
+
+count = ret;
+int total=0, entries_obtained=0;
+ret = <a href="../network/NP_Roster-Reference-English.htm#sceNpRosterGetBlockListEntry">sceNpRosterGetBlockListEntry</a>(reqId, count, 0, &amp;total, &amp;entries_obtained, blockedUser, NULL);
+if (ret &lt; 0) {
+        //E Error handling
+}
+
+//E Set as the request parameter for creating the room
+reqParam.blockedUser = blockedUser;
+reqParam.blockedUserNum = entries_obtained;
+//E Other request parameters omitted
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Items That Must be Implemented</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter explains items that must be implemented by all applications that use the NP matching 2 utility.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Use in NP Signed-in State</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP matching 2 utility must be used in an NP signed-in state. Make sure the application starts the NP module and NP service module to enter the NP signed-in state before transitioning to the state for using the NP matching 2 utility.<br>For details concerning the NP module and NP service module, refer to the "NP Overview" and "NP Reference".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Simultaneous Sign-In Support</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A user is free to sign in to the same account multiple times using different PSP&trade; systems. However, as a general rule, matching 2 cannot be used with users who are signed in simultaneously to the same account, and it may take some time until the same user is detected (up to ~5 minutes). When that user is detected, the contexts of the other users will be disabled and the user that was signed in last can continue using matching 2. If a matching 2 API is called by a disabled context, the <a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_SERVER_ERROR_NO_SUCH_CONTEXT">SCE_NP_MATCHING2_SERVER_ERROR_NO_SUCH_CONTEXT</a> error is reported by the callback. When the application receives this error, it should display an appropriate error message to the user and terminate the matching 2 library.<br><br>Note that the matching 2 feature can be used normally until the context is disabled. However, even in that case, the same user can never be in the same room.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2_5">
+<div style="margin-left:40px;"><h4><b>Note:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Room APIs generally do not return the <a href="../network/NP_Matching2-Reference-English.htm#SCE_NP_MATCHING2_SERVER_ERROR_NO_SUCH_CONTEXT">SCE_NP_MATCHING2_SERVER_ERROR_NO_SUCH_CONTEXT</a> error. Therefore, the user can continue to be in the room even if the context is disabled.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Recommended Implementation Items and Precautions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter explains items that are recommended when implementing an application that uses the NP matching 2 utility and related precautions.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Timeout Interval of sceNpMatching2LeaveRoom() Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">It may take some time for the completion of a request by <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2LeaveRoom">sceNpMatching2LeaveRoom</a>() for leaving a room to be reported to the request callback due to the effect of network delay or other factors.<br><br>Although the timeout interval can be specified for each request by setting the request option parameter when the request function is executed, if the application is adverse to time being taken by processing for leaving a room and makes the timeout interval of <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2LeaveRoom">sceNpMatching2LeaveRoom</a>() too short, processing may not be appropriately synchronized with the server that manages the session state, and it may become inconsistent with the actual session state on the server.<br><br>Make sure that the application does not make the timeout interval of <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2LeaveRoom">sceNpMatching2LeaveRoom</a>() too short. Setting the timeout interval to approximately 10 seconds is recommended.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Proper Use of Session Internal and External Attributes</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The attributes of NP matching 2 system components consist of session internal attributes and session external attributes. Session internal attributes can only be accessed from clients that have joined a session. Session external attributes can also be accessed from clients that have not joined a session.<br><br>Although session external attributes can also be accessed from clients that have joined a session, since accessing a session external attribute causes a greater server load than accessing a session internal attribute, the NP matching 2 system can exhibit better performance by using session internal and session external attributes appropriately.<br><br>The following precautions should be kept in mind when implementing an application.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Use session internal attributes when handling data that is to be shared only between session members.
+<li> Use session external attributes when handling data (data used as room search conditions, data that indicates game progress, etc.) that is to be referenced from clients that have not joined a session.
+<li> Be careful not to generate unnecessary transactions for the server. In particular, make sure that session external attributes are not accessed frequently.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Execution Order of Request Functions and of the Server</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For the request functions indicated below, the execution of the request function and the order in which that request will be executed on the server may differ. Moreover, the order in which the request is executed on the server and the order in which the processing completion regarding that request is notified to the request callback function may also differ.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetServerInfo">sceNpMatching2GetServerInfo</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetWorldInfoList">sceNpMatching2GetWorldInfoList</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetUserInfo">sceNpMatching2SetUserInfo</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetUserInfoList">sceNpMatching2GetUserInfoList</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SearchRoom">sceNpMatching2SearchRoom</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2CreateJoinRoom">sceNpMatching2CreateJoinRoom</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2JoinRoom">sceNpMatching2JoinRoom</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetRoomDataExternalList">sceNpMatching2GetRoomDataExternalList</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetRoomDataExternal">sceNpMatching2SetRoomDataExternal</a>()
+<li> <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2GetRoomMemberDataExternalList">sceNpMatching2GetRoomMemberDataExternalList</a>()
+</ul></div>
+<div style="margin-left:50px;"><br>Besides the above request functions, for two or more requests with differing request target sessions, the execution order of the requests and the order in which the respective processing completions are notified cannot be guaranteed.<br><br>Note the above point and implement an application that is not dependent on the execution order of request functions. Especially for requests in which values are set such as <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetUserInfo">sceNpMatching2SetUserInfo</a>() and <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SetRoomDataExternal">sceNpMatching2SetRoomDataExternal</a>(), it is recommended that the application execute the second request after receiving notification on the processing completion of the first request, for example, and prevent issuing multiple requests at the same time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>Limiting the Frequency of Requests</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The request functions introduced in the "NP Matching 2 Reference" are functions for making inquiries to the matching 2 server. If a game application continues to call these functions automatically, the server will be greatly overloaded. Therefore, do not implement processing that routinely calls these functions. These functions should only be called as a result of user actions.<br><br>Some examples that may cause problems are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> A game application that routinely performs searches.
+<li> A game application that routinely obtains external room data.
+<li> A game application that routinely changes external room data.
+</ul></div>
+<div style="margin-left:50px;"><br>Write your code such that it does not poll the matching 2 server.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

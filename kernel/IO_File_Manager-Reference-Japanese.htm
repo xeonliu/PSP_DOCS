@@ -1,0 +1,2738 @@
+<html lang="jp">
+<head>
+<title>IO_File_Manager-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+IO/File マネージャ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceIoStat"></a>
+<table width="100%"><td width="70%"><font size=6>SceIoStat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ステータス取得用の構造体<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>struct <b>SceIoStat</b> {
+	SceMode <i>st_mode</i>;
+	unsigned int <i>st_attr</i>;
+	SceOff <i>st_size</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#ScePspDateTime">ScePspDateTime</a> <i>st_ctime</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#ScePspDateTime">ScePspDateTime</a> <i>st_atime</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#ScePspDateTime">ScePspDateTime</a> <i>st_mtime</i>;
+	unsigned int <i>st_private[6]</i>;
+};
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの種類(file/dir)とモード(R/W/X)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_attr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス依存の属性&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_ctime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;作成時間&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_atime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;最終参照時間&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_mtime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;最終変更時間&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_private[6]</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;その他&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoGetstat">sceIoGetstat</a>(), <a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoChstat">sceIoChstat</a>()では、この構造体を使用します。<br>この構造体はiofilemgr_stat.hに定義されています。ご使用の際はiofilemgr_stat.hをincludeして下さい。<br>SceIoStatの<i>st_mode</i>フィールドは、ファイルの種類やアクセス権限を表す32bitの情報です。<br>bit0からbit11までは、ファイルのアクセス権限を表すbitフラグが格納されます。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>シンボル</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_XOTH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;otherの実行権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0002&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_WOTH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;otherのライト権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0004&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_ROTH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;otherのリード権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0010&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_XGRP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;groupの実行権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0020&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_WGRP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;groupのライト権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0040&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_RGRP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;groupのリード権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0100&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_XUSR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;userの実行権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0200&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_WUSR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;userのライト権&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0400&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_RUSR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;userのリード権&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">bit12からbit15までは、ファイルの種類を表す数値が格納されます。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>シンボル</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x1000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_FDIR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;directory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x2000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_FREG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;regular file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x4000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_FLNK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;symbolic link&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">時刻データは、デバイスに時刻データが存在しない場合は、全てNULLデータです。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceIoDirent"></a>
+<table width="100%"><td width="70%"><font size=6>SceIoDirent<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリエントリの構造体<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>struct <b>SceIoDirent</b> {
+	struct <a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SceIoStat">SceIoStat</a> <i>d_stat</i>;
+	char <i>d_name[256]</i>;
+	void *<i>d_private</i>;
+};
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>d_stat</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルのステータス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>d_name[256]</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名(フルパスではない)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;*<i>d_private</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;予約&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()では、この構造体を使用します。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpen"></a><a name="sceIoOpenCB"></a>
+<a name="sceIoOpen / sceIoOpenCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpen / sceIoOpenCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルのオープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceUID <b>sceIoOpen</b>(
+	const char *<i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+SceUID <b>sceIoOpenCB</b>(
+	const char *<i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;<i>filename</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;オープンするファイル名を指定します。&nbsp;<br>&nbsp;ファイル名は、以下の形式でなければなりません。&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;デバイス名:[デバイス内ファイル名]&nbsp;<br>&nbsp;例&nbsp;<br>&nbsp;"tty0:"&nbsp;<br>&nbsp;"tty:"(これは"tty0:"と同等です。)&nbsp;<br>&nbsp;"tty1:"&nbsp;<br>&nbsp;"host0:hostfilename"&nbsp;<br>&nbsp;"disc0:/PSP_GAME/USRDIR/demo01.pmf"&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>flag</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;ファイルをオープンするモードをSCE_O_RDONLY,&nbsp;SCE_O_WRONLY,&nbsp;<br>&nbsp;SCE_O_RDWRのいずれかで指定します。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_RDONLY&nbsp;</td>
+<td valign="top">&nbsp;読み取り専用でオープンする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_WRONLY&nbsp;</td>
+<td valign="top">&nbsp;書き込み専用でオープンする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_RDWR&nbsp;</td>
+<td valign="top">&nbsp;読み書き両用でオープンする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;また、デバイスによっては以下のモードを論理和で追加することができます。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_APPEND&nbsp;</td>
+<td valign="top">&nbsp;追加書き込みモードにする。&nbsp;<br>&nbsp;ファイルへの書き込みは常にファイルの末尾に行われる。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_CREAT&nbsp;</td>
+<td valign="top">&nbsp;ファイルが存在しない場合にはファイルを作成する&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_TRUNC&nbsp;</td>
+<td valign="top">&nbsp;書き込みオープン時、内容を捨てサイズを0にする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_EXCL&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_CREATを指定していてに同名の&nbsp;<br>&nbsp;ファイルが存在するとエラーとする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_FDEXCL&nbsp;</td>
+<td valign="top">&nbsp;ファイルをオープンしたスレッド以外のスレッドが&nbsp;<br>&nbsp;ファイルディスクリプタを操作するとエラーとする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_PWLOCK&nbsp;</td>
+<td valign="top">&nbsp;ファイルのオープンからクローズまでの間、&nbsp;<br>&nbsp;電源状態の制御を禁止する&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>mode</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;<i>flag</i>でSCE_O_CREATを指定した場合に、作成するファイルの<i>mode</i>を&nbsp;<br>&nbsp;指定します。この値は、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoGetstat">sceIoGetstat</a>()でファイルのステータスを取得したときの&nbsp;<br>&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SceIoStat">SceIoStat</a>構造体の<i>st_mode</i>フィールドに反映されます。&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd(fd&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルをオープンします。オープンに成功すると、ファイルディスクリプタと呼ばれる小さな正の整数を返します。<br>sceIoOpenCB()はsceIoOpen()に、待ち状態に入っている間にコールバック通知の有無をチェックする機能を追加したサービスコールです。処理の完了待ちの間にコールバック通知が行われると、一旦待ち状態から抜けてコールバック関数を実行した後、再び待ち状態に入ります。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1">
+<div style="margin-left:40px;"><h4><b>注意</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">SCE_O_PWLOCKを使用すると、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoClose">sceIoClose</a>()関数によって当該<i>fd</i>がクローズされるまでの間が電源ロック状態となります。電源ロック中はユーザーがPOWER/HOLDスイッチの操作で電源を切る事ができなくなるため、安易にSCE_O_PWLOCKを使用すると著しくユーザビリティを下げる結果になります。<br>SCE_O_PWLOCKつきでファイルをオープンしている間に行われたPOWER/HOLDスイッチの操作は、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoClose">sceIoClose</a>()によってロック状態を解除されるタイミングまで遅延するため、たとえば<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()でエラーが発生したり、そのエラーによりリトライが発生した場合、ロックしている期間が長時間に及んで、ユーザーにとって意外なタイミングでの電源OFFが発生することになることがあります。<br><br>サスペンド/スタンバイ処理が始まって以降にSCE_O_PWLOCKつきでファイルをsceIoOpen()関数が呼び出されると、ファイルをオープンする前にスレッドをブロックすることがあります。<br><br>電源ロックを使用する場合は細心の注意が必要です。くれぐれも安易な使用は避けてください。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoClose"></a><a name="sceIoCloseCB"></a>
+<a name="sceIoClose / sceIoCloseCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoClose / sceIoCloseCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルのクローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoClose</b>(
+	SceUID <i>fd</i>
+);
+int <b>sceIoCloseCB</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープンされているファイルをクローズします。<br>sceIoCloseCB()はsceIoClose()に、待ち状態に入っている間にコールバック通知の有無をチェックする機能を追加したサービスコールです。処理の完了待ちの間にコールバック通知が行われると、一旦待ち状態から抜けてコールバック関数を実行した後、再び待ち状態に入ります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRead"></a><a name="sceIoReadCB"></a>
+<a name="sceIoRead / sceIoReadCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRead / sceIoReadCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルを読み込む<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceSSize <b>sceIoRead</b>(
+	SceUID <i>fd</i>,
+	void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+SceSSize <b>sceIoReadCB</b>(
+	SceUID <i>fd</i>,
+	void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むバッファアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bytes(bytes&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込んだバイト数を返します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルのデータを読み込みます。<br>sceIoReadCB()はsceIoRead()に、待ち状態に入っている間にコールバック通知の有無をチェックする機能を追加したサービスコールです。処理の完了待ちの間にコールバック通知が行われると、一旦待ち状態から抜けてコールバック関数を実行した後、再び待ち状態に入ります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWrite"></a><a name="sceIoWriteCB"></a>
+<a name="sceIoWrite / sceIoWriteCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWrite / sceIoWriteCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルの書き込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceSSize <b>sceIoWrite</b>(
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+SceSSize <b>sceIoWriteCB</b>(
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書き込むデータアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書き込むサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bytes(bytes&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書き込んだバイト数を返します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルへデータを書き込みます。<br>sceIoWriteCB()はsceIoWrite()に、待ち状態に入っている間にコールバック通知の有無をチェックする機能を追加したサービスコールです。処理の完了待ちの間にコールバック通知が行われると、一旦待ち状態から抜けてコールバック関数を実行した後、再び待ち状態に入ります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseek"></a><a name="sceIoLseekCB"></a>
+<a name="sceIoLseek / sceIoLseekCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseek / sceIoLseekCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルポインタの移動(64bit版)<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;iofilemgr_fcntl.h&gt;
+#include &lt;kerror.h&gt;
+
+SceOff <b>sceIoLseek</b>(
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+SceOff <b>sceIoLseekCB</b>(
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>fd</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>offset</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;移動量&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;<i>whence</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;スタート地点以下のいずれかを指定します。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_SET&nbsp;</td>
+<td valign="top">&nbsp;<i>offset</i>はファイルの先頭からの距離&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_CUR&nbsp;</td>
+<td valign="top">&nbsp;<i>offset</i>は現在のポイントからの相対距離&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_END&nbsp;</td>
+<td valign="top">&nbsp;<i>offset</i>はファイルの末尾からの距離&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pos(pos&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新たなファイルポインタの値&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a>(負の値で64ビットに拡張したもの)<br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a>(負の値で64ビットに拡張したもの)<br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_INVAL">SCE_KERNEL_ERROR_INVAL</a>(負の値で64ビットに拡張したもの)<br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a>(負の値で64ビットに拡張したもの)<br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープン中のファイルの次のread/writeのポイントを変更します。<br>sceIoLseekCB()はsceIoLseek()に、待ち状態に入っている間にコールバック通知の有無をチェックする機能を追加したサービスコールです。処理の完了待ちの間にコールバック通知が行われると、一旦待ち状態から抜けてコールバック関数を実行した後、再び待ち状態に入ります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoIoctl"></a><a name="sceIoIoctlCB"></a>
+<a name="sceIoIoctl / sceIoIoctlCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoIoctl / sceIoIoctlCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル・デバイスの操作(戻りデータ付)<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoIoctl</b>(
+	SceUID <i>fd</i>,
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+int <b>sceIoIoctlCB</b>(
+	SceUID <i>fd</i>,
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドコード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスドライバ依存のパラメータブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスドライバ依存のパラメータブロックのbyte数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックのサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(N&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常値(ドライバに依存します)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープンしたファイルに対して、デバイス依存の操作を行います。<br>sceIoIoctlCB()はsceIoIoctl()に、待ち状態に入っている間にコールバック通知の有無をチェックする機能を追加したサービスコールです。処理の完了待ちの間にコールバック通知が行われると、一旦待ち状態から抜けてコールバック関数を実行した後、再び待ち状態に入ります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRemove"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRemove<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルを削除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoRemove</b>(
+	const char *<i>filename</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;削除するファイル名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルを削除します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDopen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDopen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリのオープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dirent.h&gt;
+#include &lt;kerror.h&gt;
+
+SceUID <b>sceIoDopen</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリ名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd(fd&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディレクトリをオープンします。オープンしたディレクトリは、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()によって登録されているファイルの情報を読み出すことができます。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDclose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDclose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリのクローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dirent.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoDclose</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoDopen">sceIoDopen</a>()でディレクトリをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoDopen">sceIoDopen</a>()で開いたファイルディスクリプタを閉じます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDread"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDread<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリを読み込む<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dirent.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoDread</b>(
+	SceUID <i>fd</i>,
+	struct <a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SceIoDirent">SceIoDirent</a> *<i>buf</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoDopen">sceIoDopen</a>()でディレクトリをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データの読み込むアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読むべきエントリはない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;正(N&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリエントリは読めた&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoDopen">sceIoDopen</a>()後、ディレクトリエントリの最初のものからを一つずつ返します。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoMkdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoMkdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリの作成<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoMkdir</b>(
+	const char *<i>dirname</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新ディレクトリ名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;作成するディレクトリの<i>mode</i>を指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;この値は、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoGetstat">sceIoGetstat</a>()でディレクトリのステータスを取得したときの&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SceIoStat">SceIoStat</a>構造体の<i>st_mode</i>フィールドに反映されます。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディレクトリを作成します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRmdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRmdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリを削除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoRmdir</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;削除するディレクトリ名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディレクトリを削除します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRename"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRename<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルを移動／名称変更<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoRename</b>(
+	const char *<i>oldname</i>,
+	const char *<i>newname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oldname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;元のファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>newname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新しいファイル名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_XDEV">SCE_KERNEL_ERROR_XDEV</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルを移動／名称変更をします。<i>oldname</i>と<i>newname</i>は同じデバイスの同じユニット番号でなければなりません。<i>newname</i>はデバイス指定を省略可能です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>カレントディレクトリの変更<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoChdir</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリ名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">デバイスのカレントディレクトリを変更します。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル/ディレクトリのステータスの変更<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_stat.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoChstat</b>(
+	const char *<i>name</i>,
+	const struct <a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SceIoStat">SceIoStat</a> *<i>buf</i>,
+	unsigned int <i>cbit</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>name</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;ファイル/ディレクトリ名&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>buf</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;新ステータス&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;<i>cbit</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;変更するフィールドの指定ビット&nbsp;<br>&nbsp;(すなわち<i>buf</i>中の有効なフィールド)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_CST_MODE&nbsp;<br>&nbsp;SCE_CST_ATTR&nbsp;<br>&nbsp;SCE_CST_SIZE&nbsp;<br>&nbsp;SCE_CST_CT&nbsp;<br>&nbsp;SCE_CST_AT&nbsp;<br>&nbsp;SCE_CST_MT&nbsp;<br>&nbsp;SCE_CST_PRVT&nbsp;</td>
+<td valign="top">&nbsp;0x0001&nbsp;<br>&nbsp;0x0002&nbsp;<br>&nbsp;0x0004&nbsp;<br>&nbsp;0x0008&nbsp;<br>&nbsp;0x0010&nbsp;<br>&nbsp;0x0020&nbsp;<br>&nbsp;0x0040&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定のファイル/ディレクトリのステータスを変更します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル/ディレクトリのステータス取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_stat.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoGetstat</b>(
+	const char *<i>name</i>,
+	struct <a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SceIoStat">SceIoStat</a> *<i>buf</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル/ディレクトリ名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ステータスを格納するバッファ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定のファイル/ディレクトリのステータスを得ます。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDevctl"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDevctl<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デバイスの操作<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoDevctl</b>(
+	const char *<i>devname</i>,
+	int <i>cmd</i>,
+	const void *<i>arg</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>devname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス指定("&lt;devname&gt;&lt;unit&gt;:")&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドコード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスドライバ依存のパラメータブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスドライバ依存のパラメータブロックのbyte数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックのサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(N&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常値(ドライバに依存します)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">デバイス固有の操作を行います。<br>動作の詳細はドライバ依存です。各デバイスのデバイスドライバのドキュメントを参照してください。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メモリの状態とデバイスの状態の同期を取る<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoSync</b>(
+	const char *<i>devname</i>,
+	int <i>flag</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>devname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス依存のフラグ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">メモリの状態とデバイスの状態の同期を取ります。ディスクデバイスなどでは、バッファの内容をディスクに書出すなどの動作をします。動作の詳細はデバイスドライバに依存します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpenAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpenAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルの非同期オープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceUID <b>sceIoOpenAsync</b>(
+	const char *<i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;<i>filename</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;オープンするファイル名を指定します。ファイル名は、&nbsp;<br>&nbsp;以下の形式でなければなりません。&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;デバイス名:[デバイス内ファイル名]&nbsp;<br>&nbsp;例&nbsp;<br>&nbsp;"tty0:"&nbsp;<br>&nbsp;"tty:"(これは"tty0:"と同等です。)&nbsp;<br>&nbsp;"tty1:"&nbsp;<br>&nbsp;"host0:hostfilename"&nbsp;<br>&nbsp;"disc0:/PSP_GAME/USRDIR/demo01.pmf"&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>flag</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;ファイルをオープンするモードをSCE_O_RDONLY,&nbsp;<br>&nbsp;SCE_O_WRONLY,&nbsp;SCE_O_RDWRのいずれかで指定します。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_RDONLY&nbsp;</td>
+<td valign="top">&nbsp;読み取り専用でオープンする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_WRONLY&nbsp;</td>
+<td valign="top">&nbsp;書き込み専用でオープンする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_RDWR&nbsp;</td>
+<td valign="top">&nbsp;読み書き両用でオープンする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;また、デバイスによっては以下のモードを論理和で追加することができます。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_APPEND&nbsp;</td>
+<td valign="top">&nbsp;追加書き込みモードにする。ファイルへの書き込みは&nbsp;<br>&nbsp;常にファイルの末尾に行われる。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_CREAT&nbsp;</td>
+<td valign="top">&nbsp;ファイルが存在しない場合にはファイルを作成する&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_TRUNC&nbsp;</td>
+<td valign="top">&nbsp;書き込みオープン時、内容を捨てサイズを0にする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_EXCL&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_CREATを指定していてに同名の&nbsp;<br>&nbsp;ファイルが存在するとエラーとする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_FDEXCL&nbsp;</td>
+<td valign="top">&nbsp;ファイルをオープンしたスレッド以外のスレッドが&nbsp;<br>&nbsp;ファイルディスクリプタを操作するとエラーとする&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_O_PWLOCK&nbsp;</td>
+<td valign="top">&nbsp;ファイルのオープンからクローズまでの間、&nbsp;<br>&nbsp;電源状態の制御を禁止する&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>mode</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;<i>flag</i>でSCE_O_CREATを指定した場合に、作成するファイルの&nbsp;<br>&nbsp;<i>mode</i>を指定します。この値は、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoGetstat">sceIoGetstat</a>()でファイルのステータス&nbsp;<br>&nbsp;を取得したときの<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SceIoStat">SceIoStat</a>構造体の<i>st_mode</i>フィールドに反映されます。&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd(fd&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルをオープンします。ファイルディスクリプタの確保ができた時点ですぐ戻り、ファイルの存在確認などの処理は非同期で行われます。処理の結果は、必ず<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()や<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()などによって受け取る必要があります。<br>sceIoOpenAsync()が正常終了しても、ファイルが存在しなかったなどの理由で実際のオープン処理には失敗している場合があります。この場合は、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()などによって非同期処理の結果を受け取った時点で、確保されていたファイルディスクリプタの解放が行われます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoCloseAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoCloseAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルの非同期クローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoCloseAsync</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープンされているファイルをクローズします。実際のクローズ処理は非同期で行われます。処理の結果は、必ず<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()や<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()などによって受け取る必要があります。<br><br>正常にファイルのクローズ処理が成功した場合は、<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()などによって非同期処理の結果を受け取った時点でファイルディスクリプタの解放が行われます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoReadAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoReadAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルの非同期読み込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoReadAsync</b>(
+	SceUID <i>fd</i>,
+	void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むバッファアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルのデータを読み込みます。実際の操作は非同期で行われ、処理の結果は、必ず<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()などによって受け取る必要があります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWriteAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWriteAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルの非同期書き込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoWriteAsync</b>(
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書き込むデータアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書き込むサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルへデータを書き込みます。実際の操作は非同期で行われ、処理の結果は、必ず<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()などによって受け取る必要があります。<br><br>引数<i>buf</i>で指定された書き込みデータの内容は非同期I/Oが完了するまで保持し続けられている必要があります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseekAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseekAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルポインタの非同期移動(64bit版)<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;iofilemgr_fcntl.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoLseekAsync</b>(
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>fd</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>offset</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;移動量&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;<i>whence</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;スタート地点以下のいずれかを指定します。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_SET&nbsp;</td>
+<td valign="top">&nbsp;<i>offset</i>はファイルの先頭からの距離&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_CUR&nbsp;</td>
+<td valign="top">&nbsp;<i>offset</i>は現在のポイントからの相対距離&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_END&nbsp;</td>
+<td valign="top">&nbsp;<i>offset</i>はファイルの末尾からの距離&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_INVAL">SCE_KERNEL_ERROR_INVAL</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープン中のファイルの次のread/writeのポイントを変更します。実際の操作は非同期で行われ、処理の結果は、必ず<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()などによって受け取る必要があります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoIoctlAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoIoctlAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル・デバイスの非同期操作(戻りデータ付)<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoIoctlAsync</b>(
+	SceUID <i>fd</i>,
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドコード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスドライバ依存のパラメータブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスドライバ依存のパラメータブロックのbyte数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックのサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープンしたファイルに対して、デバイス依存の操作を行います。実際の操作は非同期で行われ、処理の結果は、必ず<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()などによって受け取る必要があります。<br><br>引数<i>arg</i>で指定されたパラメータブロックの内容は非同期I/Oが完了するまで保持し続けられている必要があります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWaitAsync"></a><a name="sceIoWaitAsyncCB"></a><a name="sceIoPollAsync"></a>
+<a name="sceIoWaitAsync / sceIoWaitAsyncCB / sceIoPollAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWaitAsync / sceIoWaitAsyncCB / sceIoPollAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期I/O処理実行結果の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoWaitAsync</b>(
+	SceUID <i>fd</i>,
+	SceIores *<i>result</i>
+);
+int <b>sceIoWaitAsyncCB</b>(
+	SceUID <i>fd</i>,
+	SceIores *<i>result</i>
+);
+int<b> sceIoPollAsync</b>(
+	SceUID <i>fd</i>,
+	SceIores *<i>result</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>result</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期で実行されていたファイルI/O処理の結果を格納する変数へのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期処理が終了した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期処理はまだ実行中&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_NOASYNC">SCE_KERNEL_ERROR_NOASYNC</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">非同期で実行したファイルI/O処理の実行結果を取得します。<br>sceIoWaitAsync()は非同期I/O処理が完了するまで待ち、その結果を<i>result</i>引数でポインタを渡す変数に格納してから返り値に0を返します。<br>sceIoWaitAsyncCB()はsceIoWaitAsync()に、待ち状態に入っている間にコールバック通知の有無をチェックする機能を追加したサービスコールです。非同期I/O処理の完了待ちの間にコールバック通知が行われると、一旦待ち状態から抜けてコールバック関数を実行した後、再び待ち状態に入ります。<br>sceIoPollAsync()はsceIoWaitAsync()から、非同期I/O処理が完了していない場合に待ち状態に入る機能を取り除いたサービスコールです。非同期I/O処理が完了していなかった場合は返り値に1を返します。この場合は<i>result</i>引数でポインタを渡した変数の値は変化しません。<br><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoReadAsync">sceIoReadAsync</a>()や<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWriteAsync">sceIoWriteAsync</a>()などによって開始した非同期I/O処理は、sceIoWaitAsync(), sceIoWaitAsyncCB(), sceIoPollAsync()のいずれかのAPIが0を返して非同期I/O処理の結果を受け取ることで完結します。<br>非同期I/O処理が完結するまでは、同じファイルディスクリプタに対して別の非同期I/O処理を発行することはできません。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoSetAsyncCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoSetAsyncCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期処理通知用コールバックの設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoSetAsyncCallback</b>(
+	SceUID <i>fd</i>,
+	SceUID <i>cbid</i>,
+	int <i>arg</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期処理の終了時に通知を行うコールバックのID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバック関数に渡す引数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルI/Oの非同期処理が完了した際に通知を行うスレッドマネージャのコールバックIDを設定します。<br>コールバックは、あらかじめ<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>()によって生成しておく必要があります。非同期I/O処理が完了すると、指定したコールバックIDに対して<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelNotifyCallback">sceKernelNotifyCallback</a>()による通知が行われます。この後、指定したコールバックを生成したスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>()により通知の有無をチェックするか<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSleepThreadCB">sceKernelSleepThreadCB</a>()などのようなコールバック呼び出し付きの待ちAPIを実行することで、コールバック生成時に設定したコールバック関数が呼び出されます。<br>非同期I/O処理を完結させるためには、呼び出されたコールバック関数の中で<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()などを実行してファイルI/O処理の実行結果を引き取る必要があります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChangeAsyncPriority"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChangeAsyncPriority<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期I/O処理のスレッドプライオリティ設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoChangeAsyncPriority</b>(
+	SceUID <i>fd</i>,
+	int <i>level</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッドプライオリティを変更するファイルディスクリプタ。&nbsp;&nbsp;<br>&nbsp;&nbsp;-1を指定すると、非同期I/O処理スレッドを起動する際のデフォルトの&nbsp;&nbsp;<br>&nbsp;&nbsp;プライオリティを設定する。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>level</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッドプライオリティ。&nbsp;&nbsp;<br>&nbsp;&nbsp;-1を指定すると、非同期I/O処理スレッドはその親スレッド&nbsp;&nbsp;<br>&nbsp;&nbsp;(非同期I/O APIを呼び出すスレッド)のプライオリティを継承する。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-Japanese.htm#SCE_KERNEL_ERROR_ILLEGAL_PRIORITY">SCE_KERNEL_ERROR_ILLEGAL_PRIORITY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">非同期ファイルI/O処理のスレッドプライオリティを変更します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetDevType"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetDevType<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>オープンしているファイルのデバイスタイプの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoGetDevType</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()でファイルをオープンしたときに得られるファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dt_type&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(dt_type&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス構造体のdt_typeの値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* ダミーデバイス */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_CHAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* 物理キャラクタデバイス */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_BLOCK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* 物理ブロックデバイス */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_FS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* ファイルシステム論理デバイス */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_ALIAS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x20&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* エイリアス名(デバイスエイリアス) */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_MOUNTPT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x40&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* エイリアス名(マウントポイント) */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他の負数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバのエラーコード&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(通常kerror.h中のエラーマクロ)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープンしているファイルディスクリプタのデバイスのタイプを取得します。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetFdList"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetFdList<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>オープン中のファイルディスクリプタのリストを得る<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoGetFdList</b>(
+	SceUID *<i>readbuf</i>,
+	int <i>readbufsize</i>,
+	int *<i>fdcount</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>readbuf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタのリストを格納するSceUID型配列の先頭へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>readbufsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>readbuf</i>のサイズ(格納可能なファイルディスクリプタの数)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fdcount</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オープン中のファイルディスクリプタの数を取得する変数へのポインタ。&nbsp;&nbsp;<br>&nbsp;&nbsp;NULLを指定した場合は、ファイルディスクリプタの数は取得しません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;count&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;count&gt;=0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バッファに読み込めたエントリ数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">このサービスコールはデバッグ支援のために用意されています。<br>現在オープンされているファイルディスクリプタの個数とそのリストを取得します。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>IO/Fileマネージャの返すエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;成功&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_PRIORITY">SCE_KERNEL_ERROR_ILLEGAL_PRIORITY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;優先度の指定が不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_INVAL">SCE_KERNEL_ERROR_INVAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>whence</i>の指定値が不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの同時操作可能な&nbsp;&nbsp;<br>&nbsp;&nbsp;上限を超している&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定のデバイスは存在しない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;このデバイスではサポート&nbsp;&nbsp;<br>&nbsp;&nbsp;していない関数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_XDEV">SCE_KERNEL_ERROR_XDEV</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;複数のデバイスを指定している&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ALIAS_USED">SCE_KERNEL_ERROR_ALIAS_USED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エイリアス名は既に使われている&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_CANNOT_MOUNT">SCE_KERNEL_ERROR_CANNOT_MOUNT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マウントできなかった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_DRIVER_DELETED">SCE_KERNEL_ERROR_DRIVER_DELETED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;該当するドライバはDeleteされた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期操作が完了していない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NOASYNC">SCE_KERNEL_ERROR_NOASYNC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期操作は行っていない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NOCWD">SCE_KERNEL_ERROR_NOCWD</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カレントディレクトリが存在しない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NAMETOOLONG">SCE_KERNEL_ERROR_NAMETOOLONG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名が長すぎる&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

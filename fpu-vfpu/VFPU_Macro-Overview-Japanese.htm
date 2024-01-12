@@ -1,0 +1,383 @@
+<html lang="jp">
+<head>
+<title>VFPU_Macro-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+psp-as VFPUアセンブラ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>VFPU命令</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>表現形式</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">レジスタや即値には、以下の表現形式があります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td rowspan= 6  valign="top">&nbsp;マトリクスレジスタ&nbsp;</td>
+<td valign="top">&nbsp;$n&nbsp;</td>
+<td valign="top">&nbsp;直接表現&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Smif&nbsp;</td>
+<td valign="top">&nbsp;スカラー表現&nbsp;<br>&nbsp;(mはマトリクス番号、iはインデックス番号、&nbsp;<br>&nbsp;fはフィールドセレクト番号をあらわす)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Cmif&nbsp;</td>
+<td valign="top">&nbsp;列ベクトル表現&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Rmfi&nbsp;</td>
+<td valign="top">&nbsp;行ベクトル表現&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Mmif&nbsp;</td>
+<td valign="top">&nbsp;行マトリクス表現&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Emfi&nbsp;</td>
+<td valign="top">&nbsp;列マトリクス表現&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;制御レジスタ&nbsp;</td>
+<td valign="top">&nbsp;$n&nbsp;</td>
+<td valign="top">&nbsp;直接表現&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;即値(整数)&nbsp;</td>
+<td valign="top">&nbsp;dddd&nbsp;</td>
+<td valign="top">&nbsp;10進数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;0oooo&nbsp;</td>
+<td valign="top">&nbsp;8進数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;0xhhhh&nbsp;</td>
+<td valign="top">&nbsp;16進数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;+&nbsp;-&nbsp;*&nbsp;/&nbsp;&lt;&lt;&nbsp;&gt;&gt;&nbsp;(&nbsp;)&nbsp;</td>
+<td valign="top">&nbsp;演算子を使用可能&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;即値(半精度浮動小数)&nbsp;</td>
+<td valign="top">&nbsp;aa.cc&nbsp;</td>
+<td valign="top">&nbsp;10進数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;aa.cc[+-]Edd&nbsp;</td>
+<td valign="top">&nbsp;10進数指数付&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;0xaaaa&nbsp;</td>
+<td valign="top">&nbsp;半精度浮動小数形式&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Inf,&nbsp;NaN&nbsp;</td>
+<td valign="top">&nbsp;特殊な数値&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>VFPU命令のチェック機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定したレジスタや即値に対して、以下のチェックを行います。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_1"><h4>
+(1)&nbsp;<b>マトリクスレジスタのレジスタ番号( $n, Smif Cmif Rmfi Mmif Emfi )</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1_1">
+<div style="margin-left:40px;"><h4><b>エラー</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> $n指定時のレジスタ番号が0 &lt;= n &lt; 128を満たさない場合。<br>ex) $130
+<li> マトリクス番号が0 &lt;= mtx &lt; 8を満たさない場合。<br>ex) S900
+<li> インデックス番号が0 &lt;= idx &lt; 4を満たさない場合。<br>ex) S050
+<li> フィールドセレクト番号が0 &lt;= fsl &lt; 4を満たさない場合。<br>ex) S005
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1_2">
+<div style="margin-left:40px;"><h4><b>警告</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 命令にとって、不適切なレジスタ型が指定された場合。<br>ex) vsin.p	S000,S100
+<li> レジスタ型にとって、不適切なインデックス番号が指定された場合。<br>ex) vmmov.p	M110,M000<br>　vmmov.t	M120,M000
+<li> レジスタ型にとって、不適切なフィールドセレクト番号が指定された場合。<br>ex) vmmov.p	M101,M000<br>　vmmov.t	M102,M000
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_2"><h4>
+(2)&nbsp;<b>制御レジスタ( $n )</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_2_3">
+<div style="margin-left:40px;"><h4><b>エラー</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> レジスタ番号が128 &lt;= n &lt; 256を満たさない場合。<br>ex) $0
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_2_4">
+<div style="margin-left:40px;"><h4><b>警告</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 未定義のレジスタ番号が指定された場合。<br>ex) $144
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_3"><h4>
+(3)&nbsp;<b>マトリクスレジスタの衝突</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_3_5">
+<div style="margin-left:40px;"><h4><b>エラー</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> (vs, vt)とvdで使用するレジスタの領域が重なっていて、期待通りの演算結果が得られない可能性がある場合。
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>ex) vmmul.q	M000,M000,M100 ... エラー
+　vtfm3.t	C000,M000,C100 ... エラー
+　vtfm3.t	C030,M000,R003 ... good
+</font></pre></div>
+<div style="margin-left:40px;"><ul>
+<li> ただし、vmmul, vtfm2, vtfm3, vtfm4以外のリピート命令では、同一領域に同一方向で書き戻す場合に限り、警告を抑制します。<br>ex) vmscl.q	M000,M000,S100 ... good<br>　vmscl.q	E000,M000,S100 ... エラー
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_4"><h4>
+(4)&nbsp;<b>適用できないプレフィクス</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_4_6">
+<div style="margin-left:40px;"><h4><b>エラー</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> オペランド後置でプレフィクス命令を指定するとき、その命令では使用できないプレフィクスを使用しようとした場合。
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>ex) vmmul.q	M000,M000,M100[X,Y,Z,1]	... エラー
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_5"><h4>
+(5)&nbsp;<b>即値(整数)</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_5_7">
+<div style="margin-left:40px;"><h4><b>警告</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 有効ビット長を越えた値が指定された場合。<br>値は、有効ビット長でマスクされます。
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_6"><h4>
+(6)&nbsp;<b>即値(半精度浮動小数)</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_6_8">
+<div style="margin-left:40px;"><h4><b>警告</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 半精度に変換した結果がアンダーフローを起こした場合。<br>値は、0になります。
+<li> 半精度に変換した結果がオーバーフローを起こした場合。<br>値は、無限大になります。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>VFPUプレフィクス命令による修飾</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VFPUプレフィクス命令vpfxs, vpfxt, vpfxd命令は、単独の命令として記述することもできますが、以下のようにvs,vt,vdの各オペランドに後置する形式で記述することもできます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vadd.q		c000[0:1,-1:1,Z,W], c010[X,|Y|,W,W], c020[0,1/2,-Y,Z]
+</font></pre></div>
+<div style="margin-left:50px;">これは、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vpfxd		0,1,,
+vpfxs		X,|Y|,W,W
+vpfxt		0,1/2,-Y,Z
+vadd.q		c000, c010, c020
+</font></pre></div>
+<div style="margin-left:50px;">と等価になります。<br><br>オペランド後置表現を用いた場合、以下のチェックが有効になります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> プレフィクス命令がブランチディレイスロットに配置されていないかどうか
+<li> 命令によって該当するプレフィクスが使用可能かどうか
+</ul></div>
+<div style="margin-left:50px;"><br>プレフィクス命令を単独で記述した場合にはこれらのチェックは行われないため、使用禁止のプレフィクスが記述されてしまう危険性があります。なるべくオペランド後置表現を使用することをお勧めします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>VFPUアセンブラオプション</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下のVFPUアセンブラオプションが使用可能です。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_4_1"><h4>
+(1)&nbsp;<b>-vmmul-trans / -no-vmmul-trans</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">-vmmul-transオプションが指定されたとき、VFPUのvmmul命令で、vsオペランドに相当するレジスタ番号を転置した形式で与えます。VFPUハードウェアの解釈するvsオペランドは転置した形式となっているため、アセンブラがvmmul命令をアセンブルするとき、自動的に転置を行います。<br><br>デフォルトは、この-vmmul-transオプションが設定されている状態です。-no-vmmul-trans状態に切り替えることはお勧めしません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_4_2"><h4>
+(2)&nbsp;<b>-vtfm-trans / -no-vtfm-trans</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">-vtfm-transオプションが指定されたとき、VFPUのvtfm命令およびvhtfm命令で、vsオペランドに相当するレジスタ番号を転置した形式で与えます。VFPUハードウェアではe000形式でColumn major matrixが、m000形式でRow major matrixがそれぞれ指定されますが、故意にこの定義を反転させて使用したい場合に-vtfm-transオプションを指定します。<br><br>デフォルトは、この-vtfm-transオプションは設定されていない状態です。-vtfm-trans状態に切り替えることはお勧めしません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>VFPUマクロ命令</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下のVFPUマクロ命令が使用可能です。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_1"><h4>
+(1)&nbsp;<b>即値のロード</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lvi.s">lvi.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lvi.p">lvi.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lvi.t">lvi.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lvi.q">lvi.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lvhi.s">lvhi.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lvhi.p">lvhi.p</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_2"><h4>
+(2)&nbsp;<b>拡張ロード／ストア</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#ulv.s">ulv.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lv.p">lv.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lv.t">lv.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#ulv.q">ulv.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#usv.s">usv.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#sv.p">sv.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#sv.t">sv.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#usv.q">usv.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lv.s">lv.s</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lv.p">lv.p</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lv.t">lv.t</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#lv.q">lv.q</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#ulv.q">ulv.q</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#sv.s">sv.s</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#sv.p">sv.p</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#sv.t">sv.t</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#sv.q">sv.q</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#usv.q">usv.q</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#svl.q">svl.q</a> (アドレス拡張)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#svr.q">svr.q</a> (アドレス拡張)
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_3"><h4>
+(3)&nbsp;<b>vdivマクロ命令</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vdiv.p">vdiv.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vdiv.t">vdiv.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vdiv.q">vdiv.q</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_4"><h4>
+(4)&nbsp;<b>vmmulマクロ命令</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vcmmul.p">vcmmul.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vcmmul.t">vcmmul.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vcmmul.q">vcmmul.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrmmul.p">vrmmul.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrmmul.t">vrmmul.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxmmul.q">vxmmul.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxmmul.p">vxmmul.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxmmul.t">vxmmul.t</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_5"><h4>
+(5)&nbsp;<b>vrmmul.q vtfmマクロ命令</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vctfm2.p">vctfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vctfm3.t">vctfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vctfm4.q">vctfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrtfm2.p">vrtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrtfm3.t">vrtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrtfm4.q">vrtfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxtfm2.p">vxtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxtfm3.t">vxtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxtfm4.q">vxtfm4.q</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_6"><h4>
+(6)&nbsp;<b>vhtfmマクロ命令</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vchtfm2.p">vchtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vchtfm3.t">vchtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vchtfm4.q">vchtfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrhtfm2.p">vrhtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrhtfm3.t">vrhtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vrhtfm4.q">vrhtfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxhtfm2.p">vxhtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxhtfm3.t">vxhtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-Japanese.htm#vxhtfm4.q">vxhtfm4.q</a><br>
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

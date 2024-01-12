@@ -1,0 +1,853 @@
+<html lang="jp">
+<head>
+<title>USB_Camera-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+USBカメラ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラライブラリは、PSP&reg;専用USBアクセサリの一つであるカメラから、USBを介してJPEG画像データとPCMデータを取り込むためのライブラリです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>ライブラリ構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラライブラリは以下の３つのモジュールから構成されます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> USBバスドライバ(常駐モジュール)<br>PSP&reg;のUSBのベースとなるドライバ
+<li> USBアクセサリベースドライバ<br>USBアクセサリに共通の処理を行うドライバ
+<li> USBカメラドライバ<br>カメラを操作するインタフェースを提供するドライバ
+</ul></div>
+<div style="margin-left:50px;"><br>USBバスドライバについては、USB_Driver-OverviewやUSB_Driver-Referenceを参照してください。<br>USBカメラライブラリ単体でカメラ機能とマイク機能を利用する事が可能です。<br>なお、USBカメラハードウェア自体はUSBカメラライブラリとは別にUSBマイクライブラリをロードすることにより、USBマイクハードウェアと同様に使用可能です。<br>USBカメラライブラリとUSBマイクライブラリの併用は出来ません。<br>USBマイクについては、「USB_Mic-Overview」や「USB_Mic-Reference」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>USBカメラライブラリの主な機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">画像データについて<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 取得できる画像データ形式は、原データがYUV420及びYUV422のJPEG画像
+<li> 動画（連続したJPEG画像）は640x480(VGA), 480x272(PSP1), 360x272(PSP2),352x288(CIF),320x240(QVGA),176x144(QCIF),160x120(QQVGA)の解像度及び60fps,30fps,20fps,15fps,10fps,7.5fps,5fps,3.75fpsのフレームレートが可能。ただし、60fpsが有効なのは、320x240までの解像度。
+<li> 静止画は1280x960(SXGA),1024x768(XGA),640x480(VGA),480x272(PSP1), 360x272(PSP2),352x288(CIF),320x240(QVGA),176x144(QCIF),160x120(QQVGA)の解像度が選択可能。ただし1280x960,1024x768はYUV422のみサポート。
+<li> 明るさ、鮮やかさ、濃淡、シャープさなどの変更
+<li> 取得するファイルサイズの指定
+<li> 露出補正及びホワイトバランスの指定
+<li> ズームが可能
+</ul></div>
+<div style="margin-left:50px;"><br>音声データについて<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 取得できる音声データ形式は16bit PCMモノラルサンプリング周波数は44100[Hz], 22050[Hz], 11025[Hz]のいずれか
+<li> 入力ゲインのマニュアル調整
+<li> 入力ゲインのオートレベルコントロール（ALC）
+<li> ALC時のノイズゲート機能搭載
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラライブラリを使用するために必要なファイルは、以下のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usb.h&nbsp;&nbsp;<br>&nbsp;&nbsp;usbacc.h&nbsp;&nbsp;<br>&nbsp;&nbsp;usbcam.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;stubファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usb_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;usbacc_stub.a又はusbacc_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;usbcam_stub.a又はusbcam_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;モジュールファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usbacc.prx&nbsp;&nbsp;<br>&nbsp;&nbsp;usbcam.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラライブラリのサンプルプログラムとして以下のものがありますので、参照してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_1"><h4>
+(1)&nbsp;<b>devkit/sample/usb/accessory/usbcam/simplemovie</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_2"><h4>
+(2)&nbsp;<b>devkit/sample/usb/accessory/usbcam/simplestill</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>USBドライバのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBアクセサリベースドライバとUSBカメラドライバを、USBモジュールユーティリティを用いてロードします。モジュールのロード方法についてはサンプルプログラムを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>USBドライバの初期化処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の順番で<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>()を実行し、各USBドライバを始動させます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// USBバスドライバの始動
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>(SCE_USB_BUS_DRIVER_NAME, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+
+// USBアクセサリベースドライバの始動
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>(SCE_USBACC_NAME, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+
+// USBカメラドライバの始動
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_NAME">SCE_USBCAM_NAME</a>, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+
+// USBカメラマイクドライバの始動
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAMMIC_NAME">SCE_USBCAMMIC_NAME</a>, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>USBデバイスの始動</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbActivate">sceUsbActivate</a>()を実行するとUSBデバイスが始動し、自動的にUSBカメラへの電源供給が開始されます。<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbActivate">sceUsbActivate</a>()の引数には、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USB_PID_CAM">SCE_USB_PID_CAM</a>を指定してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// USBデバイスの始動
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbActivate">sceUsbActivate</a>(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USB_PID_CAM">SCE_USB_PID_CAM</a>) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>USBデバイスが始動するまでは、カメラ入力の初期化とパラメータ設定を行う、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupVideo">sceUsbCamSetupVideo</a>()と<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupStill">sceUsbCamSetupStill</a>()、マイク入力の初期化とコーデックのパラメータ設定を行う<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupMic">sceUsbCamSetupMic</a> ()のみ使用することができ、設定パラメータは、USBカメラドライバを停止するまで保持されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>カメラ入力操作</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>挿抜処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">USBカメラの挿抜を検出します。ライブラリ自身は抜出は検出できますが、挿入は検出できません。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// USBカメラの検出
+#define USBSTS_WAIT    0
+#define USBSTS_CONNECT 1
+int UsbStat;
+int ret, is_acc =0;
+while(1){
+   unsigned int usb_state;
+   switch(UsbStat){
+   case USBSTS_WAIT:
+       usb_state = <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbGetState">sceUsbGetState</a>();
+       if ((usb_state &amp; SCE_USB_STATE_MASK) == SCE_USB_CONFIGURED){
+         ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbAccGetAuthStat">sceUsbAccGetAuthStat</a>();
+         if(ret &lt; 0){
+            if( ret == (int)<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBACC_ERROR_NOT_ACCESSORY">SCE_USBACC_ERROR_NOT_ACCESSORY</a> ){
+               //"PSP"アクセサリで無いので警告等の処理
+                 is_acc = 0;
+            }
+            else{
+               //その他のエラー
+               break;
+            }
+         }
+       }
+       else{
+          is_acc = 1;
+       }
+       UsbStat = USBSTS_CONNECT;
+       printf(&quot;Connected Usb Camera \n&quot;);
+       break;
+
+   case USBSTS_CONNECT:
+      if(is_acc){
+         //USBカメラより、画像・音声などを取得。
+         if(ライブラリより抜出を検出)
+            UsbStat = USBSTS_WAIT;
+      }
+      else{
+         usb_state = <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbGetState">sceUsbGetState</a>();
+         if ((usb_state &amp; SCE_USB_CONN_MASK) == SCE_USB_DISCONNECTED){
+            UsbStat = USBSTS_WAIT;
+         }
+         else{
+            //"PSP"アクセサリで無いUSBデバイスが外されるまで警告
+         }
+      }
+      break;
+   }
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>動画取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupVideo">sceUsbCamSetupVideo</a>()で使用するパラメータとワークメモリを与えてください。<br>target_file_sizeで指定した画像サイズは、目安であり、1フレームあたりの平均サイズになります。そのため、えられる画像のサイズはtarget_file_sizeを超える場合があります。ただし、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_FRAME_MAXSIZE">SCE_USBCAM_VIDEO_FRAME_MAXSIZE</a>を超えることはありません。<br>動画のサイズがtarget_file_sizeより超える場合は、画像の対象物が撮影範囲に入るなど、被対象物が激しく変化した場合です。<br>ワークメモリは取得したい画像サイズの約2倍を目安に与えてください。<br>具体的には、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_WORK_MAXSIZE">SCE_USBCAM_VIDEO_WORK_MAXSIZE</a>はワークメモリの最大使用量を示す定義値ですが、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamVideoParam">SceUsbCamVideoParam</a>構造体のtarget_file_sizeメンバが32KiB以下の場合にはtarget_file_sizeメンバに指定した2倍程度の大きさがワークメモリの最大使用量となります。<br>ワークメモリは64byteアラインメントにて確保してください。<br>取得のAPIには同期、非同期があります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// USBカメラからの動画の取得（同期）
+#define USBCAM_WORKSIZE <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_WORK_MAXSIZE">SCE_USBCAM_VIDEO_WORK_MAXSIZE</a>
+#define JPEG_SIZE 24*1024
+static unsigned char camwork[USBCAM_WORKSIZE] __attribute__((aligned(64)));
+static unsigned char jpegbuf[<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_FRAME_MAXSIZE">SCE_USBCAM_VIDEO_FRAME_MAXSIZE</a>] __attribute__((aligned(64)));
+int ret;
+<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamVideoParam">SceUsbCamVideoParam</a> param;
+param.size           = sizeof(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamVideoParam">SceUsbCamVideoParam</a>);
+param.resolution     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_RESOLUTION_PSP1">SCE_USBCAM_RESOLUTION_PSP1</a>;
+param.frame_rate     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_FRAME_RATE_30_FPS">SCE_USBCAM_FRAME_RATE_30_FPS</a>;
+param.white_balance  = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_WB_AUTO">SCE_USBCAM_WB_AUTO</a>;
+param.saturation     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SATURATION_LV_DEFAULT">SCE_USBCAM_SATURATION_LV_DEFAULT</a>;
+param.brightness     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_BRIGHTNESS_LV_DEFAULT">SCE_USBCAM_BRIGHTNESS_LV_DEFAULT</a>;
+param.contrast       = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_CONTRAST_LV_DEFAULT">SCE_USBCAM_CONTRAST_LV_DEFAULT</a>;
+param.sharpness      = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SHARPNESS_LV_DEFAULT">SCE_USBCAM_SHARPNESS_LV_DEFAULT</a>;
+param.effect_mode    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_EFFECT_MODE_NORMAL">SCE_USBCAM_EFFECT_MODE_NORMAL</a>;
+param.target_file_size    = JPEG_SIZE;
+param.sensitivity    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SENSITIVITY_ISO100">SCE_USBCAM_SENSITIVITY_ISO100</a>;
+param.evlevel = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_EVLEVEL_00">SCE_USBCAM_EVLEVEL_00</a>;
+param.zoom    = 10;
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupVideo">sceUsbCamSetupVideo</a>(&amp;param,camwork,USBCAM_WORKSIZE)
+if (ret &lt; 0){
+   //エラー処理
+}
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStartVideo">sceUsbCamStartVideo</a>();
+if (ret &lt; 0){
+   //エラー処理
+}
+while(1){
+   SceSize jpegsize;
+   if(終了判定 == 真){
+      <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStopVideo">sceUsbCamStopVideo</a>();
+      break;
+   }
+   ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamReadVideoFrameBlocking">sceUsbCamReadVideoFrameBlocking</a>(jpegbuf,sizeof(jpegbuf));
+   if(ret &lt; 0){
+      if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+         // USBカメラが抜出されました
+         break;
+      }
+      else{
+         //エラー処理
+            if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_BUFFER_SIZE">SCE_USBCAM_ERROR_BUFFER_SIZE</a>) {
+               //jpegbufの大きさ分だけJPEGが納められています。
+            }
+      }
+   }
+   jpegsize = (SceSize)ret;
+      if(jpegsize &gt; 0){
+         // Jpegデータに関しての操作
+      }
+}
+
+// USBカメラからの動画の取得（非同期）
+SceSize size,jpegsize;
+unsigned char *jpegbuf[2];
+unsigned char *camwork;
+int i,ret;
+<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamVideoParam">SceUsbCamVideoParam</a> param;
+
+camwork = memalign(64, <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_WORK_MAXSIZE">SCE_USBCAM_VIDEO_WORK_MAXSIZE</a>);
+
+for(i=0; i&lt;2; i++){
+   jpegbuf[i] = memalign(64, <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_FRAME_MAXSIZE">SCE_USBCAM_VIDEO_FRAME_MAXSIZE</a>);
+}
+param.size           = sizeof(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamVideoParam">SceUsbCamVideoParam</a>);
+param.resolution     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_RESOLUTION_PSP1">SCE_USBCAM_RESOLUTION_PSP1</a>;
+param.frame_rate     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_FRAME_RATE_30_FPS">SCE_USBCAM_FRAME_RATE_30_FPS</a>;
+param.white_balance  = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_WB_AUTO">SCE_USBCAM_WB_AUTO</a>;
+param.saturation     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SATURATION_LV_DEFAULT">SCE_USBCAM_SATURATION_LV_DEFAULT</a>;
+param.brightness     = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_BRIGHTNESS_LV_DEFAULT">SCE_USBCAM_BRIGHTNESS_LV_DEFAULT</a>;
+param.contrast       = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_CONTRAST_LV_DEFAULT">SCE_USBCAM_CONTRAST_LV_DEFAULT</a>;
+param.sharpness      = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SHARPNESS_LV_DEFAULT">SCE_USBCAM_SHARPNESS_LV_DEFAULT</a>;
+param.effect_mode    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_EFFECT_MODE_NORMAL">SCE_USBCAM_EFFECT_MODE_NORMAL</a>;
+param.target_file_size    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_FRAME_MAXSIZE">SCE_USBCAM_VIDEO_FRAME_MAXSIZE</a>;
+param.sensitivity    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SENSITIVITY_ISO100">SCE_USBCAM_SENSITIVITY_ISO100</a>;
+param.evlevel = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_EVLEVEL_00">SCE_USBCAM_EVLEVEL_00</a>;
+param.zoom    = 10;
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupVideo">sceUsbCamSetupVideo</a>(&amp;param, camwork, <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_WORK_MAXSIZE">SCE_USBCAM_VIDEO_WORK_MAXSIZE</a>);
+if (ret &lt; 0){
+   //エラー処理
+}
+
+jpegsize = 0;
+for(i=0;;i^=0x01){
+   ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamReadVideoFrame">sceUsbCamReadVideoFrame</a>(jpegbuf[i], <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_VIDEO_FRAME_MAXSIZE">SCE_USBCAM_VIDEO_FRAME_MAXSIZE</a>);
+   if(ret &lt; 0){
+      if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+         // USBカメラが抜出されました
+         break;
+      }
+      else {
+         //エラー処理
+      }
+   }
+
+if(終了判定 == 真){
+   <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStopVideo">sceUsbCamStopVideo</a>();
+   break;
+}
+
+if (jpegsize &gt; 0) {
+   //取得したJPEGデータに対する処理. jpegbuf[i^0x01]が対象
+}
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamWaitReadVideoFrameEnd">sceUsbCamWaitReadVideoFrameEnd</a>();
+if(ret &lt; 0){
+   if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+      // USBカメラが抜出されました
+      break;
+   }
+   else {
+      //エラー処理
+      if (ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_BUFFER_SIZE">SCE_USBCAM_ERROR_BUFFER_SIZE</a>) {
+         //jpegbufの大きさ分だけJPEGが納められています。
+      }
+   }
+}
+   jpegsize = ret;
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_3"><h4>
+(3)&nbsp;<b>静止画取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupStill">sceUsbCamSetupStill</a>()より使用したいパラメータを与えます。<br>APIには同期と非同期があります。 パラメータでは取得したいデータサイズを指定できますが、圧縮率で指定し画質を優先させることができます。なお、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStartVideo">sceUsbCamStartVideo</a>()を発行している場合は、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStopVideo">sceUsbCamStopVideo</a>()を発行してください。動画取得と併用できません。<br>SXGA、XGAの解像度の静止画を取得する場合は、動画撮影のパラメータを15fps以下に変更してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//　静止画取得　（同期）
+#define JPEG_SIZE <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_STILL_MAXSIZE">SCE_USBCAM_STILL_MAXSIZE</a>
+static unsigned char jpegbuf[JPEG_SIZE] __attribute__((aligned(64)));
+int ret;
+<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamStillParam">SceUsbCamStillParam</a> param;
+
+param.size          = sizeof(param);
+param.resolution    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_RESOLUTION_VGA">SCE_USBCAM_RESOLUTION_VGA</a>;
+param.target_size   = sizeof(jpegbuf);
+param.flip_mirror   = 0;
+param.self_timer    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SELFTIMER_NO">SCE_USBCAM_SELFTIMER_NO</a>;
+param.comp_qs       = 10;
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupStill">sceUsbCamSetupStill</a>(&amp;param);
+if (ret &lt; 0){
+   //エラー処理
+}
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStillInputBlocking">sceUsbCamStillInputBlocking</a>(stillbuf, sizeof(stillbuf));
+if(ret &lt; 0){
+   if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+      // USBカメラが抜出されました
+   }
+   else {
+      //エラー処理
+      if (ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_BUFFER_SIZE">SCE_USBCAM_ERROR_BUFFER_SIZE</a>) {
+         //stillbufの大きさ分だけJPEGが納められています。
+      }
+   }
+}
+
+if(ret &gt; 0){
+   //JPEGデータが取得できました。処理を行ってください。
+}
+
+//静止画取得　（非同期）
+#define  STILLBUF_SIZE  32*1024
+unsigned char *jpegbuf;
+int ret;
+SceSize size = STILLBUF_SIZE+1024;
+<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamStillParam">SceUsbCamStillParam</a> param;
+
+param.size          = sizeof(param);
+param.resolution    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_RESOLUTION_VGA">SCE_USBCAM_RESOLUTION_VGA</a>;
+param.target_file_size   = STILLBUF_SIZE;
+param.flip_mirror   = 0;
+param.self_timer    = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_SELFTIMER_NO">SCE_USBCAM_SELFTIMER_NO</a>;
+parma.comp_qs       = 1;
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupStill">sceUsbCamSetupStill</a>(&amp;param);
+if (ret &lt; 0){
+   //エラー処理
+   }
+jpegbuf = memalign(64, size);
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStillInput">sceUsbCamStillInput</a>(jpegbuf, size);
+if(ret &lt; 0){
+   if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+      // USBカメラが抜出されました
+   }
+   else {
+      //エラー処理
+   }
+}
+while(1){
+   ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStillPollInputEnd">sceUsbCamStillPollInputEnd</a>();
+   if(ret &lt; 0){
+      if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+         // USBカメラが抜出されました
+      }
+      else {
+         //エラー処理
+         if (ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_BUFFER_SIZE">SCE_USBCAM_ERROR_BUFFER_SIZE</a>) {
+            //stillbufの大きさ分だけJPEGが納められています。
+         }
+      }
+   }
+   else if(ret &gt; 0){
+      size = (SceSize)ret;
+      break;
+   }
+   else {
+      //まだ、JPEGは取得できていません。
+   }
+}
+   //取得したJPEGデータに対しての処理
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_4"><h4>
+(4)&nbsp;<b>音声取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupMic">sceUsbCamSetupMic</a>()で使用したいパラメータとワークメモリを与えてください。ワークメモリのサイズは、サンプリングレートと取得間隔の長さに合わせて、64byteアラインメントで確保してください。目安は、(サンプリングレート[Hz]*2)*(取得間隔[sec])です。APIは同期・非同期があります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//　音声取得（同期）
+#define SAMPLE_RATE   44100
+#define MICWORK_SIZE  ((SAMPLE_RATE*2)/30) //1/30 sec分を確保
+static unsigned char micwork[MICWORK_SIZE];
+int ret;
+unsigned char pcmbuf[MICWORK_SIZE];
+<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamMicParam">SceUsbCamMicParam</a> param;
+param.alc  = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_MIC_ALC_OFF">SCE_USBCAM_MIC_ALC_OFF</a>;
+param.gain = 0;
+param.noiz = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_MIC_NOISE_GATE_OFF">SCE_USBCAM_MIC_NOISE_GATE_OFF</a>;
+param.freq = SAMPLE_RATE;
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupMic">sceUsbCamSetupMic</a>(&amp;param, micwork, MICWORK_SIZE);
+if(ret &lt; 0){
+   //エラー処理
+}
+
+while(1){
+   ret = UsbCamReadMicBlocking(pcmbuf, sizeof(pcmbuf));
+   if(ret &lt; 0){
+      if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+         // USBカメラが抜出されました
+         break;
+      }
+      else {
+         //エラー処理
+      }
+   }
+   else if( ret &gt; 0){
+      //PCMデータに対する処理
+   }
+}
+
+//　音声取得（非同期）
+#define SAMPLE_RATE   44100
+#define MICWORK_SIZE  ((SAMPLE_RATE*2)/30) //1/30 sec分を確保
+static unsigned char micwork[MICWORK_SIZE];
+int i,ret;
+SceSize size;
+unsigned char pcmbuf[2][MICWORK_SIZE];
+<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamMicParam">SceUsbCamMicParam</a> param;
+
+param.size = sizeof(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SceUsbCamMicParam">SceUsbCamMicParam</a>);
+param.alc  = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_MIC_ALC_OFF">SCE_USBCAM_MIC_ALC_OFF</a>;;
+param.gain = 0;
+param.noiz = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_MIC_NOISE_GATE_OFF">SCE_USBCAM_MIC_NOISE_GATE_OFF</a>;
+param.freq = SAMPLE_RATE;
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupMic">sceUsbCamSetupMic</a>(&amp;param, micwork, MICWORK_SIZE);
+if(ret &lt; 0){
+   //エラー処理
+}
+size = 0;
+for(i=0;;i^=0x01){
+   ret = UsbCamReadMic(pcmbuf[i], sizeof(pcmbuf[0]));
+      if(ret &lt; 0){
+         if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+            // USBカメラが抜出されました
+            break;
+         }
+         else {
+            //エラー処理
+         }
+      }
+      if( size &gt; 0 ){
+         //PCMデータに対する処理. pcmbuf[i^0x01]が対象
+      }
+
+   ret = UsbCamWaitReadMicEnd();
+      if(ret &lt; 0){
+         if(ret == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>){ 
+            // USBカメラが抜出されました
+            break;
+         }
+         else {
+            //エラー処理
+         }
+      }
+      size = (SceSize)ret;
+}
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>USBカメラの回転検出</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コールバックの登録により、USBカメラの回転検出が可能です。カメラ方向に応じて、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetReverseMode">sceUsbCamSetReverseMode</a>()<br><br>にて画像の上下反転・左右反転を行ってください。<br><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetReverseMode">sceUsbCamSetReverseMode</a>()は動画取得実行時にても使用可能ですが、発行した直後のフレームは壊れている可能性がありますので、ご注意ください。<br><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamAutoImageReverseSW">sceUsbCamAutoImageReverseSW</a>()にて自動反転を有効にすると、Driver及びハードウェアで必要に応じて画像を反転します。ただし、自動反転が行われるのは動画撮影時のみです。画像が反転する起因は、動画撮影開始時と動画撮影中のカメラの回転です。<br>また、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetReverseMode">sceUsbCamSetReverseMode</a>()にての上書きが優先されますが、上述の起因条件により上書きはキャンセルされます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//　コールバック関数
+SceUID sema;
+static int UsbCamRotNotifyCB(int count, int arg, void *common){
+   <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSignalSema">sceKernelSignalSema</a>(sema, 1);
+}
+
+// メインスレッド
+int ret;
+SceUID cbid;
+ret = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateSema">sceKernelCreateSema</a>(&quot;CamRotSig&quot;, SCE_KERNEL_SA_THPRI, 0, 1, NULL);
+if(ret &lt; 0){
+   //エラー処理
+}
+sema = (SceUID)ret;
+
+ret = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;CamRotCB&quot;, UsbCamRotNotifyCB, NULL);
+if(ret &lt; 0){
+   //エラー処理
+}
+cbid = (SceUID)ret;
+
+ret = <a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamRegisterLensRotationCallback">sceUsbCamRegisterLensRotationCallback</a>(cbid);
+if(ret &lt; 0){
+   //エラー処理
+}
+
+
+while(1){
+   <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitSema">sceKernelWaitSema</a>(sema, 1, NULL);
+   if(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamGetLensDirection">sceUsbCamGetLensDirection</a>() == <a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_LENSDIRECTION_OUT">SCE_USBCAM_LENSDIRECTION_OUT</a>){
+      //レンズの向きは、外側（"UMD"側）を向いている
+   }
+   else{
+      //レンズの向きは、内側（ディスプレイ側）を向いている
+   }
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>USBデバイスの停止</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbDeactivate">sceUsbDeactivate</a>()を実行すると、USBデバイスが停止し、自動的にUSBマイクへの電源供給が停止されます。そのため、しばらくカメラ入力を使用しないような場合にUSBデバイスを停止させておくことで、消費電力を抑えることができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// USBデバイスの停止
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbDeactivate">sceUsbDeactivate</a>() &lt; 0) {
+      // エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>USBドライバの停止</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の順番で<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>()を実行し、各USBドライバを停止させます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// USBカメラマイクドライバの停止
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAMMIC_NAME">SCE_USBCAMMIC_NAME</a>, 0, NULL) &lt; 0) {
+      // エラー処理
+}
+
+// USBカメラドライバの停止
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>(<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_NAME">SCE_USBCAM_NAME</a>, 0, NULL) &lt; 0) {
+      // エラー処理
+}
+
+// USBアクセサリベースドライバの停止
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>(SCE_USBACC_NAME, 0, NULL) &lt; 0) {
+      // エラー処理
+}
+
+// USBバスドライバの停止
+if (<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>(SCE_USB_BUS_DRIVER_NAME, 0, NULL) &lt; 0) {
+      // エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>USBドライバのアンロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アンロード方法についてはサンプルプログラムを参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>動作解説</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>挿抜検出について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラライブラリ自身、抜出検出は行いますが、挿入時の検出はUSBドライバの<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbGetState">sceUsbGetState</a>()等を使用したほうが効率的です。USBカメラライブラリの実行時に、USBカメラの抜出が行われた場合は、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>がAPIより返ります。<br>USBカメラライブラリより、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_NOT_AVAILABLE">SCE_USBCAM_ERROR_NOT_AVAILABLE</a>エラーが返された時には、ユーザにUSBカメラの接続を促すダイアログを表示するなどの対処を行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>USBカメラライブラリに対応していないUSBアクセサリとの接続</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラライブラリに対応していないUSBアクセサリを接続した場合には、そのUSBアクセサリは認識されず、USBアクセサリを接続していない場合と同じ状態になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>USBアクセサリ以外のUSBホストとの接続</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラライブラリを使用した場合、PSP&reg;はUSBホストからはオーディオクラスのUSBスピーカーとベンダー固有のドライバの３つの複合デバイスとして見えますが、USBマイクと同じように、USBスピーカーとして動作しません。<br><br>PSP&reg;専用USBアクセサリに接続されているのか、それ以外のUSBホストに接続されているのかは、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbAccGetAuthStat">sceUsbAccGetAuthStat</a>() を使用することで判断できます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>取得されるJPEGデータの大きさについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラの性質により、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupVideo">sceUsbCamSetupVideo</a>()及び<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupStill">sceUsbCamSetupStill</a>()で指定した取得されるJPEGデータサイズより大きいJPEGデータサイズが得られることがあります。<br><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupVideo">sceUsbCamSetupVideo</a>()または<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupStill">sceUsbCamSetupStill</a>()にて指定したJPEGデータサイズより大きなデータサイズのJPEGデータが得られた際に、受け取り先のバッファがデータサイズより大きい場合は、受け取りが可能な場合があります。<br>また、受け取り先のバッファが得られた画像データより小さい場合は、はみ出たデータが切られた形で、バッファに納められます。その際、<a href="../peripheral/USB_Camera-Reference-Japanese.htm#SCE_USBCAM_ERROR_BUFFER_SIZE">SCE_USBCAM_ERROR_BUFFER_SIZE</a>が<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamReadVideoFrameBlocking">sceUsbCamReadVideoFrameBlocking</a>()等から返されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>JPEGデータ内のカウンタについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamReadVideoFrame">sceUsbCamReadVideoFrame</a>()及び<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamReadVideoFrameBlocking">sceUsbCamReadVideoFrameBlocking</a>()にから得られるJPEGデータの11byte目に0-255までのループカウンタが入っています。フレーム毎に1加算されて、255を経て０に戻り、繰り返されます。コマ落ちの検出に活用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>動画取得時のパラメータ変更について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">動画取得実行時に、APIを呼ぶことにより、画像の設定を変化させることが可能ですが、発行直後のJPEGデータが破損している可能性があるため注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>静止画取得時について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">動画取得時に静止画を取得することは出来ません。<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStopVideo">sceUsbCamStopVideo</a>()にて動画取得を停止してから<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStillInput">sceUsbCamStillInput</a>()等を呼んでください。また、静止画取得中に動画取得を開始することも出来ないので注意してください。<br>動画撮影時の縦横比の違う解像度を静止画撮影時に指定した場合、撮影範囲がずれることに注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>静止画取得時のパラメータについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">明るさ、鮮やかさ、濃淡、シャープネス、ズーム等のパラメータは<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupStill">sceUsbCamSetupStill</a>()にて設定できません。それらを設定するAPIを<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamStillInput">sceUsbCamStillInput</a>()等の前に発行してください。<br>これらの設定は、動画取得時に動的に選択されることが前提となっています。<br>XGA、SXGAの大きさの静止画を取得する場合は、動画撮影側のフレームレートを15fps以下にしてください。<br>フレームレートはセンサーのゲイン、シャッタースピード、露出計測、圧縮速度などに関係しています。これらの要素は動画撮影および静止画撮影の両方から共用していますが、動画撮影開始時にしか設定は出来ません。フレームレートが30fps以上の場合のXGA,SXGAの解像度の撮影は、ハードウェア性能の上限を超えてしまうため、このような制限があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_9">
+<h3>
+<a href="#Heading3_3"> 3. </a>9 
+<!-- hp1 --><b>カメラの回転検出について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">カメラの回転検出はコールバックを登録することによって、回転を検出した際にコールバックに通知されます。取得画像自体の反転は利用するアプリの判断に任せます。<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamAutoImageReverseSW">sceUsbCamAutoImageReverseSW</a>()にて設定されない限り、ライブラリ側で画像を反転させるようなことはありません。<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamAutoImageReverseSW">sceUsbCamAutoImageReverseSW</a>()にて自動反転が設定された場合、自分側が撮影されてる場合は鏡像反転、相手側が撮影されている場合は、上下・鏡像反転がライブラリおよびUSBカメラにて行われます。<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamGetLensDirection">sceUsbCamGetLensDirection</a>()にてカメラの向きを知る場合、USBカメラがConfigured状態直後にて呼び出すと、ライブラリによるカメラ状態取得が完了していない場合があります。その際は、再度、間をおいてからAPIを呼び出してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_10">
+<h3>
+<a href="#Heading3_3"> 3. </a>10 
+<!-- hp1 --><b>露出について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">露出はカメラレンズのｆ値(f=2.8)と<a href="../peripheral/USB_Camera-Reference-Japanese.htm#sceUsbCamSetupVideo">sceUsbCamSetupVideo</a>()にて指定されるISO感度を基に、USBカメラが自律的に判断します。判断の傾向として、被写体が白い（明るい）ときは見た目より暗い画像が、被写体が黒い（暗い）ときは見た目より明るい画像が得られます。<br>被写体に応じて、白いときはEV値を増加させる、黒いときはEV値を減少させると、見た目に近い画像が得られることになります。<br>露出は動画撮影時に計測しています。そのため一度でも動画撮影をし、画像を取得しないと露出は正しく反映されません。静止画撮影自体は単独で連続して行うことは可能ですが、最後に行った動画撮影時の露出で静止画が撮影されます。その間に被写体の光量が変化した場合、動画撮影を行わないと適正な露出が得られません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_11">
+<h3>
+<a href="#Heading3_3"> 3. </a>11 
+<!-- hp1 --><b>ズーム機能について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ズームはデジタルズームで最大8.0倍まで可能ですが、撮影している解像度とフレームレートにより最大倍率が変ります。フレームレートに因る最大倍率の制限は以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>QQVGA</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>QCIF</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>QVGA</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>CIF</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>VGA</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>XGA</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>SXGA</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PSP1</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PSP2</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;15fps以下&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;6.6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3.3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2.8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3.6&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;15fpsより大きい&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3.3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.8&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">ズーム倍率は動画と静止画とで共通ですが、動画よりも大きな解像度を指定して静止画を取得する場合、ズーム倍率が静止画の解像度（より大きな解像度）の制限に従って切り下げられることがあります。つまり、動画に写る範囲よりも静止画に写る範囲が広くなることがあります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_12">
+<h3>
+<a href="#Heading3_3"> 3. </a>12 
+<!-- hp1 --><b>USB帯域上限について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">動画撮影時にて動画転送のために確保している帯域量は896kByte/secとなっています。動画一枚あたりの最大サイズは(896/フレームレート)kByteと成ります。これ以上のサイズを指定した場合、指定されたフレームレートを維持できない場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_13">
+<h3>
+<a href="#Heading3_3"> 3. </a>13 
+<!-- hp1 --><b>フリッカの自動検出について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">フリッカは自動検出を指定した場合、カメラにて補正が行われますが、フレームレートを3.75fpsおよび60fpsを指定した場合、被写体周辺の光量が少ない場合は、フリッカが発生します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>USBマイクライブラリについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBカメラハードウェア自身は、USBマイクライブラリを使用することにより、USBマイクハードウェアと同様に使用可能ですが、USBカメラライブラリと併用は出来ないので、注意してください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

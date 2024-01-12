@@ -1,0 +1,1144 @@
+<html lang="jp">
+<head>
+<title>Programming-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;プログラミングチュートリアル
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;のメモリ上には、複数のプログラムをロードすることが可能です。<br><br>メモリ上にロードされた一つのプログラムをプログラムモジュール、あるいは単にモジュールと呼び、PSP&reg;カーネルはメモリ上のモジュールを管理しています。<br><br>PSP&reg;カーネルのローダの扱えるオブジェクトファイルは、<b>PRX</b>と呼ばれるPSP&reg;カーネル独自のリロケータブルオブジェクトファイルと、通常のELF実行形式オブジェクトファイルの2種類です。<br><br>メモリ上にロードされたモジュールには、識別用のID番号(32bit)が割り当てられます。このID番号をモジュールIDと呼びます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>モジュールのプログラムで最低限必要なこと</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">モジュールには、モジュール名とモジュールバージョンをつけなければなりません。<br><br>モジュールのソースプログラム中で、以下のようにマクロSCE_MODULE_INFO( name, attribute, major, minor)を使用して宣言します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;kernel.h&gt;
+SCE_MODULE_INFO( Module_name, 0, 1, 1 );
+</font></pre></div>
+<div style="margin-left:50px;"><br>モジュールの名称nameは27文字以内で、Cの識別子と同様に、英字、'_'で始まり、英数字、'_'で構成される必要があります。モジュール名はオブジェクトファイルの中に文字列データとして格納され、デバッグ時にデバッガなどがモジュールを識別するために使用されます。<br>モジュール名がそのまま通常のシンボルになることはありませんので、関数名や変数名との衝突を心配する必要はありません。<br>なお、PSP&reg;カーネルは、同名のモジュールを同時に複数ロードすることを通常は許しています。これを禁止したい場合は、下記の属性で行ってください。<br><br>補足：<br>SCE_MODULE_INFO()の宣言は、kernel.hからインクルードされるmoduleexport.h内にあります。<br><br>attributeには、モジュールの属性を指定します。<br>以下の属性を指定するビットがあります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_MODULE_ATTR_CANT_STOP = 0x0001<br>モジュールの停止は不可能(ストップエントリが無い場合のみ有効)
+<li> SCE_MODULE_ATTR_EXCLUSIVE_LOAD = 0x0002<br>同名のモジュールが既にロードされていたらロード不可能
+<li> *SCE_MODULE_ATTR_EXCLUSIVE_START = 0x0004<br>同名のモジュールが既にスタートしていたらスタート不可能
+</ul></div>
+<div style="margin-left:50px;"><br>majorとminorは、モジュールのバージョンを指定します。バージョン番号の値は自由です。<br>(SCE製のモジュールは、メジャーバージョン、マイナーバージョンとも、1以上の値を用います。0は、モジュールの総称用に予約しています。)<br><br>モジュールには、モジュールを起動するためのスタートエントリ関数が必要です。<br>スタートエントリ関数は、以下のようにSCE_MODULE_START()マクロによって任意の関数を指定することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;kernel.h&gt;
+
+SCE_MODULE_INFO( MyModule_name, 0, 1, 1);
+
+SCE_MODULE_START(MyStart);
+int MyStart(int args, char *argp)
+{
+   ......
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">モジュールにはまた、モジュールを停止するためのストップエントリ関数を設定することが可能です。SCE_MODULE_STOP()を使用して指定します。<br><br>スタート関数、ストップ関数のプロトタイプは、以下の通りです。<br>引数の意味は、スレッドのエントリ関数に準じます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+     int module_start( SceSize argSize, const void *argBlock );
+     int module_stop ( SceSize argSize, const void *argBlock );
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>コンパイルとリンクの基本</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>prx形式のオブジェクトファイルのリンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムのコンパイルとprx生成のためのリンクは、以下のように行います。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -o program.prx xxx.o yyy.o -lanylib -lanystublib
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>elf形式のオブジェクトファイルのリンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムのコンパイルとelf生成のためのリンクは、以下のように行います。<br>elf生成の指定のためには-zgenelfオプションを使用します。-zgenelfオプションを指定した場合、libc,crt0等のライブラリは暗黙のうちにリンクされ、モジュールのエントリ関数は自動的にcrt0内のスタート関数に設定されます。crt0内からmain()関数を呼び出しますので、プログラムにはmain()関数を用意してください。（従って、SCE_MODULE_START()マクロは使わないでください。）<br>main()関数のプロトタイプはANSIで規定されている通りです。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -zgenelf -o program.elf xxx.o yyy.o -lanylib -lanystublib
+
+</font></pre></div>
+<div style="margin-left:50px;">elf形式のオブジェクトファイルは、デフォルトでは0x08804000というロードアドレスで生成されます。'-Wl,--section-start -Wl,.init=&lt;hex_address&gt;'を指定することでロードアドレスを変更することができます。ただし指定した領域が既に利用されている場合、モジュールのロードに失敗するので注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>libc,crt0付きprx形式のオブジェクトファイルのリンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libc,crt0をリンクするprxを生成するためのリンクは、以下のように行います。<br>-startfilesオプションを指定した場合、モジュールのエントリ関数は自動的にcrt0内のスタート関数に設定されます。<br>crt0内からmain()関数を呼び出しますので、プログラムにはmain()関数を用意してください（従って、SCE_MODULE_START()マクロは使わないでください）。main()関数のプロトタイプは、ANSIで規定されている通りです。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -startfiles -o program.prx xxx.o yyy.o -lanylib
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>常駐ライブラリについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PRX形式のモジュールは、自らのもつ関数群の一部を他のモジュールに提供する常駐ライブラリになることができます。<br><br>常駐ライブラリのプログラムでは、以下の二つのマクロを使用して他のモジュールに提供するライブラリ名と関数名、変数名を定義します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+SCE_LIB_DECLARE( &lt;libname&gt;, &lt;attribute&gt; )
+SCE_LIB_EXPORT( &lt;funcname&gt;, &lt;libname&gt; )
+
+</font></pre></div>
+<div style="margin-left:50px;">&lt;libname&gt;は、Cで許される識別子で指定します。<br>&lt;libname&gt;は、このまま自モジュール内でのグローバルシンボルになります。従って、他の関数や変数と同名のライブラリ名は使用できません。<br><br>&lt;attribute&gt;には、以下のものがあります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_LIB_AUTO_EXPORT(=0x0001)<br>モジュールが起動される直前に自動的にシステムに登録
+<li> SCE_LIB_WEAK_EXPORT(=0x0002)<br>同名、同バージョンの常駐ライブラリに上書きされる
+<li> SCE_LIB_WEAK_IMPORT(=0x0008)<br>リンク先のライブラリが存在しない場合にエラーにしない
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:50px;">コーディングは、以下のように行います。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;kernel.h&gt;
+/* 他モジュールに提供する関数のグループ(=ライブラリ)名の宣言 */
+SCE_LIB_DECLARE( XXX_library, SCE_LIB_AUTO_EXPORT|SCE_LIB_WEAK_IMPORT);
+
+SCE_LIB_EXPORT( Function1, XXX_library );
+int Function1(...)
+{
+    ........
+}
+
+SCE_LIB_EXPORT( Function2, XXX_library );
+int Function2(...)
+{
+    ........
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">SCE_LIB_EXPORT()は、必ずしも関数や変数の定義に隣接して使用する必要はありません。一カ所にまとめて宣言することも、別ソース上で宣言することも可能です。<br><br>上記の例では、SCE_LIB_AUTO_EXPORTによりライブラリのシステムへの登録を自動化していますが、以下のように、実行時にライブラリの公開をコントロールすることも可能です。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;kernel.h&gt;
+
+/* 他モジュールに提供する関数のグループ(=ライブラリ)名の宣言 */
+SCE_LIB_DECLARE( XXX_library, SCE_LIB_AUTO_EXPORT|SCE_LIB_WEAK_IMPORT);
+SCE_LIB_DECLARE( YYY_library, SCE_LIB_WEAK_IMPORT);
+
+SCE_LIB_EXPORT( Function1, XXX_library );
+int Function1(...)
+{
+    ........
+    sceKernelRegisterLibraryEntries(YYY_library);
+    ........
+}
+
+SCE_LIB_EXPORT( Function2, XXX_library );
+int Function2(...)
+{
+    ........
+    sceKernelReleaseLibraryEntries(YYY_library);
+    ........
+}
+
+SCE_LIB_EXPORT( Function3, YYY_library );
+int Function3(...)
+{
+    ........
+    sceKernelReleaseLibraryEntries(XXX_library);
+    ........
+}
+
+SCE_LIB_EXPORT( Function4, YYY_library );
+int Function4(...)
+{
+    ........
+}
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>常駐ライブラリのコンパイルの仕方</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">常駐ライブラリ自身のコンパイルは、他のPRXと変りありません。<br>以下のように、普通に行えます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -o program.prx xxx.o yyy.o -lanylib -lanystublib
+
+</font></pre></div>
+<div style="margin-left:50px;">常駐ライブラリを作成時に、利用側にモジュールにスタティックリンクするためのstubライブラリを同時に作成する必要があり、以下のように行います。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -zgenstubarchive -zv xxx.o yyy.o -lanylib
+
+</font></pre></div>
+<div style="margin-left:50px;">こうして出来た&lt;libname&gt;_stub.aを利用側のプログラムにリンクします。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>常駐ライブラリを利用するPRX/ELFのコンパイルの仕方</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">常駐ライブラリを利用するモジュールは、常駐ライブラリの作成者が提供するstubライブラリを、通常のライブラリと同様にリンクします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c aaa.c
+$ psp-gcc -c bbb.c
+$ psp-gcc -o clientprogram.prx aaa.o bbb.o -lanylib -lXXX_stub.a
+または、
+$ psp-gcc -o clientprogram.prx aaa.o bbb.o -lanylib libXXX.a
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>C++による常駐ライブラリの作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、常駐ライブラリをC++で記述する方法について説明します。<br>C++では、クラスや名前空間によって同名のエントリが複数存在し、マングルと呼ばれる操作によって変換された名前がリンクに使用されます。このため、C++で記述したPRXから関数・変数を公開するには、ソース中でSCE_LIB_EXPORTPICKUP_NAMESPACE()などのマクロを用いて公開する関数・変数を指定し、pspexportpickupコマンドを用いてマングル後の公開関数・変数を探し出し、それにしたがってPRXを作成するという手順を踏む必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>コーディング：公開ライブラリの定義</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">C++で常駐ライブラリのPRXを記述する際には、ヘッダファイルexportcplusplus.hで定義されている次のマクロを使って、公開する関数・変数を指定してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_LIB_EXPORTPICKUP_NAMESPACE( <i>pattern_str</i>, <i>lib_name</i> )
+<li> SCE_LIB_EXPORTPICKUP_CLASS( <i>pattern_str</i>, <i>lib_name</i> )
+<li> SCE_LIB_EXPORTPICKUP_CPP_FUNC(<i> pattern_str</i>, <i>lib_name </i>)
+<li> SCE_LIB_EXPORTPICKUP_CPP_VAR( <i>pattern_str</i>, <i>lib_name</i> )
+</ul></div>
+<div style="margin-left:50px;">各マクロの詳しい使用方法は、他のマクロとあわせて後述します。次の例では、MyClass1とMyClass2のすべての関数と変数をLibMyClassというライブラリとして公開しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_1">
+<div style="margin-left:40px;"><h4><b>C++でのライブラリ公開の例</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;kernel.h&gt;
+#include &lt;MyClass1.h&gt;
+#include &lt;MyClass2.h&gt;
+
+SCE_MODULE_INFO( CplusplusExport, 1, 0);
+SCE_LIB_DECLARE( LibMyClass, SCE_LIB_AUTO_EXPORT );
+SCE_LIB_EXPORTPICKUP_CLASS( "MyClass1", LibMyClass );
+SCE_LIB_EXPORTPICKUP_CLASS( "MyClass2", LibMyClass );
+
+int MyClass1::export1()
+{
+...
+} 
+
+int MyClass2::export1()
+{
+	...
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>コンパイルとリンク：pspexportpickupコマンドの使用法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspexportpickupコマンドは、SCE_LIB_EXPORTPICKUP_*()マクロで指定された公開関数・変数に対応するマングルされたシンボルをオブジェクトファイルから探し出し、ライブラリ定義をCのソースコードとして生成しなおします。このソースコードをコンパイルし、他のオブジェクトファイルとリンクすることで常駐ライブラリを作成することができます。<br>以下の例では、export.cpp/MyClass1.cpp/MyClass2.cppから公開されているライブラリ定義をprxexport.cとして生成しなおし、それを用いてPRXを作成しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2_2">
+<div style="margin-left:40px;"><h4><b>prxexportpickupの利用例</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>% psp-g++ -c export.cpp 
+% psp-g++ -c MyClass1.cpp 
+% psp-g++ -c MyClass2.cpp 
+% pspexportpickup -o prxexport.c export.o MyClass1.o MyClass2.o
+% psp-gcc -c prxexport.c
+% psp-g++ export.o MyClass1.o MyClass2.o prxexport.o -zgenstubarchive
+% psp-g++ export.o MyClass1.o MyClass2.o prxexport.o -startfiles -o export.prx
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>SCE_LIB_EXPORTPICKUPマクロの使用法</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_1"><h4>
+(1)&nbsp;<b>SCE_LIB_EXPORTPICKUP_NAMESPACE()：指定した名前空間全体を公開する</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_1_1">
+<div style="margin-left:63px;"><h4><b>書式</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_NAMESPACE( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;"><i>pattern_str</i>で指定した名前空間に属するC++のグローバルシンボルをすべて公開します。<br>名前空間は"ns1"や"ns1::ns2"のように文字列の形で指定してください。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_1_2">
+<div style="margin-left:63px;"><h4><b>名前空間を公開する例</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_NAMESPACE( "his_namespace::subns", my_lib_name );
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_2"><h4>
+(2)&nbsp;<b>SCE_LIB_EXPORTPICKUP_CLASS()：指定したクラス全体を公開する</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_2_1">
+<div style="margin-left:63px;"><h4><b>書式</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CLASS( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;"><i>pattern_str</i>で指定したクラスに属するグローバルシンボルをすべて公開します。<br>クラスは、"class_name"や"ns1::ns2::class_name"のように文字列の形で指定してください。クラス名の部分は、クラス名そのものか、あるいはひとつだけ'@'を含んだ"ns1::ns2::xxx@"、"ns1::ns2::@xxx"、"ns1::ns2::xxx@xxx"、あるいは"ns1::ns2::@"のような指定もできます。'@'は、ワイルドカードで、0文字以上の任意の長さの文字列を表します。ただし、すべてをマッチさせる'::@'と'@'の指定は禁止です。<br>クラスの継承関係は認識されないので、あるクラスを公開するときには、ベースクラスも明示的に公開しなければなりません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_3"><h4>
+(3)&nbsp;<b>SCE_LIB_EXPORTPICKUP_CPP_FUNC()：指定した関数を公開する</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_3_1">
+<div style="margin-left:63px;"><h4><b>書式</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_FUNC( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;"><i>pattern_str</i>で指定したパターンにマッチするC++のグローバル関数をすべて公開します。<br>パターンは、"namespace::funcname"のように名前空間と関数名からなる文字列の形で指定してください。関数名の部分は関数名そのものか、あるいはひとつだけ'@'を含んだ"ns1::ns2::fff@"、"ns1::ns2::@fff"、"ns1::ns2::nnn@fff"、あるいは"ns1::ns2::@"のような指定もできます。'@'は、ワイルドカードで、0文字以上の任意の長さの文字列を表します。ただし、すべてをマッチさせる'::@'と'@'の指定は禁止です。<br>パターンには、関数の引数のプロトタイプを含めることもできます（引数名は省いてください）。この場合は、ワイルドカード'@'は、指定できません。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_3_2">
+<div style="margin-left:63px;"><h4><b>関数を指定して公開する例</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_FUNC( "ns1::func1", my_lib_name );
+SCE_LIB_EXPORTPICKUP_CPP_FUNC( "class1::func1", my_lib_name );
+SCE_LIB_EXPORTPICKUP_CPP_FUNC( "func2(int)", my_lib_name );
+SCE_LIB_EXPORTPICKUP_CPP_FUNC( "func2(char,int)", my_lib_name );
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_4"><h4>
+(4)&nbsp;<b>SCE_LIB_EXPORTPICKUP_CPP_VAR()：指定した変数を公開する</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_4_1">
+<div style="margin-left:63px;"><h4><b>書式</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_VAR( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;"><i>pattern_str</i>で指定したパターンにマッチするC++のグローバル変数をすべて公開します。<br>パターンは、"namespace::varname"のように名前空間と変数名からなる文字列の形で指定してください。変数名の部分は変数名そのものか、あるいはひとつだけ'@'を含んだ"ns1::ns2::fff@"、"ns1::ns2::@fff"、"ns1::ns2::nnn@fff"、あるいは"ns1::ns2::@"のような指定もできます。'@'は、ワイルドカードで、0文字以上の任意の長さの文字列を表します。ただし、すべてをマッチさせる'::@'と'@'の指定は禁止です。<br>C++の変数であっても名前空間外にあるものは、Cの変数とみなされてマッチしないことに注意してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_5"><h4>
+(5)&nbsp;<b>IGNORE指定：公開しない関数・変数を指定する</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">SCE_LIB_EXPORTPICKUP_NAMESPACE()などのマクロは、条件に合致する複数のシンボルをすべて公開する働きを持ちますが、逆に、以下の二つのマクロを使うと、指定した条件に合致するシンボルを公開しないという指定を行うことができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_FUNC_IGNORE( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_VAR_IGNORE( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">これらのマクロは、すでにSCE_LIB_EXPORTPICKUP_NAMESPACE()などでピックアップされているグローバルシンボルから、pattern_strで指定したパターンにマッチするグローバルシンボルを除外する働きを持ちます。次の例では、MyClassクラスに属するグローバルシンボルのうち、MyClass::funcaとMyClass::funcb以外が公開されます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_5_1">
+<div style="margin-left:63px;"><h4><b>IGNORE指定の例</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CLASS( "MyClass", my_lib_name )
+SCE_LIB_EXPORTPICKUP_CPP_FUNC_IGNORE( "MyClass::funca", my_lib_name )
+SCE_LIB_EXPORTPICKUP_CPP_FUNC_IGNORE( "MyClass::funcb", my_lib_name )
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_6"><h4>
+(6)&nbsp;<b>LOCAL指定：特定のファイルに対する公開指定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">SCE_LIB_EXPORTPICKUP_NAMESPACE()などのマクロは、exportpickupコマンドで同時に処理されるすべてのファイルから公開すべきシンボルをピックアップする働きを持ちます。ひとつのファイルに限ってシンボルをピックアップしたい場合は、以下のマクロを使用してください。これらのマクロは、記述されている同一のファイル内に対してのみ有効です。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_LOCAL_FUNC( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_LOCAL_VAR( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_LOCAL_FUNC_IGNORE( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_LOCAL_VAR_IGNORE( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">たとえば、objecta.oの中に公開したいfunca()とfunca(int)があり、objectb.oの中には公開したくないfunca(char)がある場合、objecta.oのソースファイル中で次のように指定することができます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_7_3_6_1">
+<div style="margin-left:63px;"><h4><b>LOCAL指定の例</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_LOCAL_FUNC( "MyClass::funca", my_lib_name )
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_7"><h4>
+(7)&nbsp;<b>IGNORE指定とLOCAL指定との評価順について</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">SCE_LIB_EXPORTPICKUP*()マクロには、以下の優先順位があり、pspexportpickupコマンドでオブジェクトファイルをどの順番で指定しても同じ結果が得られるようになっています。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> IGNORE指定は、他のすべてオブジェクトでの公開指定より優先。
+<li> LOCALなIGNORE指定は、他のすべてオブジェクトの公開指定より優先。
+<li> LOCALな公開指定は、他のすべてオブジェクトのIGNORE指定より優先。
+<li> LOCALな公開指定とLOCALなIGNORE指定は記述順に評価。
+</ul></div>
+<div style="margin-left:67px;">マトリクスにして示すと、以下のようになります。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>-</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;順不問&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;記述順&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;順不問&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;IGNORE+LOCAL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;順不問&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PICKUP+LOCAL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;順不問&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;順不問&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;IGNORE&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;順不問&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>libc共有</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">-startfilesオプションをつけてコンパイルしたモジュールには、libcライブラリやcrt0等がスタティックリンクされます。このようなモジュールを同時に複数ロードしたときのメモリの状態は、以下に示す図 1のようになります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Programming-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">図 1からも分かるように、libcライブラリやcrt0をスタティックリンクしているモジュールを複数ロードすると、libcやcrt0もメモリ上に複数存在するので、メモリの利用効率が良くありません。<br><br>PSP&reg;では、このような状態を避けるため、libcを共有ライブラリのように扱う方法を提供しています。<br>libcを複数モジュール間で共有するには、<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> libcをスタティックリンクし、他モジュールに対してエクスポートするモジュール（メインモジュール）
+<li> メインモジュールがエクスポートしたlibcをインポートして使用するモジュール（サブモジュール）
+</ul></div>
+<div style="margin-left:50px;">という2種類のモジュールに分けてコンパイルします。<br>サブモジュールは、メインモジュールがスタティックリンクしたlibcを共有する形となり、メモリの利用効率は向上します。<br>これらのモジュールを同時にロードしたときの様子を図 2に示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Programming-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>メモリアロケーション用のheap領域は、libc毎に確保されるため、libcを共有ライブラリのように扱うときには、複数のモジュールが1つのheap領域を利用します。このとき、1つのモジュールがメモリリークを起こすと、他のモジュールにまで影響が及んでしまいますので、実装に際して注意を払う必要があります。<br>また、libcをexportするメインモジュールは、システム中に一つだけしか存在できませんし、サブモジュールよりも先にロードされていなければならないので、モジュール構成やロード順序なども考慮してコンパイルする必要があります。<br><br>psp-gccは、以下のオプションを用意してこの機能をサポートしています。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-startfiles&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libcやcrt0等のライブラリをスタティックにリンクする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zuse-shared&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libcをスタティックリンクせずにexportされたlibcとリンクする&nbsp;&nbsp;<br>&nbsp;&nbsp;crt0_prx.oの代わりにcrt0_prxlibc.oをリンクする&nbsp;&nbsp;<br>&nbsp;&nbsp;kernel_bridge.oをリンクしない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zexportlibc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;exportlibc.oをリンクする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zexportlibm&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;exportlibm.oをリンクする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mno-crt0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;標準のcrt0をリンクしない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">メインモジュールとサブモジュールのコンパイルは、以下のように行います。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><b>（メインモジュール）</b>
+
+$ psp-gcc -startfiles -o program.prx xxx.o yyy.o -zexportlibc -lanylib -lanystub
+
+<b>（サブモジュール）</b>
+
+$ psp-gcc -startfiles -o library.prx xxx.o yyy.o -zuse-shared -mno-crt0
+$ psp-gcc -zgenstubarchive -zx xxx.o yyy.o -lanylib
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>シンボル情報とデバッグ情報について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">オブジェクトファイルから、シンボル情報やデバッグ情報を除去する場合、PRXファイルに対しては、psp-prx-stripコマンドを使用してください。<br>ELFファイルに対しては、psp-gnu-stripコマンドを使用してください。<br><br>PRXファイルに対し、一般のpsp-gnu-stripコマンドを使用するとロードも実行もできないオブジェクトファイルになります。注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>psp-prx-stripの例</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PRXファイルのシンボル情報を削除し、ファイルサイズを小さくするには上記のように、psp-prx-stripコマンドを利用します。<br><br>まず単純にビルドします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-g++ -Wall -g -I../../include -c -o hellocpp.o hellocpp.cpp
+$ psp-g++ -Wall -g -I../../include -g hellocpp.o -startfiles -o hellocpp.prx
+
+</font></pre></div>
+<div style="margin-left:50px;">シンボル付オブジェクトファイルを保存しておきます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ cp hellocpp.prx hellocpp.sym
+
+</font></pre></div>
+<div style="margin-left:50px;">psp-prx-stripコマンドでオブジェクトファイルからシンボルを削除します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-prx-strip hellocpp.prx
+
+$ ls -al hellocpp.prx hellocpp.sym
+-rw-rw-r--    1 psp      psp        392720  6月 24 09:57 hellocpp.prx
+-rw-rw-r--    1 psp      psp       4455428  6月 24 09:56 hellocpp.sym
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_3">
+<div style="margin-left:40px;"><h4><b>注意1：stripに関して</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PRXファイルに対してpsp-gnu-stripコマンドを使用すると、PSP&reg;カーネルが実行時に参照するPRXの情報まで削除してしまうため、必ずpsp-prx-stripを利用してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_4">
+<div style="margin-left:40px;"><h4><b>注意2：デバッガに関して</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PRXのシンボル情報を削除した場合、カーネルに対してはシンボルなしファイルを与え、デバッガに対してはシンボル付きファイルを与えます。<br><br>カーネルにPRXをロードします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+dstdb&gt; mload hellocpp.prx
+
+</font></pre></div>
+<div style="margin-left:67px;">その後、シンボルだけをデバッガに読み込みます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+dstdb&gt; sload hellocpp.sym
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>psp-gccについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">psp-gccコマンドの利用の仕方を以下に簡単に説明します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;書式1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc -c ソースファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;書式2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc -o &lt;prxファイル名&gt;  &lt;オブジェクトファイル名&gt;... &lt;ライブラリ指定&gt;...&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;書式3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc -zgenelf -o &lt;elfファイル名&gt;  &lt;オブジェクトファイル名&gt;... &lt;ライブラリ指定&gt;...&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">書式1によって、Cのソースコードをコンパイルアセンブルし、リロケータブルオブジェクトファイルを作成します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> -gを指定することで、デバッグ情報をオブジェクトファイルに含めることができます。
+</ul></div>
+<div style="margin-left:50px;"><br>書式2によって、コンパイル済のオブジェクトをリンクし、prx形式オブジェクトファイルを生成します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> -startfilesを指定することにより、libc(newlib)とcrt0.oをリンクしてmain()関数のあるプログラムを作成することができます。
+<li> -sを指定することで、出来上がるprxファイルからシンボル情報とデバッグ情報を削除することができます。
+<li> -gを指定することで、デバッグ情報をオブジェクトファイルに含めることができます。
+<li> -vや-tを指定することで、コンパイルの詳細な手順を表示したり、リンク時に読み込まれるライブラリの詳細を表示することができます。
+<li> -zvや-zdumpを指定することで、常駐ライブラリとしてexportしている関数名等の情報を表示することができます。
+<li> -zweak-entryを指定することで、exportするライブラリ全部に強制的にWEAK_EXPORT属性を付けられます。
+<li> -zweak-entry=&lt;libname&gt;により指定したライブラリにのみWEAK_EXPORT属性を付けられます。
+</ul></div>
+<div style="margin-left:50px;"><br>書式3によって、コンパイル済のオブジェクトをリンクし、elf形式オブジェクトファイルを生成します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> -sを指定することで、出来上がるelfファイルからシンボル情報とデバッグ情報を削除することができます。
+<li> -gを指定することで、デバッグ情報をオブジェクトファイルに含めることができます。
+<li> -vや-tを指定することで、コンパイルの詳細な手順を表示したり、リンク時に読み込まれるライブラリの詳細を表示することができます。
+<li> -Wl,--section-start -Wl,.init=&lt;hex_address&gt;を指定することでロードアドレスを変更することができます。
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>例: psp-gcc -Wl,--section-start -Wl,.init=0x08840000 -zgenelf -o &lt;elfファイル名&gt;  .....
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>psplibgenについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">psplibgenはコンパイルのプロセスの中で、psp-gccから自動的に起動され常駐ライブラリのリンクに必要な構造体を生成する機能をもつコマンドです。<br>通常は単独で使用する必要はありませんが、以下に簡単に説明します。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_5">
+<div style="margin-left:40px;"><h4><b>書式:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">psplibgen &lt;オプション&gt;...  &lt;elf_object_file&gt;<br></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:67px;">オプション:<br></div>
+<div style="margin-left:80px;">--level &lt;openlevel&gt;<br>--level all<br>--entry-src &lt;entry_asm_sorce&gt;<br>--num-devine &lt;func-no-define-source&gt;<br>--stub-src<br>--weak-stub<br>--no-weak-stub<br>--weak-stub=&lt;libname&gt;<br>--weak-entry<br>--no-weak-entry<br>--weak-entry=&lt;libname&gt;<br></div>
+<div style="margin-left:50px;"><br>オブジェクトファイル&lt;elf_object_file&gt;を読み込み、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> エントリテーブルファイル &lt;entry-asm-source&gt;
+<li> スタブテーブルファイル   &lt;ライブラリ名&gt; + '_stub.s'
+<li> ファンクション番号定義ファイル &lt;func_num_define&gt;
+</ul></div>
+<div style="margin-left:50px;">のいずれかを出力します。<br><br>&lt;openlevel&gt;は、0-30の数値またはallで、stubに出力するエントリの公開度を指定します。<br>--weak-stubを指定することで、出力するstubに強制的にWEAK_IMPORT属性を付けられます。<br>--weak-stub=&lt;libname&gt;により指定したライブラリ名にのみWEAK_IMPORT属性を付けられます。<br>--weak-entryを指定することで、強制的にWEAK_EXPORT属性を付けられます。<br>--weak-entry=&lt;libname&gt;により指定したライブラリ名にのみWEAK_EXPORT属性を付けられます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_6">
+<div style="margin-left:40px;"><h4><b>注意:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">本コマンドは暫定仕様であり、予告なく変更することがあります。<br>特に必要のある場合以外は、単独使用しないことをおすすめします。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_12">
+<h2>
+ 12 <!-- hp --><b>psp-gcc等の検索パスと環境変数</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">通常、環境変数PATHには、/usr/local/psp/devkit/binが含まれるように設定してください。<br>/usr/local/psp/devkit/binの下には、psp-gcc, psp-as, psp-g++などのgnuのコマンドと同名のシェルスクリプトが複数存在しています。<br>これらのシェルスクリプトは、/usr/local/psp/gcc-?.?.?/binを検索し、もっとも新しいバージョンのコマンドを探して起動します。<br>何らかの理由で、古いバージョンのpsp-gccを使用したい場合は、環境変数PSP_GCC_VERSIONを設定することにより、この検索機能を無効にして/usr/local/psp/gcc-$PSP_GCC_VERSION/binの下のコマンドを起動することを指定できます。<br><br>/usr/local/psp/gcc-?.?.?/binの下にインストールされているpsp-gcc, psp-cpp,psp-ldなどのコマンドは、PSP&reg;用に、ヘッダファイルやライブラリの検索パスの先頭に/usr/local/psp/devkit/include, /usr/local/psp/devkit/libが追加されています。<br>PSP&reg;用のライブラリやヘッダファイルは、/usr/local/psp/devkitの下にインストールして使います。<br>psp-ldのリンカスクリプトもまず/usr/local/psp/devkit/lib/ldscripts/の下を検索した後、gnu標準の/usr/local/psp/gcc-?.?.?/psp/lib/ldscripts/の下を検索します。<br><br>上記の'/usr/local/psp/devkit'という基準のディレクトリは、環境変数SCE_PSP_SDK_HOMEを設定することによって切り替えることができます。<br>環境変数SCE_PSP_SDK_HOMEを設定するとヘッダファイル、ライブラリファイル、リンカスクリプトは、それぞれ以下のディレクトリになります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$SCE_PSP_SDK_HOME/include
+$SCE_PSP_SDK_HOME/lib
+$SCE_PSP_SDK_HOME/lib/ldscripts
+</font></pre></div>
+<div style="margin-left:50px;"><br>環境変数SCE_PSP_SDK_HOMEの設定を間違えると、PSP&reg;用のヘッダファイルやライブラリが検索できなくなるので注意してください。<br><br>参考までに、/usr/local/psp/devkitの下にあるものを簡単に紹介します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-gcc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-g++&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-as&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-ld&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-gnu-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-prx-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/pspfixup&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;prxコンバータ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psplibgen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;stubジェネレータ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/pspspecs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gccのコンパイルスクリプト&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/crt0_prx.o&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;prx用crt0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/crt0_elf.o&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;elf用crt0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/kernel_bridge.o&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;newlib用グルーコード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/libkernel.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;カーネルが提供するstubライブラリ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/ldscripts/elf32elmip.x&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;カーネル環境用デフォルトリンカスクリプト&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/ldscripts/elf32elmip.xc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;カーネル環境用デフォルトリンカスクリプト&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/ldscripts/prx.xr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;カーネル環境用デフォルトリンカスクリプト&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_13">
+<h2>
+ 13 <!-- hp --><b>ELF形式のオブジェクトリンク時のリンカスクリプトに関しての注意点</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ELF形式のオブジェクトをリンクする場合、現状/usr/local/psp/devkitの下のlib/ldscripts/elf32elmip.xcがデフォルトのリンカスクリプトとして使用されます。<br><br>このスクリプトは、以下の点がgnuのオリジナルのものから変更されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_13_1">
+<h3>
+<a href="#Heading3_13"> 13. </a>1 
+<!-- hp1 --><b>サーチパスの変更</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>SEARCH_DIR("/usr/local/psp/gcc-x.x.x/psp/lib");
+</font></pre></div>
+<div style="margin-left:50px;">の部分が<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SEARCH_DIR("/usr/local/psp/devkit/lib");
+</font></pre></div>
+<div style="margin-left:50px;">に変更されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_13_2">
+<h3>
+<a href="#Heading3_13"> 13. </a>2 
+<!-- hp1 --><b>ロードトップアドレスの変更</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムのロードトップアドレスが、0x08804000に変更されています。<br>PSP&reg;での、ユーザメモリのトップアドレスは、0x08800000です。<br>現状、デフォルトのロードトップアドレスを0x08804000にしています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_13_3">
+<h3>
+<a href="#Heading3_13"> 13. </a>3 
+<!-- hp1 --><b>PSP&reg;用モジュール情報のセクションの追加</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下のセクションをdataセグメントのトップ（プログラムコードの直後）に追加しています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>.lib.ent.top : { *(.lib.ent.top) }
+.lib.ent     : { *(.lib.ent) }
+.lib.ent.btm : { *(.lib.ent.btm) }
+
+.lib.stub.top : { *(.lib.stub.top) }
+.lib.stub     : { *(.lib.stub) }
+.lib.stub.btm : { *(.lib.stub.btm) }
+
+.rodata.sceModuleInfo : { *(.rodata.sceModuleInfo) }
+.rodata.sceResident   : { *(.rodata.sceResident) }
+.rodata.sceNid        : { *(.rodata.sceNid) }
+.rodata.sceVstub      : { *(.rodata.sceVstub) *(SORT(.rodata.sceVstub.*)) }
+</font></pre></div>
+<div style="margin-left:50px;"><br>PSP&reg;カーネルは、ロードするプログラム（オーバーレイ構成を使用しているならば常駐部に）上記のセクションが上記の順で存在することを必要としています。<br>これ等のセクションは、SCE_MODULE_INFO()マクロや、SCE_LIB_EXPORT()マクロ等を使用すると生成されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_14">
+<h2>
+ 14 <!-- hp --><b>crt0/libc(newlib)利用時の補足情報</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">以下はcrt0/libcの使用上の注意点です<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_1">
+<h3>
+<a href="#Heading3_14"> 14. </a>1 
+<!-- hp1 --><b>malloc()用heapのサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libcのヒープメモリサイズは、以下のようにプログラムの中でグローバル変数sce_newlib_heap_kb_sizeにKiB単位のサイズを指定してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int sce_newlib_heap_kb_size = 100;  /* malloc heap size 100KiB */
+
+</font></pre></div>
+<div style="margin-left:50px;">crt0は、通常main()関数を呼び出されるよりも前にこのサイズのカーネルより割り当てます。<br>グローバル変数sce_newlib_heap_delayed_allocに0以外の値を定義すると、プログラムの中で最初にmalloc()や内部で動的にメモリを確保するlibcの関数(printf等)を呼んだ時点まで確保するタイミングを遅延させる事ができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int sce_newlib_heap_delayed_alloc = 1;
+
+</font></pre></div>
+<div style="margin-left:50px;">sce_newlib_heap_delayed_allocを使用して、メモリ確保タイミングを遅延させた場合、malloc()やprintf()呼び出しよりも前にスレッドマネージャの固定長メモリプール/可変長メモリプールなどカーネルからメモリブロックを割り当てる処理が行われているとフラグメンテーションにつながる可能性がある点に注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_2">
+<h3>
+<a href="#Heading3_14"> 14. </a>2 
+<!-- hp1 --><b>main()関数の動作するスレッドの名前</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">main()関数を動作させるスレッドの名称は、プログラムの中でグローバル変数sce_user_main_thread_nameを定義することで指定できます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+char sce_user_main_thread_name[] = &quot;main_thread&quot;;
+
+</font></pre></div>
+<div style="margin-left:50px;">指定のない場合はスレッド名は"user_main"になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_3">
+<h3>
+<a href="#Heading3_14"> 14. </a>3 
+<!-- hp1 --><b>main()関数の動作するスレッドの優先度</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">main()関数を動作させるスレッドのスケジューリング優先度は、プログラムの中でグローバル変数sce_user_main_thread_priorityを定義することで指定できます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int sce_user_main_thread_priority = 64;
+
+</font></pre></div>
+<div style="margin-left:50px;">指定のない場合はスレッドの優先度は32になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_4">
+<h3>
+<a href="#Heading3_14"> 14. </a>4 
+<!-- hp1 --><b>main()関数の動作するスレッドで利用できるスタックサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">main()関数を動作させるスレッドのスタックサイズは、プログラムの中でグローバル変数sce_user_main_thread_stack_kb_sizeにKiB単位のサイズを定義することで指定してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+unsigned int sce_user_main_thread_stack_kb_size = 100;  /* stack size 100KiB */
+
+</font></pre></div>
+<div style="margin-left:50px;">指定のない場合は256KiBになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_5">
+<h3>
+<a href="#Heading3_14"> 14. </a>5 
+<!-- hp1 --><b>main()関数の動作するスレッドの属性</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">main()関数を動作させるスレッドの属性は、プログラムの中でグローバル変数sce_user_main_thread_attributeを定義することで指定できます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+unsigned int sce_user_main_thread_attribute = SCE_KERNEL_TH_USE_VFPU;
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_6">
+<h3>
+<a href="#Heading3_14"> 14. </a>6 
+<!-- hp1 --><b>アプリケーションがビルドされたSDKのバージョンの通知</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">crt0では、アプリケーションがビルドされたときに使用したSDKバージョンをシステムソフトウェアに通知するために、内部で<a href="../kernel/System_Memory_Manager-Reference-Japanese.htm#sceKernelSetCompiledSdkVersion">sceKernelSetCompiledSdkVersion</a>()関数が使用されます。<br>crt0.oをビルドし直したり、独自のcrtコードを利用されたりする場合には、同様な方法でこのAPI呼び出しが必要になることに注意してください。正しいバージョンが設定されなかった場合、システムソフトウェアの動作が意図しない動作になります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_15">
+<h2>
+ 15 <!-- hp --><b>Coverage &amp; Profile</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">カバレッジとプロファイルは、プログラムの実行履歴を記録します。<br>これらの実行履歴の分析を行えば、より高品質で効率的で高速なコードを書くために有益な情報を得ることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_15_1">
+<h3>
+<a href="#Heading3_15"> 15. </a>1 
+<!-- hp1 --><b>coverage</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">カバレッジは、基本ブロックを単位としてソースコードの各行が実行される回数を収集します。<br>カバレッジを計測するためには、psp-gccに"-fprofile-arcs -ftest-coverage"というオプションを与えてモジュールを作成します。<br>上記のオプションを付けてモジュールを作成すると、各ソースファイル毎に、オブジェクトファイルに加えてgcovメタデータファイルが作成されます(ファイルの拡張子は、psp-gcc 1.X系では".bb"と".bbg"、psp-gcc 2.4.1以降では&quot;.gcno&quot;)。<br>上記のオプションを付けて作成したモジュールを実行して終了すると、gcovデータファイルが自動的に生成されます(ファイルの拡張子は、psp-gcc 1.X系では".da"、psp-gcc 2.4.1以降では&quot;.gcda&quot;)。<br><br>コンパイル時に作成されたオブジェクトファイルとメタデータファイル、モジュール終了時に生成されたデータファイルが同一ディレクトリに存在する状態で、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcov XXX.o
+
+</font></pre></div>
+<div style="margin-left:50px;">を実行するとpsp-gcovはカバレッジ情報を含むファイル(拡張子はXXX.c.gcov)を生成します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_1_7">
+<div style="margin-left:40px;"><h4><b>注意1:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">gcovデータファイルは、main()関数からreturnで抜けるか、exit()でプログラムを終了した時点で生成されます。<a href="../kernel/Loadexec-Reference-Japanese.htm#sceKernelExitGame">sceKernelExitGame</a>()でプログラムを終了した場合は生成されません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_1_8">
+<div style="margin-left:40px;"><h4><b>注意2:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">正確なカバレッジ情報を得るためには、コンパイル時に最適化オプションを付加しないで下さい。明示的に最適化しない場合は、コンパイルオプションとして<br>"-O0 -fprofile-arcs -ftest-coverage"を指定します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_1_9">
+<div style="margin-left:40px;"><h4><b>注意3:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">psp-gcc 2.X系では、psp-gcc 2.4.1より前のコンパイラは、coverageをサポートしていません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_15_2">
+<h3>
+<a href="#Heading3_15"> 15. </a>2 
+<!-- hp1 --><b>profile</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プロファイルは、モジュールを構成する各ルーチンが実行される回数と、定期的にサンプリングしたプログラムカウンタの値から各ルーチンが消費した時間を計算します。<br>プロファイルを計測するためには、psp-gccに"-pg"というオプションを与えてモジュールを作成します。<br>上記オプションを付けてコンパイルしたモジュールの実行が終了すると、デバッガのカレントディレクトリに"gmon.out"という名前のファイルができます。<br>"-pg"オプションを付加して作成したモジュールとgmon.outが同じディレクトリにある状態で、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gprof YYY.prx
+
+</font></pre></div>
+<div style="margin-left:50px;">を実行すると標準出力にプロファイル情報を出力します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_10">
+<div style="margin-left:40px;"><h4><b>注意1:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">"-startfiles"オプションを用いずにcrt0やlibcを独自にリンクするモジュールがプロファイル情報を得るためには、上記のコンパイルオプションと共にlibgprof.aをリンクする必要があります。また、crt0をリンクしないモジュールは、プロファイル情報の計測を開始する箇所で、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void sceGprofCountStart(void);
+</font></pre></div>
+<div style="margin-left:67px;">プロファイル情報の計測を終了する箇所で、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void sceGprofCountEnd(void);
+</font></pre></div>
+<div style="margin-left:67px;">を呼ばなくてはなりません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_11">
+<div style="margin-left:40px;"><h4><b>注意2:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">gmon.outが生成されるのは、main関数の終了後です。<br>実行途中でプロファイル情報を取得する場合は、任意の箇所でsceGprofCountEnd()を呼んで下さい。sceGprofCountEnd()は一度しか呼ぶことができません。二度目以降のsceGprofCountEnd()は無視されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_12">
+<div style="margin-left:40px;"><h4><b>注意3:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">gmon.outは、デバッガのカレントディレクトリに生成されます。複数のモジュールが同時にプロファイル情報を記録している場合、全てのモジュールはカレントディレクトリにgmon.outを作成しようとしますが、先に生成されたgmon.outは上書きされてしまうため、一番最後に生成されたgmon.outだけが有効になります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_13">
+<div style="margin-left:40px;"><h4><b>注意4:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">psp-gprofコマンドの引数として与えるモジュールは、シンボル情報やデバッグ情報を含むものでなければなりません。実際に実行するモジュールはこれらの情報をstripした後のもので構いません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_15_3">
+<h3>
+<a href="#Heading3_15"> 15. </a>3 
+<!-- hp1 --><b>制限事項</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">coverage、profileに共通した制限事項。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PRXのみに対応します。ELF, PFX形式のモジュールは非対応です。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_16">
+<h2>
+ 16 <!-- hp --><b>PRX間のC++例外伝播</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">SDK 3.7.0、psp-gcc 1.13.0もしくはpsp-gcc 2.5.3以降のバージョンで、PRX間のC++例外伝播に対応します。<br><br>C++の例外伝播では、libgccに含まれる例外ハンドリングを行う以下の関数の実体が、例外を共有するPRX間で1箇所にしか存在しないように保証する必要があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> _Unwind_DeleteException
+<li> _Unwind_Find_FDE
+<li> _Unwind_ForcedUnwind
+<li> _Unwind_GetGR
+<li> _Unwind_GetIP
+<li> _Unwind_GetLanguageSpecificData
+<li> _Unwind_GetRegionStart
+<li> _Unwind_GetTextRelBase
+<li> _Unwind_GetDataRelBase
+<li> _Unwind_RaiseException
+<li> _Unwind_Resume
+<li> _Unwind_SetGR
+<li> _Unwind_SetIP
+<li> __deregister_frame
+<li> __deregister_frame_info
+<li> __deregister_frame_info_bases
+<li> __register_frame
+<li> __register_frame_info
+<li> __register_frame_info_bases
+<li> __register_frame_info_table
+<li> __register_frame_info_table_bases
+<li> __register_frame_table
+</ul></div>
+<div style="margin-left:50px;"><br>PSP&reg;で上記の関数がPRX間で1箇所にしか存在しないようにするには、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 上記の例外ハンドリング関数を他モジュールに対してエクスポートするモジュール（メインモジュール）
+<li> メインモジュールがエクスポートした上記の例外ハンドリング関数をインポートして使用するモジュール（サブモジュール）
+</ul></div>
+<div style="margin-left:50px;">という構成にしなくてはなりません。<br><br>psp-gccは、以下のオプションを用意して、PRX間のC++例外伝播をサポートしています。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zexport-eh&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;exportgcc_eh.oをリンクする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zuse-shared-eh&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgcc_eh.aをスタティックリンクせずにexportされた&nbsp;&nbsp;<br>&nbsp;&nbsp;例外ハンドリング関数をリンクする&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_16_1">
+<h3>
+<a href="#Heading3_16"> 16. </a>1 
+<!-- hp1 --><b>メインモジュール、サブモジュールの作成例</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">メインモジュールは、"-zexport-eh"オプションを付けて生成します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-g++ -o main.prx -startfiles -zexport-eh *.o
+
+</font></pre></div>
+<div style="margin-left:50px;">サブモジュールは、&quot;-zuse-shared-eh&quot;オプションを付けて生成します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-g++ -o sub.prx -startfiles -zuse-shared-eh *.o
+</font></pre></div>
+<div style="margin-left:50px;"><br>メインモジュールとサブモジュールの実行時のイメージを図 3に示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Programming-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">/usr/local/psp/devkit/sample/module/exception_execmenuにPRX間で例外を伝播させるサンプルがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_16_1_14">
+<div style="margin-left:40px;"><h4><b>注意1:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">例外を共有するPRX間では、例外クラスの型情報が1箇所にしか存在しないように実装する必要があります。<br>具体的には、例外クラスを共有するPRX間で、1つのPRXからのみ例外クラスをエクスポートし、その他のPRXはその例外クラスをインポートするような構成にしなければなりません。<br>運用例として、全ての例外クラスをメインモジュールからエクスポートし、サブモジュールはそれをインポートする形が考えられます。<br><br>C++の例外クラスを外部PRXにエクスポートする場合、「7 C++による常駐ライブラリの作成」にあるように、pspexportpickupコマンドを利用してマングル後のシンボルを公開して下さい。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>class MyException {
+...
+}
+
+SCE_LIB_DECLARE( XXX_library, SCE_LIB_WEAK_IMPORT | SCE_LIB_AUTO_EXPORT );
+SCE_LIB_EXPORTPICKUP_CLASS( "MyException" , XXX_library );
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_16_1_15">
+<div style="margin-left:40px;"><h4><b>注意2:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">例外クラスをインポートするPRXを作成するためには、例外クラスをエクスポートするPRXの生成するstubライブラリをインポートする側のプログラムにリンクします。<br>このとき、stubライブラリを単にリンクしただけではクラスの型情報を表すtypeinfoは正常にリンクされません。typeinfoがweakシンボルであるためです。<br>typeinfoを正常にリンクするには、リンカに"--whole-archive"オプションを与えてstubライブラリに含まれるオブジェクトファイルを強制的にリンクする必要があります。<br>"--whole-archive"オプションを使用してstubライブラリをリンクする場合のサブモジュールの作成例は、以下のようになります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-g++ -o sub.prx -Wl,--whole-archive XXX_library_stub.a -Wl,--no-whole-archive -startfiles -zuse-shared-eh *.o
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

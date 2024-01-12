@@ -1,0 +1,198 @@
+<html lang="jp">
+<head>
+<title>VAG_Format</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+VAGファイルフォーマット
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>VAGファイルフォーマット</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>VAGファイルフォーマットの特長</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAGはADPCM形式で圧縮された波形データです。波形データと、サンプリング周波数など波形データに対する48バイトの情報で構成されています。<br>VAGファイルは「.vag」という拡張子を持ちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>VAGファイルの全体的な構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAGファイルのフォーマットは次のようになっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/VAG_Format-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  VAGファイルの構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;識別ID ('V','A','G','p' = 0x56,0x41,0x47,0x70)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バージョン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;data size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;波形データサイズ (単位：バイト)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サンプリング周波数 (単位：Hz)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserved&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;予約領域 (0で埋められています)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[16]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;波形データの名称&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">※unsigned int 型フィールドの値は全てビッグエンディアン<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>波形データフォーマット</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">波形データはADPCM形式で圧縮された独自フォーマットとなっています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ADPCMデータのブロックフォーマット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">波形データは16バイトを1ブロックとして、ブロック単位で構成されます。ブロックはデコード係数とループ情報を記録したヘッダ部分2バイトと14バイトのサウンドデータからなり、28サンプル分の音声データを圧縮したものになっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/VAG_Format-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  ADPCMデータフォーマット</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ループ情報について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ADPCMデータの各ブロックの先頭2バイト目はループ情報になります。ループ情報に適切なデータを設定することにより、ブロック単位で音声データのループを実現することができます。<br>この値がどのように使用されるかは、ボイスごとに設定できる再生モードによって変わります。再生モードには「ループ再生」と「ワンショット再生」の二通りがあります。それぞれにおける解釈のされ方を以下で説明します。<br>なお、音素辺の設定の際に音素辺データのサイズを指定しますが、このサイズ分のデコードが終了した時点で、ループ再生の有効・無効やループ情報の値に関係なく発声は終了し、該当ボイスは無音となります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>ループ再生有効時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">以下の表のように解釈されます。表にない値は無視されます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ループ情報値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループの終了ブロックを示します。このブロックをデコードした後、内部に&nbsp;&nbsp;<br>&nbsp;&nbsp;保存された開始ブロック位置に戻ります。開始ブロックが見つからないまま&nbsp;&nbsp;<br>&nbsp;&nbsp;終了ブロックに達したときは、音素辺指定時に設定された音素辺の開始位置&nbsp;&nbsp;<br>&nbsp;&nbsp;に戻ります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループの開始ブロックを示します。終了ブロックに到達したとき、次にデコー&nbsp;&nbsp;<br>&nbsp;&nbsp;ドされるブロックはここになります。複数の開始ブロックが存在した場合は&nbsp;&nbsp;<br>&nbsp;&nbsp;最後に通過したものが有効となります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再生終了位置を示します。このブロックに到達した時点で該当ボイスの発声は&nbsp;&nbsp;<br>&nbsp;&nbsp;終了し、無音となります。よって、このブロックはデコードされません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>ループ再生無効(ワンショット再生)時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">以下の表のように解釈されます。表にない値は無視されます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ループ情報値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再生終了位置を示します。このブロックに到達した時点で該当ボイスの発声は&nbsp;&nbsp;<br>&nbsp;&nbsp;終了し、無音となります。よって、このブロックはデコードされません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

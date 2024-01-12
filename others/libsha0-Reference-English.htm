@@ -1,0 +1,424 @@
+<html lang="en">
+<head>
+<title>libsha0-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsha0 Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceSha0Context"></a>
+<table width="100%"><td width="70%"><font size=6>SceSha0Context<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Context information for SHA-0 digest value computation<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha0.h&gt;
+typedef struct <b>SceSha0Context</b> {
+	unsigned int <i>h</i>[5];
+	unsigned short <i>usRemains</i>;
+	unsigned short <i>usComputed</i>;
+	unsigned long long <i>ulTotalLen</i>;
+	unsigned char <i>buf</i>[SCE_SHA0_BLOCK_SIZE];
+} <b>SceSha0Context</b>;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>h</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Work area&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usRemains</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Less than 64 bytes of remaining data, which was temporarily copied within the SceSha0Context structure&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usComputed</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Digest value computed flag&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ulTotalLen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Total data size (bytes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Temporary copy of less than 64 bytes of data&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used as a work area when computation of the SHA-0 digest value is divided up. Since the <a href="../others/libsha0-Reference-English.htm#sceSha0BlockInit">sceSha0BlockInit</a>(), <a href="../others/libsha0-Reference-English.htm#sceSha0BlockUpdate">sceSha0BlockUpdate</a>(), and <a href="../others/libsha0-Reference-English.htm#sceSha0BlockResult">sceSha0BlockResult</a>() functions use this structure as a work area, an application must not directly access the members of this structure.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha0-Reference-English.htm#sceSha0BlockInit">sceSha0BlockInit</a>(), <a href="../others/libsha0-Reference-English.htm#sceSha0BlockUpdate">sceSha0BlockUpdate</a>(), <a href="../others/libsha0-Reference-English.htm#sceSha0BlockResult">sceSha0BlockResult</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha0Digest"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha0Digest<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Compute SHA-0 digest <br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha0.h&gt;
+int <b>sceSha0Digest</b>(
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on an interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to plaintext for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data size (bytes) of plaintext for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns computed digest value (20 bytes).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function computes the SHA-0 digest value.<br>This function is used when all data of the plaintext for which the digest value is to be computed has been expanded in memory.<br>Performance will improve if <i>plain </i>is 16-byte aligned and <i>len </i>is a multiple of 64.<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha0BlockInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha0BlockInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Initialize digest value computation work area<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha0.h&gt;
+int <b>sceSha0BlockInit</b>(
+	<a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a> *<i>pContext</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on an interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address of digest value computation work area.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid<i> pContext </i>address &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes the work area that is used to compute the SHA-0 digest value.<br>It should be called before the <a href="../others/libsha0-Reference-English.htm#sceSha0BlockUpdate">sceSha0BlockUpdate</a>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a>, <a href="../others/libsha0-Reference-English.htm#sceSha0BlockUpdate">sceSha0BlockUpdate</a>(), <a href="../others/libsha0-Reference-English.htm#sceSha0BlockResult">sceSha0BlockResult</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha0BlockUpdate"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha0BlockUpdate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SHA-0 digest value computation processing<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha0.h&gt;
+int <b>sceSha0BlockUpdate</b>(
+<a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a> *<i>pContext</i>,
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on an interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address of digest value computation work area.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to plaintext data for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data size (bytes) of plaintext data for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_BUSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Digest value was already computed for <i>pContext</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid<i> pContext</i> or <i>plain </i>address&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function uses the plaintext specified by <i>plain </i>and <i>len </i>to update the work area within the <a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a> structure. By dividing the computation into multiple steps, the sceSha0BlockUpdate() function, which can be called any number of times between the <a href="../others/libsha0-Reference-English.htm#sceSha0BlockInit">sceSha0BlockInit</a>() and <a href="../others/libsha0-Reference-English.htm#sceSha0BlockResult">sceSha0BlockResult</a>() functions, enables the digest value to be computed even for a large amount of data that cannot fit in memory. <br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a>, <a href="../others/libsha0-Reference-English.htm#sceSha0BlockInit">sceSha0BlockInit</a>(), <a href="../others/libsha0-Reference-English.htm#sceSha0BlockResult">sceSha0BlockResult</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha0BlockResult"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha0BlockResult<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get computed SHA-0 digest<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha0.h&gt;
+int <b>sceSha0BlockResult</b>(
+<a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a> *<i>pContext</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on an interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address of digest value computation work area.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns the computed digest value (20 bytes).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal termination&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid<i> pContext </i>or<i>digest </i>address&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function retrieves the computed digest value from the <a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a> structure. The SHA-0 algorithm computes a digest value in increments of 64 bytes, so a remaining amount less than 64 bytes may have been temporarily copied within the <a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a> structure by the <a href="../others/libsha0-Reference-English.htm#sceSha0BlockUpdate">sceSha0BlockUpdate</a>() function. If this remaining data exists, the final digest value can be obtained by calling the sceSha0BlockResult() function. Always use the sceSha0BlockResult() function to obtain the digest value.<br>The digest value of the <a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a> structure is valid until the next time <a href="../others/libsha0-Reference-English.htm#sceSha0BlockInit">sceSha0BlockInit</a>() is called.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha0-Reference-English.htm#SceSha0Context">SceSha0Context</a>, <a href="../others/libsha0-Reference-English.htm#sceSha0BlockInit">sceSha0BlockInit</a>(), <a href="../others/libsha0-Reference-English.htm#sceSha0BlockUpdate">sceSha0BlockUpdate</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

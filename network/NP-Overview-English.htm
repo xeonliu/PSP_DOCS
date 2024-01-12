@@ -1,0 +1,813 @@
+<html lang="en">
+<head>
+<title>NP-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PlayStation&reg;Network Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>About This Document</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This document presents an overview of PlayStation&reg;Network (NP) functions available on the PSP&trade;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Functions Provided</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1">
+<div style="margin-left:40px;"><h4><b>Account Services</b><br><br></h4></div></a>
+
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Sign-in
+<li> User profile acquisition
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_2">
+<div style="margin-left:40px;"><h4><b>Communication Services</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> Matching 2
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_3">
+<div style="margin-left:40px;"><h4><b>Commerce Services</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Commerce services provide functions that support online distribution. Online distribution enables products to be distributed from the "PlayStation&reg;Store" online shop, either for fee or for free. These products include downloadable games that can be installed and run on a Memory Stick&trade;, additional items that can be used in games, and tickets for access rights to the game server or monthly payments. Other commerce services functions enable games to obtain product catalogs directly by calling the PlayStation&reg;Store.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Module Relationship Diagram</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP modules are divided into two groups. One group consists of modules responsible for communication and the other group consists of modules responsible for managing user information. The relationship between NP modules is shown in the diagram below.<br>For SCE_UTILITY_MODULE_XXX, which appears for each module, specify the module name defined in /usr/local/psp/devkit/include/utility/utility_module.h.<br><br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_4">
+<div style="margin-left:40px;"><h4><b>NP module</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The NP module contains the np library and the np_auth library. The np library is used for managing user information obtained during NP sign-in. The np_auth library is used for obtaining a ticket for a specific service ID. The NP module must be made resident from NP sign-in until disconnection from the network.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_5">
+<div style="margin-left:40px;"><h4><b>NP service module</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The NP service module contains the np_service library. This library is used for signing in to the NP, updating the ticket, and getting the user's profile. The NP service module is a non-resident module that can be loaded and unloaded at any time from the title, as needed. The network module group (SCE_UTILITY_MODULE_NET_XXX) under the HTTP module is always required.<br>The network module group can be unloaded after sign-in. However, since the network module group is needed to provide the ticket acquisition API, the network module group should be reloaded when this function is needed.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_6">
+<div style="margin-left:40px;"><h4><b>NP Matching 2 Module</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The NP matching 2 module is a library that uses the NP server to perform user matching. It is a non-resident module that a title can freely load and unload when needed. The network module group (SCE_UTILITY_MODULE_NET_XXX) under the UPnP module is always required.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_7">
+<div style="margin-left:40px;"><h4><b>NP Commerce 2 Module</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The NP commerce 2 module contains the NP IN-GAME commerce 2 library. This library provides commerce services for titles. It is a non-resident module that a title can freely load and unload when needed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Development Environment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To develop applications that use the PlayStation&reg;Network, you must:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Create an NP account
+<li> Verify the network environment
+</ul></div>
+<div style="margin-left:50px;">Refer to the following document.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> "NP User's Guide for Development" (this document is publicly available on the PSP&trade; Developer Network website)
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>NP Functions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Account Services</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_8">
+<div style="margin-left:40px;"><h4><b>Sign-in and Sign-out</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">To use the services that are provided by the NP, sign-in must be completed and a ticket must be obtained that will be used for subsequent authentication. To execute sign-in, load the NP and NP service modules and start up the sign-in utility. Tickets that are obtained are maintained by the NP module. After sign-in has completed, the NP service module can be unloaded.<br>Since sign-out is handled by each library's termination processing, it does not need to be explicitly performed.<br><br>The following diagram shows the processing associated with NP sign-in.<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Ticket Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For the PSP&trade;, there are two types of NP tickets associated with a title.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_9">
+<div style="margin-left:40px;"><h4><b>Sign-in ticket</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A sign-in ticket is a ticket that is obtained by the NP sign-in utility during sign in. While the user is signed in, it can be obtained from the NP module.<br>The sign-in ticket is used for authentication of subsequent NP services (such as NP Matching2).<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_10">
+<div style="margin-left:40px;"><h4><b>Ticket for a specific service ID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A ticket associated with a specific service ID that was registered in advance can be requested from the NP server using the NP Auth library. The NP server replies with a ticket that contains user information and user permissions for that service ID.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Valid Period of Ticket</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After sign-in has completed, the valid period of the sign-in ticket (currently set to 24 hours) is returned from the sign-in utility. (The validity period is set to 5 minutes if On is specified for [Debug Settings]-&gt;[Np Debug].) If the valid period of the ticket has elapsed (the ticket has expired), NP functions will no longer be able to be used. After a ticket has expired, you must sign-in again using the sign-in utility otherwise you will not be able to use NP functions.<br>If you want to avoid errors caused by the expiration of a ticket, you must update the sign-in ticket using the ticket update API of the NP service module before the valid period has elapsed. The ticket validity period for a service ID is currently set to 24 hours. (It is set to 10 minutes for titles that requested ticket service prior to January 2010.) For an external server that provides game services, be sure to check the ticket validity period for the service ID and perform the associated processing.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Matching 2</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP matching 2 utility supports applications that implement network functions such as online game play and chat.<br><br>The NP matching 2 utility provides the following functions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Room search
+<li> Dynamic room creation
+<li> In-room chat<br>A vulgarity filter (filter to conceal inappropriate language) can be enabled for this function.
+<li> Data exchange between users in a room
+<li> Room entrance restriction
+<li> Support for team play
+<li> User search using the NP ID 
+<li> P2P connection establishment between room members
+</ul></div>
+<div style="margin-left:50px;"><br>For details, refer to the "NP Matching 2 Overview" and "NP Matching 2 System Overview" documents.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>NP IN-GAME Commerce 2 Library</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP IN-GAME commerce 2 library provides commerce services for titles.<br>For details, refer to the "NP IN-GAME Commerce 2 Overview" and "NP IN-GAME Commerce 2 Reference" documents.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>IDs Used In NP</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the various IDs which are used by the PlayStation&reg;Network.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>NP Communication ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP communication ID is used by the PlayStation&reg;Network when matching or ranking is performed, or trophies are used. Its format is "XXXXYYYYY_ZZ" (where XXXX are letters and YYYYY and ZZ are numbers) and is used by PlayStation&reg;Network communication services to identify a title application as the target. It is assigned by SCE.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_11">
+<div style="margin-left:40px;"><h4><b>Getting an NP Communication ID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">You can request an NP communication ID via the PSP&trade; Developer Network website.<br>Perform the following steps from the main page.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Select "PlayStation&reg;Network" ( "Register title" from the menu.</li>
+<li VALUE=2> Select "Request NP communication ID" on the PlayStation&reg;Network Title Registration page.</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>NP Title ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP title ID is the ID of the title used by NP. Its format is "XXXXYYYYY_00", where XXXXYYYYY is the normal disc product number (XXXX are letters and YYYYY are numbers). The product number is assigned by SCE for both optical disc-based and non-optical disc-based hard disk drive-launched titles.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Service ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The service ID is issued and registered on the server when a registration request is made via the PSP&trade; Developer Network. A registration request for a service ID is required in the following cases.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> When distributing downloadable games or additional game data via download from a regional store, or when selling service entitlements
+<li> When using the NP IN-GAME commerce 2 library to distribute packages via download from a title store, or when selling service entitlements
+<li> When using NP authentication functions to control access on a non-NP server (using the NP TCM library)
+</ul></div>
+<div style="margin-left:50px;">The service ID consists of an SCE-provided prefix followed by the NP title ID. It is used by PlayStation&reg;Network account services and commerce services to identify a title application as a target. The products or SKUs that belong to a given title application are placed under the service ID.<br></div>
+<div style="margin-left:67px;">Example: UP0001-SXXX00001_00<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_12">
+<div style="margin-left:40px;"><h4><b>Registering a Service ID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">You can register a service ID via the PSP&trade; Developer Network website.<br>Perform the following steps from the main page.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Select "PlayStation&reg;Network" ( "Register title" from the menu.</li>
+<li VALUE=2> Select "Request service ID" on the PlayStation&reg;Network Title Registration page.</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Content ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The content ID is used to identify downloadable content that was packaged by the NP DRM utility. It consists of the service ID, a hyphen (-) and a 16-character label. The label is assigned by the content provider rather than by SCE. The label is entered in the system through the Drop Point and Product Management Tool (PMT) by specifying it in the configuration file that is passed to make_package_npdrm.<br>The label can only contain uppercase letters and numbers.<br></div>
+<div style="margin-left:67px;">Example: UP0001-SXXX00001_00-0000111122223333 (where "0000111122223333" is the label)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Entitlement ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The entitlement ID identifies a service entitlement, which is used by the server to manage access rights. It consists of the service ID, a hyphen (-) and a 6-character label. The label is assigned by the content provider rather than by SCE. The label is entered in the system through the Product Management Tool (PMT). PMT checks to make sure that the entitlement ID is unique.<br>The label can only contain uppercase letters and numbers.<br>The entitlement ID is used by NP manager utility APIs to find rights information for accounts.<br></div>
+<div style="margin-left:67px;">Example: UP0001-SXXX00001_00-SVC001 (where "SVC001" is the label)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Product ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The product ID is used to identify digital data or services that belong to each service ID. It might indicate, for example, additional data or monthly payment services. It consists of the service ID, a hyphen (-) and a 16-character label. The label is assigned by the content provider rather than by SCE. The label is entered in the system through the Product Management Tool (PMT). PMT checks to make sure that the product ID is unique.<br>The label can only contain uppercase letters and numbers. <br>The product ID is used with commerce APIs to find a particular product.<br></div>
+<div style="margin-left:67px;">Example: UP0001-SXXX00001_00-0000111122223333 (where "0000111122223333" is the label)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>SKU ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A SKU is a unit that enables a price to be associated with a product so that the product can be sold. <br>A SKU ID consists of the product ID, a hyphen (-) and a 4-character label. The first character of the label is reserved by SCE, and the remaining three characters can be freely assigned by the content provider. A price can be set for a single SKU in the stores of countries that belong to a given SCE region.<br>The first character of the label is reserved by SCE and shown below for each region.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Region</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>First Character of Label</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;U&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;J&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;E&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE-Asia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;H&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The label can only contain uppercase letters and numbers.<br>After a commerce API is used to find a particular product ID, a SKU ID is assigned to each purchased product within the shopping cart structure created by the application. <br>Note: In this release, a SKU is always set to a fixed value.<br></div>
+<div style="margin-left:67px;">Example: UP0001-SXXX00001_00-0000111122223333-U001 (where "U001" is the label)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>Category ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The category ID is used when multiple products or categories are stored in a tree structure (called a "catalog"). A regional store or title store is categorized based on this catalog. The catalog can be browsed from the screen or by using commerce APIs.<br>A category ID, like a product ID, consists of the service ID, a hyphen (-) and a 16-character label. However, as an exception, the top category ID of the title has no label and has the same format as the service ID. The top category ID of the title is defined in advance by the system. For all other categories, the label is assigned by the content provider rather than by SCE. The label is entered in the system through the Product Management Tool (PMT). PMT checks to make sure that the category ID is unique.<br>The label can only contain uppercase letters and numbers.<br></div>
+<div style="margin-left:67px;">Example: UP0001-SXXX00001_00 (top category of the title)<br>Example: UP0001-SXXX00001_00-CATG000011112222 (normal category, where "CATG000011112222" is the label)<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Using NP</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Sign-in</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Use the module utility to load and unload the NP module and NP service module. Make sure that the NP module is made resident immediately before sign-in and stays resident until the network is disconnected.<br><br>For details about the module utility, refer to the utility documentation.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>Module load processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Load the module sets required for sign-in.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Load NP module set
+ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NP);
+if (ret &lt; 0) {
+	//Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Load NP service module set
+ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NP_SERVICE);
+if (ret &lt; 0) {
+	//Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>Initialization processing</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Initialize the np library
+ret = <a href="../network/NP-Reference-English.htm#sceNpInit">sceNpInit</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+
+#define NP_AUTH_POOLSIZE	(4 * 1024)
+#define NP_AUTH_CALLBACK_STACKSIZE	1024
+#define NP_AUTH_PRIORITY	42
+
+// Initialize the np_auth library
+ret = <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthInit">sceNpAuthInit</a>(
+	NP_AUTH_POOLSIZE,
+	NP_AUTH_CALLBACK_STACKSIZE + SCE_NP_AUTH_INTERNAL_THREAD_LEAST_STACK_SIZE
+	NP_AUTH_PRIORITY
+	);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+// Initialize the np_service library
+#define NP_SERVICE_POOLSIZE	(10 * 1024)
+#define NP_SERVICE_PRIORITY	42
+
+ret = <a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>(
+	NP_SERVICE_POOLSIZE,
+	SCE_NP_MANAGER_INTERNAL_THREAD_LEAST_STACK_SIZE,
+	NP_SERVICE_PRIORITY
+	);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_3"><h4>
+(3)&nbsp;<b>Sign-in processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The sign-in utility completely manages the sign-in process so it is not necessary for an application to manage sign-in IDs or passwords. The only information that an application is aware of is whether or not a user has signed in.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../utility/Utility-Reference-English.htm#SceUtilityNpSigninParam">SceUtilityNpSigninParam</a> npsignin_param;
+memset(&amp;npsignin_param, 0x00, sizeof(<a href="../utility/Utility-Reference-English.htm#SceUtilityNpSigninParam">SceUtilityNpSigninParam</a>));
+npsignin_param.base.size = sizeof(<a href="../utility/Utility-Reference-English.htm#SceUtilityNpSigninParam">SceUtilityNpSigninParam</a>);
+npsignin_param.base.ctrl_assign =
+	SCE_UTILITY_CTRL_ASSIGN_CIRCLE_IS_ENTER;
+npsignin_param.base.main_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY + 1;
+npsignin_param.base.sub_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY + 3;
+npsignin_param.base.font_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY + 2;
+npsignin_param.base.sound_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY;
+
+ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityNpSigninInitStart">sceUtilityNpSigninInitStart</a>(&amp;npsignin_param);
+
+</font></pre></div>
+<div style="margin-left:67px;">The following screens are displayed when the sign-in utility starts up.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:67px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-English003.jpg">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-English004.jpg">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_4"><h4>
+(4)&nbsp;<b>Use NP functions</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">NP functions can be used until the sign-in ticket expires. For details about NP functions, refer to the relevant documents. If an error occurs because the ticket has expired, call the sign-in utility to sign-in again.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_5"><h4>
+(5)&nbsp;<b>Updating the sign-in ticket</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A sign-in ticket can be updated before it expires.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../network/NP_Service-Reference-English.htm#SceNpManagerSigninUpdateParam">SceNpManagerSigninUpdateParam</a> param;
+
+memset(&amp;param, 0x00, sizeof(param));
+param.size = sizeof(param);
+ret = <a href="../network/NP_Service-Reference-English.htm#sceNpManagerSigninUpdateInitStart">sceNpManagerSigninUpdateInitStart</a>(&amp;param);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+// Wait for ticket update processing
+while (<a href="../network/NP_Service-Reference-English.htm#sceNpManagerSigninUpdateGetStatus">sceNpManagerSigninUpdateGetStatus</a>() !=
+	 SCE_NP_MANAGER_SIGNIN_UPDATE_STATUS_FINISHED) {
+	<a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDelayThread">sceKernelDelayThread</a>(100 * 1000);
+}
+
+// If the status is SCE_NP_MANAGER_SIGNIN_UPDATE_STATUS_FINISHED,
+// <a href="../network/NP_Service-Reference-English.htm#sceNpManagerSigninUpdateShutdownStart">sceNpManagerSigninUpdateShutdownStart</a>() is always successful.
+// Perform shutdown processing even if ticket update processing terminates with an error
+if (param.result &lt; 0) {
+	<a href="../network/NP_Service-Reference-English.htm#sceNpManagerSigninUpdateShutdownStart">sceNpManagerSigninUpdateShutdownStart</a>();
+	// Error handling
+}
+
+// When param.result is 0, it indicates that sign-in ticket updating
+// was successful.
+<a href="../network/NP_Service-Reference-English.htm#sceNpManagerSigninUpdateShutdownStart">sceNpManagerSigninUpdateShutdownStart</a>();
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_6"><h4>
+(6)&nbsp;<b>Aborting sign-in ticket update processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To abort sign-in ticket update processing, call <a href="../network/NP_Service-Reference-English.htm#sceNpManagerSigninUpdateAbort">sceNpManagerSigninUpdateAbort</a>().<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Service-Reference-English.htm#sceNpManagerSigninUpdateAbort">sceNpManagerSigninUpdateAbort</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_7"><h4>
+(7)&nbsp;<b>Termination processing</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/NP_Service-Reference-English.htm#sceNpServiceTerm">sceNpServiceTerm</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+// Terminate np_auth library
+ret = <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthTerm">sceNpAuthTerm</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+
+// Terminate np library
+ret = <a href="../network/NP-Reference-English.htm#sceNpTerm">sceNpTerm</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_8"><h4>
+(8)&nbsp;<b>Module unload processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Unload the module sets.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Unload NP service module set
+ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NP_SERVICE);
+if (ret &lt; 0) {
+	//Error handling
+}
+
+// Unload NP module set
+ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NP);
+if (ret &lt; 0) {
+	//Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Getting User Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To get user information, the np library APIs should be used after sign-in processing has completed. Note that the network modules are not required when the np library APIs are used, so you can unload them if they're no longer needed.<br>For information about loading, initializing, unloading, and shutdown processing for NP modules, see "Sign-in".<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>Get NP ID</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-English.htm#SceNpId">SceNpId</a> npId
+
+ret = <a href="../network/NP-Reference-English.htm#sceNpGetNpId">sceNpGetNpId</a>(&amp;npId);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>Get online ID</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-English.htm#SceNpOnlineId">SceNpOnlineId</a> onlineId
+
+ret = <a href="../network/NP-Reference-English.htm#sceNpGetOnlineId">sceNpGetOnlineId</a>(&amp;onlineId);
+if (ret &lt; 0) {
+	//Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>Get user profile</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-English.htm#SceNpUserInfo">SceNpUserInfo</a> userProf;
+
+ret = <a href="../network/NP-Reference-English.htm#sceNpGetUserProfile">sceNpGetUserProfile</a>(&amp;userProf);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+/*
+ * userProf.userId =&gt; NP ID
+ * userProf.name   =&gt; Online name
+ * userProf.icon   =&gt; Avatar URL
+*/
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_4"><h4>
+(4)&nbsp;<b>Get frequently used languages</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Display message locales (SCE_UTILITY_LANG_xxx) defined in utility/utility_common.h are returned in the language1, language2, and language3 members of <a href="../network/NP_Common-Reference-English.htm#SceNpMyLanguages">SceNpMyLanguages</a>. If no value is set, a negative value will be set.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../network/NP_Common-Reference-English.htm#SceNpMyLanguages">SceNpMyLanguages</a> myLang;
+
+ret = <a href="../network/NP-Reference-English.htm#sceNpGetMyLanguages">sceNpGetMyLanguages</a>(&amp;myLang);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_5"><h4>
+(5)&nbsp;<b>Get region information</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-English.htm#SceNpCountryCode">SceNpCountryCode</a> countryCode;
+int languageCode;
+
+ret = <a href="../network/NP-Reference-English.htm#sceNpGetAccountRegion">sceNpGetAccountRegion</a>(&amp;countryCode, &amp;languageCode);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_6"><h4>
+(6)&nbsp;<b>Get parental control information related to age restrictions</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>int isRestricted, age;
+
+ret = <a href="../network/NP-Reference-English.htm#sceNpGetContentRatingFlag">sceNpGetContentRatingFlag</a>(&amp;isRestricted, &amp;age);
+if (ret &lt; 0) {
+	//Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_7"><h4>
+(7)&nbsp;<b>Get parental control information related to chat restrictions</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>int isRestricted;
+ret = <a href="../network/NP-Reference-English.htm#sceNpGetChatRestrictionFlag">sceNpGetChatRestrictionFlag</a>(&amp;isRestricted);
+if (ret &lt; 0) {
+	//Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Getting a Ticket for a Specific Service ID</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_1"><h4>
+(1)&nbsp;<b>Initial steps for using np_auth</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To get a ticket, the np_auth library should be used. The np_auth library is contained in SCE_UTILITY_MODULE_NP. To use the np_auth library, SCE_UTILITY_MODULE_NP must be loaded, the np library and np_auth library must be initialized, and NP sign-in must be completed. For details, see "Sign-in."<br>Since the HTTP, SSL, inet, and net_common modules are required when np_auth library APIs are executed, these modules must be loaded and initialized in advance.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_2"><h4>
+(2)&nbsp;<b>Define ticket acquisition callback</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The ticket data body can be acquired inside the callback function. If a ticket acquisition request is successful, call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>() inside the callback to get ticket data.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+static unsigned char *ticket=NULL;	// Buffer for getting ticket
+static int ticket_len = 0;		// Ticket size
+static int auth_result=0;		// Callback result
+
+int
+authCallback(SceNpAuthRequestId id, int result, void *arg)
+{
+	int ret = 0;
+	(void)arg;
+
+	// If an error occurs, result will be a negative value.
+	if (result &lt; 0) {
+		auth_result = result;
+		return 0;
+	}
+	
+	// Get ticket
+	ticket_len = result;
+	ticket = (unsigned char *)malloc(result);
+	if (ticket == NULL) {
+		auth_result = -1;
+		return 0;
+	}
+	auth_result = <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>(id, ticket, result);
+
+	return 0;
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_3"><h4>
+(3)&nbsp;<b>Send ticket acquisition request</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The result of the ticket acquisition request is conveyed to the callback.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define AUTH_SERVICE_ID &quot;XXX-XXX-XXXXX&quot;
+
+<a href="../network/NP_Auth-Reference-English.htm#SceNpAuthRequestParameter">SceNpAuthRequestParameter</a> param;
+SceNpAuthRequestId id;
+
+memset(&amp;param, 0x00, sizeof(param));
+
+param.size = sizeof(param);
+param.version.major = 2;
+param.version.minor = 1;
+param.serviceId = AUTH_SERVICE_ID;
+param.ticketCb = authCallback;
+param.cbArg = NULL;
+
+ret = <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>(&amp;param);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_4"><h4>
+(4)&nbsp;<b>Abort ticket acquisition request</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the ticket acquisition request is aborted, the network error that occurred as a result is conveyed to the callback.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthAbortRequest">sceNpAuthAbortRequest</a>(id);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_5"><h4>
+(5)&nbsp;<b>Ticket acquisition request termination processing</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthDestroyRequest">sceNpAuthDestroyRequest</a>(id);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Matching 2</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For an overview on using the NP matching 2 library, refer to the "NP Matching 2 Overview" document.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Resources Used</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_13">
+<div style="margin-left:40px;"><h4><b>sceNpAuthInit() to sceNpAuthTerm()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">While the np_auth library is in use, one SceNpAuth thread is running.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_14">
+<div style="margin-left:40px;"><h4><b>sceNpServiceInit() to sceNpServiceTerm()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">While the np_service library is in use, one SceNpManager thread is running.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_15">
+<div style="margin-left:40px;"><h4><b>sceNpMatching2Init() to sceNpMatching2Term()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">While the np_matching2 library is in use, three internal threads (SceNpMatching2, SceNpSignalingMain, and SceNpSignalingEcho) are running.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

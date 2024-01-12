@@ -1,0 +1,225 @@
+<html lang="jp">
+<head>
+<title>HTTPS-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+HTTPSを使用するためには
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">本文書はHTTPライブラリ（libhttp）を使用してHTTPS通信を行う方法を説明した補足文書となります。libhttpのドキュメントとあわせてご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpを使用するには、PSPNETが必要です。PSPNETが必要とするファイルは、PSP&reg;ネットワークライブラリのドキュメントをご参照ください。<br>libhttpが独自に必要とするファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp/http_methods.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp/schemes.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">SSLを使用する場合は上記に加えて以下のファイルが必要となります。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttps.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libssl.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libssl_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libssl_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpはHTTP/1.1に準拠しています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ネットワークライブラリの初期化とネットワーク接続</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">HTTP通信を使用するためにはlibhttpの使用に先立って、ネットワークライブラリの初期化とネットワーク接続を行う必要があります。それぞれの手順については、PSP&reg;ネットワークライブラリのドキュメントをご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>SSLの初期化と、証明書ロードモジュールのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpの使用するモジュールセットに加えてSSLモジュールセットをロードし、libsslの初期化をしておく必要があります。libsslの初期化についてはlibssl-Overview.pdf及びlibssl-Reference.pdfをご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>libhttpの初期化とHTTPSの初期化</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsslの初期化後に<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()を呼び出します。そしてその後に<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()を呼び出すことでHTTPSの通信が有効になります。必ずlibhttpの初期化後に<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()を呼ぶようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>証明書のロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;は、FLASHストレージにCA証明書を保持しています。<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()を使用する事でアプリケーションがCA証明書を用意することなくHTTPSでの通信を行うことができます。逆にアプリケーションで用意したCA証明書を、libHttpsInit()またはlibHttpsInitWithPath()で指定する事もできます。読み出した証明書などを格納したメモリは、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnd">sceHttpsEnd</a>()時に開放されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>認証の設定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">他にも<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>()、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>()で、サーバー証明書の有効期限などのチェックを有効／無効に切り替えることができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_1">
+<div style="margin-left:40px;"><h4><b>初期化・終了の流れ</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>...     			/*ネットワークライブラリの初期化、接続処理 */
+<a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>();  		/*SSL初期化処理*/
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>(); 		/*HTTP初期化処理*/
+<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>();		/*HTTPS初期化処理*/
+<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>();	/*RootCA証明書ロード(optional) */
+<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>();	/*SSL通信の設定 (optional)*/
+....    			/*HTTP, HTTPSの通信*/
+<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnd">sceHttpsEnd</a>(); 		/*HTTPSの終了処理*/
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>();  		/*HTTPの終了処理*/
+<a href="../network/libssl-Reference-Japanese.htm#sceSslEnd">sceSslEnd</a>();   		/*SSLの終了処理*/
+...     			/*ネットワークライブラリの終了処理 */
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>スタックサイズについて</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>API呼び出しに必要なスタックサイズ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">sceHttps… で始まる関数のAPI呼び出しに必要なスタックサイズは、2048バイト（SCE_HTTP_LEAST_STACK_SIZE）です。<br>スタックサイズが不足の場合は<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a>のエラーが返ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>コールバック関数のスタックサイズ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">下記関数にて設定するコールバック関数のスタックサイズは、4096バイト（SCE_HTTP_CALLBACK_LEAST_STACK_SIZE）になります。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>SSL証明書のベリファイポリシー</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>()、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>()で設定するHTTPS通信の各チェック項目についてはタイトルのポリシーに沿って決定してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3><b>例：</b>
+//ユーザの時計がずれていることを気にしない場合
+<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>(SCE_HTTPS_FLAG_NOT_AFTER_CHECK 
+			| SCE_HTTPS_FLAG_NOT_BEFORE_CHECK);
+//偽サーバーに接続されても構わない場合
+<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>(SCE_HTTPS_FLAG_SERVER_VERIFY);
+</font></pre></div>
+<div style="margin-left:67px;">ただし、ユーザがフィッシング詐欺に遭うことがありえる仕様の場合は、ユーザの不利益にならないようご注意ください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2006 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

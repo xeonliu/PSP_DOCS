@@ -1,0 +1,574 @@
+<html lang="en">
+<head>
+<title>NP_Commerce_Programming_Guide</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PlayStation&reg;Network Commerce Programming Guide
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>About This Document</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This document describes the development process of applications that will use the commerce service provided on the PlayStation&reg;Network (NP).<br>First, the types and attributes of products that can be handled through the PlayStation&reg;Store will be described, along with typical examples and the kinds of processing the application will use in handling them.<br>Next, an outline of the products distributed through the PlayStation&reg;Store, and the development of applications that purchase products from the PlayStation&reg;Store, will be provided.<br>Finally, development support features such as wallet charging and title store previews will be described.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Product Configuration and Handling</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Product Types and Attributes</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Products distributed through the PlayStation&reg;Store are configured using a combination of the following two types of products.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> DRM content<br>Software and data downloaded by the user and saved to the Memory Stick&trade; of the PSP&trade;.
+<li> Service entitlement<br>Entitlement information (ticket) managed on the NP server, with an expiration time or a limited number of usable times.
+</ul></div>
+<div style="margin-left:50px;"><br>Product attributes can be used for setting &quot;eligibility rules&quot;, which show or hide products in the PlayStation&reg;Store according to the user's past purchases.<br>Product types and attributes are described in more detail in the document &quot;NP Product Management Guide&quot;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Examples of Products</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The most typical examples of products that can be realized using the PlayStation&reg;Network commerce service are described below, along with their technical points.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>Downloadable Games</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Stand-alone, full-set game applications can be distributed as DRM content. It is also possible to distribute free trial editions of game packages as subset applications.<br>Create a downloadable game package of the application with the executable file, data files, and content information files, and register this package as DRM content.<br>When a downloadable game is purchased, it is installed on the Memory Stick&trade;. It can be booted by selecting it from the System Software &quot;Game&quot; Column.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_2">
+<div style="margin-left:40px;"><h4><b>Additional Game Data</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Data of additional items, characters, and scenarios to be used in the game can be distributed as DRM content. Such data can be placed in the title store so that it is available for purchase only from the applicable application.<br>Create an additional game data package for distribution and the content information files (required for game data), and register this package as DRM content.<br>When such data is purchased, it is automatically saved on the Memory Stick&trade; in a directory based on the product number specified in the system file (PARAM.SFO) contained in the package. The application must be programmed to check if files of additional items exist in that directory, and then use them if found.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_3">
+<div style="margin-left:40px;"><h4><b>Consumable Items</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Ammunition and fuel are examples of consumable items, which can be used only a certain number of times in the game. Such items can be realized using service entitlements, which is the right to consume an item a certain number of times. When a service entitlement is purchased, the number of times that the user can use the item will be increased. Since the number of usable times is managed by the NP server, the user must be connected to the network during game play.<br>When creating a service entitlement for a consumable item, set the number of usable times.<br>Before using an item, the application must use the NP manager utility ticketing API to check the number of usable times left in the item. This information is available on the NP server. When the item is consumed, the application must again use the ticketing API to notify the NP server of this event.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_4">
+<div style="margin-left:40px;"><h4><b>Restricted Downloadable Games</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A downloadable game can be made usable for only a set period of time after it is purchased. This is appropriate, for example, to provide users with a demo version that can be started only until the title goes on sale.<br>When creating such a downloadable game, set the expiration time when registering the DRM content.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Currently, if additional game data is sold in this way, there is no way for users to find out the expiration time of the data. Therefore, additional game data cannot be provided in this format. The user can verify the expiration time of a downloadable game from system software.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1_5">
+<div style="margin-left:40px;"><h4><b>Subscription Network Services</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">MMORPG and other fee-based subscription services can be provided on the game server using service entitlements with expiration times. Such services can be realized as described above, or the game server (instead of the client application) can be used to verify the validity of the user's entitlement.<br>When using the game server for verifying the validity, the client application obtains the ticket from the NP server using the NP manager utility ticketing API and then sends it to the game server. The game server then uses the Ticket Checker Module (TCM) to verify the entitlement information in the ticket and thereby control accesses to the server.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_2">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Currently, subscription network services cannot be used.<br></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Overview of the Development Process</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Before Starting Development</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Registration is required before starting development of products and applications that use the PlayStation&reg;Network commerce service. For more information, contact SCE through the PSP&trade; Developer Network website.<br>Also, it is necessary to configure network settings correctly and create an account (&quot;sign up&quot;) in order to access the NP server from the PSP&trade; development tool. For more information regarding this procedure, refer to the document &quot;NP for Development User's Guide.&quot; (This document is available from the PSP&trade; Developer Network website.)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Product and Application Development</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The development of applications that access the PlayStation&reg;Store for purchasing items and entitlements, as well as the development of additional game data used by such applications will be described below.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>Create and Test Additional Game Data Locally</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">First, create the program and data to be distributed as additional game data. The main points regarding this step are as follows. (For more information, refer to the documents &quot;NPDRM Library&quot; and &quot;Additional Game Data Package Creation Guide&quot;.)<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Let .edat be the extension of the data file to be encrypted and create a ZIP archive consisting of this file together with the system file and content information files.
+<li> Upload the ZIP archive to SCE's authoring server to create the additional game data package
+<li> Download the additional game data package to a PlayStation&reg;3 or PC and expand it on the Memory Stick&trade; 
+<li> Use the PSP&trade; development tool to check that the data can be used correctly by the application
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-English001.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Create and Test Additional Game Data Locally</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>Upload to the Development Environment</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Upload the additional game data package to the development environment and register it as DRM content to generate product and catalog information. Create the service entitlement in the development environment at this time as well. The main points regarding this step are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Upload the NPDRM package to the Drop Point
+<li> Use the Product Management Tool (PMT) to edit product and catalog information
+<li> Use the PMT to create service entitlements
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-English002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Upload to the Development Environment</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>Test in the Development Environment</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The application must use the NP IN-GAME commerce 2 utility to access the PlayStation&reg;Store in order to browse and purchase products. Test that this processing is correctly implemented by browsing and purchasing products created in the development environment.<br>Test to make sure that the content can be correctly downloaded and saved as game data, and that it can be correctly used in the application. (If the product can be purchased, it should work correctly since the subsequent processing has already been tested locally.)<br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<br>
+</div>
+<br>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-English003.gif">
+</div>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<br><b>Figure 3  Test Purchasing of Content</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><br>For service entitlements, use the NP manager utility ticketing API to check whether or not the user has the right to use an item or feature. Test that this processing is correctly implemented.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-English004.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  Test Purchasing of Service Entitlements</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>QA</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After testing by the licensee in the development environment, the product will be published to the QA environment, where SCE QA will conduct testing.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>Release</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After all testing, the product will be transferred to the production environment and be made available to the end user. At this time, the final encryption process will be executed on the product.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-English005.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  QA and Release</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Development Support Functions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Wallet Charging</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For checkout processing to complete, there must be at least the price of the content charged to the user's wallet.<br>Wallets can be charged using the Account Management menu in the System Software.<br>In the development environment, wallets can be charged as necessary using the following credit card or PlayStation&reg;Network Card information.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_6">
+<div style="margin-left:40px;"><h4><b>Credit Card</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;·Credit card number:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;See table below&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;·Expiration date:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;·Address:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;·Name:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;·CVC code:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any 3-digit number&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Country/Region</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Card Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Card Number</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Japan&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Taiwan&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Hong Kong&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Singapore&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;European Countries&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;United States&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4444 4444 4444 4448&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Canada&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4444 4444 4444 4448&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_7">
+<div style="margin-left:40px;"><h4><b>PlayStation&reg;Network Card</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;·PlayStation&reg;Network Card number:  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp; One of the numbers in the table below&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Country/Region</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PlayStation&reg;Network Card Number</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Charge amount</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Japan&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;M2LN-NHFM-66H9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;10,000 JPY&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;United States&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;77R2-CLFC-7AK9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Canada&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7NE3-KHFR-TT63&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 CAD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Taiwan, Province of China&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7DKD-5CF5-J7H2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;600 TWD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Hong Kong&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5E2N-42FG-48NE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;160.00 HKD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;UK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;QGFF-LMFL-5CE6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 GBP&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Ireland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AM8T-NMF8-8A39&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Belgium&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RPQB-T7F5-NDG5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Luxembourg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;77DP-66F5-F2JL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Netherland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;BQ77-98FP-CCQK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;France&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Q5A3-2PF4-KPP4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Germany&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;R6PN-44FA-L4G9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Austria&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;D828-PEFE-L29H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Switzerland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8LCJ-7CFA-333C&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;80.00 CHF&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Italy&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;B676-EEFD-KQ6K&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Portugal&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;F6BN-DJF7-R9E9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Denmark&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FPKN-5HFN-C7CB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;400.00 DKK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Finland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3PGN-QDFF-Q2RJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Norway&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;TQTD-QEFN-QNEJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;400.00 NOK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sweden&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;37GT-AGFQ-3QTJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;400.00 SEK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Australia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5L85-4HFF-3A9B&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;80.00 AUD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;New Zealand&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4M2P-6JFP-M4QG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;100.00 NZD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Spain&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;6HC2-MEF9-77QE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Russia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;83NT-9QF2-QBQ6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1,500 RUB&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;UAE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;E3TE-TLF8-ETNK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;South Africa&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RFP5-8NFA-NNPD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;500.00 ZAR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Singapore&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4CAT-6MF6-KGND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;40.00 SGD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Korea&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;BK7N-HCFE-EG92&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50,000 KRW&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Czech Republic&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;L45D-3NFM-DKRM&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1,500.00 CZK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Poland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AGCF-FCF4-CPQT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;200.00 PLN&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Saudi Arabia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DP8B-85FK-P93A&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Greece&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;P2PH-T8FM-R55N&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Mexico&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;EHJP-44FF-CCAB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Indonesia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GKD5-6NFA-7TG7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;175,000 IDR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Thailand&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;25JK-GQF7-QBM9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1,000.00 THB&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Title Store Preview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">On the PSP&trade; development tool, the System Software provides a preview function for the title store.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>Sign in</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Sign in with an account that has access rights to the catalog of the title to preview.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>Set the Service ID</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In the System Software menu, select "Service ID" from "Debug Settings" of "Settings". The onscreen keyboard will be displayed. Input the Service ID.<br>Example: UP0001-SXXX00001_00<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>Preview</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In the System Software menu, select "Title Store Preview" from "PlayStation&reg;Network" to display the catalog in the development environment. Of the four tabs, the global catalog for the regional store will be displayed in the leftmost tab, and the in-game catalog for the title store will be displayed in the next tab to the right.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

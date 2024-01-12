@@ -1,0 +1,1157 @@
+<html lang="jp">
+<head>
+<title>HTTPS-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+HTTPSリファレンス
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="httpsCallback"></a>
+<table width="100%"><td width="70%"><font size=6>httpsCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SSL通信が発生した時のコールバック関数<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+int *(*<b>httpsCallback</b>)(
+	unsigned int <i>verify_err</i>,
+	SceSslCert *const <i>ssl_cert</i>[],
+<i>	</i>int<i> cert_num</i>,
+<i>	</i>void<i> *user_arg</i>
+);
+
+</font></pre></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>verify_err</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;証明書のベリファイエラーが発生している時に、その原因がbit表現で&nbsp;&nbsp;<br>&nbsp;&nbsp;格納されます。設定される値は<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsGetSslError">sceHttpsGetSslError</a>()でエラー値が&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ERROR_CERTの時のdetailの値と同一です。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsGetSslError">sceHttpsGetSslError</a>()の説明をご覧ください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;証明書チェーンを表す配列へのポインタ。&nbsp;&nbsp;<br>&nbsp;&nbsp;SceSslCertは、libssl.hで定義されています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;証明書チェーンの証明書の数。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>user_arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で指定した値が格納されます。&nbsp;&nbsp;<br>&nbsp;&nbsp;使用しなくても構いません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL通信を許可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負の値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL通信を不許可&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SSL通信発生時に呼び出されるコールバック関数の型定義です。<br><i>verify_err</i>, <i>ssl_cert</i>, <i>cert_num</i>の情報から、SSL通信を開始してもよいなら正の値、SSL通信を中止したい時は負の値を返してください。<i>ssl_cert</i>の証明書チェーンの情報は直接は参照できません。<a href="../network/libssl-Reference-Japanese.htm#sceSslGetSerialNumber">sceSslGetSerialNumber</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>()などを用いて情報を取得してください。<br>また証明書チェーンのメモリはコールバック関数から抜けた後に開放されるため、証明書の情報が必要な場合はコールバック関数内で別メモリに保存しておく必要があります。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libhttpをマルチスレッドで使用する場合は、当関数もマルチスレッドセーフである必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceHttpsData"></a>
+<table width="100%"><td width="70%"><font size=6>SceHttpsData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTPS用データ構造体<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>typedef struct SceHttpsData<b> </b>{
+	char *<i>ptr</i>;
+	unsigned int <i>size</i>;
+} <b>SceHttpsData;</b>
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ptr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データ領域へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()で、証明書、秘密鍵データを与える際に使用する構造体です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTPS設定の初期化および証明書設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsInit</b>(
+<i>	</i>int <i>ca_cert_num</i>,
+<i>	</i>const <a href="../network/HTTPS-Reference-Japanese.htm#SceHttpsData">SceHttpsData</a><i> **ca_list</i>,
+<i>	</i>const <a href="../network/HTTPS-Reference-Japanese.htm#SceHttpsData">SceHttpsData</a><i>*cert</i>,
+<i>	</i>const <a href="../network/HTTPS-Reference-Japanese.htm#SceHttpsData">SceHttpsData</a><i> *priv_key</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_cert_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルートCA証明書を示す構造体配列の要素数。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_list</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルートCA証明書を示す構造体配列へのポインタ。&nbsp;&nbsp;<br>&nbsp;&nbsp;要素数はCA_cert_numで指定する。扱う証明書は、PEM形式のみ。&nbsp;&nbsp;<br>&nbsp;&nbsp;必要ない場合は、NULLにする。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;クライアント証明書を示す構造体へのポインタ。扱う証明書は、PEM形式のみ。&nbsp;&nbsp;<br>&nbsp;&nbsp;必要ない場合は、NULLにする。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>priv_key</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;秘密鍵を示す構造体へのポインタ。扱う証明書は、PEM形式のみ。&nbsp;&nbsp;<br>&nbsp;&nbsp;必要ない場合は、NULLにする。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、SCE_OKを返します。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリの空き領域が足りない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431020&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_ALREADY_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnd">sceHttpsEnd</a>()を呼ぶことなく、&nbsp;&nbsp;<br>&nbsp;&nbsp;2回目のsceHttpsInit()を呼んだ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431075&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_SSL_ERROR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSLレイヤーのエラーが発生した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">HTTPS設定の初期化を行います。<a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>()でHTTPSを使用するコネクションを作成する前に呼び出しておく必要があります。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libhttpは、デフォルトのRootCA証明書をFLASHストレージに所持しています。そのCA証明書を使用する場合、本関数では<i>ca_list</i>はNULLを指定し、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()で別途CA証明書をロードしてください。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsLoadDefaultCert"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsLoadDefaultCert<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デフォルトCA証明書の読み込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsLoadDefaultCert</b>(
+	unsigned int <i>issuer</i>,
+<i>	</i>unsigned int<i> certs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>issuer</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロードするCA証明書の発行者を指定します。以下の値が指定できます。&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_ALL&nbsp;&nbsp;&nbsp;&nbsp;全ての発行者の全てのCA証明書をロードします&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_RSA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_VERISIGN&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_GEOTRUST&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_ENTRUST&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_VALICERT&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_CYBERTRUST&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_THAWTE&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_DIGICERT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>certs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>issuer</i>で指定した発行者ごとにロードする証明書をビット論理和で指定できます。&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ISSUER_ALLを<i>issuer</i>に指定していた場合は、&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>certs</i>の値は無視され全ての発行者の全てのCA証明書がロードされます。&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>certs</i>にSCE_HTTPS_ALL_CERTSを指定した場合は、&nbsp;&nbsp;<br>&nbsp;&nbsp;指定された発行者の全てのCA証明書をロードします。&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: 共通]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ALL_CERTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;発行者の全ての証明書をロードします&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_RSA]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_RSA_1024_V1_C3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_RSA_2048_V3&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_VERISIGN]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C1&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C1_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C2_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C4_G2&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C1_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C2_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C4_G3&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_C3_G5&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_TSA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VERISIGN_RCA_RSA_SS&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_SCE]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_01&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_02&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_03&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_04&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_SCE_RCA_05&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_GEOTRUST]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_GEOTRUST_GLOBAL_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_GEOTRUST_EQUIFAX_S_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_GEOTRUST_EQUIFAX_S_EBIZ_CA1&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_ENTRUST]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ENTRUST_SS_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_VALICERT]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_VALICERT_C2_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_CYBERTRUST]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_BALTIMORE_CT_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_GTE_CT_G_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_GTE_CT_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_OMNI_GLOBALSIGN_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_THAWTE]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_THAWTE_PREMIUM_S_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_THAWTE_S_CA&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_COMODO]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_ADDTRUST_EXT_CA_ROOT&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_AAA_CERT_SERVICES&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_UTN_USERFIRST_HARDWARE&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;[issuer: SCE_HTTPS_ISSUER_DIGICERT]&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_DIGICERT_HA_EV_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_DIGICERT_A_ID_RCA&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_HTTPS_DIGICERT_GLOBAL_RCA&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、ロードしたCA証明書の数を返します。<br>エラーの時は負の値を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリの空き領域が足りない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431075&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_SSL_ERROR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSLレイヤーのエラーが発生した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">FLASHストレージに保存されているデフォルトCA証明書をロードし使用します。<i>issuer</i>に証明書発行者を、<i>certs</i>にロードする証明書を指定します。あらかじめlibsslの初期化および<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()が呼ばれている必要があります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* FLASHストレージに含まれる全てのCA証明書をロードする場合 */
+ret = sceHttpsLoadDefaultCert(SCE_HTTPS_ISSUER_ALL, 0);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+..
+
+/* FLASHストレージに含まれるCA証明書のうちSCE_HTTPS_ISSUER_RSAから
+発行された全てのCA証明書をロードする場合 */
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_RSA,
+ 				SCE_HTTPS_ALL_CERTS);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+..
+
+/* FLASHストレージに含まれるCA証明書のうちSCE_HTTPS_ISSUER_RSAから
+発行されたSCE_HTTPS_RSA_2048_V3証明書のみをロードする場合 */
+
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_RSA, 
+				SCE_HTTPS_RSA_2048_V3);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+..
+
+/* FLASHストレージに含まれるCA証明書のうちSCE_HTTPS_ISSUER_RSAと
+SCE_HTTPS_ISSUER_VERISIGNから発行された全てのCA証明書をロードする場合 */
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_RSA,
+ 				SCE_HTTPS_ALL_CERTS);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+ret = sceHttpsLoadDefaultCert(	SCE_HTTPS_ISSUER_VERISIGN,
+ 				SCE_HTTPS_ALL_CERTS);
+if (ret &lt; 0){
+	printf("sceHttpsLoadDefaultCert() returns %x\n", ret);
+	goto error;
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">独自のCA証明書を使用する場合は、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()でセットする事ができます。<br>また<i>issuer</i>にSCE_HTTPS_ISSUER_ALLを指定した場合、アプリケーションが使用しているランタイムライブラリのバージョン当時の全てのルートCA証明書がロードされます。システムソフトウェアのアップデートでルートCA証明書の追加が行われた場合も、ロードされるルートCA証明書の数は変わりません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsEnd"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsEnd<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTPSの終了<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsEnd</b>(
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、SCE_OKを返します。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS初期化前&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">証明書のデータなど、HTTPS処理用に使用していたメモリを開放します。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">HTTPSで通信を行っていたオブジェクトを<a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>()で全て削除してから呼び出してください。<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>()と異なり、テンプレート設定に関してはsceHttpsEnd()の前に全て削除する必要はありません。また、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>()を呼び出す前に呼ぶ必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>(),<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateTemplate">sceHttpCreateTemplate</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>(),<br><a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateRequest">sceHttpCreateRequest</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteTemplate">sceHttpDeleteTemplate</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>(),<br><a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsGetCaList"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsGetCaList<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>現在ロードされているRootCA証明書配列を取得する<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsGetCaList</b>(
+	const SceSslCert <i>**ca_cert</i>[],
+	int<i> *ca_num</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロード済みのRootCA証明書のポインタの配列を格納するためのメモリアドレス。&nbsp;&nbsp;<br>&nbsp;&nbsp;RootCA証明書は、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()や<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()などでロードされる。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ca_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロードされたRootCA証明書の配列の個数を格納するためのメモリアドレス。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、SCE_OKを返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリが初期化されていない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">現在ロードされているRootCA証明書の配列と配列数を取得します。RootCA証明書はlibsslの各種関数を経由することで情報が取得できます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>(), <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(),<br><a href="../network/libssl-Reference-Japanese.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetIssuerName">sceSslGetIssuerName</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>(),<br><a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetNotAfter">sceSslGetNotAfter</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetNotBefore">sceSslGetNotBefore</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsEnableOption"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsEnableOption<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[SSLオプション]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTPS通信の各種チェック有効化<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsEnableOption</b>(
+	int<i> ssl_flags</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>ssl_flags</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;下記のビット定義を指定することで、HTTPS通信時の各種チェックを&nbsp;<br>&nbsp;有効にすることができます。複数のビット論理和を指定することができます。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;(0x01U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、&nbsp;<br>&nbsp;サーバーベリファイを行うかどうか。&nbsp;<br>&nbsp;初期値はon。&nbsp;<br>&nbsp;サーバーベリファイのための&nbsp;<br>&nbsp;ルートCA証明書は<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(),&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()で&nbsp;<br>&nbsp;指定することができます。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CLIENT_VERIFY&nbsp;<br>&nbsp;(0x02U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、クライアント証明を&nbsp;<br>&nbsp;行うかどうか。初期値はoff。&nbsp;<br>&nbsp;クライアント証明書と秘密鍵は&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()で指定する。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CN_CHECK&nbsp;<br>&nbsp;(0x04U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバーから送られて&nbsp;<br>&nbsp;きた証明書のcommon&nbsp;nameフィールド&nbsp;<br>&nbsp;と接続先URLのホスト名との&nbsp;<br>&nbsp;一致チェックをするかどうか。&nbsp;<br>&nbsp;初期値はon。このフラグは&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;がonの時のみ有効。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_AFTER_CHECK&nbsp;<br>&nbsp;(0x08U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバーから送られて&nbsp;<br>&nbsp;きた証明書の有効期限前チェックを&nbsp;<br>&nbsp;するかどうか。&nbsp;<br>&nbsp;初期値はon。このフラグは&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;がonの時のみ有効&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_BEFORE_CHECK&nbsp;<br>&nbsp;(0x10U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバーから送られて&nbsp;<br>&nbsp;きた証明書の有効期限前チェックを&nbsp;<br>&nbsp;するかどうか。&nbsp;<br>&nbsp;初期値はon。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_KNOWN_CA_CHECK&nbsp;<br>&nbsp;(0x20U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバー証明書を&nbsp;<br>&nbsp;発行したルートCAはローカルで&nbsp;<br>&nbsp;所持しているルートCAの中にあるか&nbsp;<br>&nbsp;チェックをするかどうか。&nbsp;<br>&nbsp;初期値はon。ルートCA証明書は&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(),&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()で&nbsp;<br>&nbsp;指定することができます。&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、SCE_OKを返します。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS初期化前&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">HTTPS通信の挙動を設定できます。設定を無効にするときは<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>()をお使いください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsDisableOption"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsDisableOption<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[SSLオプション]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTPS通信の各種チェック無効化<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsDisableOption</b>(
+	int <i>ssl_flags</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>ssl_flags</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;下記のビット定義を指定することで、HTTPS通信時の各種チェックを&nbsp;<br>&nbsp;無効にすることができます。複数のビット論理和を指定することができます。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;(0x01U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、&nbsp;<br>&nbsp;サーバーベリファイを行うかどうか。&nbsp;<br>&nbsp;初期値はon。&nbsp;<br>&nbsp;サーバーベリファイのための&nbsp;<br>&nbsp;ルートCA証明書は<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(),&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()で&nbsp;<br>&nbsp;指定することができます。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CLIENT_VERIFY&nbsp;<br>&nbsp;(0x02U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、クライアント証明を&nbsp;<br>&nbsp;行うかどうか。初期値はoff。&nbsp;<br>&nbsp;クライアント証明書と秘密鍵は&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()で指定する。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_CN_CHECK&nbsp;<br>&nbsp;(0x04U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバーから送られて&nbsp;<br>&nbsp;きた証明書のcommon&nbsp;nameフィールド&nbsp;<br>&nbsp;と接続先URLのホスト名との&nbsp;<br>&nbsp;一致チェックをするかどうか。&nbsp;<br>&nbsp;初期値はon。このフラグは&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;がonの時のみ有効。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_AFTER_CHECK&nbsp;<br>&nbsp;(0x08U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバーから送られて&nbsp;<br>&nbsp;きた証明書の有効期限前チェックを&nbsp;<br>&nbsp;するかどうか。&nbsp;<br>&nbsp;初期値はon。このフラグは&nbsp;<br>&nbsp;SCE_HTTPS_FLAG_SERVER_VERIFY&nbsp;<br>&nbsp;がonの時のみ有効&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_NOT_BEFORE_CHECK&nbsp;<br>&nbsp;(0x10U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバーから送られて&nbsp;<br>&nbsp;きた証明書の有効期限前チェックを&nbsp;<br>&nbsp;するかどうか。&nbsp;<br>&nbsp;初期値はon。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SCE_HTTPS_FLAG_KNOWN_CA_CHECK&nbsp;<br>&nbsp;(0x20U)&nbsp;</td>
+<td valign="top">&nbsp;HTTPS通信時、サーバー証明書を&nbsp;<br>&nbsp;発行したルートCAはローカルで&nbsp;<br>&nbsp;所持しているルートCAの中にあるか&nbsp;<br>&nbsp;チェックをするかどうか。&nbsp;<br>&nbsp;初期値はon。ルートCA証明書は&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(),&nbsp;<br>&nbsp;<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()で&nbsp;<br>&nbsp;指定することができます。&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、SCE_OKを返します。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS初期化前&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">HTTPS通信の挙動を設定できます。設定を有効にするときは、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>()をお使いください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsGetSslError"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsGetSslError<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SSL通信の詳細エラーコードの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+#include &lt;libhttp_error.h&gt;
+
+int <b>sceHttpsGetSslError</b>(
+	int <i>*request_id</i>,
+	int<i> *err_num</i>,
+	unsigned int<i> *detail</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>request_id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSLレイヤーのエラー情報を取得するリクエストIDを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>err_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコードを格納するためのアドレスを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;エラーコードの値によっては、<i>detail</i>により詳細な原因が格納されます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>detail</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラーコードの発生した原因の詳細を格納するためのアドレスを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;エラーコードの値によっては使用されません。&nbsp;&nbsp;<br>&nbsp;&nbsp;また、複数の原因でエラーが起こっている場合は、それら原因のビット論理和&nbsp;&nbsp;<br>&nbsp;&nbsp;で表現された値が格納されます。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>err_num</i>に格納されるエラーコードと<i>detail</i>に格納される詳細値の対応は、下記の通りです。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSLライブラリの使用できる&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリが不足している&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">detailは、現在のバージョンでは未使用。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435060&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_CERT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サーバー証明書が不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">detail一覧<br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_INTERNAL&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x01U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ内部のエラー&nbsp;&nbsp;<br>&nbsp;&nbsp;（現バージョンではこれが返る事はない）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_INVALID_CERT&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x02U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サーバー証明書のフォーマットが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_CN_CHECK&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x04U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サーバー証明書のcommon nameチェック失敗&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_NOT_AFTER_CHECK&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x08U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サーバー証明書が有効期限後&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_NOT_BEFORE_CHECK&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x10U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サーバー証明書が有効期限前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERR_UNKNOWN_CA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;(0x20U)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サーバー証明書を発行したルートCAの&nbsp;&nbsp;<br>&nbsp;&nbsp;証明書を持っていない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435061&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_HANDSHAKE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSLハンドシェイクエラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">detailは、現在のバージョンでは未使用。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435062&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_IO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL送受信エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">detailは、現在のバージョンでは未使用。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435063&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_INTERNAL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSLライブラリ内部エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">detailは、現在のバージョンでは未使用。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435064&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTPS_ERROR_PROXY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL通信前にHTTP PROXY&nbsp;&nbsp;<br>&nbsp;&nbsp;サーバーがエラーを返した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">detailは、現在のバージョンでは未使用。<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常にエラーコードが取得できた場合、SCE_OKを返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPS初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431100&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>request_id</i>で指定された値が不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804311FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>err_num</i>または<i>detail</i>にNULLが指定された&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpReadData">sceHttpReadData</a>()で発生したSCE_HTTP_SSL_ERRORの詳細理由を取得します。<i>request_id</i>にSCE_HTTP_SSL_ERRORの発生したリクエストIDを指定すると、<i>err_num</i>, <i>detail</i>で指定したアドレスにエラーコードおよび理由を示す値が格納されます。<i>detail</i>を使用しないエラーコードの場合には<i>detail</i>には0が格納されます。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_1">
+<div style="margin-left:40px;"><h4><b>注意事項</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">HTTP Pipeline使用時には、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>()等のレスポンスステータス取得関数でレスポンスヘッダを受信するため、それら関数でもSCE_HTTP_SSL_ERRORが発生することがありえることにご注意ください。またSSL通信を内部で行わない<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(), <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsLoadDefaultCert">sceHttpsLoadDefaultCert</a>()関数で発生するSCE_HTTP_SSL_ERRORからは詳細情報は取得できません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpReadData">sceHttpReadData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceHttpsSetSslCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceHttpsSetSslCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SSL通信発生時のコールバック関数設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libhttps.h&gt;
+
+int <b>sceHttpsSetSslCallback</b>(
+	int <i>id</i>,
+	int (*<i><a href="../network/HTTPS-Reference-Japanese.htm#httpsCallback">httpsCallback</a></i>)(unsigned int, SceSslCert *const sslCert[],int,void* ),
+<i>	void *user_arg</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止/許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象となるテンプレート設定、コネクション設定のいずれかのID。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i><a href="../network/HTTPS-Reference-Japanese.htm#httpsCallback">httpsCallback</a></i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバック関数へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>user_arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザが自由に設定してよい値。&nbsp;&nbsp;<br>&nbsp;&nbsp;コールバック関数が呼び出される時に設定した値が引数に使用される。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、SCE_OKを返します。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431100&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたIDが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80431001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_HTTP_BEFORE_INIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリが初期化されていない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ssl通信が発生した時に呼び出されるコールバック関数をセットします。コールバック関数が設定されていない場合は、<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>(), <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>()で指定された動作で処理されます。<br><i><a href="../network/HTTPS-Reference-Japanese.htm#httpsCallback">httpsCallback</a></i>にNULLを指定することで、コールバック関数を未設定の状態に戻すことができます。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">設定したコールバック関数は、HTTP通信処理関数を呼び出したスレッドのコンテキストで実行されます。HTTP Pipelineモードを使用した送受信を行わない限り、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()もしくは<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequestInCacheFirstMode">sceHttpSendRequestInCacheFirstMode</a>()を呼び出したスレッドのコンテキストで実行されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsEnableOption">sceHttpsEnableOption</a>(), <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsDisableOption">sceHttpsDisableOption</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequestInCacheFirstMode">sceHttpSendRequestInCacheFirstMode</a>(),<br><a href="../network/HTTPS-Reference-Japanese.htm#httpsCallback">httpsCallback</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

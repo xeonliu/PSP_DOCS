@@ -1,0 +1,201 @@
+<html lang="jp">
+<head>
+<title>libgim_Picture-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgim_picture
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgim_pictureはテクスチャとして使用する2Dグラフィックスデータを取り扱うライブラリです。まず第１に、2Dグラフィックスデータファイルの内容を解釈してイメージ / パレットといったサブブロックを持つピクチャ構造体に取り込む機能、第2に、ピクチャ構造体をアニメートする機能、第３に、libguと連携してピクチャ構造体をもとにディスプレイリストを作成しテクスチャを設定する機能を提供します。<br><br>出力に関して、libgim_pictureはテクスチャを設定する描画コマンドシーケンスをlibguに渡すだけの処理を行います。ディスプレイリストの管理と画像出力は、アプリケーション側でモデルの描画処理と合わせて、適切にlibguを制御して行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgim_pictureを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gim/gim_picture.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgim_picture.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">内部でlibguの関数を呼び出していますので、libguの関連ファイルも必要になります。また、<a href="../graphics/libgim_Picture-Reference-Japanese.htm#SceGimPicture">SceGimPicture</a>などの構造体に直接アクセスする場合には、gim/gim_protected.hもインクルードしてください。<br>libgimはソースファイルが公開されています。devkit/src/gim_picture/を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/graphics/picture</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サンプルのグラフィックスデータをロードし、３つのコピーを作成して、それぞれ異なるフレームレートで再生するというサンプルです。コントローラの操作に応じて、回転、移動、ディゾルブon/off切り替えを行うしくみになっています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GIM_Format-Overview<br>GIM-Converter<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libgim自体の初期化は不要ですが、コールバック関数を登録する必要があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ピクチャ構造体用のメモリを確保 / 解放する関数
+<li> DMA転送用のメモリを確保 / 解放する関数（ピクチャ構造体用のメモリ確保 / 解放関数と兼用するときは不要）
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>データファイルの読み込み</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">2Dデータファイルを適宜の方法で読み込み、バイナリイメージをメモリ上の任意のバッファに格納してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>ピクチャ構造体の作成とデータのロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">まず<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureCreate">sceGimPictureCreate</a>()を用いてピクチャ構造体（<a href="../graphics/libgim_Picture-Reference-Japanese.htm#SceGimPicture">SceGimPicture</a>）を生成し、続いて<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureLoadFile">sceGimPictureLoadFile</a>()を用いてファイルイメージ中のピクチャデータをピクチャ構造体に読み込んでください。<br>あらかじめ<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureGetChunk">sceGimPictureGetChunk</a>()を用いてピクチャデータ（<a href="../graphics/libgim_Picture-Reference-Japanese.htm#SceGimChunk">SceGimChunk</a>）へのポインタを取得しておくと、そのポインタを<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureCreate">sceGimPictureCreate</a>()に渡すことでピクチャ構造体の生成とピクチャデータの読み込みを同時に行うことができます。また、<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureLoad">sceGimPictureLoad</a>()を用いて既存のピクチャ構造体にピクチャデータを読み込むこともできます。<br>また、<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureDuplicate">sceGimPictureDuplicate</a>()を用いると、すでに生成しロードしてあるピクチャ構造体のコピーを作成することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>描画パラメータの設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">必要に応じて、<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureSetFrameRate">sceGimPictureSetFrameRate</a>() / <a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureSetEnableBits">sceGimPictureSetEnableBits</a>()などを用いて、描画に使用するパラメータを設定してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>ディスプレイリストの作成開始</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ディスプレイリスト用のメモリを適宜に確保し、<a href="../graphics/libgu-Reference-Japanese.htm#sceGuStart">sceGuStart</a>()でディスプレイリストの作成を開始してください。ディスプレイリストのモード設定などは任意です。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>ピクチャの更新と描画</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureAnimate">sceGimPictureAnimate</a>()を用いてアニメーションの時間を進める処理を行い、<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureActivate">sceGimPictureActivate</a>()を用いてテクスチャとしてディスプレイリストに挿入してください。プリミティブを描画する処理はlibgimではサポートしませんので、アプリケーション側で適宜に行う必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ディゾルブ機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ディゾルブ機能は２つのフレームを透過的に重ね合わせ、透過率を制御して中間のフレームを生成する機能です。フレームレートの低い「ぱたぱた動く」ピクチャを補間して滑らかに動かすための機能で、ビデオ編集でいうディゾルブ（オーバーラップ）とは異なります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libgim_Picture-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1　ディゾルブによるフレームの補間</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureSetEnableBits">sceGimPictureSetEnableBits</a>()でSCEGIM_ENABLE_DISSOLVEを有効にすると、そのピクチャに対してディゾルブ機能が働くようになります。具体的には、<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureAnimate">sceGimPictureAnimate</a>()でカレントフレームを算出する際に、適切なディゾルブ値が算出されるようになります。<br>libgimはディゾルブ値を算出・保持するだけで、描画に反映する処理は行いません。基本フレームがミップマップレベル0、ディゾルブフレームがミップマップレベル1にそれぞれ出力されますので、アプリケーション側で<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureGetDissolve">sceGimPictureGetDissolve</a>()を用いてディゾルブ値を取得し、モデルに関する処理と適宜調整したうえで、<a href="../graphics/libgu-Reference-Japanese.htm#sceGuTexLevelMode">sceGuTexLevelMode</a>()を用いて描画に反映するしくみにしてください。なお、上記のとおりディゾルブ機能でミップマップを使用するため、ピクチャがミップマップ画像を含んでいても無視され、レベル１のイメージだけが使用されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>イメージクロップ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">イメージクロップは、画像の一部分を切り出して表示に使用する機能です。次のようにx, y, w, hの４つのパラメータによって、表示に使用する範囲を指定します。x, y, w, hの値はそれぞれ画像の横幅 / 高さを2のべき乗に切り上げたサイズに対する比率であり、0.0～1.0の値をとります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libgim_Picture-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2　イメージクロップの範囲指定</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureLoadFile">sceGimPictureLoadFile</a>() / <a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureLoad">sceGimPictureLoad</a>()でイメージの幅 / 高さが２のべき乗ではないピクチャをロードしたときには、そのイメージ全体を表すように（２のべき乗サイズに足りない部分をマスクするように）自動的にイメージクロップが設定されます。また、アプリケーション側で<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureSetImageCrop">sceGimPictureSetImageCrop</a>()を用いて任意にイメージクロップを設定することができ、ズーム / パン、そのほかの処理に利用することができます。<br><br>libgimはイメージクロップの値をピクチャごとに保持・管理するだけで、描画に反映する処理は行いません。アプリケーション側で<a href="../graphics/libgim_Picture-Reference-Japanese.htm#sceGimPictureGetImageCrop">sceGimPictureGetImageCrop</a>()を用いてイメージクロップの値を取得し、モデルに関する処理と適宜調整したうえで、<a href="../graphics/libgu-Reference-Japanese.htm#sceGuTexOffset">sceGuTexOffset</a>() / <a href="../graphics/libgu-Reference-Japanese.htm#sceGuTexScale">sceGuTexScale</a>()を用いて描画に反映するようにしてください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

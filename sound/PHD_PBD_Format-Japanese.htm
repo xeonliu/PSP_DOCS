@@ -1,0 +1,928 @@
+<html lang="jp">
+<head>
+<title>PHD_PBD_Format</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PHD/PBDフォーマット
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>PSP&reg;用サウンドデータの概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>PHD/PBDおよびPEFデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PHD/PBDは、高レベルサウンドライブラリ（libsndp）で利用する音素データです。<br>PHDはヘッダとも呼ばれ、各音素に対するアトリビュートを連結したデータです。PBDはボディとも呼ばれ、ADPCM（VAG）の波形データ部を連結した音素データです。両者を合わせて、MIDI再生時に音源が行う、プログラムナンバーとノートナンバーから該当する波形データを取得する処理に即したデータ構造を形作っています。<br>PEFはエフェクトパラメータのデータでPHD/PBDとは別に扱われます。<br>PHDデータのファイルは「.phd」、PBDデータのファイルは「.pbd」、PEFデータのファイルは「.pef」という拡張子を持ちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>VAGデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAGはADPCM形式で圧縮された波形データで、PBDの素となるものです。波形データと、サンプリング周波数など波形データに対する48バイトの情報で構成されています。<br>VAGデータのファイルは「.vag」という拡張子を持ちます。詳細はVAGファイルフォーマットドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サウンドデータの基本型</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PHD/PBDおよびPEFデータは以下に示す基本型で構成されます。バイトオーダーはリトルエンディアンです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき32ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;unsigned char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし8ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし32ビット整数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>PHDのデータフォーマット</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>PHDの全体的な構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PHDは、アトリビュート（属性）を単位とし、いくつかのアトリビュートを連結したブロック構造を取ります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  PHDの全体構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">PHDの先頭には必ず「コモンアトリビュート」を置く必要があります。コモンアトリビュートはPHD全体を管理する役割を持ち、他の各アトリビュートの位置（PHD先頭からのオフセット）とバージョン情報を含んでいます。<br>コモンアトリビュートの他には、libsndpで使用するアトリビュートが３種定義されているほか、所定のヘッダと任意のデータ内容を持つアトリビュートを定義することができます。<br>このようなブロック構造により、独自のデータを保持したPHDを作ることができ、柔軟性に富むフォーマットになっています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>アトリビュートの基本構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アトリビュートは次に示す基本構造を持ちます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;識別ID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュートサイズ（コンテキストのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;data&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コンテキスト（任意のデータ）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">以下の識別IDは予約されています。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>識別ID</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>用途</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPHD'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コモンアトリビュート&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPVA'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsndp用（VAGアトリビュート）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPTN'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsndp用（トーンアトリビュート）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPPG'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsndp用（プログラムアトリビュート）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">アトリビュートサイズはアトリビュート全体ではなく、識別IDとアトリビュートサイズを除いたコンテキスト部分のバイト数ですので注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>コモンアトリビュート</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コモンアトリビュートは以下の構造を持ちます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;識別ID（'PPHD'）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュートサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;（上位16ビット：メジャーバージョン）&nbsp;&nbsp;<br>&nbsp;&nbsp;（下位16ビット：マイナーバージョン）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュート1へのオフセット&nbsp;&nbsp;<br>&nbsp;&nbsp;（PHDの先頭からのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュート2へのオフセット&nbsp;&nbsp;<br>&nbsp;&nbsp;（PHDの先頭からのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（以下、各アトリビュートへのオフセットが続く）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">libsndp用のPHDにおいては、attr_offset[0]～attr_offset[2]のフィールドはそれぞれプログラムアトリビュート / トーンアトリビュート / VAGアトリビュートの位置情報として予約されています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>libsndp用のPHDデータ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>libsndp用のPHDデータの構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsndpで使用するPHDデータは、以下に示すようにコモンアトリビュート / プログラムアトリビュート / トーンアトリビュート / VAGアトリビュートを持っています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  libsndpが使用するPHDの構造</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>コモンアトリビュート</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;識別ID（'PPHD'）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュートサイズ（56）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バージョン（0x00010000）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(予約領域)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プログラムアトリビュートへのオフセット&nbsp;&nbsp;<br>&nbsp;&nbsp;（PHD先頭からのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トーンアトリビュートへのオフセット&nbsp;&nbsp;<br>&nbsp;&nbsp;（PHD先頭からのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAGアトリビュートへのオフセット&nbsp;&nbsp;<br>&nbsp;&nbsp;（PHD先頭からのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2[9]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（任意データ）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>VAGアトリビュート</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAGアトリビュートは、連結してPBD内に保持されている個々の波形データに対する基本情報（VAGパラメータ）を保持します。VAGアトリビュートは次のように、VAGパラメータの配列の前にヘッダが付いたような構造になっています。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  VAGアトリビュートの構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPVA'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュートサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;（全体のバイト数 -8）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParam_size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAGパラメータのサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;（sizeof(vagParamCtx)）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(予約領域)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_low&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAGパラメータの開始インデックス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_high&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAGパラメータの最終インデックス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParam[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;vagParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAGパラメータ[index_low]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParam[&nbsp;&nbsp;<br>&nbsp;&nbsp;index_high - index_low + 1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;vagParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAGパラメータ[index_high]&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">vagParamは、開始インデックスから終了インデックスまでに対応する個数の要素を持つ配列で、その要素はVAGパラメータ（sdphd.hで定義されているvagParamCtx構造体）です。開始インデックスから終了インデックスまでのうち使用されていないインデックスがある場合、その使用されていないインデックスに対応する要素は0xffffffffでパディングされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>VAGパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAGパラメータはそれぞれPBD内の波形データひとつに対応し、次の構造を持ちます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;offset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;波形データのPBD先頭からのオフセット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サンプリング周波数&nbsp;&nbsp;<br>&nbsp;&nbsp;（単位：Hz）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;波形サイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;（単位：バイト）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">VAGパラメータのoffsetフィールド / sizeフィールドは、次のように、PBD内の波形データを指し示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  VAGパラメータによるPBD内の波形データ指定</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>トーンアトリビュート</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">トーンアトリビュートは、波形データを発音する際に使用する音量 / パンポット / エンベロープなどのパラメータと、音域やベンドレンジなどMIDI再生で必要となるパラメータで構成されています。トーンアトリビュートは次のように、トーンパラメータの配列の前にヘッダが付いたような構造になっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5  トーンアトリビュートの構造</b><br>
+</div>
+<br>
+<br>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPTN'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュートサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;（全体のバイト数 -8）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParam_size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トーンパラメータのサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;sizeof(toneParamCtx)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_low&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParamの開始インデックス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_high&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParamの終了インデックス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParam[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トーンパラメータ[index_low]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParam[&nbsp;&nbsp;<br>&nbsp;&nbsp;index_high - index_low + 1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トーンパラメータ[index_high]&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">toneParamは開始インデックスから終了インデックスまでに対応する個数の要素を持つ配列で、その要素はトーンパラメータ（sdphd.hで定義されているtoneParamCtx構造体）です。開始インデックスから終了インデックスまでのうち使用されていないインデックスがある場合、その使用されていないインデックスに対応する要素は0xffffffffでパディングされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>トーンパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">トーンパラメータはそれぞれひとつのVAGパラメータを指し示すインデックスとともに、発音時に使用するパラメータを持ちます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値の範囲</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParamCtxIndex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;このトーンパラメータが使用する&nbsp;&nbsp;<br>&nbsp;&nbsp;VAGパラメータのインデックス&nbsp;&nbsp;<br>&nbsp;&nbsp;（ノイズ音源の場合は0xffffffff）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;priority&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プライオリティ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0(低)～127(高)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;group&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;グループ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;noiseClock&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ノイズクロック&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～60&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;note_low&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;発音下限ノートナンバー&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;note_high&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;発音上限ノートナンバー&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;volume&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ボリューム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～4096&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;panpot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パンポット&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0(左)～64～127(右)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sendVolume&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エフェクトセンドボリューム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～4096&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sendPanpot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エフェクトセンドパンポット&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0(左)～64～127(右)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;centerNote&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サンプリング時のノートナンバー&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;centerDetune&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サンプリング時のデチューン&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-99～99(cent)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;detune&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デチューン&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-99～99(cent)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bendRange_lower&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ベンドレンジ－&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～24(ノート数)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bendRange_upper&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ベンドレンジ＋&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～24(ノート数)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;portamentTime&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ポルタメント推移時間&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;adsr1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ADSR1（エンベロープ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;adsr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ADSR2（エンベロープ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve4[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">vagParamCtxIndexはこのトーンパラメータが使用するVAGパラメータのインデックスで、つまりこのトーンパラメータが使用する波形データを示します。vagParamCtxIndexがTONE_NOISE（＝0xffffffff）の場合はこのトーンパラメータがノイズ音源を使用することを表し、noiseClockの値が有効となります。<br>priorityは発音の優先度で、より大きな値を持つトーンパラメータが優先して発音されます。<br></div>
+<br>
+<div style="margin-left:50px;">groupは同一グループ内で排他発音を行わせる機能です。0以外の値では、libsndpのボイス管理システムは同じグループ値のトーンのうちひとつだけを発音するよう制御します。使い方としては、例えばオープンハイハットの音色とクローズハイハットの音色のようにどちらか一方の発音のみを行わせたい別々の音色がある場合、双方同じgroup値に設定しておくことで排他発音されます。groupが0ならグループ機能はオフです。<br><br>note_lowとnote_highは音域、つまりこのトーンパラメータの発音が有効となるノートナンバーの下限と上限を示します。<br>sendVolumeとsendPanpotは、デジタルリバーブへの入力音量とそれに対するパンポットです。<br>centerNoteとcenterDetuneは、このトーンパラメータが使用する波形のサンプリング時のノートナンバーとデチューンです。発音時に指定されるノートナンバーとこれらの値から、音源に与えるピッチ情報が算出されます。<br>detuneは、発音時に行う音程修正のために用いられます。detuneの単位はcentで、半音が100centとなります。<br>bendRange_lowerとbendRange_upperは、ベンドホイール・ベンドレバーの操作に対する音程変化の最大幅を示します。<br>portamentTimeは将来のバージョンアップのために予約されています。現状では０を設定してください。<br>adsr1とadsr2はエンベロープを示します。詳細は<u>libsas</u>のドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>プログラムアトリビュート</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムアトリビュートは、MIDIのプログラムナンバーをトーンパラメータに対応付けるデータです。次に示すように、ヘッダと、プログラムパラメータへのオフセットテーブルと、不定サイズのプログラムパラメータが並んだ構造になっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 6  プログラムアトリビュートの構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPPG'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アトリビュートサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;（全体のバイト数 -8）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1[6]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（予約領域）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;programParam_offset[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プログラムナンバー０の&nbsp;&nbsp;<br>&nbsp;&nbsp;プログラムパラメータへのオフセット&nbsp;&nbsp;<br>&nbsp;&nbsp;（PHD先頭からのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;programParam_offset[127]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プログラムナンバー127の&nbsp;&nbsp;<br>&nbsp;&nbsp;プログラムパラメータへのオフセット&nbsp;&nbsp;<br>&nbsp;&nbsp;（PHD先頭からのバイト数）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;programParams&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プログラムパラメータ&nbsp;&nbsp;<br>&nbsp;&nbsp;（サイズ不定、個数不定、順序不定）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">programParam_offsetは128個の要素を持ちますが、そのうち、使用しないプログラムナンバーの要素の値は0xffffffffです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>プログラムパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムパラメータは、個々のプログラムが使用するトーンパラメータを示すデータです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtx_count&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;このプログラムが使用する&nbsp;&nbsp;<br>&nbsp;&nbsp;トーンパラメータの個数（n）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve[3]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(予約領域)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtxIndex[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トーンパラメータのインデックス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;…&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtxIndex[n-1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トーンパラメータのインデックス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">toneParamCtx_countは、そのプログラムが使用するトーンパラメータの個数です。この個数分、トーンパラメータのインデックスが後に続きます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>PBDのデータフォーマット</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>PBDの構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PBDは、VAG内の波形部分のみを連結してまとめたファイルです。次のように、単純な構造になっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese007.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 7  PBDの構造</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>PEFのデータフォーマット</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>PEFの構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PEFは、エフェクトパラメータです。PEFはPHD/PBDとは個別に扱われます。<br>次のような構造になっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-Japanese008.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 8  エフェクトの構造</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>エフェクトパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フィールド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPEF'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Param_size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PEFパラメータのサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;（sizeof(<a href="../sound/libsndp-Reference-Japanese.htm#SceSsEffectParam">SceSsEffectParam</a>)）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データ構造のバージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;（上位16bitと下位16bitでメジャーバージョンと&nbsp;&nbsp;<br>&nbsp;&nbsp;マイナーバージョンを表します）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Parameter&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libsndp-Reference-Japanese.htm#SceSsEffectParam">SceSsEffectParam</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パラメータ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>libsndp用のPEFデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Parameter部の型<a href="../sound/libsndp-Reference-Japanese.htm#SceSsEffectParam">SceSsEffectParam</a>はエフェクト設定用の構造体です。<br>libsndpの関数<a href="../sound/libsndp-Reference-Japanese.htm#sceSsSetEffectParam">sceSsSetEffectParam</a>()の引数とする場合はPEFよりParameter部のみを抽出して渡すようにしてください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

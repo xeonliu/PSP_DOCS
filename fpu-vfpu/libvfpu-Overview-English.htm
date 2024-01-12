@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+<title>libvfpu-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libvfpu Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">VFPU Operation Library(libvfpu) is a library that performs vector and matrix operations using VFPU instructions.<br>libvfpu provides functions for performing addition, subtraction, multiplication, division, normalization, interpolation, outer product, and inner product on 2-, 3-, and 4-dimensional floating-point vectors. Functions are also provided for generic matrix operations such as matrix multiplication, vector multiplication, matrix transposition, inversion, translation, and rotation of 2x2, 3x3, and 4x4 floating-point matrices. The library also provides functions for performing miscellaneous scalar and matrix operations.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Argument Handling</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although there are differences between the number and type of arguments for each libvfpu function depending on the operation that is performed, except for a few cases, the function types are practically identical so that the result of an operation is always returned in the first argument (vector or matrix).<br>When the argument of a function is a 4-dimensional vector or 4x4 matrix, data is passed in units of 128 bits. Consequently, the vector or matrix must be aligned on a 128-bit boundary when the function is called.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Usage Rules for Registers Used Internally by libvfpu</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libvfpu uses registers s000 to s233. It does not use registers s300 to s733. Registers s300 to s733 are guaranteed not to be destroyed even if a libvfpu function is called.<br><br>Up to library version 2.7.1, libgum_vfpu makes the current matrix resident in s300 to s333, and since libvfpu does not destroy registers in the range s300 to s333, libvfpu can coexist with libgum_vfpu. Note that for library versions 2.8.0 or later, libgum_vfpu does not make the current matrix resident.<br>When the -menable-vfpu option is specified in psp-gcc 2.0.0 or later to use VFPU intrinsics, registers in the range s000 to s333 are assigned as caller save and registers in the range s400 to s733 are assigned as callee save for the function call ABI. Since libvfpu does not destroy registers in the range s400 to s733, it can coexist with psp-gcc 2.0.0 or later.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Optimization of VFPU Code</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Most of the functions in libvfpu use pointers for arguments, and perform vector/matrix data input/output via memory. The VFPU contains a register file which can hold 128 32-bit floating-point values, however, the register file is not effectively used in libvfpu function calls. This is due to the fact that libvfpu originally was designed as a sample just to demonstrate the use of the VFPU. <br><br>In order to use the VFPU in an efficient manner, it is recommended that the code which uses the VFPU be expanded inline in somewhat sizable units. <br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Leave data in registers as long as possible, and reduce the number of accesses to memory
+<li> Schedule VFPU instruction and CPU/FPU instruction, and increase the amount of processing which can be performed simultaneously with the VFPU pipeline
+</ul></div>
+<div style="margin-left:50px;"><br>If processing which uses the VFPU is finely divided one by one into individual functions, the function call overhead will no longer be negligible. In loops and the like for which good performance is required, rather than calling libvfpu functions, it is recommended that the code be expanded by copying it repeatedly.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Pros and Cons of Using the VFPU in Threads</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The PSP&trade; kernel handles VFPU registers as part of the thread context. VFPU registers are saved and restored when threads are switched.<br>The VFPU context consists of thirty-two 128-bit registers and other control information. The size of the context is quite large, so performance may be affected if all threads attempt to save and restore the VFPU context.<br>To address this issue, the PSP&trade; kernel provides a feature known as lazy context switching which allows you to specify whether or not the VFPU will be used when a thread is created. If you know in advance that the VFPU will not be used by a thread, you can exclude the VFPU registers from the thread context, which will help to increase the speed of context switching.<br><br>If a thread that was specified as not using the VFPU tries to execute a VFPU instruction, or if it tries to execute an instruction that manipulates a VFPU register, a Coprocessor Use Prohibited exception will be generated for the CPU. If you create a thread that will use libvfpu, you must also specify that the thread will use the VFPU.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Declaring VFPU Use when Creating Threads</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If it is known beforehand that the VFPU will be used by a thread, that can be declared by specifying the SCE_KERNEL_TH_USE_VFPU attribute when creating the thread using <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateThread">sceKernelCreateThread</a>().<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceUID tid;
+
+tid = <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateThread">sceKernelCreateThread</a>("threadname", ThreadEntryFunc,
+				SCE_KERNEL_USER_LOWEST_PRIORITY,
+				8192,
+				SCE_KERNEL_TH_USE_VFPU,
+				NULL);
+
+<a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelStartThread">sceKernelStartThread</a>(tid, 0, "");
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Declaring VFPU Use when Executing Threads</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If it is not known whether a thread was created with the SCE_KERNEL_TH_USE_VFPU attribute, the SCE_KERNEL_TH_USE_VFPU attribute can be specified explicitly using the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>(0, SCE_KERNEL_TH_USE_VFPU);
+
+</font></pre></div>
+<div style="margin-left:50px;">By doing the above, the SCE_KERNEL_TH_USE_VFPU attribute can at that point be made effective, and the VFPU can be placed in a usable state, even if the SCE_KERNEL_TH_USE_VFPU attribute was not specified when the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateThread">sceKernelCreateThread</a>() function was called.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Declaring VFPU Non-Use when Executing Threads</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As previously described, lazy context switching is performed on the VFPU registers in the PSP&trade; kernel. Among the running threads, as the number of threads which use the VFPU decreases, context switching becomes faster.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>(SCE_KERNEL_TH_USE_VFPU, 0);
+</font></pre></div>
+<div style="margin-left:50px;"><br>By doing the above, the SCE_KERNEL_TH_USE_VFPU attribute can be explicitly invalidated. Once the attribute has been invalidated for a thread, the VFPU can be once again returned to the usable state by placing the SCE_KERNEL_TH_USE_VFPU attribute back into effect. <br>If a thread transitions to DORMANT state and is then reexecuted from an entry function using the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelStartThread">sceKernelStartThread</a>() function, it will return to the state indicated by the attributes specified upon reexecution by the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateThread">sceKernelCreateThread</a>() function.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Declaring VFPU Use by a Thread which Calls the main() Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The main() function is normally called by the user_main thread which is created in crt0_elf.o and crt0_prx.o. The thread attributes which are used when this thread is created are weakly referenced from crt0_elf.o and crt0_prx.o using the symbol name sce_user_main_thread_attribute. If an application which is linked with crt0_elf.o and crt0_prx.o defines a global variable with that name, then the thread can be created using the thread attributes that are set by this global variable. The following shows how to use this technique.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#if defined(_LANGUAGE_C_PLUS_PLUS)||defined(__cplusplus)||defined(c_plusplus)
+extern "C" {
+#endif
+
+int sce_user_main_thread_attribute = SCE_KERNEL_TH_USE_VFPU;
+
+#if defined(_LANGUAGE_C_PLUS_PLUS)||defined(__cplusplus)||defined(c_plusplus)
+}
+#endif
+
+</font></pre></div>
+<div style="margin-left:50px;">In C++, a global constructor may be executed even before the starting address of the main() function is reached. To use the VFPU for processing within the global constructor, define the sce_user_main_thread_attribute variable so that the thread will be created with the SCE_KERNEL_TH_USE_VFPU attribute.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Declaring VFPU Use by a Thread which Calls an Entry Function during Module Start-Up</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When linking a PRX file, if -mno-crt0 is specified as an option to psp-gcc but -startfiles is not, then crt0_prx.o, which is a libc start-up object, will not be linked in, and the function which is specified by the SCE_MODULE_START() macro will be called directly as the entry function of the PRX module. At that point, there are two ways that the VFPU can be used by the entry function.<br><br>One is to use the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>() function and specify the SCE_KERNEL_TH_USE_VFPU attribute. This is as described above. <br><br>Another method is to specify the SCE_MODULE_START_THREAD_PARAMETER macro and specify, along with the thread attributes, the priority and stack size of the thread calling the entry function. This method is used as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_MODULE_START(StartFunction);
+SCE_MODULE_START_THREAD_PARAMETER(64, 8192, SCE_KERNEL_TH_USE_VFPU);
+</font></pre></div>
+<div style="margin-left:50px;"><br>If the entry function which is called during module start-up does not terminate, the <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>() function will not complete, so it is not recommended that long operations be performed within entry functions. In entry functions, only processing which creates a thread and terminates-and stays resident should be performed. Normally, a user_main thread is created in crt0_elf.o or crt0_prx.o, which are referenced when the linker is started up from psp-gcc with the -startfiles option, and this thread calls the main() function, so it is not necessary to use the SCE_MODULE_START_THREAD_PARAMETER() macro. <br>It is only necessary to use the SCE_MODULE_START_THREAD_PARAMETER() macro in the following situations.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> The -startfiles option is not used
+<li> The -mno-crt0 option is used
+<li> The entry function is specified by the SCE_MODULE_START() macro
+<li> The VFPU is directly used in the entry function
+</ul></div>
+<div style="margin-left:50px;">All of the above conditions must apply.<br><br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<html lang="jp">
+<head>
+<title>Sound-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+サウンド概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>サウンドハードウェア</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;は2系統のステレオ出力と1系統のモノラル入力を持ちます。二系統あるステレオ出力のうち一系統はデジタルボリューム回路により音量変化を行なった後、もう一系統とミキシングされ、DACへ出力されます。またモノラル入力はADCより入力されます。なお、それぞれの入出力にはFIFOバッファが用意されています。<br>これらオーディオ入出力インタフェースはオーディオドライバにより制御されています。<br><br>本ドキュメントではこれらのうち、オーディオ出力に関して説明します。オーディオ入力については、別紙「オーディオ入力概要」をご覧ください。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sound-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 サウンドハードウェアのブロック図</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>サウンド出力までの流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;におけるサウンド出力までの流れは以下の図のようになります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sound-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 サウンド出力までの流れ</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">PSP&reg;用ゲームタイトルはサウンドライブラリを利用してサウンド出力を行います。サウンドライブラリはオーディオドライバを、オーディオドライバはサウンドハードウェアにアクセスを行い、サウンド出力を実現します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>オーディオドライバ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>オーディオドライバの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ではオーディオドライバと呼ばれるデバイスドライバがサウンドハードウェアの制御を行います。オーディオドライバへはサウンドライブラリを利用してアクセスします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>オーディオドライバの主な機能</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> サウンドに関連するDMA転送などを含むDMAC制御
+<li> サウンドハードウェア制御
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>ソフトウェアオーディオシンセサイザ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ソフトウェアオーディオシンセサイザの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ソフトウェアオーディオシンセサイザ（Software Audio Synthesizer:以下SAS）はMedia Engineにて動作し、与えられた音素片データおよび制御パラメータを元にサウンドを生成するソフトウェア音源です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>ソフトウェアオーディオシンセサイザの基本仕様</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> Media Engineにて動作
+<li> 対応音素片データフォーマットはモノラルのADPCM(.vag)、PCM、ATRAC3&trade;
+<li> 同時発音ボイス数は32(処理負荷により変動)
+<li> エフェクト機能としてデジタルリバーブを搭載
+<li> -12オクターブ～+2オクターブまでのピッチ制御が可能
+<li> ADSR方式のエンベロープを搭載
+<li> libsasライブラリにて制御
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>サウンドライブラリ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>サウンドライブラリの構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドライブラリの構成は以下のようになっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sound-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 サウンドライブラリの構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>libwaveの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libwaveは複数のADPCM(.vag) / PCM形式のサウンドをソフトウェアによりミキシングし、オーディオドライバに転送・再生するライブラリです。BGMをストリーミングにて再生しながらメモリ上にあるサウンドデータを効果音として鳴らす、などの処理が行えます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_1">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 対応フォーマットはADPCM(.vag) / 16ビットリニアPCM(Little Endianのみ)
+<li> ADPCM再生専用として簡易ライブラリを用意(SASを利用しません)
+<li> オーディオドライバへダイレクトにPCM出力を行うAPIを搭載
+<li> ADPCMサウンドシステムは最大8ボイス
+<li> PCM出力専用として3チャンネル搭載
+<li> ADPCMボイス/PCMチャンネルそれぞれにボリューム設定(L/R独立)が可能
+<li> 効果音用one shot再生及び無限ループ再生が可能(ADPCMボイス)
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>simple audioの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">simple audioは単一の16bit little endian, 2ch PCM形式のサウンドデータをそのままオーディオドライバに転送・再生するライブラリです。出力する先にハードウェアによるデジタルボリューム回路がありますので、音量変化を加えることが可能です。libwaveよりも機能は低いですが、その分libwaveよりもCPUにかける負荷が低いという特徴があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_2">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 対応フォーマットは16ビットリニアPCM(Little Endian)、2chステレオのみ
+<li> ハードウェアによるボリューム設定(L/R連動)が可能
+<li> 同時に再生できる音声は一つだけ
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>vaudioの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">vaudioは内部で各種エフェクト系ライブラリ(主にMedia Engine側で動作)を呼び出して音声を加工した上で、simple audioを用いて音声出力を行うライブラリです。内部的にsimple audioを用いるため、vaudioとsimple audioを同時に使用することはできません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_3">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 対応フォーマットは16ビットリニアPCM(Little Endian)、2chステレオのみ
+<li> ハードウェアによるボリューム設定(L/R連動)が可能
+<li> 同時に再生できる音声は一つだけ
+<li> サンプリング周波数変換、自動音量調整、イコライジングを行うことができる
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>libatrac3plusの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libatrac3plusはATRAC3&trade;/ATRAC3plus&trade; Decoderを制御するライブラリです。ATRAC3&trade;およびATRAC3plus&trade;形式で圧縮された音声データをリニアPCMへデコードすることができます。<br>なお、libatrac3plusは、ATRAC3&trade;/ATRAC3plus&trade;データからPCMへのデコード機能のみを提供します。デコードされたサウンドをオーディオ出力する場合には、libwave又はsimple audioなどと組み合わせて利用することになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_4">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> ATRAC3&trade;及びATRAC3plus&trade;の音声データをPCMにデコード可能
+<li> ATRAC3&trade;およびATRAC3plus&trade;形式の幅広いビットレート、チャネル数(モノラルおよび2チャンネルステレオ)に対応し、利用したいケースに合わせてデータサイズを調整可能
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>libsasの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasはソフトウェアオーディオシンセサイザ（SAS）を制御するライブラリです。SASが提供する全機能を利用することが出来るため、独自シーケンサやゲームタイトル用ミドルウェア開発などに利用できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_5">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> SASが提供する全機能を利用可能
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>libsndpの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsndpはlibsasを利用して動作する高水準ライブラリです。PSP&reg;のサウンド機能を比較的容易に利用するための各種APIや、サウンドアーティストツールで作成したデータを利用するためのAPIが用意されています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_6">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 一般のMIDIシーケンスソフトで作成したMIDIシーケンス(SMF format 0)の再生が可能(RPN/NPRNなどに制約があります)
+<li> サウンドアーティストツールで作成した音素片データを利用しての効果音再生が可能
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>libmp3の概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp3はMP3形式で圧縮されたオーディオデータをリニアPCMへデコードするライブラリです。デコードされたサウンドをオーディオ出力する場合には、44100Hz以外でも再生可能なvaudioと組み合わせて利用します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_7">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> MP3形式で圧縮されたオーディオデータをPCMにデコード可能
+<li> 対応コーデックはMPEG1/ 2/ 2.5 Layer3
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_9">
+<h3>
+<a href="#Heading3_4"> 4. </a>9 
+<!-- hp1 --><b>libaacの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaacはAAC形式で圧縮されたオーディオデータをリニアPCMデータへデコードするライブラリです。デコードされたサウンドをオーディオ出力する場合には、44100Hz以外でも再生可能なvaudioと組み合わせて利用します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_9_8">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> AAC形式で圧縮されたオーディオデータをPCMにデコード可能
+<li> 対応サンプリング周波数は22050/ 32000/ 44100/ 48000Hz
+<li> 対応コーデックはMPEG4 AAC-LC(SBRなし)
+<li> ヘッダなし(raw_data_frame()のみ)のAACデータに対応
+<li> libmp4と組み合わせて使用することでMPEG4形式のAACファイルを再生することが可能です。libmp4については「libmp4概要」をご覧ください。
+<li> ステレオあるいはモノラルのみに対応
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_10">
+<h3>
+<a href="#Heading3_4"> 4. </a>10 
+<!-- hp1 --><b>libp3daの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モノラルPCM音源に3D座標位置を指定することで、3D音像定位を再現した2chステレオ音声データを出力します。3D座標位置をリアルタイムに変更することで、3Dグラフィックスと連動したリアルな音像空間を再現することができます。出力される音声データはlibwaveやsimple audio等で再生することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_10_9">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 同時に4つまでのサウンドを独立して定位させることができる
+<li> 入出力PCMは16bit 44.1KHz
+<li> ドップラー効果によるピッチ変更のサポート機能
+<li> 距離が離れるにつれ、音量が小さく聞こえる効果（ロールオフ）を指定できる
+<li> サウンドの指向性を表現できる（サウンドコーン）
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_11">
+<h3>
+<a href="#Heading3_4"> 4. </a>11 
+<!-- hp1 --><b>libg729の概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">G729はIP電話等の音声通話のためのオーディオコーデックの規格です。libg729は、G729に沿ってリニアPCMのエンコーダおよびエンコードデータをリニアPCMにデコードすることができるライブラリです。デコードされたサウンドは、8KHzでも再生可能なvaudioなどのライブラリと組み合わせてオーディオ出力することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_11_10">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 16bit 8KHzのモノラルPCMのエンコードおよびデコード
+<li> 対応するビットレートは6.4kbps/8kbps/11.8kpbs
+<li> エンコーダ・デコーダはそれぞれ同時に４つまでのサウンドを処理できる
+<li> エンコーダにおいて音量が小さい場合VADフレームを生成し通信フレームサイズを減らすことができる
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_12">
+<h3>
+<a href="#Heading3_4"> 4. </a>12 
+<!-- hp1 --><b>libsceulawの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">u-lawはIP電話等の音声通話のための非線形PCMの規格です。libsceulawは、u-law規格に沿ってリニアPCMのエンコードおよびエンコードデータをリニアPCMにデコードすることができるライブラリです。規格により、1サンプルが8ビットの非線形PCMデータとなります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_12_11">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 16bitモノラルPCMのエンコードおよびデコード
+<li> 自由なサンプリングレートを用いることが可能(通常は8~16kHzで使われます)
+<li> 圧縮率は低いものの、非常に高速に変換できる
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>サウンドアーティストツール</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>サウンドアーティストツールの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;用サウンドデータを作成するためにサウンドアーティストツールが用意されています。これらツールを利用することによりPSP&reg;用サウンドデータの作成が可能となります。<br>PSP&reg;用サウンドアーティストツールとしては以下のものが用意されます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SEdit
+<li> at3tool
+<li> AIFF2VAG
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>SEdit</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Windows上で動作するサウンドオーサリングツールです。AIFF2VAGで作成したADPCM音素片ファイル(.vag)からPSP&reg;用サウンドデータを生成する機能を持っています。生成できるサウンドデータは次の2種類です。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 楽器や効果音シーケンスの属性データであるヘッダ(拡張子 .phd)
+<li> 音素片データであるボディ(拡張子 .pbd)
+</ul></div>
+<div style="margin-left:50px;"><br>SEditで生成したサウンドデータはlibsndpにて利用することが可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2_12">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> Windows上で動作
+<li> シンプルなUI
+</ul></div>
+<div style="margin-left:50px;"><br>SEditの動作環境は以下を予定しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2_13">
+<div style="margin-left:40px;"><h4><b>Windows版動作環境</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> Intel Pentium / Celeron系またはその互換プロセッサ搭載PC
+<li> Windows XP Service Pack 2(日本語版、及び英語版)で動作確認済み
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>at3tool</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">at3toolはATRAC3&trade;およびATRAC3plus&trade;のエンコードとデコードを行うツールです。サウンドファイル(.wav)をATRAC3&trade;もしくはATRAC3plus&trade;へエンコードできます。エンコードされたサウンドファイルはlibatrac3plusとlibwaveなどを利用することによりPSP&reg;上にて再生することが可能です。またエンコードしたサウンドファイルをat3toolにてPCMにデコードすることも可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_3_14">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> サウンドファイル(.wav, 16ビット Little Endian RIFF-waveフォーマット)をATRAC3&trade;もしくはATRAC3plus&trade;へエンコード可能
+<li> ビットレートは数種類から選択可能
+<li> バッチ処理でのエンコードに便利なコンソールアプリケーション
+<li> ループ位置はサウンドファイル(.wav)中のsmplチャンクおよびコマンドラインスイッチにて設定可能
+<li> エンコードしたファイルをPCMにデコードすることが可能
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_3_15">
+<div style="margin-left:40px;"><h4><b>動作環境</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> Windows XP Service Pack 3 (日本語版、及び英語版)
+<li> Windows Vista Service Pack 1 (日本語版、及び英語版)
+<li> Linux
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>AIFF2VAG</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">AIFF2VAGはPower MacintoshおよびWindows上で動作するADPCM音素片ファイル(VAG)コンバータです。AIFF形式(.aif / .aiff)およびWAVE形式(.wav)のサウンドファイルをADPCM音素片ファイル(.vag)へコンバートすることができます。コンバートしたサウンドファイルはSEdit、libwaveおよびlibsasにて利用することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_16">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> AIFF形式(.aif / .aiff)及びWAVE形式(.wav)のサウンドファイルをコンバート可能
+<li> ループ設定が可能
+<li> コンバート時のモードを4種類から選択可能
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_17">
+<div style="margin-left:40px;"><h4><b>Power Macintosh版動作環境</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> Power Macintosh G4もしくはPower Macintosh G5
+<li> Mac OS X バージョン 10.3以上
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_18">
+<div style="margin-left:40px;"><h4><b>Windows版動作環境</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> クロック周波数1 GHz以上のIntel Pentium / Celeron系またはその互換プロセッサ搭載PC
+<li> Windows XPもしくはWindows 2000
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

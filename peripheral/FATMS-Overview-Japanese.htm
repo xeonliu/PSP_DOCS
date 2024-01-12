@@ -1,0 +1,148 @@
+<html lang="jp">
+<head>
+<title>FATMS-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+FAT Filesystem For Memory Stick&trade;
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;用FAT Filesystem For Memory Stick&trade;ドライバモジュール(以下FAT ForMS)は、PSP&reg;に内蔵されているMemory Stick&trade;スロットに挿入されている、ストレージ機能を持つ<br>Memory Stick&trade;のFATファイルシステムにアクセスするためのライブラリです。<br>この機能は、IO/File managerの管理の下で動作します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">FAT ForMSを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fatms.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">基本的に、使用する前に行う作業は特にありません。<br>FAT ForMSは暗黙のうちに初期化されています。明示的な初期化を行う必要がありません。<br><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数を使ってオープン処理後、<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()関数や<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoWrite">sceIoWrite</a>()関数などでアクセスしてください。各関数の使用方法に関しては、リファレンスを参照してください。<br>また、アサイン、アンアサイン処理はMemory Stick&trade;の挿抜を検出し自動的に行なわれます。<br>メディア挿入後は、このアサイン名でFAT ForMSへのアクセスが可能です。<br>アサイン名は"ms0:" です。このアサイン名は、アンアサインしないようにして下さい。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Memory Stick&trade;のフォーマット（初期化）に関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Windows標準フォーマットツール（マイコンピュータからフォーマットする方法）を使用したMemory Stick&trade;のフォーマットは行わないでください。<br>Windows標準フォーマットツールを使用したMemory Stick&trade;のフォーマットは、動作を保証できません。<br>お持ちのMemory Stick&trade;対応機器本体のフォーマット機能で再度フォーマットを行うか、またはMemory Stick&trade; Formatter（メモリースティックフォーマッタ）を使用して再度フォーマットを行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>メモリのアラインに関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoRead">sceIoRead</a>(), <a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoWrite">sceIoWrite</a>()において、読み出し先データアドレスや書き込み元データアドレスが64バイトアラインされていない場合は、システムの制約上読み出しや書き込みの速度が遅くなる場合があります。また、<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoLseek">sceIoLseek</a>()で64バイトアラインされていないポイントを指定した場合も同様に読み出しや書き込みの速度が遅くなる場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Memory Stick&trade;の挿抜に関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Memory Stick&trade;が挿入された時に自動的にアサイン処理が行われます。また、Memory Stick&trade;が抜かれた時に自動的にアンアサイン処理が行われます。<br>Memory Stick&trade;メディアにアクセス中にメディアの抜き差しは絶対に行わないでください。データが失われたり、機器の故障の原因となったりする場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Syncに関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoSync">sceIoSync</a>()によってMemory Stick&trade;内のバッファ、FATファイルシステムの管理情報、書き出し予定データをMemory Stick&trade;のFLASHメモリに書き出す処理を明示的に実行します。これを同期処理と呼びます。<br>FATファイルシステムに対して依頼された処理は呼び出した順序で処理され、最終的に同期を取りたいタイミングで<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoSync">sceIoSync</a>()を呼び出すことで同期処理が実行されますが、同期が保証されるのは<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoSync">sceIoSync</a>()以前に呼び出された処理です。また、デバイス依存な部分があるため、実際に書き出しを行ったファイルのサイズを知りたい場合は<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoGetstat">sceIoGetstat</a>()を使用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>ファイル、フルパスの指定に関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">IO/File managerインタフェース関数を利用してMemory Stick&trade;上のファイルやフルパスを指定する際に利用する文字コードはUTF-8(BOMなし)です。また<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()を利用して取得するファイル名もUTF-8(BOMなし)です。以下に制限事項を記します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ファイル名、およびフルパス名の最大長は以下の通りです。<br>ファイル名の最大長(ヌル文字を含める) : 256文字<br>フルパス名の最大長(ヌル文字を含める) : 260文字
+<li> ファイル名に利用できない文字は以下の通りです。<br>半角記号  \ " / : &lt; &gt; | * ?<br>サロゲートペア(UTF-16で4byte使用する文字)
+<li> ファイル参照時の検索ではASCII文字の大文字、小文字は区別しません。
+<li> UTF-8(BOMなし)によるファイル、フルパスの指定はSDK 3.95以降で有効です。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>ショートファイル名に関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SDK 3.95以降、Memory Stick&trade;上に保存されるショートファイル名は、<br></div>
+<div style="margin-left:67px;">設定 &gt; 本体設定 &gt; 文字セット<br></div>
+<div style="margin-left:50px;">で指定された文字コードが使用されます。そのため、非ASCII文字は保存時と参照時で同じ文字セットが指定されていない場合、アクセスできないことがあります。<br>非ASCII文字を含むようなファイル名を扱う場合には、ロングファイル名のご利用をお勧めします。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

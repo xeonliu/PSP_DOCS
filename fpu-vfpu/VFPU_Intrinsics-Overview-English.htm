@@ -1,0 +1,810 @@
+<html lang="en">
+<head>
+<title>VFPU_Intrinsics-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+psp-gcc VFPU Intrinsics Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The psp-gcc VFPU intrinsics are functions which enable gcc to use V4SF and V16SF mode types as built-in types. VFPU matrix registers are used for both V4SF and V16SF mode types, and the compiler performs automatic register allocation in a similar manner as for GPRs and FPRs.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To perform the main processing for V4SF and V16SF mode types, the following features are provided.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Support for V4SF and V16SF mode types as float vector types
+<li> Arithmetic operators for the four basic arithmetic operations for V4SF mode types
+<li> Relational operators for V4SF mode types
+<li> Assignment operator for V16SF mode types
+<li> __builtin_vfpu_?????() built-in functions corresponding to VFPU instructions
+<li> vfpu_intrinsics.h for wrapping __builtin_vfpu_?????() built-in functions
+<li> "C" descriptor for referencing V4SF and V16SF mode types by the inline assembler
+</ul></div>
+<div style="margin-left:50px;"><br>Note that using VFPU intrinsics causes VFPU instructions to be scheduled at the same level as CPU or FPU instructions, so the compiler can do a better job of optimization than if these instructions were included using inline assembly code.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Limitations</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When VFPU intrinsics are used from the compiler, there exist the following limitations compared with when the assembler is used directly or when inline assembly code is used.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> The minimum unit for allocating registers is four 32-bit registers (for psp-gcc 1.x)
+<li> Matrix operations for 2x2 or 3x3 matrices are not supported.
+<li> Instructions such as sv.q, wb, vflush, vsync, and vnop for using the write buffer are not supported.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Differences Between psp-gcc 1.x and psp-gcc 2.x</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The VFPU intrinsics between psp-gcc 1.x and psp-gcc 2.x have the following differences.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> The register constraint descriptor, which indicates a VFPU register to the inline assembler, was "j" up to psp-gcc 1.9.x, but is "C" in psp-gcc 2.x. This is because the register constraint descriptor "j" has a different meaning in gcc-3.4.x and later. Note that although "j" and "C" can both be used in psp-gcc 1.10.x, "C" should be used as much as possible.
+<li> Register allocation units are four 32- bit registers for psp-gcc 1.x and one 32-bit register for psp-gcc 2.x.
+<li> The function calling convention for arguments and return values of V4SF mode type and V16SF mode type is to use memory passing for psp-gcc 1.x and VFPU register passing for psp-gcc 2.x.
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>psp-gcc Options and Defined Macros</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This section describes options and defined macros that were added to psp-gcc to support VFPU intrinsics.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Options</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_1">
+<div style="margin-left:40px;"><h4><b>-menable-vfpu=</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This option is used to allow psp-gcc to manage VFPU register allocation.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>-menable-vfpu=m0-m7
+</font></pre></div>
+<div style="margin-left:67px;"><br>This example enables the 8x4x4 matrix registers from m000 (e000) to m700 (e700). The range that can be specified must be in increments of 4x4 matrix register units.<br>Note that psp-gcc 2.x uses VFPU registers in the range from m000 (e000) to m300 (e300) for storing arguments of type V4SF mode and V16SF mode and return values when a function is called. Consequently, registers in this range must be included in the -menable-vfpu option.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_2">
+<div style="margin-left:40px;"><h4><b>-mfast-vfpu-math / -mno-fast-vfpu-math</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The -mfast-vfpu-math and -mno-fast-vfpu-math options are used to control the optimization level at which VFPU instructions are used. If the -mfast-vfpu-math option is used, optimization is enabled in which, for example, a vrcp.? instruction is used instead of a vdiv.? instruction.<br>Since there is a tradeoff between operation precision and speed for this optimization, the default state is -mno-fast-vfpu-math in which a vrcp.? instruction is not used.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_3">
+<div style="margin-left:40px;"><h4><b>-minline-float-load / -mno-inline-float-load (psp-gcc 1.15.3 and later or psp-gcc 2.2.0 and later only)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This option causes inline values to be generated and used for loading float-type constants in the FPR and VFPU registers without using the lwc1 or lv.s instructions. The GPR ALU instructions + mtc1 instruction are used for loading the FPU registers and instructions such as vzero.?, vone.?, vcst.?, and vfim.s are used for loading the VFPU registers. Since this optimization has a slight tradeoff between speed and instruction size, the default setting is -mno-inline-float-load which will cause the compiler to use the lwc1 and lv.s instructions.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_4">
+<div style="margin-left:40px;"><h4><b>-mvfpu-enable-vmmov / -mno-vfpu-enable-vmmov (psp-gcc 1.10.0 and later 1.x.x versions only)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The -mvfpu-enable-vmmov and -mno-vfpu-enable-vmmov options are used to control the optimization level with which VFPU instructions are used. If the -mvfpu-enable-vmmov option is specified, an optimization is enabled in which the vmmov.q instruction is used to move V16SF type registers.<br>psp-gcc 2.x or later enables -mvfpu-enable-vvmov by default.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Defined Macros</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_5">
+<div style="margin-left:40px;"><h4><b>__vfpu_enabled__</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If the -menable-vfpu option is used, the __vfpu_enabled__ macro is added as a defined macro. __vfpu_enabled__ can be referenced as a preprocessor condition.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#ifdef __vfpu_enabled__
+	...
+#endif
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Support for V4SF Mode Types (4-Dimensional Vectors)</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The V4SF mode type, which uses VFPU matrix registers, is defined as a 32-bit float 4-dimensional vector.<br><br>To use a V4SF mode type, specify the gcc qualifier __attribute__((mode(V4SF))) or __attribute__((vector_size(16))). vfpu_intrinsics.h provides the typedef <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> for using V4SF mode types.<br><br>For psp-gcc 1.x:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> __attribute__((mode(V4SF)));
+</font></pre></div>
+<div style="margin-left:50px;"><br>For psp-gcc 2.x:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> __attribute__((vector_size(16)));
+
+</font></pre></div>
+<div style="margin-left:50px;">Although the VFPU can perform operations classified by dimension so that most instructions are distinguished by the .s, .p, .t, and .q suffixes, registers cannot be allocated in terms of scalar, 2-dimensional vector, or 3-dimensional vector units for VFPU intrinsics. The minimum units are 4-dimensional vectors (128 bits).<br><br>All basic operations for V4SF mode types are compiled as .q-format instructions.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Basic Operations for V4SF Mode Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Arithmetic operators for the four basic arithmetic operations can be used as 4-dimensional vector operators for V4SF mode types.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> va, vb, vc;
+
+va = vb + vc;			// vadd.q
+va = vb - vc;			// vsub.q
+va = vb * vc;			// vmul.q
+va = vb / vc;			// vdiv.q	(for -mno-fast-vfpu-math)
+				// vrcp.q + vmul.q (for -mfast-vfpu-math)
+
+</font></pre></div>
+<div style="margin-left:50px;"><br>gcc can be made to perform optimizations more efficiently if arithmetic operators are used than if the built-in functions or inline assembler are used. These are described later. For example, gcc can output the same assembly code for the following two expressions.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = ( va * vb + va * vc );
+va = va * ( vb + vc );
+</font></pre></div>
+<div style="margin-left:50px;"><br>In C++, the &lt;? and &gt;? operators are used as gcc extended operators for obtaining the minimum and maximum values, by generating vmin.q and vmax.q instructions. However, since we have decided to remove these gcc extended operators in future versions, we recommend that you use  <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vmax_q">vfpu_vmax_q</a>() and <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vmin_q">vfpu_vmin_q</a>() instead.<br><br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = va &lt;? vb;			// vmin.q
+va = va &gt;? vb; 		// vmax.q
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>float Type to V4SF Mode Type Broadcast Operation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For V4SF mode types, extended functions can be used to perform float value broadcast operations according to individual operators as shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> va, vb;
+float fa;
+
+va = vb + <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vadd.q
+va = vb - <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vsub.q
+va = vb * <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vmul.q or vmscl.q
+va = vb / <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vdiv.q
+					// vrcp.s + vmscl.q  (for -mfast-vfpu-math)
+
+</font></pre></div>
+<div style="margin-left:50px;"><br>In this example, a broadcast operation to a V4SF mode type vector is performed by broadcasting a float scalar value to four elements. Note that the following code cannot be used.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = vb + fa;
+</font></pre></div>
+<div style="margin-left:50px;"><br>Casting from float type to V4SF mode type must be performed explicitly.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Relational Operators for V4SF Mode Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The relational operators &gt;, &lt;, &gt;=, &lt;=, ==, and != can be used with V4SF mode types.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> va, vb;
+
+if (va &lt; vb) {
+	…
+} else {
+	…
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>If the &gt;, &lt;, &gt;=, &lt;=, ==, and != operators, which are the standard operators supported by V4SF mode type, are insufficient, you can use vfpu_vcmp_??_q() from the built-in functions that are described later.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Assignment to V4SF Mode Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A V4SF mode type variable can be initialized as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> v = {1.0f, 2.0f, 0.5f, 0.0f};	/* Load from memory */
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(0.0f);		/* vzero.q is used */
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(1.0f);		/* vone.q is used */
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(3.8f);		/* vfim.q is used */
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Support for V16SF Mode Types (4x4 Matrices)</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The V16SF mode type, which uses VFPU matrix registers, is defined as a 32-bit float 4x4 matrix. To use a V16SF mode type, specify the gcc qualifier __attribute__((mode(V16SF))) or __attribute__((vector_size(64))). vfpu_intrinsics.h provides the typedef <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> for using V16SF mode types.<br><br>For psp-gcc 1.x<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> __attribute__((mode(V16SF)));
+</font></pre></div>
+<div style="margin-left:50px;"><br>For psp-gcc 2.x<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> __attribute__((vector_size(64)));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Basic Operations for V16SF Mode Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The * operator is provided for the V16SF mode type for multiplying two 4x4 matrices<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> va, vb, vc;
+
+va = vb * vc; 
+</font></pre></div>
+<div style="margin-left:50px;"><br>Other operators such as +, -, and / cannot be used.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Assignment to V16SF Mode Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">V16SF mode type variables can be initialized by using {}, 1.0f, or 0.0f in the same way as with V4SF mode type variables.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a>(0.0f);	/* vmzero.q is used */
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a>(1.0f);	/* vmidt.q is used */
+</font></pre></div>
+<div style="margin-left:50px;"><br>Note that when a V4SF mode type variable is initialized by using 1.0f, the result is equivalent to {1.0f, 1.0f, 1.0f, 1.0f}, but for a V16SF mode type variable, the result will be a unit matrix.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Function Calling Conventions for V4SF and V16SF Mode Type Arguments</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The calling conventions for functions with arguments of V4SF mode type and V16SF mode type are different between psp-gcc 1.x and psp-gcc 2.x. This means that for functions with arguments of V4SF mode type or V16SF mode type, a binary generated with psp-gcc 1.x is not ABI compatible with a binary generated with psp-gcc 2.x.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Function Calling Convention for psp-gcc 1.x</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With psp-gcc 1.x, for functions with arguments and return values of V4SF mode type or V16SF mode type, the function calling convention is pass by reference. The format conforms to the MIPS 32-bit EABI standard in which structures that are larger than 64 bits are passed by reference.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Function Calling Convention for psp-gcc 2.x</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">psp-gcc 2.x uses VFPU registers for storing arguments and return values of V4SF mode type and V16SF mode type. The registers that are used are as follows.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> V4SF mode type arguments:	c000 to c330
+<li> V16SF mode type arguments:	e000 to e300
+<li> V4SF mode type return values:	c000
+<li> V16SF mode type return values:	e000
+<li> callee save registers:		c000 to c330
+<li> caller save registers:		c400 to c730
+</ul></div>
+<div style="margin-left:50px;"><br>When there are more than sixteen V4SF mode type arguments or more than four V16SF mode type arguments, stack passing is used just as in the standard EABI. When V4SF mode type and V16SF mode type arguments are mixed, register number assignments may be skipped because registers are used for storing the V16SF mode type arguments.<br>For functions with V4SF mode type or V16SF mode type return values, the return values are stored in either c000 or e000.<br><br>When a function with variable-length arguments handles a V4SF mode type or V16SF mode type argument, the operation is undefined. This must not be used.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>VFPU Built-in Functions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The built-in functions consist of functions that perform operations corresponding to VFPU instructions and subregister access functions that can access individual fields in V4SF and V16SF mode type variables.<br><br>Although the four basic arithmetic operations for 4-dimensional vectors +, -, *, and / are supported as arithmetic operators for V4SF mode types, built-in functions such as __builtin_vfpu_vadd_s(), __builtin_vfpu_vadd_p(), __builtin_vfpu_vadd_t() must be used for scalar types, 2-dimensional vectors, and 3-dimensional vectors.<br><br>Built-in functions provided by psp-gcc have function names of the form __builtin_vfpu_????(). However, vfpu_intrinsics.h wraps most of them in function names of the form vfpu_????().<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Partial Write Function and Clobber Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The built-in functions include functions with _partial appended to the names for partially writing to individual elements within a vector among the four 32-bit registers that are assigned to a V4SF mode type variable.<br><br>For example, if the following functions are used,<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vone_q">vfpu_vone_q</a>(0);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vzero_p_partial">vfpu_vzero_p_partial</a>(va, <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VD_XY">VFPU_VD_XY</a>);	// Partial function
+</font></pre></div>
+<div style="margin-left:50px;">the final contents of va will be {0.0f, 0.0f, 1.0f, 1.0f}.<br>The first function, <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vone_q">vfpu_vone_q</a>(), assigns {1.0f, 1.0f, 1.0f, 1.0f} to va. By specifying va as the first argument of <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vzero_p_partial">vfpu_vzero_p_partial</a>(), vzero.p is executed on that 4-dimensional vector, however, va is only overwritten in the X and Y fields and the previous values will be left unchanged in the Z and W fields. This is an example of a partial write operation.<br><br>By comparison, if the vzero.p instruction is issued (by a clobber operation) without using a partial write, as in this example,<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vzero_p">vfpu_vzero_p</a>(<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VD_XY">VFPU_VD_XY</a>);			// Clobber function
+</font></pre></div>
+<div style="margin-left:50px;">the final contents of va will be {0.0f, 0.0f, ????, ????}. The contents of the Z and W fields will be undefined.<br>In this case, the result of the vzero.p instruction will only be written to the X and Y fields of the V4SF mode type variable va. Any garbage that might have been entered in the registers assigned by gcc for the Z and W fields will remain. Consequently, the result of the operation will be an undefined value. If a built-in function that does not perform a partial write operation does not require an input register as an argument before execution, it may be possible to delete the issuance of the VFPU instruction itself during the optimization.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Built-in Function Flag Argument</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The built-in functions corresponding to VFPU instructions take a 64-bit value as a flag argument. This flag can select prefixes or fields within V4SF registers that are to be used. Constants for specifying the flag are defined in vfpu_intrinsics.h.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_6">
+<div style="margin-left:40px;"><h4><b>Default Operation</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">If you do not need to use prefixes, specify 0 for the flag argument.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vadd_q">vfpu_vadd_q</a>( vs, vt, 0);		// Same as vd = vs + vt
+</font></pre></div>
+<div style="margin-left:50px;"><br>However, note that if 0 is specified for the matrix transpose specification flag, which is described later, the result will be m000 format (row major matrix).<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_7">
+<div style="margin-left:40px;"><h4><b>Prefix Specification</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">Prefixes can be specified by using the flag argument. If the following is specified,<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vadd_q">vfpu_vadd_q</a>( vs, vt,
+			VFPU_PFX_VD_Q( VFPU_PFX_THRU, VFPU_PFX_THRU,
+					VFPU_PFX_CLAMP0, VFPU_PFX_CLAMP1 ) |
+			VFPU_PFX_VS_Q( VFPU_PFX_X, VFPU_PFX_MINUS_W,
+					VFPU_PFX_QUARTER, VFPU_PFX_ABS_Y ) |
+			VFPU_PFX_VT_Q( VFPU_PFX_THIRD, VFPU_PFX_MINUS_X,
+					VFPU_PFX_X, VFPU_PFX_MINUS_ABS_X ) );
+</font></pre></div>
+<div style="margin-left:50px;">the following assembly code is output.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vadd.q	c020[x,y,0:1,-1:1], c030[x,-w,1/4,|y|], c010[1/3,-x,x,-|x|]
+</font></pre></div>
+<div style="margin-left:50px;"><br>Note that the destination prefix mask specification can be used only for a partial write function.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_8">
+<div style="margin-left:40px;"><h4><b>Field Selection</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">A flag can be specified for selecting fields for scalar, 2-dimensional, or 3-dimensional operations in which V4SF registers are to be partially used. If the following is specified,<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vadd_t">vfpu_vadd_t</a>( vs, vt, <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VD_YZW">VFPU_VD_YZW</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VS_XYZ">VFPU_VS_XYZ</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VT_YZW">VFPU_VT_YZW</a>);
+</font></pre></div>
+<div style="margin-left:50px;">the following assembly code is output.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vadd.t	c021, c030, c011
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_9">
+<div style="margin-left:40px;"><h4><b>Matrix Transposition</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">When V16SF registers are used, a flag can be specified to determine whether a matrix register is to be handled in m000 format (row major matrix) or in e000 format (column major matrix).<br><br>For example, to handle the vtfm4.q instruction in e000 format (column major matrix), specify the following<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vtfm4_q">vfpu_vtfm4_q</a>( vs, vt, VFPU_VS_E );
+</font></pre></div>
+<div style="margin-left:50px;">The following assembly code is output.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vtfm4.q		c000, e100, c200
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Subregister Access</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Built-in functions for performing subregister access are provided by vfpu_intrinsics.h to extract and replace vectors within a matrix or scalars within a vector.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_10">
+<div style="margin-left:40px;"><h4><b>Extracting Scalars From a Vector</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The built-in functions for extracting arbitrary fields from within a vector specified by a V4SF mode type variable and returning float types are as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>	 va;
+float	 x, y, z, w;
+
+x = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_float_from_v4x">vfpu_extract_float_from_v4x</a>( va );
+y = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_float_from_v4y">vfpu_extract_float_from_v4y</a>( va );
+z = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_float_from_v4z">vfpu_extract_float_from_v4z</a>( va );
+w = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_float_from_v4w">vfpu_extract_float_from_v4w</a>( va );
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_11">
+<div style="margin-left:40px;"><h4><b>Inserting Scalars in a Vector</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The built-in functions for inserting scalars specified by float type variables within a vector specified by a V4SF mode type variable are as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>	 va;
+float	 x, y, z, w;
+
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_float_into_v4x">vfpu_insert_float_into_v4x</a>(va, x);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_float_into_v4y">vfpu_insert_float_into_v4y</a>(va, y);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_float_into_v4z">vfpu_insert_float_into_v4z</a>(va, z);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_float_into_v4w">vfpu_insert_float_into_v4w</a>(va, w);
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_12">
+<div style="margin-left:40px;"><h4><b>Setting the Four Elements of a Vector</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If all four scalar elements that constitute a vector are provided, a V4SF mode type variable can be constructed from four float type variables.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>	 va;
+float	 x, y, z, w;
+
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_assign_float_to_v4xyzw">vfpu_assign_float_to_v4xyzw</a>(va, x, y, z, w);
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_13">
+<div style="margin-left:40px;"><h4><b>Extracting Vectors From a Matrix</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The built-in functions for extracting arbitrary column vectors from a matrix specified by a V16SF mode type variable and returning V4SF mode types are as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>	  x, y, z, w;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+x = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_v4_from_m4x">vfpu_extract_v4_from_m4x</a>(m);
+y = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_v4_from_m4y">vfpu_extract_v4_from_m4y</a>(m);
+z = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_v4_from_m4z">vfpu_extract_v4_from_m4z</a>(m);
+w = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_extract_v4_from_m4w">vfpu_extract_v4_from_m4w</a>(m);
+
+</font></pre></div>
+<div style="margin-left:67px;">The matrix is expected to have E000 format (column major matrix) here.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_14">
+<div style="margin-left:40px;"><h4><b>Inserting Vectors in a Matrix</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The built-in functions for inserting vectors that are specified by V4SF mode type variables as arbitrary column vectors within a matrix that is specified by a V16SF mode type variable are as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>	 x, y, z, w;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4x">vfpu_insert_v4_into_m4x</a>(m, x);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4y">vfpu_insert_v4_into_m4y</a>(m, y);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4z">vfpu_insert_v4_into_m4z</a>(m, z);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4w">vfpu_insert_v4_into_m4w</a>(m, w);
+
+</font></pre></div>
+<div style="margin-left:67px;">The matrix is expected to have E000 format (column major matrix) here.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_15">
+<div style="margin-left:40px;"><h4><b>Setting the Four Elements of a Matrix</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If all four vector elements that constitute a matrix are provided, a V16SF mode type variable can be constructed from four V4SF mode type variables.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>	 x, y, z, w;
+
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_assign_v4_to_m4xyzw">vfpu_assign_v4_to_m4xyzw</a>(x, y, z, w);
+
+</font></pre></div>
+<div style="margin-left:67px;"><br>The matrix is expected to have E000 format (column major matrix) here.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>Inline Assembler</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This section describes the syntax for referencing and outputting V4SF and V16SF mode type variables from gcc inline assembly code.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>V4SF Mode Type Variable Reference</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_16">
+<div style="margin-left:40px;"><h4><b>Operand Constraint</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">To reference a V4SF mode type variable from inline assembly code, "C" is used as an operand constraint.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>inline const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> Sin4f( const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> _Value )
+{
+	<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> retval;
+	__asm__ ("
+		"vsin.q	%0, %1	\n"
+		: "=C"(retval)
+		: "C"(_Value)
+	);
+	return retval;
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>This causes gcc to allocate a V4SF mode type variable in VFPU registers using c000 format.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_17">
+<div style="margin-left:40px;"><h4><b>Accessing Subelements</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">To access the subelements of a V4SF mode type variable (for reading or writing), use the %x0, %y0, %z0, %w0, %Y0, or %Z0 syntax.<br>To access the subelements as scalar type, use the %x, %y0, %z0, or %w0 syntax.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>inline const float dot(const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> _Value1, const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> _Value2) const
+{
+	float retval;
+	<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> tmp;
+
+	__asm__ (
+		"vdot.q	 %x1, %2, %3	\n"
+		"sv.s	 %x1, %0		\n"
+		: "=m"(retval), "=C"(tmp)	/* tmp float reg in vfpu */
+		: "C"(_Value1), "C"(_Value2)
+
+	);
+	return retval;
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>In this example, the result of the vdot.q instruction is stored in the X field of the variable tmp, which is referenced as %1.<br>To access subelements as 2D vectors, use the %0 or %Z0 syntax. %0 associates a 2D vector consisting of x and y components, and %Z0 associates a 2D vector consisting of z and w components.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>	__asm__ (
+		"vi2s.p	 %x0, %Z1	\n"
+		: "=C"(dst)
+		: "C"(src)
+	);
+</font></pre></div>
+<div style="margin-left:67px;"><br>This example specifies the 2D vector src consisting of z, w components as the input of the vi2s.p instruction.<br><br>Similarly, to access subelements as 3D vectors, use the %0 or %Y0 syntax. %0 associates a 3D vector consisting of x, y and z components, and %Z0 associates a 3D vector consisting of y, z and w components.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>V16SF Mode Type Variable Reference</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2_18">
+<div style="margin-left:40px;"><h4><b>Operand Constraint</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When using a V16SF mode type with the inline assembler, the "C" constraint is used in the same way as it is for a V4SF mode type.<br>When referencing an operand specified by "C" as a V16SF mode type matrix within inline assembly code, the syntax for referencing a matrix register is either %e or %m.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>	 vd, vt;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+__asm__ (
+	"vtfm4.q	%0, %e1, %2\n"
+	: "=&amp;C"(vd)
+	: "C"(m), "C"(vt)
+);
+</font></pre></div>
+<div style="margin-left:67px;"><br>The ampersand qualifier "=&amp;C" is supplied for the output register specification. This is a qualifier for specifying the early destruction of the output register so that an independent register will be allocated. This is required because in most cases, vd and vs or vt cannot be assigned to the same register for an instruction that operates on matrices.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2_19">
+<div style="margin-left:40px;"><h4><b>Accessing Subelements</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A combination of %c0, %r0, or %s0, the dummy %:, and the low-order two digits of the register number are used for the syntax for specifying a vector or scalar within a matrix register.<br><br>%c0, %r0, or %s0 specifies the format of the subregister within the matrix register. The numeric value that is specified here indicates the matrix operand that is supported by the "C" constraint.<br>Although the register number is represented by a three-digit numeric value for the c000, r000, and s000 formats, the matrix number is only output according to the %c0, %r0, or %s0 syntax. The character sequence %: is dummy punctuation. The remaining two-digit numeric value is described after it.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+__asm__ (
+	"vmzero.q	%e0	\n"			// e?00 to zero matrix
+	"vone.q	%r0%:00	\n"			// r?00 = [1,1,1,1]
+	"vcst.t	%c0%:31, VFPU_CONST_PI\n"		// c?31 = [PI,PI,PI]
+	"vzero.s	%s0%:00	\n"			// s?00 = 0
+	: "=C"(m)
+);
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>Tips</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>Set By Value for an Inline Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Always pass a V4SF or V16SF mode type variable as a value, as an argument of an inline function. Making an argument a value in an inline function may enable an optimization which will prevent a temporary variable from being allocated on the stack. When inline functions aren't used, it is best to use const when referencing a variable.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>Use a Union to Prevent Aliasing When Performing Type Conversion </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A cast to an incompatible pointer type may not be able to be compiled as intended because of aliasing that occurs due to optimization. If a union is used, the conversion can be performed safely without hindering optimization.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_3">
+<h3>
+<a href="#Heading3_8"> 8. </a>3 
+<!-- hp1 --><b>Specify const Whenever Possible</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When wrapping vfpu builtin, use const for <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> or <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> whenever possible. Use typedef of flag_types that is in vfpu_intrinsics.h.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_4">
+<h3>
+<a href="#Heading3_8"> 8. </a>4 
+<!-- hp1 --><b>Avoid Using volatile as Much as Possible in Inline Assembly Code</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When writing inline assembly code, volatile is unnecessary if the input block and output block are described precisely. If volatile is specified, gcc may not perform sufficient instruction reordering optimization.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_5">
+<h3>
+<a href="#Heading3_8"> 8. </a>5 
+<!-- hp1 --><b>Assign Names to Operands of Inline Assembly Code</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With gcc 3.1 or later, operands of inline assembly code can be referenced by name.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>__asm__ (
+	"vdot.q	%x[temp], %[value1], %[value2]	\n"
+	"sv.s		%x[temp], %[retval]		\n"
+	: [retval]"=m"(retval), [temp]"=C"(tmp)
+	: [value1]"C"(_Value1), [value2]"C"(_Value2)
+);
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_6">
+<h3>
+<a href="#Heading3_8"> 8. </a>6 
+<!-- hp1 --><b>Avoid Using Inline Assembly Code As Much as Possible</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To perform optimization effectively, you should avoid using inline assembly code as much as possible. If VFPU built-in functions or V4SF mode type basic operations are used, gcc will be able to reorder the code to the optimum operation order more easily. Although the number of cycles is taken into consideration when intrinsics are used, they are not taken into consideration for inline assembly code.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_7">
+<h3>
+<a href="#Heading3_8"> 8. </a>7 
+<!-- hp1 --><b>Use Defined Wrapper Functions Without Directly Calling Built-in Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To more easily accommodate future changes in the specifications of built-in functions, instead of directly calling the gcc VFPU built-in functions __builtin_vfpu_???(), you should call them via wrapper functions such as the vfpu_???() functions. These are defined in vfpu_intrinsics.h Since all wrapper functions are expanded inline, no function call cost is incurred due to optimization. Note that the arguments of some built-in functions are determined at compile time, so the no-optimization -O0 option cannot be used when these functions are compiled.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>Known Problems</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_20">
+<div style="margin-left:40px;"><h4><b>When C++ symbols are mangled, V4SF and V16SF mode types are considered to be the same</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is due to the specifications. Both V4SF and V16SF are float vector types, and they only differ in the number of dimensions. When gcc performs symbol mangling on vector types, since the number of dimensions of the vector is not included in the symbol, the mangled symbol names turn out to be the same for the same function name when the only difference is the difference between V4SF and V16SF mode in the argument types.<br>For example, consider the following.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> mul(const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> a, const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> b)
+{
+	return a * b;
+}
+
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> mul(const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> a, const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> b)
+{
+	return a * b;
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>Since these two functions are both mangled to the symbol name _Z3mulU8__vectorfS_, they cannot coexist.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_21">
+<div style="margin-left:40px;"><h4><b>V4SF mode type and V16SF mode type are considered to be the same by C++ type_info</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is due to the specifications. Since type_info is used in common, if a V4SF or V16SF mode type exception is thrown, the first exception that is caught will block.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>try {
+	<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(0.0f);
+	throw v;
+} catch (<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> e) {
+	std::cout &lt;&lt; "V16SF is caught Why!?";
+} catch (<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> e) {
+	std::cout &lt;&lt; "V4SF is caught";
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_22">
+<div style="margin-left:40px;"><h4><b>Inline functions must be created for wrapping built-in functions</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When creating functions for wrapping the VFPU built-in functions __builtin_vfpu_????(), the attribute __attribute__((always_inline)) must be assigned in the wrapper function prototype declaration.<br>A VFPU built-in function expects that <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_flag_type">vfpu_flag_type</a> will be CONST_INT for the gcc internal RTL. If the wrapper function is not inline expanded, <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_flag_type">vfpu_flag_type</a> may end up becoming a memory operand and the VFPU built-in function will not be able to be compiled in that case. To prevent this, specify an optimization option of at least -O1 and add the attribute __attribute__((always_inline)) to the wrapper function prototype declaration which will cause the wrapper function to always be inline expanded.<br>If the no-optimization option (-O0) is specified, some <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_flag_type">vfpu_flag_type</a> may not become CONST_INT and a compiler internal error may occur when compiling a built-in function.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_23">
+<div style="margin-left:40px;"><h4><b>A __builtin_vfpu_vcmp_?() function cannot be used as a ?: syntax condition (for psp-gcc 1.x)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Although a VFPU built-in function __builtin_vfpu_vcmp_?() returns a bool value, this value cannot be used directly as a ?: syntax condition.<br><br>If the bool value is used as follows,<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>bool b;
+b = ( __builtin_vfpu_vcmp_s( VFPU_GT, va, vb , <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VS_X">VFPU_VS_X</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VT_W">VFPU_VT_W</a> ) ? true : false;
+</font></pre></div>
+<div style="margin-left:67px;"><br>an Internal Compiler Error will occur, and the compilation will fail.<br><br>The bool value can be used as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>bool b;
+if (__builtin_vfpu_vcmp_s( VFPU_GT, va, vb , <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VS_X">VFPU_VS_X</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VT_W">VFPU_VT_W</a> )) {
+	b = true;
+} else {
+	b = false;
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>To prevent this problem, use the wrapper functions vfpu_cmp_??_?() that are defined in vfpu_intrinsics.h instead of directly using the VFPU built-in functions __builtin_vfpu_vcmp_?(). If a wrapper function is used, the following code can be used.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>bool b;
+b = vfpu_cmp_gt_s( va, vb , <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VS_X">VFPU_VS_X</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#VFPU_VT_W">VFPU_VT_W</a> ) ? true : false;
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_24">
+<div style="margin-left:40px;"><h4><b>The __builtin_vfpu_vidt_?() function result is undefined due to a register allocation problem</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Although the VFPU built-in functions __builtin_vfpu_vidt_?() generate vidt.? instructions, the results from the vidt.? instructions differ depending on which registers are used for which elements of the matrix for the specified operands.<br>With VFPU intrinsics, it is difficult to predict the register numbers that will be used when a vidt.? instruction is finally generated because register allocation is performed by gcc.<br><br>To prevent this problem, use the wrapper function vfpu_idt_? that is defined in vfpu_intrinsics.h instead of using the VFPU built-in function __builtin_vfpu_vidt_?(). With the wrapper function, the vidt.? instruction is not used, and a unit vector is generated by the vpfxs + vmov.? instructions.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_25">
+<div style="margin-left:40px;"><h4><b>The constant value 1.0 cannot be properly used during optimization</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">For example, although gcc is expected to generate vrcp + vocp for the following expression,<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(1.f) - <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a>(1.0f) / vb
+</font></pre></div>
+<div style="margin-left:67px;">this does not currently happen. In this case, built-in functions should be used together as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> tmp;
+tmp = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vrcp_q">vfpu_vrcp_q</a>(vb);
+va  = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_vocp_q">vfpu_vocp_q</a>(tmp);
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_26">
+<div style="margin-left:40px;"><h4><b>No method exists for using the conditional transfer instruction vcmov.?</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_27">
+<div style="margin-left:40px;"><h4><b>If the -Waggregate-return option is used, a warning may be issued when the return value is a V4SF or V16SF mode type (for psp-gcc 1.x)</b><br><b>A warning is issued on a subregister insertion indicating that a variable is uninitialized</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Scalar insertions in vectors and vector insertions in matrices are performed as partial write operations. As a result, the warning message:<br>      `vector float ????' might be used uninitialized in this function,<br>which is generated by the first insertion operation, cannot be suppressed even when insertions are ultimately to be performed for all subregisters.<br><br>With psp-gcc 1.x, this warning can be suppressed by using the following dummy inline assembly code.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+__asm__ ( "" : "=C"(m) );
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4x">vfpu_insert_v4_into_m4x</a>(m, x);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4y">vfpu_insert_v4_into_m4y</a>(m, y);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4z">vfpu_insert_v4_into_m4z</a>(m, z);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_insert_v4_into_m4w">vfpu_insert_v4_into_m4w</a>(m, w);
+</font></pre></div>
+<div style="margin-left:67px;"><br>With psp-gcc 2.x, this warning can also be suppressed by using inline assembly code, however, the code can be optimized more easily if a union is used instead.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>union {
+   <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+   <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-English.htm#vfpu_v4">vfpu_v4</a> v[4];
+} u;
+
+u.v[0] = x;
+u.v[1] = y;
+u.v[2] = z;
+u.v[3] = w;
+m = u.m;
+</font></pre></div>
+<div style="margin-left:67px;"><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

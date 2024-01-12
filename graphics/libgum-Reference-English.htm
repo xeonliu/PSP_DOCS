@@ -1,0 +1,3366 @@
+<html lang="en">
+<head>
+<title>libgum-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgum Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGumContext"></a>
+<table width="100%"><td width="70%"><font size=6>SceGumContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Context<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+typedef struct {
+	int buffer[32];
+} <b>SceGumContext</b>;
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a structure that is used for saving the context.<br>When libgum is used by an interrupt routine, etc., the main context must be saved so that it is not destroyed and restored before control returns.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumLoadContext">sceGumLoadContext</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumStoreContext">sceGumStoreContext</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumSetMatrixStack"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumSetMatrixStack<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set matrix stack buffer<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumSetMatrixStack </b>(
+	<a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a> *<i>m</i>,
+	int <i>proj</i>,
+	int <i>view</i>, 
+	int <i>world</i>, 
+	int <i>tex</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>m</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to buffer to be used as matrix stack&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>proj</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of levels in projection matrix stack&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>view</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of levels in view matrix stack&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>world</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of levels in world matrix stack&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>tex</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of levels in texture matrix stack&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes the matrix stacks to be used by libgum.<br>The <a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a> structure array specified by <i>m</i> is used as the matrix stacks, and the numbers of elements specified by <i>proj</i>, <i>view</i>, <i>world</i>, and <i>tex</i> within that array correspond to the projection matrix stack, view matrix stack, world matrix stack, and texture matrix stack, respectively.<br>In other words, the size of the array specified by <i>m</i> must be at least the sum total of the values specified by <i>proj</i>, <i>view</i>, <i>world</i>, and <i>tex</i>.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a>  mat_stack[2+2+8+2];	// Matrix stack buffer
+sceGumSetMatrixStack(mat_stack, 2, 2, 8, 2);	// Set matrix stack
+
+</font></pre></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumMatrixMode"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumMatrixMode<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Select current matrix type<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;libgum.h&gt;
+void <b>sceGumMatrixMode </b>(
+	int <i>mode</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Matrix type&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The following macros can be specified for <i>mode</i>.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_MATRIX_PROJECTION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Projection matrix&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_MATRIX_VIEW&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;View matrix&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_MATRIX_WORLD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;World matrix&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_MATRIX_TEXTURE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture matrix&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function selects the current matrix type.<br>The current matrix is considered to be a matrix of the type specified by <i>mode</i>, and when <a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>(), or <a href="../graphics/libgum-Reference-English.htm#sceGumSetCurMatrix">sceGumSetCurMatrix</a>() is called thereafter, the appropriate operation corresponding to the relevant type is performed.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGumMatrixMode( SCEGU_MATRIX_WORLD ); // Set the current matrix to the world matrix
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumLoadMatrix"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumLoadMatrix<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumLoadMatrix </b>(
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a> *<i>m</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>m</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to matrix&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function loads the matrix specified by <i>m</i> into the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>const <a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a>	m = {...};
+sceGumLoadMatrix( &amp;m );		// Load current matrix from m
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumStoreMatrix">sceGumStoreMatrix</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumLoadIdentity"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumLoadIdentity<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load unit matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;libgum.h&gt;
+void <b>sceGumLoadIdentity </b>(
+	void 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function loads the unit matrix into the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGumLoadIdentity();	// Load unit matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumRotateX">sceGumRotateX</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateY">sceGumRotateY</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZ">sceGumRotateZ</a>(),<br><a href="../graphics/libgum-Reference-English.htm#sceGumRotateXYZ">sceGumRotateXYZ</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZYX">sceGumRotateZYX</a>(),<br><a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumStoreMatrix"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumStoreMatrix<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Store current matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;libgum.h&gt;
+void <b>sceGumStoreMatrix </b>(
+	<a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a> *<i>m</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>m</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to store destination matrix&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function stores the current matrix into the matrix specified by <i>m</i>.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a>		m;
+sceGumStoreMatrix( &amp;m );	// Store current matrix in m
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumLoadMatrix">sceGumLoadMatrix</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumPushMatrix"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumPushMatrix<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Push current matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;libgum.h&gt;
+void <b>sceGumPushMatrix </b>(
+	void 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function pushes the current matrix onto the matrix stack.<br>The current matrix is saved in the appropriate matrix stack according to the current matrix type that has been selected in advance by <a href="../graphics/libgum-Reference-English.htm#sceGumMatrixMode">sceGumMatrixMode</a>().<br>If the stack overflows the matrix that was set by <a href="../graphics/libgum-Reference-English.htm#sceGumSetMatrixStack">sceGumSetMatrixStack</a>(), the current matrix is not pushed.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGumPushMatrix();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, bezier );	// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumPopMatrix"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumPopMatrix<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Pop current matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumPopMatrix </b>(
+	void 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function pops the current matrix from the matrix stack.<br>The current matrix is loaded from the appropriate matrix stack according to the current matrix type that has been selected in advance by <a href="../graphics/libgum-Reference-English.htm#sceGumMatrixMode">sceGumMatrixMode</a>().<br>If the stack underflows the matrix that was set by <a href="../graphics/libgum-Reference-English.htm#sceGumSetMatrixStack">sceGumSetMatrixStack</a>(), the current matrix is not popped.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT,7, 13, bezier ); 
+			// Draw Bezier surface
+sceGumPopMatrix();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumMultMatrix"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumMultMatrix<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Matrix multiplication<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumMultMatrix</b>( 
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a> *<i>m</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>m</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Matrix to be multiplied&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function performs matrix multiplication.<br>The current matrix is right-multiplied by the matrix specified by <i>m</i>, and the result is assigned to the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>const <a href="../kernel/Types-Reference-English.htm#ScePspFMatrix4">ScePspFMatrix4</a>	m={...};
+<a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+sceGumMultMatrix( &amp;m );	// Multiply current matrix and m
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateX">sceGumRotateX</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateY">sceGumRotateY</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZ">sceGumRotateZ</a>(),<br><a href="../graphics/libgum-Reference-English.htm#sceGumRotateXYZ">sceGumRotateXYZ</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZYX">sceGumRotateZYX</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumRotateX"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumRotateX<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Rotate around x-axis<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;libgum.h&gt;
+void <b>sceGumRotateX </b>(
+	float <i>angle</i> 
+);
+
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>angle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Rotation angle around x-axis (radians)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function rotates the current matrix.<br>Rotation by the angle specified by <i>angle</i> around the x-axis is performed for the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumRotateX( 30.0f*PI/180.0f ); 	// Rotate 30 degrees around x-axis
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, NULL, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumRotateY"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumRotateY<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Rotate around y-axis<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumRotateY </b>(
+	float <i>angle</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>angle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Rotation angle around y-axis (radians)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function rotates the current matrix.<br>Rotation by the angle specified by <i>angle</i> around the y-axis is performed for the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumRotateY( 90.0f*PI/180.0f ); 	// Rotate 90 degrees around y-axis
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, NULL, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumRotateZ"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumRotateZ<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Rotate around z-axis<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+#include &lt;libgum.h&gt;
+void<b> sceGumRotateZ </b>(
+	float <i>angle</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>angle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Rotation angle around z-axis (radians)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function rotates the current matrix.<br>Rotation by the angle specified by <i>angle</i> around the z-axis is performed for the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumRotateZ( 15.0f*PI/180.0f );	// Rotate 15 degrees around z-axis
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, NULL, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumRotateXYZ"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumRotateXYZ<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Rotate around xyz axes<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumRotateXYZ </b>(
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> *<i>vec</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vec</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3D vector specifying rotation angle&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function rotates the current matrix.<br>Rotation by the angle specified by <i>vec.x</i> around the x-axis, rotation by the angle specified by <i>vec.y</i> around the y-axis, and rotation by the angle specified by <i>vec.z</i> around the z-axis are performed successively for the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a>	vec;
+vec.x = 30.0f*PI/180.0f;	// Rotate 30 degrees around x-axis
+vec.y = 90.0f*PI/180.0f;	// Rotate 90 degrees around y-axis
+vec.z = 15.0f*PI/180.0f;	// Rotate 15 degrees around z-axis
+<a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumRotateXYZ( &amp;vec ); 
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, NULL, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumRotateZYX"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumRotateZYX<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Rotate around zyx axes<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumRotateZYX </b>(
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> *<i>vec</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vec</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3D vector specifying rotation angle&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function rotates the current matrix.<br>Rotation by the angle specified by <i>vec.z</i> around the z-axis, rotation by the angle specified by <i>vec.y</i> around the y-axis, and rotation by the angle specified by <i>vec.x</i> around the x-axis are performed successively for the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a>	vec;
+vec.x = 30.0f*PI/180.0f;	// Rotate 30 degrees around x-axis
+vec.y = 90.0f*PI/180.0f;	// Rotate 90 degrees around y-axis
+vec.z = 15.0f*PI/180.0f;	// Rotate 15 degrees around z-axis
+<a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumRotateZYX( &amp;vec ); 
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, NULL, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumScale"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumScale<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Scaling<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void<b> sceGumScale </b>(
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> *<i>vec</i> 
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vec</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3D vector for x-, y-, and z-axis scaling&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function enlarges or reduces the current matrix.<br>Scaling by <i>vec.x</i>, <i>vec.y</i>, and <i>vec.z</i> in the x-, y-, and z-axis directions, respectively, is performed for the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a>	vec;
+<a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+vec.x = 2.0f;		// Scaling ( 2.0, 2.0, 2.0)
+vec.y = 2.0f;
+vec.z = 2.0f;
+sceGumScale( &amp;vec );	// Set scaling
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, NULL, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumRotateX">sceGumRotateX</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateY">sceGumRotateY</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZ">sceGumRotateZ</a>(),<br><a href="../graphics/libgum-Reference-English.htm#sceGumRotateXYZ">sceGumRotateXYZ</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZYX">sceGumRotateZYX</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumTranslate"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumTranslate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Translation<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumTranslate </b>(
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> *<i>vec</i> 
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vec</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Displacement&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function translates the current matrix.<br>Translation by <i>vec.x</i>, <i>vec.y</i>, and <i>vec.z</i> in the x-, y-, and z-axis directions, respectively, is performed for the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> vec;
+<a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+vec.x = 0.0f;		// Translation vector (0.0,0.0,-5.0)
+vec.y = 0.0f;
+vec.z = -5.0f;
+sceGumTranslate( vec );	// Set translation
+<a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>( SCEGU_VERTEX_FLOAT, 7, 13, NULL, bezier );
+			// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumRotateX">sceGumRotateX</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateY">sceGumRotateY</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZ">sceGumRotateZ</a>(),<br><a href="../graphics/libgum-Reference-English.htm#sceGumRotateXYZ">sceGumRotateXYZ</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumRotateZYX">sceGumRotateZYX</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumScale">sceGumScale</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumFrustum"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumFrustum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set perspective projection matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void<b> sceGumFrustum </b>(
+	float <i>left</i>,
+	float <i>right</i>,
+	float <i>bottom</i>,
+	float <i>top</i>,
+	float <i>near</i>,
+	float <i>far</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>left</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Left coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>right</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Right coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bottom</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Bottom coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>top</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Top coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>near</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Near coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>far</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Far coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function uses a perspective projection transformation to create the view volume matrix according to the arguments, multiplies it by the current matrix, and sets the result in the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumMatrixMode">sceGumMatrixMode</a>(SCEGU_MATRIX_PROJECTION);
+			// Set projection matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load current matrix in unit matrix
+sceGumFrustum (0, SCEGU_SCR_WIDTH, 0, SCEGU_SCR_HEIGHT, -1.0f, 1.0f);
+			// Set orthogonal projection matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumOrtho">sceGumOrtho</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumPerspective">sceGumPerspective</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumLookAt"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumLookAt<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set viewpoint matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumLookAt </b>(
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> *<i>eye</i>,
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> *<i>center</i>, 
+	const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> *<i>up</i> 
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>eye</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Viewpoint position vector&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>center</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Gaze point position vector&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>up</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Up vector&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function calculates the viewpoint matrix according to the <i>eye</i>, <i>center</i>, and <i>up</i> arguments, multiplies it by the current matrix, and assigns the result to the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a>	eye, center, up;
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+eye.x = 1.0f;		// Viewpoint position vector(1.0,0.1,5.0)
+eye.y = 0.1f;
+eye.z = 5.0f;
+center.x = 0.0f;		// Gaze point position vector (0.0,0.0,0.0)
+center.y = 0.0f;
+center.z = 0.0f;
+up.x = 0.0f;		// Up vector(0.0,1.0,0.0)
+up.y = 1.0f;
+up.z = 0.0f;
+sceGumLookAt( &amp;eye, &amp;center, &amp;up );	// Set viewpoint matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumOrtho"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumOrtho<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set orthogonal projection matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void<b> sceGumOrtho </b>(
+	float <i>left</i>, 
+	float <i>right</i>,
+	float <i>bottom</i>,
+	float <i>top</i>,
+	float <i>near</i>,
+	float <i>far</i> 
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>left</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Left coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>right</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Right coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bottom</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Bottom coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>top</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Top coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>near</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Near coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>far</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Far coordinate of view volume&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function creates a parallel view volume matrix for an orthogonal projection according to the arguments, multiplies it by the current matrix, and assigns the results to the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumMatrixMode">sceGumMatrixMode</a>(SCEGU_MATRIX_PROJECTION);
+			// Set to projection matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Set current matrix to unit matrix
+sceGumOrtho(0, SCEGU_SCR_WIDTH, 0, SCEGU_SCR_HEIGHT, -1.0f, 1.0f);
+			// Set orthogonal projection matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumPerspective">sceGumPerspective</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumFrustum">sceGumFrustum</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumPerspective"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumPerspective<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set perspective transformation matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumPerspective </b>(
+	float <i>fovy</i>, 
+	float <i>aspect</i>,
+	float <i>near</i>,
+	float <i>far</i> 
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fovy</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Camera angle of view (radians)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aspect</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Screen aspect ratio (horizontal/vertical)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>near</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Screen near clipping plane (distance from viewpoint)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>far</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Screen far clipping plane (distance from viewpoint)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function creates a perspective transformation matrix according to the arguments, multiplies it by the current matrix, and assigns the results to the current matrix.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGumPerspective( 45.0f*PI/180.0f, SCEGU_SCR_ASPECT, 1.0f, 100.0f ); 
+			// Set perspective transformation matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgu-Reference-English.htm#sceGuViewport">sceGuViewport</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumOrtho">sceGumOrtho</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumSetCurMatrix"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumSetCurMatrix<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set current matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumSetCurMatrix </b>(
+	void 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function sets the current matrix in libgu. In other words, it inserts a command sequence for setting the current matrix in the display list that is being created by using libgu. At this time, appropriate commands are inserted according to the matrix type that was selected in advance by using <a href="../graphics/libgum-Reference-English.htm#sceGumMatrixMode">sceGumMatrixMode</a>().<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Set current matrix to unit matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(&amp;vec);	// Translate
+sceGumSetCurMatrix();	// Set current matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgu-Reference-English.htm#sceGuSetMatrix">sceGuSetMatrix</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumUpdateMatrix">sceGumUpdateMatrix</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumUpdateMatrix"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumUpdateMatrix<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set updated matrix<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumUpdateMatrix </b>(
+	void 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function checks the matrix stack that is being used by libgum and sets an updated matrix in libgu. In other words, if there is a matrix stack onto which a matrix that has not been set yet has been pushed among the projection matrix stack, view matrix stack, world matrix stack, and texture matrix stack, this function inserts a command sequence for setting that matrix in the display list that is being created by using libgu.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Set current matrix to unit matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumTranslate">sceGumTranslate</a>(&amp;vec);	// Translate
+sceGumUpdateMatrix();	// Set updated matrix
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgu-Reference-English.htm#sceGuSetMatrix">sceGuSetMatrix</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumSetCurMatrix">sceGumSetCurMatrix</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumDrawArray"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumDrawArray<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Update matrix and draw primitive<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumDrawArray </b>(
+	int <i>prim</i>,
+	int <i>type</i>,
+	int <i>count</i>,
+	const void *<i>idx</i>,
+	const void *<i>vtx</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>prim</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Type of primitive to be drawn&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data type specified by <i>idx </i>and<i> vtx </i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>count</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of vertices to be drawn (1 to 65535)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>idx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to index array&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vtx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to vertex array&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The following macros can be specified for <i>prim</i>.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_POINTS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Point&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_LINES&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Line segment&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_LINE_STRIP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Connected line segments&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_TRIANGLES&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Triangle&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_TRIANGLE_STRIP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Connected triangles&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_TRIANGLE_FAN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Connected triangles (fan shape)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_RECTANGLES&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Rectangle&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">For <i>type</i>, specify the logical OR of the various types of flags shown below. Although the vertex vector flag must be specified, the other flags can be omitted.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1">
+<div style="margin-left:40px;"><h4><b>Texture Coordinates Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No texture coordinates&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2">
+<div style="margin-left:40px;"><h4><b>Color Value Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No color value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5650&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:6:5:0 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5551&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:5:5:1 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF4444&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 4:4:4:4 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF8888&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (32-bit 8:8:8:8 format)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3">
+<div style="margin-left:40px;"><h4><b>Normal Vector Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No normal vector&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_BYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal vector (signed 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_SHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal vector (signed 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal vector (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4">
+<div style="margin-left:40px;"><h4><b>Vertex Vector Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_BYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_SHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_5">
+<div style="margin-left:40px;"><h4><b>Index Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit index&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_6">
+<div style="margin-left:40px;"><h4><b>Weight Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_7">
+<div style="margin-left:40px;"><h4><b>Weight Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1 weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;6 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8 weights&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_8">
+<div style="margin-left:40px;"><h4><b>Moving Vertex Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 5&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 6&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 7&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 8&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_9">
+<div style="margin-left:40px;"><h4><b>Through Mode Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_THROUGH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Through mode&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function inserts a command sequence for drawing various types of primitives (points, line segments, connected line segments, triangles, connected triangles, fan-shape connected triangles, or rectangles) in the display list that is being created by using libgu. If the current matrix has been updated, a command sequence for setting the new current matrix is inserted before the command sequence for drawing primitives.<br>The primitive type is specified by <i>prim</i> and the number of vertices is specified by <i>count</i>. The vertex data array is specified for <i>p</i> and the index array is specified for <i>idx</i>.<br>The data contents provided by <i>vtx</i> and <i>idx</i> are specified for <i>type</i>. The texture coordinate format, color value format, normal vector format, vertex vector format, index type, weight value, number of weights, and number of moving vertices can be specified by specifying the logical OR of an appropriate macro definition for each of them. Since the vertex vector is always supposed to be included in the data, the vertex vector format specification (SCEGU_VERTEX_xxx) cannot be omitted. The other specifications can be omitted if the relevant data is not included. To draw using through mode, specify SCEGU_THROUGH for <i>type</i>.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>typedef struct {
+	float 			u, v;
+	unsigned int 		rgba;
+	<a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a>	normal;
+	<a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a>	vector;
+} MODEL;
+static const MODEL model[] = {
+	// uv      rgba        normal          vertex
+	{0.0f,0.0f, 0xffffffff, {0.0f,0.0f,1.0f}, {-1.0f,-1.0f,0.0f,}},
+	{1.0f,0.0f, 0xffffffff, {0.0f,0.0f,1.0f}, {1.0f,-1.0f,0.0f,},
+	{1.0f,1.0f, 0xffffffff, {0.0f,0.0f,1.0f}, {1.0f, 1.0f,0.0f},
+};
+<a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumDrawArray( SCEGU_PRIM_TRIANGLES,
+	SCEGU_TEXTURE_FLOAT|SCEGU_COLOR_PF8888
+	|SCEGU_NORMAL_FLOAT|SCEGU_VERTEX_FLOAT,
+	3, NULL, model );	// Draw triangle with texture, color, normal, and vertices
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The data area indicated by the <i>vtx</i> and <i>idx</i> arguments must not be released until drawing of the associated display list ends.<br>For SCEGU_IMMEDIATE mode, since drawing is started immediately by an sceGumDrawArray() function call, D-cache coherency must be guaranteed in advance for the memory area referenced by <i>vtx</i> and <i>idx</i>. When necessary, explicitly perform a D-cache writeback.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgu-Reference-English.htm#sceGuDrawArray">sceGuDrawArray</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumDrawSpline">sceGumDrawSpline</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumDrawArrayN"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumDrawArrayN<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Draw primitives continuously<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumDrawArrayN </b>(
+	int <i>prim</i>,
+	int <i>type</i>,
+	int <i>n_verts</i>,
+	int <i>n_prims</i>,
+	const void *<i>idx</i>,
+	const void *<i>vtx</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>prim</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Type of primitive to be drawn&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data type specified by <i>idx</i> and <i>vtx</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>n_verts</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of vertices per primitive (1 to 65535)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>n_prims</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of primitives&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>idx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to index array&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vtx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to vertex array&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The following macros can be specified for <i>prim</i>.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_POINTS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Point&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_LINES&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Line segment&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_LINE_STRIP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Connected line segments&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_TRIANGLES&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Triangle&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_TRIANGLE_STRIP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Connected triangles&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_TRIANGLE_FAN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Connected triangles (fan shape)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_PRIM_RECTANGLES&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Rectangle&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For <i>type</i>, specify the logical OR of the various types of flags shown below. Although the vertex vector flag must be specified, the other flags can be omitted.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_10">
+<div style="margin-left:40px;"><h4><b>Texture Coordinates Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No texture coordinates&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_11">
+<div style="margin-left:40px;"><h4><b>Color Value Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No color value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5650&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:6:5:0 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5551&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:5:5:1 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF4444&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 4:4:4:4 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF8888&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (32-bit 8:8:8:8 format)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_12">
+<div style="margin-left:40px;"><h4><b>Normal Vector Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No normal vector&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_BYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal vector (signed 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_SHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal vector (signed 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_NORMAL_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal vector (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_13">
+<div style="margin-left:40px;"><h4><b>Vertex Vector Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_BYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_SHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_14">
+<div style="margin-left:40px;"><h4><b>Index Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit index&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_15">
+<div style="margin-left:40px;"><h4><b>Weight Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_16">
+<div style="margin-left:40px;"><h4><b>Weight Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1 weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;6 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8 weights&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_17">
+<div style="margin-left:40px;"><h4><b>Moving Vertex Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 5&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 6&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 7&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 8&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_18">
+<div style="margin-left:40px;"><h4><b>Through Mode Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_THROUGH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Through mode&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function inserts a command sequence for continuously drawing multiple primitives of the same type having the same number of vertices in the display list that is being created by using libgu. If the current matrix has been updated, a command sequence for setting the new current matrix is inserted before the command sequence for drawing primitives.<br>The primitive type (point, line segment, connected line segments, triangle, connected triangles, fan-shape connected triangles, or rectangle) is specified by <i>prim</i>, the number of vertices per primitive is specified by <i>n_verts</i>, and the number of primitives is specified by <i>n_prims</i>. The vertex data array is specified for <i>vtx</i> and the index array is specified for <i>idx</i>.<br>The data contents provided by vtx and <i>idx</i> are specified for <i>type</i>. The texture coordinate format, color value format, normal vector format, vertex vector format, index type, weight value, number of weights, and number of moving vertices can be specified by specifying the logical OR of an appropriate macro definition for each of them. Since the vertex vector is always supposed to be included in the data, the vertex vector format specification (SCEGU_VERTEX_xxx) cannot be omitted. The other specifications can be omitted if the relevant data is not included. To draw using through mode, specify SCEGU_THROUGH for <i>type</i>.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>static const <a href="../kernel/Types-Reference-English.htm#ScePspFVector3">ScePspFVector3</a> model[] = {
+	{-1.0f, -1.0f, -1.0f},{-1.0f,1.0f,-1.0f},{1.0f,-1.0f,-1.0f},{1.0f,1.0f,-1.0f},
+	{-1.0f, -1.0f, 0.0f},{-1.0f,1.0f,0.0f},{1.0f,-1.0f,0.0f},{1.0f,1.0f,0.0f},
+	{-1.0f, -1.0f, 1.0f},{-1.0f,1.0f,1.0f},{1.0f,-1.0f,1.0f},{1.0f,1.0f,1.0f},
+};
+<a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumDrawArrayN( SCEGU_PRIM_TRIANGLE_STRIP,SCEGU_VERTEX_FLOAT,
+	4, 3, NULL, model );		// Draw 2 connected triangles 3 times
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The data area indicated by the <i>vtx</i> and <i>idx</i> arguments must not be released until drawing of the associated display list ends.<br>For SCEGU_IMMEDIATE mode, since drawing is started immediately by an sceGumDrawArrayN() function call, D-cache coherency must be guaranteed in advance for the memory area referenced by <i>vtx</i> and <i>idx</i>. When necessary, explicitly perform a D-cache writeback.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgu-Reference-English.htm#sceGuDrawArray">sceGuDrawArray</a>(), <a href="../graphics/libgu-Reference-English.htm#sceGuDrawArrayN">sceGuDrawArrayN</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumDrawArray">sceGumDrawArray</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumDrawBezier"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumDrawBezier<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Draw Bezier surface<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumDrawBezier </b>(
+	int <i>type</i>,
+	int <i>ucount</i>,
+	int <i>vcount</i>,
+	const void *<i>idx</i>,
+	const void *<i>vtx</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data type specified for <i>idx</i> and <i>vtx</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ucount</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of U-direction control points (3*N+1) (N = 1, 2, 3, ..., 84)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vcount</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of V-direction control points (3*N+1) (N = 1, 2, 3, ..., 84)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>idx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to index array&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vtx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to control point array&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For <i>type</i>, specify the logical OR of the various types of flags shown below. Although the vertex vector flag must be specified, the other flags can be omitted.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_19">
+<div style="margin-left:40px;"><h4><b>Texture Coordinates Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No texture coordinates&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_20">
+<div style="margin-left:40px;"><h4><b>Color Value Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No color value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5650&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:6:5:0 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5551&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:5:5:1 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF4444&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 4:4:4:4 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF8888&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (32-bit 8:8:8:8 format)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_21">
+<div style="margin-left:40px;"><h4><b>Vertex Vector Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_BYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_SHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_22">
+<div style="margin-left:40px;"><h4><b>Index Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit index&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_23">
+<div style="margin-left:40px;"><h4><b>Weight Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_24">
+<div style="margin-left:40px;"><h4><b>Weight Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1 weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;6 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8 weights&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_25">
+<div style="margin-left:40px;"><h4><b>Moving Vertex Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 5&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 6&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 7&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 8&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function inserts a command sequence for drawing a Bezier surface in the display list that is being created by using libgu. If the current matrix has been updated, a command sequence for setting the new current matrix is inserted before the command sequence for drawing the Bezier surface.<br>The data array representing the Bezier surface control points is specified by <i>vtx</i>, the index array is specified by <i>idx</i>, and the numbers of control points in the U and V directions are specified by <i>ucount</i> and <i>vcount</i>.<br>The data contents provided by <i>vtx </i>and <i>idx</i> are specified for <i>type</i>. The texture coordinate format, color value format, vertex vector format, index type, weight value, number of weights, and number of moving vertices can be specified by specifying the logical OR of an appropriate macro definition for each of them. Since the vertex vector is always supposed to be included in the data, the vertex vector format specification (SCEGU_VERTEX_xxx) cannot be omitted. The other specifications can be omitted if the relevant data is not included. Also, since a value that is automatically calculated internally by the library is used for the normal line, a normal vector is ignored if it is specified.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumDrawBezier( SCEGU_VERTEX_FLOAT, 4, 4, bezier );	// Draw Bezier surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The data area pointed to by <i>vtx</i> and <i>idx </i>must not be released until drawing of the relevant display list is finished.<br>Settings related to detailed division of the surface are made by using <a href="../graphics/libgu-Reference-English.htm#sceGuPatchDivide">sceGuPatchDivide</a>() and <a href="../graphics/libgu-Reference-English.htm#sceGuPatchPrim">sceGuPatchPrim</a>().<br>For SCEGU_IMMEDIATE mode, since drawing is started immediately by an sceGumDrawBezier() function call, D-cache coherency must be guaranteed in advance for the memory area referenced by <i>vtx</i> and <i>idx</i>. When necessary, explicitly perform a D-cache writeback.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgu-Reference-English.htm#sceGuDrawBezier">sceGuDrawBezier</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumDrawArray">sceGumDrawArray</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumDrawSpline">sceGumDrawSpline</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumDrawSpline"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumDrawSpline<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Draw spline surface<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumDrawSpline </b>(
+	int <i>type</i>,
+	int <i>ucount</i>,
+	int <i>vcount</i>,
+	int <i>uflag</i>,
+	int <i>vflag</i>,
+	const void *<i>idx</i>,
+	const void *<i>vtx</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data type specified for <i>idx</i> and <i>vtx</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ucount</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of U-direction control points  (N) (N = 4, 5, 6, ..., 255)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vcount</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of V-direction control points  (N) (N = 4, 5, 6, ..., 255)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uflag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;U-direction open and closed specification&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vflag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;V-direction open and closed specification&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>idx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to index array&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vtx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to control point array&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">For <i>type</i>, specify the logical OR of the various types of flags shown below. Although the vertex vector flag must be specified, the other flags can be omitted.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_26">
+<div style="margin-left:40px;"><h4><b>Texture Coordinates Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No texture coordinates&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_TEXTURE_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture coordinates (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_27">
+<div style="margin-left:40px;"><h4><b>Color Value Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No color value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5650&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:6:5:0 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF5551&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 5:5:5:1 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF4444&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (16-bit 4:4:4:4 format)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_COLOR_PF8888&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Color value (32-bit 8:8:8:8 format)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_28">
+<div style="margin-left:40px;"><h4><b>Vertex Vector Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_BYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_SHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (signed 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex vector (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_29">
+<div style="margin-left:40px;"><h4><b>Index Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_INDEX_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit index&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_30">
+<div style="margin-left:40px;"><h4><b>Weight Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_NONE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_UBYTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 8-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_USHORT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (unsigned 16-bit)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_FLOAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Weight (floating point)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_31">
+<div style="margin-left:40px;"><h4><b>Weight Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1 weight&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;6 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7 weights&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_WEIGHT_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8 weights&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_32">
+<div style="margin-left:40px;"><h4><b>Moving Vertex Count Flag</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 5&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 6&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 7&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_VERTEX_8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of moving vertices: 8&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The following macros can be specified for <i>uflag </i>and <i>vflag</i>.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_OPEN_OPEN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All open&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_OPEN_CLOSE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Starting point open, ending point closed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_CLOSE_OPEN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Starting point closed, ending point open&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEGU_CLOSE_CLOSE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All closed&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function inserts a command sequence for drawing a spline surface in the display list that is being created. If the current matrix has been updated, a command sequence for setting the new current matrix is inserted before the command sequence for drawing the spline surface.<br>The data array representing the spline surface control points is specified by <i>vtx</i>, and the index array is specified by <i>idx</i>. The numbers of control points in the U and V directions are specified by <i>ucount</i> and <i>vcount</i>, and the node states in the U and V directions are specified by <i>uflag</i> and <i>vflag</i>.<br>The data contents provided by <i>vtx</i> and <i>idx</i> are specified for <i>type</i>. The texture coordinate format, color value format, vertex vector format, index type, weight value, number of weights, and number of moving vertices can be specified by specifying the logical OR of an appropriate macro definition for each of them. Since the vertex vector is always supposed to be included in the data, the vertex vector format specification (SCEGU_VERTEX_xxx) cannot be omitted. The other specifications can be omitted if the relevant data is not included. Also, since a value that is automatically calculated internally by the library is used for the normal line, a normal vector is ignored if it is specified.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#sceGumPushMatrix">sceGumPushMatrix</a>();	// Push current matrix
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadIdentity">sceGumLoadIdentity</a>();	// Load unit matrix
+sceGumDrawSpline( SCEGU_VERTEX_FLOAT, 4, 4, SCEGU_OPEN_OPEN, 
+	SCEGU_OPEN_CLOSE, spline );	// Draw spline surface
+<a href="../graphics/libgum-Reference-English.htm#sceGumPopMatrix">sceGumPopMatrix</a>();	// Pop current matrix
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The data area pointed to by <i>vtx </i>and <i>idx </i>must not be released until drawing of the relevant display list is finished.<br>Settings related to detailed division of the surface are made by using <a href="../graphics/libgu-Reference-English.htm#sceGuPatchDivide">sceGuPatchDivide</a>() and <a href="../graphics/libgu-Reference-English.htm#sceGuPatchPrim">sceGuPatchPrim</a>().<br>For SCEGU_IMMEDIATE mode, since drawing is started immediately by an <a href="../graphics/libgu-Reference-English.htm#sceGuDrawSpline">sceGuDrawSpline</a>() function call, D-cache coherency must be guaranteed in advance for the memory area referenced by <i>vtx</i> and <i>idx</i>. When necessary, explicitly perform a D-cache writeback.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgu-Reference-English.htm#sceGuDrawSpline">sceGuDrawSpline</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumDrawArray">sceGumDrawArray</a>(), <a href="../graphics/libgum-Reference-English.htm#sceGumDrawBezier">sceGumDrawBezier</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumStoreContext"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumStoreContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Store context<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumStoreContext</b>( 
+	<a href="../graphics/libgum-Reference-English.htm#SceGumContext">SceGumContext</a> *<i>ctx</i> 
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ctx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Context pointer&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function reads the current context and stores it in the variable specified by <i>ctx</i>. <br>When libgum is used by a main routine and interrupt routine simultaneously, the main context must be saved so that it is not destroyed before libgum is used by the interrupt routine and restored before control returns.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#SceGumContext">SceGumContext</a>	ctx;
+
+sceGumStoreContext(&amp;ctx);		// Save current context
+<a href="../graphics/libgum-Reference-English.htm#sceGumLoadContext">sceGumLoadContext</a>( &amp;ctx );		// Set current context
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumLoadContext">sceGumLoadContext</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGumLoadContext"></a>
+<table width="100%"><td width="70%"><font size=6>sceGumLoadContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Restore context<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libgum.h&gt;
+void <b>sceGumLoadContext</b>( 
+	<a href="../graphics/libgum-Reference-English.htm#SceGumContext">SceGumContext</a> *<i>ctx</i> 
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ctx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Context pointer&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function sets the context according to the variable specified by <i>ctx</i>. <br>When libgum is used by a main routine and interrupt routine simultaneously, the main context must be saved so that it is not destroyed before libgum is used by the interrupt routine and restored before control returns.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgum-Reference-English.htm#SceGumContext">SceGumContext</a>	ctx;
+
+<a href="../graphics/libgum-Reference-English.htm#sceGumStoreContext">sceGumStoreContext</a>(&amp;ctx);		// Save current context
+sceGumLoadContext( &amp;ctx );		// Set current context
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgum-Reference-English.htm#sceGumStoreContext">sceGumStoreContext</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

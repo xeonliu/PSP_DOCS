@@ -1,0 +1,246 @@
+<html lang="jp">
+<head>
+<title>HeadphoneRemote-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ヘッドホンリモコンドライバ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ヘッドホンリモコンドライバは、PSP&reg;のヘッドホン/マイク端子に接続するリモコン(PSP-120, PSP-S120)からのボタン入力を処理するドライバです。また、PSP-2000およびPSP-3000シリーズではクレードル(PSP-S360, PSP-S410)からの赤外線ボタン入力の処理も行います。<br><br>主な機能は以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ヘッドホンリモコンからのボタンデータ取得
+<li> 赤外線リモコンからのボタンデータ取得
+<li> ボタンのラッチによる処理落ち時の取りこぼし対策
+<li> ヘッドホンの有無、リモコンの有無、マイクの有無検出
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ヘッドホンリモコンドライバを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;hpremote_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;hpremotedrv.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ヘッドホンリモコンドライバはデフォルトのモジュールとして動作します。明示的な初期化は必要ありません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>ヘッドホンリモコンからのデータ取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コントローラと異なり、ヘッドホンリモコンからの通信はボタン操作が行われた場合にのみ行われます。ボタンデータの取得は定期的なポーリングによって行われているわけではないため、ヘッドホンドライバはボタンデータをラッチ情報として扱います。<br><br>ラッチ情報は<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmReadLatch">sceHprmReadLatch</a>()で読み出されてクリアされるまで累積し続けます。アプリケーションが定期的に<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmReadLatch">sceHprmReadLatch</a>()を呼び出ししていなかった場合でも、ラッチ情報には記録が残ります。<br>ラッチ情報はコントローラサービスがコントローラの入力をサンプリングするたびに、ボタンのプレス（押し下げ）／リリース（解放）を累積フラグの形でラッチ情報として記録します。これは、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmReadLatch">sceHprmReadLatch</a>()関数を呼び出すことで、ビットマスク値として取り出され初期化されます。ラッチ情報の詳細については、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#SceHprmLatch">SceHprmLatch</a>を参考にしてください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int IsPlayButtonPressed(void)
+{
+    <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#SceHprmLatch">SceHprmLatch</a> latch;
+    int res;
+    int i;
+
+    res = <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmReadLatch">sceHprmReadLatch</a>(&amp;latch);
+    if (res &lt; 0) {
+    return (res);
+    }
+
+    if ((latch.uiPress &amp; <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#SCE_HPRM_KEY_PLAY_PAUSE">SCE_HPRM_KEY_PLAY_PAUSE</a>)!=0) {
+        //J &gt;||ボタンが押された形跡があった
+        return (1);
+    } else {
+        //J &gt;||ボタンが押された形跡がなかった
+        return (0);
+    }
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>ただし、ラッチ情報はシステムグローバルなリソースのため、複数のスレッドから同時に利用できません。他スレッドが使用中にラッチ情報を取得したい時は、secHprmlPeekLatch()を使用してスヌープしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ヘッドホン,リモコン,マイクの検出について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ヘッドホン、リモコン、マイクについては、それぞれ<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数によって取得する事ができます。PSP&reg;本体にマイクが内蔵されているPSP-3000, PSP-N1000シリーズでは、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数は常に1を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>PSP&reg;本体にリモコン,ヘッドホン,クレードル,ビデオ出力ケーブルを接続していない</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-1000, PSP-2000シリーズおよびPSP&reg;開発ツールでは、ヘッドホンや、リモコン(PSP-120, PSP-S120)、クレードル(PSP-S360, PSP-S410)、ビデオ出力ケーブル等を使用していない場合、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数はいずれも0を返します。<br>PSP-3000, PSP-N1000シリーズでは<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は0を返しますが、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数は1を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>PSP&reg;本体に直接ヘッドホンを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">リモコン(PSP-120, PSP-S120)またはクレードル(PSP-S360, PSP-S410)を使用せず、ヘッドホン(PSP-130)または市販のヘッドホンを直接PSP&reg;本体に接続する事ができます。この場合<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()は1を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>PSP&reg;本体にリモコンのみを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP&reg;本体にリモコン(PSP-120, PSP-S120)のみを接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は1を返します。ただし、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()の変化はリモコンが接続された瞬間から少し遅れることがあり、その間は通常のヘッドホンに見えるため<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が1を返します。リモコンの認識が完了して、リモコンにヘッドホンが接続されていないことが確認されると<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が0に戻ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_4"><h4>
+(4)&nbsp;<b>PSP&reg;本体にリモコン経由でヘッドホンを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP&reg;本体にヘッドホン(PSP-130)が接続された状態のリモコン(PSP-120, PSP-S120)を接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は1を返します。ただし、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()の変化は接続された瞬間から少し遅れることがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_5"><h4>
+(5)&nbsp;<b>PSP&reg;本体にリモコン経由でヘッドセットを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP&reg;本体にヘッドセット(PSP-270)が接続された状態のリモコン(PSP-120, PSP-S120)を接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数は1を返します。ただし、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()の変化は接続された瞬間から少し遅れることがあります。<br>PSP-3000, PSP-N1000シリーズでは、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数は常に1を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_6"><h4>
+(6)&nbsp;<b>PSP&reg;本体にビデオ出力ケーブルを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-2000,PSP-3000,PSP-N1000シリーズのPSP&reg;本体に、AVケーブル(PSP-S150, PSP-N150), Sビデオケーブル(PSP-S160), D端子ケーブル(PSP-S170, PSP-N170), コンポーネントAVケーブル(PSP-S180, PSP-N180)のいずれかを接続した場合には、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は0を返します。ただし、ビデオ出力ケーブルを接続した瞬間には、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が1を返す期間があります。<br><a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数は、PSP-2000シリーズでは0、PSP-3000, PSP-N1000シリーズでは1を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_7"><h4>
+(7)&nbsp;<b>PSP&reg;本体にクレードルのみを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-2000およびPSP-3000シリーズのPSP&reg;本体に、クレードル(PSP-S360, PSP-S410)のみを接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は0を返します。<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()はリモコンなしを示しますが、赤外線リモコンからの入力により<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmReadLatch">sceHprmReadLatch</a>()ではボタン情報が読み出されることがあります。クレードル認識はクレードルが接続された瞬間から少し遅れることがあり、その間は通常のヘッドホンに見えるため<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が1を返します。クレードルの認識が完了して、クレードルにヘッドホン等が接続されていないことが確認されると<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が0に戻ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_8"><h4>
+(8)&nbsp;<b>PSP&reg;本体にクレードル経由でヘッドホンを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-2000およびPSP-3000シリーズのPSP&reg;本体に、クレードル(PSP-S360, PSP-S410)を経由してヘッドホン(PSP-130)を接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()関数は1、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は0を返します。<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()はリモコンなしを示しますが、赤外線リモコンからの入力により<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmReadLatch">sceHprmReadLatch</a>()ではボタン情報が読み出されることがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_9"><h4>
+(9)&nbsp;<b>PSP&reg;本体にクレードル経由でリモコンを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-2000およびPSP-3000シリーズのPSP&reg;本体に、クレードル(PSP-S360, PSP-S410)を経由してリモコン(PSP-120, PSP-S120)を接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は1を返します。ただし、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()の変化はリモコン,クレードルが接続された瞬間から少し遅れることがあり、その間は通常のヘッドホンに見えるため<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が1を返します。リモコンの認識が完了して、リモコンにヘッドホンが接続されていないことが確認されると<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が0に戻ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_10"><h4>
+(10)&nbsp;<b>PSP&reg;本体にクレードル経由、リモコン経由でヘッドホン接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-2000およびPSP-3000シリーズのPSP&reg;本体に、クレードル(PSP-S360, PSP-S410)を経由してヘッドホン(PSP-130)が接続された状態のリモコン(PSP-120, PSP-S120)を接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()関数は1を返します。ただし、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()の変化は接続された瞬間から少し遅れることがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_11"><h4>
+(11)&nbsp;<b>PSP&reg;本体にクレードル経由、リモコン経由でヘッドセットを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-2000およびPSP-3000シリーズのPSP&reg;本体に、クレードル(PSP-S360, PSP-S410)を経由してヘッドセット(PSP-270)が接続された状態のリモコン(PSP-120, PSP-S120)を接続した場合は、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数は1を返します。ただし、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()の変化は接続された瞬間から少し遅れることがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_12"><h4>
+(12)&nbsp;<b>PSP&reg;本体にクレードル経由でビデオ出力ケーブルを接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP-2000およびPSP-3000シリーズのPSP&reg;本体に、クレードル(PSP-S360, PSP-S410)を経由してAVケーブル(PSP-S150), Sビデオケーブル(PSP-S160), D端子ケーブル(PSP-S170), コンポーネントAVケーブル(PSP-S180)のいずれかを接続した場合には、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>()および<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>()関数は、0を返します。ただし、ビデオ出力ケーブルを接続した瞬間には、<a href="../peripheral/HeadphoneRemote-Reference-Japanese.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>()が1を返す期間があります。<br><br></div>
+<div style="margin-left:50px;">PSP&reg;本体のヘッドホン/マイク端子にヘッドホン、リモコン、マイク、ビデオ出力ケーブルを接続する場合、2009年6月現在では上記のような組み合わせがありますが、将来これ以外の組み合わせが発生しないことを保証するものではありません。特定の組み合わせが発生すること、あるいは発生しないことを期待したプログラミングを行わないように注意してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>未定義のボタンについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">未定義のボタンのビットは絶対に参照しないようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>HOLDスイッチについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">リモコンのHOLDスイッチをHOLD状態にすると、ヘッドホンドライバはHOLDスイッチ以外のすべてのボタンがリリース状態であると認識します。HOLD状態が解除されるまで、ボタンのプレス状態を取得することはできません。<br>リモコンのHOLD状態と、PSP&reg;本体のHOLD状態はそれぞれ独立しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>同時押しについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">リモコンでは複数ボタンの同時押し検出について保障はありません。2006年8月現在のリモコン(PSP-120)では2個までの同時押し検出ができますが、複数のボタンの同時押しを期待したり、3つ以上のボタンの同時押しを期待しないようなプログラミングは行わないように注意してください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

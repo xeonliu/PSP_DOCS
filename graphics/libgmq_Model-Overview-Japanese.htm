@@ -1,0 +1,2199 @@
+<html lang="jp">
+<head>
+<title>libgmq_Model-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgmq_model
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgmq_modelはlibgmo_modelの軽量版です。libgmo_modelとほぼ同じAPIを提供し、より少ないCPU負荷でGMOファイルを表示することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgmq_modelを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gmq/gmq_model.h&nbsp;&nbsp;<br>&nbsp;&nbsp;giq/giq_picture.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgmq_model.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libgiq_picture.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> テクスチャを表示するためlibgiq_pictureが必要です。
+<li> 標準のコンテキストで描画する場合は、libguおよびlibgumが必要です。
+<li> 内部関数を使用する場合は、gmq/gmq_protected.hをインクルードしてください。
+<li> ソースコードは、devkit/src/gmq_model/ にあります。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/graphics/model_gmq</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libgmo_modelとlibgmq_modelでモデルデータを表示するサンプルです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GMO_Format-Overview<br>GMO_Format-Reference<br>GMO-Converter<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">次に示すのは、libgmq_modelを使用するプログラム例の主要部分です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;gmq/gmq_model.h&gt;
+
+// 初期化
+・・・
+
+// モデルデータをロード
+SceGmqModel *model = <a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelCreate">sceGmqModelCreate</a>() ;
+<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelLoadFile">sceGmqModelLoadFile</a>( model, data, size, 0 ) ;
+SceGmqModel *copy =<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelDuplicate">sceGmqModelDuplicate</a>( model, SCEGMQ_DUPLICATE_AUTOMATIC ) ;
+<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelSetCurrentMotion">sceGmqModelSetCurrentMotion</a>( copy, 0, 0.0f ) ;
+
+for ( ; ; ) {
+	//  ディスプレイリストを開始
+	<a href="../graphics/libgu-Reference-Japanese.htm#sceGuStart">sceGuStart</a>( SCEGU_LIST_CACHED, pkt, pkt_size ) ;
+
+	//  モデルデータを表示
+	<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelSetWorldMatrix">sceGmqModelSetWorldMatrix</a>( copy, &amp;world_matrix ) ;
+	<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelAnimate">sceGmqModelAnimate</a>( copy, 1.0f / 60.0f ) ;
+	<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelUpdate">sceGmqModelUpdate</a>( copy ) ;
+	<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelDraw">sceGmqModelDraw</a>( copy ) ;
+	. . .
+	//  ディスプレイリストを終了
+	<a href="../graphics/libgu-Reference-Japanese.htm#sceGuFinish">sceGuFinish</a>() ;
+	<a href="../graphics/libgu-Reference-Japanese.htm#sceGuSendList">sceGuSendList</a>( SCEGU_QUEUE_TAIL, pkt, 0, 0, 0 ) ;
+}
+
+//  モデルデータを削除
+<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelDelete">sceGmqModelDelete</a>( model ) ;
+<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelDelete">sceGmqModelDelete</a>( copy ) ;
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">必要に応じて、コールバック関数を登録します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 通常のメモリを確保 / 解放する関数
+<li> DMA転送用のメモリを確保 / 解放する関数
+<li> 高速なeDRAM上のメモリを確保 / 解放する関数
+<li> テクスチャ画像の登録 / 取得を行う関数
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>モデルデータをロード</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelCreate">sceGmqModelCreate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: モデル構造体を作成します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelLoadFile">sceGmqModelLoadFile</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: モデル構造体にデータを読み込みます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelDuplicate">sceGmqModelDuplicate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: モデル構造体のコピーを作成します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelSetCurrentMotion">sceGmqModelSetCurrentMotion</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 再生するモーションを選択します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>ディスプレイリストを開始</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>モデルデータを表示</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelSetWorldMatrix">sceGmqModelSetWorldMatrix</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: モデルの位置を設定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelAnimate">sceGmqModelAnimate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: アニメーションの時間を進めます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelUpdate">sceGmqModelUpdate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: モデルのワールド行列を計算します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelDraw">sceGmqModelDraw</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: ディスプレイリストを作成します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>ディスプレイリストを終了</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>モデルデータを削除</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelDelete">sceGmqModelDelete</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: モデル構造体を解放します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>追加的な処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">必要に応じて、以下のような処理を追加してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>各種パラメータの設定</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelSetEnableBits">sceGmqModelSetEnableBits</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: イネーブルビットを設定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelSetEnableMask">sceGmqModelSetEnableMask</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: イネーブルマスクを設定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・・・&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>キャッシュのロード</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelLoadCache">sceGmqModelLoadCache</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 高速メモリを確保します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelUnloadCache">sceGmqModelUnloadCache</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 高速メモリを解放します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>制限事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>モデルデータの制限</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> ボーンは深さ優先順に格納されている
+<li> 1つのメッシュが使用するすべての頂点データは同じ頂点フォーマットを持つ
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>注意点</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> メモリブロックをまとめて確保するメモリクラスタは、暗黙に生成されます。
+<li> 特定のパラメータを変更した場合は、以下の関数を呼び出す必要があります（詳しくはライブラリリファレンスを参照してください）。
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelReconfigure">sceGmqModelReconfigure</a>()
+<li> <a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelNormalize">sceGmqModelNormalize</a>()
+</ul></div>
+</ul>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>内部データ</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> データ構造の変更のため、内部データにアクセスする一部のAPIは非対応か、または便宜上の処理を行うコンビニエンス関数になりました。
+<li> データ構造は以下のように変更されました。
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> Arraysブロックは、Meshブロックの下位ブロックとなります。
+<li> 高速化用のArraysブロックは、リンクリストに登録されます。
+<li> Materialブロックの情報は、Layerブロックに格納されます。
+<li> Animateコマンドは、FCurveブロックに統合されます。
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> 描画データは以下のように変更されました。
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> 描画プリミティブは、描画パケットに展開されて格納されます。
+<li> インデックス頂点は、非インデックス頂点に展開されて格納されます。
+</ul></div>
+</ul>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>拡張された機能</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>メモリマネージャ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">メモリのアラインメントや解放遅延などの機能をメモリマネージャに実装しました。これらの処理をメモリマネージャに実行させることも、従来どおりユーザーが用意するメモリ管理関数に実行させることも可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>メモリミューテックス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マルチスレッドによるアクセスからメモリマネージャを保護することが可能になりました。<br>スレッドセーフ性については第5章を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>モデル複製</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">従来は未対応であった、頂点データやピクセルデータを複製することが可能になりました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>リスト描画</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ボーンの描画順序を直接指定したりZ値でソートすることが可能になりました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>プリセット描画</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">パケットをあらかじめ作成しておくことでCPU負荷を軽減することが可能になりました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>エッジ描画</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モデルデータからエッジ情報を追加でロードし、稜線などのエッジを選択的に描画することが可能になりました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>サブブロック名</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モデルデータからサブブロック名を追加でロードし、アニメーションターゲットの名前解決を行うことが可能になりました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>頂点ウェイトの省略</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">スキンメッシュが単一の頂点ウェイトを持つ場合に、頂点ウェイトを省略可能になりました。<br>ソリッドメッシュとして描画することで、GPU負荷を削減できる場合があります。<br>（その場合、メッシュに BlendSubset 1 Nが必要です）<br><br>頂点ウェイトのないメッシュは、以下のように処理されます。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> BlendSubset なし : ソリッドメッシュ
+<li> BlendSubset 1 N  : 頂点ウェイトが省略されたスキンメッシュ
+</ul></div>
+<div style="margin-left:50px;"><br>なお、頂点ウェイトを省略したモデルのエッジ描画は未対応です。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>スレッドセーフ性</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>スレッドセーフ性</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgmq_modelは、複数のモデルが内部データを共有するように設計されているため、マルチスレッド処理には適していません。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgmq_Model-Overview-Japanese001.gif">
+</div>
+<div style="margin-left:50px;"><br><br>もし、モデルの複製を行わず内部データを共有しない状態であっても、描画パラメータやメモリマネージャがグローバル変数に格納されているため、何らかのアクセス保護が必要です。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgmq_Model-Overview-Japanese002.gif">
+</div>
+<div style="margin-left:50px;"><br><br>マルチスレッド処理を行うためには、以下のような条件を満たす必要があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> サブスレッドでアクセスするモデルは他のモデルと内部データを共有しない
+<li> サブスレッドでアクセスするモデルに対して描画APIを呼び出さない
+<li> メモリマネージャをミューテックスなどで保護する
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>ファイルロード処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">たとえばファイルロード処理をサブスレッドで実行することは、ロード直後のモデルが他のモデルと内部データを共有しないこと、また描画 API を呼び出すケースも少ないことから、比較的実現が容易であると考えられます。<br><br>サブスレッドの処理は、たとえば以下のようになります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> メインスレッドと非同期でファイルロード処理を行う
+<li> メインスレッドと同期してファイルロード完了を通知する
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgmq_Model-Overview-Japanese003.gif">
+</div>
+<div style="margin-left:50px;"><br><br>サブスレッドのプログラムは、たとえば以下のようになります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *data = 0 ;
+size_t size = 0 ;
+LoadFile( "dog.gmo", &amp;data, &amp;size ) ;
+
+SceGmqModel *model = <a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelCreate">sceGmqModelCreate</a>() ;
+<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelSetOptionFlags">sceGmqModelSetOptionFlags</a>( model, SCEGMQ_OPTION_IMPORT_PICTURES, 0 ) ;
+<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelLoadFile">sceGmqModelLoadFile</a>( model, data, size, 0 ) ;
+<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelLoadCache">sceGmqModelLoadCache</a>( model ) ;
+
+</font></pre></div>
+<div style="margin-left:50px;">外部テクスチャのインポートやプリセットパケットの生成処理は非同期部分で実行できません。外部テクスチャのインポートは他のモデルと内部データを共有します。またプリセットパケットの生成処理は内部的に描画APIを呼び出します。<br><br>そのため、上の例では、外部テクスチャを自動的にインポートしないようオプションフラグをクリアしてファイルロードを行っています。外部テクスチャをインポートするには、メインスレッドで明示的に<a href="../graphics/libgmq_Model-Reference-Japanese.htm#sceGmqModelImportPictures">sceGmqModelImportPictures</a>()を呼び出してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>関数一覧</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libgmo_modelに対応する関数は以下のようになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>グローバル</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>備考</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMemoryManager&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMemoryManager2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMemoryManager3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMemoryMutex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetPictureManager&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetPictureManager2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelOpenMemoryCluster&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelOpenMemoryCluster2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelOpenMemoryCluster3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCloseMemoryCluster&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCloseMemoryCluster2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCloseMemoryCluster3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelTouchMemory&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCleanMemory&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMemoryInfo&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCheckFileHeader&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetChunkCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetRootChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCountChildChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelFindChildChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelAddMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetPictureMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelAddPictureMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMemoryClusterSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMemoryClusterSizeEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMemoryClusterSize2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMemoryClusterSize2Ex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMemoryClusterSizes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Modelオブジェクト</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCreate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDelete&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDuplicate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoadFile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoadGmo&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoad&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUnload&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoadCache&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoadCacheEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUnloadCache&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUnloadCacheEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelAnimate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelAnimateEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUpdate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUpdateEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDraw&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDrawEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDrawList&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDrawListEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSort&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSortList&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelEnumList&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelImportMotions&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelImportPictures&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelReconfigure&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelNormalize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Modelパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetWorldMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetWorldMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetCurrentMotion&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetCurrentMotion&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetColor&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetColor&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetSubdivision&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetSubdivision&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetGlobalTexGen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetGlobalTexGen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetClippingMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetClippingMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetOutputMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetOutputMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetOptionFlags&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetOptionFlags&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMeshType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMeshType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMeshLevel&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMeshLevel&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelHasAnimation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetBoundingBox&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetVertexOffset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetTexcoordOffset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetBoundingPoints&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetBoundingPointsCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetBoneCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetPartCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMaterialCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetTextureCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMotionCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetBone&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetPart&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMaterial&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetTexture&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMotion&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetBoneCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetPartCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMaterialCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetTextureCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMotionCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetBone&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetPart&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMaterial&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetTexture&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelSetMotion&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoadPreset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUnloadPreset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetPresetFrameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetPresetPacketSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUpdatePreset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCallPreset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelCopyPreset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoadEdges&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUnloadEdges&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDrawEdges&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelDrawEdgesEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelLoadNames&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelUnloadNames&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetBoneNameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetPartNameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMaterialNameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetTextureNameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMotionNameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetBoneName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetPartName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMaterialName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetTextureName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ModelGetMotionName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>Boneパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetInitialState&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetParentBone&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetParentBone&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetVisibility&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetVisibility&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetDrawParts&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetDrawPartsCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetDrawParts&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetMorphWeights&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetMorphWeightsCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetMorphWeights&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetMorphIndex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetMorphIndex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetBlendBonesCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetBlendBones&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetBlendOffsetsCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetBlendOffsets&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetPivot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetPivot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetMultMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetMultMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetTranslate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetTranslate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetRotate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetRotate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetScale&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetScale&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetRotateYXZ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetRotateZYX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetScale2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetScale3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetWorldMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetWorldMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetColor&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetColor&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneSetZSortMode&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BoneGetZSortMode&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>Partパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PartSetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PartGetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PartGetMeshCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PartGetMesh&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PartGetArraysCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PartGetArrays&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_6">
+<h3>
+<a href="#Heading3_6"> 6. </a>6 
+<!-- hp1 --><b>Meshパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetArrays&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetActiveArrays&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshSetMaterial&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetMaterial&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshSetSubdivision&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetSubdivision&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetBlendSubsetCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetBlendSubset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetBoundingPointsCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetBoundingPoints&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshSetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshSetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshSetMeshMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MeshGetMeshMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_7">
+<h3>
+<a href="#Heading3_6"> 6. </a>7 
+<!-- hp1 --><b>Arraysパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetNext&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetUsage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetPacket&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetPacketSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetVertices&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetVertexFormat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetVertexStride&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetVertexCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetBoundingPointsCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ArraysGetBoundingPoints&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_8">
+<h3>
+<a href="#Heading3_6"> 6. </a>8 
+<!-- hp1 --><b>Materialパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetLayerCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetLayer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetPassCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetInitialState&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetDiffuse&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetDiffuse&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetSpecular&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetSpecular&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetShininess&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetEmission&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetEmission&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetAmbient&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetAmbient&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetReflection&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetReflection&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetRefraction&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetRefraction&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetBump&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetBump&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetLayerTexCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetLayerTexCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialSetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MaterialGetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_9">
+<h3>
+<a href="#Heading3_6"> 6. </a>9 
+<!-- hp1 --><b>Layerパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetInitialState&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetTexture&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetTexture&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetMapType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetMapType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetMapFactor&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetMapFactor&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetBlendFunc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetBlendFunc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetTexCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetTexCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetTexGen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetTexGen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetTexMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetTexMatrix&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetEnableMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetDiffuse&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetDiffuse&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetSpecular&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetSpecular&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetShininess&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetEmission&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetEmission&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerSetAmbient&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LayerGetAmbient&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_10">
+<h3>
+<a href="#Heading3_6"> 6. </a>10 
+<!-- hp1 --><b>Textureパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TextureSetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TextureGetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TextureSetPicture&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TextureGetPicture&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TextureGetFileName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TextureHasAnimation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_11">
+<h3>
+<a href="#Heading3_6"> 6. </a>11 
+<!-- hp1 --><b>Motionパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionSetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetParent&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetAnimationCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetAnimation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetFCurveCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetFCurve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionSetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionSetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionSetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionSetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionSetWeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MotionGetWeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_12">
+<h3>
+<a href="#Heading3_6"> 6. </a>12 
+<!-- hp1 --><b>FCurveパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FCurveGetKeyFrames&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FCurveGetKeyFrameFormat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FCurveGetKeyFrameDimCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FCurveGetKeyFrameStride&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FCurveGetKeyFrameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FCurveGetTargetType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FCurveGetTargetIndex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

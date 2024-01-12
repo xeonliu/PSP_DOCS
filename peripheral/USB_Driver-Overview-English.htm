@@ -1,0 +1,461 @@
+<html lang="en">
+<head>
+<title>USB_Driver-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+USB Driver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Introduction</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The USB driver is a set of drivers that control the USB interface of the PSP&trade;. <br>The USB driver consists of a USB bus driver and USB protocol drivers. As shown in Figure 1, the architecture is such that the USB protocol drivers are plugged into the USB bus driver. <br>The USB bus driver coordinates the multiple USB protocol drivers plugged into it, and communicates with the USB host as a single USB device. At that time, if multiple protocol drivers are plugged in, to the host it appears to be a device which has multiple interfaces.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  USB Driver Architecture</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>In this document, the USB bus driver, which forms the base of the USB driver, will be the focus of discussion.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Major Features</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Compliant with USB Specification Rev. 2.0
+<li> Starting (plugging in) and stopping (plugging out) USB protocol drivers
+<li> Activating and deactivating USB devices
+<li> Retrieval of USB device state
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Configuration Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the USB bus driver.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usb.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usb_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Overview Diagram of the Basic Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The diagram shown below shows the simplified procedure for using the USB driver when the PSP&trade; is used as a USB device.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Overview of USB Driver Usage Procedure</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>USB Device Activation Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In order to perform communication with USB on the PSP&trade;, first activate the USB device using the following procedure.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>Load the USB bus driver</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The USB bus driver is automatically loaded during system start-up.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>Load the USB protocol driver modules</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Load the necessary USB protocol driver modules. When a USB protocol driver is loaded, the USB bus driver is automatically notified. (The USB bus driver maintains a list of loaded USB protocol drivers, and when the USB bus driver receives a notification, it records that USB protocol driver on the list.)<br>In addition, USB protocol driver modules can be loaded with any arbitrary timing.<br><br>At this point:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> The USB device is in the powered off state.
+<li> Even if the USB cable is connected, it will not be recognized by the host.
+<li> Functionality other than <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbGetState">sceUsbGetState</a>() and USB bus driver start-up cannot be used.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>Start the USB bus driver</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Specify <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a> in the <i>name</i> argument, and call the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStart">sceUsbStart</a>() function. Start the USB bus driver.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStart">sceUsbStart</a>(<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a>, 0, NULL) &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_4"><h4>
+(4)&nbsp;<b>Start (plug in) the USB protocol drivers</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Specify the name of the USB protocol driver in the <i>name</i> argument, and call the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStart">sceUsbStart</a>() function. The USB protocol driver will be plugged into the USB bus driver and started. <br>For the names of the USB protocol drivers, refer to the header files, documentation, etc. for the respective USB protocol drivers.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStart">sceUsbStart</a>(SCE_USBXXX_NAME, 0, NULL) &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>Depending on the USB protocol driver, it may be possible to pass as an argument another piece of data besides the driver name.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceUsbXXXStartData data;
+
+// Example of protocol driver for which data other than the driver name can be specified
+if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStart">sceUsbStart</a>(SCE_USBXXX_NAME, sizeof(SceUsbXXXStartData), &amp;data) &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_5"><h4>
+(5)&nbsp;<b>Activate the USB Device</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Specify the product ID in the <i>idProduct</i> argument, and call the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbActivate">sceUsbActivate</a>() function. Activate the USB device. <br>The product IDs are defined in each protocol's header file; use these values.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbActivate">sceUsbActivate</a>(SCE_USB_PID_XXX) &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> In order to activate a USB device, one or more USB protocol drivers must be started.
+<li> When a USB device is activated, the USB protocol drivers cannot be started or stopped (plugged in or plugged out).
+<li> Even while a USB device is being activated, it is possible to load USB protocol driver modules and to unload USB protocol driver modules which have not been started (plugged in).
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>USB Device Deactivation Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When USB communication on a PSP&trade; is finished, the USB device can be deactivated using the following procedure. <br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_1"><h4>
+(1)&nbsp;<b>Deactivate the USB Device</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbDeactivate">sceUsbDeactivate</a>() function. The USB device will be deactivated. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbDeactivate">sceUsbDeactivate</a>() &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>As viewed from the host, the situation when a USB device is deactivated is the same as that when the USB cable is disconnected.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> At that point, it becomes possible to start or stop (plug in or plug out) the USB protocol driver. Other USB protocol drivers can be swapped in, and, by activating the USB device again, a device other than the previous one can be used.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_2"><h4>
+(2)&nbsp;<b>Stop (plug out) the USB protocol driver</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Specify the name of the USB protocol driver in the <i>name</i> argument, and call the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStop">sceUsbStop</a>() function. The USB protocol driver will be stopped (plugged out). <br>Depending on the USB protocol driver, it may be possible to pass as an argument another piece of data besides the driver name. For details, refer to the USB protocol driver documentation.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStop">sceUsbStop</a>(SCE_USBXXX_NAME, 0, NULL) &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_3"><h4>
+(3)&nbsp;<b>Stop the USB bus driver</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Specify <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a> in the <i>name</i> argument, and call the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStop">sceUsbStop</a>() function. The USB bus driver will be stopped. <br>In order to stop the USB bus driver, all of the USB protocol drivers must be stopped first.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbStop">sceUsbStop</a>(<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a>, 0, NULL) &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_4"><h4>
+(4)&nbsp;<b>Unload the USB protocol driver modules</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Unload the USB protocol driver modules. The USB bus driver will be automatically notified, and registration of the relevant USB protocol driver will be canceled. <br>Note that while the driver is being started, the module for that driver cannot be unloaded.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Retrieval of USB Device State</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To retrieve the state of a USB device, call the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbGetState">sceUsbGetState</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>unsigned int state;
+
+state = <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbGetState">sceUsbGetState</a>();
+</font></pre></div>
+<div style="margin-left:50px;"><br>The device state is represented by the logical OR of the following states.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>State</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Mask Constant</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_ACTIVATED">SCE_USB_ACTIVATED</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_DEACTIVATED">SCE_USB_DEACTIVATED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;USB device activated state&nbsp;&nbsp;<br>&nbsp;&nbsp;USB device deactivated state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_ACT_MASK">SCE_USB_ACT_MASK</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_DISCONNECTED">SCE_USB_DISCONNECTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;USB cable connected state&nbsp;&nbsp;<br>&nbsp;&nbsp;USB cable disconnected state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_CONN_MASK">SCE_USB_CONN_MASK</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_DEFAULT">SCE_USB_DEFAULT</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_CONFIGURED">SCE_USB_CONFIGURED</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_SUSPENDED">SCE_USB_SUSPENDED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Default and Address state&nbsp;&nbsp;<br>&nbsp;&nbsp;Configured state&nbsp;&nbsp;<br>&nbsp;&nbsp;Suspended state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_STATE_MASK">SCE_USB_STATE_MASK</a>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">A detailed explanation of the respective states is provided in &quot;<u><a href="../peripheral/USB_Driver-Overview-English.htm#Heading4_3_1">USB Device States</a></u>&quot; in the next chapter. In addition, a mask is provided to facilitate retrieval of the respective states; use this as appropriate.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Waiting for Specified USB Device State</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To monitor the state of a specific USB device and perform different operations depending on its state transitions, use the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitState">sceUsbWaitState</a>() and <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>() functions. The <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitState">sceUsbWaitState</a>() function is a function which waits until the transition is made to the specified USB device state. With <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>(), a callback function takes on the executable wait state. The states described below in &quot;USB Device States&quot; can be specified using logical OR, and whether to wait for the AND or the OR of this specified state can also be specified. In addition, if NULL is specified for the <i>timeout</i> argument, the function waits indefinitely until either the specified state occurs or the wait state is canceled.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// To wait until either the USB cable is connected or the wait state is canceled
+if (<a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitState">sceUsbWaitState</a>(<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>, SCE_KERNEL_EW_AND, NULL) &lt; 0) {
+	// Error handling
+	return -1;
+}
+printf("USB cable is connected\n");
+</font></pre></div>
+<div style="margin-left:50px;"><br>To cancel the wait state of <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitState">sceUsbWaitState</a>() or <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>, use the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitCancel">sceUsbWaitCancel</a>() function. When the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitCancel">sceUsbWaitCancel</a>() function is called, the wait states of every waiting thread of the <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitState">sceUsbWaitState</a>() and <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>() functions are canceled. It is not possible to cancel only a particular thread using <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitCancel">sceUsbWaitCancel</a>().<br>To end the wait state of a particular thread, employ a method such as specifying an appropriate value in the <i>timeout</i> argument of <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitState">sceUsbWaitState</a>(), determining whether to end or continue the wait state when the timeout occurs, and then end the wait state by simply not entering the wait state again.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#define TIMEOUT   1000000   // 1 sec
+unsigned int timeout = TIMEOUT;
+int ret
+static int cancel = 0;     // End flag. To end (same state as cancel), this should be
+modified from another thread
+
+while (1) {
+	// To wait for the USB cable to be connected
+	ret = <a href="../peripheral/USB_Driver-Reference-English.htm#sceUsbWaitState">sceUsbWaitState</a>(<a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>, SCE_KERNEL_EW_AND, &amp;timeout);
+	if (ret &lt; 0) {
+		if (cancel) {
+			// End (cancel)
+			printf("canceled\n");
+			break;
+		} else if (ret == <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_ERROR_TIMEOUT">SCE_USB_ERROR_TIMEOUT</a>) {
+			// Continue wait state
+			timeout = TIMEOUT;
+		} else {
+			// Error handling
+			return -1;
+		}
+	} else {
+		// Processing after transitioning to specified state
+		printf("USB cable is connected\n");
+		break;
+	}
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Description of Operation</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>USB Device States</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The USB device state is represented as the logical OR of the three states shown in Figure 3 to Figure 5.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_1">
+<div style="margin-left:63px;"><h4><b>USB Device Activated and Deactivated States</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This indicates whether or not the device is activated.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_ACTIVATED">SCE_USB_ACTIVATED</a>	: The USB device is activated 
+<li> <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_DEACTIVATED">SCE_USB_DEACTIVATED</a>	: The USB device is deactivated 
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-English003.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  USB Device Activated and Deactivated States</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_2">
+<div style="margin-left:63px;"><h4><b>USB Cable Connection States</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This indicates whether or not the USB cable is connected. Even if the cable is connected, it will not be detected by the host unless the USB Device Activated/Deactivated State is ACTIVATED.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>    	: The USB cable is connected
+<li> <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_DISCONNECTED">SCE_USB_DISCONNECTED</a> 	: The USB cable is disconnected
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-English004.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  USB Cable Connection States</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_3">
+<div style="margin-left:63px;"><h4><b>States in the USB Specification</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This indicates the states which are defined in the USB specification (USB Specification Rev. 2.0). These states are only valid if the USB Device Activated/Deactivated State is ACTIVATED, and the <a href="../peripheral/USB_Driver-Reference-English.htm#USB Cable Connection State">USB Cable Connection State</a> is CONNECTED. In all other circumstances, it will be DEFAULT.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_DEFAULT">SCE_USB_DEFAULT</a>     	: Default and Address state
+<li> <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_CONFIGURED">SCE_USB_CONFIGURED</a> 	: Configured state
+<li> <a href="../peripheral/USB_Driver-Reference-English.htm#SCE_USB_SUSPENDED">SCE_USB_SUSPENDED</a>  	: Suspended state
+</ul></div>
+<div style="margin-left:80px;">* The Suspended state refers to the <a href="../peripheral/USB_Driver-Reference-English.htm#USB Specification State">USB Specification State</a>, and is different from suspend in the PSP&trade; system.<br><br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-English005.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  States in the USB Specification</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Behavior during Suspend and Resume</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">During suspend and resume in the PSP&trade; system, USB devices behave as follows.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> During suspend
+</ul></div>
+<div style="margin-left:80px;">Takes on the same state as when the USB cable is disconnected.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> During resume 
+</ul></div>
+<div style="margin-left:80px;">If the USB cable is connected, takes on the same state as when the USB cable was plugged in. If the USB cable is not connected, takes on the same state as when the USB cable was unplugged.<br></div>
+<div style="margin-left:50px;"><br>For this reason, when suspend and resume are performed with the USB cable connected, it appears to an application as though the USB cable has been unplugged and then plugged in again.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

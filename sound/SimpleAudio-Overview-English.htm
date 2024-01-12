@@ -1,0 +1,189 @@
+<html lang="en">
+<head>
+<title>SimpleAudio-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Simple Audio Output Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Overview and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Simple Audio Output library, as its name indicates, provides simple audio output functions. It can output one 44.1 kHz 16-bit linear PCM 2ch stereo format audio voice. To output other formats of audio data or multiple voices, the user must perform data conversion or mixing.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_1">
+<div style="margin-left:63px;"><h4><b>Features</b><br><br></h4></a></div>
+</ol>
+<div style="margin-left:70px;"><ul>
+<li> The only supported format is 44.1 kHz sampling, 16-bit linear PCM (Little Endian) 2ch stereo
+<li> Audio driver can be directly manipulated
+<li> The CPU does not touch audio data
+<li> All audio data transfers are DMA transfers (as a result, an area that is accessible from the 32-bit bus is required for audio data)
+<li> The volume (both L/R) can be set by using the hardware digital volume function
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Processing Flow Until Sound Output</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the Simple Audio Output library is used, an audio output request from a game title is passed directly to the Audio Driver. The Audio Driver delivers the requested data to the channel having the audio output hardware digital volume function. The audio output hardware applies the specified digital volume value to this voice and then mixes it with other output channels to output audio signals.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the Simple Audio Output library. Since the part of Simple Audio Output library for manipulating the audio driver is common with libwave, the required .a file is the same as for libwave.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libwave.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;audiooutput.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">The following sample program uses the Simple Audio Output library.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_4_1"><h4>
+(1)&nbsp;<b>psp/devkit/sample/sound/at3mix</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Although this sample, which uses libsas and libatrac3plus, is similar to the sample starmix, which uses libwave, it performs mixing on the ME and uses the Simple Audio Output library for output. Therefore, the load on the main CPU is reduced.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Simple Audio Output Library Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following procedure shows how to use Simple Audio.<br><br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Call <b><a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2Reserve">sceAudioOutput2Reserve</a></b>() to perform initialization.</li>
+<li VALUE=2> Call <b><a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a></b>() to perform sound output.</li>
+<li VALUE=3> Call <b><a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2Release">sceAudioOutput2Release</a></b>() to perform termination.</li>
+</ol></div>
+<div style="margin-left:50px;"><br>To output audio using Simple Audio, call the <b><a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2Reserve">sceAudioOutput2Reserve</a></b>() function to declare that the audio output function is to be used and set the sample length of data that is to be output at one time.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+int iRc;
+
+/* Output 256 samples at a time */
+iRc = <a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2Reserve">sceAudioOutput2Reserve</a>(256);
+if (iRc != SCE_OK){
+	/* The setting failed */
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>The <b><a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a></b>() function is used for actual sound output. <b><a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a></b>() registers the PCM-format audio data that has been stored in the buffer in the audio driver. Playback of registered sound data begins after sound data that was previously registered in the audio driver has played. The thread that calls this function enters a wait state until playback begins.<br>Audio data is not necessarily played immediately after it is registered in the audio driver. Also, although playback of registered sound data begins when control returns from the function, it does not mean that the playback has ended or that the data has not been copied somewhere else. As a result, if the buffer is overwritten before playback actually ends, the data will not be played correctly. Be sure to use at least a double buffer for the sound output buffer and make sure that the buffer is not overwritten immediately after data is registered.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+/* Set a double buffer for pcmBuf */
+int iSide = 0;
+
+/* Output the 16-bit PCM STEREO data that is in pcmBuf[iSide] */
+<a href="../sound/SimpleAudio-Reference-English.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a>(
+	<a href="../sound/SimpleAudio-Reference-English.htm#SCE_AUDIO_VOLUME_0dB">SCE_AUDIO_VOLUME_0dB</a>,
+	pcmBuf[iSide]
+);
+iSide ^= 1;
+</font></pre></div>
+<div style="margin-left:50px;"><br>Similar precautions are necessary when processing ends. If PCM data had been placed in a dynamically allocated memory area (such as an area that was allocated by using the malloc function or an automatic variable that is allocated internally by the function), noise may be output during execution that can vary depending on the circumstances. Be sure to first confirm that output of the "final data" has ended properly before freeing memory. Also, a dedicated thread is often used to output PCM-format sound. In that case, be sure to perform processing for synchronizing between threads so that the thread is not forcibly terminated while the sound output thread is still outputting data (for details, see the sample program).<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Important Precautions Related to Thread Switching and Priority</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the Simple Audio Output library is used, sound is output to the hardware by the user thread that called the output function. As a result, when the thread is not in Run state, audio output may be stopped and a noise that is jarring to the ear may be produced. Make sure that the interrupt-disable period or dispatch-disabled period while audio output is being performed is not too long. As a rule of thumb, it should be at most a few hundred microseconds.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Audio Data Layout and Size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the Simple Audio Output library is used, audio data is output to the sound output block using direct DMA. Audio data must be placed in an Extended Memory section that can be accessed by the DMAC. Note that a bus error will occur if it is placed in eDRAM or Scratch Pad memory.<br>Also, because of the relationship between the DMA length and CPU cache size, audio data should be placed at a location with 64-byte alignment, and the number of granularity samples should be a multiple of 16 so that the data length is a multiple of 64.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Precaution Related to Mixing and the CPU Load</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To reduce the load on the CPU, the functions that can be used by the Simple Audio Output library are limited. As a result, only one voice can be output at a time. To output multiple voices, either the application must perform mixing for multiple sets of PCM data or libwave must be used.<br>When libwave is used or mixing is performed by the CPU, the load may still end up being high regardless of whether the Simple Audio Output library is used. To use the Simple Audio Output library effectively, the <b><a href="../sound/libsas-Reference-English.htm#sceSasCoreWithMix">sceSasCoreWithMix</a></b>() function must be used to enable the Media Engine to perform mixing, and libwave must not be used to produce continuous background music.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

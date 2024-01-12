@@ -1,0 +1,308 @@
+<html lang="en">
+<head>
+<title>Controller-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Controller Service Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Controller Service is a service for reading the digital buttons and analog pad of the PSP&trade;.<br><br>Its major functions are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Retrieving data from the controller (digital buttons and analog pad)
+<li> Using digital button latching to prevent the loss of data during processing delays
+<li> Emulation of button rapid-fire state
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required in order to use the Controller Service.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ctrl_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ctrlsvc.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure (if Calls Can Be Made Properly at the VSYNC Period)</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">Ideally, a program which calls the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function at the VSYNC period will be capable of properly retrieving data which has been queued by the Controller Service.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The Controller Service runs as a default module. Explicit initialization is not necessary.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Setting the Controller Mode</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The mode in which the Controller Service performs sampling is set using the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlSetSamplingMode">sceCtrlSetSamplingMode</a>() function. There are two modes: a <b>digital buttons only mode (SCE_CTRL_MODE_DIGITALONLY)</b>, in which only the digital buttons are read, and a <b>digital buttons / analog pad dual mode (SCE_CTRL_MODE_DIGITALANALOG)</b>, in which the analog pad is read in addition to the digital buttons. The default is the digital buttons only mode. <br>If the analog pad is not to be used, using the digital buttons only mode will reduce power consumption, if only slightly, in comparison to the digital buttons/ analog pad dual mode. <br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Retrieving Data from the Controller Service</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Controller state data can be retrieved in blocking fashion by calling the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> ct;
+int res;
+
+res = <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(&amp;ct, 1);
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Retrieving Details from Controller State Data Once it is Read</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Controller state data which has been retrieved using the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function is saved in an <a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> structure. Using the <a href="../peripheral/Controller-Reference-English.htm#Basic Button State Constants">Basic Button State Constants</a>, it is possible to retrieve which buttons were operated.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int IsCircleButtonPressed(void)
+{
+   <a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> ct;
+   int res;
+
+   res = <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(&amp;ct, 1);
+   if (res &lt; 0) {
+        return (res);
+   }
+
+if ((ct.Buttons &amp; <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_CIRCLE">SCE_CTRL_CIRCLE</a>)!=0) {
+        // When the circle button has been pressed
+        return (1);
+  } else {
+        // When the circle button has not been pressed
+        return (0);
+  }
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>If Calls May Be Made at Periods of Two VSYNCs or More</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If processing delays occur in an application, then the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function, which is essentially supposed to be called by an application at the VSYNC period, may end up not getting called for two or more periods. <br>If this is a possibility, use a procedure such as the following.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The Controller Service runs as a default module. Explicit initialization is not necessary.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>Setting the Controller Mode</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The mode in which the Controller Service performs sampling is set using the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlSetSamplingMode">sceCtrlSetSamplingMode</a>() function. There are two modes: a <b>digital buttons only mode (SCE_CTRL_MODE_DIGITALONLY)</b>, in which only the digital buttons are read, and a <b>digital buttons / analog pad dual mode (SCE_CTRL_MODE_DIGITALANALOG)</b>, in which the analog pad is read in addition to the digital buttons. The default is the digital buttons only mode. <br>If the analog pad is not to be used, using the digital buttons only mode will reduce power consumption, if only very slightly, in comparison to the digital buttons/ analog pad dual mode. <br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>Retrieving Data from the Controller Service</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When calling the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function, specify multiple buffers in the arguments. <br>For example, if a maximum of six periods' worth of data is to be retrieved, specify 6 for the retrieval buffer count. Doing this will make it possible to retrieve, counting back from the newest data being buffered by the Controller Service, as many as six sets of controller state data. <br>The actual number of sets of data which were retrieved can be ascertained based on the return value of the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function. If this value is greater than one, this signifies that a processing delay has occurred.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> ct[6];
+int res;
+
+res = <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(ct, 6);
+</font></pre></div>
+<div style="margin-left:67px;"><br>By referencing the past history as well, poor responsiveness to key input can be prevented.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int IsCircleButtonPressed(void)
+{
+   <a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> ct[6];
+   unsigned int btn;
+   int res;
+   int i;
+
+   res = <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(&amp;ct, 6);
+   if (res &lt; 0) {
+     return (res);
+   }
+
+   btn = 0;
+   for (i=0; i&lt;res; i++) {
+      btn |= ct[i].Buttons;
+   }
+if ((btn &amp; <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_CIRCLE">SCE_CTRL_CIRCLE</a>)!=0) {
+      //When the circle button has been pressed
+       return (1);
+  } else {
+      //When the circle button has not been pressed
+      return (0);
+  }
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>Within the Controller Service, up to a maximum of 64 buffers (periods' worth) of data are held. In other words, the maximum number of buffers which can be specified by the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function is likewise 64.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Controller-Overview-English001.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>If Controller State Data Cannot be Retrieved at the VSYNC Period (Latch Data)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As a result of heavy-load processing such as that in thinking routines in games, or when PRX modules are rearranged, it may not be possible to make data requests to the Controller Service in a successive manner. Even though it will not be possible to obtain controller state data for that period, the basic button state changes can at least be retrieved by using latch data.<br>Latch information is continuously accumulated until it is cleared by calling <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadLatch">sceCtrlReadLatch</a>(). The information is kept even if more than 64 cycles have elapsed since the last key input, which is the number of cycles buffered by the Controller Service.<br>With latch data, each time the Controller Service samples controller input, button presses and releases are stored as latch data in the form of cumulative flags. This data can be retrieved as a bit mask and initialized using the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadLatch">sceCtrlReadLatch</a>() function. For details regarding latch data, refer to <a href="../peripheral/Controller-Reference-English.htm#SceCtrlLatch">SceCtrlLatch</a>.<br></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int IsCircleButtonPressed(void)
+{
+   <a href="../peripheral/Controller-Reference-English.htm#SceCtrlLatch">SceCtrlLatch</a> latch;
+   int res;
+   int i;
+
+   res = <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadLatch">sceCtrlReadLatch</a>(&amp;latch);
+   if (res &lt; 0) {
+     return (res);
+   }
+
+   if ((latch.uiPress &amp; <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_CIRCLE">SCE_CTRL_CIRCLE</a>)!=0) {
+        // Indications that the circle button has been pressed
+        return (1);
+   } else {
+       // No indications that the circle button has been pressed
+       return (0);
+   }
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:50px;">However, since latch data is a global system resource, it cannot be used simultaneously from multiple threads. To retrieve latch data while it is being used by another thread, snoop it using <a href="../peripheral/Controller-Reference-English.htm#sceCtrlPeekLatch">sceCtrlPeekLatch</a>(). <br>In addition, the latch logic for the digital buttons is implemented by software in the Controller Service. If interrupts are disabled for an extremely long period of time, this latch logic will also fail to operate properly. Make periods during which interrupts are disabled as short as possible.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Buffer Polling</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function or the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferNegative">sceCtrlReadBufferNegative</a>() function are called, the controller state data which had not yet been read since the last time the function was called are read from the buffer in the Controller Service. In addition, since this buffer is a global system resource, inconsistencies will occur if the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function or the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferNegative">sceCtrlReadBufferNegative</a>() function is called from multiple threads at the same time. <br>Call the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>() function from only one thread, and if the controller state data is needed by another thread, use the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlPeekBufferPositive">sceCtrlPeekBufferPositive</a>() function. By using the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlPeekBufferPositive">sceCtrlPeekBufferPositive</a>() function, it is possible to snoop the data without initializing the buffer.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Controller-Overview-English002.gif">
+</div>
+<div style="margin-left:50px;"><br>However, note that since the <a href="../peripheral/Controller-Reference-English.htm#sceCtrlPeekBufferPositive">sceCtrlPeekBufferPositive</a>() function references the contents of the buffer at the moment that the function is called, due to variations in interrupt load it may not be possible to retrieve data at a consistent interval even if the controller is being sampled every VBLANK period. This means that, in the diagram above, it is unclear whether the peek by thread B will retrieve controller state data 2 or controller state data 3.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Range of Values for the Analog Pad</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The analog pad values can range from 0x00 to 0xFF on both the horizontal and vertical axes. In the horizontal direction, 0x00 is output when at the left limit, and 0xFF is output when at the right limit; in the vertical direction, 0x00 is output when at the top limit, and 0xFF is output when at the bottom limit. In both directions, the center value is 0x80. However, there can be a margin of error of as much as about ±0x40, so in order to detect the neutral state it is necessary to set up a dead zone of about ±0x40 (i.e., to ignore values in the range from 0x40 to 0xC0). <br><br>When the user moves along the entire range of motion in either the horizontal or vertical direction, full-scale values of 0x00 to 0xFF are guaranteed to be output. However, the ability for both the horizontal and vertical directions to perform full-scale output at the same time is not guaranteed. This means that, for example, when the user moves to the extreme lower righthand corner of the analog pad, there is no guarantee that 0xFF will be outputted as the value of both X and Y at the same time. Do not expect the analog pad to be formed such that, when viewed from above, the area of movement traces out a perfect square.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>POWER/HOLD Switch</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the POWER/HOLD switch is placed in the HOLD state, the Controller Service will see all of the digital buttons as being in the released state, regardless of their actual state. It will not be possible to retrieve the pressed state of the digital buttons until the HOLD state is cancelled. <br>However, even in the HOLD state, sampling of the controller is performed. In that situation, in the sampled <a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> structure, the <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a> bit of the <i>Buttons</i> member will be set. <br>In contrast, even during the HOLD state the analog pad operation data will continue to change. The values of the <i>Lx</i> and <i>Ly</i> members of the <a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> structure are held at the middle value; the final analog quantity will not continue to be held. The matter of how to interpret the operation of the analog pad while in the HOLD state is left to the application.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>INTERCEPTED State</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The press state of the PS button (HOME button) is invisible to applications, but during the operation of the pop-up menu which is provided by the PSP&trade; system software and which pops up in response to the PS button (HOME button) button, an application's controller input can be intercepted. <br>In such situations, in the <i>Buttons</i> member of the <a href="../peripheral/Controller-Reference-English.htm#SceCtrlData">SceCtrlData</a> structure, the <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a> bit will be set. By referencing the <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a> bit, an application can detect when input from the controller is being intercepted. However, for the analog pad, values will continue to be returned even if <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a> is set. <br><br>This is not to imply that the <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a> bit is directly related to the fact that the pop-up menu provided by the PSP&trade; system software is being displayed. The pop-up menu provided by the PSP&trade; system software pops up as a result of the PS button (HOME button) being pressed while an application is running, but the intercepting of controller input from the application is delayed until all of the buttons which were pressed at that time have been released. The <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a> bit is not set until the controller input has actually begun to be intercepted. <br>For this reason, if the PS button (HOME button) is pressed again before all of the buttons which had been held down while the application was running were released, the pop-up menu provided by the PSP&trade; system software will be closed without having intercepted controller input at all. <br>Due to the fact that the behavior of pop-up menus provided by the PSP&trade; system software will not necessarily remain constant in the future, it is recommended that specifications which recognize the existence of pop-up menus provided by the PSP&trade; system software (for example, by meaninglessly pausing until a pop-up menu is turned on or off) not be incorporated in applications.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Connecting a PlayStation&reg;3 Wireless Controller</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can connect a SIXAXIS&trade; wireless controller or DUALSHOCK&reg;3 wireless controller for a PlayStation&reg;3 system to a PSP-N1000 series system using a wireless Bluetooth&reg; connection. The input from the wireless controller is merged with the PSP&trade; console's button information and can be obtained by using controller service APIs. However, the system cannot distinguish whether information was input from the PSP&trade; console's buttons or from the wireless controller.<br><br>The controller service can only obtain information for the buttons on the PSP&trade; console. The wireless controller's L3 and R3 buttons, right analog stick, pressure-sensitive buttons, SIXAXIS&trade; sensors, and vibration feature cannot be used.<br><br>If input is received from the wireless controller when the POWER/HOLD switch on the PSP-N1000 series system is in HOLD state, the system emulates a state in which <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a> is temporarily canceled. From the application's viewpoint, it will appear as if <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a> is quickly locked and unlocked. Note that if a repeat operation is implemented when a button is pressed and held down, it will not be reflected in the <a href="../peripheral/Controller-Reference-English.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a> bit.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

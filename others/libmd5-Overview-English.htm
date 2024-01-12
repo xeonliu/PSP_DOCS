@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>libmd5-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libmd5 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmd5 is a library that is used to generate a digest value using the MD5 Message-Digest Algorithm format as defined by RFC1321. It can be used to detect data corruption and prevent data tampering through the use of Keyed-Hashing for Message Authentication (HMAC).<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libmd5.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmd5.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Static link library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmd5.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmd5_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmd5_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRX module file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmd5.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>MD5 digest value computation (comprehensive method)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">No specific initialization is required to use libmd5.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char digest[SCE_MD5_DIGEST_SIZE];
+
+<a href="../others/libmd5-Reference-English.htm#sceMd5Digest">sceMd5Digest</a>(plaintext, length, digest);
+
+</font></pre></div>
+<div style="margin-left:67px;"><br>You can compute the digest value simply by calling the <a href="../others/libmd5-Reference-English.htm#sceMd5Digest">sceMd5Digest</a>() function, as shown above.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>MD5 digest computation (divided method)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">You can compute the digest value for a large amount of data by breaking up the calculation of the hash value as shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../others/libmd5-Reference-English.htm#SceMd5Context">SceMd5Context</a> ctx;
+u_char digest[SCE_MD5_DIGEST_SIZE];
+
+<a href="../others/libmd5-Reference-English.htm#sceMd5BlockInit">sceMd5BlockInit</a>(&amp;ctx);
+<a href="../others/libmd5-Reference-English.htm#sceMd5BlockUpdate">sceMd5BlockUpdate</a>(&amp;ctx, plain1, len1);
+<a href="../others/libmd5-Reference-English.htm#sceMd5BlockUpdate">sceMd5BlockUpdate</a>(&amp;ctx, plain2, len2);
+<a href="../others/libmd5-Reference-English.htm#sceMd5BlockUpdate">sceMd5BlockUpdate</a>(&amp;ctx, plain3, len3);
+	:		Repeat an arbitrary number of times
+<a href="../others/libmd5-Reference-English.htm#sceMd5BlockResult">sceMd5BlockResult</a>(&amp;ctx, digest);
+</font></pre></div>
+<div style="margin-left:67px;"><br>To use this method, first call the <a href="../others/libmd5-Reference-English.htm#sceMd5BlockInit">sceMd5BlockInit</a>() function to initialize the <a href="../others/libmd5-Reference-English.htm#SceMd5Context">SceMd5Context</a> structure. Then, call the <a href="../others/libmd5-Reference-English.htm#sceMd5BlockUpdate">sceMd5BlockUpdate</a>() function an arbitrary number of times. Finally, call the <a href="../others/libmd5-Reference-English.htm#sceMd5BlockResult">sceMd5BlockResult</a>() function to compute the digest value.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

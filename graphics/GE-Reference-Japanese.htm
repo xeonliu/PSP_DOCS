@@ -1,0 +1,3102 @@
+<html lang="jp">
+<head>
+<title>GE-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Graphics Engineマネージャ(geman)
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_SIGNAL_WAIT"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_SIGNAL_WAIT<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SIGNALハンドラ呼び出し(ウェイトあり)<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_SIGNAL_WAIT		0x01
+
+#define SCE_GE_SET_SIGNAL_SIGNAL_WAIT(_id)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |			\
+		 (SCE_GE_SIGNAL_SIGNAL_WAIT&lt;&lt;16) |		\
+		 ((_id) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストの停止中にSIGNALハンドラを呼び出すCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_SIGNAL_WAITコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>16ビットの値をSIGNALハンドラの引数<i>id</i>として渡すことができます。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_SIGNAL_WAITの場合、Graphics Engineマネージャはこのディスプレイリスト走査が停止した状態のままSIGNALハンドラ呼び出しを行います。ディスプレイリストが停止していても停止前に発効された描画コマンドによってGraphics Engineの描画動作自体は継続中であるため、SIGNALハンドラ内で描画フレームバッファの内容を読み書きすることはできませんが、<a href="../graphics/GE-Reference-Japanese.htm#sceGeGetCmd">sceGeGetCmd</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeGetMtx">sceGeGetMtx</a>()関数によってレジスタの内容を読み出すことは可能です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#signalhandler">signalhandler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_SIGNAL_NOWAIT"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_SIGNAL_NOWAIT<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SIGNALハンドラ呼び出し(ウェイトなし)<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_SIGNAL_NOWAIT	0x02
+
+#define SCE_GE_SET_SIGNAL_SIGNAL_NOWAIT(_id)           	\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |            	\
+		 (SCE_GE_SIGNAL_SIGNAL_NOWAIT&lt;&lt;16) | 	\
+		 ((_id) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストの実行中にSIGNALハンドラを呼び出すCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_SIGNAL_NOWAITコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>16ビットの値をSIGNALハンドラの引数<i>id</i>として渡すことができます。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_SIGNAL_NOWAITの場合、Graphics Engineマネージャは即座にディスプレイリストを再開させます。SIGNALハンドラ呼び出しはディスプレイリストが動作再開してから行いますので、SIGNALハンドラ内で描画フレームバッファの内容を読み書きしたり、<a href="../graphics/GE-Reference-Japanese.htm#sceGeGetCmd">sceGeGetCmd</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeGetMtx">sceGeGetMtx</a>()関数によってレジスタの内容を読み出すことはできません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#signalhandler">signalhandler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_SIGNAL_PAUSE"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_SIGNAL_PAUSE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SIGNALハンドラ呼び出し(ポーズあり)<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_SIGNAL_PAUSE		0x03
+
+#define SCE_GE_SET_SIGNAL_SIGNAL_PAUSE(_id)            	\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |            	\
+		 (SCE_GE_SIGNAL_SIGNAL_PAUSE&lt;&lt;16) |  	\
+		 ((_id) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストを一時停止させ描画完了した後にSIGNALハンドラを呼び出すCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_SIGNAL_PAUSEコマンドを示すCMD_SIGNALは直後にCMD_END+CMD_FINISH+CMD_ENDを伴っていなくてはなりません。<br><br>16ビットの値をSIGNALハンドラの引数<i>id</i>として渡すことができます。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_SIGNAL_PAUSEの場合、Graphics Engineマネージャはディスプレイリストを再開させて、続くCMD_FINISH+CMD_ENDを実行します。SIGNALハンドラが呼び出されるのは、このCMD_FINISH+CMD_ENDが完了した後になりますので、SIGNALハンドラ内で描画フレームバッファの内容を読み書きしたり、<a href="../graphics/GE-Reference-Japanese.htm#sceGeGetCmd">sceGeGetCmd</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeGetMtx">sceGeGetMtx</a>()関数によってレジスタの内容を読み出すことが可能です。SCE_GE_SIGNAL_SIGNAL_PAUSEによるSIGNALハンドラが呼び出しが発生した後、Graphics Engineマネージャはディスプレイリストの再起動を自動的には行いませんので、Graphics Engineは描画動作を一時停止状態になります。この状態から復帰するためには、<a href="../graphics/GE-Reference-Japanese.htm#sceGeContinue">sceGeContinue</a>()関数を呼び出す必要があります。<a href="../graphics/GE-Reference-Japanese.htm#sceGeContinue">sceGeContinue</a>()関数は<a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>()による一時停止から復帰させる目的でも使用されますので、SCE_GE_SIGNAL_SIGNAL_PAUSEコマンドを使用する場合は<a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>()関数を使用することできません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#signalhandler">signalhandler</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeContinue">sceGeContinue</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_DRAWSYNC"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_DRAWSYNC<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>描画処理の同期<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_DRAWSYNC		0x08
+
+#define SCE_GE_SET_SIGNAL_DRAWSYNC()          		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |    		\
+		 (SCE_GE_SIGNAL_DRAWSYNC&lt;&lt;16))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストを一時停止させ描画完了した後に続くディスプレイリストを再開させるCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_DRAWSYNCコマンドを示すCMD_SIGNALは直後にCMD_END+CMD_FINISH+CMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_DRAWSYNCの場合、Graphics Engineマネージャは即座にディスプレイリストを再開させて、続くCMD_FINISH+CMD_ENDを実行します。このCMD_FINISH+CMD_ENDが完了したことによってFINISH割り込みが発生するとGraphics Engineマネージャは再び即座にその後のディスプレイリストを再開させます。このときSIGNALハンドラの呼び出しはありません。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_JUMP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_JUMP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストの絶対ジャンプ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_JUMP		0x10
+
+#define SCE_GE_SET_SIGNAL_JUMP(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_JUMP&lt;&lt;16) |		\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_JUMP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストの絶対ジャンプするCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_JUMPコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_JUMPの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定されるジャンプ先アドレスを読み取り、そのアドレスからディスプレイリストを再開させます。<br><br>SCE_GE_SIGNAL_JUMPコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_JUMPコマンドによる絶対アドレスジャンプと比べるとパフォーマンスでは劣りますが、CMD_BASE, CMD_OFFSET, CMD_ORIGINによるベースアドレス/オフセットアドレスの影響を受けないという特徴があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_JUMP, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RJUMP">SCE_GE_SIGNAL_RJUMP</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_OJUMP">SCE_GE_SIGNAL_OJUMP</a><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_CALL"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_CALL<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストの絶対コール<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_CALL		0x11
+
+#define SCE_GE_SET_SIGNAL_CALL(_hi16) 		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_CALL&lt;&lt;16) |		\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_CALL(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストの絶対コールするCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_CALLコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_CALLの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定されるコール先アドレスを読み取り、そのアドレスからディスプレイリストを再開させます。<br><br>SCE_GE_SIGNAL_CALLコマンドによるコールは<a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a>構造体の<i>nStackDepth</i>メンバで指定された段数までネストが可能することができます。<br><br>SCE_GE_SIGNAL_CALLコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_CALLコマンドによる絶対アドレスジャンプと比べるとパフォーマンスでは劣りますが、ハードウェアによるネスト段数の制約を受けない、CMD_BASE, CMD_OFFSET, CMD_ORIGINによるベースアドレス/オフセットアドレスの影響を受けないという特徴があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CALL, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RET">SCE_GE_SIGNAL_RET</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_OCALL">SCE_GE_SIGNAL_OCALL</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RET"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RET<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストのリターン<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RET		0x12
+
+#define SCE_GE_SET_SIGNAL_RET(_hi16)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_RET&lt;&lt;16))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストのリターンを行うCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_RETコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>の場合、Graphics Engineマネージャは<a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a>で指定されていたコール元アドレスを読み出し、そのアドレスからディスプレイリストを再開させます。<br><br>SCE_GE_SIGNAL_RETでは<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>コマンドによるコールが発生した位置に戻りますが、このときスタック用として以下の内容が復帰されます。<br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> CMD_CALLのネスト状態
+<li> CMD_CALLのリターンアドレス
+<li> CMD_BASEで指定されたベースアドレス
+<li> CMD_OFFSETまたはCMD_ORIGINで指定されたオフセットアドレス
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_RET, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_OCALL">SCE_GE_SIGNAL_OCALL</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RJUMP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RJUMP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストの相対ジャンプ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RJUMP		0x14
+
+#define SCE_GE_SET_SIGNAL_RJUMP(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_RJUMP&lt;&lt;16) |	\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_RJUMP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+</font></pre></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストの相対ジャンプするCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_RJUMPコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_RJUMPの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定される相対アドレスを読み取り、CMD_SIGNALが置かれていたアドレス値と加算してジャンプ先アドレスを決定し、ディスプレイリストを再開させます。<br><br>SCE_GE_SIGNAL_RJUMPコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_JUMPコマンドによるアドレスジャンプと比べるとパフォーマンスでは劣りますが、CMD_BASE, CMD_OFFSET, CMD_ORIGINによるベースアドレス/オフセットアドレスの影響を受けないという特徴があります。<br></div>
+<br>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_JUMP, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_JUMP">SCE_GE_SIGNAL_JUMP</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_OJUMP">SCE_GE_SIGNAL_OJUMP</a><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RCALL"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RCALL<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストの相対コール<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RCALL		0x15
+
+#define SCE_GE_SET_SIGNAL_RCALL(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_RCALL&lt;&lt;16) | 	\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_CALL(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+</font></pre></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストの相対コールするCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_RCALLコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br></div>
+<br>
+<div style="margin-left:50px;">CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_RCALLの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定される相対アドレスを読み取り、CMD_SIGNALが置かれていたアドレス値と加算してコールアドレスを決定し、ディスプレイリストを再開させます。<br><br>SCE_GE_SIGNAL_RCALLコマンドによるコールは<a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a>構造体の<i>nStackDepth</i>メンバで指定された段数までネストが可能することができます。<br><br>SCE_GE_SIGNAL_RCALLコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_CALLコマンドによるアドレスジャンプと比べるとパフォーマンスでは劣りますが、ハードウェアによるネスト段数の制約を受けない、CMD_BASE, CMD_OFFSET, CMD_ORIGINによるベースアドレス/オフセットアドレスの影響を受けないという特徴があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CALL, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RET">SCE_GE_SIGNAL_RET</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_OCALL">SCE_GE_SIGNAL_OCALL</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OJUMP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OJUMP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストのオフセットつきジャンプ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OJUMP		0x16
+
+#define SCE_GE_SET_SIGNAL_OJUMP(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_OJUMP&lt;&lt;16) |	\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_OJUMP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+</font></pre></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストのオフセットつきジャンプするCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_OJUMPコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_OJUMPの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定される相対アドレスを読み取り、CMD_OFFSETまたはCMD_ORIGINによるオフセット値と加算してジャンプ先アドレスを決定し、ディスプレイリストを再開させます。<br><br>SCE_GE_SIGNAL_OJUMPコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_JUMPコマンドによるアドレスジャンプと比べるとパフォーマンスでは劣ります。<br></div>
+<br>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_JUMP, CMD_OFFSET, CMD_ORIGIN, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_JUMP">SCE_GE_SIGNAL_JUMP</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RJUMP">SCE_GE_SIGNAL_RJUMP</a><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OCALL"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OCALL<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストのオフセットつきコール<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OCALL		0x17
+
+#define SCE_GE_SET_SIGNAL_OCALL(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_OCALL&lt;&lt;16) |	\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_OCALL(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディスプレイリストのオフセットつきコールするCMD_SIGNALマクロコマンドです。SCE_GE_SIGNAL_OCALLコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_OCALLの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定される相対アドレスを読み取り、CMD_OFFSETまたはCMD_ORIGINによるオフセット値と加算してコール先アドレスを決定し、ディスプレイリストを再開させます。<br><br>SCE_GE_SIGNAL_OCALLコマンドによるコールは<a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a>構造体の<i>nStackDepth</i>メンバで指定された段数までネストが可能することができます。<br><br>SCE_GE_SIGNAL_OCALLコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_CALLコマンドによる絶対アドレスジャンプと比べるとパフォーマンスでは劣りますが、ハードウェアによるネスト段数の制約を受けないという特徴があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CALL, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RET">SCE_GE_SIGNAL_RET</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RTBP0～7"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RTBP0～7<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>相対アドレス指定テクスチャ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RTBP0		0x20
+#define SCE_GE_SIGNAL_RTBP1		0x21
+#define SCE_GE_SIGNAL_RTBP2		0x22
+#define SCE_GE_SIGNAL_RTBP3		0x23
+#define SCE_GE_SIGNAL_RTBP4		0x24
+#define SCE_GE_SIGNAL_RTBP5		0x25
+#define SCE_GE_SIGNAL_RTBP6		0x26
+#define SCE_GE_SIGNAL_RTBP7		0x27
+
+#define SCE_GE_SET_SIGNAL_RTBPn(_n,_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		((SCE_GE_SIGNAL_RTBP0 + (_n))&lt;&lt;16) |	\
+		((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_RTBPn(_n,_tbw,_lo16)		\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		(((_tbw) &amp; 0xFF)&lt;&lt;16) |    		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_TBP0～7, CMD_TBW0～7にフィックスアップされるCMD_SIGNALマクロコマンドです。テクスチャバッファアドレスを指定は、ディスプレイリストの現在位置からの相対で指定されます。SCE_GE_SIGNAL_RTBP0～7コマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_RTBP0～7の場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定されるテクスチャバッファの相対アドレスを、CMD_ENDのbit 23～16でテクスチャバッファの幅をそれぞれ読み取り、CMD_SIGNALが置かれていたアドレス値と加算してテクスチャバッファアドレスを決定します。そして、ディスプレイリストを再開するときGraphics Engineマネージャは、メモリ上のCMD_SIGNAL+CMD_ENDをCMD_TBP0～7+CMD_TBW0～7に書き変え、CMD_TBP0～7よりディスプレイリストを再実行させます。<br>2回目以降はすでにCMD_SIGNAL+CMD_ENDはCMD_TBP0～7+CMD_TBW0～7に書き換えられているため、割り込みは発生しません。<br><br>SCE_GE_SIGNAL_RTBP0～7コマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_TBP0～7コマンドによるテクスチャバッファアドレス指定と比べると最初の1回目だけパフォーマンスでは劣りますが、テクスチャの定義をディスプレイリストからの相対アドレス指定したい場合に利用できます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_TBP0～7, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_OTBP0～7">SCE_GE_SIGNAL_OTBP0～7</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OTBP0～7"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OTBP0～7<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>オフセットアドレスつきテクスチャ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OTBP0		0x28
+#define SCE_GE_SIGNAL_OTBP1		0x29
+#define SCE_GE_SIGNAL_OTBP2		0x2A
+#define SCE_GE_SIGNAL_OTBP3		0x2B
+#define SCE_GE_SIGNAL_OTBP4		0x2C
+#define SCE_GE_SIGNAL_OTBP5		0x2D
+#define SCE_GE_SIGNAL_OTBP6		0x2E
+#define SCE_GE_SIGNAL_OTBP7		0x2F
+
+#define SCE_GE_SET_SIGNAL_OTBPn(_n,_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		((SCE_GE_SIGNAL_OTBP0 + (_n))&lt;&lt;16) |	\
+		((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_OTBPn(_n,_tbw,_lo16)		\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		(((_tbw) &amp; 0xFF)&lt;&lt;16) |    		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_TBP0～7, CMD_TBW0～7にフィックスアップされるCMD_SIGNALマクロコマンドです。テクスチャバッファアドレスを指定は、オフセットアドレスレジスタの現在値からの相対で指定されます。SCE_GE_SIGNAL_OTBP0～7コマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_OTBP0～7の場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定されるテクスチャバッファの相対アドレスを、CMD_ENDのbit 23～16でテクスチャバッファの幅をそれぞれ読み取り、CMD_OFFSETまたはCMD_ORIGINによって設定されたオフセット値と加算してテクスチャバッファアドレスを決定します。そして、ディスプレイリストを再開するときGraphics Engineマネージャは、メモリ上のCMD_SIGNAL+CMD_ENDをCMD_TBP0～7+CMD_TBW0～7に書き変え、CMD_TBP0～7よりディスプレイリストを再実行させます。<br>2回目以降はすでにCMD_SIGNAL+CMD_ENDはCMD_TBP0～7+CMD_TBW0～7に書き換えられているため、割り込みは発生しません。つまり、CMD_OFFSETまたはCMD_ORIGINによるオフセット値との指定は、最初にメモリ上のCMD_SIGNAL+CMD_ENDをCMD_TBP0～7+CMD_TBW0～7に書き換えた時のオフセット値のみが有効です。2回目以降、異なるオフセット値に設定されている状態であっても、すでにSCE_GE_SIGNAL_OTBP0～7コマンドはメモリ上から消えていますので、オフセット値の変化には追従しません。<br><br>SCE_GE_SIGNAL_OTBP0～7コマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_TBP0～7コマンドによるテクスチャバッファアドレス指定と比べると最初の1回目だけパフォーマンスでは劣りますが、テクスチャの定義をCMD_OFFSETまたはCMD_ORIGINからの相対アドレス指定したい場合に利用できます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RCBP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RCBP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>相対アドレス指定CLUT<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RCBP		0x30
+
+#define SCE_GE_SET_SIGNAL_RCBP(hi16)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		(SCE_GE_SIGNAL_RCBP&lt;&lt;16) |		\
+		((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_RCBP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CBP, CMD_CBWにフィックスアップされるCMD_SIGNALマクロコマンドです。CLUTバッファアドレスを指定は、ディスプレイリストの現在位置からの相対で指定されます。SCE_GE_SIGNAL_RCBPコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br><br>CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_RCBPの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定されるCLUTバッファの相対アドレスを読み取り、CMD_SIGNALが置かれていたアドレス値と加算してCLUTバッファアドレスを決定します。そして、ディスプレイリストを再開するときGraphics Engineマネージャは、メモリ上のCMD_SIGNAL+CMD_ENDをCMD_CBP+CMD_CBWに書き変え、CMD_CBPよりディスプレイリストを再実行させます。<br>2回目以降はすでにCMD_SIGNAL+CMD_ENDはCMD_CBP+CMD_CBWに書き換えられているため、割り込みは発生しません。<br><br>SCE_GE_SIGNAL_RCBPコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_CBPコマンドによるCLUTバッファアドレス指定と比べると最初の1回目だけパフォーマンスでは劣りますが、CLUTの定義をディスプレイリストからの相対アドレス指定したい場合に利用できます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CBP, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_OCBP">SCE_GE_SIGNAL_OCBP</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OCBP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OCBP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>オフセットアドレスつきCLUT<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OCBP		0x31
+
+#define SCE_GE_SET_SIGNAL_OCBP(hi16)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		(SCE_GE_SIGNAL_OCBP&lt;&lt;16) |		\
+		((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_OCBP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+</font></pre></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CBP, CMD_CBWにフィックスアップされるCMD_SIGNALマクロコマンドです。CLUTバッファアドレスを指定は、オフセットアドレスレジスタの現在値からの相対で指定されます。SCE_GE_SIGNAL_OCBPコマンドを示すCMD_SIGNALは直後にCMD_ENDを伴っていなくてはなりません。<br></div>
+<br>
+<div style="margin-left:50px;">CMD_SIGNALに連続するCMD_ENDによってディスプレイリスト走査はいったんSIGNAL割り込みを発生させた状態で停止しますが、SCE_GE_SIGNAL_OCBPの場合、Graphics EngineマネージャはCMD_SIGNALとCMD_ENDの下位16ビットずつで指定されるCLUTバッファの相対アドレスを読み取り、CMD_OFFSETまたはCMD_ORIGINによって設定されたオフセット値と加算してCLUTバッファアドレスを決定します。そして、ディスプレイリストを再開するときGraphics Engineマネージャは、メモリ上のCMD_SIGNAL+CMD_ENDをCMD_CBP+CMD_CBWに書き変え、CMD_CBPよりディスプレイリストを再実行させます。<br>2回目以降はすでにCMD_SIGNAL+CMD_ENDはCMD_CBP+CMD_CBWに書き換えられているため、割り込みは発生しません。つまり、CMD_OFFSETまたはCMD_ORIGINによるオフセット値との指定は、最初にメモリ上のCMD_SIGNAL+CMD_ENDをCMD_CBP+CMD_CBWに書き換えた時のオフセット値のみが有効です。2回目以降、異なるオフセット値に設定されている状態であっても、すでにSCE_GE_SIGNAL_OCBPコマンドはメモリ上から消えていますので、オフセット値の変化には追従しません。<br><br>SCE_GE_SIGNAL_OCBPコマンドはCPUに割り込みを発生させてジャンプを行うため、Graphics Engineが直接解釈するCMD_CBPコマンドによるCLUTバッファアドレス指定と比べると最初の1回目だけパフォーマンスでは劣りますが、CLUTの定義をCMD_OFFSETまたはCMD_ORIGINからの相対アドレス指定したい場合に利用できます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CBP, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RCBP">SCE_GE_SIGNAL_RCBP</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_BREAK"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_BREAK<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNALマクロコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストブレークポイント<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_BREAK		0xFF
+
+#define SCE_GE_SET_SIGNAL_BREAK(_mark)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		(SCE_GE_SIGNAL_BREAK&lt;&lt;16) |		\
+		((_mark) &amp; 0xFFFF))
+#define SCE_GE_SET_END_BREAK()			\
+		SCE_GE_SET_END()
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics Engineがディスプレイリストの当該アドレスに到達した時、Graphics EngineおよびCPUを停止させるためのCMD_SIGNALマクロコマンドです。デバッガ停止状態からは、Graphics Engineの各種レジスタ値を参照したり、新しいブレークポイントの設定、ステップ実行、コンティニュー実行などを行う事ができます。<br><br>_markにはとくに意味はありません。複数個のブレークポイントを挿入する場合の判別用などに16ビットの値を指定する事ができます。<br><br>このCMD_SIGNALマクロコマンドはデバッグ用です。マスター版では使用することはできません。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeContext"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engineのコンテキスト<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeContext {
+	unsigned int <i>buffer</i>[512];
+} <b>SceGeContext</b>;
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics Engineの描画コンテキストを保持するための構造体です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeSaveContext">sceGeSaveContext</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeRestoreContext">sceGeRestoreContext</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeStack"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeStack<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストサブルーチンのためのスタック要素<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeStack {
+	unsigned int <i>buffer</i>[8];
+} <b>SceGeStack</b>;
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_SIGNALによるサブルーチンコールに必要な情報をスタックとして保持される情報を表現します。ディスプレイリスト内でCMD_SIGNALによるサブルーチンコールを使用する場合、<a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()関数でディスプレイリストをキューイングするとき、<a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a>構造体の<i>nStackDepth</i>, <i>pStackBuf</i>メンバでスタックバッファの深さおよびサイズを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeListOptParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeListOptParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストキューイング時のオプション<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeListOptParam {
+	unsigned int <i>size</i>; /*sizeof(SceGeListOptParam) */
+	<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a> *<i>pGeContext</i>;
+	int <i>nStackDepth</i>;
+	<a href="../graphics/GE-Reference-Japanese.htm#SceGeStack">SceGeStack</a> *<i>pStackBuf</i>;
+} <b>SceGeListOptParam</b>;
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>()関数でディスプレイリストを発行するときのオプションを指定するための構造体です。<i>size</i>メンバにはsizeof(SceGeListOptParam)の値を設定してください。<br><br><i>pGeContext</i>メンバに<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a>構造体へのアドレスを設定しておくと、ディスプレイリストの描画前にGraphics Engine内のコンテキストをその<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a>構造体に保存し、描画完了時に復帰する処理が自動的に行われます。保存・復帰をする必要がない場合には、NULLを指定します。<br><i>nStackDepth</i>および<i>pStackBuf</i>には、<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a> / <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a>コマンドによって使用されるスタックバッファの深さおよび先頭アドレスを指定します。CMD_SIGNALによるサブルーチンコールを使用しない場合は<i>nStackDepth</i>に0、および<i>pStackBuf</i>にNULLを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a>, <a href="../graphics/GE-Reference-Japanese.htm#SceGeStack">SceGeStack</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeCbParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeCbParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>コールバック関数登録時のパラメータ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeCbParam {
+	void (*<i>pSignalFunc</i>)(int <i>intrcode</i>, void *<i>cookie</i>, const void *<i>madr</i>);
+	void *<i>pSignalCookie</i>;
+	void (*<i>pFinishFunc</i>)(int <i>intrcode</i>, void *<i>cookie</i>, const void *<i>madr</i>);
+	void *<i>pFinishCookie</i>;
+} <b>SceGeCbParam</b>;
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>()関数でコールバック関数を登録する際に、登録内容を表すパラメータです。<br>SIGNALコールバック関数およびFINISHコールバック関数のポインタを、それぞれ<i>pSignalFunc</i>, <i>pFinishFunc</i>に設定します。また、各コールバック関数が呼び出されるときに渡されるcookie領域へのポインタを、それぞれ<i>pSignalCookie</i>, <i>pFinishCookie</i>に設定します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-Japanese.htm#signalhandler">signalhandler</a>(), <a href="../graphics/GE-Reference-Japanese.htm#finishhandler">finishhandler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeBreakParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeBreakParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>描画中断時のワークエリア<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeBreakParam {
+	unsigned int <i>buf</i>[4];
+} <b>SceGeBreakParam</b>;
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>()関数の引数としてワークエリアを渡すための構造体です。渡されたワークエリアは、内部でキューを中断するために使用されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeEdramGetSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeEdramGetSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engine eDRAMのサイズ取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeEdramGetSize</b> (
+	void
+)
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics EngineローカルeDRAMの容量を、バイト数単位で返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics EngineのローカルeDRAMのサイズを取得する関数です。<br>プログラム動作中に(リブートするまでの間に)サイズが変化することはありませんので、起動時に1回だけ取得して動作中にその値を使用し続けることは可能です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeEdramGetAddr"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeEdramGetAddr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engine eDRAMのベースアドレス取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+void *<b>sceGeEdramGetAddr</b> (
+	void
+)
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics EngineローカルeDRAMの物理アドレスを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics EngineローカルeDRAMをCPUからアクセスする場合の物理アドレスを取得する関数です。このアドレスを仮想アドレスとして解釈するとALLEGREXのアドレス空間ではkuseg0セグメントに相当しますので、ALLEGREXとGraphics Engineの間でコヒーレンシ保証が必要な場合には明示的なDキャッシュ制御が必要になります。非キャッシュのkuseg1セグメントのアドレスとして使用するためには、<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelMakeUncachedAddr">sceKernelMakeUncachedAddr</a>()関数を用いて変換してください。<br>プログラム動作中に(リブートするまでの間に)物理アドレスが変化することはありませんので、起動時に1回だけ取得して動作中にその値を使用し続けることは可能です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeEdramGetSize">sceGeEdramGetSize</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelMakeUncachedAddr">sceKernelMakeUncachedAddr</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeEdramSetAddrTranslation"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeEdramSetAddrTranslation<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engine eDRAMのアドレス変換モード設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeEdramSetAddrTranslation</b> (
+	int <i>width</i>
+)
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>width</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ幅(バイト数)&nbsp;&nbsp;<br>&nbsp;&nbsp;0/512/1024/2048/4096&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">以前に設定されていたメモリ幅(バイト数)<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics EngineのローカルeDRAMをグラフィックスモードで使用するとき、もっとも効率がよくなるメモリ幅をバイト数で指定します。<i>width</i>に0を指定した場合、リニアモードの指定になります。<br>デフォルトでは、1024バイトが設定されています。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeGetCmd"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeGetCmd<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engine描画コマンドレジスタの参照<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+unsigned int <b>sceGeGetCmd </b>(
+	int <i>cmdno</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmdno</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;描画コマンドのレジスタ番号&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>cmdno</i>に指定するマクロと描画コマンドレジスタとの対応は以下のとおりです。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>マクロ</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>描画コマンドレジスタ</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_NOP&nbsp;</td>
+<td valign="top">&nbsp;無処理&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_VADR&nbsp;</td>
+<td valign="top">&nbsp;頂点データ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_IADR&nbsp;</td>
+<td valign="top">&nbsp;インデックスデータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PRIM&nbsp;</td>
+<td valign="top">&nbsp;プリミティブ描画&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BEZIER&nbsp;</td>
+<td valign="top">&nbsp;ベジェ描画&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SPLINE&nbsp;</td>
+<td valign="top">&nbsp;スプライン描画&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BBOX&nbsp;</td>
+<td valign="top">&nbsp;バウンディングボックス&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_JUMP&nbsp;</td>
+<td valign="top">&nbsp;ジャンプ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BJUMP&nbsp;</td>
+<td valign="top">&nbsp;条件ジャンプ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CALL&nbsp;</td>
+<td valign="top">&nbsp;リストコール&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_RET&nbsp;</td>
+<td valign="top">&nbsp;リストリターン&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_END&nbsp;</td>
+<td valign="top">&nbsp;読み出し終了&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SIGNAL&nbsp;</td>
+<td valign="top">&nbsp;シグナル割り込み&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FINISH&nbsp;</td>
+<td valign="top">&nbsp;描画終了&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BASE&nbsp;</td>
+<td valign="top">&nbsp;アドレスベースコマンド&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_VTYPE&nbsp;</td>
+<td valign="top">&nbsp;頂点タイプ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_REGION1&nbsp;</td>
+<td valign="top">&nbsp;描画領域&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_REGION2&nbsp;</td>
+<td valign="top">&nbsp;描画領域&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTE&nbsp;</td>
+<td valign="top">&nbsp;ライティングイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE0&nbsp;</td>
+<td valign="top">&nbsp;ライトイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE1&nbsp;</td>
+<td valign="top">&nbsp;ライトイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE2&nbsp;</td>
+<td valign="top">&nbsp;ライトイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE3&nbsp;</td>
+<td valign="top">&nbsp;ライトイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CLE&nbsp;</td>
+<td valign="top">&nbsp;クリッピングイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BCE&nbsp;</td>
+<td valign="top">&nbsp;カリングイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TME&nbsp;</td>
+<td valign="top">&nbsp;テクスチャイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FGE&nbsp;</td>
+<td valign="top">&nbsp;フォグイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DTE&nbsp;</td>
+<td valign="top">&nbsp;ディザイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ABE&nbsp;</td>
+<td valign="top">&nbsp;アルファブレンドイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ATE&nbsp;</td>
+<td valign="top">&nbsp;アルファテストイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZTE&nbsp;</td>
+<td valign="top">&nbsp;デプステストイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_STE&nbsp;</td>
+<td valign="top">&nbsp;ステンシルテストイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_AAE&nbsp;</td>
+<td valign="top">&nbsp;アンチエイリアシングイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PCE&nbsp;</td>
+<td valign="top">&nbsp;パッチカリングイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CTE&nbsp;</td>
+<td valign="top">&nbsp;カラーテストイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LOE&nbsp;</td>
+<td valign="top">&nbsp;ロジカルオペレーションイネーブル&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BONEN&nbsp;</td>
+<td valign="top">&nbsp;ボーン行列ナンバー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT0&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT1&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT2&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT3&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT4&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT5&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT6&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT7&nbsp;</td>
+<td valign="top">&nbsp;頂点ウェイト&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DIVIDE&nbsp;</td>
+<td valign="top">&nbsp;パッチ分割数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PPM&nbsp;</td>
+<td valign="top">&nbsp;パッチプリミティブ&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WORLDN&nbsp;</td>
+<td valign="top">&nbsp;ワールド行列ナンバー&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_VIEWN&nbsp;</td>
+<td valign="top">&nbsp;ビュー行列ナンバー&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PROJN&nbsp;</td>
+<td valign="top">&nbsp;透視行列ナンバー&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TGENN&nbsp;</td>
+<td valign="top">&nbsp;テクスチャ生成行列ナンバー&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SX&nbsp;</td>
+<td valign="top">&nbsp;ビューポート&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SY&nbsp;</td>
+<td valign="top">&nbsp;ビューポート&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SZ&nbsp;</td>
+<td valign="top">&nbsp;ビューポート&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TX&nbsp;</td>
+<td valign="top">&nbsp;ビューポート&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TY&nbsp;</td>
+<td valign="top">&nbsp;ビューポート&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TZ&nbsp;</td>
+<td valign="top">&nbsp;ビューポート&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SU&nbsp;</td>
+<td valign="top">&nbsp;テクスチャスケール&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SV&nbsp;</td>
+<td valign="top">&nbsp;テクスチャスケール&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TU&nbsp;</td>
+<td valign="top">&nbsp;テクスチャオフセット&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TV&nbsp;</td>
+<td valign="top">&nbsp;テクスチャオフセット&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_OFFSETX&nbsp;</td>
+<td valign="top">&nbsp;スクリーンオフセット&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_OFFSETY&nbsp;</td>
+<td valign="top">&nbsp;スクリーンオフセット&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SHADE&nbsp;</td>
+<td valign="top">&nbsp;シェーディング&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FRONT&nbsp;</td>
+<td valign="top">&nbsp;照光表面&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CULL&nbsp;</td>
+<td valign="top">&nbsp;カリング表面&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MATERIAL&nbsp;</td>
+<td valign="top">&nbsp;マテリアル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MEC&nbsp;</td>
+<td valign="top">&nbsp;モデルカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MAC&nbsp;</td>
+<td valign="top">&nbsp;モデルカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MDC&nbsp;</td>
+<td valign="top">&nbsp;モデルカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MSC&nbsp;</td>
+<td valign="top">&nbsp;モデルカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MAA&nbsp;</td>
+<td valign="top">&nbsp;モデルカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MDA&nbsp;</td>
+<td valign="top">&nbsp;モデルカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MSA&nbsp;</td>
+<td valign="top">&nbsp;モデルカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MK&nbsp;</td>
+<td valign="top">&nbsp;モデルスペキュラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_AC&nbsp;</td>
+<td valign="top">&nbsp;環境光カラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_AA&nbsp;</td>
+<td valign="top">&nbsp;環境光カラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LMODE&nbsp;</td>
+<td valign="top">&nbsp;ライトモード&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE0&nbsp;</td>
+<td valign="top">&nbsp;ライトタイプ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE1&nbsp;</td>
+<td valign="top">&nbsp;ライトタイプ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE2&nbsp;</td>
+<td valign="top">&nbsp;ライトタイプ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE3&nbsp;</td>
+<td valign="top">&nbsp;ライトタイプ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX0&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY0&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ0&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX1&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY1&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ1&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX2&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY2&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ2&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX3&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY3&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ3&nbsp;</td>
+<td valign="top">&nbsp;ライトベクトル&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX0&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY0&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ0&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX1&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY1&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ1&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX2&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY2&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ2&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX3&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY3&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ3&nbsp;</td>
+<td valign="top">&nbsp;ライト方向&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA0&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB0&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC0&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA1&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB1&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC1&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA2&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB2&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC2&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA3&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB3&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC3&nbsp;</td>
+<td valign="top">&nbsp;ライト距離減衰係数&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS0&nbsp;</td>
+<td valign="top">&nbsp;ライト収束係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS1&nbsp;</td>
+<td valign="top">&nbsp;ライト収束係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS2&nbsp;</td>
+<td valign="top">&nbsp;ライト収束係数&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS3&nbsp;</td>
+<td valign="top">&nbsp;ライト収束係数&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO0&nbsp;</td>
+<td valign="top">&nbsp;ライト遮断内積値&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO1&nbsp;</td>
+<td valign="top">&nbsp;ライト遮断内積値&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO2&nbsp;</td>
+<td valign="top">&nbsp;ライト遮断内積値&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO3&nbsp;</td>
+<td valign="top">&nbsp;ライト遮断内積値&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC0&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC0&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC0&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC1&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC1&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC1&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC2&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC2&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC2&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC3&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC3&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC3&nbsp;</td>
+<td valign="top">&nbsp;ライトカラー&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FBP&nbsp;</td>
+<td valign="top">&nbsp;フレームバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FBW&nbsp;</td>
+<td valign="top">&nbsp;フレームバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZBP&nbsp;</td>
+<td valign="top">&nbsp;デプスバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZBW&nbsp;</td>
+<td valign="top">&nbsp;デプスバッファ&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP0&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW0&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP1&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW1&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP2&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW2&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP3&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW3&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP4&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW4&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP5&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW5&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP6&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW6&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP7&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW7&nbsp;</td>
+<td valign="top">&nbsp;テクスチャバッファ&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CBP&nbsp;</td>
+<td valign="top">&nbsp;CLUTバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CBW&nbsp;</td>
+<td valign="top">&nbsp;CLUTバッファ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBP1&nbsp;</td>
+<td valign="top">&nbsp;転送バッファ(ソース)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBW1&nbsp;</td>
+<td valign="top">&nbsp;転送バッファ(ソース)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBP2&nbsp;</td>
+<td valign="top">&nbsp;転送バッファ(デスティネーション)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBW2&nbsp;</td>
+<td valign="top">&nbsp;転送バッファ(デスティネーション)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE0&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE1&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE2&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE3&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE4&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE5&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE6&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE7&nbsp;</td>
+<td valign="top">&nbsp;テクスチャサイズ&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TMAP&nbsp;</td>
+<td valign="top">&nbsp;テクスチャマップモード&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSHADE&nbsp;</td>
+<td valign="top">&nbsp;シェードマップモード&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TMODE&nbsp;</td>
+<td valign="top">&nbsp;テクスチャモード&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TPF&nbsp;</td>
+<td valign="top">&nbsp;テクスチャピクセルフォーマット&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CLOAD&nbsp;</td>
+<td valign="top">&nbsp;CLUTロード&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CLUT&nbsp;</td>
+<td valign="top">&nbsp;CLUT&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TFILTER&nbsp;</td>
+<td valign="top">&nbsp;テクスチャフィルタ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TWRAP&nbsp;</td>
+<td valign="top">&nbsp;テクスチャラップモード&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TLEVEL&nbsp;</td>
+<td valign="top">&nbsp;テクスチャレベルモード&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TFUNC&nbsp;</td>
+<td valign="top">&nbsp;テクスチャファンクション&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TEC&nbsp;</td>
+<td valign="top">&nbsp;テクスチャ環境カラー&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TFLUSH&nbsp;</td>
+<td valign="top">&nbsp;テクスチャフラッシュ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSYNC&nbsp;</td>
+<td valign="top">&nbsp;テクスチャ同期&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FOG1&nbsp;</td>
+<td valign="top">&nbsp;フォグパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FOG2&nbsp;</td>
+<td valign="top">&nbsp;フォグパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FC&nbsp;</td>
+<td valign="top">&nbsp;フォグカラー&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FPF&nbsp;</td>
+<td valign="top">&nbsp;フレームピクセルフォーマット&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CMODE&nbsp;</td>
+<td valign="top">&nbsp;クリアモード&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SCISSOR1&nbsp;</td>
+<td valign="top">&nbsp;シザリング領域&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SCISSOR2&nbsp;</td>
+<td valign="top">&nbsp;シザリング領域&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MINZ&nbsp;</td>
+<td valign="top">&nbsp;デプスレンジ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MAXZ&nbsp;</td>
+<td valign="top">&nbsp;デプスレンジ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CTEST&nbsp;</td>
+<td valign="top">&nbsp;カラーテストパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CREF&nbsp;</td>
+<td valign="top">&nbsp;カラーテストリファレンス&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CMSK&nbsp;</td>
+<td valign="top">&nbsp;カラーマスク&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ATEST&nbsp;</td>
+<td valign="top">&nbsp;アルファテストパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_STEST&nbsp;</td>
+<td valign="top">&nbsp;ステンシルテストパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SOP&nbsp;</td>
+<td valign="top">&nbsp;ステンシルオペレーション&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZTEST&nbsp;</td>
+<td valign="top">&nbsp;デプステストパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BLEND&nbsp;</td>
+<td valign="top">&nbsp;アルファブレンドパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FIXA&nbsp;</td>
+<td valign="top">&nbsp;固定カラーA&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FIXB&nbsp;</td>
+<td valign="top">&nbsp;固定カラーB&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH1&nbsp;</td>
+<td valign="top">&nbsp;ディザ係数レジスタ1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH2&nbsp;</td>
+<td valign="top">&nbsp;ディザ係数レジスタ2&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH3&nbsp;</td>
+<td valign="top">&nbsp;ディザ係数レジスタ3&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH4&nbsp;</td>
+<td valign="top">&nbsp;ディザ係数レジスタ4&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LOP&nbsp;</td>
+<td valign="top">&nbsp;ロジカルオペレーションパラメータ&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZMSK&nbsp;</td>
+<td valign="top">&nbsp;デプスマスク&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PMSK1&nbsp;</td>
+<td valign="top">&nbsp;プレーンマスク1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PMSK2&nbsp;</td>
+<td valign="top">&nbsp;プレーンマスク2&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XSTART&nbsp;</td>
+<td valign="top">&nbsp;バッファ間転送開始&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XPOS1&nbsp;</td>
+<td valign="top">&nbsp;ホストバッファの転送開始位置&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XPOS2&nbsp;</td>
+<td valign="top">&nbsp;フレームバッファの転送開始位置&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XSIZE&nbsp;</td>
+<td valign="top">&nbsp;転送サイズ&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>cmdno</i>で指定された描画コマンドレジスタに、最後に設定された値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Gracphics Engineの描画コマンドレジスタの値を取得する関数です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeGetMtx">sceGeGetMtx</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeGetMtx"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeGetMtx<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engineマトリクスレジスタの参照<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+unsigned int <b>sceGeGetMtx </b>(
+	int <i>mtxno</i>,
+	unsigned int *<i>puiMtx</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mtxno</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マトリクスレジスタのレジスタ番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>puiMtx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マトリクスレジスタの内容を受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;unsigned int型バッファへのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;"><i>mtxno</i>に指定するマクロとマトリクスレジスタとの対応は以下のとおりです。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マトリクスレジスタ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_BONE0&nbsp;&nbsp;<br>&nbsp;&nbsp; ～&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_GE_MTXNO_BONE7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ボーン行列&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_WORLD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ワールド行列&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_VIEW&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ビュー行列&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_PROJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;透視行列&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_TEXGEN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;テクスチャ生成行列&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、0を返します。<br><br>エラーの場合、負の値を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_INDEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたマトリクス番号が不正だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics Engineのマトリクスレジスタの値を取得する関数です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeGetCmd">sceGeGetCmd</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeSaveContext"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeSaveContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engineコンテキストの保存<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeSaveContext</b> (
+	<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a> *<i>pContext</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コンテキストを保存する<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a>構造体へのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、0を返します。<br>エラーの場合、負の値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Graphics Engineの内部状態(コンテキスト)を<i>pContext</i>が指し示す<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a>構造体に保存します。<br>コンテキストの退避 / 復帰を明示的に行いたい場合に、<a href="../graphics/GE-Reference-Japanese.htm#sceGeRestoreContext">sceGeRestoreContext</a>()と組み合わせて使用します。sceGeSaveContext()関数は、全てのディスプレイリストが完了している状態で呼び出す必要があります。ディスプレイリストが完了するまでは<a href="../graphics/GE-Reference-Japanese.htm#sceGeDrawSync">sceGeDrawSync</a>()関数で待つ事ができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeRestoreContext">sceGeRestoreContext</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeRestoreContext"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeRestoreContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engineコンテキストの復帰<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeRestoreContext </b>(
+	const <a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a> *<i>pContext</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;復帰すべきコンテキスト情報を持つ<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a>構造体へのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、0を返します。<br>エラーの場合、負の値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>pContext</i>が指し示す<a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a>構造体の内容に従ってGraphics Engineの内部状態(コンテキスト)を設定します。つまり、保存されているコンテキストを復帰します。<br>コンテキストの退避 / 復帰を明示的に行いたい場合に、<a href="../graphics/GE-Reference-Japanese.htm#sceGeSaveContext">sceGeSaveContext</a>()と組み合わせて使用します。sceGeRestoreContext()関数は、全てのディスプレイリストが完了している状態で呼び出す必要があります。ディスプレイリストの実行中にsceGeRestoreContext()関数を実行してはいけません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeSaveContext">sceGeSaveContext</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeContext">SceGeContext</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="signalhandler"></a>
+<table width="100%"><td width="70%"><font size=6>signalhandler<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SIGNAL割り込みハンドラ関数のプレースホルダ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+void <b>signalhandler </b>(
+	int <i>intrcode</i>,
+	void *<i>cookie</i>,
+	const void *<i>madr</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出されます。<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>intrcode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CMD_SIGNALの下位16ビット値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cookie</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバック登録時に設定されたクッキー値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現在のディスプレイリスト位置を示すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_SIGNALマクロコマンドのうち、<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>が発生した場合に呼び出されるSIGNAL割り込みハンドラのプレースホルダです。signalhandler()は、割り込みコンテキストで呼び出されます。<br><br>引数<i>intrcode</i>にはCMD_SIGNALの下位16ビット値が渡されます。<br>引数<i>cookie</i>には、<a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>()関数呼び出し時に<a href="../graphics/GE-Reference-Japanese.htm#SceGeCbParam">SceGeCbParam</a>構造体の<i>pSignalCookie</i>メンバで設定されたクッキー値が渡されます。<br>引数<i>madr</i>には、CMD_SIGNALマクロコマンドによる割り込みを発生させたときのディスプレイリストアドレスが渡されます。ただし、<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>によるsignalhandler()呼び出しの場合には引数<i>madr</i>は意味を持ちません。signalhandler()呼び出し前に後続ディスプレイリストの実行が再開されているためです。<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>の場合はsignalhandler()終了後に、<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>の場合は<a href="../graphics/GE-Reference-Japanese.htm#sceGeContinue">sceGeContinue</a>()関数呼出し後にディスプレイリストが再開されます。<br><br>引数<i>madr</i>によってディスプレイリストの現在位置を知る事ができますが、signalhandler()内でその内容や頂点バッファ等を書き換えることは推奨しません。ディスプレイリストの再開前にはDキャッシュをライトバックする必要がありますが、割り込みコンテキストで呼び出されるsignahandler()内でキャッシュ操作することは、割り込み負荷を高くしてしまい他の処理のパフォーマンスに影響を与える可能性があるためです。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>, <a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>,<br><a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>, <a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeCbParam">SceGeCbParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="finishhandler"></a>
+<table width="100%"><td width="70%"><font size=6>finishhandler<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>FINISH割り込みハンドラ関数のプレースホルダ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+void <b>finishhandler </b>(
+	int <i>intrcode</i>,
+	void *<i>cookie</i>,
+	const void *<i>madr</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出されます。<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>intrcode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CMD_FINISHの下位16ビット値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cookie</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバック登録時に設定されたクッキー値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストの終了した位置を示すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_FINISH+CMD_ENDコマンドによってディスプレイリストが干渉した時に呼び出されるFINISH割り込みハンドラのプレースホルダです。finishhandler()は、割り込みコンテキストで呼び出されます。<br><a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>または<a href="../graphics/GE-Reference-Japanese.htm#SCE_GE_SIGNAL_DRAWSYNC">SCE_GE_SIGNAL_DRAWSYNC</a>内に現れるCMD_FINISH+CMD_ENDの場合にはfinishhandler()が呼び出されないことに注意してください。<br><br>引数<i>intrcode</i>にはCMD_FINISHの下位16ビット値が渡されます。<br>引数<i>cookie</i>には、<a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>()関数呼び出し時に<a href="../graphics/GE-Reference-Japanese.htm#SceGeCbParam">SceGeCbParam</a>構造体の<i>pFinishCookie</i>メンバで設定されたクッキー値が渡されます。<br>引数<i>madr</i>には、終了したディスプレイリストアドレスが渡されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeCbParam">SceGeCbParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListEnQueue"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListEnQueue<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストのキューイング<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListEnQueue </b>(
+	const void *<i>madr</i>,
+	const void *<i>sadr</i>,
+	int <i>cbid</i>,
+	const <a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a> *<i>pOpt</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sadr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;初期ストールアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバックID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オプション指定(コンテキスト退避領域の指定)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、ディスプレイリストID(0以上の値)を返します。<br>エラーの場合、負の値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>madr</i>で指定されたディスプレイリスト(Graphics Engineに対するコマンド列)を、キューの末尾に追加する関数です。ディスプレイリストを追加すると、ディスプレイリストIDを返します。ディスプレイリストIDは最大63個まで同時に登録できます。<br></div>
+<div style="margin-left:50px;">返り値として得られるディスプレイリストIDを<a href="../graphics/GE-Reference-Japanese.htm#sceGeListSync">sceGeListSync</a>()関数に渡すことで、そのディスプレイリストの描画動作が完了したかどうかを知ることができます。ディスプレイリストIDは<a href="../graphics/GE-Reference-Japanese.htm#sceGeDrawSync">sceGeDrawSync</a>()関数をブロッキングモードで呼び出すまで有効です。<br></div>
+<div style="margin-left:50px;"><br><i>sadr</i>には、ストールアドレスの初期値を指定します。ストールアドレスを使用しない場合はNULLを指定してください。ストールアドレスとはGraphics Engineへの転送処理をストールさせるアドレスで、キューイング後にそのアドレス以降にディスプレイリストを追加することができます。ディスプレイリストを追加したら、<a href="../graphics/GE-Reference-Japanese.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>()関数によってストールアドレスを更新してください。<br><br><i>cbid</i>には、このディスプレイリストの処理中に呼び出すべきコールバック関数のIDを指定します。あらかじめ<a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>()関数でコールバック関数を登録しておき、登録時に返されたコールバックIDを指定してください。コールバック関数を使用しない場合には負の値(＜0)を指定してください。<br><br><i>pOpt</i>には、付加的なオプションを指定します。現在のところ、オプションとしてコンテキストの自動退避を指定することができます。具体的には<a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a>構造体の説明を参照してください。コンテキストの自動退避およびCMD_SIGNALによるCALL/RETを行う必要がない場合には、<i>pOpt</i>にNULLを指定してください。<br><br>Graphics Engineはバスマスタデバイスとして、ディスプレイリスト、頂点データ、テクスチャデータ等にアクセスします。sceGeListEnQueue(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()関数でリストを登録するにあたっては、あらかじめALLEGREX CPUのDキャッシュをライトバックするなどしてコヒーレンシ保証を行う必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListSync">sceGeListSync</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>(),<br><a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListEnQueueHead"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListEnQueueHead<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストのキューイング(割り込み)<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListEnQueueHead </b>(
+	const void *<i>madr</i>,
+	const void *<i>sadr</i>,
+	int <i>cbid</i>,
+	const <a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a> *<i>pOpt</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sadr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;初期ストールアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバックID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オプション指定(コンテキスト退避領域の指定)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、ディスプレイリストID(0以上の値)を返します。<br>エラーの場合、負の値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>madr</i>で指定されたディスプレイリスト(Graphics Engineに対するコマンド列)を、キューの先頭に追加する関数です。ディスプレイリストを追加すると、ディスプレイリストIDを返します。ディスプレイリストIDは最大63個まで同時に登録できます。<br></div>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>()で描画を中断した状態でこの関数を用いてディスプレイリストをキューイングすることにより、割り込み描画を行うことができます。<br>返り値として得られるディスプレイリストIDを<a href="../graphics/GE-Reference-Japanese.htm#sceGeListSync">sceGeListSync</a>()関数に渡すと、このディスプレイリストの描画動作が完了したかどうかを知ることができます。ディスプレイリストIDは<a href="../graphics/GE-Reference-Japanese.htm#sceGeDrawSync">sceGeDrawSync</a>()関数をブロッキングモードで呼び出すまで有効です。<br></div>
+<div style="margin-left:50px;"><br><i>sadr</i>には、ストールアドレスの初期値を指定します。ストールアドレスを使用しない場合はNULLを指定してください。ストールアドレスとはGraphics Engineへの転送処理をストールさせるアドレスで、キューイング後にそのアドレス以降にディスプレイリストを追加することができます。ディスプレイリストを追加したら、<a href="../graphics/GE-Reference-Japanese.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>()関数によってストールアドレスを更新してください。<br><br><i>cbid</i>には、このディスプレイリストの処理中に呼び出すべきコールバック関数のIDを指定します。あらかじめ<a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>()関数でコールバック関数を登録しておき、登録時に返されたコールバックIDを指定してください。コールバック関数を使用しない場合には負の値(＜0)を指定してください。<br><br><i>pOpt</i>には、付加的なオプションを指定します。現在のところ、オプションとしてコンテキストの自動退避を指定することができます。具体的には<a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a>構造体の説明を参照してください。コンテキストの自動退避を行う必要がない場合には、<i>pOpt</i>にNULLを指定してください。<br><br>Graphics Engineはバスマスタデバイスとして、ディスプレイリスト、頂点データ、テクスチャデータ等にアクセスします。<a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), sceGeListEnQueueHead()関数でリストを登録するにあたっては、あらかじめALLEGREX CPUのDキャッシュをライトバックするなどしてコヒーレンシ保証を行う必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListSync">sceGeListSync</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>(),<br><a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListDeQueue"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListDeQueue<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストのキュー解除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListDeQueue </b>(
+	int <i>id</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は、0を返します。<br>エラーがあった場合は負の値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>id</i>で指定されたディスプレイリストをキューから取り除く関数です。<br>指定されたディスプレイリストがすでに動作を開始していた場合は、エラーとなります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListUpdateStallAddr"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListUpdateStallAddr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ストールアドレスの更新<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListUpdateStallAddr </b>(
+	int <i>id</i>,
+	void *<i>pSadr</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSadr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新しいストールアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は、0を返します。<br>エラーの場合、負の値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>id</i>で指定されたディスプレイリストのストールアドレスを更新する関数です。<br>ディスプレイリストが動作を開始していれば、ストールアドレスレジスタ(SADR)が直接書き換えられます。ディスプレイリストが動作を開始する前であれば、初期ストールアドレスが再設定されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスプレイリストの完了待ち<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListSync </b>(
+	int <i>id</i>,
+	int <i>mode</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1">
+<div style="margin-left:40px;"><h4><b>引数<i>mode</i>が0(ブロック)のとき</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可、ディスパッチ許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2">
+<div style="margin-left:40px;"><h4><b>引数<i>mode</i>が1(ノンブロック)のとき</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスプレイリストID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;同期モード&nbsp;&nbsp;<br>&nbsp;&nbsp;0= ディスプレイリストが完了するまで待つ&nbsp;&nbsp;<br>&nbsp;&nbsp;1= ディスプレイリストの完了状態を調べてすぐ戻る&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、<i>id</i>で指定されたディスプレイリストの状態を次のいずれかの値で返します。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_STALLING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ストールアドレスに到達してストールしている&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_DRAWING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;描画動作中&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_QUEUED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;キューイング中(まだ描画を開始していない)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_COMPLETED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;描画動作を完了している&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_PAUSED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;描画動作を中断している&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">エラーの場合、負の値を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたディスプレイリストIDが不正だった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたモードが不正だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">キューイングしたディスプレイリストの描画動作と同期を取るための関数です。<br></div>
+<div style="margin-left:50px;"><i>mode</i>に0を指定した場合、<i>id</i>で指定されたディスプレイリストが完了するのを待ち、完了した時点でリターンします。<br></div>
+<div style="margin-left:50px;"><i>mode</i>に1を指定した場合、<i>id</i>で指定されたディスプレイリストの状態を調べて、ただちにリターンします。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeDrawSync">sceGeDrawSync</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeDrawSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeDrawSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>キュー全体の完了待ち<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeDrawSync </b>(
+	int <i>mode</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_3">
+<div style="margin-left:40px;"><h4><b>引数<i>mode</i>が0(ブロック)のとき</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可、ディスパッチ許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4">
+<div style="margin-left:40px;"><h4><b>引数<i>mode</i>が1(ノンブロック)のとき</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;同期モード&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = キュー全体が完了するまで待機する&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = キューの完了状態を調べてすぐ戻る&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、キューの状態を以下のいずれかの値で返します。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_STALLING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ストールアドレスに到達してストールしている&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_DRAWING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;描画動作中&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_COMPLETED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;描画動作を完了している&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">エラーの場合、負の値を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたモードが不正だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>mode</i>に0を指定した場合、キュー全体の描画動作が完了するのを待ち、完了した時点でリターンします。このとき、全てのディスプレイリストIDが削除されます。同時にキューイングできるディスプレイリストIDは最大63個であるため、sceGeDrawSync()によって描画完了を確認することによりID割り当てを回収します。<br></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:50px;"><i>mode</i>に1を指定した場合、キュー全体の状態を調べて、ただちにリターンします。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeListSync">sceGeListSync</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeBreak"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeBreak<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>描画動作の中断<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeBreak </b>(
+	int <i>mode</i>,
+	<a href="../graphics/GE-Reference-Japanese.htm#SceGeBreakParam">SceGeBreakParam</a> *<i>pParam</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止、許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;中断モード&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = 現在描画中のディスプレイリストを中断する&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = キュー全体を中断しキャンセルする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pParam</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ内部で使用するワークエリア&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">描画中だった(中断した)ディスプレイリストIDを返します。<br><br>エラーの場合、負の値を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_BUSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リストが自発停止動作中だったため、強制停止できなかった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_ALREADY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;すでに停止していた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたモードが不正だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">描画動作を中断するための関数です。呼び出した時点で現在描画中のディスプレイリストを中断し、そのディスプレイリストIDを返します。<br><i>mode</i>に0を指定した場合、中断したディスプレイリストは待機状態となり、<a href="../graphics/GE-Reference-Japanese.htm#sceGeContinue">sceGeContinue</a>()で再開することができます。<br><i>mode</i>に1を指定した場合、中断したディスプレイリストはキャンセルされ、キューイングされてまだ描画されていないディスプレイリストもすべてキューから削除されます。<br></div>
+<div style="margin-left:50px;"><i>pParam</i>の内容はsceGeBreak()からリターンしてきたときに破壊されています。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeContinue">sceGeContinue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeContinue"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeContinue<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>描画キューの再開<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeContinue </b>(
+	void
+);
+</font></pre></div>
+<br>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は、0を返します。<br><br>エラーの場合、負の値を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_ALREADY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;すでに描画中だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>()で中断して待機状態になっているディスプレイリストの描画処理を再開する関数です。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeBreak">sceGeBreak</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeSetCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeSetCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>コールバック関数の登録<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeSetCallback </b>(
+	const <a href="../graphics/GE-Reference-Japanese.htm#SceGeCbParam">SceGeCbParam</a> *<i>pParam</i>
+);
+</font></pre></div>
+<br>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pParam</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバック登録パラメータ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、コールバックID(0以上の値)を返します。<br>エラーの場合、負の値を返します。<br></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SIGNALコールバック関数およびFINISHコールバック関数を登録する関数です。コールバック関数を登録すると、コールバックIDを返します。コールバック関数は16個まで同時に登録できます。<br></div>
+<div style="margin-left:50px;"><i>pParam</i>が指し示す<a href="../graphics/GE-Reference-Japanese.htm#SceGeCbParam">SceGeCbParam</a>構造体に、SIGNALコールバック関数 / FINISHコールバック関数へのポインタと、各関数に渡すcookie領域へのポインタを指定してください。<br>正常終了して返されたコールバックIDを、ディスプレイリストをキューイングする際に<a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>()または<a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()の第3引数として渡すと、そのディスプレイリストに含まれるCMD_SIGNALおよびCMD_FINISHを処理した時点で該当するSIGNALコールバック関数およびFINISHコールバック関数が呼び出されます。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeUnsetCallback">sceGeUnsetCallback</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-Japanese.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-Japanese.htm#SceGeCbParam">SceGeCbParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeUnsetCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeUnsetCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>コールバック関数の登録解除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeUnsetCallback </b>(
+	int <i>id</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み禁止／許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバックID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、0を返します。<br>エラーの場合、負の値を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>()で登録したコールバック関数の登録を解除するための関数です。<br><i>id</i>で指定したコールバック関数が解除されます。<br>コールバック関数は16個までしか同時に登録できないため、使用の終わったコールバック関数はsceGeUnsetCallback()関数によって返却してください。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-Japanese.htm#sceGeSetCallback">sceGeSetCallback</a>()<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

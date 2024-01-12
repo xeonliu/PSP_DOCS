@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>DMAC-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+DMAC Driver Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceDmacMemcpy"></a>
+<table width="100%"><td width="70%"><font size=6>sceDmacMemcpy<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Transfer memory data using DMAC<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;dmacdrv.h&gt;
+int <b>sceDmacMemcpy</b> (
+	void *<i>dst</i>,
+	const void *<i>src</i>,
+	unsigned int <i>uSize</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dst</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Destination address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>src</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Source address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Transfer count (number of transfer bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes successfully, zero is returned. <br>If an error occurs, a negative number is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function performs a memory transfer using the DMAC.<br><br>Although the writeback method is used for the ALLEGREX CPU D-cache, coherency is not guaranteed by using a mechanism such as hardware cache snooping. Note that when a memory transfer is performed using the sceDmacMemcpy() function, D-cache writeback of the source area and invalidation of the destination area must be performed manually.<br>sceDmacMemcpy() performs memory transfers using the maximum width of 128 bits. Efficiency is greatest when the pointers indicated by the <i>dst</i> and <i>src</i> arguments are aligned on 16-byte boundaries.<br><br>Based on the relationship between the pointers indicated by the <i>dst</i> and <i>src</i> arguments and the number of transfer bytes indicated by the <i>uSize</i> argument, non-cache memory accesses may be performed by the CPU in the neighborhoods of the transfer starting position and endpoint. Make sure that the transfer destination area indicated by the <i>dst</i> and <i>uSize</i> arguments does not overlap the transfer source area indicated by the <i>src</i> and <i>uSize</i> arguments.<br><br>Since the DMAC is a resource that is shared within the system, processing is blocked if another thread is using the DMAC by calling a function such as sceDmacMemcpy().<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackAll">sceKernelDcacheWritebackAll</a>(), <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackRange">sceKernelDcacheWritebackRange</a>(), <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>(), <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

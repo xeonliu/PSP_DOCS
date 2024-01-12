@@ -1,0 +1,1146 @@
+<html lang="en">
+<head>
+<title>Programming-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&trade; Programming Tutorial
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Multiple programs can be loaded at the same time in PSP&trade; memory.<br><br>A program that is loaded in memory is called a program module or simply a module. The PSP&trade; kernel is responsible for managing the modules in memory.<br><br>The PSP&trade; kernel loader can handle two types of object files. One is a relocatable object file format unique to the PSP&trade; kernel called a <b>PRX</b> file, and the other is a normal ELF executable object file.<br><br>Every module that is loaded in memory is identified by a unique 32-bit ID called a module ID.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Minimum Requirements of a Program Module</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A module must have a module name and a module version.<br><br>The macro SCE_MODULE_INFO(name, attribute, major, minor) is used to declare these within the source program of the module as shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;kernel.h&gt;
+SCE_MODULE_INFO( Module_name, 0, 1, 1 );
+</font></pre></div>
+<div style="margin-left:50px;"><br>The module name specified for the name argument can be a maximum of 27 characters in length. Alphanumeric characters and the underscore &quot;_&quot; can be used, however, the first character must be either a letter or the underscore, just like the rules for an identifier in C. The module name, which is stored as a string in the object file, is used by the debugger to identify the module during debugging.<br>Since the module name is not directly used as an ordinary symbol, you need not worry about conflicts with function names or variable names.<br>The PSP&trade; kernel normally permits multiple modules having the same name to be loaded simultaneously. To prevent this from happening, use the SCE_MODULE_ATTR_EXCLUSIVE_LOAD attribute described below.<br><br>Note:<br>The SCE_MODULE_INFO() macro is declared in moduleexport.h, which is included from kernel.h.<br><br>The module attribute is specified for the attribute argument.<br>Various bits are used to specify the following attributes.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_MODULE_ATTR_CANT_STOP = 0x0001<br>The module cannot stop (valid only when there is no stop entry).
+<li> SCE_MODULE_ATTR_EXCLUSIVE_LOAD = 0x0002<br>The module cannot be loaded if a module having the same name has already been loaded.
+<li> *SCE_MODULE_ATTR_EXCLUSIVE_START = 0x0004<br>The module cannot be started if a module having the same name has already been started.
+</ul></div>
+<div style="margin-left:50px;"><br>The module version is specified for the major and minor arguments. The version number can be freely assigned.<br>(A module created by SCE uses a value greater than or equal to 1 for both the major version and minor version. The value 0 is reserved for a generic identifier of the module.)<br><br>A module must have a start entry function which is called to start the module.<br>An arbitrary function can be specified for the start entry function by using SCE_MODULE_START() as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;kernel.h&gt;
+
+SCE_MODULE_INFO( MyModule_name, 0, 1, 1);
+
+SCE_MODULE_START(MyStart);
+int MyStart(int args, char *argp)
+{
+   ......
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">A stop entry function for stopping the module can also be set in a module. This is specified by using SCE_MODULE_STOP().<br><br>Prototypes of the start and stop functions are shown below.<br>The meanings of the arguments conform to those for the entry function of a thread.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+     int module_start( SceSize argSize, const void *argBlock );
+     int module_stop ( SceSize argSize, const void *argBlock );
+
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Compile and Link Basics</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Link Procedure for a prx-Format Object File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Program compilation and linking to generate a prx file are performed as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -o program.prx xxx.o yyy.o -lanylib -lanystublib
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Link Procedure for an elf-Format Object File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Program compilation and linking to generate an elf file are performed as follows.<br>Specify the -zgenelf option to generate an elf file. This will enable libraries such as libc and crt0 to be implicitly linked, and the module's entry function to be automatically set for the start function in crt0. Since the main() function is called from crt0, be sure to provide a main() function for the program. (In other words, do not use the SCE_MODULE_START() macro.)<br>The prototype of the main() function conforms to the ANSI specification.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -zgenelf -o program.elf xxx.o yyy.o -lanylib -lanystublib
+
+</font></pre></div>
+<div style="margin-left:50px;">By default, the load address of an elf-format object file is set to 0x08804000. The load address can be changed by specifying "-Wl,--section-start -Wl,.init=&lt;hex_address&gt;." However, note that module loading will fail if the specified area is already being used.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Link Procedure for a prx-format object file with libc and crt0</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The procedure for generating a prx file by linking libc and crt0 is as follows.<br>Specify the -startfiles option, which will automatically set the start function in crt0 to the module's entry function.<br>Since the main() function is called from crt0, be sure to provide a main() function for the program (in other words, do not use the SCE_MODULE_START() macro).<br>The prototype of the main() function conforms to the ANSI specification.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -startfiles -o program.prx xxx.o yyy.o -lanylib
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Resident Libraries</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A PRX-format module can be used as a resident library. A resident library provides some of its functions to another module.<br><br>The following two macros are used in the resident library program to define the library name and to declare a function name or variable name that will be made available to another module.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+SCE_LIB_DECLARE( &lt;libname&gt;, &lt;attribute&gt; )
+SCE_LIB_EXPORT( &lt;funcname&gt;, &lt;libname&gt; )
+
+</font></pre></div>
+<div style="margin-left:50px;">For &lt;libname&gt;, specify a valid C-language identifier.<br>&lt;libname&gt; is used as a global symbol within the library program module. Therefore, you cannot use a library name that has the same name as another function or variable within the module.<br><br>&lt;attribute&gt; can be any of the following values.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_LIB_AUTO_EXPORT (= 0x0001)<br>The module is automatically registered in the system immediately before it is started.
+<li> SCE_LIB_WEAK_EXPORT (= 0x0002)<br>A resident library having the same name and same version is overwritten.
+<li> SCE_LIB_WEAK_IMPORT (= 0x0008)<br>No error occurs if the link-destination library does not exist.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:50px;">The following shows a code example.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;kernel.h&gt;
+/* Declare the group of functions (= library) to be provided to other modules */
+SCE_LIB_DECLARE( XXX_library, SCE_LIB_AUTO_EXPORT|SCE_LIB_WEAK_IMPORT);
+
+SCE_LIB_EXPORT( Function1, XXX_library );
+int Function1(...)
+{
+    ........
+}
+
+SCE_LIB_EXPORT( Function2, XXX_library );
+int Function2(...)
+{
+    ........
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">SCE_LIB_EXPORT() does not necessarily need to be placed near the function or variable definition. All declarations can be collected together in one place and they can also be made in a separate source program.<br><br>In the example shown above, the library is automatically registered in the system because SCE_LIB_AUTO_EXPORT is specified. However, you can also control the public declaration of a library during execution as shown in the following code.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;kernel.h&gt;
+
+/* Declare functions (= library) to be provided to other modules */
+SCE_LIB_DECLARE( XXX_library, SCE_LIB_AUTO_EXPORT|SCE_LIB_WEAK_IMPORT);
+SCE_LIB_DECLARE( YYY_library, SCE_LIB_WEAK_IMPORT);
+
+SCE_LIB_EXPORT( Function1, XXX_library );
+int Function1(...)
+{
+    ........
+    sceKernelRegisterLibraryEntries(YYY_library);
+    ........
+}
+
+SCE_LIB_EXPORT( Function2, XXX_library );
+int Function2(...)
+{
+    ........
+    sceKernelReleaseLibraryEntries(YYY_library);
+    ........
+}
+
+SCE_LIB_EXPORT( Function3, YYY_library );
+int Function3(...)
+{
+    ........
+    sceKernelReleaseLibraryEntries(XXX_library);
+    ........
+}
+
+SCE_LIB_EXPORT( Function4, YYY_library );
+int Function4(...)
+{
+    ........
+}
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Compiling Resident Libraries</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The procedure to compile a resident library is no different from that of an ordinary PRX file.<br>It is normally done as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c xxx.c
+$ psp-gcc -c yyy.c
+$ psp-gcc -o program.prx xxx.o yyy.o -lanylib -lanystublib
+
+</font></pre></div>
+<div style="margin-left:50px;">When a resident library is created, a stub library for statically linking to the module must be created at the same time as follows..<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -zgenstubarchive -zv xxx.o yyy.o -lanylib
+
+</font></pre></div>
+<div style="margin-left:50px;">This will create a file called &lt;libname&gt;_stub.a, which is then linked to the program which will use the library.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Compiling a PRX or ELF File That Uses a Resident Library</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A module that uses a resident library links a stub library that is provided by the resident library creator in a similar manner as a normal library.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-gcc -c aaa.c
+$ psp-gcc -c bbb.c
+$ psp-gcc -o clientprogram.prx aaa.o bbb.o -lanylib -lXXX_stub.a
+or
+$ psp-gcc -o clientprogram.prx aaa.o bbb.o -lanylib libXXX.a
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>Creating a Resident Library in C++</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This section explains how to create a resident library in C++.<br>In C++, more than one function or variable with the same name may exist simultaneously, depending on the class or namespace. In order to use these names for linking, they must first be made unique by using an operation known as &quot;mangling&quot;. To export functions or variables from a PRX file that was coded in C++, the following procedure must be used. First, a macro such as SCE_LIB_EXPORTPICKUP_NAMESPACE() is used to specify the functions or variables that are to be exported in the source code. Then, the pspexportpickup command is used to find the exported functions or variables after the names have been mangled. Finally, a PRX file is created using the mangled names.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>Coding: Defining an Export Library</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To create a PRX file for a resident library in C++, use the following macros to specify the functions or variables to be exported. These are defined in the exportcplusplus.h header file.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_LIB_EXPORTPICKUP_NAMESPACE( <i>pattern_str, lib_name</i> )
+<li> SCE_LIB_EXPORTPICKUP_CLASS( <i>pattern_str, lib_name</i> )
+<li> SCE_LIB_EXPORTPICKUP_CPP_FUNC(<i> pattern_str, lib_name </i>)
+<li> SCE_LIB_EXPORTPICKUP_CPP_VAR( <i>pattern_str, lib_name</i> )
+</ul></div>
+<div style="margin-left:50px;">Details about how to use each macro are presented later together with descriptions of other macros. In the following example, all functions and variables of MyClass1 and MyClass2 will be exported as the library named LibMyClass.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_1">
+<div style="margin-left:40px;"><h4><b>Library Exporting Example in C++</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;kernel.h&gt;
+#include &lt;MyClass1.h&gt;
+#include &lt;MyClass2.h&gt;
+
+SCE_MODULE_INFO( CplusplusExport, 1, 0);
+SCE_LIB_DECLARE( LibMyClass, SCE_LIB_AUTO_EXPORT );
+SCE_LIB_EXPORTPICKUP_CLASS( "MyClass1", LibMyClass );
+SCE_LIB_EXPORTPICKUP_CLASS( "MyClass2", LibMyClass );
+
+int MyClass1::export1()
+{
+...
+} 
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>Compilation and Linking: pspexportpickup Command</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The pspexportpickup command is used to find mangled symbols in an object file that correspond to exported functions and variables previously specified in SCE_LIB_EXPORTPICKUP_*() macros and generates a library definition file in C source code. A resident library can be created by compiling this source code file and linking it with the other object files.<br>In the following example, library definitions are exported from export.cpp/MyClass1.cpp/MyClass2.cpp, and regenerated as prxexport.c using the pspexportpickup command. This file is used to create the PRX file.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2_2">
+<div style="margin-left:40px;"><h4><b>pspexportpickup Usage Example</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>% psp-g++ -c export.cpp 
+% psp-g++ -c MyClass1.cpp 
+% psp-g++ -c MyClass2.cpp 
+% pspexportpickup -o prxexport.c export.o MyClass1.o MyClass2.o
+% psp-gcc -c prxexport.c
+% psp-g++ export.o MyClass1.o MyClass2.o prxexport.o -zgenstubarchive
+% psp-g++ export.o MyClass1.o MyClass2.o prxexport.o -startfiles -o export.prx
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>SCE_LIB_EXPORTPICKUP Macro Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_1"><h4>
+(1)&nbsp;<b>SCE_LIB_EXPORTPICKUP_NAMESPACE(): Export an entire namespace</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_1_3">
+<div style="margin-left:40px;"><h4><b>Syntax</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_NAMESPACE( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">This macro exports all C++ global symbols that belong to the namespace specified by <i>pattern_str</i>.<br>For the namespace, specify a string of the form "ns1" or "ns1::ns2."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_1_4">
+<div style="margin-left:40px;"><h4><b>Example of Exporting a Namespace</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_NAMESPACE( "his_namespace::subns", my_lib_name ); 
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_2"><h4>
+(2)&nbsp;<b>SCE_LIB_EXPORTPICKUP_CLASS(): Export an entire class</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_2_5">
+<div style="margin-left:40px;"><h4><b>Syntax</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CLASS( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">This macro exports all global symbols that belong to the class specified by <i>pattern_str</i>. For the class, specify a string of the form "class_name" or "ns1::ns2::class_name." For the class_name, specify either the class name itself or a string that contains only one at sign (@) such as &quot;ns1::ns2::xxx@&quot; or &quot;ns1::ns2::@xxx&quot; or &quot;ns1::ns2::xxx@xxx&quot; or &quot;ns1::ns2::@&quot;. The at sign (@) is a wildcard that represents a string with an arbitrary length of zero or more characters. Note that you cannot use strings such as "::@" and "@" to match everything.<br>Since class inheritance relationships are not automatically recognized, when exporting a given class, the base class must also be explicitly exported.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_3"><h4>
+(3)&nbsp;<b>SCE_LIB_EXPORTPICKUP_CPP_FUNC(): Export a function</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_3_6">
+<div style="margin-left:40px;"><h4><b>Syntax</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_FUNC( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">This macro exports all C++ global functions that match the pattern specified by <i>pattern_str</i>.<br>For the pattern, specify a string that consists of a namespace and function name in the form "namespace::funcname." For the function name, specify either the function name itself or a string that contains only one at sign (@) such as &quot;ns1::ns2::fff@&quot; or &quot;ns1::ns2::@fff&quot; or &quot;ns1::ns2::nnn@fff&quot; or &quot;ns1::ns2::@&quot;. The at sign (@) is a wildcard that represents a string with an arbitrary length of zero or more characters. Note that you cannot use strings such as "::@" and "@" to match everything.<br>The pattern can also contain a function argument prototype (the argument name should be omitted). However, in this case, you cannot use the wild card (@).<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_3_7">
+<div style="margin-left:40px;"><h4><b>Examples of Exporting Functions</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_FUNC( "ns1::func1", my_lib_name );
+SCE_LIB_EXPORTPICKUP_CPP_FUNC( "class1::func1", my_lib_name );
+SCE_LIB_EXPORTPICKUP_CPP_FUNC( "func2(int)", my_lib_name );
+SCE_LIB_EXPORTPICKUP_CPP_FUNC( "func2(char,int)", my_lib_name );
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_4"><h4>
+(4)&nbsp;<b>SCE_LIB_EXPORTPICKUP_CPP_VAR(): Export a variable</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_4_8">
+<div style="margin-left:40px;"><h4><b>Syntax</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_VAR( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">This macro exports all C++ global variables that match the pattern specified by <i>pattern_str</i>. <br>For the pattern, specify a string that consists of a namespace and variable name in the form "namespace::varname." For the variable name, specify either the variable name itself or a string that contains only one at sign (@) such as &quot;ns1::ns2::fff@&quot; or &quot;ns1::ns2::@fff&quot; or &quot;ns1::ns2::nnn@fff&quot; or &quot;ns1::ns2::@&quot;. The at sign (@) is a wildcard that represents a string with an arbitrary length of zero or more characters. Note that you cannot use strings such as "::@" and "@" to match everything.<br>Note that even if a variable is a C++ variable, if it is outside of the namespace, it is treated as a C variable and will not be matched.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_5"><h4>
+(5)&nbsp;<b>IGNORE specification: Specify functions or variables that are not to be exported</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Although macros such as SCE_LIB_EXPORTPICKUP_NAMESPACE() will export all symbols that match a given condition, the following two macros can be used to indicate that symbols that match a given condition should not be exported.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_FUNC_IGNORE( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_VAR_IGNORE( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">These macros are used to exclude global symbols that match the pattern specified by pattern_str from the global symbols that have already been picked up by macros such as SCE_LIB_EXPORTPICKUP_NAMESPACE(). In the following example, all global symbols that belong to the MyClass class other than MyClass::funca and MyClass::funcb are exported.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_5_9">
+<div style="margin-left:40px;"><h4><b>IGNORE Specification Example</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CLASS( "MyClass", my_lib_name )
+SCE_LIB_EXPORTPICKUP_CPP_FUNC_IGNORE( "MyClass::funca", my_lib_name )
+SCE_LIB_EXPORTPICKUP_CPP_FUNC_IGNORE( "MyClass::funcb", my_lib_name )
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_6"><h4>
+(6)&nbsp;<b>LOCAL specification: Export specification for a specific file</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Macros such as SCE_LIB_EXPORTPICKUP_NAMESPACE() will pick up symbols that should be exported from all files that are processed at the same time by the exportpickup command. If you want to pick up symbols from only one file, use the following macros instead. These macros can only be used within the file to which they apply.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_LOCAL_FUNC( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_LOCAL_VAR( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_LOCAL_FUNC_IGNORE( <i>pattern_str, lib_name</i> )
+SCE_LIB_EXPORTPICKUP_CPP_LOCAL_VAR_IGNORE( <i>pattern_str, lib_name</i> )
+</font></pre></div>
+<div style="margin-left:67px;">For example, when object.o contains funca() and funca(int), which are to be exported, and objectb.o contains funca(char), which is not to be exported, the following can be specified within the objecta.o source file.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_6_10">
+<div style="margin-left:40px;"><h4><b>LOCAL Specification Example</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>SCE_LIB_EXPORTPICKUP_CPP_LOCAL_FUNC( "MyClass::funca", my_lib_name )
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_7"><h4>
+(7)&nbsp;<b>Evaluation Order of IGNORE and LOCAL Specifications</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The SCE_LIB_EXPORTPICKUP*() macros have the priority order indicated below. This ensures that the results obtained will be the same, regardless of the order in which the object files are specified in the pspexportpickup command.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> IGNORE specifications take precedence over the export specifications of all other objects
+<li> LOCAL IGNORE specifications take precedence over the export specifications of all other objects
+<li> LOCAL export specifications take precedence over IGNORE specifications of all other objects
+<li> LOCAL export specifications and LOCAL IGNORE specifications are evaluated in the order in which they are declared.
+</ul></div>
+<div style="margin-left:67px;">This is shown in the following matrix.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>-</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Order ignored&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Declaration order&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Order ignored&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;IGNORE+LOCAL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP+LOCAL</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Order ignored&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PICKUP+LOCAL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Order ignored&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>IGNORE</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Order ignored&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;IGNORE&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PICKUP</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Order ignored&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>Sharing libc</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The libc library and crt0 are statically linked to any module that is compiled with the -startfiles option. The following figure shows the memory state when two or more of these kinds of modules are loaded simultaneously.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Programming-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">It is apparent from Figure 1 that when multiple modules that are statically linked to the libc library and crt0 are loaded, memory utilization is not very efficient since multiple instances of libc and crt0 also exist in memory.<br><br>To avoid this situation, the PSP&trade; provides a method of handling libc as a shared library.<br>To share libc between multiple modules, modules are divided into the following two types before compilation:<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Module (main module) that statically links libc and exports it to other modules
+<li> Module (sub module) that imports and uses the libc that was exported by the main module 
+</ul></div>
+<div style="margin-left:50px;">Sub modules share the libc that was statically linked by the main module, and the memory utilization is improved.<br>Figure 2 shows a situation in which these modules are loaded simultaneously.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Programming-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>A heap area for memory allocation is normally reserved for each libc, but when libc is handled as a shared library, multiple modules share one heap area. Consequently, if one module causes a memory leak, its effect will be felt by the other modules. Therefore, care is required when implementing this technique.<br>In addition, since only one main module that exports libc can exist in the system, it must be loaded before the sub modules. Therefore, the module configuration and load order must be taken into consideration for compilation.<br><br>psp-gcc provides the following options to support this function.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-startfiles&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Statically link libc, crt0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zuse-shared&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Link with the exported libc and do not statically link libc&nbsp;&nbsp;<br>&nbsp;&nbsp;Link crt0_prxlibc.o instead of crt0_prx.o&nbsp;&nbsp;<br>&nbsp;&nbsp;Do not link kernel_bridge.o&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zexportlibc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Link exportlibc.o&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zexportlibm&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Link exportlibm.o&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mno-crt0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Do not link the standard crt0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The main module and sub modules are compiled as follows.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><b>(Main module)</b>
+
+$ psp-gcc -startfiles -o program.prx xxx.o yyy.o -zexportlibc -lanylib -lanystub
+
+<b>(Sub module)</b>
+
+$ psp-gcc -startfiles -o library.prx xxx.o yyy.o -zuse-shared -mno-crt0
+$ psp-gcc -zgenstubarchive -zx xxx.o yyy.o -lanylib
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>Symbol Information and Debug Information</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">To remove symbol information or debug information from an object file, use the psp-prx-strip command with a PRX file and the psp-gnu-strip command with an ELF file.<br><br>Note that if the general psp-gnu-strip command is used with a PRX file, it will leave the file in a state where it cannot be loaded or executed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>psp-prx-strip Example</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To delete the symbol information from a PRX file and reduce the file size, use the psp-prx-strip command as shown below.<br><br>First, simply build.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-g++ -Wall -g -I../../include -c -o hellocpp.o hellocpp.cpp
+$ psp-g++ -Wall -g -I../../include -g hellocpp.o -startfiles -o hellocpp.prx
+
+</font></pre></div>
+<div style="margin-left:50px;">Then, save the object file with symbols in advance.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ cp hellocpp.prx hellocpp.sym
+
+</font></pre></div>
+<div style="margin-left:50px;">Use the psp-prx-strip command to delete symbols from the object file.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-prx-strip hellocpp.prx
+
+$ ls -al hellocpp.prx hellocpp.sym
+-rw-rw-r--    1 psp      psp        392720  6/24 09:57 hellocpp.prx
+-rw-rw-r--    1 psp      psp       4455428  6/24 09:56 hellocpp.sym
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_11">
+<div style="margin-left:40px;"><h4><b>Note 1:  Concerning strip</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">If the psp-gnu-strip command is used with a PRX file, PRX information that is referenced by the PSP&trade; kernel during execution will also be deleted. Therefore, always use the psp-prx-strip command with a PRX file.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_12">
+<div style="margin-left:40px;"><h4><b>Note 2:  Concerning the Debugger</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">When symbol information is removed from a PRX file, the resultant file should be used with the kernel, however the original file with symbols should be used with the debugger.<br><br></div>
+<div style="margin-left:67px;">Load the PRX file in the kernel.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+dstdb&gt; mload hellocpp.prx
+
+</font></pre></div>
+<div style="margin-left:67px;">Then, load only the symbols in the debugger.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+dstdb&gt; sload hellocpp.sym
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>psp-gcc</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The method of using the psp-gcc command is briefly explained below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Format 1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc -c &lt;source file name&gt;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Format 2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc -o &lt;prx file name &gt;  &lt;object file name &gt;... &lt;library specification &gt;...&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Format 3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc -zgenelf -o &lt;elf file name &gt;  &lt;object file name&gt;... &lt;library specification&gt;...&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Format 1 compiles and assembles C source code to create a relocatable object file.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> By specifying -g, debug information can be included in the object file.
+</ul></div>
+<div style="margin-left:50px;"><br>Format 2 links compiled object files to generate a prx-format object file.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> By specifying -startfiles, libc (newlib) and crt0.o can be linked to create a program having a main() function.
+<li> By specifying -s, symbol information and debug information can be deleted from the prx file that is generated.
+<li> By specifying -g, debug information can be included in the object file.
+<li> By specifying -v or -t, a detailed compile procedure or details about libraries that are read during linking can be displayed.
+<li> By specifying -zv or -zdump, information such as function names that are exported as resident libraries can be displayed.
+<li> By specifying -zweak-entry, the WEAK_EXPORT attribute is forcibly assigned to all exported libraries.
+<li> To assign the WEAK_EXPORT attribute only to a specific library, use -zweak-entry=&lt;libname&gt;.
+</ul></div>
+<div style="margin-left:50px;"><br>Format 3 links compiled object files to generate an elf-format object file.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> By specifying -s, symbol information and debug information can be deleted from the elf file that is generated.
+<li> By specifying -g, debug information can be included in the object file.
+<li> By specifying -v or -t, a detailed compile procedure or details about libraries that are read during linking can be displayed.
+<li> By specifying -Wl,--section-start -Wl,.init=&lt;hex_address&gt;, the load address can be changed.
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example: psp-gcc -Wl,--section-start -Wl,.init=0x08840000 -zgenelf -o &lt;elf file name&gt;  .....
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>psplibgen</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The psplibgen command generates a structure that is needed to link a resident library. It is started automatically from psp-gcc during the compile process.<br>Although this command is normally not used by itself, it is briefly explained below.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_13">
+<div style="margin-left:40px;"><h4><b>Syntax:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">psplibgen &lt;option&gt;...  &lt;elf_object_file&gt;<br></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:67px;">Options:<br></div>
+<div style="margin-left:80px;">--level &lt;openlevel&gt;<br>--level all<br>--entry-src &lt;entry_asm_sorce&gt;<br>--num-define &lt;func-no-define-source&gt;<br>--stub-src<br>--weak-stub<br>--no-weak-stub<br>--weak-stub=&lt;libname&gt;<br>--weak-entry<br>--no-weak-entry<br>--weak-entry=&lt;libname&gt;<br></div>
+<div style="margin-left:50px;"><br>The object file &lt;elf_object_file&gt; is read and one of the following is output.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Entry table file &lt;entry-asm-source&gt;
+<li> Stub table file &lt;library name&gt; + '_stub.s'
+<li> Function number definition file &lt;func_num_define&gt;
+</ul></div>
+<div style="margin-left:50px;">&lt;openlevel&gt;, which is a numeric value from 0 to 30 or all, specifies the degree to which the entries that are output in the stub are publicly available.<br>By specifying --weak-stub, the WEAK_IMPORT attribute is forcibly assigned to the stub that is output.<br>To assign the WEAK_IMPORT attribute only to a specific library, use --weak-stub=&lt;libname&gt;.<br>By specifying --weak-entry, the WEAK_EXPORT attribute is forcibly assigned.<br>To assign the WEAK_ EXPORT attribute only to a specific library, use --weak-entry=&lt;libname&gt;.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_14">
+<div style="margin-left:40px;"><h4><b>Note</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">The specifications for this command are preliminary and may be changed without prior notification.<br>This command should not be used independently except when specifically required.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_12">
+<h2>
+ 12 <!-- hp --><b>Search Path for psp-gcc and Environment Variables</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Normally, the environment variables should be set so that /usr/local/psp/devkit/bin is included in PATH.<br>There are multiple shell scripts having the same names as gnu commands such as psp-gcc, psp-as, and psp-g++ under /usr/local/psp/devkit/bin.<br>These shell scripts are started up by searching /usr/local/psp/gcc-?.?.?/bin to find the newest version of a command.<br>If you want to use an old version of psp-gcc for some reason, you can disable this search function by setting the environment variable PSP_GCC_VERSION which will cause the command under /usr/local/psp/gcc-$PSP_GCC_VERSION/bin to be run.<br><br>For commands such as psp-gcc, psp-cpp, and psp-ld, which are installed under /usr/local/psp/gcc-?.?.?/bin, the search path is modified for the PSP&trade; such that /usr/local/psp/devkit/include and /usr/local/psp/devkit/lib are added to the front of the search path when locating header files or libraries.<br>PSP&trade; libraries and header files are located under /usr/local/psp/devkit. When searching for psp-ld linker scripts, /usr/local/psp/devkit/lib/ldscripts/ is checked first and then the standard gnu directory /usr/local/psp/gcc-?.?.?/psp/lib/ldscripts/ is checked.<br><br>You can change the standard directory "/usr/local/psp/devkit" described above by setting the environment variable SCE_PSP_SDK_HOME.<br>If the environment variable SCE_PSP_SDK_HOME is set, header files, library files, and linker scripts will be under the following directories, respectively.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$SCE_PSP_SDK_HOME/include
+$SCE_PSP_SDK_HOME/lib
+$SCE_PSP_SDK_HOME/lib/ldscripts
+</font></pre></div>
+<div style="margin-left:50px;"><br>Note that if the environment variable SCE_PSP_SDK_HOME is set incorrectly by mistake, it will not be possible to find PSP&trade; header files or libraries.<br><br>For reference, files that are under /usr/local/psp/devkit are briefly described below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>File</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-gcc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-g++&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-as&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-ld&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-gnu-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psp-prx-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shell script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/pspfixup&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;prx converter&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bin/psplibgen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;stub generator&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/pspspecs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc compile script&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/crt0_prx.o&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;crt0 for prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/crt0_elf.o&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;crt0 for elf&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/kernel_bridge.o&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;newlib glue code&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/libkernel.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;stub library provided by the PSP&trade; kernel&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/ldscripts/elf32elmip.x&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Default linker script for PSP&trade; kernel environment&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/ldscripts/elf32elmip.xc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Default linker script for PSP&trade; kernel environment&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;lib/ldscripts/prx.xr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Default linker script for PSP&trade; kernel environment&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_13">
+<h2>
+ 13 <!-- hp --><b>Precautions Related to Linker Scripts When Linking ELF-Format Object Files</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">To link ELF-format object files, lib/ldscripts/elf32elmip.xc under /usr/local/psp/devkit is currently used as the default linker script. The following changes have been made from the original gnu script.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_13_1">
+<h3>
+<a href="#Heading3_13"> 13. </a>1 
+<!-- hp1 --><b>Change in Search Path</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SEARCH_DIR("/usr/local/psp/gcc-x.x.x/psp/lib");
+      was changed to
+SEARCH_DIR("/usr/local/psp/devkit/lib");
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_13_2">
+<h3>
+<a href="#Heading3_13"> 13. </a>2 
+<!-- hp1 --><b>Change in Load Top Address</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The program's load top address was changed to 0x08804000.<br>For the PSP&trade;, the top address of user memory is 0x08800000.<br>Currently, the default load top address is 0x08804000.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_13_3">
+<h3>
+<a href="#Heading3_13"> 13. </a>3 
+<!-- hp1 --><b>Addition of PSP&trade; Module Information Sections</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following sections were added to the top of the data segment (immediately after the program code).<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>.lib.ent.top : { *(.lib.ent.top) }
+.lib.ent     : { *(.lib.ent) }
+.lib.ent.btm : { *(.lib.ent.btm) }
+
+.lib.stub.top : { *(.lib.stub.top) }
+.lib.stub     : { *(.lib.stub) }
+.lib.stub.btm : { *(.lib.stub.btm) }
+
+.rodata.sceModuleInfo : { *(.rodata.sceModuleInfo) }
+.rodata.sceResident   : { *(.rodata.sceResident) }
+.rodata.sceNid        : { *(.rodata.sceNid) }
+.rodata.sceVstub      : { *(.rodata.sceVstub) *(SORT(.rodata.sceVstub.*)) }
+</font></pre></div>
+<div style="margin-left:50px;"><br>To load a program, the PSP&trade; kernel requires that the above sections exist in the indicated order (in the resident part if an overlay structure is used).<br>These sections are generated by using the SCE_MODULE_INFO() macro and SCE_LIB_EXPORT() macros.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_14">
+<h2>
+ 14 <!-- hp --><b>Supplemental Information When Using crt0 or libc (newlib)</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Note the following when using crt0 or libc.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_1">
+<h3>
+<a href="#Heading3_14"> 14. </a>1 
+<!-- hp1 --><b>Heap Size for malloc()</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In the program, specify the libc heap size in kibibytes (KiB) as follows by using the global variable sce_newlib_heap_kb_size.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int sce_newlib_heap_kb_size = 100;  /* malloc heap size 100KiB */
+
+</font></pre></div>
+<div style="margin-left:50px;">crt0 normally allocates this amount from the kernel before the main() function is called.<br>If a non-zero value is defined for the global variable sce_newlib_heap_delayed_alloc, the timing for allocating this memory can be delayed until the program first calls malloc() or a libc function (such as printf) that dynamically allocates memory internally.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int sce_newlib_heap_delayed_alloc = 1;
+
+</font></pre></div>
+<div style="margin-left:50px;">Note that when sce_newlib_heap_delayed_alloc is used to delay the memory allocation timing, if processing for allocating memory blocks from the kernel such as the fixed-length memory pool or variable-length memory pool of the thread manager is performed before the malloc() or printf() call, it can lead to fragmentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_2">
+<h3>
+<a href="#Heading3_14"> 14. </a>2 
+<!-- hp1 --><b>Name of the Thread Running the main() Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The name of the thread running the main() function can be specified by defining the global variable sce_user_main_thread_name in the program.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+char sce_user_main_thread_name[] = &quot;main_thread&quot;;
+
+</font></pre></div>
+<div style="margin-left:50px;">If not specified, the default thread name is "user_main".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_3">
+<h3>
+<a href="#Heading3_14"> 14. </a>3 
+<!-- hp1 --><b>Priority of the Thread Running the main() Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The scheduling priority of the thread running the main() function can be specified by defining the global variable sce_user_main_thread_priority in the program.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int sce_user_main_thread_priority = 64; 
+
+</font></pre></div>
+<div style="margin-left:50px;">If not specified, the thread priority is 32.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_4">
+<h3>
+<a href="#Heading3_14"> 14. </a>4 
+<!-- hp1 --><b>Stack Size That Can be Used by the Thread Running the main() Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In the program, specify the stack size of the thread running the main() function in kibibytes (KiB) as follows by using the global variable sce_user_main_thread_stack_kb_size.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+unsigned int sce_user_main_thread_stack_kb_size = 100;  /* stack size 100KiB */
+
+</font></pre></div>
+<div style="margin-left:50px;">If not specified, the default stack size is 256 KiB.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_5">
+<h3>
+<a href="#Heading3_14"> 14. </a>5 
+<!-- hp1 --><b>Attribute of the Thread Running the main() Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In the program, specify the attribute of the thread running the main() function by defining the global variable sce_user_main_thread_attribute.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+unsigned int sce_user_main_thread_attribute = SCE_KERNEL_TH_USE_VFPU;
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_14_6">
+<h3>
+<a href="#Heading3_14"> 14. </a>6 
+<!-- hp1 --><b>Reporting the SDK Version That Was Used When the Application Was Built</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In crt0, the <a href="../kernel/System_Memory_Manager-Reference-English.htm#sceKernelSetCompiledSdkVersion">sceKernelSetCompiledSdkVersion</a>() function is used internally to report the version of the SDK that was used when the application was built to system software.<br>Note that when crt0.o is rebuilt or original crt code is used, this function needs to be used in a similar manner. If the correct SDK version is not set, system software may not operate as intended.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_15">
+<h2>
+ 15 <!-- hp --><b>Coverage &amp; Profile</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Program execution history is recorded for coverage and profile.<br>When the execution history is analyzed, useful information can be obtained that enables high-speed code to be written more efficiently and with higher quality.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_15_1">
+<h3>
+<a href="#Heading3_15"> 15. </a>1 
+<!-- hp1 --><b>coverage</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Coverage collects the number of times each line of source code is executed in terms of basic blocks.<br>To measure coverage, first create a module with psp-gcc and specify the "-fprofile-arcs -ftest-coverage" options.<br>When the module is created with these options, for each source file gcov metadata files will be created (file extensions are ".bb" and ".bbg" with psp-gcc 1.X and ".gcno" with psp-gcc 2.4.1 and later), in addition to the object file.<br>When the resultant module is executed and terminates, a gcov data file is automatically created (file extension is ".da" with psp-gcc 1.X and ".gcda" with psp-gcc 2.4.1 and later).<br><br>If<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gcov XXX.o
+
+</font></pre></div>
+<div style="margin-left:50px;">is executed when the object file and metadata files created during compilation as well as the data file created following module termination are in the same directory, then psp-gcov will create a file (named XXX.c.gcov) that contains coverage information.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_1_15">
+<div style="margin-left:40px;"><h4><b>Note 1:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The gcov data file is created either when control leaves the main() function because of a return or the program is terminated by a call to exit(). It is not created when the program is terminated by a call to <a href="../kernel/Loadexec-Reference-English.htm#sceKernelExitGame">sceKernelExitGame</a>().<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_1_16">
+<div style="margin-left:40px;"><h4><b>Note 2:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">To obtain accurate coverage information, do not add any optimization options when compiling the program. To explicitly indicate that no optimization is to be performed, specify "-O0 -fprofile-arcs -ftest-coverage" as the compiler options.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_1_17">
+<div style="margin-left:40px;"><h4><b>Note 3:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">coverage is not supported in psp-gcc 2.X compilers earlier than psp.gcc 2.4.1.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_15_2">
+<h3>
+<a href="#Heading3_15"> 15. </a>2 
+<!-- hp1 --><b>profile</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Profile calculates the number of times the routines in a module are executed and how long it takes to execute each routine. This calculation is done by sampling the program counter value periodically.<br>To measure a profile, create a module using psp-gcc and specify the "-pg" option.<br>When the module that was created with the above option is executed and terminates, a file named "gmon.out" is created in the current directory of the debugger.<br>If<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gprof YYY.prx
+</font></pre></div>
+<div style="margin-left:50px;">is executed when gmon.out and the created module are in the same directory, profile information is output to standard output.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_18">
+<div style="margin-left:40px;"><h4><b>Note 1:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">To obtain profile information for a module that independently links crt0 or libc without using the "-startfiles" option, you must link libgprof.a and use the compiler options described above. Also, for a module that does not link crt0, <br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void sceGprofCountStart(void);
+</font></pre></div>
+<div style="margin-left:67px;">must be called at the location where the measurement of profile information is to begin and <br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void sceGprofCountEnd(void);
+</font></pre></div>
+<div style="margin-left:67px;">must be called at the location where the measurement of profile information is to end.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_19">
+<div style="margin-left:40px;"><h4><b>Note 2:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">gmon.out is created after the main function ends.<br>To obtain profile information during execution, call sceGprofCountEnd() at an arbitrary location. sceGprofCountEnd() can be called any number of times. Second and subsequent calls to sceGprofCountEnd() are ignored.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_20">
+<div style="margin-left:40px;"><h4><b>Note 3:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">gmon.out is created in the current directory of the debugger. If profile information is being recorded simultaneously for multiple modules, all modules attempt to create gmon.out in the current directory, but only the last gmon.out that was created is valid because any gmon.out that was created earlier ends up being overwritten.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_15_2_21">
+<div style="margin-left:40px;"><h4><b>Note 4:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A module that is provided as an argument of the psp-gprof command must contain symbol information and debugging information. In actuality, it doesn't matter if a module to be executed has this information stripped.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_15_3">
+<h3>
+<a href="#Heading3_15"> 15. </a>3 
+<!-- hp1 --><b>Restrictions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following restriction applies to both coverage and profile.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Only PRX modules are supported. ELF and PFX format modules are not supported.
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_16">
+<h2>
+ 16 <!-- hp --><b>Propagating C++ Exceptions Between PRX Modules</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">SDK 3.7.0, psp-gcc 1.13.0, and psp-gcc 2.5.3 and later support the propagation of C++ exceptions between PRX modules.<br><br>To propagate C++ exceptions, you must guarantee that the following functions that handle libgcc exceptions are defined in only one location among the PRX modules that are to share the exceptions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> _Unwind_DeleteException
+<li> _Unwind_Find_FDE
+<li> _Unwind_ForcedUnwind
+<li> _Unwind_GetGR
+<li> _Unwind_GetIP
+<li> _Unwind_GetLanguageSpecificData
+<li> _Unwind_GetRegionStart
+<li> _Unwind_GetTextRelBase
+<li> _Unwind_GetDataRelBase
+<li> _Unwind_RaiseException
+<li> _Unwind_Resume
+<li> _Unwind_SetGR
+<li> _Unwind_SetIP
+<li> __deregister_frame
+<li> __deregister_frame_info
+<li> __deregister_frame_info_bases
+<li> __register_frame
+<li> __register_frame_info
+<li> __register_frame_info_bases
+<li> __register_frame_info_table
+<li> __register_frame_info_table_bases
+<li> __register_frame_table
+</ul></div>
+<div style="margin-left:50px;"><br>To ensure that the above functions are defined in only one location among PRX modules, the PSP&trade; system must be set up as follows:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> A module (the main module) exists that exports the above exception handling functions to other modules
+<li> Modules (submodules) exist that import and use the above exception handling functions that were exported by the main module.
+</ul></div>
+<div style="margin-left:50px;"><br>psp-gcc provides the following options to support C++ exception propagation between PRX modules.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zexport-eh&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Link exportgcc_eh.o&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-zuse-shared-eh&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Link exported exception handling functions without statically linking libgcc_eh.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_16_1">
+<h3>
+<a href="#Heading3_16"> 16. </a>1 
+<!-- hp1 --><b>Creating the Main Module and Submodules</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Create the main module by specifying the"-zexport-eh" option.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-g++ -o main.prx -startfiles -zexport-eh *.o
+
+</font></pre></div>
+<div style="margin-left:50px;">Create submodules by specifying the &quot;-zuse-shared-eh&quot; option.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+$ psp-g++ -o sub.prx -startfiles -zuse-shared-eh *.o
+</font></pre></div>
+<div style="margin-left:50px;"><br>Figure 3 shows the state when the main module and submodules are executing.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Programming-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The sample program in /usr/local/psp/devkit/sample/module/exception_execmenu gives an example of propagating exceptions between PRX modules.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_16_1_22">
+<div style="margin-left:40px;"><h4><b>Note 1:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PRX modules that share exceptions must be implemented so that type information for exception classes exists in only one location.<br>Specifically, PRX modules that share an exception class must be set up so that the exception class is exported from only one of the modules and then imported by the other modules.<br>An example would be to have the main module export all of the exception classes and then have the submodules import them.<br><br>To export a C++ exception class to an external PRX module, use the pspexportpickup command to export the mangled symbols as described in Chapter 7 "Creating a Resident Library in C++."<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>class MyException {
+...
+}
+
+SCE_LIB_DECLARE( XXX_library, SCE_LIB_WEAK_IMPORT | SCE_LIB_AUTO_EXPORT );
+SCE_LIB_EXPORTPICKUP_CLASS( "MyException" , XXX_library );
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_16_1_23">
+<div style="margin-left:40px;"><h4><b>Note 2:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">To create a PRX module that imports an exception class, link to the program that imports the stub library that will be used to create the PRX module that exports the exception class.<br>Note that by just linking the stub library, typeinfo, which is a symbol representing the type information for the class, will not be linked. This is because typeinfo is a weak symbol.<br>To link typeinfo, you must specify the "--whole-archive" option to the linker to forcibly link the object file that includes the stub library.<br>The following is an example showing how to create a submodule by linking a stub library with the "--whole-archive" option.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-g++ -o sub.prx -Wl,--whole-archive XXX_library_stub.a -Wl,--no-whole-archive -startfiles -zuse-shared-eh *.o
+</font></pre></div>
+<div style="margin-left:50px;"><br><br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

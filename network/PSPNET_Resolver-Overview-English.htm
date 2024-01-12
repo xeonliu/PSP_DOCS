@@ -1,0 +1,395 @@
+<html lang="en">
+<head>
+<title>PSPNET_Resolver-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+pspnet_resolver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Overview and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolver is a DNS resolver library that runs on top of the pspnet_inet TCP/IP protocol stack. It is used to convert host names to IP addresses and vice-versa. For example, if a user specifies a host name when making a connection, the pspnet_resolver library can convert that host name to an IP address for use as an argument in a pspnet_inet socket API.<br>For details about pspnet_inet, see the PSP&trade; network library documentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_resolver.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_resolver_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_resolver_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since the resolver library is rarely used by itself, no sample programs specifically for pspnet_resolver are provided. However, one of the pspnet_inet sample programs, http_get, can also serve as a pspnet_resolver sample. http_get uses pspnet_resolver to convert a host name, which is specified in an argument, to an IP address.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Library Design</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">pspnet_resolver uses an independent API that takes into consideration multithread safety and error code granularity. gethostbyname() and gethostbyaddr(), which are generally used in UNIX, are not used.<br>The features of the pspnet_resolver APIs are given below.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Resolver Context</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An application must first create a resolver context in order to perform DNS name resolution. A "resolver ID" is assigned to each context, and this resolver ID is specified to start and stop name resolution.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Application-Specific Buffers</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A buffer that sends and receives DNS packets is required to perform DNS name resolution. When multiple threads are to perform name resolution at the same time, each thread must have its own independent buffer. With pspnet_resolver, these buffers are all allocated by the application. They are not allocated by the library.<br>A buffer is maintained for each resolver ID, and buffer independence is guaranteed because each thread uses a unique resolver ID.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Availability of Blocking and Non-blocking APIs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">APIs that perform name resolution are provided as both blocking and non-blocking functions. The blocking versions, <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>() and <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>(), start name resolution and block internally until name resolution completes or an error occurs. Blocking can be canceled by calling the stop function and specifying the resolver ID of the name resolution operation to be canceled.<br>The non-blocking versions of these functions are <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoAAsync">sceNetResolverStartNtoAAsync</a>() and <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoNAsync">sceNetResolverStartAtoNAsync</a>(). The non-blocking <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>() function is also provided to poll the status after name resolution has started. After a non-blocking function for starting name resolution is called, <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>() should be called periodically until name resolution completes.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Simple Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolver provides two basic name resolution functions: "lookup," which resolves a host name to an IP address, and "reverse lookup," which resolves an IP address to a host name.<br>With DNS, multiple records corresponding to a name may exist. However, in general, since multiple records are rarely ever needed, pspnet_resolver returns only the first record to an application even if multiple records are returned in a reply to a query.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Resend Interval and Resend Count</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since name resolution is performed by sending/receiving UDP datagrams, packet loss may occur on the communications channel. For that reason, name resolution must support timeout-based retransmissions. pspnet_resolver allows a resend interval and resend count to be specified for each name resolution operation.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Usage Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Loading Modules</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The pspnet_resolver module is part of the PSPNET infrastructure module set. Refer to the &quot;PSPNET Overview&quot; document and &quot;Utility Overview&quot; document regarding the method for loading the module set.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Getting Ready to Use the Library</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Before using the pspnet_resolver library, you must have already established a network connection and obtained an IP address. For more information about network connections, see the &quot;PSP&trade; network library&quot; documentation.<br>The IP addresses of the primary and secondary DNS servers that are used as the destinations for name resolution inquiries when an IP address is obtained are kept internally by pspnet_inet. pspnet_resolver directs its inquiries to those name servers.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Initialization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The initialization function is <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverInit">sceNetResolverInit</a>().<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverInit">sceNetResolverInit</a>(void);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Creating a Resolver Context</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Before performing any actual name resolution, use <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverCreate">sceNetResolverCreate</a>() to create a resolver context and obtain a resolver ID.<br>To create a resolver context, specify the buffer to be used by the context from the application.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverCreate">sceNetResolverCreate</a>(int *rid, void *buf, SceSize buflen);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Performing Name Resolution in Blocking Mode</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_1">
+<div style="margin-left:40px;"><h4><b>Starting name resolution</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">After obtaining a resolver ID, call <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>() to start a blocking mode lookup, or call <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>() to start a blocking mode reverse lookup, and specify the resolver ID. These functions also allow the resend interval and resend count to be specified for the inquiry packets to be sent during the operation.<br>Because they are blocking APIs, the calling thread sends and receives name resolution packets, and the function returns after completion or if an error occurs.<br></div>
+<div style="margin-left:50px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>(
+    int rid,
+    const char *hostname,
+    struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    unsigned int timeout,
+    int retry);
+
+int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>(
+    int rid,
+    const struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    char *hostname,
+    SceSize hostname_len,
+    unsigned int timeout,
+    int retry);
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_2">
+<div style="margin-left:40px;"><h4><b>Stopping name resolution</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Since name resolution functions are blocking functions, the stop function <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStop">sceNetResolverStop</a>() is provided so blocking can be canceled from another thread.<br></div>
+<div style="margin-left:50px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStop">sceNetResolverStop</a>(int rid);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Performing Name Resolution in Non-Blocking Mode</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_3">
+<div style="margin-left:40px;"><h4><b>Starting name resolution</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">After obtaining a resolver ID, call <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoAAsync">sceNetResolverStartNtoAAsync</a>() to start a non-blocking mode lookup, or call <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoNAsync">sceNetResolverStartAtoNAsync</a>() to start a non-blocking mode reverse lookup, and specify the resolver ID. These functions also allow the resend interval and resend count to be specified for the inquiry packets to be sent during the operation.<br>Because they are non-blocking APIs, these functions do not perform the actual communication; they only prepare for the name resolution operation that is to follow.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoAAsync">sceNetResolverStartNtoAAsync</a>(
+    int rid,
+    const char *hostname,
+    struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    unsigned int timeout,
+    int retry
+    );
+
+int 
+<a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoNAsync">sceNetResolverStartAtoNAsync</a>(
+    int rid,
+    const struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    char *hostname,
+    SceSize hostname_len,
+    unsigned int timeout,
+    int retry
+    );
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_4">
+<div style="margin-left:40px;"><h4><b>Waiting for completion of name resolution</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">After starting name resolution in non-blocking mode, you must wait for it to complete. This is done by periodically calling the non-blocking function <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>(), or by calling <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverWaitAsync">sceNetResolverWaitAsync</a>() which blocks until name resolution completes.<br>Since the internal thread in pspnet_resolver does not wait, a non-blocking socket is used by this wait function to perform communication until completion of the operation. As a result, even though <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>() is indeed a non-blocking function, it may cause a context switch if a semaphore wait occurs in the library.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int
+<a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>(
+    int rid,
+    void *result
+    );
+
+int
+<a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverWaitAsync">sceNetResolverWaitAsync</a>(
+    int rid,
+    void *result
+    );
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_5">
+<div style="margin-left:40px;"><h4><b>Stopping name resolution</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">To stop name resolution in non-blocking mode, call the stop function, <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStop">sceNetResolverStop</a>(), just as is done in blocking mode.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStop">sceNetResolverStop</a>(int rid);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Error Codes</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolver returns all error codes in the return values of functions. For details about error codes, refer to the library reference documentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>Deleting the Resolver Context </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a thread is finished using the resolver, it should delete the corresponding resolver context by calling <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverDelete">sceNetResolverDelete</a>().<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverDelete">sceNetResolverDelete</a>(int rid);
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Resources Used</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Internal Threads</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolver does not create any internal threads.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Heap</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolver uses a heap of PSPNET to manage the resolver contexts.<br>Since 28 bytes are used for one resolver context, a rough estimate of the size of the heap is 28 bytes times the number of resolver contexts to be used simultaneously.<br>However, since this estimate does not take internal fragmentation into consideration, the heap size should be specified so that it includes some additional margin beyond this amount.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Send/Receive Buffer</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolver also needs memory for a send/receive buffer for each resolver context. This buffer is specified when <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverCreate">sceNetResolverCreate</a>() is called.<br>A rough estimate of the size of the buffer needed for the <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>() and <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>() functions is given below. You can stipulate the maximum size for each one of them.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_1"><h4>
+(1)&nbsp;<b>sceNetResolverStartNtoA()</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Assume that the size of the hostname specified in the arguments is h.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> When an IP address (an A record) corresponding to hostname exists <br>The buffer size needed is approximately (3*h + 30) bytes. <br>Example: When "foo.bar.org" has an A record, the buffer size needed is approximately 3 * 12 + 30 = 66 bytes
+<li> When an alias name (a CNAME record) exists <br>The buffer size needed varies depending on the size of the CNAME name or the number of CNAME levels. <br>One level requires approximately (3*h + 40 + (size of CNAME name)*3) bytes.<br>Example: When "foo.bar.org" is the CNAME of "realname.bar.org" and "realname.bar.org" has an A record (1 level CNAME), the buffer size needed for the name resolution of "foo.bar.org" is approximately 3 * 12 + 40 + 17 * 3 = 127 bytes.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:67px;">Note, however, that according to the DNS specification, the required buffer size is at most (l+512) bytes, where l can be a maximum of 256 bytes, making this a total of 768 bytes maximum.<br>This value is defined in pspnet_resolver.h as the macro SCE_PSPNET_RESOLVER_NTOA_BUFSIZE_MAX.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_2"><h4>
+(2)&nbsp;<b>sceNetResolverStartAtoN()</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The buffer size needed is approximately (103 + hostname size) bytes. <br>Example: When the hostname corresponding to "100.101.102.103" is "foo.bar.org" and a reverse lookup of "100.101.102.103" is performed, the buffer size needed is approximately 103 + 12 = 115 bytes.<br></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:67px;">Note, however, that according to the DNS specification, the required buffer size is at most 359 bytes. This value is defined in pspnet_resolver.h as the macro SCE_PSPNET_RESOLVER_ATON_BUFSIZE_MAX.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Required Stack Size When Calling the API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The stack size required when calling the pspnet_resolver API is 5120 bytes (SCE_NET_PSPNET_RESOLVER_LEAST_STACK_SIZE). If the stack size is not big enough, an <a href="../network/PSPNET_Error-Reference-English.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a> error will be returned.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Storage of Data After Name Resolution</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>() is called to perform a lookup, the resolved IP address is stored in the <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetInAddr">SceNetInetInAddr</a> structure pointed to by the <i>addr</i> argument.<br>When <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>() is called to perform a reverse lookup, the resolved hostname is copied to the area pointed to by the <i>hostname</i> argument.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Simultaneous Operations for the Same Resolver Context</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The pspnet_resolver resolver context manipulation functions <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverDelete">sceNetResolverDelete</a>(), <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>(), and <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>() are multithread safe. However, more than one thread cannot perform operations simultaneously for the same resolver ID. To use pspnet_resolver simultaneously from multiple threads, you must create independent resolver contexts.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

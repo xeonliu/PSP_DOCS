@@ -1,0 +1,771 @@
+<html lang="en">
+<head>
+<title>PSPNET_Adhoc_Matching-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+pspnet_adhoc_matching Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Overview and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ad hoc Matching library (pspnet_adhoc_matching) provides services for configuring (matching) a group of participating game players in ad hoc mode. The main services provided by the library are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Handling notifications for players waiting to join the group and discovering their peers
+<li> Negotiation
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> Notification of join requests
+<li> Notification of acceptance/denial of join requests
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> Group management
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> Confirming that a player exists who has agreed to participate
+<li> Handling notifications for players who cancel their participation agreements
+</ul></div>
+</ul>
+<div style="margin-left:50px;">A matching protocol is implemented in the library using the ad hoc mode communication protocol. An application uses these services through the library API and through event handlers that are called from the library.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Library Configuration</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_matching.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc_matching_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc_matching_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Load Modules</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The ad hoc matching library module is part of the PSPNET ad hoc module set. Refer to the PSPNET Overview document and Utility Overview document regarding the method for loading the module set.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Initialize the Library</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In order to use the Ad hoc Matching library, make sure that your network is set up to use the ad hoc mode communication protocol, then call the library initialization function.<br>For information about setting up a network connection for use with the ad hoc mode communications protocol, refer to the PSP&trade; network library overview document.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Assume that library initialization needed to set up ad hoc mode has been
+// completed and that the network connection is active
+
+// Initialize the library 
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingInit">sceNetAdhocMatchingInit</a>(MATCHING_POOLSIZE);
+if (ret &lt; 0) {
+	// Initialization failed
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingInit">sceNetAdhocMatchingInit</a>() failed. ret = 0x%08x\n", ret);
+	goto bad;
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Start Matching</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To start matching, create a context and call the start function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Specify the operating mode and create a context
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>(
+		mode, MATCHING_MAXNUM, MATCHING_PORT, MATCHING_RXBUFLEN,
+		HELLO_INTERVAL, KEEPALIVE_INTERVAL, KEEPALIVE_COUNT, 
+		REXMT_INTERVAL, handler);
+if (ret &lt; 0) {
+	// Context creation failed
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>() failed. ret = 0x%08x\n", ret);
+	goto bad;
+}
+// Save context ID in ctx_id
+ctx_id = ret;
+
+// Start matching
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>(ctx_id,
+		MATCHING_EVENT_TPL,
+		SCE_NET_PSPNET_ADHOC_MATCHING_LEAST_STACK_SIZE
+			+ MATCHING_EVENT_HANDLER_STACK_SIZE,
+		MATCHING_INPUT_TPL, 0, hellooptlen, helloopt);
+if (ret &lt; 0) {
+	// Matching start failed
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>() failed. ret = 0x%08x\n", ret);
+	goto bad;
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Select/Accept a Target Participating Player</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>() to select and accept a target participating player associated with a Hello or Request event.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Select/accept player indicated by addr
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>(ctx_id, &amp;addr, optlen, opt);
+if (ret &lt; 0) {
+	// Processing failed
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>() failed. ret = 0x%08x\n", ret);
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Cancel/Deny Selection of Target Participating Player</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTarget">sceNetAdhocMatchingCancelTarget</a>() or <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>() to deny a Request event or cancel an agreement with a participating player who had previously been selected.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Cancel/deny selection of participating player indicated by addr
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>(ctx_id, &amp;addr, optlen, opt);
+if (ret &lt; 0) {
+	// Processing failed
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>() failed. ret = 0x%08x\n", ret);
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Get Member List</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">During the matching operation, you can get a list of members who belong to a group of participating game players by calling the <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Get the size of the buffer needed to store the member list in buflen
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>(id, &amp;buflen, NULL);
+if (ret &lt; 0) {
+	// Processing failed
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>() failed. ret = %d\n", ret);
+	return;
+}
+
+mm = (struct <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SceNetAdhocMatchingMember">SceNetAdhocMatchingMember</a> *)malloc(buflen);
+if (mm == NULL) {
+	// Memory allocation failed
+	printf(&quot;malloc() failed.\n&quot;);
+	return;
+}
+
+// Get member list
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>(id, &amp;buflen, (void *)mm);
+if (ret &lt; 0) {
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>() failed. ret = %d\n", ret);
+	free((void *)mm);
+	return;
+}
+
+// Display member list
+printf("MEMBER==&gt;");
+// Walk through list and display members
+for ( ; mm != NULL; mm = mm-&gt;next) {
+	<a href="../network/PSPNET_Core-Reference-English.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(&amp;mm-&gt;addr, etherstr);
+	printf(" [%s]", etherstr);
+}
+printf("\n");
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>Stop Matching</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call the stop matching function and delete the context.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Stop matching
+<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStop">sceNetAdhocMatchingStop</a>(ctx_id);
+// Delete context
+<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingDelete">sceNetAdhocMatchingDelete</a>(ctx_id);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>Sample Event Handler Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The matching library reports various types of events by calling event handler functions. The following samples show the operations that should be performed by the event handlers.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_1"><h4>
+(1)&nbsp;<b>Sample event handler that simply displays the event</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static char *eventtypestr[] = {
+	"NONE",
+	"HELLO",
+	"REQUEST",
+	"LEAVE",
+	"DENY",
+	"CANCEL",
+	"ACCEPT",
+	"ESTABLISHED",
+	"TIMEOUT",
+	"ERROR",
+       "BYE"
+};
+
+static void
+handler_default(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-English.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	char etherstr[18];
+
+	<a href="../network/PSPNET_Core-Reference-English.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(peer, etherstr);
+	printf("%s from %s", eventtypestr[ev], etherstr);
+
+	for (i = 0; i &lt; optlen; i++) {
+		printf("%02x", *((char *)opt+i));
+	}
+	printf("\n");
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_2"><h4>
+(2)&nbsp;<b>Sample multiplayer mode (parent) event handler</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+handler_parent(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-English.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	int ret;
+
+	switch (ev) {
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>:
+		// Ask user whether to accept request to participate
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>:
+		// Notify user that request to participate was canceled
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>:
+		// Notify user that agreement with target participating player was
+canceled
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>:
+		// Notify user that agreement with target participating player was
+established
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>:
+		// Notify user that there was no response from target participating
+player
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>:
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>:
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>:
+		// These events do not occur
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>:
+		// Communication state error (perform error handling)
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>:
+		// Target participating player terminated matching library
+		break;
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_3"><h4>
+(3)&nbsp;<b>Sample multiplayer mode (child) event handler</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+handler_child(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-English.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	int ret;
+
+	switch (ev) {
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>:
+		// Notify user that a target participating player exists
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>:
+		// Notify user that an agreement with a target participating player was
+canceled
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>:
+		// Notify user that a request to participate was denied
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>:
+		// Notify user that a request to participate was accepted
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>:
+		// Notify user that an agreement with a target participating player was
+ established
+		break;	
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>:
+		// Notify user that there was no response from a target participating
+player
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>:
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>:
+		// These events do not occur
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>:
+		// Communication state error (perform error handling)
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>:
+		// Target participating player terminated matching library
+		break;
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_4"><h4>
+(4)&nbsp;<b>Sample peer-to-peer mode event handler</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+handler_p2p(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-English.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	int ret;
+
+	switch (ev) {
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>:
+		// Notify user that a target participating player exists
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>:
+		// Ask user whether to accept request to participate
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>:
+		// Notify user that an agreement with a target participating player was
+canceled
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>:
+		// Notify user that a request to participate was denied
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>:
+		// Notify user that a request to participate was canceled
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>:
+		// Notify user that a request to participate was accepted
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>:
+		// Notify user that an agreement with a target participating player was
+established
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>:
+		// Notify user that there was no response from a target participating
+player
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>:
+		// Communication state error (perform error handling)
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>:
+		// Target participating player terminated matching library
+		break;
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Explanation of Operation </b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Group Models</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ad hoc Matching library supports two models for setting up groups of participating players.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>Peer-to-peer (two-player competition)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A two-player model in which the participants are connected in a symmetric configuration. No parent-child relationship is required between the players. Each peer is configured such that it forms a group with one other arbitrary peer.<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 Peer-to-Peer Group Model</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>Multiplayer</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A model in which two or more participants are connected in a star configuration. This model has explicit parent-child relationships between the players. A parent peer is configured such that it forms a group with one or more child peers. Groups with two or more parent peers or groups consisting of only child peers are not permitted.<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3 Multiplayer Group Model</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">When the library creates a context, the group model to be used for the group of participating game players is specified as the operating mode. If the multiplayer group model is specified, the choice of parent or child for the peer is also specified at the same time. The Ad hoc Matching library requires that peers that will be playing in the same group use the same group model and that the group model will be decided beforehand. In other words, a group cannot be made up of peers that use different group models.<br>The group model prescribes the structure of the group, but does not impose any restrictions on the communication paths used during actual game play. In other words, in the multiplayer model, each player can arbitrarily communicate with any other player or players without restriction.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Matching Protocol</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ad hoc Matching library defines a matching protocol which is used to exchange matching information between peers.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_1">
+<div style="margin-left:40px;"><h4><b>Overview of Protocol Operation</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The following is an overview of the matching protocol from initial negotiation until a group of participating game players is formed.<br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> A peer advertises that it is waiting to join a group<br>A peer set up in peer-to-peer or multiplayer (parent) mode starts sending a Hello message indicating that it is waiting to join a group. The Hello message is broadcast at regular intervals.</li>
+<li VALUE=2> Another peer makes a request to join the group<br>Another peer set up in peer-to-peer or multiplayer (child) mode discovers a waiting target by receiving its Hello message. If the user chooses, a JoinRequest message will be sent to the target.</li>
+<li VALUE=3> The first peer replies to the join request<br>The waiting peer discovers the target (the other player) by receiving its JoinRequest message. The user can choose to accept the target, in which case the peer sends a JoinReply message, or to deny the target, in which case it sends a Leave message.</li>
+<li VALUE=4> The peers establish an agreement or the request is denied <br>If the peer that sent the join request receives a JoinReply message it knows that its request has been accepted, and that an agreement for it to participate has been established. On the other hand, if the peer receives a Leave message, it knows that its join request was denied.</li>
+<li VALUE=5> Keep the connection alive <br>After an agreement to participate in the group has been established between the peers, they each confirm that their targets are alive by exchanging KeepAlive messages at regular intervals.</li>
+<li VALUE=6> Terminate the matching protocol.</li>
+<li VALUE=7> After the structure of the group has been decided, the matching protocol is terminated. A Bye message will be broadcast at this time to report the termination of the matching library.</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>Timers and Counters</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The matching protocol makes use of the following timers and counters.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Hello interval timer<br>This timer sets the interval between successive Hello message transmissions.
+<li> KeepAlive interval timer<br>This timer sets the interval between KeepAlive message transmissions.
+<li> KeepAlive counter<br>Once an agreement to participate in a group has been established with a target player, the KeepAlive counter is used to check that the target is still alive. Every time the KeepAlive interval timer is started, the KeepAlive counter is decremented by 1. After KeepAlive messages are successfully exchanged between the peers, the counter is reset to its initial (non-zero) value. Whenever the counter reaches 0, a timeout is reported to the application.
+<li> Resend timer <br>This timer sets the resend interval for JoinRequest messages, JoinReply messages, or data transmissions.
+<li> Resend counter<br>This counter is used to monitor whether the target exists when JoinRequest or JoinReply messages are sent, or when data transmission takes place. Every time the resend timer is activated, the counter decrements by one. Upon successful confirmation that the target exists, the counter is reset to its initial non-zero value. When the counter reaches zero, a timeout is reported to the application.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Event Model</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ad hoc Matching library is designed so that an application can set up a group of participating players without having to be directly aware of the details of the matching protocol described above. This is accomplished by using events to exchange information between the application and the Ad hoc Matching library.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_3">
+<div style="margin-left:40px;"><h4><b>Application &rarr; Ad hoc matching library</b><br><br></h4></div></a>
+
+<div style="margin-left:80px;">An application reports events to the Ad hoc Matching library through API calls.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Start event<br>Start matching. Corresponds to a call to <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>().
+<li> Stop event<br>Stop matching. Corresponds to a call to <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStop">sceNetAdhocMatchingStop</a>().
+<li> Select event<br>Report a join request to the target player. Or, report that a previously received join request has been accepted. Corresponds to a call to <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>().
+<li> Cancel event<br>Report a denial to a previously received join request. Alternatively, report the cancellation of a participation agreement with the target player. Corresponds to a call to <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTarget">sceNetAdhocMatchingCancelTarget</a>() or <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>().
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_4">
+<div style="margin-left:40px;"><h4><b>Ad hoc matching library &rarr; Application</b><br><br></h4></div></a>
+
+<div style="margin-left:80px;">The Ad hoc Matching library reports events to an application by calling an event handler function.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Hello event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>)<br>Reported when a Hello message is received.
+<li> Request event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>)<br>Reported when a join request is received.
+<li> Accept event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>)<br>Reported when a join request is accepted.
+<li> Deny event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>)<br>Reported when a join request is denied.
+<li> Cancel event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>)<br>Reported when a join request is canceled.
+<li> Established event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>)<br>Reported when a participation agreement is established.
+<li> Leave event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>)<br>Reported when a participation agreement is canceled (Leave is received).
+<li> Timeout event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>)<br>Reported when either the Resend counter or the Keep Alive counter has decremented to 0.
+<li> Error event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>)<br>Reported when some error occurred in the matching protocol.
+<li> Bye event (<a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>)<br>Reported when a Bye message is received.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_5">
+<div style="margin-left:40px;"><h4><b>State Transition Diagram</b><br><br></h4></div></a>
+
+<div style="margin-left:80px;">Figure 4 shows the relationships between state transitions and events between two peers. <br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4 Matching Protocol State Transition Diagram</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Optional Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ad hoc Matching library enables additional messages to be exchanged between peers by specifying optional data. The following messages can be extended by optional data.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_1"><h4>
+(1)&nbsp;<b>Hello message</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The optional data specified in the argument of <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>() is added to the Hello message. The optional data is reported to the target player together with the Hello event.<br>Optional data can be dynamically changed by using <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSetHelloOpt">sceNetAdhocMatchingSetHelloOpt</a>(). Also, the currently set optional data can be obtained by using <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingGetHelloOpt">sceNetAdhocMatchingGetHelloOpt</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_2"><h4>
+(2)&nbsp;<b>JoinRequest message</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The optional data specified in the argument of <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>() is added to the JoinRequest message. The optional data is reported to the target player together with the JoinRequest event.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_3"><h4>
+(3)&nbsp;<b>JoinReply message</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The optional data specified in the argument of <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>() is added to the JoinReply message. The optional data is reported to the target player together with the Accept event.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_4"><h4>
+(4)&nbsp;<b>Leave message</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The optional data that was specified in the argument of <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>() is added. The optional data that was added to the Leave message is reported to the target player together with the Cancel, Deny, or Leave event.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Data Transmission and Reception</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ad hoc Matching library can send and receive arbitrary data between peers that are in an ESTABLISHED state.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_1"><h4>
+(1)&nbsp;<b>Data Transmission</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSendData">sceNetAdhocMatchingSendData</a>() is used to send data to a specific peer. The data is resent the number of times indicated by the resend counter with the interval specified by the resend timer until a confirmation response is received from the peer. The reception of a confirmation response is reported by a Data Ack event. If a confirmation response is not received, such as in the case of a timeout, then a Data Timeout event is reported.<br>New data cannot be sent until a Data Ack or Data Timeout event is reported. To send new data before that time, first use <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingAbortSendData">sceNetAdhocMatchingAbortSendData</a>() to cancel the current data transmission.<br>If the peer was not in an ESTABLISHED state (a Leave event, Timeout event, or Error event was reported), no Data Ack or Data Timeout event is generated.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_2"><h4>
+(2)&nbsp;<b>Data Reception</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When data is received, a Data event is reported along with the data.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Stack Size</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>Required stack size when calling the API</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The required stack size when calling the ad hoc matching library API is 3072 bytes (SCE_NET_PSPNET_ADHOC_MATCHING_LEAST_STACK_SIZE). If the stack size is not big enough, an <a href="../network/PSPNET_Error-Reference-English.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a> error will be returned.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>Event-handler thread stack size</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The stack size of the event-handler thread<b> is 3072 bytes, which is the size of the stack used internally by the event-handler thread (SCE_NET_PSPNET_ADHOC_MATCHING_LEAST_STACK_SIZE) plus the stack size used by the event-handler function.</b><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Specifying the Pool Size When Initializing the Library</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Memory that the ad hoc matching library uses internally is allocated from an independent memory pool, which is allocated when the ad hoc matching library is initialized, not from the memory pool which is allocated when pspnet is initialized. The amount of memory required depends on such factors as the number of contexts that are used, number of members that are handled by each context, and the size of the optional data that is handled.<br><br>The maximum amount of memory needed per context is determined by the items listed below. Use approximately 100 bytes for the maximum optional data size if no optional data is used.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <i>rxbuflen</i> specified in <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>() (approximately twice the maximum size of the optional data that is handled)
+<li> <i>hellooplen</i> specified in <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>()
+<li> <i>optlen</i> specified in <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>()
+<li> <i>optlen</i> specified in <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>()
+<li> Size of temporary buffer when sending a message (approximately twice the maximum size of the optional data that is handled)
+<li> Size of temporary buffer when receiving a message (approximately twice the maximum size of the optional data that is handled)
+<li> Size of context management area (approximately 200 bytes)
+<li> Size of member list management area (approximately 300 bytes)
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:50px;">The amount of memory needed for each member that is handled by each context is as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Size of member management area (approximately 100 bytes)
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:50px;">Therefore, using the following values:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Number of contexts:  1
+<li> Maximum size of optional data that is handled:  1000 bytes
+<li> <i>hellooptlen</i>:  1000 bytes
+<li> <i>optlen</i>:  1000 bytes
+<li> Number of members:  4
+</ul></div>
+<div style="margin-left:50px;">the total amount of memory needed would be at most approximately 9900 bytes.<br>However, this value assumes no memory fragmentation, so in actuality a larger pool size must be specified. <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingGetPoolMaxAlloc">sceNetAdhocMatchingGetPoolMaxAlloc</a>() can be used to obtain the maximum amount of internal memory that is used, and the pool size can be determined by referring to this number.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Conditions for Sending Hello Messages</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although peer-to-peer mode and multiplayer mode parents send Hello messages at a specified interval, transmission is automatically stopped when the number of members of a matching group who have established a participation agreement reaches the maximum number of members as specified by <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>(). When a participation agreement is canceled and the number of members becomes less than or equal to the maximum number of members, the sending of Hello messages is automatically restarted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>When the Number of Connected Players Reaches the Maximum</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a parent in peer-to-peer mode or multiplayer mode has already established a participation agreement with the maximum number of members allowed (the maximum capacity has been reached), then even if a new JoinRequest message is sent to this peer, no Request event will be generated. In this case, the library automatically returns a Leave message internally, and a Deny event is reported to the peer that sent the JoinRequest message.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>SCE_ERROR_NET_ADHOC_INVALID_ADDR</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following function will return <a href="../network/PSPNET_Error-Reference-English.htm#SCE_ERROR_NET_ADHOC_INVALID_ADDR">SCE_ERROR_NET_ADHOC_INVALID_ADDR</a> if no connection has been established to the ad hoc network. Be sure to call this function only after a connection is established.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/PSPNET_Adhoc_Matching-Reference-English.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>()<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

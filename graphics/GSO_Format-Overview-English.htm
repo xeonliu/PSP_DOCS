@@ -1,0 +1,472 @@
+<html lang="en">
+<head>
+<title>GSO_Format-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; GSO 3D Converter</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+GSO Format Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Introduction</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Feature Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The purpose of this file format is to provide basic display of 3D scenes. <br>The following information is stored in a 3D scene.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Environment (background and ambient light)
+<li> Fog
+<li> Lighting
+<li> Cameras
+<li> Nodes
+<li> Objects (modeling data)
+<li> Textures (image data)
+<li> Controls (programs)
+<li> Motion
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Generating GSO Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GSO files are converted from standard 3D scene data, as follows:<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English001.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Notation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This document uses the following data types. The byte order is little endian.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 32-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32-bit floating-point&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Data Structure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Hierarchy</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The 3D format has the following hierarchical block structure:<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Blocks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A block represents a group of data within a 3D model. It consists of a block type, a block name, and a variable number of arguments. Direct data arrays can also be included as block data. In addition, commands, and subblocks can be included, as shown in the following hierarchical diagram:<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English003.gif">
+</div>
+<div style="margin-left:50px;"><br><br>A block is referenced externally by using its block name. Blocks of the same type must have unique block names at a given hierarchical level. Arguments are used to represent information required by a given block. They are primarily used for format information for data blocks.<br><br>Sample Code:<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a>"scene-0" {				// Block
+	<a href="../graphics/GSO_Format-Reference-English.htm#BoundingBox">BoundingBox</a> -100 -100 -100 100 100 100	// Block command
+
+	<a href="../graphics/GSO_Format-Reference-English.htm#Node">Node</a> "node-0" {			// Subblock
+		<a href="../graphics/GSO_Format-Reference-English.htm#Translate">Translate</a> 0 0 0			// Subblock command
+		<a href="../graphics/GSO_Format-Reference-English.htm#RotateYXZ">RotateYXZ</a> 0 0 0			// Subblock command
+		<a href="../graphics/GSO_Format-Reference-English.htm#Scale">Scale</a> 1 1 1			// Subblock command
+		<a href="../graphics/GSO_Format-Reference-English.htm#NodeObject">NodeObject</a> "object-0"		// Subblock command
+	}
+}
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Commands</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Commands represent the block's elemental data. A command consists of a type and an arbitrary number of arguments.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English004.gif">
+</div>
+<div style="margin-left:50px;"><br><br>The number of arguments and their corresponding data types are stipulated for each command. The following shows the available data types of arguments:<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Name</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Description</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Example</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;int&nbsp;</td>
+<td valign="top">&nbsp;Signed&nbsp;32-bit&nbsp;integer&nbsp;</td>
+<td valign="top">&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;short&nbsp;</td>
+<td valign="top">&nbsp;Signed&nbsp;16-bit&nbsp;integer&nbsp;</td>
+<td valign="top">&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;char&nbsp;</td>
+<td valign="top">&nbsp;Signed&nbsp;8-bit&nbsp;integer&nbsp;</td>
+<td valign="top">&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;u_int&nbsp;</td>
+<td valign="top">&nbsp;Unsigned&nbsp;32-bit&nbsp;integer&nbsp;</td>
+<td valign="top">&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;u_short&nbsp;</td>
+<td valign="top">&nbsp;Unsigned&nbsp;16-bit&nbsp;integer&nbsp;</td>
+<td valign="top">&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;u_char&nbsp;</td>
+<td valign="top">&nbsp;Unsigned&nbsp;8-bit&nbsp;integer&nbsp;</td>
+<td valign="top">&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;float&nbsp;</td>
+<td valign="top">&nbsp;Single&nbsp;precision&nbsp;floating&nbsp;point&nbsp;number&nbsp;</td>
+<td valign="top">&nbsp;1.0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;string&nbsp;</td>
+<td valign="top">&nbsp;Character&nbsp;string&nbsp;</td>
+<td valign="top">&nbsp;"tex.bmp"&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ref&nbsp;</td>
+<td rowspan= 2  valign="top">&nbsp;Block&nbsp;reference&nbsp;</td>
+<td valign="top">&nbsp;"node-0"&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;"<a href="../graphics/GSO_Format-Reference-English.htm#Node">Node</a>::node-0"&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;enum&nbsp;</td>
+<td rowspan= 2  valign="top">&nbsp;Enumerated&nbsp;constant&nbsp;</td>
+<td valign="top">&nbsp;LINEAR&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;LINEAR|HOLD&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;void&nbsp;</td>
+<td valign="top">&nbsp;Any&nbsp;of&nbsp;the&nbsp;above&nbsp;</td>
+<td valign="top">&nbsp;------------&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The ref type is used to specify some other block. Block types can also be specified in the "block_type::block_name" format.<br><br>The enum type lists constants that can be used as arguments in a given command. Logical sums can also be designated by concatenating enumerated constants with the "|" character.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Text Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Text format is coded in the file header at the beginning of the file, and defines the format of the blocks and commands that follow.<br><br>Sample Code:<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>.GSS 1.00
+
+<a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> "scene-0" {
+	<a href="../graphics/GSO_Format-Reference-English.htm#Env">Env</a> "env-0" {
+		<a href="../graphics/GSO_Format-Reference-English.htm#EnvBackground">EnvBackground</a> 1.0 1.0 1.0 1.0
+		<a href="../graphics/GSO_Format-Reference-English.htm#EnvAmbient">EnvAmbient</a> 0.5 0.5 0.5 1.0
+		<a href="../graphics/GSO_Format-Reference-English.htm#EnvMap">EnvMap</a> <a href="../graphics/GSO_Format-Reference-English.htm#EnvBackground">EnvBackground</a> "texture-0"
+	}
+	<a href="../graphics/GSO_Format-Reference-English.htm#Node">Node</a> "node-0" {
+		<a href="../graphics/GSO_Format-Reference-English.htm#NodeObject">NodeObject</a> "object-0"
+	}
+	<a href="../graphics/GSO_Format-Reference-English.htm#Node">Node</a> "node-1" {
+		<a href="../graphics/GSO_Format-Reference-English.htm#Parent">Parent</a> "node-0"
+		<a href="../graphics/GSO_Format-Reference-English.htm#Translate">Translate</a> -10.0 5.0 0.0
+		<a href="../graphics/GSO_Format-Reference-English.htm#RotateYXZ">RotateYXZ</a> 0.0 1.57 0.0
+		<a href="../graphics/GSO_Format-Reference-English.htm#NodeObject">NodeObject</a> "object-1"
+	}
+	<a href="../graphics/GSO_Format-Reference-English.htm#Node">Node</a> "node-2" {
+		<a href="../graphics/GSO_Format-Reference-English.htm#Parent">Parent</a> "node-0"
+		<a href="../graphics/GSO_Format-Reference-English.htm#Translate">Translate</a> 10.0 5.0 0.0
+		<a href="../graphics/GSO_Format-Reference-English.htm#RotateYXZ">RotateYXZ</a> 0.0 -1.57 0.0
+		<a href="../graphics/GSO_Format-Reference-English.htm#NodeObject">NodeObject</a> "object-1"
+	}
+	<a href="../graphics/GSO_Format-Reference-English.htm#Object">Object</a> "object-0" {
+		<a href="../graphics/GSO_Format-Reference-English.htm#FileName">FileName</a> "map.gmo"
+	}
+	<a href="../graphics/GSO_Format-Reference-English.htm#Object">Object</a> "object-1" {
+		<a href="../graphics/GSO_Format-Reference-English.htm#FileName">FileName</a> "dog.gmo"
+	}
+	<a href="../graphics/GSO_Format-Reference-English.htm#Texture">Texture</a> "texture-0" {
+		<a href="../graphics/GSO_Format-Reference-English.htm#FileName">FileName</a> "sky.bmp"
+	}
+}
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Binary Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The structure of binary format is similar to that of text format.<br>Binary format contains a 16-byte header at the beginning of the file, followed by model data in hierarchical chunks, as follows:<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English005.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_1">
+<div style="margin-left:40px;"><h4><b>File Header</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A file header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_int signature ;	// file indicator ( '.GSO' )
+	u_int version ;	// version no. ( '1.00' )
+	u_int style ;		// data style ( 'PSP' )
+	u_int option ;		// options ( 0 )
+} GsoHeader ;
+
+</font></pre></div>
+<div style="margin-left:67px;">The data style field shows that the data representation has been optimized for specific APIs. The 'PSP' style comprises formats that follow the constraints of the PSP&trade; library. For details, refer to the section on PSP&trade; Library Restrictions, as well as the PSP&trade; library documentation. The data style is the same as text format when it is set to zero.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_2">
+<div style="margin-left:40px;"><h4><b>Chunk Structure</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A chunk is a collection of binary-formatted data; two types of chunks are defined: block chunks and command chunks and these correspond to blocks and commands.<br><br>Block chunks have the following data structure.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English006.gif">
+</div>
+<div style="margin-left:67px;"><br>A block chunk header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;		// Chunk type
+	u_short args_offs ;	// Offset to block arguments
+	u_int next_offs ;	// Next chunk offset
+	u_int child_offs ;	// Child chunk offset
+	u_int data_offs ;	// Offset to block data
+} GsoChunk ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>The headers of every element in a block must be aligned on 4-byte boundaries, so the size, offset, and other elements in the block chunk header must all be multiples of 4. Block names can be left out, because blocks in binary formats are referenced by number.<br><br>A command chunk has the following data structure:<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English007.gif">
+</div>
+<div style="margin-left:67px;"><br>A command chunk header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;		// Chunk type
+	u_short name ;		// Not used; fixed value of 0
+	u_int next_offs ;	// Next chunk offset
+} GsoChunk ;
+
+</font></pre></div>
+<div style="margin-left:67px;">Block chunks and command chunks are stored as nested structures. Child chunks are stored sequentially within block chunks, as follows:<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English008.gif">
+</div>
+<div style="margin-left:67px;"><br>The topmost bit (GSO_HALF_CHUNK) of a given chunk's type identifies whether a given chunk in a sequence is a command or block chunk.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_3">
+<div style="margin-left:40px;"><h4><b>Data Types</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Binary formats are represented using the following data types.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Alignment</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Single precision floating point number&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;string&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Character string (null-terminated)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ref&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Block reference (32-bit integer)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;enum&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Enumerated constant (32-bit integer)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;void&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any of the above&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;----------------&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">Arguments must be aligned in the units shown in this table, including padding if necessary.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_4">
+<div style="margin-left:40px;"><h4><b>Block References</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Block references are represented by names in text format. In binary format, these references are given by block number instead.<br>A block reference has the following bit structure:<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GSO_Format-Overview-English009.gif">
+</div>
+<div style="margin-left:67px;"><br>Type is the chunk type of the referenced block.<br>Level is the hierarchical level where the where the chunk resides.<br>Number is the number of a block within a given type.<br>In case of an invalid reference, all bits will be 1.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>PSP&trade; Library Restrictions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The following restriction applies to 'PSP' style binary format.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Function Data Blocks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Key frame times and values can be stored as 16-bit floating point numbers in a function data block. In such cases, the SCEGSO_FCURVE_FLOAT16 bit in the format argument of the function data is set.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

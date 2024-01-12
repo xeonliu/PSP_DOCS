@@ -1,0 +1,310 @@
+<html lang="en">
+<head>
+<title>AudioInput-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Audio Input Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Sound Hardware</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; has a standard monaural audio input that is connected to an analog-to-digital converter (ADC). This audio input function enables audio to be input from a headset microphone that is connected to the headphone remote control jack, or from the built-in microphone. The audio input function is controlled by the audio driver.<br>Note: PSP&trade; systems starting with the PSP-300x series come with the built-in microphone.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/AudioInput-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Sound Hardware (Input Part) Block Diagram</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Be sure to connect the headset to the jack on the remote control. <br>* If the headset is connected to the headphone jack on the console, audio input will not be possible.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/AudioInput-Overview-English002.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2: Headset Connection</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>Built-in Microphone</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The built-in microphone included in PSP-300x series systems and later does not require any special support to provide audio input. The audio driver automatically switches between the built-in microphone and the headset, so an application need only use input processing from the headset to receive audio input.<br>Note that when the audio input device switches, sound will be momentarily interrupted, however the audio input configuration parameters are directly passed to the receiving device and audio input will be resumed.<br>When the headset is inserted into the remote control jack, audio input from the headset takes precedence over audio input from the built-in microphone. To use the built-in microphone, the headset should be removed.<br>Audio cannot be input from both the headset and built-in microphone at the same time.<br>In a PSP&trade; system that has a built-in microphone, the <b><a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a></b>() function always returns 1.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Audio Input Flow</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following diagram shows the audio input flow on the PSP&trade;.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/AudioInput-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Audio Input Flow</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">A PSP&trade; game title uses the audio driver to perform audio input.<br>The audio driver accesses the sound hardware to implement audio input.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the audio input library.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;audioinput.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;stub file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;audio_stub_02.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Implementation Method</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The basic processing flow is simple and can be represented as follows.<br>Parameter setting and initialization &rarr; Audio input &rarr; End<br>Simplified audio input sample code is shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/*
+Processing Overview
+This sample code writes audio input to recbuf[] for 5 seconds.
+Input data is 44100KHz, 16-bit monaural data.
+*/
+#include &lt;kernel.h&gt;
+#include &lt;stdio.h&gt;		/* For printf */
+#include &lt;audioinput.h&gt;	/* For <a href="../sound/AudioInput-Reference-English.htm#sceAudioInput">sceAudioInput</a>… */
+
+#define SEC 5		/*  5 sec */
+#define INPUTFS 44100	/*  1 sec SampleSize */
+#define BUFLEN (((INPUTFS * SEC)/64)*64)	/*  Sample size in seconds. Note that this is a multiple of 64. */
+
+int main(void)
+{
+	int ret=0;
+	/* Audio input buffer */
+	static short recbuf[BUFLEN] __attribute__((aligned(64)));
+
+	/* Prepare parameter values */
+	<a href="../sound/AudioInput-Reference-English.htm#SceAudioInputParam">SceAudioInputParam</a> param;
+	param.alc = -12;		/*  ALC = ON TargetLevel = -12[dB]
+	param.gain = 30;	/*  Maximum gain = +30[dB] */
+	param.noiz = -60;	/*  Noise gate threshold = -60[dB]
+	param.hold = 0;		/*    0[ms] */
+	param.decay = 3;	/*  192[ms] */
+	param.attack = 2;	/*   24[ms] */
+
+	/*  Parameter setting and intialization */
+	<a href="../sound/AudioInput-Reference-English.htm#sceAudioInputInitEx">sceAudioInputInitEx</a>(&amp;param);
+
+	/*  Start of audio input
+	The specified input size (number of samples) must be a multiple of 64 */
+	ret = <a href="../sound/AudioInput-Reference-English.htm#sceAudioInputBlocking">sceAudioInputBlocking</a>(BUFLEN, INPUTFS, recbuf);
+	if(ret &lt; 0){
+		printf("Error: <a href="../sound/AudioInput-Reference-English.htm#sceAudioInputBlocking">sceAudioInputBlocking</a> [%08xh]\n",ret);
+		return ret;
+	}
+
+	/*  End of audio input
+	The end of input is indicated by specifying NULL for the 3rd argument */
+	<a href="../sound/AudioInput-Reference-English.htm#sceAudioInputBlocking">sceAudioInputBlocking</a>(BUFLEN, INPUTFS, NULL);
+
+	return 0;
+}
+
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Audio Input</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Audio Driver Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The audio driver is a library for capturing external audio (monaural) as PCM waveform data.<br>To input audio, an input device such as a Microphone is connected.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Main Functions of the Audio Driver</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> The supported data format is 16-bit PCM monaural, and the sampling frequency can be either 44.1 [KHz], 22.05 [KHz], or 11.025 [KHz].
+<li> The input gain can be adjusted manually.
+<li> The input gain can be adjusted by an auto level control (ALC).
+<li> A built-in noise gate function can be used with ALC.
+<li> The time over which the gain changes when ALC is active can be set.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ALC Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALC, which is an acronym for Auto Level Control, is a function for automatically adjusting the input level so that it is maintained at a fixed value when the volume is too low or too high. When the input level is greater than or less than the specified level (target level), the level is automatically adjusted.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/AudioInput-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  ALC Operation Relative to the Target Level</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The values that can be set by using the API are the target level and maximum gain.<br>Depending on the maximum gain value, the input level may not be able to be adjusted to the target level.<br>The ALC function can also be turned off. When ALC = OFF, only the input gain can be set.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_2">
+<div style="margin-left:40px;"><h4><b>Gain Variation Time Setting</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Besides varying the gain according to the ALC, the variation time can also be set.<br>The Hold Time can be used to set the time from when an input level that is lower than the TargetLevel is detected until the gain adjustment starts. Values from 0 to approximately 43.7 [sec] can be set for the Hold Time.<br>The Decay Time can be used to set the time when the gain <b>increases</b> until the input level changes to 90% of the end-of-change level. Values from 24 [ms] to approximately 24.58 [sec] can be set for the Decay Time. <br>The Attack Time can be used to set the time when the gain <b>decreases</b> until the input level changes to 90% of the end-of-change level. Values from 6 [ms] to approximately 6.14 [sec] can be set for the Attack Time.<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/AudioInput-Overview-English005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  ALC Time Variation</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Noise Gate</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The noise gate function can be used together with ALC.<br>The noise gate prevents ALC from adjusting the gain of an input that is less than or equal to a pre-determined level. This prevents ALC from increasing the gain of the hiss noise that is present during periods of silence.<br>(*)  The noise gate can also be switched off while ALC = ON.<br>(*)  The noise gate function cannot be used when ALC = OFF.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Removing and Inserting the Remote Control and Mic</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If the remote control and mic are unplugged during audio input, the library will not return an error. Instead, the audio input will be muted.<br>When the built-in microphone is switched, sound will be momentarily interrupted but audio input will continue.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Time Until the Input Level Stabilizes</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The audio input level is unstable for approximately one second immediately after the <a href="../sound/AudioInput-Reference-English.htm#sceAudioInput">sceAudioInput</a>() or <a href="../sound/AudioInput-Reference-English.htm#sceAudioInputBlocking">sceAudioInputBlocking</a>() function starts the input. This is due to the effect of the level controller. The only method of not getting audio during this time is to not obtain it during this unstable interval. This can be accomplished by starting the audio input before the data is actually needed. For example, in the sample program sample/sound/rec_play/sample, input processing is started when the program begins.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Playing Back Audio When Using the Built-In Microphone</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When input audio is directly output to the speakers, or after performing audio processing, an audio feedback loop may result. Although this is unlikely to occur with the headset, it is more likely to happen when the built-in microphone is used for audio input. Be careful to avoid situations in which audio is played back immediately after it is input.<br><br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

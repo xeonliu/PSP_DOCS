@@ -1,0 +1,147 @@
+<html lang="jp">
+<head>
+<title>libheap-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libheap
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libheapは、あらかじめスレッドマネージャの固定長メモリプール(FPL)を使って確保したメモリをさらに細かい単位で管理するためのライブラリです。<br>libcに依存せずmalloc()/free()ライクなメモリ管理を行いたい場合や、ヒープを複数個独立させて確保したい場合に使用する事ができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libheapを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタティックリンクライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRXモジュールファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libheap.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>ヒープメモリの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">まず、ヒープメモリを生成します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *pHeap;
+
+pHeap = <a href="../kernel/libheap-Reference-Japanese.htm#sceHeapCreateHeap">sceHeapCreateHeap</a>(&quot;heap1&quot;, 1048576, SCE_HEAP_AUTO_EXTEND, NULL);
+
+</font></pre></div>
+<div style="margin-left:67px;">ここでは、初期サイズを1MB、ヒープ自動拡張ありでヒープメモリを"heap1"という名前で生成しています。libheapは指定された名前と初期サイズを用いて固定長メモリプールを作成してメモリを確保します。ユーザパーティションメモリが使用されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>ヒープメモリからメモリ確保</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">生成したヒープからメモリを確保するためには<a href="../kernel/libheap-Reference-Japanese.htm#sceHeapAllocHeapMemory">sceHeapAllocHeapMemory</a>()関数を使用します。このとき、<a href="../kernel/libheap-Reference-Japanese.htm#sceHeapCreateHeap">sceHeapCreateHeap</a>()で得たヒープを引数として指定します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+void *buf;
+
+buf = <a href="../kernel/libheap-Reference-Japanese.htm#sceHeapAllocHeapMemory">sceHeapAllocHeapMemory</a>(pHeap, 1024);
+
+</font></pre></div>
+<div style="margin-left:67px;">この例では1024バイトのメモリをヒープから確保しています。SCE_HEAP_AUTO_EXTENDフラグつきで生成されたヒープの場合、ヒープの残容量が足りなかったときにヒープ拡張が試みられます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>ヒープメモリへメモリ返却</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../kernel/libheap-Reference-Japanese.htm#sceHeapAllocHeapMemory">sceHeapAllocHeapMemory</a>()関数で確保したメモリは<a href="../kernel/libheap-Reference-Japanese.htm#sceHeapFreeHeapMemory">sceHeapFreeHeapMemory</a>()によって返却します。ヒープを返却するときは、かならず確保した元のヒープに返却する必要があります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../kernel/libheap-Reference-Japanese.htm#sceHeapFreeHeapMemory">sceHeapFreeHeapMemory</a>(pHeap,　buf);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>ヒープメモリの削除</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../kernel/libheap-Reference-Japanese.htm#sceHeapCreateHeap">sceHeapCreateHeap</a>()関数で生成したヒープは、<a href="../kernel/libheap-Reference-Japanese.htm#sceHeapDeleteHeap">sceHeapDeleteHeap</a>()で削除する事ができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../kernel/libheap-Reference-Japanese.htm#sceHeapDeleteHeap">sceHeapDeleteHeap</a>(pHeap);
+
+</font></pre></div>
+<div style="margin-left:67px;">ヒープを削除すると、ヒープが使用していたメモリがカーネルのシステムメモリマネージャに返却され、他の用途に使用できるようになります。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2006 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

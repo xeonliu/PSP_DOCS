@@ -1,0 +1,192 @@
+<html lang="jp">
+<head>
+<title>PSP_System_Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;システム概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>アーキテクチャ概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;システムは、下図のように32ビットRISC CPUを中心とした統合チップ・PSP&reg; Engineを中心としたシステムとして構成されます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSP_System_Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 ブロック図</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">なお、図中の太字の数字はビット幅を示しています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>PSP&reg; Engineについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg; Engineは大きく分けて3つのブロックから構成された統合チップとして設計されています。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSP&reg;全体の制御を行うメインCPUブロック
+<li> 主に音声・映像のフォーマットを処理するためのMedia Engineブロック
+<li> PSP&reg; Engineの外部に接続される、ペリフェラルとのI/Oを行うペリフェラル接続ブロック
+</ul></div>
+<div style="margin-left:50px;">以下に各ブロックの特徴を示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>メインCPUブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">32ビットMIPSアーキテクチャCPU(ALLEGREX)を中心に、FPUおよびVFPU(4FMAC)、曲面処理が可能なGraphics Engine(GE)と内蔵メモリ(eDRAM)を備えた、全体を制御するブロックです。一般的なアプリケーションはここで動作します。<br>ALLEGREXは7段パイプライン、MIPS-III(および一部のMIPS-IV)命令セットを有する32bit RISC-CPUです。コプロセッサとしてFPUとVFPUを備えており、それぞれで単精度浮動小数点演算が可能です(倍精度演算を行うことはできません)。FPUはMIPSアーキテクチャにおける一般的なFPUで、一般的な算術演算を行うのに適しています。一方、VFPUはゲームなどで多用される行列演算や三角関数を1命令で実行することができるよう開発された独自命令セットを持つコプロセッサで、ベクトル処理などを得意とします。<br>GEは固定パイプラインを有する描画エンジンで、頂点座標変換、光源処理および描画処理などを行うことができます。内蔵された2MiBのeDRAMと512bitバスで接続されており、高速な描画を実現しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Media Engineブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">MEPG4 AVCやATRAC3plus&trade;といった様々なビデオ・オーディオコーデックの再生や信号処理を行うためのブロックです。ハードウェア実装されたデコーダ、およびVMEといわれる信号処理用プロセッサ、それらを制御するコントローラなどからなります。また頻繁なメモリアクセスが必要になるコーデックを動作させた時でも、他のブロックに影響を与えないよう、ブロック内部にeDRAMを有しています。<br>アプリケーションからはOSの提供するデバイスドライバを介して使用することになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ペリフェラル接続ブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RAM/ROMの他、各種IO用デバイスを接続するためのブロックです。アプリケーションからはOSの提供するデバイスドライバを介して使用することになります。ペリフェラルの内容については次章を参考にしてください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>ペリフェラルについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;に搭載されるペリフェラルについて説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>システムフラッシュメモリ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;のOSが格納されています。一般的なアプリケーションから直接アクセスすることはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>メインメモリ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg; Engineに内蔵されたメモリ(eDRAM)の他に、32MBのメインメモリを装備しています。<br>PSP&reg; Engine内部の各ブロックからアクセスすることが可能です。なお、開発機では実機よりも多くのメモリを搭載しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>UMD&reg;およびUMD&reg; controller</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP-1000からPSP-3000では、UMD&reg;ドライブを搭載しています。<br>UMD&reg;は大きさ60mm、二層構造で1.8GBの容量を持つディスクメディアです。<br>PSP&reg;に搭載されたドライブの読み込み性能は11~22Mbps(角速度一定、理論値)で、またモバイル用途を意識して耐衝撃対策用のバッファメモリが搭載されています。読み込み速度に関しては大まかに8～16倍速CD-ROMドライブと同程度ですが、シーク速度が遅めであることに注意してください。これはドライブのサイズ・消費電力制限から来る制約となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>LCD</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;に装着されるLCDは、バックライトを備えた480x272ドットの大きさのものです。縦横比は、16:9となっています(ピクセルアスペクトレシオは1:1になります)。<br>対角サイズはPSP-1000からPSP-3000では4.3インチ、PSP-N1000では3.8インチです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>内蔵フラッシュメモリ・Memory Stick&trade;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP-1000からPSP-3000にはMemory Stick&trade;スロットが、PSP-N1000には約16GBの内蔵フラッシュメモリとMemory Stick&trade;スロットが搭載されています。<br>ゲームデータのセーブを行う先などとして使うことができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>WLAN</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;にはIEEE802.11bに準拠した無線LANによるネットワーク機能が搭載されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>コントローラ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">本体に付属するボタンは以下の通りです。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> STARTボタン
+<li> SELECTボタン
+<li> 方向キー上下左右
+<li> ○ボタン
+<li> ×ボタン
+<li> △ボタン
+<li> □ボタン
+<li> Rボタン
+<li> Lボタン
+<li> アナログパッド
+<li> HOLDスイッチ
+<li> POWERスイッチ
+<li> PSボタン(HOMEボタン)
+</ul></div>
+<div style="margin-left:50px;"><br>POWERスイッチおよびPSボタン(HOMEボタン)はシステムが処理を行いますので、一般的なアプリケーションの操作用に用いることはできません。<br>各種ボタンの押し下げ状態はいったんシスコンと言われるブロックにて受け取られ、その情報は定期的にメインCPUへ通知されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>電源管理について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">スリープ機能(サスペンド・レジューム機能)、および、ゲームスリープ機能(ハイバネーション機能)を備えています。これらはユーザーの操作によって行われますので、PSP&reg;上で動作するアプリケーションはこれらの要求に可及的速やかに対応する必要があります。<br>また、ネットワーク接続、タイマ動作などにより、(ユーザーの操作なしで)サスペンド状態からのレジュームを行うことも可能です。<br>この他、一定時間操作がなかった時にバックライトを自動でOffにしたり、スリープ・スタンバイモードに遷移させたりする機能があります。<br>詳しくはパワーサービス概要などをご覧ください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

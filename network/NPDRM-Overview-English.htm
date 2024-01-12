@@ -1,0 +1,244 @@
+<html lang="en">
+<head>
+<title>NPDRM-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NPDRM Library Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Features and Benefits</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NPDRM library is used for accessing protected files that were encrypted using the NPDRM mechanism (these files are known as NPDRM EDATA and NPDRM SPRX). <br>Programs that are distributed as additional game data from the PlayStation&reg;Store and programs that access additional game data must use the NPDRM library to verify that users have the right to access those files and that they have not been tampered with. The NPDRM library is also used to set the key for decrypting a file. The file access itself is performed with a normal file access function such as sceIoRead(), and then the contents are automatically decrypted at the same time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the NPDRM library.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;npdrm_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;npdrm_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_drm.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The stub library or the weak import stub library must be linked in advance. The program is responsible for reading the NPDRM module itself. Details are provided in "Using the Library."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following NPDRM library sample program is provided.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/np/np_drm</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This program decrypts and reads an encrypted data file (testrnd1k.edat) using the NPDRM library, then compares it to the unencrypted version of the file (testrndk1k_plain). It also loads npdrtestmodule.sprx which is an encrypted PRX file. These files should be placed in the /PSP/GAME/SXXX00001/ folder on a Memory Stick&trade;.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>NPDRM Files</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Introduction to NPDRM Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An NPDRM file is an encrypted file which incorporates access rights management and can be distributed from the PlayStation&reg;Store. To support fee-based distribution, an NPDRM file has a mechanism for managing access rights based on a user's NP account. This prevents a file from being accessed if the user only copies the file but does not install it properly. Encryption can also be used to prevent the file from being tampered with. In addition, by specifying an arbitrary encryption key, an invalid program can be prevented from reading the file.<br>The NPDRM EDATA file is used for distributing data and the NPDRM SPRX file is used for distributing programs. These files together are referred to as the NPDRM files.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Creating an NPDRM File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Figure 1 shows an overview of the procedure for creating an NPDRM file.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NPDRM-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  NPDRM File Creation Procedure</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">After developing a data or program file that you wish to distribute on the PlayStation&reg;Store, create an NPDRM file for development by creating content information files such as icon images and a configuration file containing the content ID. The content ID will uniquely identify the content on the PlayStation&reg;Store. You can then use the authoring server provided by SCE to perform authoring. Note that an NPDRM file for development can only be used on the development tool.<br><br>Using the NPDRM file for development, perform operational testing of the program, and when testing is complete, submit the program to SCE as a master. We will perform QA testing and convert the file to an NPDRM file for release, which can be used on a PSP&trade; system and which we will make available on the PlayStation&reg;Store.<br><br>Details about the creation procedure are provided in the "PSP&trade; Additional Game Data Package Creation Guide" document. Refer to that document as necessary.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Using the Library</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Loading the Module</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Before you can use the NPDRM library, you must load the NPDRM module. To do this, call the module utility function <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>() and specify SCE_UTILITY_MODULE_NPDRM as the argument.<br>For details, refer to the Utility Services document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Accessing an NPDRM EDATA File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Use the following procedure to access an NPDRM EDATA file.<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>() to set the key by passing it the value of k_licensee that was specified when the file was created. You can skip this step if the NPDRM EDATA file that you want to access has no key.</li>
+<li VALUE=2> Call sceIoOpen() to open the file with the FGAMEDATA flag logically ORed into the <i>flag</i> argument. The file descriptor (fd) will be returned. You may also use the asynchronous version sceIoOpenAsync(), or the callback wait function <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpenCB">sceIoOpenCB</a>().</li>
+<li VALUE=3> Call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() with the <i>fd</i> argument set to the value of fd that was obtained in step (2). This function will check the access rights for the file and set the decryption key.</li>
+<li VALUE=4> Call a normal file access function such as sceIoRead(), sceIoLseek(), or sceIoClose() to access the file. The file data will be automatically decrypted.</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>Inline Function sceNpDrmOpen()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The inline function <a href="../network/NPDRM-Reference-English.htm#sceNpDrmOpen">sceNpDrmOpen</a>() will consecutively perform the steps of opening the file with sceIoOpen() and setting the decryption key with <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>().<br><br><a href="../network/NPDRM-Reference-English.htm#sceNpDrmOpen">sceNpDrmOpen</a>() can return errors that occur during the file open operation as well as NPDRM errors such as the user not having access rights, the file being corrupted, or the file not being NPDRM EDATA. Since it is not possible to recover from an NPDRM error even by retrying the operation, an infinite loop may result if an <a href="../network/NPDRM-Reference-English.htm#sceNpDrmOpen">sceNpDrmOpen</a>() error occurs and unlimited retries are attempted in much the same way as with an sceIoOpen() error. If a file cannot be opened with <a href="../network/NPDRM-Reference-English.htm#sceNpDrmOpen">sceNpDrmOpen</a>(), you should perform appropriate processing such as displaying an error dialog.<br>If you want to provide an error retry capability when opening the file, or you want to use the asynchronous function sceIoOpenAsync() or the callback wait function <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpenCB">sceIoOpenCB</a>(), do so in combination with <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>().<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_3">
+<div style="margin-left:40px;"><h4><b>Obtaining the Decrypted Data Size</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">An encryption envelope which contains management information is added to an NPDRM EDATA file, so the size of an NPDRM EDATA file will end up being larger than the original data file. If you use sceIoGetstat() to check the size, the file size will include the encryption envelope. If you want to know just the data size of a file without the encryption envelope, wait for <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() to complete, make sure automatic decryption is enabled, and call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataGetDataSize">sceNpDrmEdataGetDataSize</a>().<br>Note that when <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() has completed successfully and automatic decryption is enabled, the size of the encryption envelope need not be considered when using sceIoRead() or sceIoLseek() to access the NPDRM EDATA file.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Accessing an NPDRM SPRX File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Use the following procedure to access an NPDRM SPRX file.<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>() to set the key by passing it the value of k_licensee that was specified when the file was created.</li>
+<li VALUE=2> Call <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>() to load the NPDRM SPRX file and call <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>() to execute the file. The file will be loaded or executed after verifying the access rights.</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Unloading the Module</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>() to unload the module. For details, refer to the Utility Services document.<br>When accessing an NPDRM EDATA file, after <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() has completed successfully, you do not need to keep the NPDRM module. However, even if you do unload the NPDRM module, you can still perform file accesses.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Path Name of NPDRM File </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To access an NPDRM file using the NPDRM library, the file must be placed in a specific directory on the Memory Stick&trade; (ms0:). If it is placed elsewhere such as on host0:, the access rights check will fail.<br>If the ZIP file that is output from the authoring server is expanded in the root directory of the Memory Stick&trade;, NPDRM files for development will be placed in the proper directory. Once there they should not be moved unnecessarily. Details about the directory structure are presented in the "PSP&trade; Additional Game Data Package Creation Guide."<br><br>An NPDRM EDATA file always has an extension of ".edat," and an NPDRM SPRX file always has an extension of ".sprx." Since the Memory Stick&trade; filesystem is not case sensitive with respect to filenames, extensions such as .EDAT and .Sprx are also permitted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>NPDRM Rights Information File for Development</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The package that is output from the authoring server also contains an NPDRM rights information file, which is used for verifying access rights. When the ZIP file that is output from the authoring server is expanded in the root directory of the Memory Stick&trade;, a file named <i>contentID</i>.rif is created in the /PSP/LICENSE/ folder. If this file exists, the user is considered to have access rights and functions such as <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() will be successful. On the other hand, if this file does not exist, the access rights check will fail. This can be used to test the behavior of an application in the case when a user does not have access rights.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>NPDRM File Protection</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The filesystem does not have any special mechanism for protecting an NPDRM file. An NPDRM file can be opened and its contents can be overwritten in the same way as an ordinary file. However, if the contents are overwritten, the file will be considered corrupted when its access rights are checked, and it will not be able to be accessed as an NPDRM file.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Handling the Loss of Access Rights</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A user may lose access rights to an NPDRM file. For example, if the rights information file is deleted or the PSP&trade; system is deactivated (its authentication is canceled) or the valid period ends, a user may no longer have the right to access an NPDRM file even if the file itself still exists. Be sure to program the application so it is able to handle these cases.<br>In particular, when access rights are lost for an additional scenario or additional character, the application should behave as it did before the subject file was added. Since the loss of access rights can be determined from an error code, be sure to display an error dialog or take some other appropriate action.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

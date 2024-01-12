@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>Vaudio-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Virtual Audio Driver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functions and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">vaudio is a library that performs various kinds of sound processing functions. By using vaudio together with other libraries and audio output functions that run on the PSP&trade;, processed audio can be output.<br>vaudio provides the following functions.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Sampling frequency conversion<br>Sound sampled at 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, or 8000Hz can be frequency converted before it is output.
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Automatic level control (ALC)<br>If the playback volume is too soft or too loud, the level can be automatically adjusted so that it will be easier for listening.
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Equalizer<br>Sound can be passed through an equalizer that has several preset frequency characteristics.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use vaudio.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;vaudio_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;vaudio_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;vaudio.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The module utility must be used to load the vaudio module itself. For details, refer to the "Utility Services" documentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/mp3play/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample shows how to use vaudio to play MP3 data. MP3 playback at frequencies other than 44.1kHz is also supported by vaudio. An MP3 file containing background music is played based on the graphics sample program devkit/sample/graphic/stars. This program is useful as a reference for loop playback, stopping playback, pausing playback, and skipping ID3 tags. The ID3 tags are parsed to get the primary music information (such as the track name and artist name) from the MP3 file.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Using the Library</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>vaudio Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Before using vaudio, you should first use the module utility function <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>() to load the vaudio module. You can then use vaudio according to the following procedure.<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Call <a href="../sound/Vaudio-Reference-English.htm#sceVaudioChReserve">sceVaudioChReserve</a>() to perform initialization processing.</li>
+<li VALUE=2> Use functions such as <a href="../sound/Vaudio-Reference-English.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>() to perform sound output processing.</li>
+<li VALUE=3> Call <a href="../sound/Vaudio-Reference-English.htm#sceVaudioChRelease">sceVaudioChRelease</a>() to perform termination processing.</li>
+</ol></div>
+<div style="margin-left:50px;"><br>To use vaudio to output sound, call the <a href="../sound/Vaudio-Reference-English.htm#sceVaudioChReserve">sceVaudioChReserve</a>() function and declare the use of the audio output function. Also specify the output sample size and data sampling rate of data that is to be output each time.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example)
+int iRc;
+
+/* Output 256 samples at a time */
+iRc = <a href="../sound/Vaudio-Reference-English.htm#sceVaudioChReserve">sceVaudioChReserve</a>(256,44100,<a href="../sound/Vaudio-Reference-English.htm#SCE_VAUDIO_FMT_S16_STEREO">SCE_VAUDIO_FMT_S16_STEREO</a>);
+if (iRc != SCE_OK){
+	/* Setting failed */
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>The <a href="../sound/Vaudio-Reference-English.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>() function is used for actual sound output. <br><a href="../sound/Vaudio-Reference-English.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>() registers the PCM audio data that is stored in the specified buffer with the audio driver. Playback of this data begins after the sound data that was previously registered in the audio driver has been played. When <a href="../sound/Vaudio-Reference-English.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>() is called, the calling thread enters a wait state until playback begins.<br>Note that audio data is not necessarily played immediately after it is registered in the audio driver. Also, although the registered sound data begins playing when control returns from the function, the data will not have been copied somewhere else. As a result, if the buffer is overwritten before playback actually ends, the data will not be played back correctly. Be sure to use at least a double buffer for the sound output buffer and make sure that the buffer is not rewritten after the sound data is registered.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example)
+/* Set up a double buffer for pcmBuf */
+int iSide = 0;
+
+/* Output the 16-bit PCM STEREO data that is in pcmBuf[iSide] */
+<a href="../sound/Vaudio-Reference-English.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>(
+	<a href="../sound/Vaudio-Reference-English.htm#SCE_VAUDIO_VOLUME_0dB">SCE_VAUDIO_VOLUME_0dB</a>,
+	pcmBuf[iSide]
+);
+iSide ^= 1;
+</font></pre></div>
+<div style="margin-left:50px;"><br>Similar precautions are necessary when playback ends. If PCM data was placed in a dynamically allocated memory area (such as an area that was allocated using the malloc function or an automatic variable that is allocated internally by a function) and the memory area is freed before all the data has been output, unpredictable noise may end up getting output. Be sure to verify that all of the data has been output properly before freeing memory. A dedicated thread is often used for outputting PCM data. In this case, be sure to perform synchronization between threads so that the sound output thread is not forcibly terminated while it is still outputting data. (For details, refer to the sample program.)<br><br>If you call the <a href="../sound/Vaudio-Reference-English.htm#sceVaudioSetAlcMode">sceVaudioSetAlcMode</a>() function while sound data is playing (or before it is played), you can switch between enabling and disabling the automatic level control function. Similarly, you can switch the equalizer mode by calling the <a href="../sound/Vaudio-Reference-English.htm#sceVaudioSetEffectType">sceVaudioSetEffectType</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example)
+<a href="../sound/Vaudio-Reference-English.htm#sceVaudioSetAlcMode">sceVaudioSetAlcMode</a>(<a href="../sound/Vaudio-Reference-English.htm#SCE_VAUDIO_ALC_MODE1">SCE_VAUDIO_ALC_MODE1</a>);
+<a href="../sound/Vaudio-Reference-English.htm#sceVaudioSetEffectType">sceVaudioSetEffectType</a>(<a href="../sound/Vaudio-Reference-English.htm#SCE_VAUDIO_FX_TYPE_UNIQUE">SCE_VAUDIO_FX_TYPE_UNIQUE</a>);
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">After performing effects processing internally, vaudio outputs the final audio using blocks in the same way as the simple audio library. Therefore, simple audio and vaudio cannot be used simultaneously. If you attempt to use them simultaneously, an error will be returned when you try to initialize a channel.<br><br>The output data must be in a location that can be accessed from a 32-bit bus just as with simple audio. Be sure to place the data in DDR memory.<br><br>When the equalizer is used, clipping occurs in the digital domain and noise may be audible. This is because the amplitude is increased as a result of a specific frequency band being emphasized by the equalizer. Although the degree of accuracy that is generated is low, a similar problem may occur when sampling rate conversion is used. This phenomenon can be prevented by making the input waveform a little smaller where there is some margin.<br><br>When audio with a sampling rate other than 44.1kHz is played by vaudio, it is internally converted to 44.1kHz and mixed with the audio output from a non-vaudio source. Therefore, even if audio is played that was sampled at 48kHz, frequency components above 22.05kHz will not be output.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

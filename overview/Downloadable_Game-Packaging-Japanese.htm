@@ -1,0 +1,1034 @@
+<html lang="jp">
+<head>
+<title>Downloadable_Game-Packaging</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Downloadable Game Package</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;ダウンローダブルゲーム パッケージ作成ガイド
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>はじめに</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">このドキュメントは、PSP&reg;ダウンローダブルゲームパッケージの作成方法を順を追って説明したものです。<br>PSP&reg;ダウンローダブルゲームパッケージを作成するために必要なプログラミング上の注意、コンテンツ情報などパッケージングに必要なファイルのデータ仕様と作成方法、そして、マスターとして弊社に提出していただいてからQAテストを経て公開されるまでの工程について説明しています。また、すでにUMD&reg;でリリースされているアプリケーションをリパッケージする手順についても説明しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>PSP&reg;ダウンローダブルゲームパッケージとは</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームパッケージとは、アプリケーションをPlayStation&reg;Storeで配信するためのデータ形式です。配信されたアプリケーションはMemory Stick&trade;上に展開され、PSP&reg;システムソフトウェアのゲーム列に表示され起動することができます。展開されたアプリケーションへのアクセス権はNPDRMのしくみによって管理され、権利を持つユーザーだけが利用できるように保護されています。<br><br>ユーザーがPlayStation&reg;StoreからPSP&reg;ダウンローダブルゲームパッケージをダウンロードするには、PlayStation&reg;3を用いる方法、PSP&reg;を用いる方法と、PCを用いる方法の3とおりがあります。<br>PlayStation&reg;3を用いてダウンロードする場合、PSP&reg;ダウンローダブルゲームパッケージはいったんPlayStation&reg;3の内蔵ハードディスクドライブにインストールされ、ユーザーがシステムソフトウェアを操作して、USB接続されたPSP&reg;のMemory Stick&trade;上にコピーします。<br>PSP&reg;を用いてダウンロードする場合は、システムソフトウェアによって、PSP&reg;ダウンローダブルゲームパッケージがMemory Stick&trade;上に展開されます。また、PCを用いてダウンロードする場合は、専用のPCアプリケーションであるMedia Goを使用し、USB接続されたPSP&reg;の<br>Memory Stick&trade;にインストールします。ユーザーがPlayStation&reg;3を用いてダウンロードする場合のために、PSP&reg;ダウンローダブルゲームパッケージにはPlayStation&reg;3用のコンテンツ情報ファイルを含めておく必要があります。PSP&reg;またはPCを用いてのダウンロードでは、パッケージに含まれているこれらPlayStation&reg;3用のコンテンツ情報ファイルは表示されないことになります。<br><br>PSP&reg;ダウンローダブルゲームパッケージとは別に、PlayStation&reg;Storeでデータを配信するためのデータ形式としてPSP&reg;追加ゲームデータパッケージというものがあります。この詳細については、別ドキュメント「PSP&reg;追加ゲームデータ パッケージ作成ガイド」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>作業の流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームパッケージの作成作業は、おおよそ次の手順で進めます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_1"><h4>
+(1)&nbsp;<b>アプリケーション本体の作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UMD&reg;ゲームを作成するときと同様にプログラムとデータとコンテンツ情報を作成し、動作テストを十分に行ってから、UMD&reg; Image Generatorを用いてUMD&reg;イメージファイルを作成してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_2"><h4>
+(2)&nbsp;<b>パッケージングに必要なファイルの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PlayStation&reg;3用のコンテンツ情報ファイル(必須)と、パッケージにゲーム解説書を同梱するならその元画像ファイル、そして設定ファイルを作成してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_3"><h4>
+(3)&nbsp;<b>デバッグオーサリングとテスト</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">弊社の提供するシンプルオーサリングサービス(SAS)を用いて、(2)で作成したファイルから、デバッグ用パッケージを作成することができます。このデバッグ用パッケージと開発ツールを用いることで、Memory Stick&trade;での動作を確認することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_4"><h4>
+(4)&nbsp;<b>マスター提出とQAテスト</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UMD&reg;イメージファイルとパッケージングに必要なファイルを所定のディレクトリ構造にまとめてDVD-Rディスクに書き込み、チェックしたTRCなどとともに弊社に提出してください。弊社側でPSP&reg;ダウンローダブルゲームパッケージを作成し、QAテストを行います。QAテストの終了後、PlayStation&reg;Storeで公開されます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>アプリケーション本体の作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、PSP&reg;ダウンローダブルゲーム、つまりPSP&reg;ダウンローダブルゲームパッケージとして配信するためのアプリケーションを作成する手順と注意事項を説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>プログラミング上の注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームでも、プログラミングに関してはUMD&reg;ゲームとほぼ同じですが、ダウンローダブルゲームに特有の制限事項や、ダウンローダブルゲームでは特に問題となりやすい点が存在します。これらの詳細につきましては、「PSP&reg;ダウンローダブルゲーム作成時の注意点」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>動作テスト</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">オンラインで配信するPSP&reg;ダウンローダブルゲームであっても、UMD&reg;ゲームと同等のクオリティが必要です。マスターインする前に、動作テストを十分に行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>システムファイル・コンテンツ情報ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;ゲームを作成する場合と同様に、システムファイル（PARAM.SFO）および静止画アイコン（ICON0.PNG）などのコンテンツ情報ファイルを作成してください。データ仕様や作成方法の詳細は、PSP&reg;ランタイムライブラリドキュメントに含まれる「ゲームマスターディスク作成手順」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>UMD&reg;イメージファイルの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">動作テストが完了したら、プログラムとデータとコンテンツ情報ファイルを所定のディレクトリ構造に収め、UMD&reg; Image Generatorを用いてUMD&reg;イメージファイルを作成してください。UMD&reg; Image Generatorは4つまたは5つのファイルを出力します。出力されたファイルを、PSP&reg;ダウンローダブルゲーム用のUMD&reg; Image Checker for Downloadable Gameを用いてチェックし、エラーのないことを示す「UMD Image Check result: OK」というメッセージが表示されることを確認してください。<br>手順やディレクトリ構造の詳細は、PSP&reg;ランタイムライブラリドキュメントに含まれる「ゲームマスターディスク作成手順」、Game Master Discパッケージに含まれる「UMD&reg; Image Generator」、ダウンローダブルゲーム作成パッケージに含まれる「UMD&reg; Image Checker for Downloadable Game」ドキュメントを参照してください。<br>なお、UMD&reg; Image Generatorでは自動的にUPDATEディレクトリが挿入されますが、システムソフトウェアからは無視されますので、削除の必要はありません。また、このディレクトリを残しておくことによる、パッケージのサイズ増加もありません。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>パッケージングに必要なファイルの作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、PSP&reg;ダウンローダブルゲームパッケージを作成するときに特有の、以下のファイルについて説明します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PlayStation&reg;3用静止画アイコンファイル
+<li> PlayStation&reg;3用説明画像ファイル（高解像度 / 標準解像度）
+<li> ゲーム解説書の元画像ファイル
+<li> 設定ファイル（NPDRM.CONF）
+</ul></div>
+<div style="margin-left:50px;">PlayStation&reg;3用のコンテンツ情報には上記以外にもBGMや動画アイコンなどがありますが、PSP&reg;ダウンローダブルゲームパッケージには、上記の静止画アイコンと説明画像のみを納めてください。他のPlayStation&reg;3用コンテンツ情報を収めてはいけません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>PlayStation&reg;3用静止画アイコンファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">静止画アイコンは、PSP&reg;ダウンローダブルゲームパッケージを代表する画像です。<br>多国語切り替えに対応していて、各言語の静止画アイコンを所定のファイル名で用意しておくと、ユーザーの選択に応じた言語のものが表示されます。各言語の静止画アイコンを用意するかどうかは任意ですが、少なくともデフォルト言語の静止画アイコンを用意する必要があります。<br>データ仕様は以下のとおりです。画像内容に規定がありますので、弊社が提供するテンプレートに基づいて作成してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_1">
+<div style="margin-left:40px;"><h4><b>画サイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">320×176ピクセル<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_2">
+<div style="margin-left:40px;"><h4><b>画像フォーマット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PNG－32bitまたは24bit（インタレース形式は不可）<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_3">
+<div style="margin-left:40px;"><h4><b>ファイルサイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">制限なし<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_4">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デフォルト ※必須&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_00.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;日本語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_01.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;英語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_02.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フランス語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_03.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スペイン語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_04.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドイツ語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_05.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イタリア語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_06.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オランダ語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_07.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ポルトガル語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_08.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロシア語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_09.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;韓国語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_10.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;中国語（繁体字）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_11.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;中国語（簡体字）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_12.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フィンランド語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_13.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スウェーデン語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_14.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デンマーク語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ICON0_15.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ノルウェー語&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>作成方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">市販の画像編集ツールを使用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>PlayStation&reg;3用説明画像ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">説明画像はPSP&reg;ダウンローダブルゲームパッケージの内容を説明するための画像で、コンテンツにフォーカスを当てると表示されます。<br>画面解像度切り替えに対応し、高解像度版のファイルまたは標準解像度版のファイルが、ユーザーのテレビ画面に合わせて表示されます。<br>多国語切り替えに対応し、各言語の説明画像を所定のファイル名で用意しておくと、ユーザーの選択に応じた言語のものが表示されます。各言語の説明画像を用意するかどうかは任意ですが、少なくともデフォルト言語の説明画像を用意する必要があります。<br>データ仕様は以下のとおりです。画像内容に規定がありますので、弊社が提供するテンプレートに基づいて作成してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_6">
+<div style="margin-left:40px;"><h4><b>画サイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;高解像度版&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;：1000×560ピクセル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;標準解像度版&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;：310×250ピクセル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_7">
+<div style="margin-left:40px;"><h4><b>画像フォーマット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PNG－32bitまたは24bit（32bitを推奨：インタレース形式は不可）<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_8">
+<div style="margin-left:40px;"><h4><b>ファイルサイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">制限なし<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_9">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>高解像度版</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>標準解像度版</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デフォルト ※必須&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_00.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_00.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;日本語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_01.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_01.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;英語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_02.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_02.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フランス語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_03.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_03.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スペイン語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_04.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_04.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドイツ語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_05.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_05.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イタリア語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_06.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_06.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オランダ語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_07.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_07.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ポルトガル語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_08.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_08.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロシア語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_09.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_09.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;韓国語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_10.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_10.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;中国語（繁体字）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_11.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_11.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;中国語（簡体字）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_12.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_12.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フィンランド語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_13.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_13.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スウェーデン語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_14.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_14.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デンマーク語&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PIC0_15.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PIC2_15.PNG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ノルウェー語&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_10">
+<div style="margin-left:40px;"><h4><b>作成方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">市販の画像編集ツールを使用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>ゲーム解説書の元画像ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーションの内容や操作方法の説明を適切な画像ファイルとしてPSP&reg;ダウンローダブルゲームパッケージに含めておくと、ユーザーがPSP&reg;システムソフトウェアの画面で「ゲーム解説書」として閲覧できるしくみになっています。ゲーム解説書を省略してもダウンローダブルゲームパッケージを構築することは可能ですが、弊社各リージョンのガイドラインにしたがってください。<br>ゲーム解説書は、多国語切り替えに対応していません。また、ゲーム解説書をNPDRMによって保護するためには、後述の設定ファイルによる指定が必要です。<br>データ仕様は次のとおりです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_11">
+<div style="margin-left:40px;"><h4><b>画サイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">横：480ピクセル(固定)<br>縦：248～960ピクセル<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_12">
+<div style="margin-left:40px;"><h4><b>画像フォーマット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PNG－24bit（インタレース形式不可）<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_13">
+<div style="margin-left:40px;"><h4><b>ファイルサイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">1ページあたり、最大1280Ｋバイト(1280×1024バイト)。<br>最大999ページまで。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_14">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ページ番号を表す数字3桁＋".PNG"：001.PNG, 002.PNG, ...<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_15">
+<div style="margin-left:40px;"><h4><b>作成方法</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">市販の画像編集ツールを使用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>設定ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">設定ファイルは、PlayStation&reg;Storeでコンテンツを識別するためのコンテントIDとマスターパッケージバージョンを記述したテキストファイルです。設定ファイルのファイル名は、NPDRM.CONFとしてください。形式は次のとおりです。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Content-ID = <i>IV0002-NPXS00004_00-0000111122223333</i>
+PackageVersion = <i>01.00</i>
+ProtectDocument = <i>TRUE</i>
+HealthWarning = <i>SCEJ</i>
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_16">
+<div style="margin-left:40px;"><h4><b>コンテントID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">「Content-ID = 」に続けてコンテントID、すなわち弊社から発行されるサービスIDに、ハイフンと任意のラベル16桁を続けたものを記述してください。コンテントIDの詳細については、「PlayStation&reg;Network 概要」ドキュメントを参照してください。コンテントIDは、パッケージごとに異なっていなければなりません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_17">
+<div style="margin-left:40px;"><h4><b>マスターパッケージバージョン</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">「PackageVersion = 」に続けてマスターパッケージバージョンを、整数部2桁小数点以下2桁の数字で記述してください。<br>数値は「Technical Requirements Checklist for PSP&trade; (PlayStation&reg;Portable) Software」（TRC）に記載されているマスターバージョン番号の決め方に準拠して決めてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_18">
+<div style="margin-left:40px;"><h4><b>ゲーム解説書保護</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ゲーム解説書をNPDRMによって保護するには、「ProtectDocument = TRUE」を記述してください。この指定を行ったゲーム解説書は、ダウンローダブルゲームの本体と同様に、購入したユーザアカウントで機器認証したPSP&reg;でのみ閲覧可能となります。「ProtectDocument = FALSE」と記述した場合、または、この指定を行わなかった場合は、ゲーム解説書はNPDRMによって保護されません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_19">
+<div style="margin-left:40px;"><h4><b>起動時注意文指定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ゲーム起動時に起動時注意文を表示するよう、指定することができます。「HelthWarning = 」に続けて、リリースする地域・言語を、下表の指定ワードにより、記述してください。これらの指定により表示される文章は、7章に掲載していますので参照してください。<br>「HealthWarning = NONE」と記述した場合、または、この指定を行わなかった場合は、起動時注意文の表示は行われません。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>指定ワード</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEJ向けタイトル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEA向けタイトル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEE_EN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEE向けタイトル（英語）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEE_FR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEE向けタイトル（フランス語）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEE_DE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEE向けタイトル（ドイツ語）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEE_IT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEE向けタイトル（イタリア語）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEE_ES&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEE向けタイトル（スペイン語）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEAsia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEAsia向けタイトル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_20">
+<div style="margin-left:40px;"><h4><b>圧縮率指定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ダウンローダブルゲームパッケージのオーサリングでは、入力されたUMD&reg;イメージファイルに含まれるデータを圧縮します。圧縮率を変更するには、「ZIPThreshold = 」に続けて、圧縮率(0～100)を記述します。ZIPThreshold行を記述しない場合は、圧縮率は80となります。「ZIPThreshold = 0」を指定すると、非圧縮になり、圧縮されたデータの展開処理に要する負荷がなくなりますが、ファイルサイズが増え、ユーザがパッケージをダウンロードするのに、より長い時間を要します。特に圧縮率変更の必要がなければ、この指定を行わないでください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_21">
+<div style="margin-left:40px;"><h4><b>最適化レベル指定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">弊社のオーサリングサービスでは、ダウンローダブルゲームにおいて、システムがデータを読み込む際の処理性能向上のため、最適化レベルを変更することがあります。この変更によって、開発中のプログラムの動作に支障がある場合は、「OptimizeLevel=」に続けて、最適化レベルの値を記述することで、以前と同様のオーサリングを指定することができます。支障がない場合には、この指定を行わないでください。<br>オーサリングサービスの変更をおこなう際には、技術情報にて詳細を公開していますので参照してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>デバッグオーサリングとテスト</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、シンプルオーサリングサービス(SAS)を用いて、デバッグパッケージを作成するのに必要なファイルと、作成したデバッグパッケージでのテストについて説明します。<br>シンプルオーサリングサービスの操作方法、アクセス方法の詳細につきましては、「PlayStation&reg;Network SMT シンプルオーサリングサービスユーザガイド」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>デバッグパッケージの作成</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_22">
+<div style="margin-left:40px;"><h4><b>ディレクトリ構成</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">3章で用意したファイルを次のディレクトリ構成でZIP形式のアーカイブファイルにまとめてください。<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  ダウンローダブルゲームZIPアーカイブの構成</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">ルートディレクトリの直下に、UMD&reg;イメージファイルを配置してください。UMD&reg; Image Generatorは4つまたは5つのファイルを出力しますので、必ず全部を書き込んでください。また、ルートディレクトリの直下に「PS3_CONT」という名前のサブディレクトリを作成し、PlayStation&reg;3用コンテンツ情報ファイルをその中に配置してください。同様に「DOC」という名前のサブディレクトリを作成し、ゲーム解説書の元画像ファイルを配置してください。最後に、ルートディレクトリ直下に設定ファイル（NPDRM.CONF）を配置してください。<br>作成したZIPアーカイブのファイル名は、"<i>コンテントID</i>.ZIP"としてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>オーサリング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">弊社が提供するシンプルオーサリングサービスを用いて、作成したZIPアーカイブにオーサリングを行い、PSP&reg;ダウンローダブルゲームパッケージを作成してください。シンプルオーサリングサービスの利用方法の詳細は、「PlayStation&reg;Network SMT シンプルオーサリングサービスユーザガイド」ドキュメントを参照してください。<br>アップロードしたファイルに問題がある場合、下記のエラーコードが通知されます。下記以外のエラーが通知される場合、エラーコードと共に弊社にご連絡ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_23">
+<div style="margin-left:40px;"><h4><b>ダウンローダブルゲームパッケージ オーサリングエラー一覧</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コード</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>原因／対処方法</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;64&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFの記述に不足あるいは誤りがあります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;65&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのContent-ID指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;66&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのPackageVersion指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;67&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なUMD&reg;マスタイメージのため、変換に失敗しました。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;68&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;マスタイメージ内にPARAM.SFOが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;69&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたDISC_IDはダウンローダブルゲームでは使えません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;70&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PS3_CONT/以下に、不要なファイルが存在しています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;71&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不要なファイルが含まれています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;72&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;大文字小文字の違いのみの名前を持つ複数ファイルが、同一ディレクトリに&nbsp;&nbsp;<br>&nbsp;&nbsp;含まれています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;73&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PlayStation&reg;3用ICON0.PNGが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;74&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PlayStation&reg;3用PIC0.PNGが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;75&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PlayStation&reg;3用PIC2.PNGが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;76&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;マスタイメージ内のBOOT.BINが不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;77&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;マスタイメージ内のPARAM.SFOが読み出せません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;78&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;マスタイメージ内のPARAM.SFOを変換できませんでした。&nbsp;&nbsp;<br>&nbsp;&nbsp;不正なPARAM.SFOである可能性があります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;79&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DOC/以下のファイルに問題があり、解説書ファイルの生成に失敗しました。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;80&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのHealthWarning指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;82&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのProtectDocument指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;83&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;処理対象のZIPファイル名に、NPDRM.CONFで指定されたContent-IDが&nbsp;&nbsp;<br>&nbsp;&nbsp;含まれていません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;84&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZIPアーカイブのルートディレクトリにUMD&reg;イメージファイル群が見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;85&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZIPアーカイブのルートディレクトリにNPDRM.CONFが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;87&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;マスタイメージが古い形式である可能性があります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;88&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;マスタイメージ内のPARAM.SFOが不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;94&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;マスタイメージの検査中に、問題が発見されました。最新のUMD&reg; Image Checkerツールで、詳細を確認してください。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>開発ツールを用いてのテスト</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">シンプルオーサリングサービスから得られるファイルは次の2つです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSP&reg;開発ツールで動作テストを行うためのZIPパッケージ（*.ZIP）
+<li> PlayStation&reg;3開発ツールでコンテンツ情報を確認するためのPKGパッケージ（*.PKG）
+</ul></div>
+<div style="margin-left:50px;">ZIPパッケージは、Memory Stick&trade;のルートディレクトリに展開してください。<br>そのMemory Stick&trade;をPSP&reg;開発ツールにセットすると、PSP&reg;システムソフトウェアのゲーム列から起動し、動作確認することができます。Memory Stick&trade;上のアプリケーションをシステムソフトウェアから起動した状態であればUMD&reg;がなくても、disc0:の内容を参照するプログラムをデバッガから実行可能です。<br>なおZIPパッケージは、PSP&reg;開発ツールでのみ動作します。<br><br>PKGパッケージは、そのままMemory Stick&trade;のルートディレクトリに保存してください。<br>そのMemory Stick&trade;をPlayStation&reg;3の開発ツールにセットし、システムソフトウェアのゲーム列にある"Install Package Files"という項目を選択してインストールしてください。インストールした後、システムソフトウェアの画面にPlayStation&reg;3用コンテンツ情報が正しく表示されることを確認してください。また、PSP&reg;開発ツールをPlayStation&reg;3開発ツールにUSB接続し、インストールしたコンテンツを選択することで、PlayStation&reg;3からPSP&reg;にコピーするときの動作を確かめることができます。その際は、PlayStation&reg;Networkにサインインの上、操作を行ってください。<br>なお、PlayStation&reg;3の開発ツールをお持ちでない場合は、弊社パブリッシャーリレーション部へご確認ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>パッケージの検査</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">シンプルオーサリングサービスから得られたPKGパッケージについて、make_package_npdrmコマンドを用いて、正当性の検査をすることができます。<br>正当性の検査をするには、--checkオプションを使用してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+例） % make_package_npdrm  --check  IV0002-NPXS00004_00-0000111122223333.pkg
+
+</font></pre></div>
+<div style="margin-left:50px;">また、--listオプションを使用することで、パッケージに含まれるファイルを表示することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+例） % make_package_npdrm  --list  IV0002-NPXS00004_00-0000111122223333.pkg
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>マスター提出とQAテスト</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>提出用ディスクの作成</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_24">
+<div style="margin-left:40px;"><h4><b>ディレクトリ構成</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">用意したファイルを次のディレクトリ構成でDVD-Rディスクに書き込んでください。<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  提出用ディスクのディレクトリ構成</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">ルートディレクトリの直下に、UMD&reg;イメージファイルを配置してください。UMD&reg; Image Generatorは4つまたは5つのファイルを出力しますので、必ず全部を書き込んでください。また、ルートディレクトリの直下に「PS3_CONT」という名前のサブディレクトリを作成し、PlayStation&reg;3用コンテンツ情報ファイルをその中に配置してください。同様に「DOC」という名前のサブディレクトリを作成し、ゲーム解説書の元画像ファイルを配置してください。最後に、ルートディレクトリ直下に設定ファイル（NPDRM.CONF）を配置してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_25">
+<div style="margin-left:40px;"><h4><b>DVDライティングソフトウェア</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">書き込みに使用するDVDライティングソフトウェアは任意です。「data DVD」として書き込むことに注意してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_26">
+<div style="margin-left:40px;"><h4><b>作成したディスクの確認</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">書き込みが正常に終了すれば、そのDVD-RディスクをPSP&reg;開発ツールのDVDドライブにセットして使用することができます。アプリケーションが正常に動作することを確認するとともに、システムソフトウェアのコンテンツ情報チェック機能を使用して、コンテンツ情報が正しいことを確認してください。詳細は、PSP&reg;ランタイムライブラリドキュメント「コンテンツ情報チェック機能」を参照してください。なお、PSP&reg;開発ツールのシステムソフトウェアは、あらかじめ弊社の指定するバージョンにアップデートしておいてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>マスター提出</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">上記に従って作成したDVD-Rディスクを、チェック済みの「Technical Requirements Checklist for PSP&trade; (PlayStation&reg;Portable) Software」（TRC）そのほか必要な書類とともに提出してください。<br>UMD&reg;とダウンローダブルゲームの両方を発売するタイトルの場合、ダウンローダブルゲーム向けに作成したDVD-Rディスクで、UMD&reg;のマスターを兼ねることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>QAテスト</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">弊社では、提出されたDVD-Rディスクを元にオーサリング処理を行ってPSP&reg;ダウンローダブルゲームパッケージを作成し、QAテストを行います。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_3_27">
+<div style="margin-left:40px;"><h4><b>特別なQAテスト</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">いくつかのテスト項目については特別な工程でQAテストを行います。次に示すテストが必要なアプリケーションの場合は、あらかじめ弊社パブリッシャーリレーション部にご相談ください。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> PSP&reg;本体のモデル間の互換性テスト
+<li> 外部ディスプレイへの出力テスト
+<li> 周辺機器を使用してのテスト
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>公開</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">QAテスト完了後、PSP&reg;ダウンローダブルゲームパッケージは、エンドユーザー向けの公開サーバーへ移されて公開されます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>UMD&reg;ゲームのリパッケージ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、すでにUMD&reg;ゲームとして発売されているタイトルをPSP&reg;ダウンローダブルゲームにリパッケージしたいときの作業手順について、ここまでの説明と異なる点を中心に説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>アプリケーション本体の作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">既存のUMD&reg;ゲームをPSP&reg;ダウンローダブルゲームリパッケージしてPlayStation&reg;Storeで配信したい場合は、まず弊社パブリッシャーリレーション部へご確認ください。サービスIDの発行など、PlayStation&reg;Storeの利用に関していくつかの手続きが必要です。<br><br>リパッケージに際してアプリケーション本体の変更は通常は不要ですが、以下のように注意の必要な場合があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_1_28">
+<div style="margin-left:40px;"><h4><b>複数枚組のタイトル</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">複数枚組のタイトルは、PSP&reg;ダウンローダブルゲームにリパッケージすることができません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>パッケージングに必要なファイルの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PlayStation&reg;3用コンテンツ情報、ゲーム解説書の元画像ファイル、設定ファイル（NPDRM.CONF）は、新規のPSP&reg;ダウンローダブルゲームパッケージを作成するときと同様に作成してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>提出用ディスクの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">用意したファイルを次のディレクトリ構成でDVD-Rディスクに書き込んでください。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  リパッケージ版提出用ディスクのディレクトリ構成</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">UMD&reg;イメージファイルが要らないこと以外は、新規のPSP&reg;ダウンローダブルゲームパッケージの場合と同じです。<br>書き込みに使用するDVDライティングソフトウェアは任意です。「data DVD」として作成することに注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>QAテスト</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">上記で作成したDVD-Rディスクを、UMD&reg;とともに弊社に提出してください。弊社側でPSP&reg;ダウンローダブルゲームパッケージを作成し、QAテストを行って、公開します。<br>リパッケージの場合、ゲーム本体に関しては貴社でテストを行っていただくことはありません。PlayStation&reg;3用コンテンツ情報に関して明らかな画像の破たんなどがみられた場合は、PSP&reg;ダウンローダブルゲームパッケージをお返しして確認していただく場合があります。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>参考情報</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>Memory Stick&trade;上でのディレクトリ構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ダウンローダブルゲームパッケージがPSP&reg;のMemory Stick&trade;にインストールされたとき、ディレクトリ構成は以下のようになります。PSP&reg;ダウンローダブルゲームディレクトリの名前は、コンテントIDに含まれる品番ではなく、PARAM.SFOの品番に対応しますので注意してください。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  Memory Stick&trade;上でのディレクトリ構成の例</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>起動時注意文指定により表示される文章</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">起動時注意文指定を行うと、指定ワードによりそれぞれ下記の文章が表示されます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese005.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5  「SCEJ」により表示される文章</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese006.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 6  「SCEA」により表示される文章</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese007.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 7  「SCEE_EN」により表示される文章</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese008.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 8  「SCEE_FR」により表示される文章</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese009.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 9  「SCEE_DE」により表示される文章</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese010.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 10  「SCEE_IT」により表示される文章</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese011.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 11  「SCEE_ES」により表示される文章</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Downloadable_Game-Packaging-Japanese012.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 12  「SCEAsia」により表示される文章</b><br>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

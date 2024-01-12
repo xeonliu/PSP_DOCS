@@ -1,0 +1,1446 @@
+<html lang="jp">
+<head>
+<title>libdeflt-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libdeflt
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGzipHeader"></a>
+<table width="100%"><td width="70%"><font size=6>SceGzipHeader<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ライブラリエントリテーブルのヘッダ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+typedef struct {
+	unsigned char <i>id1</i>;
+	unsigned char <i>id2</i>;
+	unsigned char <i>cm</i>;
+	unsigned char <i>flg</i>;
+	unsigned int <i>uiMtime</i>;
+	unsigned char <i>xlf</i>;
+	unsigned char <i>os</i>;
+} __attribute__((packed)) <b>SceGzipHeader</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id1</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マジックコード（0x1F固定）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id2</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マジックコード（0x8B固定）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cm</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮方法を示します。libdefltが対応するのは&nbsp;&nbsp;<br>&nbsp;&nbsp;0x08= DEFLATE形式のみです。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フラグ&nbsp;&nbsp;<br>&nbsp;&nbsp;bit 7～5: Reserved&nbsp;&nbsp;<br>&nbsp;&nbsp;bit 4: FCOMMENT&nbsp;&nbsp;<br>&nbsp;&nbsp;bit 3: FNAME&nbsp;&nbsp;<br>&nbsp;&nbsp;bit 2: FEXTRA&nbsp;&nbsp;<br>&nbsp;&nbsp;bit 1: FHCRC&nbsp;&nbsp;<br>&nbsp;&nbsp;bit 0: FTEXT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiMtime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル更新日時（GMT）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>xlf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エクストラフラグ&nbsp;&nbsp;<br>&nbsp;&nbsp;0x02= 最大圧縮率&nbsp;&nbsp;<br>&nbsp;&nbsp;0x04= 速度優先&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>os</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;OS識別コード&nbsp;&nbsp;<br>&nbsp;&nbsp;0x00= FAT&nbsp;&nbsp;<br>&nbsp;&nbsp;0x01= Amiga&nbsp;&nbsp;<br>&nbsp;&nbsp;0x02= VMS&nbsp;&nbsp;<br>&nbsp;&nbsp;0x03= Unix&nbsp;&nbsp;<br>&nbsp;&nbsp;0x04= VM/CMS&nbsp;&nbsp;<br>&nbsp;&nbsp;0x05= Atari TOS&nbsp;&nbsp;<br>&nbsp;&nbsp;0x06= HPFS(OS/2, NT)&nbsp;&nbsp;<br>&nbsp;&nbsp;0x07= Macintosh&nbsp;&nbsp;<br>&nbsp;&nbsp;0x08= Z-System&nbsp;&nbsp;<br>&nbsp;&nbsp;0x09= CP/M&nbsp;&nbsp;<br>&nbsp;&nbsp;0x0A= TOPS-20&nbsp;&nbsp;<br>&nbsp;&nbsp;0x0B= NTFS(NT)&nbsp;&nbsp;<br>&nbsp;&nbsp;0x0C= QDOS&nbsp;&nbsp;<br>&nbsp;&nbsp;0x0D= Acorn RISCOS&nbsp;&nbsp;<br>&nbsp;&nbsp;0xFF= Unknown&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">GZIP形式の圧縮ファイルのヘッダを表現する構造体です。<br>各種GZIPヘッダパース関数を使用すると、このヘッダの内容を解釈し、各フィールドの値や開始アドレスなどを得ることができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetInfo">sceGzipGetInfo</a>(), <a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetName">sceGzipGetName</a>(), <a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetComment">sceGzipGetComment</a>(), <a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetCompressedData">sceGzipGetCompressedData</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceZipHeaderPK0304"></a>
+<table width="100%"><td width="70%"><font size=6>SceZipHeaderPK0304<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルごとに付くZIPヘッダ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+typedef struct {
+	unsigned int <i>signature</i>;
+	unsigned short <i>version</i>;
+	unsigned short <i>option</i>;
+	unsigned short <i>cm</i>;
+	unsigned short <i>filetime</i>;
+	unsigned short <i>filedate</i>;
+	unsigned int <i>crc32</i>;
+	unsigned int <i>compsize</i>;
+	unsigned int <i>uncompsize</i>;
+	unsigned short <i>fnamelen</i>;
+	unsigned short <i>extralen</i>;
+	char <i>filename</i>[1];
+} __attribute__((packed)) <b>SceZipHeaderPK0304</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>signature</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マジックコード（0x04034b50固定）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>version</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バージョン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オプション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cm</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮方法を示します。libdefltが対応するのは0x08= DEFLATE形式のみです。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filetime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル更新時刻（MS-DOS形式）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filedate</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル更新日（MS-DOS形式）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>crc32</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRC&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>compsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮後のサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uncompsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮前のサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fnamelen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名の長さ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>extralen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;拡張情報の長さ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名（可変長、<i>fnamelen</i>バイトで終端文字はなし）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ZIP形式の圧縮ファイルのヘッダを表現する構造体です。ZIPファイルには複数のファイルを一つにまとめる（アーカイブする）ことができますが、アーカイブされた個々のファイルごとにこの形式のヘッダが付きます。<br>ZIPヘッダパース関数を使用すると、このヘッダの内容を解釈し、各フィールドの値や開始アドレスなどを得ることができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceZipGetInfo">sceZipGetInfo</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceZipFooterPK0708"></a>
+<table width="100%"><td width="70%"><font size=6>SceZipFooterPK0708<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルごとに付くZIPフッタ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+typedef struct {
+	unsigned int <i>signature</i>;
+	unsigned int <i>crc32</i>;
+	unsigned int <i>compsize</i>;
+	unsigned int <i>uncompsize</i>;
+} __attribute__((packed)) <b>SceZipFooterPK0708</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>signature</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マジックコード（0x08074b50固定）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>crc32</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRC&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>compsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮後のサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uncompsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮前のサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ZIP形式の圧縮ファイルのフッタを表現する構造体です。ファイルごとに付くヘッダ内でCRCおよびファイルサイズに関する情報を格納しなかった場合、それらの情報を格納するためにこの形式のフッタが付与されます。<br>ZIPヘッダパース関数を使用すると、ヘッダ内にCRC32の値がなかった場合は、このフッタの内容を解釈し、適切なCRC32の値を返します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceZipGetInfo">sceZipGetInfo</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceDeflateDecompress"></a>
+<table width="100%"><td width="70%"><font size=6>sceDeflateDecompress<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>DEFLATE圧縮の展開<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceDeflateDecompress</b> (
+	void *<i>pDst</i>,
+	unsigned int <i>uiBufSize</i>,
+	const void *<i>pSrcDeflate</i>,
+	void **<i>ppNext</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pDst</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータを受け取るバッファアドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiBufSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータを受け取るバッファのサイズを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcDeflate</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DEFLATEフォーマットの圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppNext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開終了時、処理された圧縮データの次のアドレスを返す&nbsp;&nbsp;<br>&nbsp;&nbsp;void *型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータのサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なフォーマット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_SIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開中にバッファをオーバーフローした&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">DEFLATE圧縮されたデータを展開します。<br>この関数ではDEFLATE圧縮データの先頭アドレスを受け取ります。GZIPヘッダ付きのデータを展開する場合には、<a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetCompressedData">sceGzipGetCompressedData</a>()関数を用いてDEFLATE圧縮データの先頭アドレスを取得するか、<a href="../others/libdeflt-Reference-Japanese.htm#sceGzipDecompress">sceGzipDecompress</a>()関数を使用してください。<br>展開が正常に終了した場合<i>ppNext</i>引数によって指定されたvoid *型変数に、処理された圧縮データの次のアドレスが代入されます。GZIP形式の場合はCRC32, ISIZEが、ZLIB形式の場合はADLER32が保存されています。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipDecompress">sceGzipDecompress</a>(), <a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetCompressedData">sceGzipGetCompressedData</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGzipDecompress"></a>
+<table width="100%"><td width="70%"><font size=6>sceGzipDecompress<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>GZIPフォーマットの展開<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceGzipDecompress</b> (
+	void *<i>pDst</i>,
+	unsigned int <i>uiBufSize</i>,
+	const void *<i>pSrcGzip</i>,
+	unsigned int *<i>puiCrc32</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pDst</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータを受け取るバッファアドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiBufSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータを受け取るバッファのサイズを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcGzip</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIPフォーマットの圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>puiCrc32</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRC32値を受け取るunsigned int型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータのサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なフォーマット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_SIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開中にバッファをオーバーフローした&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_NOT_SUPPORTED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DEFLATE以外の圧縮方法が用いられていた&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">DEFLATE圧縮されたデータを展開します。<br>この関数ではGZIPヘッダ付き圧縮データの先頭アドレスを受け取ります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipCrc32">sceGzipCrc32</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceZlibDecompress"></a>
+<table width="100%"><td width="70%"><font size=6>sceZlibDecompress<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ZLIBフォーマットの展開<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceZlibDecompress</b> (
+	void *<i>pDst</i>,
+	unsigned int <i>uiBufSize</i>,
+	const void *<i>pSrcDeflate</i>,
+	unsigned int *<i>puiAdler32</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pDst</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータを受け取るバッファアドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiBufSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータを受け取るバッファのサイズを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcDeflate</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZLIB形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>puiAdler32</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開終了時、処理された圧縮データの次のアドレスに保持されていた&nbsp;&nbsp;<br>&nbsp;&nbsp;Adler-32チェック値を返すunsigned int型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータのサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なフォーマット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_SIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開中にバッファをオーバーフローした&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">DEFLATE圧縮されたデータを展開します。<br>この関数ではZLIB形式の圧縮データの先頭アドレスを受け取ります。<br>展開が正常に終了した場合<i>puiAdler32</i>引数によって指定されたunsigned int型変数に、処理された圧縮データの次のアドレスに保持されていたAdler-32チェック値が代入されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipDecompress">sceGzipDecompress</a>(), <a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetCompressedData">sceGzipGetCompressedData</a>(), <a href="../others/libdeflt-Reference-Japanese.htm#sceZlibAdler32">sceZlibAdler32</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGzipGetComment"></a>
+<table width="100%"><td width="70%"><font size=6>sceGzipGetComment<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>コメント文字列を取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+const char *<b>sceGzipGetComment</b> (
+	const char *<i>pSrcGzip</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcGzip</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIP形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コメント文字列の先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIPヘッダにコメント文字列が保存されていない。&nbsp;&nbsp;<br>&nbsp;&nbsp;または、<i>pSrcGzip</i>で指定されたデータはGZIPヘッダではない。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">GZIPヘッダからコメント文字列が保存されているアドレスを取得します。GZIP形式でない場合、ヘッダにコメント文字列が含まれなかった場合にはNULLが返ります。<br>この関数は<a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetInfo">sceGzipGetInfo</a>()関数のラッパ関数です。<br></div>
+<br>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetInfo">sceGzipGetInfo</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGzipGetCompressedData"></a>
+<table width="100%"><td width="70%"><font size=6>sceGzipGetCompressedData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>DEFLATE圧縮データの先頭アドレスを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+const void *<b>sceGzipGetCompressedData</b> (
+	const char *<i>pSrcGzip</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcGzip</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIP形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DEFLATE圧縮データの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcGzip</i>で指定されたデータはGZIP形式ではない。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">GZIPヘッダからdefalte圧縮データの先頭アドレスを取得します。GZIP形式でない場合にはNULLが返ります。<br>この関数は<a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetInfo">sceGzipGetInfo</a>()関数のラッパ関数です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetInfo">sceGzipGetInfo</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGzipGetInfo"></a>
+<table width="100%"><td width="70%"><font size=6>sceGzipGetInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>GZIPヘッダから各要素を取得する<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceGzipGetInfo</b> (
+	const void *<i>pSrcGzip</i>,
+	const void **<i>ppvExtra</i>,
+	const char **<i>ppszName</i>,
+	const char **<i>ppszComment</i>,
+	unsigned short *<i>pusCrc</i>,
+	const void **<i>ppvData</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcGzip</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIP形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppvExtra</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エクストラフィールドの先頭アドレスを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;void *型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppszName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名フィールドの先頭アドレスを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;const char *型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppszComment</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コメントフィールドの先頭アドレスを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;const char *型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pusCrc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRC16値を受け取るunsigned short型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppvData</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮データの先頭アドレスを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;const void *型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIPヘッダが不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">GZIPファイルヘッダから各要素のアドレスを取得します。CRC16のみは固定サイズのデータであるため、要素が直接取得されます。<br>それぞれの要素はGZIPヘッダ内で必須ではない場合もあります。ファイル内に含まれない要素だった場合には、アドレスにNULLが渡されます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGzipGetName"></a>
+<table width="100%"><td width="70%"><font size=6>sceGzipGetName<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル名を取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+const char *<b>sceGzipGetName</b> (
+	const char *<i>pSrcGzip</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcGzip</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIP形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名の先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIPヘッダにファイル名が保存されていない。&nbsp;&nbsp;<br>&nbsp;&nbsp;または、<i>pSrcGzip</i>で指定されたデータはGZIPヘッダではない。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">GZIPヘッダからファイル名が保存されているアドレスを取得します。GZIP形式でない場合、ヘッダにファイル名が含まれなかった場合にはNULLが返ります。<br>この関数は<a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetInfo">sceGzipGetInfo</a>()関数のラッパ関数です。<br></div>
+<br>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipGetInfo">sceGzipGetInfo</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGzipIsValid"></a>
+<table width="100%"><td width="70%"><font size=6>sceGzipIsValid<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>GZIPヘッダのマジックコードをチェックする<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceGzipIsValid</b> (
+	const void *<i>pSrcGzip</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcGzip</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIP形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GZIPヘッダのマジックコード発見&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マジックコードが不一致&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ヘッダの先頭にあるマジックコードをチェックし、そのデータがGZIP形式であるかどうかを調べます。GZIP形式のヘッダは最初の2バイトがマジックコードで、0x1F, 0x8Bとなります。sceGzipIsValid()関数では先頭の2バイトについてのみチェックします。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceZlibGetCompressedData"></a>
+<table width="100%"><td width="70%"><font size=6>sceZlibGetCompressedData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>DEFLATE圧縮データの先頭アドレスを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+const void *<b>sceZlibGetCompressedData</b> (
+	const char *<i>pSrcZlib</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcZlib</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZLIB形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DEFLATE圧縮データの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcZlib</i>で指定されたデータはZLIB形式ではない。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ZLIB形式ヘッダからdefalte圧縮データの先頭アドレスを取得します。ZLIB形式でない場合にはNULLが返ります。<br>この関数は<a href="../others/libdeflt-Reference-Japanese.htm#sceZlibGetInfo">sceZlibGetInfo</a>()関数のラッパ関数です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceZlibGetInfo">sceZlibGetInfo</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceZlibGetInfo"></a>
+<table width="100%"><td width="70%"><font size=6>sceZlibGetInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ZLIBヘッダから各要素を取得する<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceZlibGetInfo </b>(
+	const void *<i>pSrcZlib</i>,
+	unsigned char *<i>pbCmf</i>,
+	unsigned char *<i>pbFlg</i>,
+	unsigned int *<i>puiDictId</i>,
+	const void **<i>ppvData</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcZlib</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZLIB形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pbCmf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮の方法およびフラグを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;unsigned char型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pbFlg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮レベルなどのフラグを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;unsigned char型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>puiDictId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;定義済み辞書を用いる場合の辞書IDを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;unsigned int型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppvData</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮データの先頭アドレスを受け取る&nbsp;&nbsp;<br>&nbsp;&nbsp;const void *型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZLIBヘッダが不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ZLIB形式から各要素を取得します。各要素の意味はRFC1950をご参照ください。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceZlibIsValid"></a>
+<table width="100%"><td width="70%"><font size=6>sceZlibIsValid<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ZLIBヘッダのマジックコードをチェックする<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceZlibIsValid</b> (
+	const void *<i>pSrcZlib</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrcZlib</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZLIB形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZLIBヘッダのマジックコード発見&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;マジックコードが不一致&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ZLIB形式のヘッダの先頭にあるマジックコードをチェックし、そのデータがZLIB形式であるかどうかを調べます。ZLIB形式のヘッダは最初の2バイトをビッグエンディアンの16ビット値とみなしたとき、31の整数倍になります。sceZlibIsValid()関数では先頭の2バイトについてのみチェックします。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceZipGetInfo"></a>
+<table width="100%"><td width="70%"><font size=6>sceZipGetInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ZIPヘッダから各要素を取得する<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceZipGetInfo </b>(
+	const void *<i>pSrc</i>,
+	const void **<i>ppvExtra</i>,
+	unsigned int *<i>puiCrc</i>,
+	const void **<i>ppvData</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZIP形式の圧縮データの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppvExtra</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;拡張情報の格納されているアドレスを受け取るvoid *型変数への&nbsp;&nbsp;<br>&nbsp;&nbsp;ポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>puiCrc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRC32値を受け取るunsigned int型変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ppvData</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;圧縮データの先頭アドレスを受け取るconst void *型変数への&nbsp;&nbsp;<br>&nbsp;&nbsp;ポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ZIPヘッダが不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ZIP形式アーカイブから、アーカイブ内部の個々のファイルに関する情報を取得します。<br><i>ppvData</i>に格納されるアドレスからDEFLATE形式の圧縮データ、あるいは圧縮なしでそのままコピーされた元データが置かれています。圧縮形式であった場合、このアドレスを<a href="../others/libdeflt-Reference-Japanese.htm#sceDeflateDecompress">sceDeflateDecompress</a>()に渡すことで、圧縮されたデータを展開することが可能です。<br>圧縮形式かどうかの判断は<a href="../others/libdeflt-Reference-Japanese.htm#SceZipHeaderPK0304">SceZipHeaderPK0304</a>構造体の<i>cm</i>メンバの値をチェックすることで行ってください。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGzipCrc32"></a>
+<table width="100%"><td width="70%"><font size=6>sceGzipCrc32<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CRC32チェックサムの計算<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceGzipCrc32</b> (
+	unsigned int <i>uiCrc</i>,
+	const unsigned char *<i>pSrc</i>,
+	unsigned int <i>uiSize</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiCrc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;初期値を指定します。通常は0を指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRC32計算するデータの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRC32計算するデータのサイズを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CRC32を返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CRC32アルゴリズムを用いたチェックデジットを計算します。RFC1952をご参照ください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceGzipDecompress">sceGzipDecompress</a>()<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceZlibAdler32"></a>
+<table width="100%"><td width="70%"><font size=6>sceZlibAdler32<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Adler-32チェックサムの計算<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+int <b>sceZlibAdler32</b> (
+	unsigned int <i>uiAdler</i>,
+	const unsigned char *<i>pSrc</i>,
+	unsigned int <i>uiSize</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能<br>マルチスレッドセーフである（割り込み禁止、許可状態に依存しない）<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiAdler</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;初期値を指定します。通常は1を指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSrc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チェックサム計算するデータの先頭アドレスを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チェックサム計算するデータのサイズを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Adler-32形式のチェックサムを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Adler-32アルゴリズムを用いたチェックサムを計算します。RFC1950をご参照ください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceZlibDecompress">sceZlibDecompress</a>()<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libdefltのエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開されたデータのサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_INVALID_FORMAT">SCE_ERROR_INVALID_FORMAT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なフォーマット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_INVALID_SIZE">SCE_ERROR_INVALID_SIZE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;展開中にバッファをオーバーフローした&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_NOT_SUPPORTED">SCE_ERROR_NOT_SUPPORTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DEFLATE以外の圧縮方法が用いられていた&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

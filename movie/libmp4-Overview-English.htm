@@ -1,0 +1,536 @@
+<html lang="en">
+<head>
+<title>libmp4-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libmp4 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>libmp4 Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4 is a library for demultiplexing the video and audio streams of MP4 files. The demultiplexed video and audio tracks can be decoded with the AVC decoding functions of libmpeg and the AAC decoding functions of libmp4, respectively. <br>Video and audio track data can be decoded one sample (one access unit) at a time. Because the PSP&trade; is equipped with dedicated AAC and AVC decoding hardware, decoding can be performed quickly.<br><br>The following MP4 file formats are supported. (Tools for creating MP4 files are not provided. They can be created using ordinary third-party tools.)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>MP4</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> Files that are not movie fragments
+<li> Files containing 0 or 1 tracks of video and audio, demultiplexed a track at a time.
+<li> Files with a maximum size of 4 GB
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2">
+<div style="margin-left:40px;"><h4><b>Video</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> AVC Main Profile Lv2.1 (entropy coding is supported only for CABAC)
+<li> 3 reference frames from 64x64 to 480x272 pixels (16-pixel increments)
+<li> Progressive scan with a frame rate of 29.97 Hz
+<li> Duration ranging from 1 frame to 4.97 hours
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_3">
+<div style="margin-left:40px;"><h4><b>Audio</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> Supported sampling frequencies are 24000, 32000, 44100, and 48000 Hz
+<li> Supported codec is MPEG4 AAC-LC (no SBR)
+<li> Headerless (raw_data_frame() only) AACdata
+<li> Stereo only or mono only
+<li> Duration ranging from 1 frame to 4.97 hours
+</ul></div>
+<div style="margin-left:50px;"><br>It is a desirable goal to be able to play all videos using the PSP&trade; system software's video feature. However, not all videos that can be played can necessarily be handled by libmp4. For example, the AVC Baseline profile is supported by the video playback function, but it is not supported by libmp4. Therefore, it cannot be played using libmp4.<br><br>AVC decoding uses libmpeg. For information and precautions concerning AVC decoding and the handling of decoded YCbCr and RGBA images, refer to the libmpeg documentation.<br><br>Stereo with a bit depth of 16 is the only PCM data format that can be AAC-decoded and output. Even if the input is mono AAC data, stereo data equalized between the left and right channels will be output as the decoding result. Also, libmp4 does not provide a function for outputting the audio of decoded PCM data. To output PCM data as audio, libmp4 must be used together with vaudio. Since libwave or simple audio can only handle 44100 Hz PCM data, vaudio should always be used. For information about how to output PCM data as audio, refer to the &quot;Sound Overview&quot; document.<br>Also, libmp4 cannot be used at the same time as libaac.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Configuration</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The configuration of libmp4 is shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp4-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  libmp4 Configuration</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libmp4.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp4.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp4_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp4_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The libmpeg module is also required if AVC tracks need to be supported in MP4 files. A utility function is also required to load the libmp4 and libmpeg modules as well as modules that perform subservient functions. For details, refer to the utility overview.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Related Documents</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> libmpeg<br>libmpeg functions are used for AVC decoding. Refer to the libmpeg documentation when working with video.
+<li> The "Module Utility" chapter of the Utility Services Overview document. <br>This contains information about the utility function used to load libmp4 and other modules.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Movie Playback Processing Flow</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following figure shows the data flow with names of specific functions and structures.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp4-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Specific Data Flow</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The overall process for playing movies using these functions and structures is shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp4-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Movie Playback Processing Flow</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If you wish to perform AVC decoding, initialize libmpeg first (if you only want to perform AAC decoding, you do not need to initialize libmpeg). Call <a href="../movie/libmpeg-Reference-English.htm#sceMpegInit">sceMpegInit</a>(). Then, call <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>(), <a href="../movie/libmpeg-Reference-English.htm#sceMpegQueryMemSize">sceMpegQueryMemSize</a>(), and <a href="../movie/libmpeg-Reference-English.htm#sceMpegCreate">sceMpegCreate</a>() with SCE_MPEG_MODE_ONLY_AVC_DECODE specified for the <i>iMpegMode</i> argument. This will initialize the AVC decoder for libmp4. For the <i>pAVCTop</i> argument of <a href="../movie/libmpeg-Reference-English.htm#sceMpegCreate">sceMpegCreate</a>(), use the return value of <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceGetAvcDecTopAddr">sceMpegAvcResourceGetAvcDecTopAddr</a>(), which can be used after <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>() is called.<br>Next, call <a href="../movie/libmp4-Reference-English.htm#sceMp4Init">sceMp4Init</a>() to initialize libmp4. Then, use <a href="../movie/libmp4-Reference-English.htm#sceMp4Create">sceMp4Create</a>() to perform preparations for demultiplexing appropriate for MP4 files. libmp4 uses the <i>pSceMp4FileFp</i> argument of the <a href="../movie/libmp4-Reference-English.htm#sceMp4Create">sceMp4Create</a>() function to perform file accesses and uses an area with size <i>iReadCacheSize</i> starting from the address <i>pReadCacheBuf</i> as a buffer area for file reading.<br>Use <a href="../movie/libmp4-Reference-English.htm#sceMp4RegistTrack">sceMp4RegistTrack</a>() to set the AVC track or AAC track for demultiplexing. The <i>pSceMp4FileFp</i> structure is also used here to perform the file access settings to be used when buffering each track. After this, use <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>() to configure the buffering for each track. Then call <a href="../movie/libmp4-Reference-English.htm#sceMp4InitAu">sceMp4InitAu</a>() (<a href="../movie/libmpeg-Reference-English.htm#sceMpegInitAu">sceMpegInitAu</a>() can also be called) to set the buffer area for storing one pre-decoded sample (one access unit) that is generated during demultiplexing. For AVC tracks, use <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceGetAvcEsBuf">sceMpegAvcResourceGetAvcEsBuf</a>() to extract the buffering area. This was previously allocated as a special area in main memory by <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>() which was called earlier. For AAC tracks, the user should allocate an 8192-byte area with 64-byte alignment from main memory. To perform AAC decoding, call <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecodeInitResource">sceMp4AacDecodeInitResource</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecodeInit">sceMp4AacDecodeInit</a>() to prepare the AAC decoder.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Read data into sample buffer</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>() to read data from the MP4 file into the sample buffer storage area that was set using <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>(). Since MP4 file accesses are performed in units based on the <i>iReadCacheSize</i> argument of <a href="../movie/libmp4-Reference-English.htm#sceMp4Create">sceMp4Create</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>(), be sure to set this argument with units that are standard for the filesystem.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Extract elementary streams (demultiplexing)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To extract one access unit's worth of streams from the MP4 data in the sample buffer, separate functions must be used for each stream type. Specifically, use <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>() for the video stream and <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>() for the audio stream. When these functions are called, timestamps (PTS/DTS) can also be obtained when they are available. If the demultiplexing functions mentioned above are called when the sample buffer has less than one access unit's worth of MP4 data, <a href="../movie/libmp4-Reference-English.htm#SCE_MPEG_ERROR_MP4_NO_DATA">SCE_MPEG_ERROR_MP4_NO_DATA</a> will be returned as the return value. In this case, you can extract the required elementary streams for video and audio decoding by returning to step (2), using <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>() to read MP4 data into the sample buffer, and calling the above functions again.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Decode video and audio data</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the libmpeg AVC decoding function <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcDecode">sceMpegAvcDecode</a>() to decode the video track. The decoded result is a top-left to bottom-right raster scanned image in RGBA (32-bit) format. There is also a function for retrieving the decoded result in YCbCr format, however, its explanation is omitted here.<br>Use <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecode">sceMp4AacDecode</a>() to decode the AAC-format audio stream.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>Output video and audio data </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Since libmp4 cannot output the decoded video and audio data to an LCD and audio device on its own, you must perform the appropriate processing yourself.<br>After outputting the data, return to step (3), extract the next part of the elementary stream, decode it, perform output processing again and repeat.<br>Decide when to stop playback according to the total number of samples in the track and the total track playback time obtained from <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAvcTrackInfoData">sceMp4GetAvcTrackInfoData</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAacTrackInfoData">sceMp4GetAacTrackInfoData</a>(), and the sample number and PTS/DTS of the sample obtained from <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>(). Then, proceed to step (6) Finish.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>Finish</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Since a reference image from the last frame of the video stream may be left in the AVC decoder, call <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcDecodeStop">sceMpegAvcDecodeStop</a>() to read the remaining data.<br>To release resources used by the above series of processing steps, call <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecodeExit">sceMp4AacDecodeExit</a>() to release the AAC decoding buffer, which is the storage destination of the demultiplexed elementary stream, and call <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecodeTermResource">sceMp4AacDecodeTermResource</a>() to release the AAC decoding resources. Use <a href="../movie/libmpeg-Reference-English.htm#sceMpegDelete">sceMpegDelete</a>(), <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceFinish">sceMpegAvcResourceFinish</a>(), and <a href="../movie/libmpeg-Reference-English.htm#sceMpegFinish">sceMpegFinish</a>() to release the decoding buffer for the video stream.<br>To release resources related to MP4 demultiplexing and terminate movie playback processing, call <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufDestruct">sceMp4TrackSampleBufDestruct</a>(), <a href="../movie/libmp4-Reference-English.htm#sceMp4UnregistTrack">sceMp4UnregistTrack</a>(), <a href="../movie/libmp4-Reference-English.htm#sceMp4Delete">sceMp4Delete</a>(), and finally <a href="../movie/libmp4-Reference-English.htm#sceMp4Finish">sceMp4Finish</a>().<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Track Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following track types can be used in MP4 files.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Element track</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Track Type</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;AVC (CABAC)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MP4_TRACK_AVC_CABAC&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;AAC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MP4_TRACK_AAC&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">As described above, one track of AVC data can be handled as video data and one track of AAC data can be handled as audio data at a time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Buffer Allocation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use libmp4, the buffers shown below must either be allocated by libmp4 or prepared by the user.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_4">
+<div style="margin-left:40px;"><h4><b>Work memory used by libmp4 for demultiplexing</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When the <a href="../movie/libmp4-Reference-English.htm#sceMp4Init">sceMp4Init</a>() function is called, the fixed-length memory pool function of the thread manager is used to allocate memory. Either SCE_MP4_DEMUX_NORMAL_TYPE_OF_BUFFER_SIZE or SCE_MP4_DEMUX_HIGH_TYPE_OF_BUFFER_SIZE must be set, corresponding to 64 KB and 256 KB, respectively.<br>Although SCE_MP4_DEMUX_NORMAL_TYPE_OF_BUFFER_SIZE is sufficient for a normal MP4 file, there may be insufficient memory for an MP4 file with a multitrack structure, and an <a href="../movie/libmp4-Reference-English.htm#SCE_MPEG_ERROR_MP4_MEMORY_ALLOC">SCE_MPEG_ERROR_MP4_MEMORY_ALLOC</a> error may occur. In this case, you can avoid the error by setting SCE_MP4_DEMUX_HIGH_TYPE_OF_BUFFER_SIZE.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_5">
+<div style="margin-left:40px;"><h4><b>libmp4 read buffer for reading files and for demultiplexing</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libmp4 requires a read buffer to read MP4 file information (moov box) and to perform demultiplexing. The file read buffer must be set using <a href="../movie/libmp4-Reference-English.htm#sceMp4Create">sceMp4Create</a>(). Accesses to the file can be reduced by allocating a larger buffer area. Although any value greater than or equal to 1024 bytes can be set, because this value will determine the file access alignment and size that is read at one time, demultiplexing performance will decrease unless the setting matches the media on which the file is stored.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_6">
+<div style="margin-left:40px;"><h4><b>SampleBuf buffering area set by sceMp4TrackSampleBufConstruct()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">SampleBuf is an area for storing the demultiplexed sample data for each track, and is allocated in advance. To set this area, first determine its size from the average and maximum bit rates, the number of samples to be buffered, and the size of the buffer area required for file accesses by calling <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufQueryMemSize">sceMp4TrackSampleBufQueryMemSize</a>(). Then, after allocating the memory area, call <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>() to set it. You can absorb fluctuations due to file accesses by making the SampleBuf buffering size larger.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_7">
+<div style="margin-left:40px;"><h4><b>Buffers for storing the sample data that is input to the decoders</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The handle that is returned by the libmpeg function <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceGetAvcEsBuf">sceMpegAvcResourceGetAvcEsBuf</a>() is used as the input buffer for the AVC decoder.<br></div>
+<div style="margin-left:67px;">For the input buffer for the AAC decoder, allocate an 8192-byte area with 64-byte alignment. Then, use <a href="../movie/libmp4-Reference-English.htm#sceMp4InitAu">sceMp4InitAu</a>() (or <a href="../movie/libmpeg-Reference-English.htm#sceMpegInitAu">sceMpegInitAu</a>()) to initialize the <a href="../movie/libmpeg-Reference-English.htm#SceMpegAu">SceMpegAu</a> structure.<br>Approximately 128 KiB is allocated for the AVC decoder when the libmpeg function <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>() is called.<br>Approximately 100 KiB is allocated for the AAC decoder as a separate work area when <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecodeInitResource">sceMp4AacDecodeInitResource</a>() is called.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_8">
+<div style="margin-left:40px;"><h4><b>Data buffers for decoded output</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When the decoded output from the AVC decoder is in RGBA format, the buffer for saving the decoded results must have a size of at least <i>iFrameWidth </i>x the number of pixels in the vertical direction x 4 (RGBA) bytes. Also, it must be allocated with 16-byte alignment. The data may also be output in YCbCr format, and details can be found in the libmpeg manual.<br>The output from the AVC decoder, which is output after decoding one access unit, may vary from 0 to 4 frames depending on the AVC stream that is stored.<br>The output from the AAC decoder consists of 1024 16-bit samples in 2 channels, for a total of 4096 bytes. This data buffer must be allocated with 64-byte alignment.<br>After initialization, there is no output from the AAC decoder for the first 2 access units. After that, 1024 samples of data are continually output.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Reading Data from a File in libmp4</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To perform demultiplexing in libmp4, the file handler specified in the <a href="../movie/libmp4-Reference-English.htm#SceMp4FileFp">SceMp4FileFp</a> structure, which is used with <a href="../movie/libmpeg-Reference-English.htm#sceMpegCreate">sceMpegCreate</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4RegistTrack">sceMp4RegistTrack</a>(), and the callback functions libmp4 uses for file access are registered.<br>For each of these functions, file access is performed in units of <i>iReadCacheSize</i>, which is specified in <a href="../movie/libmp4-Reference-English.htm#sceMp4Create">sceMp4Create</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>(). Any size greater than or equal to 1024 bytes can be set for this argument, but for files that are too small or are of an odd size, file accesses may become extremely slow with some file storage media. Set an appropriate size to suit the file storage media being used.<br>Also, a function such as sceIoRead() can be used for reading inside a callback function without causing any problems, but when reading is performed via the data cache by a function such as memcpy(), you should always write the data back to main memory from the data cache using a function such as <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>().<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>File Storage Media</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The characteristics of MP4 files are such that there are no constraints on the spacing between the locations where the AVC and AAC elementary streams are placed in the file (mdat box) and the location where the database is placed (moov box), as well as on the spacing of video and audio interleaves. As a result, seeks may end up occurring when the file is played from a UMD&trade; and it will not be possible to guarantee AV synchronization. When an opening movie, etc. is stored as a file on a UMD&trade;, try to use PSMF as much as possible. MP4 files should only be used from a UMD&trade; after they have been adequately checked and no problems have been found.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Video Decoding</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Refer to the libmpeg documentation for information about AVC decoding.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>Audio Data in AAC Decoding Results</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Audio data in the results decoded by <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecode">sceMp4AacDecode</a>() are output in increments of 1024 samples, and the only PCM data format that can be output is stereo with a bit depth of 16 bits. Even if the input is mono AAC data, stereo data that has been equalized on the left and right will be output as the decoding result. Also, libmp4 does not provide a function for audio output of decoded PCM data. To output PCM data as audio, libmp4 must be used together with vaudio. Since libwave or simple audio can only handle 44100 Hz PCM data, vaudio should always be used. For information about how to output PCM data as audio, refer to the &quot;Sound Overview&quot; document. <br>Also, note that libmp4 cannot be used at the same time as libaac.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>Notes Concerning AAC Decoding</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Always use <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecode">sceMp4AacDecode</a>() to decode an AAC elementary stream. Also, to start decoding from a new playback position, be sure to initialize the AAC decoder every time. You can initialize the AAC decoder by calling <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecode">sceMp4AacDecode</a>() with the <i>iInitFlag</i> argument set to 1. When continuing AAC decoding for the second and subsequent times, set the <i>iInitFlag</i> argument to 0. Note that after the AAC decoder is initialized, there is no output for the first and second decodings. The output of PCM data begins with the third decoding.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_9">
+<h3>
+<a href="#Heading3_2"> 2. </a>9 
+<!-- hp1 --><b>Reference: Differences Between libmpeg and libmp4 (For Those Familiar with libmpeg)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The method of using library functions is basically very similar between libmpeg and libmp4, however, the names of functions are different between the two libraries. The big difference between the libraries is in the handling of the demultiplex buffer.<br>First, the stream that libmpeg handles is PSMF, and buffering is managed for the entire file by the <a href="../movie/libmpeg-Reference-English.htm#SceMpegRingbuffer">SceMpegRingbuffer</a> structure. Each AVC or ATRAC3plus&trade; stream to be decoded is demultiplexed and then decoded.<br>By comparison, the stream that libmp4 handles is an MP4 file, and buffering is performed for individual AVC and AAC streams in units of tracks, rather than for the entire file. The entity for buffering these AVC and AAC elementary streams is managed using a concept known as SampleBuf, which performs demultiplexing. After demultiplexing, individual access units (samples) are extracted to the <a href="../movie/libmpeg-Reference-English.htm#SceMpegAu">SceMpegAu</a> structure, after which decoding is performed in a similar manner as for libmpeg.<br><br>This is described more specifically as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> In libmp4, the functions <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufAvailableSize">sceMp4TrackSampleBufAvailableSize</a>(), which use the <a href="../movie/libmp4-Reference-English.htm#SceMp4Track">SceMp4Track</a> structure, are used instead of the libmpeg functions <a href="../movie/libmpeg-Reference-English.htm#sceMpegRingbufferPut">sceMpegRingbufferPut</a>() and <a href="../movie/libmpeg-Reference-English.htm#sceMpegRingbufferAvailableSize">sceMpegRingbufferAvailableSize</a>(), which use the <a href="../movie/libmpeg-Reference-English.htm#SceMpegRingbuffer">SceMpegRingbuffer</a> structure.
+<li> In libmp4, demultiplexing is performed using <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>() and <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>() from data held in the <a href="../movie/libmp4-Reference-English.htm#SceMp4Track">SceMp4Track</a> structure SampleBuffer instead of the respective libmpeg functions <a href="../movie/libmpeg-Reference-English.htm#sceMpegGetAvcAu">sceMpegGetAvcAu</a>() and <a href="../movie/libmpeg-Reference-English.htm#sceMpegGetAtracAu">sceMpegGetAtracAu</a>(), from data held in the <a href="../movie/libmpeg-Reference-English.htm#SceMpegRingbuffer">SceMpegRingbuffer</a> structure.
+<li> For AVC decoding, the libmpeg AVC decoding functions <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcDecode">sceMpegAvcDecode</a>() or <a href="../movie/libmpeg-Reference-English.htm#sceMpegAvcDecodeYCbCr">sceMpegAvcDecodeYCbCr</a>() are used directly. For AAC decoding, the libmp4 AAC decoding function <a href="../movie/libmp4-Reference-English.htm#sceMp4AacDecode">sceMp4AacDecode</a>() is used instead of the libmpeg function <a href="../movie/libmpeg-Reference-English.htm#sceMpegAtracDecode">sceMpegAtracDecode</a>().
+</ul></div>
+<div style="margin-left:50px;"><br>Also, terminology from the MP4 standard (ISO/IEC 14496-12, 14496-15) is generally used in libmp4. If there are any terms, you do not understand, refer to "Reference: Terminology."<br>If you understand the differences explained above, you should be able to perform basic operations using libmp4.<br>The images of the following functions are almost equivalent. For details, refer to the reference manuals.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>libmpeg Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>libmp4 Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegInit">sceMpegInit</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4Init">sceMp4Init</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegFinish">sceMpegFinish</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4Finish">sceMp4Finish</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegCreate">sceMpegCreate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4Create">sceMp4Create</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegDelete">sceMpegDelete</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4Delete">sceMp4Delete</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegRegistStream">sceMpegRegistStream</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4RegistTrack">sceMp4RegistTrack</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegUnRegistStream">sceMpegUnRegistStream</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4UnregistTrack">sceMp4UnregistTrack</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegGetAvcAu">sceMpegGetAvcAu</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegGetAtracAu">sceMpegGetAtracAu</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegRingbufferQueryMemSize">sceMpegRingbufferQueryMemSize</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufQueryMemSize">sceMp4TrackSampleBufQueryMemSize</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegRingbufferConstruct">sceMpegRingbufferConstruct</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegRingbufferDestruct">sceMpegRingbufferDestruct</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufDestruct">sceMp4TrackSampleBufDestruct</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegFlushStream">sceMpegFlushStream</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufFlush">sceMp4TrackSampleBufFlush</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegRingbufferAvailableSize">sceMpegRingbufferAvailableSize</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufAvailableSize">sceMp4TrackSampleBufAvailableSize</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-English.htm#sceMpegRingbufferPut">sceMpegRingbufferPut</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetNumberOfSpecificStreams">scePsmfGetNumberOfSpecificStreams</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4GetNumberOfSpecificTrack">sceMp4GetNumberOfSpecificTrack</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Functions that handle EP_Map used by prsmf.prx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4GetSampleNumWithTimeStamp">sceMp4GetSampleNumWithTimeStamp</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4SearchSyncSampleNum">sceMp4SearchSyncSampleNum</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4GetSampleNumWithTimeStamp">sceMp4GetSampleNumWithTimeStamp</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4SearchSyncSampleNum">sceMp4SearchSyncSampleNum</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPresentationStartTime">scePsmfGetPresentationStartTime</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPresentationEndTime">scePsmfGetPresentationEndTime</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetNumberOfStreams">scePsmfGetNumberOfStreams</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-English.htm#sceMp4GetMovieInfo">sceMp4GetMovieInfo</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_10">
+<h3>
+<a href="#Heading3_2"> 2. </a>10 
+<!-- hp1 --><b>Reference: Terminology</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Those who are familiar with libmpeg may have some difficulty with the terminology from the MP4 standard (ISO/IEC 14496-12, 14496-15). A simple explanation of differences between libmp4 and libmpeg terminology is presented below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Term from libmp4</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Explanation of Term</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Movie&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The information contained in, or the name of the layer where the &nbsp;&nbsp;<br>&nbsp;&nbsp;entire MP4 file is managed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Track&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;An individual playback unit for video or audio. Corresponds &nbsp;&nbsp;<br>&nbsp;&nbsp;conceptually to a video or audio stream in libmpeg or libpsmf.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sample&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Same as an access unit.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sync sample&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The sample where decoding can start. For AAC, decoding can start &nbsp;&nbsp;<br>&nbsp;&nbsp;from any sample. For AVC, decoding can only start from an IDR &nbsp;&nbsp;<br>&nbsp;&nbsp;picture.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DT (Decoding Times)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The time when decoding is performed. Corresponds to DTS in &nbsp;&nbsp;<br>&nbsp;&nbsp;libmpeg or libpsmf. For libmp4, the units are 90 kHz, similar to &nbsp;&nbsp;<br>&nbsp;&nbsp;libmpeg.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CT (Composition Times)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The time when the picture is displayed. Corresponds to PTS in &nbsp;&nbsp;<br>&nbsp;&nbsp;libmpeg or libpsmf. For libmp4, the units are 90 kHz, similar to &nbsp;&nbsp;<br>&nbsp;&nbsp;libmpeg.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Library Precautions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following are precautions related to libmp4.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Only one <a href="../movie/libmp4-Reference-English.htm#SceMp4">SceMp4</a> structure can be created for the entire program. If more than one is created, the program may not work correctly.
+<li> An MP4 stream in which multiple AVC and AAC elementary streams are multiplexed cannot be handled. For AVC and AAC streams, only one stream each can be decoded at a time.
+<li> After decoding an MP4 file, always initialize the demultiplexing SampleBuf before inputting another MP4 file.
+<li> No problem will occur in libmp4 if a callback function uses a function like sceIoRead() to read an MP4 file, however, when reading is performed via the data cache by a function such as memcpy(), always write the data cache back to main memory by calling a function such as <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>(). 
+<li> The characteristics of MP4 files are such that there are no constraints on the spacing between the locations where the AVC and AAC elementary streams are placed in the file (mdat box) and the location where the database is placed (moov box), as well as on the spacing of video and audio interleaves. As a result, seeks may end up occurring when the file is played from a UMD&trade; and it will not be possible to guarantee AV synchronization. Only use MP4 files stored on a UMD&trade; if they have been checked and no problems have been found.
+<li> Because libmp4 does not have a function to decode AVC, the libmpeg AVC decode function should be used. To play an AVC stream in an MP4 file, call <a href="../movie/libmpeg-Reference-English.htm#sceMpegQueryMemSize">sceMpegQueryMemSize</a>() and <a href="../movie/libmpeg-Reference-English.htm#sceMpegCreate">sceMpegCreate</a>() with the special constant for libmpeg SCE_MPEG_MODE_ONLY_AVC_DECODE specified in the <i>iMpegMode</i> argument. For a PSMF file, the encoder adds a constraint when creating an AVC stream which prevents it from being decoded as an ordinary MP4 file.
+<li> An ordinary MP4 AVC track may contain B-pictures, and reordering may occur. Note that the demultiplex results obtained by <a href="../movie/libmp4-Reference-English.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>() are in decoding order (DTS) rather than display order (PTS). On the other hand, the image output (RGBA or YCbCr) of the AVC decoder's results on the PSP&trade; is always in display order (PTS). Therefore, the image output (RGBA or YCbCr) may be in a different order than the order of the <a href="../movie/libmpeg-Reference-English.htm#SceMpegAu">SceMpegAu</a> structure used for decoding. To match the output image (RGBA or YCbCr) with the PTS of the <a href="../movie/libmpeg-Reference-English.htm#SceMpegAu">SceMpegAu</a> structure, you must sort the data and order it according to time. For specific information on how to do this, refer to the mp4str sample.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Stack Size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The required stack size for libmp4 API calls is 4096 bytes. Allocate a stack size larger than this.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4 internally calls the Media Engine's CPU functions and uses semaphores for exclusive processing of the Media Engine's internal resources. <br>If a thread that is calling libmp4 is forcibly deleted by using <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>() or <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>() before the thread transitions to DORMANT state while a libmp4 function is being executed, then depending on the timing, the thread may end up being deleted while it continues to hold internal resources. As a result, there is a risk that another library that is using the Media Engine's CPU functions such as libmp4 may no longer work properly.<br><br>To terminate a thread, make sure the following actions are taken (the samples that use libmp4 are also constructed in this way):<br></div>
+<div style="margin-left:40px;"><ul>
+<li> The side that requests the thread to terminate uses a shared variable or event flag to communicate its request to the thread.
+<li> The thread that is to be terminated periodically monitors this flag to determine whether a termination request was issued. If a request was issued, the thread first verifies that libmp4 is not currently running and then it calls <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelExitThread">sceKernelExitThread</a>() to terminate itself.
+</ul></div>
+<div style="margin-left:50px;"><br><br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

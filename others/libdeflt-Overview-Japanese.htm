@@ -1,0 +1,174 @@
+<html lang="jp">
+<head>
+<title>libdeflt-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libdeflt
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libdefltはRFC1950, RFC1951, RFC1952で定義されるZLIBフォーマット、DEFLATE圧縮フォーマット、GZIPフォーマット、およびPK0304形式のzipフォーマットのデータを伸張するためのライブラリです。データを圧縮して保持しておき、使用時に展開してから使用することでメモリを効率的に使用したり、データのロード時間を短縮したりすることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libdefltを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタティックリンクライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRXモジュールファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/deflt/fileio/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">GZIP形式で圧縮されたファイルを展開するサンプルコードです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_2">
+<div style="margin-left:40px;"><h4><b>devkit/sample/deflt/zip/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ZIP形式でアーカイブ・圧縮されたファイルを展開するサンプルコードです。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>GZIPデータの展開</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ヘッダつきのいわゆる.gzファイルを展開する際は以下のようにします。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+
+char dstbuf[BUFSIZE];
+unsigned int uiCrc32;
+int res;
+
+res = <a href="../others/libdeflt-Reference-Japanese.htm#sceGzipDecompress">sceGzipDecompress</a>(dstbuf, sizeof(dstbuf), gzipdata, &amp;uiCrc32);
+
+</font></pre></div>
+<div style="margin-left:67px;">libdefltを使用する際に初期化は必要ありません。上記のように単に<a href="../others/libdeflt-Reference-Japanese.htm#sceGzipDecompress">sceGzipDecompress</a>()関数を使用すれば、展開処理が行われます。ただし、上記コードにおける配列gzipdata[]には、.gzファイルをファイルIO関数などで読み込んでおく必要があります(以下同様)。<a href="../others/libdeflt-Reference-Japanese.htm#sceGzipDecompress">sceGzipDecompress</a>()関数は、エラーの場合負の値を、正常終了の場合展開されたデータのサイズを返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>deflate圧縮データの展開</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">HTTP/1.1ではデータがdeflate形式で圧縮されていることがあります。この時、GZIPヘッダ、ZLIBヘッダ等は付加されずに、直接deflate形式の圧縮データのみが与えられますが、このような場合には、<a href="../others/libdeflt-Reference-Japanese.htm#sceDeflateDecompress">sceDeflateDecompress</a>()関数を使用することでデータ展開を行うことができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+
+char dstbuf[BUFSIZE];
+int res;
+res = <a href="../others/libdeflt-Reference-Japanese.htm#sceDeflateDecompress">sceDeflateDecompress</a>(dstbuf, sizeof(dstbuf), infdata, NULL);
+
+</font></pre></div>
+<div style="margin-left:67px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceDeflateDecompress">sceDeflateDecompress</a>()関数は、エラーの場合負の値を、正常終了の場合展開されたデータのサイズを返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>ZLIB圧縮データの展開</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PNGのラスターデータのような、(ZLIBヘッダ付きの)ZLIB形式で格納されたデータを展開する場合は、<a href="../others/libdeflt-Reference-Japanese.htm#sceZlibDecompress">sceZlibDecompress</a>()関数を使用します<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+
+char dstbuf[BUFSIZE];
+unsigned int uiAdler32;
+int res;
+res = <a href="../others/libdeflt-Reference-Japanese.htm#sceZlibDecompress">sceZlibDecompress</a>(dstbuf, sizeof(dstbuf), infdata, &amp;uiAdler32);
+
+</font></pre></div>
+<div style="margin-left:67px;"><a href="../others/libdeflt-Reference-Japanese.htm#sceZlibDecompress">sceZlibDecompress</a>()関数は、エラーの場合負の値を、正常終了の場合展開されたデータのサイズを返します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>注意事項</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libdefltは圧縮されたビットストリームがすべてそろわない限り展開を開始することはできません。また、展開を行うと、無条件ですべてのデータが展開されます。部分的に展開するといった機能はありません。したがって、展開されるデータのサイズ以上の出力バッファを事前に用意しておく必要があります。<br>これらのことが問題がある場合は、圧縮データを作成する際に細切れにしてから圧縮を行うなどの方法を用いてください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

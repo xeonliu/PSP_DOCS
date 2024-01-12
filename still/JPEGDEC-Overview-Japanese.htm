@@ -1,0 +1,225 @@
+<html lang="jp">
+<head>
+<title>JPEGDEC-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+JPEGデコーダ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の概要と特長</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">JPEG DecoderライブラリはJPEGデータをデコードする機能を提供します。色空間としてYCbCr形式が使われ、かつ色空間サンプリングとして特定の値が用いられていた場合は、それをRGBA形式に変換するための機能も提供されます。またこの色変換の方式として、速度が要求されるもの（モーションJPEGなどを使った動画など）と、画質が要求されるもの（静止画やテクスチャデータなど）で、それぞれに適した方法を選択することが可能です。<br>YCbCr以外の色空間の場合、当ライブラリでは画面表示用の色空間への変換機能は提供されませんが、色変換より前の段階の処理に関しては当ライブラリにて実現できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ベースラインプロファイルの一部のファイルに対応
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> 色空間次元数1～4、DCT精度8bit、シーケンシャルスキャン
+<li> 1つ目の色次元の空間サンプリングは1:1、（もしあるならば）2つ目以降の色次元の空間サンプリングはすべて同じでなければなりません
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> 専用ハードウェアを用いた、高速な色変換機能（255Level YCbCr、色空間サンプリングYUV420からRGBAへの変換）をサポート
+<li> 色変換機能（255Level YCbCr、色空間サンプリングYUV422, 420, 444からRGBAへの変換）をサポート
+<li> YCbCr形式のデコード結果が不要な場合は、直接RGBA形式のデータのみを出力することも可能
+</ul>
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">JPEGデコードライブラリを使用するには次のファイルが必要です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scejpeg_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scejpeg_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scejpeg.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">また、JPEGデコードモジュールそのものを読み込むには、ユーティリティのAV関連モジュール読み込み機能を用いる必要があります。詳しくはユーティリティ概要をご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現時点でJPEGデコードライブラリはUSB Cameraからのデータをデコードすることをメインに書かれています。サンプルプログラムはUSB Camera用のものをご覧ください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_1"><h4>
+(1)&nbsp;<b>devkit/sample/usb/accessory/usbcam/simplestill/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">カメラより得られたJPEG画像をディスプレイ上に表示し、静止画を保存するサンプルです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_2"><h4>
+(2)&nbsp;<b>devkit/sample/usb/accessory/usbcam/simplemovie/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">カメラより得られたJPEG画像、PCMを再生するサンプルです。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>必要モジュールのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モジュールユーティリティを用いてavcodecをロードしてください。詳しくはユーティリティのドキュメントをご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Motion JPEG時の使用方法（サイズ720x480以下のとき）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モーションJPEGのような速度の必要なデコードは以下の手順で行うことになります。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegInitMJpeg">sceJpegInitMJpeg</a>()にてライブラリの初期化を行う</li>
+<li VALUE=2> <a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegCreateMJpeg">sceJpegCreateMJpeg</a>()にて、デコードした結果を格納するフレームバッファの（最大）サイズを指定する</li>
+<li VALUE=3> <a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpeg">sceJpegDecodeMJpeg</a>()を用いてデコードする</li>
+<li VALUE=4> 必要に応じてフレームバッファ内容を表示する</li>
+<li VALUE=5> 3,4を適宜繰り返す</li>
+<li VALUE=6> ライブラリの終了処理を行う（<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDeleteMJpeg">sceJpegDeleteMJpeg</a>(),<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegFinishMJpeg">sceJpegFinishMJpeg</a>()）</li>
+</ol></div>
+<div style="margin-left:50px;">ただし、この方式でデコードできるのはJPEG画像のサイズが720x480ピクセル以下で、かつ色空間サンプリングがYUV420と同じ色空間を用いている（次元数が3で、かつ2および3番目の色空間のサンプリング次数が2x2となっている）ものに限られます。この条件を満たさない場合はエラーが返ります。また色変換は255レベルYCbCrで行われます。これらの制限は、色変換を行う専用ハードウェアの制約によるものです。<br>(3)でデコードしようとしたJPEGデータの画像サイズが、(1)で指定したサイズよりも大きな場合、エラーが返ります。<br>モーションJPEG形式のデータをデコードして得られるYCbCr形式のデータを用いて画像認識・エフェクトなどを行ったうえで、さらに画面表示を行いたいといった場合、中間データであるYCbCr形式のデータが必要ですが、そのときにはこの方法は適しません。このような場合、(2)にて<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>()を用いることで、色変換前の（YCbCr形式の）データを取得することができます。この時YCbCr形式のデコード結果を格納するための領域はアプリ側で用意する必要があります。<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>()関数にて取得されたYCbCr形式のデータは、画像サイズが720x480以下であれば、<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegMJpegCsc">sceJpegMJpegCsc</a>()を用いてRGBA形式に変換することが可能です。なお、<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>()関数では<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegCreateMJpeg">sceJpegCreateMJpeg</a>()関数にて設定したフレームバッファサイズの制限は無視されます（別途出力先バッファのサイズを指定する必要があります）。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>大きな画像ファイル、YUV420以外の色空間のファイルにおける使用方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">本ライブラリでは、現時点でも720x480よりも大きな画像や、YUV420形式以外の色空間を用いたJPEGデータをデコードすることは可能ですが、このようなデータはメモリサイズおよびハードウェアの制約により高速に色変換を行うことができません。このようなデータを表示するには、ユーザアプリにてメモリを確保した上で、<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>()関数を用いて色変換前のデータを取得し、<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegCsc">sceJpegCsc</a>()関数にてRGB形式に変換して表示するようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>デコード結果のフォーマットについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpeg">sceJpegDecodeMJpeg</a>()でデコード・色変換した結果、および<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegMJpegCsc">sceJpegMJpegCsc</a>()で色変換した結果は、RGBA(32bit)形式で左上から右下の方向にラスタスキャンした画像として格納されます。&alpha;値は常に0となります。元になるJPEG画像のサイズが指定したフレームバッファの縦横サイズに満たない場合、JPEG画像よりも大きい部分となる領域は変更されません。<br><a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>()でデコードした結果は、Y, Cb, Crのそれぞれが別々のフレームバッファ領域に、左上から右下の方向にラスタスキャンした画像として格納されます。1ピクセルあたりのビット数はY, Cb, Crすべて8bitです。各色次元のフレームバッファのサイズは、元となるJPEGのピクセルサイズを16の倍数に切り上げたもの（MCU単位で数えたときのピクセルサイズ）になります。Motion JPEG時の色空間サンプリングは4:2:0固定ですので、Yとそれ以外の色空間でフレームバッファのサイズは4:1となります。また各次元のフレームバッファは隙間なくY, Cb, Crの順にぴったりと並びます。<br>例として320x240のJPEGファイルをYCbCr形式でデコードした場合、デコード先に指定したバッファのアドレスから76800(=320×240)バイトがYのフレームバッファになり、Yのフレームバッファが終わったところからさらに19200(=160×120)バイトがCbのフレームバッファになり、同様にその後にCrのフレームバッファが19200バイト続きます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ムービーとの同時使用について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ではAVC形式のムービーを取り扱うことが可能ですが、AVCの使用中（libmpegライブラリの初期化関数を呼び出してから、終了させるまでの間）には、JPEGデコードライブラリの中で使える関数に制約がかかります。これは、両者で使用するリソースが競合するためです。<br>AVC使用中にJPEGデコード・表示を行う際にには、アプリケーション側でYCbCr形式のフレームバッファを用意して、<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>()を呼び出し、<a href="../still/JPEGDEC-Reference-Japanese.htm#sceJpegMJpegCsc">sceJpegMJpegCsc</a>()を用いて色変換をするようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>DHTセグメントなしのデータについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Motion JPEGデータの種類によっては、JPEGデータにハフマン符号定義セグメント（DHTセグメント）が存在せず、常時JPEG規格の推奨ハフマン符号を使用するタイプのものがあります。このようなデータをデコードしたい場合は、Motion JPEGデコード関数の引数<i>omitDht</i>に対して<a href="../still/JPEGDEC-Reference-Japanese.htm#SCE_JPEG_MJPEG_WITHOUT_DHT">SCE_JPEG_MJPEG_WITHOUT_DHT</a>を指定してください。この引数を設定すると、DHTセグメントがなかったときは推奨テーブルが使用され、DHTセグメントがあった場合はそのテーブルの内容が使用されます。ただし、<a href="../still/JPEGDEC-Reference-Japanese.htm#SCE_JPEG_MJPEG_WITHOUT_DHT">SCE_JPEG_MJPEG_WITHOUT_DHT</a>を指定した場合、ほんの少しJPEGデコードにかかる時間は増えます。むやみにこのパラメータをセットしないようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>入出力データのアラインメントについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デコードAPIの入力データへのポインタのアラインメントは自由ですが、もし可能であれば64バイトアラインメントにあわせるとパフォーマンスが改善することがあります。ただし、わざわざデータをコピーしてまでアラインメントをあわせるほどの改善ではありません。<br><br>デコード・色変換関数の出力バッファへのポインタは64バイトアラインメントが取れていることが必要です。そうでないときはエラーが返ります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>MCUサイズの整数倍でない画サイズの扱いについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">縦横の画像サイズがぴったりMCUサイズの倍数となっていないJPEGデータをデコードした場合、MCUサイズの倍数まで広げたデータを出力します。つまり、たとえばYUV420形式（MCUサイズは16x16ピクセル）を用いた360x270ピクセルのJPEGデータをデコードした場合、得られるYCbCr形式のデータは368x272となり、またこれを色変換して得られるRGBA形式のデータも同サイズとなります。このため、その分フレームバッファなども必要になります。必要に応じてアプリ側で不要部分を削るなどして表示してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>色変換ハードウェアの不具合について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モーションJPEG用の関数を用いて、画像サイズの横幅が97～112, 225～240, 353~368, ..., 128n+97～128n+112ピクセル（nは0以上の整数）の範囲に入るJPEGデータをデコードする場合、実際よりも横方向のバッファサイズを16ピクセル分多く確保する必要があります（デコード結果、色変換結果ともに必要になります）。関数呼び出し後、多めに確保した領域に格納される値は不定です。必要に応じてこの部分を削って表示するようにしてください。<br>これは、色変換を行う専用ハードウェアのエラッタによるものです。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

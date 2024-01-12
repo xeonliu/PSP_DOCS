@@ -1,0 +1,435 @@
+<html lang="jp">
+<head>
+<title>Game_Sharing-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ゲームシェアリング概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ゲームシェアリング概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリングはPSP&reg;端末間において、外部起動用バイナリをアドホックモード通信によって送受信するための機能です。本ドキュメントでは、ゲームシェアリングのサーバー側の実装、及びゲームシェアリングに使用される外部起動用バイナリについて説明します。<br>外部起動用バイナリは、起動バイナリとヘッダ情報から構成される１つのファイルです。外部起動用バイナリの最大サイズは8メガバイト(8 × 1024 × 1024 byte)です。<br><br>ゲームシェアリングはあらかじめ定められたアドホックネットワーク内で行われます。以下にその例を示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Game_Sharing-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 ゲームシェアリングユーティリティ概要</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ゲームシェアリングサーバー<br>ゲームプログラムからゲームシェアリングユーティリティAPIを利用してクライアントからの接続を待機します。転送する外部起動用バイナリのサイズは（8 × 1024 × 1024）バイトに制限されています。
+<li> ゲームシェアリングクライアント<br>PSP&reg;システムソフトウェア上に実装されており、ユーザが「ゲーム」メニューの「ゲームシェアリング」を選択することによってサーバーを検索します。サーバー選択後、正常に外部起動用バイナリを受信したクライアントはそのデータを自動的に起動します。外部起動用バイナリはメモリ上に展開されます。PSP&reg;の電源を切ると外部起動用バイナリは消失します。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>モジュール構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリングユーティリティを使用するために必要なファイルは次の通りです。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;utility_gamesharing.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;utility_ stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">ゲームシェアリングユーティリティを使用するためには、事前にゲームシェアリング用アドホックネットワークに接続する必要があります。アドホックネットワーク接続に必要なライブラリは次の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhocctl.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_matching.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポート&nbsp;&nbsp;<br>&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhocctl_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_matching_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhocctl_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_matching_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">外部起動用バイナリ上でモジュールをロードするためには、以下のファイルが必要です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;modulemgr_gamesharing.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;modulemgr_user_stub_03.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリングユーティリティのサーバー側の実装サンプルとして次のものがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_1"><h4>
+(1)&nbsp;<b>devkit/sample/utility/gamesharing/adhoc_stick_server</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ゲームシェアリングユーティリティのサーバーサンプルです。<br>カレントディレクトリにあるhost0:./upload.datファイルを外部起動用バイナリとして転送します。このサンプルはネットワークサンプルのadhoc_stickをベースに作られています。<br>サンプルを起動して、○ボタンを押すとゲームシェアリング用IBSSへ接続します。その後自動的にゲームシェアリングユーティリティが起動します。<br>サーバーはデータ転送後に、ゲーム用のIBSSへと接続し、adhoc_stickサンプルとして動作します。<br>ゲーム用IBSSへ接続している状態で○ボタンを押すと、ネットワークから切断し、初期画面に戻ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_2"><h4>
+(2)&nbsp;<b>devkit/sample/utility/gamesharing/adhoc_stick_gamedata</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">devkit/sample/gamesharing/adhoc_stick_server で使用される外部起動用バイナリ（upload.dat）のサンプルです。起動後にゲームシェアリングサーバーが指定したグループ名でアドホックネットワークに接続し、adhoc_stickサンプルとして動作します。<br><br>注）実際にゲームデータとして動作させるためにはコンパイルした後に外部起動用バイナリとしてパッケージング処理が必要になります。パッケージングの詳細については、「外部起動用バイナリについて」のドキュメントを参照してください。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>ゲームシェアリングサーバー実装方法</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ゲームシェアリングのサーバーの実装方法について説明します。実装に関しての詳細はサンプル(devkit/sample/utility/gamesharing/adhoc_stick_server）を参照してください。以下にサーバー側プログラムの流れを図示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Game_Sharing-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 ゲームシェアリング（サーバー側）プログラムの流れ</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">サーバー側のプログラムは大きく分けて、ネットワーク初期化、ゲームシェアリングネットワーク接続、ゲームシェアリングユーティリティ起動、外部起動用バイナリ転送、ゲームシェアリングネットワーク切断、の5つに分類できます。以下それぞれについて説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ネットワーク初期化</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">初めにゲームシェアリングユーティリティが使用するネットワークライブラリの初期化をゲームタイトルで行う必要があります。タイトルでもネットワークライブラリを使用している場合は一旦終了処理をしてから再初期化します。<br>必要なネットワークライブラリのモジュールはPSPNET共通モジュールセットおよびPSPNETアドホックモジュールセットです。<br>モジュールのロード手順についてはサンプルプログラム(devkit/sample/utility/gamesharing/adhoc_stick_server)を参照してください。<br><br>ネットワークライブラリの初期化処理ではゲームシェアリング用アドホックIDを指定することと、pspnet_adhoc_matchingライブラリの初期化が必要な点に注意してください。アドホックIDはtypeにSCE_NET_ADHOCCTL_ADHOCTYPE_SYSTEMを、dataに"000000001"を指定してください。その他のライブラリの初期化については「pspnetドキュメントおよびpspnet_adhoc_matchingドキュメント」を参照してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// ゲームシェアリング用のアドホックID を指定
+static struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlAdhocId">SceNetAdhocctlAdhocId</a> gamesharing_id = {
+    .type = SCE_NET_ADHOCCTL_ADHOCTYPE_SYSTEM,
+    .data = {'0','0','0','0','0','0','0','0','1'}   /* "000000001" */
+};
+
+// pspnet_adhocctl モジュールの初期化
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlInit">sceNetAdhocctlInit</a>(ADHOCCTL_STACKSIZE, ADHOCCTL_TPL, &amp;gamesharing_id);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ゲームシェアリングネットワーク接続</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリング用のアドホックネットワークにpspnet_adhocctlライブラリを用いて接続します。<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()関数への引数としてゲームシェアリング用のグループ名を指定してください。グループ名は"GameShar"になります。詳細については「pspnetドキュメント」を参照してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>static struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlGroupName">SceNetAdhocctlGroupName</a> gamesharing_group_name = {
+    .data = {'G', 'a', 'm', 'e', 'S', 'h', 'a', 'r'} /* "GameShar */
+};
+
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>(&amp;gamesharing_group_name);
+if (ret &lt; 0) {
+	// エラー処理
+}
+while (1) {
+	// 接続状態のポーリング
+}
+// 接続完了
+
+</font></pre></div>
+<div style="margin-left:50px;">また、ネットワークの接続にネットワーク接続ユーティリティを利用することもできます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ゲームシェアリングユーティリティ起動</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリングユーティリティはゲームシェアリングサーバーの機能を持ったユーティリティです。専用のAPIを呼び出すことによって、ゲームシェアリングサーバーが起動します。起動時にゲームデータ、グループ名を指定します。APIの詳細については、サンプルプログラム及び、「ユーティリティリファレンス」を参照してください。<br><br>正常にゲームシェアリングユーティリティが起動するとサーバー待機状態となります。この時、クライアント側からはサーバーリストを参照することができます。クライアントがダウンロード要求を送信しサーバー側がそれを受け入れると、ゲームシェアリング起動バイナリの送受信が開始されます。<br>外部起動用バイナリは専用のバイナリデータです。ゲームシェアリングではバイナリデータの形式について確認は行いません。指定されたデータサイズ分だけ送受信を行います。正しいデータ形式でない場合は、送受信完了後のゲーム起動にて失敗します。<br><br>ゲームシェアリングクライアントは、ゲーム起動時にサーバー側のMACアドレス、またサーバーが指定したグループ名を起動引数として渡します。これらのデータはゲーム起動後、サーバーとネットワーク対戦を行う場合などに使用することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>ゲームシェアリングユーティリティ起動タイプ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリングユーティリティの起動タイプには、クライアントとサーバーが1対1で通信を行うモードと、複数クライアントに対応したモードとの、2つのタイプがあります。<br>起動タイプは、<a href="../utility/Utility-Reference-Japanese.htm#SceUtilityGameSharingParam">SceUtilityGameSharingParam</a>構造体のserverTypeで指定します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 1対１モード<br>1：1で通信を行うモードでは、クライアントからのリクエストをユーザが承諾するとデータ転送が開始されます。データ転送が完了した時点で、ユーティリティは自動的に終了します。<br>以下に、1：1モードでのゲームシェアリングユーティリティの画面フローを示します。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Game_Sharing-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 １：１モードの画面フロー</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 1対ｎモード<br>1：nモードでは、クライアントからの送信に対して自動的にデータ転送が開始されます。この時、データ転送は最大で4並列で行われます。このモードでは、1：1モードのように、自動でユーティリティが終了することはありません。ユーティリティを終了させるためには、ユーティリティを起動したユーザが明示的にユーティリティを終了させる必要があります。<br>以下に1：nモードのゲームシェアリングユーティリティの画面フローを示します。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Game_Sharing-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4 １：ｎモードの画面フロー</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>外部起動用バイナリ転送</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">外部起動用バイナリを転送する方法として、次の2種類の方法があります。<br>バイナリ転送の方式は、<a href="../utility/Utility-Reference-Japanese.htm#SceUtilityGameSharingParam">SceUtilityGameSharingParam</a>構造体のdataLocationTypeで指定します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ファイルシステム上のデータを転送<br>dataLocationTypeにSCE_UTILITY_GAMESHARING_LOCATION_TYPE_FILEを指定することで、ファイルシステム上のデータを転送します。ファイルパスを<a href="../utility/Utility-Reference-Japanese.htm#SceUtilityGameSharingParam">SceUtilityGameSharingParam</a>構造体のfilePathに指定してください。
+<li> メモリ上のデータを転送<br>dataLocationTypeにSCE_UTILITY_GAMESHARING_LOCATION_TYPE_MEMORYを指定することで、メモリ上のデータを転送します。データのバッファポインタとサイズをそれぞれ、<a href="../utility/Utility-Reference-Japanese.htm#SceUtilityGameSharingParam">SceUtilityGameSharingParam</a>構造体のuploadDataとuploadDataSizeに指定してください。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>ゲームシェアリングネットワーク切断</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリングユーティリティの終了後は、通常通りネットワークを切断してください。詳細は「pspnetドキュメント」を参照してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>外部起動用バイナリ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">外部起動用バイナリは、ゲームシェアリングユーティリティによって送信され、PSP&reg;システムソフトウェアのメニューから受信・起動されるバイナリデータです。外部起動用バイナリは、システムファイルおよびオーサリングされたゲームブートファイルから構成されます。<br>ここでは、ゲームブートファイルの実装方法について説明します。実装に関しての詳細はサンプル(devkit/sample/utility/gamesharing/adhoc_stick_gamedata）を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>起動時の引数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">バイナリが起動すると、プログラムのmain()関数の引数として次のような値が渡されます。<br>これらの値にはゲームシェアリングサーバーが指定した値が入っていますので、起動後にサーバーと通信対戦を行うような場合に利用することができます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>main()への引数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>データ内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;argv[1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サーバーのMACアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;argv[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;グループ名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">MACアドレスは、"XX:XX:XX:XX:XX:XX"という形式の文字列になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>モジュールのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モジュールをプログラムに内包して、バッファからロードすることによってモジュールを利用することができます。バッファからモジュールをロードするためには次のAPIを使用してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>&lt;modulemgr_gamesharing.h&gt;
+int <a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>(SceSize size, 
+					void *base, 
+					int flags, 
+					const <a href="../kernel/Module_Manager-Reference-Japanese.htm#SceKernelLMOption">SceKernelLMOption</a> *pOpt
+					);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>デバッグ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">オーサリング処理を行ったバイナリは、dstdbから起動することができなくなります。<br>オーサリング処理を行う前ならば、通常のプログラムと同様にdstdb等を使ってデバッグすることが可能です。<br>このとき、mstartコマンドでゲームシェアリングユーティリティサーバーのMACアドレスやグループ名を指定することでより本番に近い形で起動させることができます<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例：
+dstdb 0R0&gt; mstart  sample.prx  00:00:00:00:00:00  GROUP
+</font></pre></div>
+<div style="margin-left:50px;"><br>また、dstdbからプログラムを起動すると<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>()を使用することができなくなります。モジュールをロードする場合は、通常の<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModule">sceKernelLoadModule</a>()を使用して、ホストやディスクからモジュールをロードしてください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意点</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>PSP&reg;システムソフトウェアバージョン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">起動バイナリを受信するPSP&reg;のシステムソフトウェアバージョンが、起動バイナリを作成したパッケージのリリースバージョンよりも古いものであった場合、この起動バイナリを起動させることはできません。<br>詳細については、「外部起動用バイナリについて」ドキュメントの注意事項を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ゲームシェアリングユーティリティ起動中のネットワークエラーについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームシェアリングをサーバーとして起動している間のネットワークのエラー表示は、ゲームシェアリングユーティリティが行うため、ゲームプログラム側で表示する必要はありません。ユーティリティの起動中にエラーイベントが発生した場合は画面表示をせずに、ユーティリティの呼出し後にネットワークの切断処理を行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>バッファからのモジュールロードについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>()を用いることで、バッファにあるモジュールをロードすることができます。ただし、ロードできるモジュールはdevkit/moduleおよびdevkit/kmoduleにあるものに限ります。また、<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>()は、外部起動バイナリとして作られたプログラムからのみ、使用することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>TOOLにおけるデバッグ情報表示</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ツールでゲームシェアリングのデータを受信した場合、受信した外部起動バイナリに含まれているシステムファイル（param.sfo）の情報が表示されます。この機能はツール特有のもので、PSP&reg;本体では表示されません。<br>表示される情報は次の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Status&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイルのフォーマットが正しければ"OK"を、正式な&nbsp;&nbsp;<br>&nbsp;&nbsp;フォーマットに従っていない場合は"ERROR"を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイルに記載されている品番を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PSP_SYSTEM_VER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイルに記載されているPSP&reg;のシステムバージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;を表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;REGION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイルに記載されているリージョンを表示します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SHARING_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイルに記載されているSharingIDを表示します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

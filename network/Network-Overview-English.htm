@@ -1,0 +1,667 @@
+<html lang="en">
+<head>
+<title>Network-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Network Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Structure of PSPNET</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSPNET supports two modes of communication: infrastructure mode and ad hoc mode. Each mode is used for different purposes as stipulated by the network protocol.<br><br>Infrastructure mode is used for communication over the Internet or for communication with a non-PSP&trade; node on a LAN. In this case, TCP/IP is used as the network protocol. Meanwhile, ad hoc mode is used for communication between two PSP&trade; peers which are participating in online gaming. In this case, a proprietary PSP&trade; protocol (the ad hoc mode communication protocol) is used as the network protocol.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Mode</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Protocol</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Communication</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Between PSP&trade;</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Peers</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Communication</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>With a Non-PSP&trade;</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Node</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Infrastructure&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;TCP/IP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Ad hoc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Dedicated&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;X&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Currently, TCP/IP is used only in infrastructure mode. Infrastructure mode can also be used by two PSP&trade; peers which are communicating using TCP/IP.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Module Structure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNET uses the TCP/IP protocol and the dedicated ad hoc mode protocol independently. Consequently, the pspnet module provides common base functions, while dedicated modules are provided for each protocol. PSPNET also provides individual network connection modules for infrastructure mode and ad hoc mode. <br>For connection to a TCP/IP network, a utility library which supports GUI-based connections, and a non-GUI dummy dialog library which can be used during development, are provided. TCP/IP network settings are stored in a nonvolatile memory area, and when connecting, the settings are read and the appropriate connection operations are performed.<br><br><br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Module Structure Diagram (Protocol Stack)</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 Module Structure Diagram (TCP/IP Network Connection)</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3 Module Structure Diagram (Ad Hoc Network Connection)</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>Common Modules</b><br><br></h4></div></a>
+
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_1">
+<div style="margin-left:63px;"><h4><b>ifhandle</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module connects pspnet with the interface driver.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_2">
+<div style="margin-left:63px;"><h4><b>pspnet</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module provides basic pspnet functions (such as interface management, buffer management, and utility functions).<br>It is required when using either TCP/IP or the dedicated ad hoc mode protocol.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2_2">
+<div style="margin-left:40px;"><h4><b>TCP/IP Protocol Modules</b><br><br></h4></div></a>
+
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_3">
+<div style="margin-left:63px;"><h4><b>pspnet_inet</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module is the base TCP/IP module.<br>It supports the TCP/IP protocol and BSD socket API.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_4">
+<div style="margin-left:63px;"><h4><b>pspnet_apctl</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module provides access point connection functions and IP address acquisition functions in infrastructure mode.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_5">
+<div style="margin-left:63px;"><h4><b>pspnet_ap_dialog_dummy</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This is a non-GUI network connection library that is used during development in place of the Utility library.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_5_3">
+<div style="margin-left:40px;"><h4><b>Ad Hoc Mode Communication Protocol Modules</b><br><br></h4></div></a>
+
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_6">
+<div style="margin-left:63px;"><h4><b>pspnet_adhoc</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module is the base dedicated ad hoc mode protocol module.<br>It supports the ad hoc socket API.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_7">
+<div style="margin-left:63px;"><h4><b>pspnet_adhoc_auth</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module provides ad hoc mode device authentication functions.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_8">
+<div style="margin-left:63px;"><h4><b>memab</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module provides ad hoc mode device authentication functions.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_9">
+<div style="margin-left:63px;"><h4><b>pspnet_adhocctl</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This module provides ad hoc mode connection functions.<br><br></div>
+<div style="margin-left:50px;">For information on the Utility library, please see the corresponding library overview document and other reference documents.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>IEEE 802.11 Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Operating Modes</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In IEEE 802.11, there are two independent operating modes: infrastructure mode and ad hoc mode.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Infrastructure mode</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In infrastructure mode, there exists a special wireless node called an access point, and all communication is performed via this access point. Another wireless node cannot communicate over the network unless it is in range of the access point. Currently, this mode is used by hot spots, wireless routers, etc.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Ad hoc mode</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In ad hoc mode, wireless nodes communicate with each another directly. Ad hoc mode has an advantage over infrastructure mode in that no access point is needed, but has a disadvantage in that the processing done by the access point in infrastructure mode must now be distributed among the wireless nodes.<br><br></div>
+<div style="margin-left:50px;">These modes operate exclusively, so they cannot be used at the same time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>BSS (Basic Service Set)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In IEEE 802.11, for wireless nodes to be able to communicate with one another, they must participate in the same communication group. This communication group is called a Basic Service Set (BSS). Multiple BSSs can exist in the same space, and they are identified by a 48-bit ID called the BSSID.<br><br>Figure 4 shows the BSS configuration in infrastructure mode, and Figure 5 shows the BSS configuration in ad hoc mode.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4 Infrastructure Mode </b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5 Ad Hoc Mode</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">In addition to the BSSID, a BSS has the following parameters.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <b>SSID (Service Set ID)</b><br>An SSID is an identifier of length 0 to 32 bytes and is usually a string. Each BSS has an arbitrary SSID. The SSID is used by a wireless node as an identifier for discovering and participating in a target BSS.
+<li> <b>Channel</b><br>A channel is a numerical value indicating a frequency range used by the BSS. Although the values 1 to 14 are stipulated in the IEEE 802.11 specification, and these are what the PSP&trade; uses, the range of actual values used may be further limited by the country of operation.
+</ul></div>
+<div style="margin-left:50px;"><br>Figure 6 shows a situation in which multiple BSSs coexist in the same space, and are identified by their SSIDs.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6 BSS Identification Using SSID</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Communication Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">For a wireless node to communicate, it must participate in (join) a BSS. The procedure for joining a BSS is as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Infrastructure mode<br>The SSID to which to connect is selected using the network connection utility.
+<li> Ad hoc mode<br>The ad hoc connection library is used to participate in a BSS with the specified ad hoc ID and group name.<br>Wireless nodes which are participating in the BSS can communicate with other wireless nodes which are participating in the same BSS. As with ethernet devices, each wireless node is identified using a 48-bit MAC address.<br>Also, by using <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>(), neighboring BSSs which are configured with the same ad hoc ID can be scanned.
+</ul></div>
+<div style="margin-left:80px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>TCP/IP Protocol Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSPNET provides the following functions to support the TCP/IP protocol.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> TCP/IP protocol
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> IPv4
+<li> ICMP
+<li> UDP
+<li> TCP
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> BSD socket API
+<li> Network connection (IP address setting) function
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> DHCP
+<li> PPPoE
+<li> Manual setting
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> Utility functions
+</ul>
+</ul></div>
+<div style="margin-left:67px;">IPv6 is not supported.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>BSD Socket API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Function names have been changed in the BSD socket API provided by pspnet_inet. A list of the APIs provided by pspnet_inet, along with the corresponding generic BSD socket APIs, are shown below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>pspnet_inet API</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>BSD Socket API</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetAccept">sceNetInetAccept</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;accept()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetBind">sceNetInetBind</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;bind()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetConnect">sceNetInetConnect</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;connect()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetGetpeername">sceNetInetGetpeername</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;getpeername()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetGetsockname">sceNetInetGetsockname</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;getsockname()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetGetsockopt">sceNetInetGetsockopt</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;getsockopt()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetListen">sceNetInetListen</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;listen()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetRecv">sceNetInetRecv</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;recv()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetRecvfrom">sceNetInetRecvfrom</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;recvfrom()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetRecvmsg">sceNetInetRecvmsg</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;recvmsg()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSend">sceNetInetSend</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;send()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSendto">sceNetInetSendto</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sendto()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSendmsg">sceNetInetSendmsg</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sendmsg()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSetsockopt">sceNetInetSetsockopt</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;setsockopt()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetShutdown">sceNetInetShutdown</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shutdown()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSocket">sceNetInetSocket</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;socket()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetClose">sceNetInetClose</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;close()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetPoll">sceNetInetPoll</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;poll()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSelect">sceNetInetSelect</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;select()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInetAddr">sceNetInetInetAddr</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_addr()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInetAton">sceNetInetInetAton</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_aton()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInetNtop">sceNetInetInetNtop</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_ntop()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInetPton">sceNetInetInetPton</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_pton()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:80px;">The pspnet_inet socket APIs are basically blocking APIs. pspnet_inet provides functions for canceling (aborting) blocking. The abort functions include <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSocketAbort">sceNetInetSocketAbort</a>(), in which a socket ID is specified, and <a href="../network/PSPNET_Core-Reference-English.htm#sceNetThreadAbort">sceNetThreadAbort</a>(), in which a thread is specified.<br>The pspnet_inet socket APIs differ from other library APIs in that they return a negative number as the return value when an error occurs, similarly to the BSD socket APIs. The error code corresponds to the <i>errno</i> variable, and can be obtained by calling <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetGetErrno">sceNetInetGetErrno</a>().<br>For information about how to use the pspnet_inet socket APIs, refer to general documentation on the BSD socket APIs.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Ad Hoc Mode Communication Protocol Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>SSID Structure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An ad hoc mode network in IEEE 802.11 is structured as a BSS known as an IBSS (Independent Basic Service Set). In order for wireless nodes to communicate with each other, they must participate in the same IBSS. <br>In PSPNET, in order to configure an individual IBSS for each title application, each title is basically assigned an individual SSID. For this reason, SSIDs used in IBSSs are prescribed in the following manner.<br><br>PSP_<i>&lt;AdHocID&gt;</i>_L_<i>&lt;GroupName&gt;</i><br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_4">
+<div style="margin-left:40px;"><h4><b>AdHocID (10 characters)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is an ID (string) which as a rule is assigned uniquely to each title. It is specified during library initialization. <br>A 10-character ad hoc ID is comprised of one character indicating an attribute, followed by a string of nine characters. When used in a title application, the SCE_NET_ADHOCCTL_ADHOCTYPE_PRODUCT_ID attribute is used to directly represent the title's product number as a string (four alphabetic characters and five numeric characters). For information regarding the specific procedures, see the reference documents for the Ad Hoc Network Connection library. <br>If you need to specify a value other than the title's product number, such as for communication between different applications, please contact SCEI.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_5">
+<div style="margin-left:40px;"><h4><b>GroupName (0 - 8 characters)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a parameter (string) which is specified when a title application connects to an ad hoc network. Only PSP&trade; consoles which specify the same group name can participate in the same IBSS. <br>How group names are used is entirely up to the title application. For example, by specifying fixed strings which correspond to the stages of the game, the levels of the participants, etc., an IBSS to which only particular users can connect can be created (Figure 7). In addition, by specifying a unique random string among the participants connected to an IBSS, an independent IBSS can be created (Figure 8). <br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7 Group Names Usage Example (1)</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8 Group Names Usage Example (2)</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Channel Used</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The channel used by PSPNET in ad hoc mode is determined according to the ad hoc mode channel number setting made by PSP&trade; system software.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> For "automatic" <br>For <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>() and <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>(), channel 11 (11ch) is used. For <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>(), the channel number in the scan information that was specified in the argument is used.
+<li> For "1ch," "6ch," or "11ch" <br>The specified channel number is used.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Communication State Transitions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following are the two communication states in PSPNET's ad hoc mode.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Disconnected<br>State in which the PSP&trade; is not participating in any IBSS.
+<li> Connected to IBSS<br>State in which the PSP&trade; is participating in an IBSS
+</ul></div>
+<div style="margin-left:50px;">The conditions which cause transitions between these states are shown in Figure 9.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 9 Ad Hoc Mode Communication States</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_1"><h4>
+(1)&nbsp;<b>Connecting to an IBSS </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Two separate methods are available for connecting to an IBSS: one in which <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>() is used alone, and one in which <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>() and <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>() are used together.<br>After connecting to the IBSS, each PSP&trade; automatically discovers the other PSP&trade; consoles which are present on the same IBSS, and subsequently perform device authentication among themselves. PSP&trade; consoles can communicate with each other on an IBSS only after they have successfully completed device authentication.<br><br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_3_1_1">
+<div style="margin-left:63px;"><h4><b>Using sceNetAdhocctlConnect() </b><br><br></h4></a></div>
+<div style="margin-left:67px;">Using <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>(), it is possible to connect to an IBSS without requiring that the title application be aware of the creation of and participation in the IBSS.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> Merits<br>All peers can use the same code. <br>Not necessary to agree on things between users in advance (such as who waits first).
+<li> Demerits<br>Requires some time to complete the connection. <br>Depending on the timing, there is a possibility that peers might end up connecting to different IBSSs.
+</ul></div>
+<div style="margin-left:67px;">Figure 10 shows an outline of the internal processing for <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>().<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English010.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 10 sceNetAdhocctlConnect() Internal Flow</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_3_1_2">
+<div style="margin-left:63px;"><h4><b>Using sceNetAdhocctlCreate() and sceNetAdhocctlJoin() .</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Use <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>() and <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>() for the title application to explicitly create and participate in an IBSS.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> Merits<br>Less time needed to complete the connection.<br>Peers can reliably connect to the same IBSS.
+<li> Demerits<br>Necessary to agree on things between users in advance (such as who waits first).<br>Requires separate code for creators and participants.
+</ul></div>
+<div style="margin-left:67px;"><br><a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>() processing must be performed first before calling <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>().<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_2"><h4>
+(2)&nbsp;<b>Disconnecting from an IBSS</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A PSP&trade; can return from an IBSS to the disconnected state at any time. To return to the disconnected state, call <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlDisconnect">sceNetAdhocctlDisconnect</a>(). The device authentication status will then be cleared. To subsequently participate in the IBSS, device authentication must again be performed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_3"><h4>
+(3)&nbsp;<b>Error generation</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If either of the following situations occurs during an IBSS connection, an error is reported and the transition is made to the disconnected state.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Wireless LAN switch is turned off
+<li> State is switched to suspend (sleep) state
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Ad Hoc Mode Communication Protocol</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since communication in ad hoc mode is closed communication within an IBSS, the ad hoc mode communication protocol, which is implemented on top of Ethernet frames, uses a specifically reserved Ethernet type. PDP (PSPNET Datagram Protocol) and PTP (PSPNET Transport Protocol) are provided as communication protocols for this purpose.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-English011.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 11 Configuration of Ad Hoc Mode Communication Protocol</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_1"><h4>
+(1)&nbsp;<b>PDP</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PDP is an unreliable, connectionless, datagram transport protocol. It is used in place of UDP. Unicast and broadcast addresses are both supported as destination addresses.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_2"><h4>
+(2)&nbsp;<b>PTP</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PTP is a reliable, connection-oriented, full duplex stream transport protocol. It is used in place of TCP. Unicast addresses can be used as destination addresses.<br>[Main differences with TCP]<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> With PTP, the direction in which a connection can be established is predefined. An active open connection can only make a connection with a passive open connection. However, once the connection is established, there is no restriction on the direction of data transfer.
+<li> With PTP, the application specifies the resend interval and timeout. The resend interval is fixed, and no back-off is performed.
+<li> With PTP, there is no half-closed state. If one side breaks the connection, the connection on the other side is also broken.
+</ul></div>
+<div style="margin-left:67px;"><br>Addresses used by the ad hoc mode communication protocol are 48-bit MAC addresses. The MAC address of the wireless LAN device in each PSP<sup>TM</sup> is used as the address (unicast address) for specifying that PSP<sup>TM</sup>. A broadcast address can also be used to specify all PSP&trade; consoles within an IBSS by setting all 48 bits of the address to '1'. However, multicast addresses for specifying a particular group within the IBSS cannot be used.<br><br>When communicating with the ad hoc mode communication protocol, a communication node is identified by a combination of address and port number. Port numbers are represented by 16-bit integers, and are assigned independently by PTP and PDP. Port number assignments are shown below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Port Number</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Use (for both PTP and PDP)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x0000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unused&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x0001 - 0x7FFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For user&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x8000 - 0xFFFE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For system&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0xFFFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unused&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Socket APIs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Socket APIs similar to those of the TCP/IP protocol are also provided as ad hoc mode communication protocol APIs. A socket is identified by a unique ID, and the protocol is linked to a combination of an address and port number when the socket is created. The socket ID is specified when connecting and disconnecting, or when sending and receiving data.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>Naming Service</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A PSP&trade; can set a unique name in the system settings. PSPNET maintains a table that associates MAC addresses with unique names for all PSP&trade; consoles that have joined the same IBSS. This table is used to exchange unique names during authentication in ad hoc mode. Utility functions are also available for exchanging, or getting the list of, MAC addresses and unique names based on this table.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<html lang="en">
+<head>
+<title>GameData-Authoring</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+iofilemgr_dnas-FormatGame DataAuthoring Guide
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Preface</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This document explains how to create and access encrypted files that are provided by SCE in the iofilemgr_dnas format. These files can be installed on a Memory Stick&trade; from a UMD&trade; by the game data install utility, and then used as encrypted read-only files.<br><br>Although the game data install utility can install game data files in other formats besides iofilemgr_dnas, for those file formats, encryption and a digital signature are required so that tampering can be detected.<br>Also, the types (contents) of data that are installed are restricted. For details concerning installation of game data on a Memory Stick&trade; refer to the following document.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Game Data Install Utility
+</ul></div>
+<div style="margin-left:50px;"><br>For details concerning the authoring service, refer to the following document.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PlayStation&reg;Network SMT Simple Authoring Service Users Guide
+</ul></div>
+<div style="margin-left:50px;"><br>For a function reference for accessing an installed iofilemgr_dnas-format encrypted file, refer to the following document.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> iofilemgr_dnas-Format Game Data API Reference
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Creating Files Required for Authoring</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the following files, which are required to create an iofilemgr_dnas-format encrypted file.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSP&trade; content information files (ICON0.PNG, etc.)
+<li> Security ID specification file (SECURE_INSTALL_IDS.CSV)
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>PSP&trade; Content Information Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&trade; content information files include icon image files used for displaying game data installed on a Memory Stick&trade; on PSP&trade; system software screens. Of the following five files, the still image icon file must be created. The other content information files are optional.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Still image icon file: ICON0.PNG
+<li> Video icon file: ICON1.PMF
+<li> Content description image file: PIC0.PNG
+<li> Content information background image file: PIC1.PNG
+<li> BGM file: SND0.AT3
+</ul></div>
+<div style="margin-left:50px;">For details concerning the format of each file or how to create these files, refer to "Content Information Files" in the separate document "Game Data Install Utility."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Security ID Specification File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To encrypt game data in iofilemgr_dnas format, you must specify a security ID for each file that will be used as the encryption key. When game data consists of multiple files, setting a different security ID for each file enables you to easily detect user actions like renaming or replacing files as errors.<br>The security ID specification file is in CSV format with each line of the file containing a filename and the security ID applied to that file ("0x" followed by 32 hex characters (16 bytes) in hex dump format). The security ID value can be freely determined, however, because it is also used as a private key for preventing illegal file access, a value which cannot be easily guessed such as that from a high quality random number generator should be specified. Examples of security ID values and their specifications are shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>FILE1.DAT, 0x291bf0d31b1c7b986ac012718157233b
+FILE2.DAT, 0x71fd9eb933274a50131294ea65ecacf0
+FILE3.DAT, 0x978ddcf24c3f15cfa7710646de344fe4
+…
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Packaging and Operational Testing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the procedure for collecting together the prepared files and how to use those files to perform authoring and operational testing.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Creating a ZIP Archive</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Arrange the prepared files in the directory structure shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/GameData-Authoring-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Directory Structure for Authoring</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Create a subdirectory called "PSP_INSDIR" directly under the root directory of the package and place the game data to be encrypted there.<br>Similarly, create a subdirectory called "PSP_CONT" and place the PSP&trade; content information files there. Finally, place the security ID specification file "SECURE_INSTALL_IDS.CSV" directly under the root directory.<br><br>Archive this entire directory structure in ZIP format.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_1">
+<div style="margin-left:40px;"><h4><b>Linux command example</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>% zip -ry GAMEDATAINSTALL_SAMPLE.ZIP .
+
+</font></pre></div>
+<div style="margin-left:67px;">For your reference, there is a sample of this ZIP archive in devkit/sample/fileio/iofilemgr_dnas/authoring_sample/.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Authoring</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Use the Simple Authoring Service provided by SCE to perform authoring on the ZIP archive that you created. For details about how to use the Simple Authoring Service, refer to the "PlayStation&reg;Network SMT Simple Authoring Service Users Guide" document.<br>The authoring results are provided as a ZIP file and the encrypted game data files are obtained by unzipping the file.<br>If a problem is detected in the uploaded files, the following error codes are reported. If any other error is reported, inform SCE and tell us the corresponding error code.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>List of iofilemgr_dnas-format game data authoring errors</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Code</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Cause / Corrective Action</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;60&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reading of SECURE_INSTALL_IDS.CSV failed. File contains invalid specification.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;61&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified security ID is invalid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;62&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SECURE_INSTALL_IDS.CSV was not found.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Operational Testing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The encrypted files obtained from authoring must ultimately be placed in the disc0:/PSP_GAME/INSDIR/ directory on the UMD&trade;. From there, the game data install utility should be used to install them under the ms0:/PSP/SAVEDATA/ directory on the <br>Memory Stick&trade; where they can be used. However, when doing standalone testing during the initial stage of development, operational testing can be performed if the encrypted files are simply copied to any path on the Memory Stick&trade;.<br>To open an encrypted file, use <a href="../others/GameData-Reference-English.htm#sceIoOpenDNAS">sceIoOpenDNAS</a>(). This function is different from the normal sceIoOpen() in that the <i>secureInstallId</i> argument has been added. For this argument, set the security IDs that were specified for each file during authoring in a 16-byte char-type array (note this is not a hex dump string). If the file is opened successfully, fd is obtained as the return value. If the file is subsequently accessed using sceIoRead() or sceIoLseek() in the same manner as for a normal file, digital signature verification and decryption will be performed automatically during reading. When finished accessing the file, always use sceIoClose() to close it.<br>For your reference, a sample program is included in devkit/sample/fileio/iofilemgr_dnas/file_read/.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Miscellaneous Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Difference between Encrypted File Size and Readable Data Size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although sceIoGetstat() can be used to obtain the size of an iofilemgr_dnas-format encrypted file just as with a normal file, a value larger than the size of the valid data will be obtained using this method. This is because the information that is obtained applies to the entire file, which also includes the encryption envelope. <br>The size of the actual data that should be decrypted and read is the same as the size of the original data before it was encrypted. When sceIoRead() is executed, an end of file (EOF) condition will occur immediately after the size of the decrypted original data is read.<br>If you want to know the readable data size before actually reading the file, call sceIoLseek() with the file descriptor obtained from <a href="../others/GameData-Reference-English.htm#sceIoOpenDNAS">sceIoOpenDNAS</a>(), seek to the end of the file and reference the value. Since executing sceIoLseek() only sets the read starting position for an iofilemgr_dnas-format encrypted file, a substantial processing load (such as for data decryption or physical head movement) will not occur.<br>Note that the calculation performed when "Memory Stick&trade; free space required for installation" is displayed for a package is based on the file size that also includes the encryption envelope.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

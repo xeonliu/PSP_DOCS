@@ -1,0 +1,161 @@
+<html lang="jp">
+<head>
+<title>DMAC-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+DMACドライバ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">DMACドライバは、PSP&reg;システムチップ内のシステムメインバスで高速にメモリコピーを行う機能を提供します。<br>本ドキュメントでは、DMACドライバを使用する時の注意点を中心に説明しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">DMACドライバを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dmac_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dmacdrv.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>ライブラリの初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">DMACドライバはデフォルトのモジュールとして動作しますので、明示的に初期化処理を行なう必要はありません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>メモリコピー動作</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>()関数によってメモリコピー動作を行います。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+res = <a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>(dst, src, size);
+
+</font></pre></div>
+<div style="margin-left:67px;"><br><a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>()関数は、メモリコピーが完了するまでブロックしますので、<a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>()関数を割り込みハンドラのコンテキストから呼び出したり、割り込み禁止状態やディスパッチ禁止状態で呼び出したりすることはできません。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>転送アラインメントとパフォーマンスについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;システムチップ内のシステムメインバスは128ビット幅であるため、DMACによるメモリコピーの転送開始アドレス、転送先アドレス、転送サイズはいずれも16バイトアラインされていないと高速な転送が行えません。DMACハードウェアの性能は64バイトアラインのときが最適な性能となります。<br><a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>()関数内部では、ソースとデスティネーションのアドレスの差分より転送幅を決定し、端数をCPUのアンキャッシュメモリアクセスによって処理します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>キャッシュ操作について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPUのDキャッシュはライトバック方式ですが、DMACによるメモリ転送を行った場合に、ハードウェアによるDキャッシュの内容とメモリの内容のコヒーレンシを保つためのキャッシュスヌーピングは行われません。コヒーレンシの保証は、ソフトで行う必要があります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackRange">sceKernelDcacheWritebackRange</a>(src, size);
+res = <a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>(dst, src, size);
+<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheInvalidateRange">sceKernelDcacheInvalidateRange</a>(dst, size);
+</font></pre></div>
+<div style="margin-left:50px;"><br>上記のように、DMACによるメモリ転送に先立ってあらかじめ<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackRange">sceKernelDcacheWritebackRange</a>()関数などでDキャッシュをライトバックする必要があります。また、メモリ転送された先のデータをCPUが読み出す前に、該当するエリアを<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheInvalidateRange">sceKernelDcacheInvalidateRange</a>()関数等で無効化しておく必要があります。<br><br><a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>()関数に先立って<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>()関数を使用すると、コヒーレンシ制御を一度に行う事ができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>();
+res = <a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>(dst, src, size);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>DMA転送可能なメモリエリアについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">DMACドライバの<a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>()関数によってDMA転送可能なメモリのアドレス空間は以下のエリアに限られます。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> メインメモリのユーザーアドレス空間
+<li> Graphics Engine eDRAM
+<li> スクラッチパッドSRAM
+</ul></div>
+<div style="margin-left:50px;"><br>不正なアドレスが指定されると、<a href="../peripheral/DMAC-Reference-Japanese.htm#sceDmacMemcpy">sceDmacMemcpy</a>()関数内の引数チェックによってDMA起動前にエラーとして返す場合があります。ただしNMI例外によって通知されるバスエラー等が発生した場合にはデバッガのシステム停止状態になります。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<html lang="jp">
+<head>
+<title>libqpcode-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libqpcode
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceQPrintableEncoder"></a>
+<table width="100%"><td width="70%"><font size=6>sceQPrintableEncoder<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>quoted-printableエンコード<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#inclue &lt;libqpcode.h&gt;
+int <b>sceQPrintableEncoder </b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> *<i>out</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> *<i>in</i>,
+	SceSize <i>src_len</i>,
+	SceSize *<i>require</i>,
+	SceSize <i>prepare</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>in</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バイト列へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>out</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バイト列へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>src_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力の長さ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>require</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バイト数を格納するメモリへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>prepare</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バイト列に用意したメモリのサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80434022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力に必要なバイト数が&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>prepare</i>で指定された値を超えた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804341FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>out</i>と<i>require</i>の両方ともに&nbsp;&nbsp;<br>&nbsp;&nbsp;NULLがセットされた&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>in</i>と<i>src_len</i>で指定された入力バイト列をQPrintableエンコードして、<i>out</i>で指定されたメモリ領域へ出力し、出力バイト数を<i>require</i>に格納します。出力バイト数が<i>prepare</i>を超えるときはエラーが返ります。出力用のメモリ領域はアプリケーションが用意しなければなりません。<i>out</i>にNULLを指定することで、出力に必要なメモリ領域の大きさが<i>require</i>にセットされ取得できます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceQPrintableLineDecoder"></a>
+<table width="100%"><td width="70%"><font size=6>sceQPrintableLineDecoder<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>quoted-printable行デコード<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#inclue &lt;libqpcode.h&gt;
+int <b>sceQPrintableLineDecoder </b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> *<i>out</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> *<i>in</i>,
+	SceSize <i>src_len</i>,
+	SceSize *<i>require</i>,
+	SceSize <i>prepare</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>out</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バイト列へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>in</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バイト列へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>src_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力の長さ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>require</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バイト数を格納するメモリへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>prepare</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バイト列に用意したメモリのサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80434022&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力に必要なバイト数が&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>prepare</i>で指定された値を超えた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804341FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>out</i>と<i>require</i>の両方ともに&nbsp;&nbsp;<br>&nbsp;&nbsp;NULLがセットされた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80434108&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_QPCODE_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なフォーマットのバイト列が&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>in</i>に指定された&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>in</i>と<i>src_len</i>とで指定された入力バイト列（quoted-printableエンコードされたデータの1行分）をデコードして、<i>out</i>で指定されたメモリ領域へ出力し、出力バイト数を<i>require</i>に格納します。出力バイト数が<i>prepare</i>を超えるときはエラーが返ります。入力バイト列は、終端のRFC822改行（CRとLFの連続）を含めて長さが78かそれ以下でなければいけません。<i>ilen</i>にこれ以上の値を設定しても無視されます。出力用のメモリ領域はアプリケーションが用意しなければなりません。<i>out</i>にNULLを指定することで、出力に必要なメモリ領域の大きさが<i>require</i>にセットされ取得できます。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<html lang="jp">
+<head>
+<title>libparse_HTTP-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libparse_http
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_httpは、HTTPレスポンスヘッダのステータスラインの解析及び、HTTPのヘッダから任意の文字列キーに対応する値を取得するためのライブラリです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_httpを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_http.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_http_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_http_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">devkit/sample/net/libhttp/parse_http/<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モジュールユーティリティAPIにてlibparse_httpモジュールをロードします。libparse_httpの使用には特に初期化は必要ありません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>HTTPレスポンスのステータスラインの解析</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">HTTPレスポンスのステータスラインは、以下に示されるフォーマットを取ります。<br><br>HTTP-Version SP Status-Code SP Reason-Phrase CRLF<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;HTTP-Version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= &quot;HTTP&quot; &quot;/&quot; 1*DIGIT &quot;.&quot; 1*DIGIT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Status-code&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= 3DIGIT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Reason-Phrase&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= *&lt;CR, LFを含まないテキスト&gt;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">以下の手順でステータスラインを解析することが出来ます。入力される文字列はNULLターミネートされている必要はありませんが、ステータスラインの終わりはCRLFもしくはLFである必要があります。またlibparse_http内部ではメモリを確保しないため、解析後のReason-Phraseは入力で与えられた文字列の中のReason-Phraseの開始位置とReason-Phraseの長さで表現されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a>	*status_line  = &quot;HTTP/1.0 404 Not Found\r\n&quot;;
+SceSize line_len = strlen(status_line);
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> http_major_ver, http_minor_ver, response_code, ret;
+const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> *reason_phrase, *buf;
+SceSize *phrase_len;
+
+ret = <a href="../network/libparse_HTTP-Reference-Japanese.htm#sceParseHttpStatusLine">sceParseHttpStatusLine</a> (status_line,line_len, &amp;http_major_ver, &amp;http_minor_ver, 
+	&amp;response_code, &amp;reason_phrase, &amp;phrase_len);
+if (ret &lt; 0) ERROR;
+buf = (<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a>)malloc (phrase_len + 1);
+if (buf == NULL) ERROR;
+memcpy(buf, reason_phrase, phrase_len);
+buf[phrase_len] = '\0';
+printf(&quot;http ver: %d.%d response code: %d reason phrase: %s&quot;,
+	http_major_ver, http_minor_ver, response_code, buf);
+/*Expected Result &quot;http_ver: 10 response code: 404 reason phrase: Not Found&quot; */
+
+</font></pre></div>
+<div style="margin-left:67px;">以上のように<a href="../network/libparse_HTTP-Reference-Japanese.htm#sceParseHttpStatusLine">sceParseHttpStatusLine</a> ()関数を使用することで、HTTPステータスラインの解析が行われます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>HTTPのメッセージヘッダの解析</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">HTTPメッセージヘッダは以下のフォーマットを取ります。<br><br>*(message-header CRLF)<br>CRLF<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;message-header&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= field-name &quot;:&quot; [field-value]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;field-name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= token&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;token&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= separators及びコントロールキャラクタを除くUS-ASCIIキャラクタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;separators&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= "(" | ")" | "&lt;" | "&gt;" | "@" | "," | ";" | ":" | "\" | &lt;"&gt; | "/" | "[" | "]" | "?" | "=" | "{" | "}" | SP | HT(水平タブ)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;field-value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= *(field-content | LWS)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;field-content&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= *(token | separators)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LWS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= [CRLF] 1*(SP | HT)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+        <div style="margin-left:80px;"><pre><font size=3>例：
+Date: Wed, 25 Aug 2004 06:00:00 GMT\r\n
+Content-Length: 644\r\n
+ETag: "23efe4-2c0-405a7e36"\r\n
+Accept-Ranges: bytes\r\n
+foo: aaaaaa\r\n
+ bbbbb\r\n            /*行頭がSPまたはHTの時は前行の続き*/
+Content-Length: 704\r\n
+\r\n
+
+</font></pre></div>
+<div style="margin-left:67px;">下記にlibhttpで取得したレスポンスヘッダの中から所望のfield-nameに対応するfield-valueを取得するサンプルコードを示します。libparse_http内部ではメモリを確保しないため、解析後のfield-valueは入力で与えられた文字列の中のfield-valueの開始位置とfield-valueの長さで表現されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a>	ret;
+<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a>	*header, *buf;
+const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a>	*field_name = &quot;Date&quot;, *field_value;
+SceSize	header_len, value_len;
+
+ret = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>(request_id, &amp;header, &amp;header_len);
+if (ret &lt; 0) ERROR;
+ret = <a href="../network/libparse_HTTP-Reference-Japanese.htm#sceParseHttpResponseHeader">sceParseHttpResponseHeader</a>(header, header_len, field_name,
+	&amp;field_value, &amp;value_len);
+if (ret &lt; 0) ERROR;
+buf = (<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a>*)malloc(value_len + 1);
+memcpy(buf, field_value, value_len);
+buf[value_len + 1];
+printf(&quot;field value: %s\n&quot;, field_value); /*field value: Wed, 25 Aug 2004 06:00:00 GMT */
+
+</font></pre></div>
+<div style="margin-left:67px;">以上のように<a href="../network/libparse_HTTP-Reference-Japanese.htm#sceParseHttpResponseHeader">sceParseHttpResponseHeader</a>()関数を使用することで、HTTPのメッセージヘッダの解析を行うことが出来ます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>API呼び出しに必要なスタックサイズについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_httpのAPI呼び出しに必要なスタックサイズは、1024バイト（SCE_PARSE_HTTP_LEAST_STACK_SIZE）です。スタックサイズが不足の場合は<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a>のエラーが返ります。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

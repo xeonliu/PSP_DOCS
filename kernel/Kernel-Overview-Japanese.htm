@@ -1,0 +1,629 @@
+<html lang="jp">
+<head>
+<title>Kernel-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;カーネル
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>PSP&reg;カーネルの概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;カーネルは、PSP&reg;上で動作するオペレーティングシステムです。シンプルでリアルタイム処理に適した優先度ベースのマルチスレッドスケジューリング機能を持ち、セマフォ / イベントフラグ / メッセージボックス等によるスレッド間同期・通信、割り込みハンドラの管理、メモリプールの管理、ファイルインタフェース、タイマ管理などの機能を提供します。<br>また、PSP&reg;のプログラムをメモリ上でモジュールとして管理する機能とともに、モジュールの一部を他のモジュールにサブルーチンとして提供する「常駐ライブラリ」の機能をサポートします。<br>PSP&reg;カーネルはPSP&reg;の起動時に初期化され、利用可能な状態になります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>カーネルのソフトウェア階層</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;のメモリ上に存在するカーネルソフトウェアは、以下の階層構造を持ちます。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  PSP&reg;カーネルの階層構造</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>システムメモリマネージャ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">システムメモリマネージャは、メモリ領域全体の管理を行います。<br>メモリ領域は、まずメモリパーティションに分割されます。各メモリパーティションに対して、カーネルモードおよびユーザモードからのアクセス制限、デフォルトのメモリ割り当て方針（SMEM_Low / SMEM_Highのいずれか）が設定されます。<br>各メモリパーティションに対して、以下の2種類のメモリ割り当てサービスが提供されます。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> メモリブロックサービス<br>メモリパーティションの中で、比較的大きなサイズのメモリブロックを比較的低い頻度で確保 / 解放するサービス。プログラムモジュールのロード場所の確保、スレッドのスタックの確保などで利用することを想定したもの。
+<li> ヒープメモリサービス<br>パーティション内にヒープメモリ用のメモリブロックを確保してその中で、比較的小さなサイズのメモリブロックを比較的高い頻度で確保 / 解放するサービス。malloc() / free()と同様の用途で利用することを想定したもの。
+</ul></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  メモリ管理構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">標準では、システムメモリマネージャを直接呼び出してメモリを確保するのはマルチスレッドマネージャとプログラムローダだけで、デバイスドライバ以上の層のプログラムは、マルチスレッドマネージャの提供するメモリ割り当てサービスを利用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>プログラムローダ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムローダは、UMD&reg; / Memory Stick&trade; / フラッシュメモリ等からプログラムモジュールをメモリにロードし、メモリ上のモジュールを管理します。下層にあたるローダと上層にあたるモジュールマネージャで構成されています。<br>ローダは次の機能を持ちます。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> メモリ上のプログラムモジュールの管理
+<li> 常駐ライブラリの管理（ロード時のリンク処理を含む）
+<li> リロケータブルモジュールのメモリ上への配置
+</ul></div>
+<div style="margin-left:50px;"><br>モジュールマネージャは、ローダとファイルシステムを呼び出して以下の機能を実現します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> プログラムモジュールファイルのロード
+<li> プログラムモジュールの実行
+<li> プログラムモジュールの停止
+<li> プログラムモジュールのアンロード
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>割り込みハンドラマネージャ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">割り込みハンドラマネージャは、割り込みハンドラの登録・管理ルーチンと、割り込み要因を判定して各ハンドラに制御を渡す統合割り込みハンドラで構成されます。PSP&reg;には複数の割り込み要因があり、要因別のマスクレジスタとマスターマスクレジスタによって割り込み禁止 / 許可を設定することができ、これらのマスクを操作する関数が用意されています。割り込みが発生すると、割り込みハンドラマネージャは割り込みステータスレジスタとマスクレジスタを参照して割り込み要因を判定し、登録されている適切な割り込みハンドラを呼び出します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>マルチスレッドマネージャ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マルチスレッドマネージャは、CPU資源の管理とメモリ資源の管理、割り込み資源の管理を行い、上層のソフトウェアに対して次の機能を提供します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> スレッドの管理機能
+<li> スレッドのスケジューリング機能
+<li> スレッド間の同期機能
+<li> メモリ管理機能
+<li> 割り込み管理機能
+<li> コールバック機能
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>IO/Fileマネージャ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">IO/Fileマネージャは、sceIoOpen(),sceIoClose(),sceIoRead(),sceIoWrite()などと同様のデバイスに依存しないファイルアクセスAPIを提供し、デバイスドライバやファイルシステムが持つこれらのエントリ群の登録管理を行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>デバイスドライバ・ファイルシステム・カーネルサービス群</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_1">
+<div style="margin-left:40px;"><h4><b>デバイスドライバ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">デバイスドライバは、マルチスレッドマネージャの機能を使用して各I/Oデバイスをハンドリングするモジュールで、次の3つの部分で構成されます。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 割り込み処理ルーチン（必要があれば）
+<li> デバイスコントロールスレッド（0個以上）
+<li> エントリ関数群<br>エントリ関数群は、上層のプログラムから呼び出されて、I/Oリクエストをデバイスコントロールスレッドに渡すかまたは直接デバイスをコントロールする処理を行います。エントリ関数群自体は、呼び出し側スレッドのコンテキストで実行されます。
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_2">
+<div style="margin-left:40px;"><h4><b>ファイルシステム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ファイルシステムは、汎用ファイルインタフェースとブロックデバイス間を繋ぐ役割を果たします。またディレクトリサービスを提供します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_3">
+<div style="margin-left:40px;"><h4><b>カーネルサービス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">カーネルサービスは、ドライバやカーネルモジュールを利用して上位のプログラムにサービスを提供します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>マルチスレッド管理</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;カーネルのマルチスレッド管理について解説します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>スレッドの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">スレッドとは、並行処理の観点から見た、プログラムの論理的な単位です。アプリケーションプログラムの処理内容を複数のスレッドに分け、それらを同時並行的に動作させることができます。同時並行といってもCPUはひとつしかありませんから、ある短い時間内で見ると、実行されているスレッドはひとつだけです。どのスレッドが実行されるかは、各スレッドの状態と優先度によって決められます。優先度の高いスレッドが実行中であればそのスレッドが待ち状態に入るか割り込みハンドラ中で状態が変更されない限り、それより優先度の低いスレッドが実行されることはありません。複数のタスク（またはプロセス）を切り替えながらまんべんなく実行しようとするTSS（Time Sharing System）とは、この点で大きく異なっています。<br>入出力装置やメモリ上の特定のワークエリアなどの資源は、スレッド間で排他的に使用するように調整しなければなりません。PSP&reg;カーネルはスレッド間の同期・通信機能として、セマフォ／ミューテックス／軽量ミューテックス／イベントフラグ／メッセージボックス／メッセージパイプを提供しています。<br>なお、スレッドと割り込みハンドラは明確に区別されます。スレッドはあくまでユーザプログラムの一部として、割り込みハンドラはカーネルの一部として、それぞれ異なるシステム状態のもとで実行されます。これに関連して、プログラムを記述する上でいくつか注意すべき点があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>スレッドの状態と動作</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;カーネルの管理するスレッドは、以下の7つ（大きく見ると5つ）の状態を持ちます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;RUN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;実行状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CPUがそのスレッドを実行中の状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;READY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;実行可能な状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CPUが他のスレッドを実行中であるため&nbsp;&nbsp;<br>&nbsp;&nbsp;待機している状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;WAIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;待ち状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ある条件が成立するまで、自ら待ちに入った状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SUSPEND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;強制待ち状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;他のスレッドが発行したシステムコールによって&nbsp;&nbsp;<br>&nbsp;&nbsp;強制的に待ちに入れられた状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;WAIT-SUSPEND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2重待ち状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WAIT状態であったときに他のスレッドから&nbsp;&nbsp;<br>&nbsp;&nbsp;強制的に待ちに入れられた状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DORMANT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;休止状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッドが生成されてまだ起動されていない状態、&nbsp;&nbsp;<br>&nbsp;&nbsp;または終了してから削除されるまでの状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NON-EXISTENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未登録状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スレッドが生成されていない、&nbsp;&nbsp;<br>&nbsp;&nbsp;または削除された後の仮想的な状態&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>RUN実行状態</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">CPUがそのスレッドを実行中であるという状態です。ある瞬間について見れば、この状態のスレッドはひとつしかありません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>READY実行可能状態</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">そのスレッドは実行できる条件が整っているが、より優先度の高い（あるいは同じ）スレッドが実行中であるために待機している状態です。READY状態のスレッドが複数個ある場合、それらのスレッドはCPUが空くのを待って待ち行列を作ります。これをレディキューと呼びます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>WAIT：待ち状態／SUSPEND：強制待ち状態／WAIT-SUSPEND：2重待ち状態</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">そのスレッドが実行できる条件が整わないため実行を止められている、実行保留状態です。WAITは自スレッドの発行したシステムコールによって実行が止まっている状態、SUSPENDは他のスレッドから強制的に止められている状態、WAIT-SUSPENDはWAIT中にさらに他スレッドによって止められた状態です。待ち状態からの実行再開は、実行を中断した場所から行われ、プログラムカウンタやレジスタなどプログラムの実行状態を表現する情報（コンテキスト）はそのまま復元されます。<br>デバイスをアクセス中のスレッドをSUSPEND状態やWAIT-SUSPEND状態にするとシステムがデッドロックする可能性があるため、デバッグ目的以外でこれらの状態を利用することは推奨しません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>DORMANT：休止状態</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">スレッドがまだ起動されていない状態、または終了した状態。スレッドを生成するとまずこの状態になります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>NON-EXISTENT：未登録状態</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">スレッドが作成される前または削除された後の、仮想的な状態です。<br>生成されたスレッドはまずDORMANT状態になり、起動されることによってREADY状態となってレディキュー（詳細後述）に入り、レディキューの先頭にあるスレッドが実行されてRUN状態となります。RUN状態のスレッドは、スリープするかまたはセマフォなどの条件を待つことによってWAIT状態に移り、待ち条件が成立するとREADY状態に戻ります。<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  スレッドの状態遷移図</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>スレッドのスケジューリング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">READY状態にある複数のスレッドをどのような順序で実行する（RUN状態に移す）か、その調整・制御をスケジューリングと呼びます。PSP&reg;カーネルでのスケジューリングについて以下説明します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_4">
+<div style="margin-left:40px;"><h4><b>優先度</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">スレッドはそれぞれ優先度を持ち、READY状態のスレッドはそれぞれの持つ優先度にしたがってスケジューリングされ実行されます。実行されているスレッドが同一優先度以下のスレッドにCPUを奪われる（RUN状態から外される）ことは、基本的にはありません。優先度の範囲は1～126で、数値の小さい方が高い優先度を表します。一部の優先度はシステムで予約されていて、ユーザプログラムで使用できる優先度の範囲は、SCE_KERNEL_USER_HIGHEST_PRIORITY（=16）～SCE_KERNEL_USER_LOWEST_PRIORITY（=111）に限られています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_5">
+<div style="margin-left:40px;"><h4><b>レディキュー</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">RUN状態およびREADY状態のスレッドを、実行される優先順位にしたがって並べたものがレディキューです。レディキューの並び順は各スレッドが持つ優先度の高い順で、同一優先度のスレッド同士は早くREADY状態になった順に並びます。<br>たとえば次のように、優先度21のスレッドA、優先度22のスレッドB、C、D、優先度23のスレッドE、Fがレディキューに存在するとします。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br>レディキューにあるもっとも優先度の高いスレッドはスレッドAなので、スレッドAが実行されます。スレッドAの実行中、暗黙のうちに他のスレッドに実行が移ることはありません。スレッドAがWAIT状態になると、レディキューは下図のようになり、スレッドBが実行されます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br>実際のプログラミングにおいては、各スレッドは処理が一段落したところで、または外部の処理を待たねばならなくなったところでWAIT状態に移るようにしておきます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_6">
+<div style="margin-left:40px;"><h4><b>割り込みとスケジューリング</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">割り込みが発生すると（割り込み禁止状態でなければ）割り込みハンドラに制御が移り、割り込みハンドラからリターンする時点で、各スレッドの状態と優先度にしたがって再度スケジューリングが行われます。<br>割り込みハンドラ内でスレッドAをREADY状態に移したりスレッドBの優先度を下げたりする処理が行われない限り、割り込みハンドラから戻った後もやはりスレッドBが実行されます。割り込みハンドラ内でスレッドAがREADY状態に移されると、リターン時の再スケジューリングでスレッドAがRUN状態になり、スレッドBはRUN状態からREADY状態に移ります（スレッドBがプリエンプトされた、といいます）。この場合でもレディキュー内のスレッドBの位置は変わらないので、スレッドAがレディキューから外れれば再びスレッドBが実行されます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese006.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br>実際のプログラミングにおいては、割り込み発生時に行うべき処理をWAIT状態のスレッドとして待機させておき、割り込みハンドラ内でそのスレッドをREADY状態に移してリターンする、といった処理が一般的です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>優先度の変更</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">スレッドの優先度は、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelChangeThreadPriority">sceKernelChangeThreadPriority</a>()を用いて変更することができます。自分自身の優先度を変更することもできますし、他のスレッドの優先度を変更することもできます。<br>また、レディキューを回転させる<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelRotateThreadReadyQueue">sceKernelRotateThreadReadyQueue</a>()を用いて、優先度の同じスレッド同士の実行順序を変更することができます。たとえば優先度12を<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelRotateThreadReadyQueue">sceKernelRotateThreadReadyQueue</a>()によって回転すると、先頭のスレッドが最後尾に移ってC,D,Bの順となります。なお、待ち状態のスレッドがREADY状態に移った場合は、そのスレッドは該当優先度のレディキューの最後尾につきます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>スレッド間の同期</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">スレッド同士の間で、入出力デバイスへのアクセス競合などを避け、同期して処理を行うために、PSP&reg;カーネルはいくつかの同期機能を提供しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_7">
+<div style="margin-left:40px;"><h4><b>スレッドのスリープ・起床</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">各スレッドは、処理が一段落して外部デバイスの処理を待たねばならなくなるなど、CPUを当面必要としなくなった時点で<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSleepThread">sceKernelSleepThread</a>()を呼び出し、WAIT状態に移ることができます。これを「スリープする」といいます。スリープしているスレッドは、他のスレッドまたはスレッド独立部から<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWakeupThread">sceKernelWakeupThread</a>()を用いてREADY状態に戻すことができます。これを、「スレッドを起床する」といいます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_8">
+<div style="margin-left:40px;"><h4><b>イベントフラグ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">イベントフラグはより柔軟な同期処理を行うことができます。一時に多数のスレッドを起床するプログラムなどで有用です。まず、フラグの初期値を設定してイベントフラグを作成しておきます。条件の成立を待つスレッドは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitEventFlag">sceKernelWaitEventFlag</a>()を呼び出して、解除条件を指定してWAIT状態に移ります。他のスレッドまたは割り込みハンドラが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSetEventFlag">sceKernelSetEventFlag</a>()によってフラグ値を変更すると、イベントフラグを待っているスレッドのうち、新しいフラグ値が解除条件に合致するものがREADY状態に戻ります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_9">
+<div style="margin-left:40px;"><h4><b>セマフォ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">複数のスレッドが同じデバイスやバッファ領域などを使用する場合に、使用状況を他のスレッドに知らせて同期を取るために用意されているのがセマフォ（信号機）機能です。<br>デバイス等を使用したいスレッドは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitSema">sceKernelWaitSema</a>()を実行してセマフォ資源を取得し、つまり使用中フラグを立てることで使用権を取得してから使用します。使い終われば、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSignalSema">sceKernelSignalSema</a>()を実行してセマフォ資源をシステムに返却します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br><br><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitSema">sceKernelWaitSema</a>()を実行したときにもし他のスレッドがデバイス等を使用中であれば、セマフォ資源は取得できず、そのスレッドはWAIT状態になってセマフォ待ち行列に入ります。デバイス等を使い終わったスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSignalSema">sceKernelSignalSema</a>()を実行してセマフォ資源をシステムに返却すると、返却されたセマフォ資源がセマフォ待ち行列の先頭のスレッドに与えられ、そのスレッドはREADY状態に戻り、優先度によるスケジューリングにしたがって実行され、デバイス等を使用できるようになります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br><br>セマフォ資源の個数はセマフォ作成時に指定することができるため、上記のような排他制御の他に、複数のスレッドがデータを供給する共有バッファの有効データ数を表すような使い方も可能です。データ供給側のスレッドは、共有バッファにデータを格納したときに<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSignalSema">sceKernelSignalSema</a>()を実行して有効データが増えたことを示します。それに対してデータ消費側のスレッドは、共有バッファからデータを取り出そうとするときに<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitSema">sceKernelWaitSema</a>()を実行して、セマフォ資源が取得できれば共有バッファ中のデータを処理し、取得できなければWAIT状態になってデータが供給されるのを待つことになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_10">
+<div style="margin-left:40px;"><h4><b>ミューテックス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ミューテックスは、セマフォと同様、複数のスレッドが同じデバイスやバッファ領域などを使用する場合に、使用状況を他のスレッドに知らせて同期を取るために使用されます。<br>資源を使用したいスレッドは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelLockMutex">sceKernelLockMutex</a>()を実行してミューテックス資源を取得し、つまり使用中フラグを立てることで使用権を取得してから使用します。使い終わったら、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelUnlockMutex">sceKernelUnlockMutex</a>()を実行してミューテックス資源をシステムに返却します。<br>セマフォとの違いは、セマフォが資源の数をカウントするのに対し、ミューテックスは資源の数は常に1個で何回ロックが行われたかをカウントしている、という点です。ミューテックスの場合資源はロックしているスレッドによって占有され、再帰的なミューテックスのロックが行われた場合、同じ回数だけアンロックされない限り返却されません。アンロックはロックを行ったスレッドによってのみ可能で、ミューテックスをロックしていないスレッドがアンロック操作を行うことはできません。再帰的でないミューテックスの場合は、ロックカウントが0または1以外の状態になることはできません。<br>スレッドが終了するとき、そのスレッドが確保したままになっているミューテックスがあった場合、自動的なミューテックスのアンロックが行われます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_11">
+<div style="margin-left:40px;"><h4><b>軽量ミューテックス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">軽量ミューテックスは、ワークエリアの一部をユーザメモリに配置することでロック/アンロック操作を高速化したミューテックスです。<br>資源を使用したいスレッドは、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelLockLwMutex">sceKernelLockLwMutex</a>()を実行して軽量ミューテックス資源を取得し、つまり使用中フラグを立てることで使用権を取得してから使用します。使い終わったら、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelUnlockLwMutex">sceKernelUnlockLwMutex</a>()を実行して軽量ミューテックス資源をシステムに返却します。<br>ミューテックスとの違いは、軽量ミューテックスのワークエリアをユーザ自身が用意しなくてはならないこと、軽量ミューテックスを指定してその軽量ミューテックスを待機しているスレッドの待ちキャンセル操作ができないこと、スレッドが終了したとき当該スレッドが確保したままになっていた軽量ミューテックスを自動的に解除する機能がないことです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_12">
+<div style="margin-left:40px;"><h4><b>メッセージボックス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">メッセージボックスはスレッド間でのデータ交換をサポートするサービスで、セマフォとリングバッファの組み合わされたものと考えることもできます。<br>まず<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateMbx">sceKernelCreateMbx</a>()を用いてメッセージボックスを作成しておきます（複数可）。メッセージを待つスレッドはメッセージボックスの番号を指定して<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelReceiveMbx">sceKernelReceiveMbx</a>()を発行してWAIT状態に入ります。他のスレッドまたはスレッド独立部から<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSendMbx">sceKernelSendMbx</a>()でメッセージボックスの番号を指定してメッセージを送信すると、そのメッセージボックスで待っているスレッドがREADY状態に移されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_13">
+<div style="margin-left:40px;"><h4><b>メッセージパイプ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">メッセージパイプは、メッセージボックスと同様にスレッド間のデータ交換をサポートするサービスです。メッセージボックスがデータを指すポインタのみをやりとりすることでデータ交換を行うのに対して、メッセージパイプは送信側バッファから受信側バッファへのデータコピーによってデータ交換を行います。<br>まず<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateMsgPipe">sceKernelCreateMsgPipe</a>()を用いてメッセージパイプを作成しておきます。この際、メッセージパイプに内部バッファを持たせることができます（内部バッファを持たせないこともできます）。メッセージを送信するスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSendMsgPipe">sceKernelSendMsgPipe</a>()を発行すると、送信するメッセージがメッセージパイプの内部バッファに収まる場合はすぐに戻りますが、内部バッファに収まらないサイズのメッセージの場合や内部バッファなしの場合は、そのメッセージを受け取れるだけの受信バッファを持ったスレッドが受信処理を行うまで、送信側スレッドはWAIT状態に入ります。メッセージを受信するスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelReceiveMsgPipe">sceKernelReceiveMsgPipe</a>()を発行すると、受信スレッドが用意したバッファを満たすサイズのメッセージがメッセージパイプの内部バッファにあるか、またはWAIT状態に入った送信側スレッドがある場合には、受信バッファにメッセージを受け取ってすぐに戻ります。受信バッファを満たすだけのメッセージがない場合には、送信側スレッドが送信処理を行うまでWAIT状態に入ります。<br>メッセージパイプによりやりとりされるデータには、メッセージの区切りはありません。送信側スレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSendMsgPipe">sceKernelSendMsgPipe</a>()で10バイトのデータを10回送った場合、受信側スレッドは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelReceiveMsgPipe">sceKernelReceiveMsgPipe</a>()を1回呼び出すことで100バイトのデータを受け取ることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>メモリプール</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">システムメモリマネージャによるメモリ管理をさらに使いやすくするために、PSP&reg;カーネルは可変長と固定長のメモリプールと、TLS用のメモリプールの管理機能を提供しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_14">
+<div style="margin-left:40px;"><h4><b>可変長メモリプール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">システムメモリマネージャから確保したメモリプールを元に、スレッドに対して可変長のメモリブロックを提供することができます。<br>可変長メモリプールは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateVpl">sceKernelCreateVpl</a>()によって作成します。作成したメモリプールからは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelAllocateVpl">sceKernelAllocateVpl</a>()によって可変長のメモリブロックを確保することができ、不要になったメモリブロックは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelFreeVpl">sceKernelFreeVpl</a>()によってメモリプールへ返却することができます。<br>メモリブロック確保の際、メモリプールの空き容量が不足している場合はスレッドがWAIT状態に入ります。他のスレッドによってメモリブロックの返却が行われて十分な空き容量が確保できるようになると、そのスレッドはREADY状態に戻ります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_15">
+<div style="margin-left:40px;"><h4><b>固定長メモリプール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">システムメモリマネージャから確保したメモリプールを元に、スレッドに対して固定長のメモリブロックを提供することができます。メモリブロックのサイズはメモリプールの作成時に指定した値に決められていますが、可変長メモリプールより高速に確保／返却の処理を行うことができます。<br>固定長メモリプールは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateFpl">sceKernelCreateFpl</a>()によって作成します。作成したメモリプールからは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelAllocateFpl">sceKernelAllocateFpl</a>()によって固定長のメモリブロックを確保することができ、不要になったメモリブロックは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelFreeFpl">sceKernelFreeFpl</a>()によってメモリプールへ返却することができます。<br>メモリブロック確保の際、メモリプールの空き容量が不足している場合はスレッドがWAIT状態に入ります。他のスレッドによってメモリブロックの返却が行われて十分な空き容量が確保できるようになると、そのスレッドはREADY状態に戻ります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_16">
+<div style="margin-left:40px;"><h4><b>TLSメモリプール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">システムメモリマネージャから確保したメモリプールを元に、スレッドに対してTLS(スレッド固有ストレージ)メモリブロックを提供することができます。メモリブロックのサイズとブロックの個数(つまりTLSメモリブロックを使用可能なスレッドの数)はメモリプールの作成時に指定した値に決められています。<br>TLSメモリプールは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateTlspl">sceKernelCreateTlspl</a>()によって作成します。作成したTLSメモリプールからは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetTlsAddr">sceKernelGetTlsAddr</a>()によって固定長のメモリブロックをTLSメモリブロックとして確保することができます。確保したTLSメモリブロックはそのスレッドがDORMANT状態になるか、またはDORMANT状態を経て削除されるまで有効です。スレッドが生存している限り、あるスレッドが呼び出した<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetTlsAddr">sceKernelGetTlsAddr</a>()の返り値は同じになります。不要になったTLSメモリブロックを明示的にTLSメモリプールへ返却することはできません。<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDeleteTlspl">sceKernelDeleteTlspl</a>()でTLSメモリプールを削除することはできます。<br>スレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetTlsAddr">sceKernelGetTlsAddr</a>()でTLSメモリブロックを確保する際、TLSメモリプールの空き容量が不足している場合はスレッドがWAIT状態に入ります。他のスレッドによってTLSメモリブロックの返却が行われて十分な空き容量が確保できるようになると、そのスレッドはREADY状態に戻ります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>スレッドイベント</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マルチスレッドマネージャが行うスレッドの生成、起動、停止、削除といった操作をスレッドイベントと呼びます。スレッドイベントが発生する際に、あらかじめ登録されている特定のハンドラ関数を呼び出すことができ、その関数をスレッドイベントハンドラと呼びます。<br>スレッドイベントハンドラは、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelRegisterThreadEventHandler">sceKernelRegisterThreadEventHandler</a>()によって登録することができます。また、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelReleaseThreadEventHandler">sceKernelReleaseThreadEventHandler</a>()によって削除することができます。<br>スレッドイベントハンドラは、以下の4種類のスレッドイベントによって呼び出されます。スレッドイベントハンドラがどのコンテキストで実行されるかは、スレッドイベントによって異なります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_1"><h4>
+(1)&nbsp;<b>スレッド生成イベント（TE_CREATE）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateThread">sceKernelCreateThread</a>()によって新規にスレッドを生成する際に発生するスレッドイベントです。このスレッドイベントに対するハンドラは、スレッドが生成された直後に、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateThread">sceKernelCreateThread</a>()を呼び出したスレッドのコンテキストで実行されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_2"><h4>
+(2)&nbsp;<b>スレッド起動イベント（TE_START）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelStartThread">sceKernelStartThread</a>()によってスレッドの起動を行う際に発生するスレッドイベントです。このスレッドイベントに対するハンドラは、起動したスレッドがエントリアドレスから実行を開始する直前に、そのスレッドのコンテキストで実行されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_3"><h4>
+(3)&nbsp;<b>スレッド終了イベント（TE_EXIT）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitThread">sceKernelExitThread</a>(), <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitDeleteThread">sceKernelExitDeleteThread</a>(), <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>(), <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>()の各APIによって、スレッドの実行が終了する際に発生するスレッドイベントです。<br>このスレッドイベントに対するハンドラは、終了するスレッドのコンテキストで実行されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_4"><h4>
+(4)&nbsp;<b>スレッド削除イベント（TE_DELETE）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitDeleteThread">sceKernelExitDeleteThread</a>(), <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDeleteThread">sceKernelDeleteThread</a>(), <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>()の各APIによって、スレッドが削除される際に発生するスレッドイベントです。このスレッドイベントに対するハンドラは、スレッドが削除される直前に、削除を行うAPIを呼び出したスレッドのコンテキストで実行されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>コールバック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コールバックは、スレッドに対して非同期の事象を伝達する手段の一つです。スレッドは、事象発生時に呼び出されるコールバック関数を設定してコールバックを生成します。生成したコールバックに対して事象発生の通知が行われると、設定されているコールバック関数がコールバックを生成したスレッドのコンテキストで呼び出されます。<br>コールバック発生の通知が行われると、コールバックを生成したスレッドにその状態が記録されます。実際のコールバック関数の実行は、コールバックを生成したスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>()によってコールバック通知の有無をチェックするまで遅延されます。<br>コールバックを生成したスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitSemaCB">sceKernelWaitSemaCB</a>()などCBつきの待ち関数で待ち状態に入った場合でもコールバック通知の有無のチェックが行われます。いずれの場合でも、コールバック関数はコールバックを生成したスレッドのコンテキストで行われます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_9">
+<h3>
+<a href="#Heading3_3"> 3. </a>9 
+<!-- hp1 --><b>タイマ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マルチスレッドマネージャは、ハードウェアカウンタを仮想化し、複数のユーザプログラムから同時に使用できるようにシステム時刻、仮想タイマ、アラームとしてタイマ機能を提供します。また、スレッド間同期プリミティブを待機するときのタイムアウトや、スレッド遅延を行う<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>()としてもタイマの機能が使用されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_9_17">
+<div style="margin-left:40px;"><h4><b>システム時刻</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSP&reg;カーネルが起動してから経過時刻をシステム時刻として取得することができます。システム時刻は64ビット幅で、参照することのみが可能なシステムに唯一のカウンタです。停止させたり、カウント値を設定したりすることはできないので、全てのスレッドまたはスレッド独立部からいつでも参照できる共通の時刻として使用できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_9_18">
+<div style="margin-left:40px;"><h4><b>仮想タイマ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">仮想タイマは、使用者が自由に起動/停止させたりカウント値を操作したりすることができるタイマとして提供されます。仮想タイマ同士は独立しているため、ある仮想タイマへの操作は別の仮想タイマに影響を及ぼしません。仮想タイマの周波数はシステム時刻と同じです。<br>仮想タイマの使用にあたっては、まず<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateVTimer">sceKernelCreateVTimer</a>()で仮想タイマを生成し、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelStartVTimer">sceKernelStartVTimer</a>() / <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelStopVTimer">sceKernelStopVTimer</a>()で個別の仮想タイマを起動または停止させます。<br>仮想タイマに対しては、その仮想タイマでのカウント値によって呼び出されるハンドラ関数を<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSetVTimerHandler">sceKernelSetVTimerHandler</a>()によって登録する事ができます。仮想タイマのハンドラ関数の呼び出しはスレッド独立部から行われます。ハンドラの返り値で0を返すとハンドラが解除されます。正の値を返すと、次回のハンドラ呼び出し予定時刻を、現在設定されていた予定時刻からの相対時間で指定する事ができます。つまり、ハンドラ関数が0以外の固定の値を返し続けた場合はその値を周期とする周期タイマになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_9_19">
+<div style="margin-left:40px;"><h4><b>アラーム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">タイムアウトの検出などワンショット型のタイマ処理を行う場合のためアラーム機能が提供されています。アラームは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSetAlarm">sceKernelSetAlarm</a>()または<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSetSysClockAlarm">sceKernelSetSysClockAlarm</a>()によって設定され、設定された時間の満了後にアラームハンドラがスレッド独立部として呼び出されます。1回目のアラーム予定時刻は<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSetAlarm">sceKernelSetAlarm</a>()または<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSetSysClockAlarm">sceKernelSetSysClockAlarm</a>()が呼び出されたタイミングからの相対時間によって決定されますが、アラームを連続して実行する場合は、アラームハンドラの返り値で今回の予定時刻から次回の予定時刻までの相対時間を指定する事ができます。アラームハンドラが返り値として0を返した場合、そのアラームは削除されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>IO/Fileマネージャ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;上で稼働するデバイスドライバには、以下の3種類があります。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> 独自のAPIを持つ常駐ライブラリ</li>
+<li VALUE=2> IO/FileマネージャのAPIからのみ利用可能な常駐モジュール</li>
+<li VALUE=3> 独自のAPIを持ち常駐ライブラリとして稼働し、なおかつIO/FileマネージャのAPIからも利用可能な常駐モジュール</li>
+</ol></div>
+<div style="margin-left:50px;"><br>IO/Fileマネージャは、上記タイプ2と3のデバイスドライバをアプリケーションプログラムからsceIoOpen(), sceIoClose(), sceIoRead(), sceIoWrite()などのファイルアクセスAPIで呼ぶための機構を提供し、あわせてデバイスドライバの登録管理を行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>IO/Fileマネージャの扱うファイル名</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">sceIoOpen(), sceIoDopen(), sceIoMkdir(), sceIoRemove()等、ファイル名やディレクトリ名を必要とするIO/FileマネージャのAPIではファイル名を以下の形式で与えます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><i>デバイス名</i>：<i>デバイス内ファイル名</i>
+</font></pre></div>
+<div style="margin-left:50px;"><br><i>デバイス名</i>は、以下のいずれかになります。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 物理ブロックデバイス名
+<li> 物理キャラクタデバイス名
+<li> エイリアス名
+</ul></div>
+<div style="margin-left:50px;"><i>デバイス内ファイル名</i>つまり「:」よりも右側にある文字列は、各デバイスドライバそれぞれに固有のファイル名です。この部分はデバイスドライバにそのまま渡されIO/Fileマネージャは内容について関知しません。また、内部に個別のファイルを持たないデバイスの場合はこの部分が存在しない場合があります。<br>ファイル名に関する制限は以下のとおりです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> パスの区切り文字は'/'
+<li> ファイル名の長さは最大255文字
+<li> パス名全体の長さは最大1024文字
+<li> デバイス名については大文字・小文字の区別はしない。ファイル名についてはファイルシステムに依存する
+</ul></div>
+<div style="margin-left:50px;">また、IO/Fileマネージャを使用するスレッドはそれぞれ、スレッド固有のCurrent Working Directory(CWD)を持ちます。CWDは<i>デバイス名</i>+<i>そのデバイス内のディレクトリ名</i>で表されます。ファイル名を必要とするAPIでデバイス名指定が省略された場合は、CWDからの相対パス指定として扱われます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_20">
+<div style="margin-left:40px;"><h4><b>ファイル名の例</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>"tty0:"
+"host0:/usr/local/psp/devkit/module/xxx.prx"
+"TEST.DAT"   (CWDが "disc0:/DATA" であれば、"disc0:/DATA/TEST.DAT" の意味になる)
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>非同期I/Oアクセス機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">IO/Fileマネージャは、sceIoOpen(), sceIoClose(), sceIoRead(), sceIoWrite(), sceIoLseek(), sceIoIoctl()の各機能について非同期I/Oアクセスを提供します。非同期I/Oアクセスは、それぞれの関数名にAsyncが付き、sceIoOpenAsync(), sceIoCloseAsync(), sceIoReadAsync(), <a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoWriteAsync">sceIoWriteAsync</a>(), sceIoLseekAsync(), sceIoIoctlAsync()となります。<br><br>IO/Fileマネージャの非同期版I/Oは、非同期I/Oアクセス関数を呼び出したスレッドに代わってIO/Fileマネージャがワーカスレッドを生成し、ワーカスレッド側で同期I/Oアクセスを行うことによって実現されています。<br>ワーカスレッドの動作完了は、sceIoPollAsync(), sceIoWaitAsync(), sceIoWaitAsyncCB()によって取得する事ができます。sceIoPollAsync()を使用すると、ワーカスレッドの動作が完了したかどうかノンブロックで参照します。sceIoWaitAsync()およびsceIoWaitAsyncCB()はワーカスレッドの動作が完了するまで、呼び出したスレッドをブロックして待たせます。非同期I/Oをリクエストしたら、非同期I/Oが完了するまでsceIoPollAsync()を定期的に呼び出すか、sceIoWaitAsync()またはsceIoWaitAsyncCB()で完了待ちを行ってください。これは、sceIoPollAsync(), sceIoWaitAsync(), sceIoWaitAsyncCB()の引数resultより非同期I/Oの結果が通知されるためです。アプリケーションが非同期I/Oの完了を確認するまで、同じfdに対して非同期I/Oをリクエストすることはできません。また、非同期I/Oをリクエストしていないfdに対してはsceIoPollAsync()等を呼び出してはいけません。<br><br>非同期I/Oの処理はワーカスレッドによって実行されるため、非同期I/Oのリクエスト後にsceIoPollAsync()だけで完了待ちをしようとすると、デッドロックになります。sceIoPollAsync()によって完了を検出する場合には、スレッド遅延やVBLANK待ちなど、適宜スレッドの実行権をリリースするような処理をはさみつつ行う必要があります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>メモリ空間</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ユーザメモリは、キャッシュ使用モードの異なる2つの仮想アドレスに重複してマップされています。プログラマはこの2つの仮想アドレスを使い分けることで、キャッシュの使用方法をきめ細かく制御することができます。<br>メモリエリアはまたカーネル領域とユーザ領域に分割され、カーネル領域は不正なアクセスから保護されています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-Japanese009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  メモリ空間</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>スレッド部とスレッド独立部</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マルチスレッドマネージャの環境下では、スレッド部を実行中のシステム状態とそれ以外の部分を実行中のシステム状態は異なっています。スレッド以外の部分、つまり割り込みハンドラを作成する際には、システム状態の違いを意識してプログラミングする必要があります。<br>割り込みハンドラやタイマハンドラなどのスレッド独立部では、スレッド独立部に入る直前に実行中だったスレッドを特定することが無意味で「自スレッド」の概念が存在しません。また、実行中のスレッドを特定できないのでスレッドのディスパッチングは起きません。ディスパッチングが必要になっても、それはスレッド独立部を抜けるまで遅らされます（これを遅延ディスパッチ状態と呼びます）。<br>スレッド独立部からは、待ち状態にはいるサービスコールや暗黙で自スレッドを指定するサービスコールを発行することは原理的に不可能です。また、マルチスレッドマネージャの実装上の都合で、同じ機能であってもスレッド部から発行するサービスコールとは内部処理が異なる場合があります。なお不適切なシステム状態のもとで発行されたサービスコールはエラーを返します。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

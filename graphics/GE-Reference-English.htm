@@ -1,0 +1,3092 @@
+<html lang="en">
+<head>
+<title>GE-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Graphics Engine Manager(geman) Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_SIGNAL_WAIT"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_SIGNAL_WAIT<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SIGNAL handler call (with wait)<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_SIGNAL_WAIT		0x01
+
+#define SCE_GE_SET_SIGNAL_SIGNAL_WAIT(_id)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |			\
+		 (SCE_GE_SIGNAL_SIGNAL_WAIT&lt;&lt;16) |		\
+		 ((_id) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for calling the SIGNAL handler while the display list is stopped. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_SIGNAL_WAIT command must be immediately followed by CMD_END.<br><br>A 16-bit value can be passed as the <i>id</i> argument of the SIGNAL handler.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_SIGNAL_WAIT, the Graphics Engine manager calls the SIGNAL handler directly while this display list scanning is stopped. Even when the display list is stopped, since the Graphics Engine's drawing operation itself continues according to the drawing commands that came into effect before the display list was stopped, the contents of the drawing frame buffer cannot be read/written within the SIGNAL handler, but the register contents can be read by the <a href="../graphics/GE-Reference-English.htm#sceGeGetCmd">sceGeGetCmd</a>() and <a href="../graphics/GE-Reference-English.htm#sceGeGetMtx">sceGeGetMtx</a>() functions.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#signalhandler">signalhandler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_SIGNAL_NOWAIT"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_SIGNAL_NOWAIT<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SIGNAL handler call (no wait)<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_SIGNAL_NOWAIT	0x02
+
+#define SCE_GE_SET_SIGNAL_SIGNAL_NOWAIT(_id)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |			\
+		 (SCE_GE_SIGNAL_SIGNAL_NOWAIT&lt;&lt;16) |	\
+		 ((_id) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for calling the SIGNAL handler while the display list is being executed. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_SIGNAL_NOWAIT command must be immediately followed by CMD_END.<br><br>A 16-bit value can be passed as the <i>id</i> argument of the SIGNAL handler.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_SIGNAL_NOWAIT, the Graphics Engine manager restarts the display list immediately. Since the SIGNAL handler is called after the display list starts operating again, the contents of the drawing frame buffer can be read/written within the SIGNAL handler, and the register contents cannot be read by the <a href="../graphics/GE-Reference-English.htm#sceGeGetCmd">sceGeGetCmd</a>() and <a href="../graphics/GE-Reference-English.htm#sceGeGetMtx">sceGeGetMtx</a>() functions.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#signalhandler">signalhandler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_SIGNAL_PAUSE"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_SIGNAL_PAUSE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SIGNAL handler call (with pause)<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_SIGNAL_PAUSE		0x03
+
+#define SCE_GE_SET_SIGNAL_SIGNAL_PAUSE(_id)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |			\
+		 (SCE_GE_SIGNAL_SIGNAL_PAUSE&lt;&lt;16) |	\
+		 ((_id) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for calling the SIGNAL handler after drawing is completed by pausing the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_SIGNAL_PAUSE command must be immediately followed by CMD_END + CMD_FINISH + CMD_END.<br><br>A 16-bit value can be passed as the <i>id</i> argument of the SIGNAL handler.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_SIGNAL_PAUSE, the Graphics Engine manager restarts the display list and then executes CMD_FINISH + CMD_END.<br>Since the SIGNAL handler is called after this CMD_FINISH + CMD_END is completed, the contents of the drawing frame buffer can be read/written within the SIGNAL handler, and the register contents can be read by the <a href="../graphics/GE-Reference-English.htm#sceGeGetCmd">sceGeGetCmd</a>() and <a href="../graphics/GE-Reference-English.htm#sceGeGetMtx">sceGeGetMtx</a>() functions. Since the Graphics Engine manager does not automatically restart the display list after the SIGNAL handler call is generated by SCE_GE_SIGNAL_SIGNAL_PAUSE, the Graphics Engine is in a state in which the drawing operation is paused. To return from this state, the <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>() function must be called. Since the <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>() function is also used to return from a pause due to the <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function, when the SCE_GE_SIGNAL_SIGNAL_PAUSE command is used, the <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function cannot be used.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#signalhandler">signalhandler</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_DRAWSYNC"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_DRAWSYNC<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Drawing processing synchronization<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_DRAWSYNC		0x08
+
+#define SCE_GE_SET_SIGNAL_DRAWSYNC()			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |			\
+		 (SCE_GE_SIGNAL_DRAWSYNC&lt;&lt;16))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for restarting the display list after drawing is completed by pausing the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_DRAWSYNC command must be immediately followed by CMD_END + CMD_FINISH + CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_DRAWSYNC, the Graphics Engine manager immediately restarts the display list and then executes CMD_FINISH + CMD_END. If a FINISH interrupt is generated by the completion of this CMD_FINISH + CMD_END, the Graphics Engine manager immediately restarts the display list again after that interrupt is generated. There is no SIGNAL handler call at this time.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_JUMP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_JUMP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list absolute jump<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_JUMP		0x10
+
+#define SCE_GE_SET_SIGNAL_JUMP(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_JUMP&lt;&lt;16) |		\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_JUMP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for causing an absolute jump in the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_JUMP command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_JUMP, the Graphics Engine manager reads the jump destination address that is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END and restarts the display list from that address.<br><br>Since the SCE_GE_SIGNAL_JUMP command generates an interrupt to the CPU to perform the jump, although its performance is worse than that of an absolute address jump due to a CMD_JUMP command, which is directly interpreted by the Graphics Engine, it is not affected by the base address and offset address due to CMD_BASE, CMD_OFFSET, and CMD_ORIGIN.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_JUMP, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RJUMP">SCE_GE_SIGNAL_RJUMP</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OJUMP">SCE_GE_SIGNAL_OJUMP</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_CALL"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_CALL<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list absolute call<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_CALL		0x11
+
+#define SCE_GE_SET_SIGNAL_CALL(_hi16)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_CALL&lt;&lt;16) |		\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_CALL(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for causing an absolute call in the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_CALL command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_CALL, the Graphics Engine manager reads the call destination address that is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END and restarts the display list from that address.<br><br>Calls due to the SCE_GE_SIGNAL_CALL command can be nested up to the number of times specified by the <i>nStackDepth</i> member of the <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> structure.<br><br>Since the SCE_GE_SIGNAL_CALL command generates an interrupt to the CPU to perform the jump, although its performance is worse than that of an absolute address jump due to a CMD_CALL command, which is directly interpreted by the Graphics Engine, it is not affected by the base address and offset address due to CMD_BASE, CMD_OFFSET, and CMD_ORIGIN.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CALL, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RET">SCE_GE_SIGNAL_RET</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OCALL">SCE_GE_SIGNAL_OCALL</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RET"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RET<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list return<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RET		0x12
+
+#define SCE_GE_SET_SIGNAL_RET(_hi16)			\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_RET&lt;&lt;16))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for causing a return to the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_RET command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_RET, the Graphics Engine manager reads the call source address that had been specified in <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> and restarts the display list from that address.<br><br>Although SCE_GE_SIGNAL_RET returns to the position at which the call was generated due to the <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a> command, the following contents are restored for stack use at this time.<br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> CMD_CALL nesting state
+<li> CMD_CALL return address
+<li> Base address specified by CMD_BASE
+<li> Offset address specified by CMD_OFFSET and CMD_ORIGIN
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_RET, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OCALL">SCE_GE_SIGNAL_OCALL</a><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RJUMP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RJUMP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list relative jump<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RJUMP		0x14
+
+#define SCE_GE_SET_SIGNAL_RJUMP(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_RJUMP&lt;&lt;16) |	\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_RJUMP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for causing a relative jump in the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_RJUMP command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_RJUMP, the Graphics Engine manager reads the relative address that is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, determines the jump destination address by adding that relative address and the address value that had been placed by CMD_SIGNAL, and restarts the display list.<br><br>Since the SCE_GE_SIGNAL_RJUMP command generates an interrupt to the CPU to perform the jump, although its performance is worse than that of an absolute address jump due to a CMD_JUMP command, which is directly interpreted by the Graphics Engine, it is not affected by the base address and offset address due to CMD_BASE, CMD_OFFSET, and CMD_ORIGIN.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_JUMP, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_JUMP">SCE_GE_SIGNAL_JUMP</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OJUMP">SCE_GE_SIGNAL_OJUMP</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RCALL"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RCALL<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list relative call<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RCALL		0x15
+
+#define SCE_GE_SET_SIGNAL_RCALL(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_RCALL&lt;&lt;16) |		\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_CALL(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for causing a relative call in the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_RCALL command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_RCALL, the Graphics Engine manager reads the relative address that is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, determines the call address by adding that relative address and the address value that had been placed by CMD_SIGNAL, and restarts the display list.<br><br>Calls due to the SCE_GE_SIGNAL_RCALL command can be nested up to the number of times specified by the <i>nStackDepth</i> member of the <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> structure.<br><br>Since the SCE_GE_SIGNAL_RCALL command generates an interrupt to the CPU to perform the jump, although its performance is worse than that of an absolute address jump due to a CMD_CALL command, which is directly interpreted by the Graphics Engine, it is not affected by the base address and offset address due to CMD_BASE, CMD_OFFSET, and CMD_ORIGIN.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CALL, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RET">SCE_GE_SIGNAL_RET</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OCALL">SCE_GE_SIGNAL_OCALL</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OJUMP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OJUMP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list jump with offset<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OJUMP		0x16
+
+#define SCE_GE_SET_SIGNAL_OJUMP(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_OJUMP&lt;&lt;16) |	\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_OJUMP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for causing a jump with offset in the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_OJUMP command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_OJUMP, the Graphics Engine manager reads the relative address that is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, determines the jump destination address by adding that relative address and the offset value due to CMD_OFFSET and CMD_ORIGIN, and restarts the display list.<br><br>Since the SCE_GE_SIGNAL_OJUMP command generates an interrupt to the CPU to perform the jump, its performance is worse than that of an absolute address jump due to a CMD_JUMP command.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_JUMP, CMD_OFFSET, CMD_ORIGIN, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_JUMP">SCE_GE_SIGNAL_JUMP</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RJUMP">SCE_GE_SIGNAL_RJUMP</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OCALL"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OCALL<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list call with offset<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OCALL		0x17
+
+#define SCE_GE_SET_SIGNAL_OCALL(_hi16)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		 (SCE_GE_SIGNAL_OCALL&lt;&lt;16) |	\
+		 ((_hi16) &amp; 0x0FFF))
+#define SCE_GE_SET_END_OCALL(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for causing a call with offset in the display list. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_OCALL command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_OCALL, the Graphics Engine manager reads the relative address that is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, determines the call destination address by adding that relative address and the offset value due to CMD_OFFSET and CMD_ORIGIN, and restarts the display list.<br><br>Calls due to the SCE_GE_SIGNAL_OCALL command can be nested up to the number of times specified by the <i>nStackDepth</i> member of the <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> structure.<br><br>Since the SCE_GE_SIGNAL_OCALL command generates an interrupt to the CPU to perform the jump, although its performance is worse than that of an absolute address jump due to a CMD_CALL command, which is directly interpreted by the Graphics Engine, its nesting depth is not constrained by the hardware.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CALL, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RET">SCE_GE_SIGNAL_RET</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RTBP0-7"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RTBP0-7<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Relative address-specified texture<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RTBP0		0x20
+#define SCE_GE_SIGNAL_RTBP1		0x21
+#define SCE_GE_SIGNAL_RTBP2		0x22
+#define SCE_GE_SIGNAL_RTBP3		0x23
+#define SCE_GE_SIGNAL_RTBP4		0x24
+#define SCE_GE_SIGNAL_RTBP5		0x25
+#define SCE_GE_SIGNAL_RTBP6		0x26
+#define SCE_GE_SIGNAL_RTBP7		0x27
+
+#define SCE_GE_SET_SIGNAL_RTBPn(_n,_hi16)		\
+			((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+((SCE_GE_SIGNAL_RTBP0 + (_n))&lt;&lt;16) |	\
+((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_RTBPn(_n,_tbw,_lo16)		\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		(((_tbw) &amp; 0xFF)&lt;&lt;16) | 			\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command that is fixed up by CMD_TBP0-7 and CMD_TBW0-7. The texture buffer address is specified relative to the current display list position. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_RTBP0-7 command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_RTBP0-7, the Graphics Engine manager reads the relative address of the texture buffer, which is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, and the texture buffer width in bits 23 to 16 of CMD_END, and determines the texture buffer address by adding that relative address and the address value that had been placed by CMD_SIGNAL. In addition, when the display list is restarted, the Graphics Engine manager rewrites the CMD_SIGNAL + CMD_END that is in memory with CMD_TBP0-7 + CMD_TBW0-7, and causes the display list to be executed again starting from CMD_TBP0-7. Since CMD_SIGNAL + CMD_END is overwritten by CMD_TBP0-7 + CMD_TBW0-7 for the second and subsequent times, no interrupt is generated.<br><br>Since the SCE_GE_SIGNAL_RTBP0-7 command generates an interrupt to the CPU to perform the jump, its performance is worse, only the first time, than that of a texture buffer address specification according to a CMD_TBP0-7 command, which is directly interpreted by the Graphics Engine, but it can be used to specify a texture definition by using a relative address from the display list.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_TBP0-7, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OTBP0-7">SCE_GE_SIGNAL_OTBP0-7</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OTBP0-7"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OTBP0-7<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Texture with offset address<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OTBP0		0x28
+#define SCE_GE_SIGNAL_OTBP1		0x29
+#define SCE_GE_SIGNAL_OTBP2		0x2A
+#define SCE_GE_SIGNAL_OTBP3		0x2B
+#define SCE_GE_SIGNAL_OTBP4		0x2C
+#define SCE_GE_SIGNAL_OTBP5		0x2D
+#define SCE_GE_SIGNAL_OTBP6		0x2E
+#define SCE_GE_SIGNAL_OTBP7		0x2F
+
+#define SCE_GE_SET_SIGNAL_OTBPn(_n,_hi16)		\
+			((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+((SCE_GE_SIGNAL_OTBP0 + (_n))&lt;&lt;16) |	\
+((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_OTBPn(_n,_tbw,_lo16)		\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		(((_tbw) &amp; 0xFF)&lt;&lt;16) | 			\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command that is fixed up by CMD_TBP0-7 and CMD_TBW0-7. The texture buffer address is specified relative to the current value of the offset address register. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_OTBP0-7 command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_OTBP0-7, the Graphics Engine manager reads the relative address of the texture buffer, which is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, and the texture buffer width in bits 23 to 16 of CMD_END, and determines the texture buffer address by adding that relative address and the offset value that was set by CMD_OFFSET and CMD+ORIGIN. In addition, when the display list is restarted, the Graphics Engine manager rewrites the CMD_SIGNAL + CMD_END that is in memory with CMD_TBP0-7 + CMD_TBW0-7, and causes the display list to be executed again starting from CMD_TBP0-7. Since CMD_SIGNAL + CMD_END is overwritten by CMD_TBP0-7 + CMD_TBW0-7 for the second and subsequent times, no interrupt is generated. In other words, only the offset value at the time that the CMD_SIGNAL + CMD_END that was in memory was overwritten with CMD_TBP0-7 + CMD_TBW0-7 is valid for the specification with the offset value according to CMD_OFFSET and CMD_ORIGIN. For the second and subsequent times, even if the offset value is set to a different offset value, the offset value change is not followed since the SCE_GE_SIGNAL_OTBP0-7 command has already been erased from memory. <br><br>Since the SCE_GE_SIGNAL_OTBP0-7 command generates an interrupt to the CPU to perform the jump, its performance is worse, only the first time, than that of a texture buffer address specification according to a CMD_TBP0-7 command, which is directly interpreted by the Graphics Engine, but it can be used to specify a texture definition by using a relative address from CMD_OFFSET and CMD_ORIGIN.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_RCBP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_RCBP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Relative address-specified CLUT<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_RCBP		0x30
+
+#define SCE_GE_SET_SIGNAL_RCBP(hi16)			\
+			((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+			(SCE_GE_SIGNAL_RCBP&lt;&lt;16) |		\
+			((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_RCBP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command that is fixed up by CMD_CBP and CMD_CBW. The CLUT buffer address is specified relative to the current display list position. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_RCBP command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_RCBP, the Graphics Engine manager reads the relative address of the CLUT buffer, which is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, and determines the CLUT buffer address by adding that relative address and the address value that had been placed by CMD_SIGNAL. In addition, when the display list is restarted, the Graphics Engine manager rewrites the CMD_SIGNAL + CMD_END that is in memory with CMD_CBP + CMD_CBW, and causes the display list to be executed again starting from CMD_CBP. Since CMD_SIGNAL + CMD_END is overwritten by CMD_CBP + CMD_CBW for the second and subsequent times, no interrupt is generated.<br><br>Since the SCE_GE_SIGNAL_RCBP command generates an interrupt to the CPU to perform the jump, its performance is worse, only the first time, than that of a CLUT buffer address specification according to a CMD_CBP command, which is directly interpreted by the Graphics Engine, but it can be used to specify a CLUT definition by using a relative address from the display list.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CBP, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OCBP">SCE_GE_SIGNAL_OCBP</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_OCBP"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_OCBP<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CLUT with offset address<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_OCBP		0x31
+
+#define SCE_GE_SET_SIGNAL_OCBP(hi16)			\
+			((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+(SCE_GE_SIGNAL_OCBP&lt;&lt;16) |		\
+((_hi16) &amp; 0xFFFF))
+#define SCE_GE_SET_END_OCBP(_lo16)			\
+		((SCE_GE_CMD_END&lt;&lt;24)    |		\
+		((_lo16) &amp; 0xFFFF))
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command that is fixed up by CMD_CBP and CMD_CBW. The CLUT buffer address is specified relative to the current value of the offset address register. A CMD_SIGNAL indicating a SCE_GE_SIGNAL_OCBP command must be immediately followed by CMD_END.<br><br>Although display list scanning is stopped by the CMD_END following the CMD_SIGNAL when a SIGNAL interrupt was generated, for SCE_GE_SIGNAL_OCBP, the Graphics Engine manager reads the relative address of the CLUT buffer, which is specified by the low-order 16 bits of each of CMD_SIGNAL and CMD_END, and determines the CLUT buffer address by adding that relative address and the offset value that was set by CMD_OFFSET and CMD+ORIGIN. In addition, when the display list is restarted, the Graphics Engine manager rewrites the CMD_SIGNAL + CMD_END that is in memory with CMD_CBP + CMD_CBW, and causes the display list to be executed again starting from CMD_CBP. Since CMD_SIGNAL + CMD_END is overwritten by CMD_CBP + CMD_CBW for the second and subsequent times, no interrupt is generated. In other words, only the offset value at the time that the CMD_SIGNAL + CMD_END that was in memory was overwritten with CMD_CBP + CMD_CBW is valid for the specification with the offset value according to CMD_OFFSET and CMD_ORIGIN. For the second and subsequent times, even if the offset value is set to a different offset value, the offset value change is not followed since the SCE_GE_SIGNAL_OCBP command has already been erased from memory. <br><br>Since the SCE_GE_SIGNAL_OCBP command generates an interrupt to the CPU to perform the jump, its performance is worse, only the first time, than that of a CLUT buffer address specification according to a CMD_CBP command, which is directly interpreted by the Graphics Engine, but it can be used to specify a CLUT definition by using a relative address from CMD_OFFSET and CMD_ORIGIN.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CMD_CBP, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RCBP">SCE_GE_SIGNAL_RCBP</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_GE_SIGNAL_BREAK"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_GE_SIGNAL_BREAK<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[CMD_SIGNAL Macro Commands]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Display list breakpoint<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+#define SCE_GE_SIGNAL_BREAK		0xFF
+
+#define SCE_GE_SET_SIGNAL_BREAK(_mark)		\
+		((SCE_GE_CMD_SIGNAL&lt;&lt;24) |		\
+		(SCE_GE_SIGNAL_BREAK&lt;&lt;16) |		\
+		((_mark) &amp; 0xFFFF))
+#define SCE_GE_SET_END_BREAK()			\
+		SCE_GE_SET_END()
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a CMD_SIGNAL macro command for stopping the Graphics Engine and CPU when the Graphics Engine reaches the relevant address of the display list. From the debugger stopped state, various types of register values of the Graphics Engine can be referenced, new breakpoints can be set, and step execution or continue execution can be performed.<br><br>_mark has no specific meaning. A 16-bit value can be specified for discrimination purposes when multiple breakpoints are inserted.<br><br>This CMD_SIGNAL macro command is for debugging. It cannot be used in a master version.<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeContext"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Graphics Engine context<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeContext {
+	unsigned int <i>buffer</i>[512];
+} <b>SceGeContext</b>;
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a structure for saving the Graphics Engine's drawing context.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeSaveContext">sceGeSaveContext</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeRestoreContext">sceGeRestoreContext</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeStack"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeStack<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Stack element for display list subroutine<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeStack {
+	unsigned int <i>buffer</i>[8];
+} <b>SceGeStack</b>;
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure represents information that is required for subroutine calls according to CMD_SIGNAL, which is saved as a stack. To use subroutine calls according to CMD_SIGNAL within a display list, specify the stack buffer depth and size in the <i>nStackDepth</i> and <i>pStackBuf</i> members of the <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> structure when enqueuing the display list by using the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() or <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeListOptParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeListOptParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Options when enqueuing a display list<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeListOptParam {
+	unsigned int	<i>size</i>;		/* sizeof(SceGeListOptParam) */
+	<a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> *	<i>pGeContext</i>;
+	int		<i>nStackDepth</i>;
+	<a href="../graphics/GE-Reference-English.htm#SceGeStack">SceGeStack</a> *	<i>pStackBuf</i>;
+} <b>SceGeListOptParam</b>;
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a structure for specifying options when enqueuing a display list by using the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function. Be sure to set the value of sizeof(SceGeListOptParam) in the <i>size</i> member.<br><br>If the address of the <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> structure is set in advance in the <i>pGeContext</i> member, processing is automatically performed for saving the context within the Graphics Engine in that <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> structure before the display list is drawn and restoring the context when drawing is completed. If the context does not need to be saved and restored, NULL should be specified.<br>Specify the depth and starting address of the stack buffer that is used by the <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a> and <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a> commands in <i>nStackDepth</i> and <i>pStackBuf</i>. If no subroutine call according to CMD_SIGNAL is to be used, specify 0 for <i>nStackDepth</i> and NULL for <i>pStackBuf</i>.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a>, <a href="../graphics/GE-Reference-English.htm#SceGeStack">SceGeStack</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeCbParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeCbParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Callback function registration parameters<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeCbParam {
+	void (*<i>pSignalFunc</i>)(int <i>intrcode</i>, void *<i>cookie</i>, const void *<i>madr</i>);
+	void *<i>pSignalCookie</i>;
+	void (*<i>pFinishFunc</i>)(int <i>intrcode</i>, void *<i>cookie</i>, const void *<i>madr</i>);
+	void *<i>pFinishCookie</i>;
+} <b>SceGeCbParam</b>;
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">These are parameters for representing registration contents when using the <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() function to register callback functions. <br>Pointers to SIGNAL callback and FINISH callback functions are set for<i> pSignalFunc</i> and <i>pFinishFunc</i>, respectively. Also, a pointer to a cookie area that is passed when each callback function is called is set for <i>pSignalCookie</i> and <i>pFinishCookie</i>, respectively.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-English.htm#signalhandler">signalhandler</a>(), <a href="../graphics/GE-Reference-English.htm#finishhandler">finishhandler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGeBreakParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceGeBreakParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Drawing interruption work area<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+typedef struct SceGeBreakParam {
+	unsigned int <i>buf</i>[4];
+} <b>SceGeBreakParam</b>;
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a structure for passing a work area as an argument of the <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function. The work area that is passed is used for interrupting the queue internally.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeEdramGetSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeEdramGetSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get Graphics Engine eDRAM size<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeEdramGetSize</b> (
+	void
+)
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The size of the Graphics Engine local eDRAM in bytes is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the size of the Graphics Engine local eDRAM.<br>Since the size does not change (until the system is rebooted) while a program is running, the size can be obtained only once on startup and that value can continue to be used while the program is running.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeEdramGetAddr"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeEdramGetAddr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get Graphics Engine eDRAM base address<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+void *<b>sceGeEdramGetAddr</b> (
+	void
+)
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The physical address of the Graphics Engine local eDRAM is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function gets the physical address when the Graphics Engine local eDRAM is accessed from the CPU. If this address is interpreted as a virtual address, since it corresponds to the kuseg0 segment in the ALLEGREX address space, explicit D cache control is required if coherency between ALLEGREX and the Graphics Engine must be guaranteed. To use it as a non-cache kuseg1 segment address, use the <a href="../kernel/Cache-Reference-English.htm#sceKernelMakeUncachedAddr">sceKernelMakeUncachedAddr</a>() function to convert it.<br>Since the physical address does not change (until the system is rebooted) while a program is running, the physical address can be obtained only once on startup and that value can continue to be used while the program is running.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeEdramGetSize">sceGeEdramGetSize</a>(), <a href="../kernel/Cache-Reference-English.htm#sceKernelMakeUncachedAddr">sceKernelMakeUncachedAddr</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeEdramSetAddrTranslation"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeEdramSetAddrTranslation<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set Graphics Engine eDRAM address translation mode<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeEdramSetAddrTranslation</b> (
+	int <i>width</i>
+)
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>width</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory width (number of bytes)&nbsp;&nbsp;<br>&nbsp;&nbsp;0, 512, 1024, 2048, or 4096&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The memory width (number of bytes) that had been previously set is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function specifies the most efficient memory width in terms of bytes when the Graphics Engine local eDRAM is used in graphics mode. If 0 is specified for <i>width</i>, linear mode is specified.<br>By default, 1024 bytes is set.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeGetCmd"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeGetCmd<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Reference Graphics Engine drawing command register<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+unsigned int <b>sceGeGetCmd </b>(
+	int <i>cmdno</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmdno</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Drawing command register number&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The macros that are specified for <i>cmdno</i> correspond to drawing command registers as follows.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Macro</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Drawing&nbsp;Command&nbsp;Register</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_NOP&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;processing&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_VADR&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;data&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_IADR&nbsp;</td>
+<td valign="top">&nbsp;Index&nbsp;data&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PRIM&nbsp;</td>
+<td valign="top">&nbsp;Primitive&nbsp;drawing&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BEZIER&nbsp;</td>
+<td valign="top">&nbsp;Bezier&nbsp;drawing&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SPLINE&nbsp;</td>
+<td valign="top">&nbsp;Spline&nbsp;drawing&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BBOX&nbsp;</td>
+<td valign="top">&nbsp;Bounding&nbsp;box&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_JUMP&nbsp;</td>
+<td valign="top">&nbsp;Jump&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BJUMP&nbsp;</td>
+<td valign="top">&nbsp;Conditional&nbsp;jump&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CALL&nbsp;</td>
+<td valign="top">&nbsp;List&nbsp;call&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_RET&nbsp;</td>
+<td valign="top">&nbsp;List&nbsp;return&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_END&nbsp;</td>
+<td valign="top">&nbsp;Reading&nbsp;end&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SIGNAL&nbsp;</td>
+<td valign="top">&nbsp;Signal&nbsp;interrupt&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FINISH&nbsp;</td>
+<td valign="top">&nbsp;Drawing&nbsp;end&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BASE&nbsp;</td>
+<td valign="top">&nbsp;Address&nbsp;base&nbsp;command&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_VTYPE&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;type&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_REGION1&nbsp;</td>
+<td valign="top">&nbsp;Drawing&nbsp;area&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_REGION2&nbsp;</td>
+<td valign="top">&nbsp;Drawing&nbsp;area&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTE&nbsp;</td>
+<td valign="top">&nbsp;Lighting&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LE3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CLE&nbsp;</td>
+<td valign="top">&nbsp;Clipping&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BCE&nbsp;</td>
+<td valign="top">&nbsp;Culling&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TME&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FGE&nbsp;</td>
+<td valign="top">&nbsp;Fog&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DTE&nbsp;</td>
+<td valign="top">&nbsp;Dither&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ABE&nbsp;</td>
+<td valign="top">&nbsp;Alpha&nbsp;blend&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ATE&nbsp;</td>
+<td valign="top">&nbsp;Alpha&nbsp;test&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZTE&nbsp;</td>
+<td valign="top">&nbsp;Depth&nbsp;test&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_STE&nbsp;</td>
+<td valign="top">&nbsp;Stencil&nbsp;test&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_AAE&nbsp;</td>
+<td valign="top">&nbsp;Antialiasing&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PCE&nbsp;</td>
+<td valign="top">&nbsp;Patch&nbsp;culling&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CTE&nbsp;</td>
+<td valign="top">&nbsp;Color&nbsp;test&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LOE&nbsp;</td>
+<td valign="top">&nbsp;Logical&nbsp;operation&nbsp;enable&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BONEN&nbsp;</td>
+<td valign="top">&nbsp;Bone&nbsp;matrix&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT0&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT1&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT2&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT3&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT4&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT5&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT6&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WEIGHT7&nbsp;</td>
+<td valign="top">&nbsp;Vertex&nbsp;weight&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DIVIDE&nbsp;</td>
+<td valign="top">&nbsp;Patch&nbsp;division&nbsp;count&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PPM&nbsp;</td>
+<td valign="top">&nbsp;Patch&nbsp;primitive&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_WORLDN&nbsp;</td>
+<td valign="top">&nbsp;World&nbsp;matrix&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_VIEWN&nbsp;</td>
+<td valign="top">&nbsp;View&nbsp;matrix&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PROJN&nbsp;</td>
+<td valign="top">&nbsp;Perspective&nbsp;matrix&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TGENN&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;generation&nbsp;matrix&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SX&nbsp;</td>
+<td valign="top">&nbsp;Viewport&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SY&nbsp;</td>
+<td valign="top">&nbsp;Viewport&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SZ&nbsp;</td>
+<td valign="top">&nbsp;Viewport&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TX&nbsp;</td>
+<td valign="top">&nbsp;Viewport&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TY&nbsp;</td>
+<td valign="top">&nbsp;Viewport&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TZ&nbsp;</td>
+<td valign="top">&nbsp;Viewport&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SU&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;scale&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SV&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;scale&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TU&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;offset&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TV&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;offset&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_OFFSETX&nbsp;</td>
+<td valign="top">&nbsp;Screen&nbsp;offset&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_OFFSETY&nbsp;</td>
+<td valign="top">&nbsp;Screen&nbsp;offset&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SHADE&nbsp;</td>
+<td valign="top">&nbsp;Shading&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FRONT&nbsp;</td>
+<td valign="top">&nbsp;Illumination&nbsp;surface&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CULL&nbsp;</td>
+<td valign="top">&nbsp;Culling&nbsp;surface&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MATERIAL&nbsp;</td>
+<td valign="top">&nbsp;Material&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MEC&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MAC&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MDC&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MSC&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MAA&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MDA&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MSA&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MK&nbsp;</td>
+<td valign="top">&nbsp;Model&nbsp;specular&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_AC&nbsp;</td>
+<td valign="top">&nbsp;Ambient&nbsp;light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_AA&nbsp;</td>
+<td valign="top">&nbsp;Ambient&nbsp;light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LMODE&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;mode&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;type&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;type&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;type&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LTYPE3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;type&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LX3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LY3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LZ3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;vector&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDX3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDY3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDZ3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;direction&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKA3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKB3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKC3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;distance&nbsp;attenuation&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;convergence&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;convergence&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;convergence&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKS3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;convergence&nbsp;coefficient&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;cut-off&nbsp;dot&nbsp;product&nbsp;value&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;cut-off&nbsp;dot&nbsp;product&nbsp;value&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;cut-off&nbsp;dot&nbsp;product&nbsp;value&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LKO3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;cut-off&nbsp;dot&nbsp;product&nbsp;value&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC0&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC1&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC2&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LAC3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LDC3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LSC3&nbsp;</td>
+<td valign="top">&nbsp;Light&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FBP&nbsp;</td>
+<td valign="top">&nbsp;Frame&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FBW&nbsp;</td>
+<td valign="top">&nbsp;Frame&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZBP&nbsp;</td>
+<td valign="top">&nbsp;Depth&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZBW&nbsp;</td>
+<td valign="top">&nbsp;Depth&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP0&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW0&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP1&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW1&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP2&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW2&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP3&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW3&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP4&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW4&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP5&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW5&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP6&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW6&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBP7&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TBW7&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CBP&nbsp;</td>
+<td valign="top">&nbsp;CLUT&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CBW&nbsp;</td>
+<td valign="top">&nbsp;CLUT&nbsp;buffer&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBP1&nbsp;</td>
+<td valign="top">&nbsp;Transfer&nbsp;buffer&nbsp;(source)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBW1&nbsp;</td>
+<td valign="top">&nbsp;Transfer&nbsp;buffer&nbsp;(source)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBP2&nbsp;</td>
+<td valign="top">&nbsp;Transfer&nbsp;buffer&nbsp;(destination)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XBW2&nbsp;</td>
+<td valign="top">&nbsp;Transfer&nbsp;buffer&nbsp;(destination)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE0&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE1&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE2&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE3&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE4&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE5&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE6&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSIZE7&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;size&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TMAP&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;map&nbsp;mode&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSHADE&nbsp;</td>
+<td valign="top">&nbsp;Shade&nbsp;map&nbsp;mode&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TMODE&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;mode&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TPF&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;pixel&nbsp;format&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CLOAD&nbsp;</td>
+<td valign="top">&nbsp;CLUT&nbsp;load&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CLUT&nbsp;</td>
+<td valign="top">&nbsp;CLUT&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TFILTER&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;filter&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TWRAP&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;wrap&nbsp;mode&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TLEVEL&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;level&nbsp;mode&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TFUNC&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;function&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TEC&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;environment&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TFLUSH&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;flush&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_TSYNC&nbsp;</td>
+<td valign="top">&nbsp;Texture&nbsp;synchronization&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FOG1&nbsp;</td>
+<td valign="top">&nbsp;Fog&nbsp;parameter&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FOG2&nbsp;</td>
+<td valign="top">&nbsp;Fog&nbsp;parameter&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FC&nbsp;</td>
+<td valign="top">&nbsp;Fog&nbsp;color&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FPF&nbsp;</td>
+<td valign="top">&nbsp;Frame&nbsp;pixel&nbsp;format&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CMODE&nbsp;</td>
+<td valign="top">&nbsp;Clear&nbsp;mode&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SCISSOR1&nbsp;</td>
+<td valign="top">&nbsp;Scissoring&nbsp;area&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SCISSOR2&nbsp;</td>
+<td valign="top">&nbsp;Scissoring&nbsp;area&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MINZ&nbsp;</td>
+<td valign="top">&nbsp;Depth&nbsp;range&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_MAXZ&nbsp;</td>
+<td valign="top">&nbsp;Depth&nbsp;range&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CTEST&nbsp;</td>
+<td valign="top">&nbsp;Color&nbsp;test&nbsp;parameter&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CREF&nbsp;</td>
+<td valign="top">&nbsp;Color&nbsp;test&nbsp;reference&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_CMSK&nbsp;</td>
+<td valign="top">&nbsp;Color&nbsp;mask&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ATEST&nbsp;</td>
+<td valign="top">&nbsp;Alpha&nbsp;test&nbsp;parameters&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_STEST&nbsp;</td>
+<td valign="top">&nbsp;Stencil&nbsp;test&nbsp;parameters&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_SOP&nbsp;</td>
+<td valign="top">&nbsp;Stencil&nbsp;operation&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZTEST&nbsp;</td>
+<td valign="top">&nbsp;Depth&nbsp;test&nbsp;parameter&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_BLEND&nbsp;</td>
+<td valign="top">&nbsp;Alpha&nbsp;blend&nbsp;parameters&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FIXA&nbsp;</td>
+<td valign="top">&nbsp;Fixed&nbsp;color&nbsp;A&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_FIXB&nbsp;</td>
+<td valign="top">&nbsp;Fixed&nbsp;color&nbsp;B&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH1&nbsp;</td>
+<td valign="top">&nbsp;Dither&nbsp;coefficient&nbsp;register&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH2&nbsp;</td>
+<td valign="top">&nbsp;Dither&nbsp;coefficient&nbsp;register&nbsp;2&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH3&nbsp;</td>
+<td valign="top">&nbsp;Dither&nbsp;coefficient&nbsp;register&nbsp;3&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_DITH4&nbsp;</td>
+<td valign="top">&nbsp;Dither&nbsp;coefficient&nbsp;register&nbsp;4&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_LOP&nbsp;</td>
+<td valign="top">&nbsp;Local&nbsp;operation&nbsp;parameter&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_ZMSK&nbsp;</td>
+<td valign="top">&nbsp;Depth&nbsp;mask&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PMSK1&nbsp;</td>
+<td valign="top">&nbsp;Plane&nbsp;mask&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_PMSK2&nbsp;</td>
+<td valign="top">&nbsp;Plane&nbsp;mask&nbsp;2&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XSTART&nbsp;</td>
+<td valign="top">&nbsp;Buffer&nbsp;transfer&nbsp;start&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XPOS1&nbsp;</td>
+<td valign="top">&nbsp;Host&nbsp;buffer&nbsp;transfer&nbsp;starting&nbsp;position&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XPOS2&nbsp;</td>
+<td valign="top">&nbsp;Frame&nbsp;buffer&nbsp;transfer&nbsp;starting&nbsp;position&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_GE_CMD_XSIZE&nbsp;</td>
+<td valign="top">&nbsp;Transfer&nbsp;size&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The value that was set last in the drawing command register specified by <i>cmdno</i> is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function obtains the value of the Graphics Engine drawing command register.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeGetMtx">sceGeGetMtx</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeGetMtx"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeGetMtx<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Reference Graphics Engine matrix register<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+unsigned int <b>sceGeGetMtx </b>(
+	int <i>mtxno,</i>
+	unsigned int *<i>puiMtx</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mtxno</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Register number of matrix register&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>puiMtx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to unsigned int-type buffer for receiving matrix register contents&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The macros that are specified for <i>mtxno</i> correspond to matrix registers as follows.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Matrix Register</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_BONE0&nbsp;&nbsp;<br>&nbsp;&nbsp; to &nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_GE_MTXNO_BONE7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Bone matrix&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_WORLD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;World matrix&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_VIEW&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;View matrix&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_PROJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Perspective matrix&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_MTXNO_TEXGEN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture generation matrix&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When processing is normally terminated, 0 is returned.<br><br>When an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_INDEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified matrix number was invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function obtains the value of the Graphics Engine matrix register.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeGetCmd">sceGeGetCmd</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeSaveContext"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeSaveContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Save Graphics Engine context<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeSaveContext</b> (
+	<a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> *<i>pContext</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> structure for saving the context&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, 0 is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function saves the Graphics Engine internal state (context) in the <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> structure pointed to by <i>pContext</i>.<br>To explicitly save and restore the context, use this function in combination with <a href="../graphics/GE-Reference-English.htm#sceGeRestoreContext">sceGeRestoreContext</a>(). The sceGeSaveContext() function must be called when the entire display list is completed. Processing can wait due to the <a href="../graphics/GE-Reference-English.htm#sceGeDrawSync">sceGeDrawSync</a>() function until the display list is completed.<br><br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeRestoreContext">sceGeRestoreContext</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeRestoreContext"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeRestoreContext<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Restore Graphics Engine context<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeRestoreContext </b>(
+	const <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> *<i>pContext</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> structure holding context information to be restored&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, 0 is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function sets the Graphics Engine internal state (context) according to the contents of the <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a> structure pointed to by <i>pContext</i>. In other words, it restores the context that has been saved. <br>To explicitly save and restore the context, use this function in combination with <a href="../graphics/GE-Reference-English.htm#sceGeSaveContext">sceGeSaveContext</a>(). The sceGeRestoreContext() function must be called when the entire display list is completed. The sceGeRestoreContext() function cannot be executed while the display list is being executed.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeSaveContext">sceGeSaveContext</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="signalhandler"></a>
+<table width="100%"><td width="70%"><font size=6>signalhandler<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Placeholder for the SIGNAL interrupt handler function<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+void <b>signalhandler </b>(
+	int <i>intrcode</i>,
+	void *<i>cookie</i>,
+	const void *<i>madr</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Called from an interrupt handler.<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>intrcode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Low-order 16 bits of CMD_SIGNAL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cookie</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cookie value set when the callback was registered&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer indicating the current display list position&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a placeholder for the SIGNAL interrupt handler that is called when <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>, or <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a> is issued from among the CMD_SIGNAL macro commands. signalhandler() is called in an interrupt context.<br><br>The low-order 16 bits of CMD_SIGNAL are passed in the argument <i>intrcode</i>.<br>The cookie value that was set in the <i>pSignalCookie</i> member of the <a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a> structure when the <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() function was called is passed in the argument <i>cookie</i>.<br>The display list address when an interrupt occurred because of the CMD_SIGNAL macro command is passed in the argument <i>madr</i>. However, the argument <i>madr</i> is meaningless when signalhandler() is called due to <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>. This is because execution of the subsequent display list has been restarted before signalhandler() is called. For <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>, the display list is restarted after signalhandler() ends, and for <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>, the display list is restarted after the <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>() function is called.<br><br>Although the current display list position can be determined from the argument <i>madr</i>, modifying its value or changing the contents of the vertex buffer within signalhandler() is not recommended. This is because the D-cache must be written back before the display list is restarted, so manipulating the cache within signalhandler(), which is called in an interrupt context, may increase the interrupt load and affect the performance of other processing.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>,<br><a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>, <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="finishhandler"></a>
+<table width="100%"><td width="70%"><font size=6>finishhandler<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Placeholder for the FINISH interrupt handler function<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+void <b>finishhandler </b>(
+	int <i>intrcode</i>,
+	void *<i>cookie</i>,
+	const void *<i>madr</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Called from an interrupt handler.<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>intrcode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Low-order 16 bits of CMD_FINISH&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cookie</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cookie value set when the callback was registered&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer indicating the position at which the display list ended&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a placeholder for the FINISH interrupt handler, which is called when the display list is interfered with by the CMD_FINISH+CMD_END commands. finishhandler() is called in an interrupt context.<br></div>
+<div style="margin-left:50px;">Note that finishhandler() is not called for CMD_FINISH+CMD_END commands that appear within <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a> or <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_DRAWSYNC">SCE_GE_SIGNAL_DRAWSYNC</a>.<br><br>The low-order 16 bits of CMD_FINISH are passed in the argument <i>intrcode</i>.<br>The cookie value that was set in the <i>pFinishCookie</i> member of the <a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a> structure when the <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() function was called is passed in the argument <i>cookie</i>.<br>The display list address where the display list ended is passed in the argument <i>madr</i>.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListEnQueue"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListEnQueue<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Queue display list<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListEnQueue </b>(
+	const void *<i>madr</i>,
+	const void *<i>sadr</i>,
+	int <i>cbid</i>;,
+	const <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> *<i>pOpt</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display list starting address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sadr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Intial stall address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Callback ID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Option specification (context save area specification)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, the display list ID (nonnegative value) is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function adds the display list (command sequence for the Graphics Engine) specified by <i>madr</i> at the end of the queue. When a display list is added, a display list ID is returned. Up to 63 display list IDs can be registered simultaneously.<br>By passing the display list ID that is obtained as the return value to the <a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>() function, you can find out whether or not the drawing operation for that display list has completed. The display list ID is valid until the <a href="../graphics/GE-Reference-English.htm#sceGeDrawSync">sceGeDrawSync</a>() function is called in blocking mode.<br></div>
+<div style="margin-left:50px;"><br>For <i>sadr</i>, specify the initial value of the stall address. If no stall address is to be used, specify NULL. The stall address is the address at which transfer processing to the Graphics Engine is to be stalled. After it is queued, a display list can be added following that address. If a display list is added, update the stall address by using the <a href="../graphics/GE-Reference-English.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>() function.<br><br>For <i>cbid</i>, specify the ID of the callback function that is to be called during processing of this display list. Use the <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() function to register a callback function in advance and specify the callback ID that was returned when that function was registered. If no callback function is to be used, specify a negative value (&lt; 0).<br><br>For <i>pOpt</i>, specify additional options. Currently, automatically saving the context can be specified as an option. Specifically, see the description of the <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> structure.  If automatic saving of the context and CALL/RET according to CMD_SIGNAL need not be performed, specify NULL for <i>pOpt</i>.<br><br>The Graphics Engine accesses display lists, vertex data, texture data, etc. as a bus master device. When a list is registered by using the sceGeListEnQueue() or <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>() function, coherency must be guaranteed by writing back the ALLEGREX CPU D cache in advance.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListEnQueueHead"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListEnQueueHead<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Queue (interrupt) display list<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListEnQueueHead </b>(
+	const void *<i>madr</i>,
+	const void *<i>sadr</i>,
+	int <i>cbid</i>;,
+	const <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> *<i>pOpt</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>madr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display list starting address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sadr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Intial stall address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Callback ID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Option specification (context save area specification)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, the display list ID (nonnegative value) is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function adds the display list (command sequence for the Graphics Engine) specified by <i>madr</i> at the beginning of the queue. When a display list is added, a display list ID is returned. Up to 63 display list IDs can be registered simultaneously.<br>By using this function to queue a display list when drawing has been interrupted by <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>(), insertion drawing can be performed.<br>If the display list ID that is obtained as the return value is passed to the <a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>() function, you can find out whether or not the drawing operation for this display list has completed. The display list ID is valid until the <a href="../graphics/GE-Reference-English.htm#sceGeDrawSync">sceGeDrawSync</a>() function is called in blocking mode.<br></div>
+<div style="margin-left:50px;"><br>For <i>sadr</i>, specify the initial value of the stall address. If no stall address is to be used, specify NULL. The stall address is the address at which transfer processing to the Graphics Engine is to be stalled. After it is queued, a display list can be added following that address. If a display list is added, update the stall address by using the <a href="../graphics/GE-Reference-English.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>() function.<br><br>For <i>cbid</i>, specify the ID of the callback function that is to be called during processing of this display list. Use the <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() function to register a callback function in advance and specify the callback ID that was returned when that function was registered. If no callback function is to be used, specify a negative value (&lt; 0).<br><br>For <i>pOpt</i>, specify additional options. Currently, automatically saving the context can be specified as an option. Specifically, see the description of the <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> structure. If the context need not be automatically saved, specify NULL for <i>pOpt</i>.<br><br>The Graphics Engine accesses display lists, vertex data, texture data, etc. as a bus master device. When a list is registered by using the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() or sceGeListEnQueueHead() function, coherency must be guaranteed by writing back the ALLEGREX CPU D cache in advance.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListDeQueue"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListDeQueue<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Cancel display list queuing<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListDeQueue </b>(
+	int <i>id</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display list ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, 0 is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function removes the display list specified by <i>id</i> from the queue.<br>If the specified display list had already started operation, an error will occur.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListUpdateStallAddr"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListUpdateStallAddr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Update stall address<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListUpdateStallAddr </b>(
+	int <i>id</i>,
+	void *<i>pSadr</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display list ID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pSadr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New stall address&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, 0 is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function updates the stall address of the display list specified by <i>id</i>.<br>If the display list has started running, the stall address register (SADR) is directly overwritten. If it is prior to the start of display list execution, the initial stall address is reset.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeListSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeListSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Wait for display list completion<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeListSync </b>(
+	int <i>id</i>,
+	int <i>mode</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1">
+<div style="margin-left:40px;"><h4><b>When the <i>mode</i> argument is 0 (block)</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled, dispatch-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2">
+<div style="margin-left:40px;"><h4><b>When the <i>mode</i> argument is 1 (non-block)</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display list ID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Synchronization mode&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Wait until display list is completed.&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Check display list completion state and return immediately&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, the state of the display list specified by <i>id</i> is returned according to one of the following values.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_STALLING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stalling since stall address was reached&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_DRAWING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Drawing operation is in progress&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_QUEUED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Queued (drawing has not started)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_COMPLETED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Drawing operation is completed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_PAUSED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Drawing operation is interrupted&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified display list ID was invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified mode was invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is a function for synchronizing with the drawing operation of a queued display list.<br>If 0 is specified for <i>mode</i>, this function waits for the completion of the display list specified by <i>id</i> and returns when it is completed.<br>If 1 is specified for <i>mode</i>, this function checks the state of the display list specified by <i>id</i> and returns immediately.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeDrawSync">sceGeDrawSync</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeDrawSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeDrawSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Wait for completion of entire queue<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeDrawSync </b>(
+	int <i>mode</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_3">
+<div style="margin-left:40px;"><h4><b>When the <i>mode</i> argument is 0 (block)</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled, dispatch-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4">
+<div style="margin-left:40px;"><h4><b>When the <i>mode</i> argument is 1 (non-block)</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Synchronization mode&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Wait until entire queue is completed.&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Check queue completion state and return immediately&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, the queue state is returned according to one of the following values.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_STALLING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stalling since stall address was reached&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_DRAWING&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Drawing operation is in progress&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GE_LIST_COMPLETED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Drawing operation is completed&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified mode was invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If 0 is specified for <i>mode</i>, this function waits for the completion of the drawing operation for the entire queue and returns when it is completed. At the same time, all display list IDs are deleted. Since up to 63 display list IDs can be queued simultaneously, by using sceGeDrawSync() to verify the completion of drawing, ID assignments can be recovered <br><br>If 1 is specified for <i>mode</i>, this function checks the state of the entire queue and returns immediately.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeBreak"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeBreak<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Interrupt drawing operation<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeBreak </b>(
+	int <i>mode,</i>
+<i>	</i><a href="../graphics/GE-Reference-English.htm#SceGeBreakParam">SceGeBreakParam</a> *<i>pParam</i>
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Interruption mode&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Interrupt display list that is currently being drawn&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Interrupt and cancel entire queue &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pParam</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Work area that is used internally by library&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The ID of the (interrupted) display list that was being drawn is returned.<br><br>When an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_BUSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Since the list was spontaneously stopped, it cannot be forcibly stopped&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_ALREADY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;It had already been stopped&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified mode was invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function interrupts the drawing operation. It interrupts the display list that is currently being drawn when this function is called and returns the ID of that display list.<br>If 0 is specified for <i>mode</i>, the interrupted display list enters standby state and can be restarted by <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>().<br>If 1 is specified for <i>mode</i>, the interrupted display list is canceled and all queued display lists that have not been drawn yet are deleted from the queue.<br>The contents of <i>pParam</i> are destroyed when control returns from sceGeBreak().<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeContinue"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeContinue<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Restart drawing queue<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeContinue </b>(
+	void
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler (does not depend on interrupt-disabled or -enabled state)<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, 0 is returned.<br><br>When an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_ALREADY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;It was already being drawn&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function restarts the drawing process for the display list that was interrupted by <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() and is in standby state.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeSetCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeSetCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Register callback function<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeSetCallback </b>(
+	const <a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a> *<i>pParam</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pParam</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Callback registration parameters&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, the callback ID (nonnegative value) is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function registers a SIGNAL callback function and a FINISH callback function. When a callback function is registered, the callback ID is returned. Up to 16 callback functions can be registered simultaneously.<br>This function registers a SIGNAL callback function and a FINISH callback function.<br>In the <a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a> structure pointed to by <i>pParam</i>, specify pointers to the SIGNAL callback function and FINISH callback function and a pointer to a cookie area that is passed to each function.<br></div>
+<div style="margin-left:50px;">If the callback ID that is returned when this function completes normally is passed as the third argument of <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() or <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>() when a display list is enqueued, the relevant SIGNAL callback function and FINISH callback function are called when the CMD_SIGNAL and CMD_FINISH that are contained in that display list are processed.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeUnsetCallback">sceGeUnsetCallback</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(), <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>(), <a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGeUnsetCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceGeUnsetCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Cancel callback function registration<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;geman.h&gt;
+int <b>sceGeUnsetCallback </b>(
+	int <i>id</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Callback ID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">When the function completes normally, 0 is returned.<br>If an error occurs, a negative value is returned.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function cancels the registration of callback functions that were registered by using <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>().<br>The callback function specified by <i>id</i> is canceled.<br>Since at most 16 callback functions can be registered simultaneously, be sure to use the sceGeUnsetCallback() function to return a callback function that will no longer be used.<br><br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

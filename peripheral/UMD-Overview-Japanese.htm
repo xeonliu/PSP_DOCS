@@ -1,0 +1,1254 @@
+<html lang="jp">
+<head>
+<title>UMD-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+UMD&reg;アクセス概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ドキュメント概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">このドキュメントでは、PSP&reg;に搭載されているUMD&reg;の概要とアクセス手順、および開発ツールに搭載されているUMD&reg;/DVDへのアクセス手順等について説明しています。<br>UMD&reg;/DVDへのアクセス方法には、ファイル単位でのアクセス、セクタ単位でのアクセス、LBA仮想ファイルとしてのアクセスがあります。それらのアクセスを実現するためのドライバとして、ISO9660ファイルシステムドライバ、UMD&reg;ブロックデバイスドライバが使用されます。<br>これらの解説や、UMD&reg;ドライブ状態等の情報が、このドキュメントには掲載されています。<br><br>ただし、本ドキュメントだけでは情報が不十分です。<br>以下のドキュメントも合わせてご覧ください。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ISO9660ファイルシステムドライバリファレンス
+<li> UMD&reg;ブロックデバイスドライバリファレンス
+<li> UMD&reg; Image Generatorリファレンス等
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>UMD&reg;概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>主な機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;/DVDの光ディスクへのアクセスは、<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>(), <a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()などのPSP&reg;のI/O関数を通してのみ行うことができます。<br>UMD&reg;/DVDへのリード処理は、ファイル単位（byte単位）・セクタ単位でアクセス可能です。シーク処理は、バイト単位・セクタ単位で行うことが可能です。<br>現在、PSP&reg;ゲームタイトルからUMD&reg;の電源管理やサスペンド・レジューム時の処理を行うことはできません。詳しくは、「UMD&reg;ドライブ電源状態」の章をご覧ください。<br><br>なお、UMD&reg;のユーザデータは2048bytes/sectorとなっています。<br>再生方向に対してセクタごとに0番から最終セクタ番号までの論理ブロックアドレス(LBA)<br>が割り当てられています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>基本仕様</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>物理層</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;容量（ユーザデータ領域）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;60mmΦ 片面2層 1.8(GB)*&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;暗号方式&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AES 128bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;転送レート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;11Mbps&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;再生方向&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Opposite&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">*1MB=1000×1000bytes、1GB=1000×1000×1000bytes換算値です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_2">
+<div style="margin-left:40px;"><h4><b>論理層</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ファイルシステム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ISO9660 Level2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;画枠&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;480 x 272&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Video Codec&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG4 AVC Main Profile Level: 2.1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Audio Codec&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade; 2ch&nbsp;&nbsp;<br>&nbsp;&nbsp;PCM 2ch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Audio Fs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;44.1kHz（ゲーム）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Audio&nbsp;&nbsp;<br>&nbsp;&nbsp;最大ビットレート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade; 256kbps&nbsp;&nbsp;<br>&nbsp;&nbsp;PCM&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_3">
+<div style="margin-left:40px;"><h4><b>その他</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">カートリッジ付き<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">アクセス方法には、ファイル単位とセクタ単位の2つの方法があります。また、セクタ単位でのアクセス方法には、デバイスファイルとしてのアクセスと、仮想ファイルとしてのアクセスの2つの方法があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ファイル単位によるアクセス手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ISO9660ファイルアクセスドライバを使用することで、UMD&reg;/DVDへファイル単位でアクセスすることができます。以下に、その手順を簡単に説明します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>UMD&reg;/DVDメディア挿入待ち処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">データが読み込み可能になるには、メディアが挿入されてUMD&reg;ドライブ状態がREADABLE状態になっている必要性があります。その待ち処理方法として、ここでは<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdCheckMedium">sceUmdCheckMedium</a>()関数を利用してREADABLE状態への遷移を待ってからアクティベートにする方法を取っています。<br>ただし、下記(3)での待ち処理を行う場合は、この処理を行わなくてもかまいません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (!<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdCheckMedium">sceUmdCheckMedium</a>()) {
+	
+	 /*J メディア挿入待ち */
+	 <a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdWaitDriveStatCB">sceUmdWaitDriveStatCB</a>(<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_MEDIA_IN">SCE_UMD_MEDIA_IN</a>);
+ }
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>起動処理（アクティベート処理）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdActivate">sceUmdActivate</a>()関数を呼んでください（この関数を使用するには、mediaman_stub.aをリンクする必要があります）。成功すると、UMD&reg;/DVDデバイスがアクティベート状態になります。その際の引数<i>mode</i>には、<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_MODE_POWERON">SCE_UMD_MODE_POWERON</a>のみ指定可能です。引数<i>aliasname</i>には、任意のデバイスエイリアス名（末尾にユニット番号を含む）を指定することができます。ただし通常は、midiaman.hで定義されている<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a> ( disc0: )定数を使用してください。<br>メディアが挿入されていた場合、sceIoAssign()関数で内部処理を行い、ブロックデバイスが"umd0:"、ファイルシステムが"isofs0:"のUMD&reg;/DVDデバイスとしてマウントされます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/*J アクティベート処理(ノンブロッキング) */
+ ret = <a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdActivate">sceUmdActivate</a>(<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_MODE_POWERON">SCE_UMD_MODE_POWERON</a>, <a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a>);
+
+ if (ret &lt; 0) { 
+		
+	DPRINT("ERROR: <a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdActivate">sceUmdActivate</a>(%x)\n", ret);
+	<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdUnRegisterUMDCallBack">sceUmdUnRegisterUMDCallBack</a>(gDVDUMDSampleCallBackId);
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDeleteCallback">sceKernelDeleteCallback</a>(gDVDUMDSampleCallBackId);
+	return ret;
+ }
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>読み込み可能状態待ち</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アクティベート後に<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdWaitDriveStatCB">sceUmdWaitDriveStatCB</a>()関数で、NOT_READY状態からREADABLE状態になるまで待つ処理を行います。<br>上記(2)の処理を行っていても、この処理は必ず行ってください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/*J 読み込み可能イベント待ち */
+ <a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdWaitDriveStat">sceUmdWaitDriveStat</a>(<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a>);
+
+ if ((ret = SampleStart(<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a>)) != 0) {
+
+	 DPRINT("*** ERROR STOP ***[%x]\n", ret);
+ }
+ else {
+	 DPRINT("*** TEST COMPLETE ***\n");
+ }
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>I/Oオープン処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UMD&reg;/DVD上にあるファイルにアクセスするには、アクティベート状態にしたデバイスエイリアス名を利用します。<br>以下の例は、デバイスエイリアス名が"disc0:"、ファイルパスが"/PSP_GAME/sence_a.dat"のファイルにアクセスする場合です。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>("disc0:/PSP_GAME/sence_a.dat", ….);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>アクセス処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">オープン後は、<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()関数等で通常のI/O処理を行ってください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_6"><h4>
+(6)&nbsp;<b>終了処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コールバックの登録解除とデバイスのディアクティベートを適時、行ってください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/*J コールバックの登録解除 */
+ <a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdUnRegisterUMDCallBack">sceUmdUnRegisterUMDCallBack</a>(gDVDUMDSampleCallBackId);
+ <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDeleteCallback">sceKernelDeleteCallback</a>(gDVDUMDSampleCallBackId);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>コールバック関数の作成と登録</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;ドライブ状態の取得をコールバックで行う時、遷移イベント待ち用コールバック関数の作成と登録を行ってください。<br>この時、作成と登録は、なるべく起動してすぐに行うようにしてください。登録まで終わらないうちに、UMD&reg;ドライブを取り出された等の状態遷移があった場合は、当然ながらコールバック処理が行われません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/*J コールバックの作成 */
+ gDVDUMDSampleCallBackId = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>("DVDUMD_SAMPLE", UMDCallBackFunc, NULL);
+
+ if (gDVDUMDSampleCallBackId &lt; 0) {
+
+	 DPRINT("ERROR: <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(%x)\n", gDVDUMDSampleCallBackId);
+	 return gDVDUMDSampleCallBackId;
+ }
+
+ /*J コールバックの登録 */
+ ret = <a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>(gDVDUMDSampleCallBackId);
+
+ if (ret &lt; 0) {
+
+	 DPRINT("ERROR: <a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>(%x)\n", ret);
+	 return ret;
+ }
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>セクタ単位によるアクセス手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;ブロックデバイスドライバを使用することで、UMD&reg;/DVDへセクタ単位でアクセスすることができます。基本的にファイル単位でのアクセス手順と同じですが、起動処理（アクティベート）をせずに以下の手順に従ってください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_1"><h4>
+(1)&nbsp;<b>デバイスファイルとしてオープン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数を利用し、物理デバイス名をデバイスファイルとしてオープンしてください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>("umd<i><b>XXXX</i></b>:", ….);
+
+</font></pre></div>
+<div style="margin-left:67px;"><i><b>XXXX</i></b>にはユニット番号が入ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_2"><h4>
+(2)&nbsp;<b>アクセス処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">データアクセスは、セクタ単位(2048bytes/sector)で行われます。デバイスファイルとしてオープンした時には、0x0セクタ(LBA0x0)から読み出しが開始されます。他のセクタから読み込みを開始したい場合は、必要なセクタ位置にシーク処理して、データの読み込みを開始してください。<br>また、<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoRead">sceIoRead</a>(), <a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoLseek">sceIoLseek</a>()に指定されるサイズも、セクタ単位での指定になります。読み込みバッファは、読み込み指定セクタサイズ×2048byteが最低限必要となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>仮想ファイルとしてのアクセス手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">仮想ファイルとは、UMD&reg;上のLBAをファイル名と見なした、LBA上のデータのことです。ファイルパスの指定に制限がある以外、仮想ファイルは通常ファイルと同様に扱うことができます。また、ディレクトリ内を検索する必要がない分、通常ファイルよりも高速にアクセス可能です。<br><br>基本的な手順は、通常のファイル単位でのアクセス手順と同じですが、オープン前にLBAの取得が必要になります。また、<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数でのファイルパスの指定方法が異なります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_1"><h4>
+(1)&nbsp;<b>LBAの取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">まず、LBAを取得します。取得方法は3種類あります。どれか適切な方法で取得してください。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> UMD&reg; GeneatorのLayoutおよびFileListファイルからの直接指定<br>UMD&reg; GeneatorのLayoutから、ファイルが配置されるLBAを判断することが可能です。<br>ただし、この方法では、GeneratorからLayoutを確認後、そのLBAをコーディングして、コンパイルし、もう一度、UMD&reg; Geneatorで、Layoutを確認して、実装した配置とデータ位置がずれていないかどうか確認する必要があります。
+<li> SceIoStat構造体からの取得<br>sceIoGetstat()関数、sceIoDread()関数から、ファイルやディレクトリのSceIoStat構造体を取得してください。<br>st_private[0]から該当ファイル/ディレクトリエントリのLBAが取得できます。
+<li> SCE_ISOFS_GET_LBAコマンドからの取得<br><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()関数のSCE_ISOFS_GET_LBAコマンドで、指定ファイルの先頭LBAが取得できます。
+<li> Primary Volume Descriptor /Path Tableからの取得<br><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()関数で、プライマリボリュームディスクリプタ、パステーブルを取得し、そこからLBAを取得することが可能です。<br>プライマリボリュームディスクリプタおよびパステーブルの詳細については、<u>http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pd</u>f<br>を参照してください。
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_2"><h4>
+(2)&nbsp;<b>仮想ファイルとしてオープン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数を使って、仮想ファイルとしてオープンしてください。<br>ファイルパスの書式は以下の通りです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>"デバイス名" + "ユニット番号" + ":" + "/sce_lbn0x<i><b>XXXX</i></b>_size0x<i><b>NNNN</i></b>"
+</font></pre></div>
+<div style="margin-left:67px;"><br><i><b>XXXX</i></b>にはLBA、<i><b>NNNN</i></b>にはアクセスデータサイズ(byte)を指定します。ファイル名の先頭には、必ず"/"をつけてください。LBA・アクセスデータサイズの数値は、16進数として扱うので16進数のプレフィクスとして"0x"を必ずつけるようにしてください。<br>アクセスデータサイズは、バイト単位データとして扱います。<br>通常、エイリアス名（デバイス名＋ユニット番号）は、<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a>を使用してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>(<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a> + "/sce_lbn0x<i><b>XXXX</i></b>_size0x<i><b>NNNN </i></b>", ….);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>プレイ中のUMD&reg;メディア入れ替え手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">複数枚組みのゲームなど、ゲーム中にUMD&reg;メディアの入れ替えを必要とする場合には、下記の手順で入れ替えを行ってください。また、devkit/sample/dvdumd/replaceにサンプルプログラムがありますので参照してください。<br><a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdReplacePermit">sceUmdReplacePermit</a>()関数でUMD&reg;メディアの入れ替えを許可すると、READABLE状態の時に、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdReplaceProhibit">sceUmdReplaceProhibit</a>()関数を実行する以外に、入れ替え禁止状態に戻す方法はありません。そのため、UMD&reg;メディアの入れ替えを中断する処理を実装したい場合には、ユーザに元のUMD&reg;メディアを入れてもらい、READBLE状態にしてから<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdReplaceProhibit">sceUmdReplaceProhibit</a>()関数を実行するなどの方法で実現するようにしてください。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_1"><h4>
+(1)&nbsp;<b>インポーズのポップアップ無効</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UMD&reg;ドライブの蓋開け時に表示されるインポーズのポップアップを表示しないようにするには、<a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeSetUMDPopup">sceImposeSetUMDPopup</a>()関数の引数にSCE_IMPOSE_POPUP_DISABLEを入れて実行してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_2"><h4>
+(2)&nbsp;<b>UMD&reg;メディアの入れ替え許可</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UMD&reg;メディアの入れ替えを許可するために、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdReplacePermit">sceUmdReplacePermit</a>()関数を実行してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_3"><h4>
+(3)&nbsp;<b>UMD&reg;メディアの入れ替え待ち</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ユーザがUMD&reg;メディアを入れ替えて、READABLE状態になるまで待つようにしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_4"><h4>
+(4)&nbsp;<b>UMD&reg;メディアの入れ替え禁止</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UMD&reg;メディアの入れ替えが禁止するために、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdReplaceProhibit">sceUmdReplaceProhibit</a>()関数を実行してください。この関数は、READABLE状態でのみ成功します。そのため、実行する前に必ず前処理でREADABLE状態になるのを待つようにしてください。<br>ちなみに、入れ替えが禁止された後、その時に入っているUMD&reg;メディアとは異なるUMD&reg;メディアに入れ替えると、UMD&reg;ドライブ状態はNOT READY状態になります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_5"><h4>
+(5)&nbsp;<b>インポーズのポップアップ有効</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ドライブの蓋開け時にインポーズのポップアップが表示されるようにするために、<a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeSetUMDPopup">sceImposeSetUMDPopup</a>()関数の引数にSCE_IMPOSE_POPUP_ENABLEを入れて実行してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_6"><h4>
+(6)&nbsp;<b>UMD&reg;メディアのチェック</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">入っているUMD&reg;メディアが意図したUMD&reg;メディアであるかどうかを確認してください。UMD&reg;メディアの入れ替えを許可した状態では、チェック中に入れ替えられる可能性があります。UMD&reg;メディアのチェックは、入れ替えを禁止した状態で行うようにしてください。<br>意図したUMD&reg;メディアとは異なった場合には、その旨をユーザに通知し、再び最初からやり直すなどの対処を行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>DVD-Rを用いた開発ツールでのデバッグ手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;を利用したタイトルの開発では、DVD-Rに書き込まれたUMD&reg;イメージをツールに内蔵されたDVDドライブで読み込むことで、UMD&reg;のデバッグを行うことができます。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_1"><h4>
+(1)&nbsp;<b>UMD&reg; Imageの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UMD&reg; Imageは、複数のファイルからなるイメージファイル群で、UMD&reg; Image Generatorを利用して作成することができます。<br>UMD&reg; Imageの詳しい作成方法は、UMD&reg; Image Generatorのドキュメントをご覧ください。<br>ここでは「ユーザがUMD&reg; Image Generatorを利用してデバッグを行うUMD&reg;イメージを書き出すことに成功した」ということを前提として話を進めます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_2"><h4>
+(2)&nbsp;<b>UMD&reg; Image Discの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">任意のDVD-R書き込みソフトを利用し、ディスクのルートディレクトリにUMD&reg; Imageを書き込みます。<br>UMD&reg; Imageが書き込まれたDVD-Rは、以下のようなディレクトリ構造を持ちます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Root Directory
+	|----- USER_L0.IMG
+	|----- CONT_L0.IMG
+	|----- MDI.IMG
+	|----- UMD_AUTH.DAT
+</font></pre></div>
+<div style="margin-left:67px;">(*Root Directory以下のファイルは、作成したUMD&reg; Imageによって若干異なります。)<br><br>UMD&reg; Imageをルートディレクトリに含んだDVD-RのディスクをUMD&reg; Image Discと呼びます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_3"><h4>
+(3)&nbsp;<b>開発ツールでのUMD&reg; Image Discの読み込み</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">出来上がったUMD&reg; Image Discを開発ツールで利用するには、開発ツールのDRIVE SELECTがDVD側に設定されている必要があります。<br>DRIVE SELECTがUMD&reg;側に設定されている場合、開発ツールの電源を再起動しDVDに設定してください。<br><br>UMD&reg; Image Discを開発ツールのDVDドライブに挿入し、デバッグを行います。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>UMD&reg;ドライブ状態</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>UMD&reg;ドライブ状態の種類</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;ドライブ状態とは、UMD&reg;へのアクセス可能・不可能状態を表したものです。これには、UMD&reg;メディアの挿入状態ももちろん含みます。<br>各状態は、下表の通りです。mediaman.hにあるマクロ名と一致しています。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_4">
+<div style="margin-left:40px;"><h4><b>UMD&reg;ドライブ状態ステータス</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_MEDIA_OUT">SCE_UMD_MEDIA_OUT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアが抜かれた。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_MEDIA_IN">SCE_UMD_MEDIA_IN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアが挿された。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_MEDIA_CHG">SCE_UMD_MEDIA_CHG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;前のメディアと異なるメディアが挿入された。&nbsp;&nbsp;<br>&nbsp;&nbsp;（コールバック通知非対応）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_READY">SCE_UMD_READY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライブレディ状態である。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_NOT_READY">SCE_UMD_NOT_READY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライブレディ状態でない。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込み可能状態である。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_5">
+<div style="margin-left:40px;"><h4><b>MEDIA IN状態</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UMD&reg;メディアがドライブに入っている状態です。ドライブ電源がOFFあり、UMD&reg;メディアが入っているとこの状態のみを通知します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_6">
+<div style="margin-left:40px;"><h4><b>MEDIA OUT状態</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UMD&reg;メディアがドライブにセットされていない状態です。ドライブ電源がOFFであり、なおかつ「UMD&reg;メディアがない」、もしくは「蓋があいている」場合に、この状態のみを通知します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_7">
+<div style="margin-left:40px;"><h4><b>MEDIA CHG状態</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UMD&reg;メディアが抜かれる前の状態がREADABLE状態もしくはREADY状態で、再度挿入されたメディアが前に挿されていたメディアと異なる場合この状態が設定されます。<br>※本状態だけはエッジトリガによりコールバック通知は行わず<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdGetDriveStat">sceUmdGetDriveStat</a>()で取得する仕様になっています。<br>※UMD&reg; Geneator 0.93以降でつくられたメディアから適用される状態です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_8">
+<div style="margin-left:40px;"><h4><b>NOT READY状態</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UMD&reg;ドライブ電源をOFFにした場合（現在、タイトルからはOFFにすることはできません）、READABLE状態やREADY状態でディアクティベートした場合、もしくはMEDIA INの状態から不正なディスクもしくはなんらかの原因でディスク認識が正常に行えなかった場合にこの状態を通知します。<br>UMD&reg;の入れ替えを禁止した状態で、別のUMD&reg;が入れられた場合にNOT READY状態となり、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdGetErrorStat">sceUmdGetErrorStat</a>()の返り値がSCE_UMD_ERROR_REPLACEDとなります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_9">
+<div style="margin-left:40px;"><h4><b>READY状態</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NOT READYの状態、MEDIA OUT状態で、メディアを入れて、正常にディスク認識が行えた場合にこの状態を通知します。<br>この状態では、ブロックデバイス経由のセクタ単位アクセスが可能になります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_10">
+<div style="margin-left:40px;"><h4><b>READABLE状態</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ファイルシステムなどの初期化が正常に行われ、メディアが読める状態になるとこの状態を通知します。この状態では、ファイル単位、セクタ単位両方でアクセスが可能になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>UMD&reg;ドライブ状態遷移</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">各UMD&reg;ドライブ状態は、以下のように遷移します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/UMD-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 UMD&reg;ドライブの状態遷移図（電源はUMD&reg;ドライブ電源）</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>UMD&reg;ドライブ状態の取得方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;ドライブ状態の多くは、エッジトリガで通知されます。<br>起動時のUMD&reg;メディアの有無は、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdCheckMedium">sceUmdCheckMedium</a>()関数によって確認できます。<br>その他のUMD&reg;ドライブ状態を取得する方法は、2つあります。<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>()関数でコールバックを使用する方法と、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdGetDriveStat">sceUmdGetDriveStat</a>()関数で状態を取得する方法です。<br><br><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>()関数で作った状態通知用コールバック関数のコールバックIDを<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>()関数で登録することで、状態遷移をコールバック関数に通知します。ただし、実際にコールバック関数が呼び出されるのは、状態遷移直後ではなく、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>()関数やsce<i><b>XXXXX</i></b>CB()系関数を呼んだタイミングとなります。<br><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>()関数、sce<i><b>XXXXX</i></b>CB()関数の詳細ついては、スレッドマネージャのリファレンスおよびsce<i><b>XXXXX</i></b>CB()関数のあるリファレンスを参照してください。<br><br>また、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdGetDriveStat">sceUmdGetDriveStat</a>()関数では、返り値でUMD&reg;ドライブ状態を取得することができます。UMD&reg;ドライブ状態のステータスが複数ある場合、その論理和(OR)で通知されます。<br><br>タイミングによっては、通知されていたにもかかわらずコールバックされなかった間に、状態遷移が複数回発生する場合があります。その場合は、「UMD&reg;ドライブ状態遷移図」などを参考にし、通知された状態と通知された回数によって推測可能なものもあります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>UMD&reg;メディア入れ替え時の動作</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>UMD&reg;メディアが挿された場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーション側（ゲームタイトル）は、以前挿されていたメディアと同じメディアが挿入された場合、ファイルディスクリプタのクローズ処理などをしなくても、抜かれる前の状態から復帰できるように作ることが可能です。<br>前に挿入されていたメディアと異なるメディアが挿された場合（<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_MEDIA_CHG">SCE_UMD_MEDIA_CHG</a>状態になった場合）は、アプリケーション側でオープン状態のファイルディスクリプタをクローズ処理する必要があります。クローズのタイミングは、任意です。<br>もし、前のディスクでオープンしたディスクリプタで、新たなディスクのファイル読み込みを行うと、通常は<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_ERROR_ERRNO_EBADF"><a href="../peripheral/UMD_Block-Reference-Japanese.htm#SCE_ERROR_ERRNO_EBADF">SCE_ERROR_ERRNO_EBADF</a></a>が返ります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>UMD&reg;メディアが抜かれた場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">データを読み込み中にメディアが抜かれた場合、直ちにはエラーを戻しません。<br>通常読み込み時には、一定量のデータがキャッシュに先読みする形で置かれています。そのため、キャッシュヒットしている限り、通常の読み込み動作を行います。<br>キャッシュでリクエストされるデータをまかなえなくなった場合に、SCE_UMD_NO_MEDIUMのエラーを戻します。<br>それ以外のエラーが発生した場合、この限りではありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>プレイ中のUMD&reg;メディアの入れ替えについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Runtime Library 2.00からゲーム中のディスクの入れ替えを禁止します。ディスクを入れ替える場合には特定の手順を踏む必要があります。<br><br>ゲーム起動時とは異なるディスクが入れられた場合にはNOT READY状態となり、ディスクへアクセスすることはできません。異なるディスクが入れられた場合には、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdGetErrorStat">sceUmdGetErrorStat</a>()を実行するとSCE_UMD_ERROR_REPLACEDが返りますので、他の要因によるNOT READY状態と区別することができます。<br>ゲーム起動時と同じディスクを入れた場合には、通常通り認識されてREADABLE状態となり、ディスクへアクセスすることができます。<br><br>なお、2.00より前のRuntime Libraryを使用したゲームの場合には、従来どおりディスクの入れ替えは禁止されません。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>ISO9660ファイルシステムドライバ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;上のデータをファイル単位でアクセスするために必要なドライバです。<br>PSP&reg;で提供するISO9660ファイルシステムは、ISO9660 Level 2をベースにUMD&reg;向けに独自拡張しております。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>ISO9660 Level2 with UMD&reg; extension</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;向けの拡張として、ISO9660 Level2の仕様に以下の変更が加わります。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ファイル識別子の形式について、区切り文字"."および"；"の規定を廃止し、ファイル版数番号は含めないものとします。
+<li> 使用できる文字は、*大小英数文字およびアンダーバー(_),ピリオド(.),セミコロン(;)とします。
+</ul></div>
+<div style="margin-left:50px;"><br>*小文字アルファベットも利用できる点にご注意ください。<br><br>これにより、PSP&reg;で提供するISO9660ファイルシステム仕様は以下の通りとなります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>項目</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ISO9660 Level</b> <b>2 with UMD&reg;</b> <b>extensionの仕様</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;使用できる文字&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;大小英数文字、アンダーバー、ピリオド、セミコロン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;最大ファイル識別子のサイズ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;31文字&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;最大ディレクトリ識別子のサイズ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;31文字&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;最大ディレクトリ階層&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8階層&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ファイルの配置&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;連続&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ファイル識別子の形式&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>デバイス名</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">現在、ISO9660ファイルシステムドライバがマウント指定可能なブロックデバイス名は、以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ブロックデバイス名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>デバイス</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;umd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD-ROM&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>ファイル名</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;で提供するISO9660ファイルシステムで標準I/O関数を利用する場合、ファイル名は以下の形式で指定します。<br><br></div>
+<div style="margin-left:67px;">"デバイスエイリアス名" + "ユニット番号" + '：' + "ファイルパス名"<br><br></div>
+<div style="margin-left:50px;">アクティベート処理でマウントされたデバイスエイリアス名"disc"、ユニット番号が0、ディレクトリパス/PSP_GAME/USRDIR/<a href="../graphics/GSO_Format-Reference-Japanese.htm#Scene">Scene</a>/にあるファイルA.datを指定する場合は以下のようになります（通常、デバイスエイリアス名には、<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a>を使用します）。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>disc0:/PSP_GAME/USRDIR/<a href="../graphics/GSO_Format-Reference-Japanese.htm#Scene">Scene</a>/A.dat
+</font></pre></div>
+<div style="margin-left:50px;"><br>PSP&reg;の標準I/O関数では、文字列の長さは上限が1023bytesまでとなっていますが、ISO9660ファイルシステムの最大ファイルパスの長さが255bytesですので、ファイルパス名は最大255bytesである必要があります。<br><br>また、ISO9660のUMD&reg;拡張によりファイル名の大文字と小文字は区別されますのでご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>キャッシュ機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;は、基本的なキャッシュ機能を有しています。<br>ISO9660の仕様上、ディレクトリレコードなどのメタ情報は内周に配置されます。そのため、ファイル単位アクセスする場合、データが外周に配置されていると、最悪のケースでは、ディレクトリレコードを読むために内周にシークし、データを読むために外周にシークするという動作が起こる場合が考えられます。<br>こうしたケースをなくすために、一度アクセスした、ディレクトリレコードは、かならずキャッシングされ、無用なシークを起こさないようになっています。<br>通常データも、一定サイズのリングバッファにキャッシュされています。<br>また、キャッシュは、以下のタイミングでクリア、上書きされます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> メタデータ（ディレクトリレコードなど）<br>蓋を閉めた場合（メディア有り）<br>キャッシュ容量を超えた場合
+<li> 通常データ<br>蓋を閉めた場合（メディア有り）<br>キャッシュ容量を超えた場合
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_6">
+<h3>
+<a href="#Heading3_6"> 6. </a>6 
+<!-- hp1 --><b>API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;で提供するISO9660ファイルシステムドライバでは、標準I/O関数を通じて以下の機能を利用することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_11">
+<div style="margin-left:40px;"><h4><b>ファイルアクセス</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルのオープン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoClose">sceIoClose</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルのクローズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの読み込み&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoLseek">sceIoLseek</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルオフセットのシーク&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpenAsync">sceIoOpenAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの非同期オープン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoCloseAsync">sceIoCloseAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの非同期クローズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoReadAsync">sceIoReadAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの非同期読み込み&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_12">
+<div style="margin-left:40px;"><h4><b>ディレクトリアクセス</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDopen()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリエントリのオープン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDclose()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリエントリのクローズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDread()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリエントリの読み込み&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_13">
+<div style="margin-left:40px;"><h4><b>その他の処理</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;その他のファイルアクセス機能&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;その他のファイルアクセス機能の非同期処理版&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoGetstat()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルのステータスの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期処理のステータス取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoSetAsyncCallback">sceIoSetAsyncCallback</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期処理通知用コールバックの設定&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;"><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()/<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()機能リストは以下のようになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_14">
+<div style="margin-left:40px;"><h4><b>sceIoIoctl()/sceIoIoctlAsync()機能リスト</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コマンド名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FILEPOINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルオフセットの位置を取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PVD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プライマリボリュームディスクリプタの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PTBL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パステーブルの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_SECTOR_SIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;セクタサイズの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_LBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;LBAの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FSIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルサイズの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_SEEK_FILE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シーク処理&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_UNCACHED_READ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;強制ディスクアクセス読み込み&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの先読みリクエスト&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>UMD&reg;ブロックデバイスドライバ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;/DVD上のデータをデバイスファイルとしてアクセスするために必要なドライバです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>データアクセス方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;では、UMD&reg;ブロックデバイスドライバを使用することで、ブロックデバイスファイルとして、UMD&reg;上のデータをオープンすることができます。オープン時には、UMD&reg;上のLBA 0にファイルオフセットが設定され、そこからアクセスを開始することになります。<br>ブロックデバイスファイル名の構造は、以下のようになります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>"ブロックデバイス名" + "ユニット番号" + '：'
+</font></pre></div>
+<div style="margin-left:50px;"><br>現在、UMD&reg;ブロックデバイスドライバがアクセス指定可能なブロックデバイス名は、以下の通りです。<br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ブロックデバイス名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>デバイス</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;umd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD-ROM&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>アクセス単位</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;ブロックデバイスへのデータアクセスは、読み込み処理・シーク処理など、すべてセクタ単位で行われます。結果、読み込み処理の場合、設定するバッファサイズ×2048bytes分のデータが読み込まれます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_4">
+<h3>
+<a href="#Heading3_7"> 7. </a>4 
+<!-- hp1 --><b>API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;で提供するUMD&reg;ブロックデバイスドライバでは、標準I/O関数を通じて以下の機能を利用することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_15">
+<div style="margin-left:40px;"><h4><b>デバイスアクセス</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスのオープン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoClose">sceIoClose</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスのクローズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスデータの読み込み&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoLseek">sceIoLseek</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスオフセットのシーク&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpenAsync">sceIoOpenAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスの非同期オープン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoCloseAsync">sceIoCloseAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスの非同期クローズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoReadAsync">sceIoReadAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスの非同期読み込み&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_16">
+<div style="margin-left:40px;"><h4><b>その他の処理</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;その他のデバイスアクセス機能&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス制御機能&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;その他のデバイスアクセス機能の非同期処理版&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoSetAsyncCallback">sceIoSetAsyncCallback</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期処理通知用コールバックの設定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非同期処理のステータス取得&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;"><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()の機能リストは以下のようになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_17">
+<div style="margin-left:40px;"><h4><b>sceIoDevctl()機能リスト</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コマンド名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_GET_MEDIATYPE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアタイプの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_GET_LASTLBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;最終LBAの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_SEEK_DISC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスクのシーク処理&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データの先読みリクエスト&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;"><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()/<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()の機能リストは以下のようになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_18">
+<div style="margin-left:40px;"><h4><b>sceIoIoctl()/sceIoIoctlAsync()機能リスト</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コマンド名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_GET_FILEPOINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスオフセットの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_SEEK_FILE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シーク処理&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_UNCACHED_READ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;強制ディスクアクセス読み込み&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>UMD&reg;ドライブの電源状態</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">UMD&reg;ドライブには、Active / Idle / Sleep / Power Offの4つの電源状態がありますが、<br>現在、電源管理はカーネルおよびデバイスドライバで行うことになっており、PSP&reg;ゲームタイトルから制御を行うことはできません。<br>UMD&reg;ドライブにおいて電源状態は、以下の動作によって、アクティブに遷移します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ディスクアクセスを伴う読み込み時（キャッシュヒット時にはActiveへ遷移しません）
+<li> 以下のコマンドが成功した時<br><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()のSCE_ISOFS_SEEK_FILE、SCE_UMD_SEEK_FILE、<br>SCE_ISOFS_UNCACHED_READ、SCE_ISOFS_READ_AHEAD、<br>SCE_UMD_UNCACHED_READ<br><a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()のSCE_UMD_SEEK_DISC、SCE_UMD_READ_AHEAD
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>ディスクアクセス動作</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>読み込み動作について</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_19">
+<div style="margin-left:40px;"><h4><b>デバイスドライバ内でのスレッドディスパッチのタイミング</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UMD&reg;/DVDの読み込みは、ゲームタイトルから実行される<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()関数などの読み込みリクエストをおこなったスレッドプライオリティで動作しています。<br>デバイスドライバは、主に以下のタイミングでゲームタイトルからのスレッドをウェイトさせて、CPUリソースの開放を行います。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> デバイスドライバが、ドライブに対して読み込みリクエストは発行し、そのリクエスト受付可能状態が返ってくるまでの間。
+<li> ドライブがデータのＤＭＡ転送中。
+<li> ドライブからの読み込みリクエスト完了がデバイスドライバに通知されるまでの間。
+</ul></div>
+<div style="margin-left:67px;"><br>UMD&reg;/DVDの読み込み動作中に、読み込みスレッドよりプライオリティの高いスレッドが、リソースを開放しないと、DMA転送が完了したにもかかわらず、読み込み処理自体が戻ってこない場合があることに注意してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_20">
+<div style="margin-left:40px;"><h4><b>読み込み動作について</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 読み込み動作でCPUリソースを必要とする場合<br>PSP&reg;において、ドライブからのデータ転送は、セクタ単位で行われています。<br>ファイルシステムによるファイル単位での読み込みでは、必ずしもセクタ単位でデータリクエストが行われるわけではないので、デバイスドライバ内で読み込みデータ量に適した調整を行っています。<br>読み込みデータサイズが2048bytesの倍数ではなかった場合、もしくは読み込みデータ位置がセクタの先頭から始まらなかった場合には、内部でメモリコピーが発生し、CPUリソースを使うことになります。<br>以下は、データ読み込みでCPUを消費するケース例です。
+</ul></div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ケース1）読み込みサイズがセクタ倍数ではない場合<br>ファイルA（LBA 0x100,サイズ6000bytes）をファイルオフセット0から、6000bytes読む場合。<br>6000 - (2 × 2048) = 1004bytesのメモリコピーが発生し、そのメモリコピー分のCPUリソースを消費します。
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-Japanese002.gif">
+</div>
+<div style="margin-left:67px;"><br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ケース2）読み込み位置がセクタの先頭でない場合<br>ファイルB（LBA 0x100,サイズ　6000bytes）をファイルオフセット64byte目から、5936bytes読む場合。<br>(6000 - (2 * 2048)）+ (2048 - 64) = 3888bytesのメモリコピーが発生し、そのメモリコピーのためのCPUリソースを消費します。
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-Japanese003.gif">
+</div>
+<div style="margin-left:67px;"><br><br>したがって上記のケースでは、最大4094[bytes]までメモリコピーがデバイスドライバ内で発生する場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>シーク動作について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;のシークは、最もバッテリ消費する動作のひとつです。バッテリ消費量は、そのストロークの長さに比例するため、データ配置を考慮したアクセスを行うことは、データアクセス速度を最適化するだけでなく、PSP&reg;自体のバッテリライフにも寄与してきます。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-Japanese004.gif">
+</div>
+<div style="margin-left:50px;"><br>シングルレイヤーディスクの場合、LBAは内周から外周方向に割り当てられています。<br>LBA（0x0）から、最終LBAへシークする場合、光ヘッドを外周方向へ動作させることになります。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-Japanese005.gif">
+</div>
+<div style="margin-left:50px;"><br>二層ディスク（Opposite）の場合、一層目のLBAは、シングルレイヤーと同じく内周から外周に割り当てられます。しかし、二層目は、外周から内周方向に割り当てられています。このため、LBA（0x0）から、一層目最終LBAへのシークがもっともストロークの長い動作となります。<br>逆に、LBA(0x0)から二層目にある最終LBAへのシークは、光ヘッド制御のストロークが短くなります（上図の赤い矢印の動きです）。レイヤー移動のコストは、シングルレイヤーディスクの最終LBAへのシークほど、バッテリ消費およびシークタイムのコストはかかりません。<br>※レイヤー間移動においてもオーバーヘッドはあるものの、フルストロークのシークほどのコストはかかりません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_3">
+<h3>
+<a href="#Heading3_9"> 9. </a>3 
+<!-- hp1 --><b>ディスクアクセスをともなう関数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ISO9660-Reference,UMD-Referenceで提供されているUMD&reg;/DVDアクセス関数には、実際にディスクアクセスを伴う関数と、デバイスドライバ内で処理が完結している関数があります。<br>UMD&reg;/DVDアクセスを伴う処理は低速であるため、非同期関数を利用して別機能の処理をUMD&reg;/DVDアクセス中に行うことでCPUリソースを効率化できます。<br>デバイスドライバ内で処理が完結している関数は、メモリに対する処理であるために、同期関数処理であっても比較的処理が軽く、パフォーマンスに影響はありません。<br>逆に、こうした関数を非同期関数処理で行った場合、非同期処理のオーバーヘッドだけ効率が悪くなる場合があります。<br>現在、UMD&reg;/DVDアクセスを伴う関数は、以下の関数になります。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpenAsync">sceIoOpenAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルのオープン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoGetstat()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ステータスの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoReadAsync">sceIoReadAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データの読み込み&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDopen()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリのオープン&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDread()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリの読み込み&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_SEEK_DISCコマンド&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PVD,&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_ISOFS_GET_PTBL,&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_ISOFS_SEEK_FILE,&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_UMD_SEEK_FILE,&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_ISOFS_UNCACHED_READ,&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_UMD_UNCACHED_READコマンド&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_4">
+<h3>
+<a href="#Heading3_9"> 9. </a>4 
+<!-- hp1 --><b>リトライ処理について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;/DVDアクセス中にデバイスドライバがエラーを返した場合、正しい動作を確認後、エラーを戻した関数に対してリトライを行うようにしてください。例えば、PSP&reg;の蓋を開けた場合や、スリープモード処理が実行された場合に、エラーが起こることがあります。この時、適切なメディアが挿入されて蓋が閉められた状態からの復帰動作、スリープ状態からのレジュ－ム動作等を正しく行うためにリトライ処理が必要となります。<br>通常、リトライを行う必要のある関数は、上記のUMD&reg;/DVDアクセスを伴う関数に対して行うことになります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_1">
+<h3>
+<a href="#Heading3_10"> 10. </a>1 
+<!-- hp1 --><b>ゲームタイトルプログラミングにおいて注意すること</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_10_1_21">
+<div style="margin-left:40px;"><h4><b>PSP&reg;において、UMD&reg;のレイテンシを保証することはできません。</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UMD&reg;のレイテンシについては、保証することができません。<br>一定のレイテンシに依存した、コーディングを行わないようにしてください。<br>PSP&reg;では、消費電力の低減化の一つとして、一定時間、ドライブアクセスが発生しなかった場合、ドライブ電源状態は、徐々に低電力モードへ遷移していきます。<br>ドライブが、Active状態の場合のみを想定したコーディングになっていますと、仮に、ゲームが放置されて、ドライブ状態が、Idleおよびそれ以下の電源状態へ遷移してしまったとすると、次回にゲームを再開する場合、UMD&reg;のレイテンシは変化していますので、サウンド、グラフィックなどのタイミングがずれる原因となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_2">
+<h3>
+<a href="#Heading3_10"> 10. </a>2 
+<!-- hp1 --><b>開発ツールにおけるDVDとUMD&reg;の違い</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">開発ツールで利用するUMD&reg;/DVDのアクセス方法は、ゲームタイトルをプログラミングするレベルで意識する必要はなく、同様のI/O処理で動作します。<br>しかし、開発ツールで利用するDVDに配置されるデータ位置と、実際のUMD&reg;に配置されるデータ位置は異なることになります。<br><br></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-Japanese006.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:50px;">開発ツールにおいては、DVD上のLBAに直接アクセスする機能を提供していません。<br>たとえば、ブロックデバイスの<a href="../peripheral/UMD_Block-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数や仮想ファイル機能からLBA 0x100を指定したとしても、それはDVDではなくUMD&reg;データイメージ上のLBA 0x100にアクセスします。<br>sceIoGetstat()関数、sceIoDread()関数で取得できるLBAは、DVD上から取得しても、UMD&reg;イメージ上のLBAが渡されていることに注意してください。<br><br>また、開発ツールのDVDは、PSP&reg;本体上のUMD&reg;と起動タイミング、アクセスタイミングなどは必ずしも一致しません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_3">
+<h3>
+<a href="#Heading3_10"> 10. </a>3 
+<!-- hp1 --><b>DVD上におけるUSER_L1.IMGイメージの配置について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;上のデータ配置とあわせるために、DVDで2層のイメージを作成する場合は、<br>USER_L1.IMGイメージのLBAは、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+USER_L0.IMGのLBA ＋ USER_L0.IMGイメージのセクタ数
+
+</font></pre></div>
+<div style="margin-left:50px;">に配置されている必要があります。<br>通常、ISO9660の仕様に準拠したライティングソフトでイメージを焼くと、ディレクトリ内のファイルの順番はASCII順に並ぶため、特に意識しなくとも上記のようなデータ配置なります。<br>ただし、ライティングソフトによっては、配置を自由に変更できるものも存在します。<br>それによって、USER_L1.IMGが上記のような位置に配置されなかった場合、<br>起動時に、<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-Japanese007.gif">
+</div>
+<div style="margin-left:50px;"><br><br>というメッセージを出します。このメッセージが出た場合、1層と2層を跨いでデータアクセスを行おうとすると、2層目のデータが正しく読めません。<br><br>※1層および2層にあるデータだけにアクセスする場合、問題はおきません。<br><br>DVDでUMD&reg;の2層イメージにアクセスする場合は、この点に注意してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>プログラミングTips</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_1">
+<h3>
+<a href="#Heading3_11"> 11. </a>1 
+<!-- hp1 --><b>コールバック関数の呼び出しとUMD&reg;の蓋開き状態について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;の蓋が開けられた場合、タイトルプログラムとしては、適切なUMD&reg;が挿入されるまで、リトライ処理を行うか、<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdWaitDriveStat">sceUmdWaitDriveStat</a>*()関数などで、<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a>状態になるまで読み込みスレッドをWAIT状態にしておきます。<br>読み込みスレッドで、コールバック関数の生成を行っている場合、これらのリトライおよびWAIT状態の入り方が適切ではないと、蓋開き中に、PSボタン(HOMEボタン)が押されたり、POWERスイッチ操作でスリープ動作へ移行する際に問題が生じます。<br>この場合の適切でない処理とは、リトライ中のポーリング処理などで、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThreadCB">sceKernelDelayThreadCB</a>()や<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>()を利用してない、もしくは、その他CB付き（コールバックチェック付き）の関数を実行してない<a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdWaitDriveStatCB">sceUmdWaitDriveStatCB</a>()で、<a href="../peripheral/UMD-Reference-Japanese.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a>状態を待っていないことを意味しています。こうした処理が行われていないと、コールバック通知のチェックできないため、システムソフトウェアの復帰およびスリープへの遷移が、蓋を閉めるまで遅延してしまいます。<br>蓋が開いた状態に対しても、コールバックのチェックは行うように心がけてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_2">
+<h3>
+<a href="#Heading3_11"> 11. </a>2 
+<!-- hp1 --><b>多数の読み込みスレッドで同時に非同期読み込みを行うことに関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ディスクからのデータ読み込みを、非同期で行いたいことはよくあると思いますが、複数の読み込みスレッドで同時に非同期読み込みを行う場合、各読み込みスレッドは、小さい読み込みサイズのリクエストを複数行うのではなく、なるべく一括読みをする方が効率的な場合があります。<br>ディスクへの読み込みリクエストは、キューイング、つまりリクエストの早いもの順に行われます。そのため、複数の読み込みスレッドが小さな読み込みサイズのリクエストを頻繁に行ったり、通常ファイルでOpen、Readを交互にリクエストすると、ヘッドが頻繁に動いたり、キャッシュヒットしにくい状態になることが予想されます。<br>複数の読み込みスレッドから、通常ファイルを利用して非同期読み込みを行う場合は、Openをまとめてリクエストしたり、仮想ファイルを利用することで、無駄な内周へのヘッド移動を起こさずにすみます。<br>複数の読み込みスレッドで同時に入り乱れた形で、非同期読み込みを行う場合はご注意ください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

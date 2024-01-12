@@ -1,0 +1,537 @@
+<html lang="en">
+<head>
+<title>libpsmf-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libpsmf Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Library Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmf is a library which parses the header portion of PSMF files and retrieves information on streams. <br>A PSMF files is comprised of a PSMF header and a PSMF stream. EP_map, information regarding the audio and video stream structure in the PSMF stream, and the like are contained in the PSMF header, and this information can be retrieved by using libpsmf. Specifically, the information which can be retrieved is as follows.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Information on the PSMF stream as a whole
+<li> The number of streams multiplexed in the PSMF stream
+<li> The number of video streams multiplexed in the PSMF stream
+<li> The number of audio streams multiplexed in the PSMF stream
+<li> EP_map information on the video streams multiplexed in the PSMF stream
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>The Process Culminating in Retrieval of PSMF Header Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When libpsmf is utilized, the necessary information is retrieved via the following process.<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/libpsmf-Overview-English001.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 The Process Culminating in Retrieval of PSMF Header Information</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libpsmf.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libpsmf.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Module file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psmf.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psmf_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Related Documents</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> Overview of Video Data Creation and Playback Processing<br>A document which presents an overview of the raw data and creation methods for creating PSMF data, as well as an overview how to play back PSMF utilizing libmpeg.
+<li> UMD&trade; Stream Composer (for Game Movie) User's Manual<br>A document which describes how to use the tools for creating PSMF data.
+<li> PSMF Composer User's Manual<br>A document which describes how to use the tools for creating PSMF data.
+<li> libmpeg Overview<br>A document which presents an overview of libmpeg.
+<li> libmpeg Reference<br>libmpeg function reference.
+<li> libpsmf Reference<br>libpsmf function reference.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>PSMF Header Structure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Information which can be Retrieved from the PSMF Header</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSMF header holds information about the PSMF stream. Using this header, information about decoded data can be learned in advance, making it possible to implement trick play and similar techniques. <br><br>The PSMF header holds the following types of information.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Start PTS of a stream
+<li> End PTS of a stream
+<li> Total number of multiplexed streams
+<li> Information on multiplexed video streams
+<li> Information on multiplexed audio streams
+<li> PsmfMark
+</ul></div>
+<div style="margin-left:50px;"><br>In terms of video stream information, the following can be retrieved.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Horizontal pixel count of an image encoded using MPEG4-AVC
+<li> Vertical pixel count of an image encoded using MPEG4-AVC
+<li> EP_map
+</ul></div>
+<div style="margin-left:50px;"><br>In terms of audio stream information, the following can be retrieved for both ATRAC3plus&trade; and PCM.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Sampling frequency
+<li> Channel configuration
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>EP_map</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">By using libpsmf, the EP_map for the video streams which are multiplexed in the PSMF stream can be retrieved from the PSMF header. <br>An EP_map is a collection of information about intermediate locations called entry points from which video stream playback can begin. In PSMF, information about an IDR picture that can be played from an intermediate location within a stream is entered in the EP_map as an entry point.<br><br>The entry point spacing, which is from 400 to 2000msec, is determined by the IDR duration in the Video Encode Advanced Setting of the UMD&trade; Stream Composer (for Game Movie). A frame that is specified as a forced IDR in the UMD&trade; Stream Composer (for Game Movie) will also become an entry point. Therefore, to play video beginning at a specific point in the stream, you can simply encode that location as a forced IDR.<br><br>An entry point has the following information.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Offset from the beginning of the PSMF stream indicating an IDR from which video stream playback can begin
+<li> PTS of the IDR specified by the offset
+</ul></div>
+<div style="margin-left:50px;"><br>Having this kind of information enables you to perform trick play or play a video stream starting from an arbitrary location.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>PsmfMarks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">By using libpsmf, the PsmfMarks for the video streams which are multiplexed in the PSMF stream can be retrieved from the PSMF header. <br>A PsmfMark is used to identify specific locations within a PSMF stream. PsmfMarks include Chapter Marks and Event Marks. EventMarks can be associated with a specific video stream. ChapterMarks apply to all streams.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>libpsmf Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmf is used via a procedure such as the following.<br><br>When retrieving PSMF or stream information<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Retrieve the PSMF header size using <a href="../movie/libmpeg-Reference-English.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>(), and allocate the PSMF header from the PSMF file.</li>
+<li VALUE=2> Initialize the context based on <a href="../movie/libpsmf-Reference-English.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>().</li>
+<li VALUE=3> Specify the target stream using <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStream">scePsmfSpecifyStream</a>(), <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(), or <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>().</li>
+<li VALUE=4> Retrieve the stream information using <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPresentationStartTime">scePsmfGetPresentationStartTime</a>() etc.</li>
+<li VALUE=5> Finish by freeing the allocated PSMF header.</li>
+</ol></div>
+<div style="margin-left:50px;"><br>When retrieving entry point information<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Retrieve the PSMF header size using <a href="../movie/libmpeg-Reference-English.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>(), and allocate the PSMF header from the PSMF file.</li>
+<li VALUE=2> Initialize the context based on <a href="../movie/libpsmf-Reference-English.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>().</li>
+<li VALUE=3> Specify the target video stream using <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStream">scePsmfSpecifyStream</a>(), <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(), or <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>().</li>
+<li VALUE=4> Retrieve the necessary entry point information using <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>() and <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>().</li>
+<li VALUE=5> Finish by releasing the allocated PSMF header.</li>
+
+</ol></div>
+<div style="margin-left:50px;">When retrieving PsmfMark information<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Retrieve the PSMF header size using <a href="../movie/libmpeg-Reference-English.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>(), and allocate the PSMF header from the PSMF file.</li>
+<li VALUE=2> Initialize the context based on <a href="../movie/libpsmf-Reference-English.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>().</li>
+<li VALUE=3> Retrieve the necessary PsmfMark information using <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPsmfMarkWithTimestamp">scePsmfGetPsmfMarkWithTimestamp</a>() and <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPsmfMark">scePsmfGetPsmfMark</a>().</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Initialization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In order to use libpsmf, it is necessary to first allocate the PSMF header and perform initialization.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+/* Initialize */
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> iReadSize, offset;
+SceUID fd;
+<a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> stream_buf[2048];
+<a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a>* pHeader;
+
+/* Open */
+if ( sceIoOpen (filename , SEEK_SET) &lt; 0) {
+/* Failure during seek */
+}
+
+/* Retrieve one packet's worth to find the start address of the stream 
+in the PSMF file */
+if( (iReadSize  = sceIoRead(pStrFile, stream_buf, 2048)) &lt; 2048) {
+/* Failure during read-in of first packet */
+}
+
+/* Retrieve size of PSMF header */
+if (<a href="../movie/libmpeg-Reference-English.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>(pMpeg, stream_buf, &amp;offset) != SCE_OK) {
+    /* Failure during retrieval of size of PSMF header */
+}
+	
+/* Allocate memory for just PSMF header portion */
+*pHeader = (<a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a>*)malloc(offset);
+if (pHeader == NULL) {
+    /* Memory allocation failure */
+}
+
+/* Adjust file position to start */
+if ( sceIoLseek (fd, 0L, SEEK_SET) &lt; 0) {
+    /* Failure during seek */
+}
+
+/* Read in PSMF header */
+if( (iReadSize  = sceIoRead(fd, *pHeader, offset)) &lt; offset){
+    /* Header read-in failure */
+}
+
+/* Set PSMF header */
+if((ret = <a href="../movie/libpsmf-Reference-English.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>(&amp;psmf, pHeader)) != SCE_OK) {
+    /* Failure during setting of PSMF header */
+}
+
+/* Retrieve necessary information from PSMF header */
+</font></pre></div>
+<div style="margin-left:50px;"><br>In order to use libpsmf, it is absolutely necessary to first allocate the PSMF header. The size of the PSMF header can be ascertained based on the offset from the beginning of the PSMF file of the start address of the PSMF stream. The PSMF header absolutely must be allocated while libpsmf is used. Moreover, once a PSMF header is allocated, it cannot be moved to another memory address. In such cases, it is necessary to start over again from initialization.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Retrieving PSMF Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With libpsmf, information on the PSMF stream as a whole can be retrieved by initializing the <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> ret;
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> psmf;
+
+/* Initialize <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure */
+
+/* Retrieve presentation start time */
+if((ret = <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPresentationStartTime">scePsmfGetPresentationStartTime</a> (&amp;psmf, &amp;start_time)) != SCE_OK) {
+    /* Presentation start time retrieval failure */
+}
+
+/* Retrieve total number of streams */
+if((ret = <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetNumberOfStreams">scePsmfGetNumberOfStreams</a> (&amp;psmf)) &lt; 0) {
+    /* Stream count retrieval failure */
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>By initializing the <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure, the start PTS and end PTS of a stream, the total number of streams multiplexed in the PSMF stream, etc. can be retrieved from the PSMF header.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Retrieving Video Stream Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Information on a particular video stream can be retrieved from the PSMF header by specifying in the <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure the video stream for which to retrieve the information.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> ret;
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmfVideoInfo">ScePsmfVideoInfo</a> vInfo;
+
+/* Initialize <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure */
+
+/* Specify the ch0 video stream */
+if((ret = <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(&amp;psmf, SCE_MPEG_STREAM_M4AVC, 0)) 
+!= SCE_OK) {
+    /* Failure during stream specification*/
+}
+
+/* Retrieve sequence info */
+if((ret = <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetVideoInfo">scePsmfGetVideoInfo</a>(&amp;psmf, &amp;vInfo)) != SCE_OK) {
+    /* Video information retrieval failure */
+}
+
+/* Horizontal resolution */
+printf (&quot;horizontal size = %d\n&quot;, vInfo.horizontalSize);
+
+/* Vertical resolution */
+printf (&quot;vertical size = %d\n&quot;, vInfo.verticalSize);
+</font></pre></div>
+<div style="margin-left:50px;"><br>When specifying a stream<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Specify the stream type and channel using <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>().</li>
+<li VALUE=2> Specify the stream type and stream type number using <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>().</li>
+<li VALUE=3> From among the stream numbers, specify the one which specifies the video stream using <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStream">scePsmfSpecifyStream</a>().</li>
+</ol></div>
+<div style="margin-left:50px;"><br>A stream can be specified using any of the above three methods. By specifying the stream, the information on the specified stream can be retrieved. To determine whether or not the specified stream is a video stream, use <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetCurrentStreamType">scePsmfGetCurrentStreamType</a>(). <br>The stream type and channel which are used with <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>() and <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>() are the same as those used with libmpeg.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Retrieving Audio Stream Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Information on a particular audio stream can be retrieved from the PSMF header by specifying in the <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure the audio stream for which to retrieve the information.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> ret;
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmfAudioInfo">ScePsmfAudioInfo</a> aInfo;
+
+/* Initialize <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure */
+
+/* Specify the ch0 audio stream */
+if((ret = <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(&amp;psmf, SCE_MPEG_STREAM_ATRAC, 0)) 
+!= SCE_OK) {
+    /* Failure during stream specification*/
+}
+
+/* Retrieve sequence info */
+if((ret = <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetAudioInfo">scePsmfGetAudioInfo</a>(&amp;psmf, &amp;aInfo)) != SCE_OK) {
+    /* Audio information retrieval failure */
+}
+
+/* Sampling frequency */
+printf (&quot;sampling frequency = %d\n&quot;, aInfo.samplingFrequency);
+
+/* Channel configuration */
+printf (&quot;channel configuration = %d\n&quot;, aInfo.channelConfiguration);
+
+</font></pre></div>
+<div style="margin-left:50px;">When specifying a stream, an audio stream can be specified using the same methods as with video. <br>When specifying a stream using <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>(), since audio includes both ATRAC3plus&trade; and PCM, the stream can be selected either by specifying one or the other using streamType, or by selecting SCE_MPEG_STREAM_AUDIO.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Retrieving Arbitrary Entry Point Information from EP_map</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmfEntryPoint">ScePsmfEntryPoint</a> entry;
+
+/* Initialize */
+
+/* Specify stream */
+if(<a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(&amp;psmf, SCE_MPEG_STREAM_M4AVC, 0) != 
+SCE_OK) {
+    /* Stream specification failure */
+}
+
+/* Specify entry point from PTS */
+if(<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>(&amp;psmf, 90000, &amp;entry) != SCE_OK) {
+    /* Entry point retrieval failure */
+}
+
+/* Specify entry point from ep_id */
+if(<a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>(&amp;psmf, 0, &amp;entry) != SCE_OK) {
+    /* Entry point retrieval failure */
+}
+
+printf (&quot;PTS = 0x%x\n&quot;, entry.pts);
+printf (&quot;OFFSET = 0x%x\n&quot;, entry.offset);
+</font></pre></div>
+<div style="margin-left:50px;"><br>To specify a particular entry point in EP_map, either specify it using the PTS, or utilize the epId. To use the PTS, use <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>(). When using this function, the information in the entry point having a PTS which is equivalent to or immediately prior to the specified PTS will be returned. <br>To specify an entry point using the epId, use <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>(). The range for the epId specified here is 0 &lt;= epId &lt; <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetNumberOfEPentries">scePsmfGetNumberOfEPentries</a>(). It is possible to determine whether or not EP_map exists by using <a href="../movie/libpsmf-Reference-English.htm#scePsmfCheckEPmap">scePsmfCheckEPmap</a>(). Entry points cannot be retrieved from files in which EP_map does not exist. EP_map currently does not contain streams other than video streams, so when retrieving entry point information from EP-map, a video stream first must be specified in the <a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> structure. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Retrieving Arbitrary PsmfMark Information</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-English.htm#ScePsmfPsmfMark">ScePsmfPsmfMark</a> mark;
+int i, num;
+
+/* Initialization processing */
+
+/* Get number of marks */
+num = <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetNumberOfPsmfMarks">scePsmfGetNumberOfPsmfMarks</a>(&amp;psmf, SCE_PSMF_MARK_STREAM_ANY);
+
+if ( num &lt; 0 ) {
+	/* Error handling */
+}
+
+for (i = 0; i &lt; num; i++ ) {
+	if ( <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPsmfMark">scePsmfGetPsmfMark</a>(&amp;psmf, SCE_PSMF_MARK_STREAM_ANY, i, &amp;mark) != SCE_OK){
+		/* Error handling */
+	}
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>There are two types of PsmfMarks: Chapter Marks and Event Marks. Event Marks can be associated with a specific video stream. If <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetNumberOfPsmfMarks">scePsmfGetNumberOfPsmfMarks</a>() is called with the ch argument set to SCE_PSMF_MARK_STREAM_ANY, the total number of PsmfMarks in all streams is returned. When ch is set to a specific stream, the total number of PsmfMarks in the specified stream and common with all streams is returned.<br>To get a PsmfMark, either use the PTS to identify it or use its markId. To use the PTS, use <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPsmfMarkWithTimestamp">scePsmfGetPsmfMarkWithTimestamp</a>(). This funcction returns, the PsmfMark that is associated with the specified stream and has a PTS that is equal to or immediately before the specified PTS.<br>To use the markID to get a specific PsmfMark, use <a href="../movie/libpsmf-Reference-English.htm#scePsmfGetPsmfMark">scePsmfGetPsmfMark</a>().<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Regarding IDs for Specifying Streams, Entry Points and PsmfMarks</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Specifying Streams</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With libpsmf, a stream can be specified using a channel, stream type number, or stream number. <br><br>Channels are the same as those used with <a href="../movie/libmpeg-Reference-English.htm#sceMpegRegistStream">sceMpegRegistStream</a>(), so a stream can be specified by using a stream type and a channel.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Elementary</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Stream</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Stream Type</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>(iStreamType)</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Stream ID</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Private</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Stream ID</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Channel</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>(ch)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MPEG4 AVC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_M4AVC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1110 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;None&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_ATRAC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1011 1101b'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'0000 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PCM&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_PCM&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1011 1101b'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'0001 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;USER DATA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_DATA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1011 1101b'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'0010 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">With <a href="../movie/libmpeg-Reference-English.htm#sceMpegRegistStream">sceMpegRegistStream</a>(), a stream is specified by the combination of a stream type and a channel, but channels represent the conversion of private stream IDs into more easily understood values, and thus may not be assigned in order starting from zero, but rather may be assigned as, for instance, 1, 2, 3, 4, 6, 10. <br>Consequently, in order to specify a stream using a channel, the channel must be known beforehand. <br><br>Meanwhile, values for streamTypeNumber are assigned to each stream type in order starting from zero. Consequently, a stream can be specified even if the exact channel is not known. Values for streamTypeNumber are assigned in the order in which they are written in the PSMF header. Consequently, there is no correspondence between channel and streamTypeNumber values, and completely different values may be assigned to these. <br><br>When using a stream utilizing streamTypeNumber, audio can be specified using SCE_MPEG_STREAM_AUDIO. SCE_MPEG_STREAM_AUDIO is a stream type which is used with <a href="../movie/libpsmf-Reference-English.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>(), and when specifying this stream type, an audio stream can be specified without regard for the audio codec involved. The total number of streams involved when SCE_MPEG_STREAM_AUDIO is specified is the sum total of the number of streams involved when SCE_MPEG_STREAM_ATRAC and SCE_MPEG_STREAM_PCM are specified. <br><br>streamNumber is an ID which is assigned to streams in the order written to the PSMF header, starting with zero. <br>Values are assigned in order, starting with zero, to all streams which are multiplexed in the PSMF stream. Consequently, no stream types are specified.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Specifying Entry Points</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In order to specify an entry point, epId is used. epId is an ID that is used for specifying entry points in the EP_map. Values are assigned starting from 0 and in order from the entry point with the smallest PTS, in each stream. By specifying an epId, a particular entry point in EP_map can be specified.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Specifying PsmfMarks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In order to specify a PsmfMark, a markId is used. A markId, is an ID that is used for identifying PsmfMarks. Values are assigned starting from 0 and in order from the smallest PTS. By specifying a markID, specific PsmfMark information can be obtained.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Important Precaution</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Proper operation cannot be guaranteed if, after specifying a PSMF header in libpsmf, the location in which the PSMF header is stored is moved.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

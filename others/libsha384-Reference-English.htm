@@ -1,0 +1,429 @@
+<html lang="en">
+<head>
+<title>libsha384-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsha384 Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceSha384Context"></a>
+<table width="100%"><td width="70%"><font size=6>SceSha384Context<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Context information for SHA-384 digest value computation<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha384.h&gt;
+typedef struct SceSha384Context {
+	unsigned long long <i>h</i>[8];
+	unsigned int <i>pad</i>;
+	unsigned short <i>usRemains</i>;
+	unsigned short <i>usComputed</i>;
+	unsigned long long <i>ulTotalLen</i>;
+	unsigned char <i>buf</i>[SCE_SHA384_BLOCK_SIZE];
+} <b>SceSha384Context</b>;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>h</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Work area&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pad</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Padding for adjusting alignment&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usRemains</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Less than 128 bytes of remaining data, which was temporarily copied within the SceSha384Context structure&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usComputed</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Digest value computed flag&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ulTotalLen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Total data size (bytes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Temporary copy of less than 128 bytes of data&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used as a work area when computation of the SHA-384 digest value is segmented. Since the <a href="../others/libsha384-Reference-English.htm#sceSha384BlockInit">sceSha384BlockInit</a>(), <a href="../others/libsha384-Reference-English.htm#sceSha384BlockUpdate">sceSha384BlockUpdate</a>(), and <a href="../others/libsha384-Reference-English.htm#sceSha384BlockResult">sceSha384BlockResult</a>() functions use this structure as a work area, an application must not directly access the members of this structure.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha384-Reference-English.htm#sceSha384BlockInit">sceSha384BlockInit</a>(), <a href="../others/libsha384-Reference-English.htm#sceSha384BlockUpdate">sceSha384BlockUpdate</a>(), <a href="../others/libsha384-Reference-English.htm#sceSha384BlockResult">sceSha384BlockResult</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha384Digest"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha384Digest<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Calculate SHA-384 digest<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha384.h&gt;
+int <b>sceSha384Digest</b> (
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to plaintext data for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data size (bytes) of plaintext for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns computed digest value (48 bytes).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Successful completion&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function calculates the SHA-384 digest value.<br>This function is used when all data of the cleartext for which the digest value is to be calculated has been expanded in memory.<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha384BlockInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha384BlockInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Initialize digest value calculation work area<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha384.h&gt;
+int <b>sceSha384BlockInit </b>(
+	<a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a> *<i>pContext</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies address of digest value calculation work area.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext </i>address is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes the work area that is used to calculate the SHA-384 digest value.<br>This function should be called before the <a href="../others/libsha384-Reference-English.htm#sceSha384BlockUpdate">sceSha384BlockUpdate</a>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a>, <a href="../others/libsha384-Reference-English.htm#sceSha384BlockUpdate">sceSha384BlockUpdate</a>(), <a href="../others/libsha384-Reference-English.htm#sceSha384BlockResult">sceSha384BlockResult</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha384BlockUpdate"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha384BlockUpdate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SHA-384 digest value calculation processing<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha384.h&gt;
+int <b>sceSha384BlockUpdate</b> (
+<a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a> *<i>pContext</i>,
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address of digest value calculation work area.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to plaintext data for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data size (bytes) of plaintext data for which digest value is to be computed.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Successful completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_BUSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Digest value was already computed for <i>pContext</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i> or <i>plain</i> address is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function uses the plaintext specified by <i>plain</i> and <i>len</i> to update the work area within the <a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a> structure. The sceSha384BlockUpdate() function, which can be called any number of times between the <a href="../others/libsha384-Reference-English.htm#sceSha384BlockInit">sceSha384BlockInit</a>() function and <a href="../others/libsha384-Reference-English.htm#sceSha384BlockResult">sceSha384BlockResult</a>() function, enables the digest value to be calculated even for a large amount of data that cannot fit in memory.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a>, <a href="../others/libsha384-Reference-English.htm#sceSha384BlockInit">sceSha384BlockInit</a>(), <a href="../others/libsha384-Reference-English.htm#sceSha384BlockResult">sceSha384BlockResult</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha384BlockResult"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha384BlockResult<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get calculated SHA-384 digest<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha384.h&gt;
+int <b>sceSha384BlockResult</b> (
+	<a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a> *<i>pContext</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address of digest value calculation work area.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns the calculated digest value (48 bytes).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative value is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i> or<i>digest</i> address is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function retrieves the calculated digest value from the <a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a> structure. The SHA-384 algorithm calculates a digest value in units of 128 bytes, so a remaining amount less than 128 bytes may have been temporarily copied within the <a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a> structure by the <a href="../others/libsha384-Reference-English.htm#sceSha384BlockUpdate">sceSha384BlockUpdate</a>() function. If this remaining data exists, the final digest value is determined by calling the sceSha384BlockResult() function. Always use the sceSha384BlockResult() function to obtain the digest value.<br>The digest value of the <a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a> structure is valid until the next call to the <a href="../others/libsha384-Reference-English.htm#sceSha384BlockInit">sceSha384BlockInit</a>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha384-Reference-English.htm#SceSha384Context">SceSha384Context</a>, <a href="../others/libsha384-Reference-English.htm#sceSha384BlockInit">sceSha384BlockInit</a>(), <a href="../others/libsha384-Reference-English.htm#sceSha384BlockUpdate">sceSha384BlockUpdate</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

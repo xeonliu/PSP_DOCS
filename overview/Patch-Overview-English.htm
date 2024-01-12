@@ -1,0 +1,766 @@
+<html lang="en">
+<head>
+<title>Patch-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Patch Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Patch System for the PSP&trade; System</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>About Patches</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The term "patch" refers to the procedure for adding or replacing program or data files to extend the functionality of an application, and the new program or data files that are added or replaced during that procedure.<br>A patch system is provided that can add or replace any program or data file of a previously released application supplied on a UMD&trade;, or of a PSP&trade; downloadable game application installed on a Memory Stick&trade;.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>Note</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If you wish to use patches to extend the functionality of your application, contact the SCE Publisher Relations Department during the planning stage.<br><br></div>
+<div style="margin-left:50px;">The main components of the PSP&trade; patch system are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Patch server<br>Server for registering patches and distributing patches over the network.
+<li> Update feature <br>Feature that checks the patch server for new patches and downloads and installs those that it finds.
+<li> Patch launch feature <br>Feature that launches a newly installed program file when starting up a UMD&trade; or downloadable game.
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">For the update feature, the system software performs all processes, from checking the patch server to downloading and installing available patches. A feature is also provided that enables an application to use the game update library to check the patch server.<br>The patch launch feature is required in order to patch the boot program file of a UMD&trade; game or downloadable game. Because the boot program supplied with a UMD&trade; game or downloadable game cannot be overwritten, the patch is stored in a specific directory on the Memory Stick&trade;. When the system software launches the UMD&trade; game or downloadable game, it checks whether a patch exists. If one does exist, the system software launches the updated application by launching the boot program file of the patch rather than the boot program in the UMD&trade; game or downloadable game.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Patch Process</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Patch Server</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_2">
+<div style="margin-left:40px;"><h4><b>Title Patch Publishing System</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">SCE provides a patch server for managing and distributing patches.<br>The Title Patch Publishing System is provided as a special-purpose tool for performing such tasks as uploading a patch package to the development server, submitting it to QA, and promoting it to the production server. This tool is a PlayStation&reg;Network Server Management Tool (web application), which authenticates users according to their PSP&trade; Developer Network website accounts.<br>For details about the Title Patch Publishing System, refer to the "PlayStation&reg;Network SMT Portal Users Guide" and the "PlayStation&reg;Network SMT Title Patch Publishing System Users Guide."<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Title Patch Publishing System</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_3">
+<div style="margin-left:40px;"><h4><b>Patch package</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A patch generally consists of multiple files. However, when registered on the patch server a patch package must be created by adding content information such as PARAM.SFO and ICON0.PNG to those files.<br>A patch package is a type of NPDRM package. For details, see the chapter "Creating a Patch Package."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_4">
+<div style="margin-left:40px;"><h4><b>Patch identifier</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Patches are managed for each DISC_ID in PARAM.SFO. If a title consists of multiple discs each with its own DISC_ID, patches must be created and registered separately on the patch server for each one. However, if you want to share one patch among different DISC_IDs for a multidisc title, you can add a GAMEDATA_ID parameter to the PARAM.SFO file of each disc that is to share the patch. If GAMEDATA_ID is defined in PARAM.SFO, then it will be used as the identifier instead of DISC_ID. In other words, GAMEDATA_ID must have the same value as that specified for DISC_ID in PARAM.SFO of the patch.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_5">
+<div style="margin-left:40px;"><h4><b>Patch version</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The application and patch versions are managed by the APP_VER parameter in PARAM.SFO.<br>The version number, which consists of four decimal digits, is conveniently divided into a two-digit major version and a two-digit minor version. A larger number indicates a newer version.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Updating</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Updating is a process that sends an inquiry to the patch server to check whether a new patch package has been published, and if so, downloads and installs it on the Memory Stick&trade;.<br><br>For details about system behavior during updates, see the chapter "Update Process."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Patch Launching</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a UMD&trade; game or downloadable game is launched, system software checks whether a patch has been installed on the Memory Stick&trade;. If a patch has been installed, system software determines whether the boot program in the UMD&trade; game / downloadable game or the boot program in the patch is newer and starts whichever is newer. System software also determines whether it needs to be updated at this time as well. If so, it prompts the user to update it. For details about this process, see the chapter "Patch Launching Process."<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Update Process</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the update process, which consists of checking whether a new patch has been registered on the patch server and then downloading and installing it.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Update Process</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">During the update process, system software downloads and installs a patch.<br>To start the update process, open the Options menu from system software by clicking the triangle button for the icon of the game to be updated, and select "Update." System software connects to the network using infrastructure mode and checks the patch server for any new patches and their versions.<br>If a new patch has been registered, a dialog prompting the user to perform the update will appear.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Update Dialog</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">If the user selects "Yes," system software will download and install the patch package.<br>If new system software is needed to launch the patch, a dialog will appear that prompts the user to update system software before downloading and installing the patch package.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  When a System Software Update is Needed</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The downloaded patch package is expanded by system software and installed on the <br>Memory Stick&trade;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Checking for Patches from an Application</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An application can use the game update library APIs at any time to check for new patches. To perform this operation, the PSP&trade; system must be connected to a network in infrastructure mode. For details, refer to the "Game Update Library Overview" and "Game Update Library Reference."<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Patch Launching Process</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the process used by system software to determine and launch a UMD&trade; game or downloadable game program that was updated by a patch. It also describes the system update process (which determines whether the system software version meets the minimum application requirements and prompts the user to perform any necessary updates), because this process occurs at the same time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Parameters Indicating the Software Version</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following two parameters represent version information and are used for patches and system updates.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSP_SYSTEM_VER<br>This indicates the system software version required to run the application.
+<li> APP_VER<br>This indicates the version of the application or patch itself.
+</ul></div>
+<div style="margin-left:50px;">These versions are independent and have no relationship to one another. <br>Both types of information are specified in PARAM.SFO.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Launching Sequence</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">First, this section explains the behavior when a UMD&trade; game or downloadable game is launched when a patch has not been installed. In this case, only processing related to system updates is performed, as shown below, based on the PSP_SYSTEM_VER value that was obtained from PARAM.SFO of the UMD&trade; or downloadable game.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  Launch Sequence</b><br>
+</div>
+<br>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(1)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The user selects (launches) the icon of the UMD&trade; game or downloadable game.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(2)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP_SYSTEM_VER is obtained from PARAM.SFO. This value is the version of the &nbsp;&nbsp;<br>&nbsp;&nbsp;system software required by the application.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(3)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The system software version is compared with the PSP_SYSTEM_VER value that &nbsp;&nbsp;<br>&nbsp;&nbsp;was obtained.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(4)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;If the system software version is greater than or equal to PSP_SYSTEM_VER, the &nbsp;&nbsp;<br>&nbsp;&nbsp;boot file EBOOT.BIN is launched (game launch), since a system update is not &nbsp;&nbsp;<br>&nbsp;&nbsp;required in this case.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(5)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;If the system software version is less than PSP_SYSTEM_VER, the user is &nbsp;&nbsp;<br>&nbsp;&nbsp;prompted to perform an update, since a system update is required in this case.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Patch Launching Sequence</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This section explains what happens when a UMD&trade; game or downloadable game is launched when a patch has been installed. In this case, processing involved in updating the system, comparing the game version with that of the patch, and launching whichever is newer are performed as follows.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6  Launch Sequence When Patch Exists</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_6">
+<div style="margin-left:40px;"><h4><b>Determining whether to update the system</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(1)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The user selects (launches) the icon of the UMD&trade; game or downloadable game.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(2)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP_SYSTEM_VER is obtained from the UMD&trade; game or downloadable game and &nbsp;&nbsp;<br>&nbsp;&nbsp;from the patch.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(3)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The system software version is compared with the versions obtained in (2).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(4)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;If the system software version of the UMD&trade; game is newer than the system &nbsp;&nbsp;<br>&nbsp;&nbsp;software version of the patch, the updater is launched after user confirmation, &nbsp;&nbsp;<br>&nbsp;&nbsp;because the boot file can only be executed after the system software is updated. &nbsp;&nbsp;<br>&nbsp;&nbsp;After updating, the PSP&trade; system is rebooted. Since the updater is not contained in&nbsp;&nbsp;<br>&nbsp;&nbsp;a downloadable game, the user will only be prompted to perform the update in this &nbsp;&nbsp;<br>&nbsp;&nbsp;case.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(5)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;If the version required by the patch is the newest, a notification dialog is displayed &nbsp;&nbsp;<br>&nbsp;&nbsp;instructing the user to obtain and launch the updater. This is only a notification, &nbsp;&nbsp;<br>&nbsp;&nbsp;and the user must use the network or external media to perform the system update &nbsp;&nbsp;<br>&nbsp;&nbsp;manually.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(6)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;If the system software version is the newest, processing proceeds to determining &nbsp;&nbsp;<br>&nbsp;&nbsp;the boot program, because a system update is not required.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_7">
+<div style="margin-left:40px;"><h4><b>Determining the boot program</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;(7)&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;APP_VER&nbsp;is&nbsp;obtained&nbsp;from&nbsp;the&nbsp;UMD&trade;&nbsp;game&nbsp;or&nbsp;downloadable&nbsp;game&nbsp;and&nbsp;from&nbsp;the&nbsp;&nbsp;<br>&nbsp;patch.&nbsp;<br>&nbsp;If&nbsp;APP_VER&nbsp;has&nbsp;not&nbsp;been&nbsp;set&nbsp;in&nbsp;either&nbsp;the&nbsp;game&nbsp;or&nbsp;the&nbsp;patch,&nbsp;then&nbsp;the&nbsp;patch&nbsp;boot&nbsp;&nbsp;<br>&nbsp;file&nbsp;is&nbsp;launched.&nbsp;If&nbsp;APP_VER&nbsp;has&nbsp;been&nbsp;set&nbsp;for&nbsp;either&nbsp;the&nbsp;game&nbsp;or&nbsp;the&nbsp;patch,&nbsp;but&nbsp;not&nbsp;&nbsp;<br>&nbsp;both,&nbsp;then&nbsp;the&nbsp;corresponding&nbsp;boot&nbsp;file&nbsp;is&nbsp;launched.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;<b>Note:&nbsp;<br>&nbsp;</b>Since&nbsp;APP_VER&nbsp;is&nbsp;a&nbsp;parameter&nbsp;that&nbsp;was&nbsp;introduced&nbsp;in&nbsp;system&nbsp;software&nbsp;&nbsp;<br>&nbsp;version&nbsp;6.00,&nbsp;it&nbsp;might&nbsp;not&nbsp;be&nbsp;specified&nbsp;in&nbsp;the&nbsp;PARAM.SFO&nbsp;file&nbsp;of&nbsp;the&nbsp;UMD&trade;&nbsp;&nbsp;<br>&nbsp;game&nbsp;or&nbsp;downloadable&nbsp;game.&nbsp;However,&nbsp;even&nbsp;in&nbsp;this&nbsp;case,&nbsp;correct&nbsp;behavior&nbsp;will&nbsp;&nbsp;<br>&nbsp;be&nbsp;obtained.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;(8)&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;The&nbsp;versions&nbsp;obtained&nbsp;in&nbsp;(7)&nbsp;are&nbsp;compared.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;(9)&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;If&nbsp;the&nbsp;UMD&trade;&nbsp;game&nbsp;or&nbsp;downloadable&nbsp;game&nbsp;version&nbsp;is&nbsp;newer&nbsp;than&nbsp;the&nbsp;patch&nbsp;version,&nbsp;&nbsp;<br>&nbsp;the&nbsp;boot&nbsp;file&nbsp;of&nbsp;the&nbsp;UMD&trade;&nbsp;game&nbsp;or&nbsp;downloadable&nbsp;game&nbsp;is&nbsp;launched.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;<b>Note:&nbsp;<br>&nbsp;</b>Remastering&nbsp;may&nbsp;create&nbsp;a&nbsp;UMD&trade;&nbsp;or&nbsp;downloadable&nbsp;game&nbsp;version&nbsp;that&nbsp;is&nbsp;&nbsp;<br>&nbsp;newer&nbsp;than&nbsp;the&nbsp;patch&nbsp;version.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;(10)&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;If&nbsp;the&nbsp;game&nbsp;version&nbsp;and&nbsp;patch&nbsp;version&nbsp;are&nbsp;the&nbsp;same&nbsp;or&nbsp;the&nbsp;patch&nbsp;version&nbsp;is&nbsp;newer,&nbsp;&nbsp;<br>&nbsp;the&nbsp;patch&nbsp;boot&nbsp;file&nbsp;is&nbsp;launched&nbsp;(patch&nbsp;launch).&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Creating an Application that Supports Patching</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes matters that you should carefully consider when creating an application that will use patches for extending its functionality.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Overview of the Process</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The process for developing and releasing an application that supports patching is briefly described below.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>Approving plans</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If you want to create an application for which you plan to use patches to extend its functionality, contact the SCE Publisher Relations Department during the planning stage to discuss the content of the patches, estimated time periods, and estimated number of times patches will be made.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>Creating and testing the application</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Generally speaking, there are no special requirements for supporting patches in an application. However, if your application will use the game update library to check for new patches, you must test this functionality. Create a dummy patch package, use the Title Patch Publishing System to upload it to the development patch server, and verify that update processing works as intended.<br>When creating the master disc, set APP_VER appropriately in PARAM.SFO. Also, if you want to share the patch for an application that has multiple master discs, specify the representative DISC_ID for GAMEDATA_ID.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_3"><h4>
+(3)&nbsp;<b>Creating and testing the patch package</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When releasing a patch, create the patch program and data, and create and test the patch package together with content information. For information about the procedure for creating a patch package, refer to the "PSP&trade; Patch Package Creation Guide" document.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_4"><h4>
+(4)&nbsp;<b>Testing using the development patch server</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the Title Patch Publishing System to upload the patch package to the development patch server. If all tests thus far have been successful, there should be no problems, but be sure to test the update itself and the updated application.<br>In particular, verify that the update can be performed properly as intended from all previously released versions.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_1_4_1">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">To test patch distribution using the development patch server, check the Title Patch Publishing System setting "Server Setting (development server)" -&gt; "ACL Setting (development server)" to verify that the IP address of the machine from which the application will be run is permitted to access the server.<br>If access is not permitted, the application will be considered not to have an update.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_5"><h4>
+(5)&nbsp;<b>Submitting to QA</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the Title Patch Publishing System to submit the patch package to QA. You can also submit multiple patch packages with different versions at the same time.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_6"><h4>
+(6)&nbsp;<b>Releasing the patch</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the patch package has been approved by QA, it can be moved to the production patch server. QA will perform tasks for releasing the package. If you have a desired release date, contact the SCE Publisher Relations Department.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Making use of Versions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The application version is represented by the APP_VER value "<i>xx.yy</i>" in PARAM.SFO. <i>xx</i> represents the major version and <i>yy</i> represents the minor version.<br>Assume the master disc or package version is "01.00." Basically the minor version is incremented by 1 each time a patch is released ("01.01," "01.02," "01.03," …). The major version is incremented by 1 and the minor version is returned to 0 only when the application is remastered ("02.00," "03.00," "04.00," …).<br>System software treats the version as a 4-digit number without the decimal point, and it recognizes a larger number as a newer version. Also, if APP_VER does not exist in PARAM.SFO, system software considers it to be "00.00."<br><br>Version transitions proceed sequentially and linearly from the oldest version to the newest version. When a version is updated, the result must be the same regardless of which version of the game was used as the base version for the update.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7  Version Transitions by Patches</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Patch Package Configurations</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The two types of patch packages, cumulative patch packages and differential patch packages, have different configurations.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_8">
+<div style="margin-left:40px;"><h4><b>Cumulative patch package</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A cumulative patch package can update an application to the patch version from any past version. It contains all additional data released in the past and required for the patch version.<br>When the latest version is a cumulative patch package, only that package is placed on the patch server, because that patch package alone can be used to update the application from any past version.<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8  Cumulative Patch Package</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_9">
+<div style="margin-left:40px;"><h4><b>Differential patch package</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A differential patch package can update an application to the patch version but only from a certain specific version. Of the additional data required for the patch version, the differential patch package only contains the data not included in that specific original version. The PARAM.SFO file contained in the differential patch package must contain TARGET_APP_VER, which indicates the differential target version, in addition to APP_VER, which indicates its own version.<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 9  Differential Patch Package</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">When the latest version is a differential patch package, all patch packages that are required for updating the application to the differential target version are placed on the patch server in addition to that differential patch package. System software automatically selects, downloads, and installs the required patch packages from the current application version.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_10">
+<div style="margin-left:40px;"><h4><b>Patch package configuration examples</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Let's consider an example in which three patches (versions 1.01, 1.02, and 1.03) were released for a UMD&trade; game or downloadable game.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 1.01 (cumulative patch package) <br>First patch package. The first patch package is handled as a cumulative patch package.
+<li> 1.02 (differential patch package) <br>Differential package from 1.01. TARGET_APP_VER is set to 01.01 and this package contains only files that were added or changed since version 1.01. <br>Two patch packages (1.01 and 1.02) are placed on the patch server, and only the 1.02 patch is downloaded and installed if the user had already applied the 1.01 patch, while both the 1.01 and 1.02 patches will be downloaded and installed if the user had not applied the 1.01 patch.
+<li> 1.03 (differential patch package) <br>Differential package from 1.02. TARGET_APP_VER is set to 01.02 and this package contains only files that were added or changed since version 1.02. <br>Three patch packages (1.01, 1.02, and 1.03) are placed on the patch server, and only the required packages are downloaded and installed depending on the application version the user is using.
+</ul></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English010.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 10  Patch Package Configuration Example</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Support When Application is Remastered</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This section uses an example to explain how to assign application versions when both patching and remastering an application. In the following example, we consider the case of remastering the application after cumulative patch 1.01 and differential patch 1.02 are applied.<br>First, each time the patch is updated, the minor version is incremented by 1 as described earlier:  "01.01," "01.02," …<br>Then when the application is remastered, the major version is updated to "02.00." (To remaster the application three or more times, update the major version to "03.00," "04.00," …)<br>At the same time, prepare a differential patch for providing the equivalent content as the remastered application. Set the value of APP_VER for this differential patch to "02.00", which is the same version as the remastered application (see Figure 11).<br><br>When differential patches are released again after the application is remastered, set APP_VER to "02.01" and "02.02" (see Figure 12). Note that the post-remaster patches are launched from both the original master disc and the remaster disc.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>APP_VER</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>TARGET_APP_VER</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Note</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Master disc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.00&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Patch package (1)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.01&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cumulative patch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Patch package (2)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.02&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.01&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Differential patch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Remaster disc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;02.00&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Patch package (3)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;02.00&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.02&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Differential patch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Patch package (4)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;02.01&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;02.00&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Differential patch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Patch package (5)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;02.02&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;02.01&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Differential patch&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English011.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 11  Patching and Remastering Configuration Example</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Overview-English012.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 12  Post-Remastering Patching Configuration Example</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Creating a Patch Package</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the main processing performed by a program launched as a patch and explains how to create PARAM.SFO, PBOOT.BIN, and other files distributed in the patch package. For a list of required files and the procedure for collecting them in a package, refer to the "PSP&trade; Patch Package Creation Guide" document<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Patch Program Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Normally, the processing performed by PBOOT.BIN when it is launched as a patch, is virtually the same as that performed by EBOOT.BIN of a UMD&trade; game or downloadable game. When the game is launched by PBOOT.BIN, data files and program files in the UMD&trade; game or downloadable game (other than EBOOT.BIN) can be read from the UMD&trade; or downloadable game image in the same way as if the game were launched from the disc. When the patch contains revised versions of those files, the game can access them from the directory where the patch was installed. (An alternative way of explaining this is that when program files other than EBOOT.BIN or data files are revised, they are distributed together with the revised PBOOT.BIN file so that they can be read from the directory where the patch was installed.)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Method of Creating PARAM.SFO</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The system file editor (SystemFileEditor) is used to create PARAM.SFO. Use the method described below to create the PARAM.SFO file that will be distributed as the patch.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Launch the system file editor (SystemFileEditor.exe).</li>
+<li VALUE=2> Select the [New] command from the [File] menu and the config file (*.sfc) search dialog will appear. Select the patch config file (MSGamepatch_SystemFile_Config.sfc) contained in the systemfile_conf directory of the tool package, and click [Open (O)].</li>
+<li VALUE=3> Set the following parameters.</li>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Key</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description of Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting Example</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TITLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game title name&nbsp;&nbsp;<br>&nbsp;&nbsp;Character code: UTF8&nbsp;&nbsp;<br>&nbsp;&nbsp;Length: Up to 128 bytes&nbsp;&nbsp;<br>&nbsp;&nbsp;     (including NULL)&nbsp;&nbsp;<br>&nbsp;&nbsp;Must not contain newlines.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Prairie Warrior&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PARENTAL_LEVEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Parental lock level&nbsp;&nbsp;<br>&nbsp;&nbsp;Setting: 0 to 11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Product number&nbsp;&nbsp;<br>&nbsp;&nbsp;Allowable characters: A to &nbsp;&nbsp;<br>&nbsp;&nbsp;Z and 0 to 9&nbsp;&nbsp;<br>&nbsp;&nbsp;Length: Up to 13 bytes&nbsp;&nbsp;<br>&nbsp;&nbsp;    (including NULL)&nbsp;&nbsp;<br>&nbsp;&nbsp;Must be set.&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>(*) Must not include </b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>hyphens "-".</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ABCD01234&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_VERSION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Optional&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Disc version&nbsp;&nbsp;<br>&nbsp;&nbsp;Numbers can be set as &nbsp;&nbsp;<br>&nbsp;&nbsp;desired in the following &nbsp;&nbsp;<br>&nbsp;&nbsp;format.&nbsp;&nbsp;<br>&nbsp;&nbsp;Format: X.XX (X = 0 to 9)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.00&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;REGION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Region&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(The SystemFileEditor &nbsp;&nbsp;<br>&nbsp;&nbsp;default value need not be &nbsp;&nbsp;<br>&nbsp;&nbsp;changed.)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BOOTABLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Whether or not it is &nbsp;&nbsp;<br>&nbsp;&nbsp;bootable&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(The SystemFileEditor &nbsp;&nbsp;<br>&nbsp;&nbsp;default value need not be &nbsp;&nbsp;<br>&nbsp;&nbsp;changed.)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DRIVER_PATH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device driver path name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(The SystemFileEditor &nbsp;&nbsp;<br>&nbsp;&nbsp;default value need not be &nbsp;&nbsp;<br>&nbsp;&nbsp;changed.)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ATTRIBUTE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(The SystemFileEditor &nbsp;&nbsp;<br>&nbsp;&nbsp;default value need not be &nbsp;&nbsp;<br>&nbsp;&nbsp;changed.)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PSP_SYSTEM_VER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&trade; system software &nbsp;&nbsp;<br>&nbsp;&nbsp;version required to &nbsp;&nbsp;<br>&nbsp;&nbsp;execute the patch&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(The SystemFileEditor &nbsp;&nbsp;<br>&nbsp;&nbsp;default value need not be &nbsp;&nbsp;<br>&nbsp;&nbsp;changed.)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CATEGORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;System file category&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(The SystemFileEditor &nbsp;&nbsp;<br>&nbsp;&nbsp;default value need not be &nbsp;&nbsp;<br>&nbsp;&nbsp;changed.)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;USE_USB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Whether or not USB &nbsp;&nbsp;<br>&nbsp;&nbsp;accessory is used&nbsp;&nbsp;<br>&nbsp;&nbsp;Used: 1&nbsp;&nbsp;<br>&nbsp;&nbsp;Not used: 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;APP_VER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Enter the patch version.&nbsp;&nbsp;<br>&nbsp;&nbsp;Set this carefully, &nbsp;&nbsp;<br>&nbsp;&nbsp;otherwise the update may &nbsp;&nbsp;<br>&nbsp;&nbsp;not be applied properly.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.00&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TARGET_APP_VER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Optional&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For a differential patch &nbsp;&nbsp;<br>&nbsp;&nbsp;package, enter the &nbsp;&nbsp;<br>&nbsp;&nbsp;differential target version.&nbsp;&nbsp;<br>&nbsp;&nbsp;Set this carefully, &nbsp;&nbsp;<br>&nbsp;&nbsp;otherwise the update may &nbsp;&nbsp;<br>&nbsp;&nbsp;not be applied properly.&nbsp;&nbsp;<br>&nbsp;&nbsp;If omitted, the patch will &nbsp;&nbsp;<br>&nbsp;&nbsp;be handled as a &nbsp;&nbsp;<br>&nbsp;&nbsp;cumulative patch package.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.00&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PBOOT_TITLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Required&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Patch title name&nbsp;&nbsp;<br>&nbsp;&nbsp;Character code: UTF8&nbsp;&nbsp;<br>&nbsp;&nbsp;Length: Up to 128 bytes&nbsp;&nbsp;<br>&nbsp;&nbsp;     (including NULL)&nbsp;&nbsp;<br>&nbsp;&nbsp;Must not include newlines.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Prairie Warrior&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GAMEDATA_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Optional&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Identifier used in place of &nbsp;&nbsp;<br>&nbsp;&nbsp;the product number to &nbsp;&nbsp;<br>&nbsp;&nbsp;allow patch sharing&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ABCD12345&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<li VALUE=4> When you finish entering the parameters, execute the [Convert] command in the [File] menu to convert to a system file.</li>
+<li VALUE=5> When conversion has completed successfully, a system file with extension .sfo will be created.</li>
+<li VALUE=6> Rename the saved file PARAM.SFO and use this file.</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Creating a Patch Program File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When developing a program to be included in a patch, be sure to test not only that the program itself works properly, but also that the application works properly after the old version is updated by the program.<br>You can recreate the state when the patch is installed by unzipping the ZIP package obtained from the Simple Authoring Service in the root directory of a Memory Stick&trade;, and then you can perform operational testing using the PSP&trade; development tool.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>Creating Patch Content Information Files and Data Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A patch package is encrypted. After it is successfully installed, it will be decrypted and the contents verified to be correct. Therefore, no specific means of protecting it from tampering is required. However, it is recommended that the application perform its own encryption processing for important files.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

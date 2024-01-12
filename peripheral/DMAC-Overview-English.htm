@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>DMAC-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+DMAC Driver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The DMAC driver provides the capability to perform high-speed data copying to and from the PSP&trade; on-chip memory over the system main bus.<br>The main purpose of this document is to list precautions to be followed when the DMAC driver is used.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the DMAC driver.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dmac_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dmacdrv.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Library initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The DMAC driver runs as a default module, so it is not necessary to explicitly initialize it.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Memory copy operation</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Perform a memory copy operation using the <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+res = <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>(dst, src, size);
+</font></pre></div>
+<div style="margin-left:67px;"><br>The <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>() function blocks until the memory copy has completed, so it cannot be called from an interrupt handler context, nor can it be called if interrupts or dispatching are disabled.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Transfer alignment and performance</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">The system main bus in the PSP&trade; system chip is 128 bits wide, so in order to perform high-speed transfers with the DMAC, the transfer starting address, transfer destination address and transfer size must all be 16-byte aligned. Optimal DMAC hardware performance can be achieved with 64-byte alignment.<br>The <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>() function determines the transfer width from the difference between the source and destination addresses. There is a small amount of additional overhead due to the CPU uncached memory access.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Cache operations</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">Although the writeback method is used for the ALLEGREX CPU D-cache, when the DMAC is used for memory transfers, cache snooping for maintaining coherency between the D-cache and memory is not performed by the hardware. Coherency must be guaranteed by software.<br><br>Data in the D-cache must be explicitly written back before a memory transfer can be performed by the DMAC, using a function such as <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackRange">sceKernelDcacheWritebackRange</a>(). The following code fragment shows how this is done.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+<a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackRange">sceKernelDcacheWritebackRange</a>(src, size);
+res = <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>(dst, src, size);
+<a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheInvalidateRange">sceKernelDcacheInvalidateRange</a>(dst, size);
+</font></pre></div>
+<div style="margin-left:67px;"><br>Also, before the CPU reads the memory-transferred destination data, the relevant area may have to be invalidated in advance by using a function such as <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheInvalidateRange">sceKernelDcacheInvalidateRange</a>().<br><br>By calling the <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>() function before the <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>() function, coherence can be performed all at once. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+<a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>();
+res = <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>(dst, src, size);
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Memory areas that can be DMA transferred</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">The memory address spaces that can be DMA transferred using the <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>() function of the DMAC driver are limited to the following areas.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> User address space of main memory
+<li> Graphics Engine eDRAM
+<li> Scratchpad SRAM
+</ul></div>
+<div style="margin-left:67px;"><br>If an invalid address is specified, <a href="../peripheral/DMAC-Reference-English.htm#sceDmacMemcpy">sceDmacMemcpy</a>() may return with an error based on argument checking before it starts the DMA operation. However, if a bus error or the like occurs due to an NMI exception, the debugger will enter system stopped state.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

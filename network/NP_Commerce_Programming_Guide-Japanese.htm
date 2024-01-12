@@ -1,0 +1,568 @@
+<html lang="jp">
+<head>
+<title>NP_Commerce_Programming_Guide</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PlayStation&reg;Network コマース プログラミングガイド
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>このドキュメントについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">このドキュメントでは、PlayStation&reg;Network（通称NP）の提供するコマースサービスを利用するアプリケーションの開発について説明します。<br>まず、PlayStation&reg;Storeで取り扱えるプロダクトのタイプと属性について説明し、それらをどのように組み合わせて「商品」とするか、アプリケーション内ではどのような処理を行ってその商品を取り扱うか、いくつか代表的と思われる事例を示します。<br>続いて、PlayStation&reg;Storeで配信するプロダクトと、PlayStation&reg;Storeからプロダクトを購入する機能を持つアプリケーションの開発工程について概略を示します。<br>また、開発支援機能として、ウォレットのチャージとタイトルストアのプレビュー機能について説明します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>プロダクトの構成と取り扱い</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>プロダクトのタイプと属性</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PlayStation&reg;Storeで配信するプロダクトは、以下の2種類を組み合わせて構成します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> DRMコンテンツ<br>ユーザーがダウンロードし、PSP&reg;のMemory Stick&trade;に保存して使用するソフトウェアやデータ
+<li> サービスエンタイトルメント<br>有効期間や利用できる回数を設定でき、NPサーバー上で管理される権利情報（チケット）
+</ul></div>
+<div style="margin-left:50px;"><br>属性としては、ユーザーごとの購入履歴に応じてPlayStation&reg;Storeでの表示の有無を制御する「エリジビリティルール」を設定することができます。<br>プロダクトのタイプと属性については「NP プロダクトマネジメントガイド」ドキュメントで具体的に説明されていますので参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>商品の事例</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PlayStation&reg;Networkのコマースサービスを利用して実現できる商品の代表的な形態を以下に例示し、それぞれ技術的な要点について説明します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>ダウンローダブルゲーム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">単独で起動できるフルセットのゲームアプリケーションをDRMコンテンツとして配信することができます。パッケージとして販売するゲームのサブセットを体験版として無償で配信するといったことも可能です。<br>アプリケーションの実行ファイル・データファイル・コンテンツ情報ファイルをまとめてダウンローダブルゲームパッケージを作成し、DRMコンテンツとして登録してください。<br>ダウンローダブルゲームは購入時にMemory Stick&trade;にインストールされ、システムソフトウェアの「ゲーム」列から選択して起動することができるようになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_2">
+<div style="margin-left:40px;"><h4><b>追加ゲームデータ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ゲーム内で使用する追加アイテムや追加キャラクター、追加シナリオなどのデータをDRMコンテンツとして配信することができます。タイトルストアに配置すれば、該当のアプリケーション内でのみ購入できるようになります。<br>配信するデータとゲームデータとしてのコンテンツ情報ファイルをまとめて追加ゲームデータパッケージを作成し、DRMコンテンツとして登録してください。<br>データは購入時に自動的に、Memory Stick&trade;上の、パッケージに含まれるシステムファイル(PARAM.SFO)で指定した品番に基づくディレクトリに保存されます。アプリケーションはそのディレクトリ内に追加アイテムのファイルが存在するかどうか調べ、存在すればそれを使用するようにプログラミングしておくことになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_3">
+<div style="margin-left:40px;"><h4><b>消費型アイテム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">たとえば弾丸や燃料などのようにゲーム内で一定回数だけ使用できるようなアイテムを、サービスエンタイトルメントを用いて実現することができます。つまり、そのアイテムを一定回数だけ消費する権利を販売する、ということです。複数購入すれば、その分だけ使用可能回数が加算されます。利用可能回数は、NPサーバーによって管理されますので、プレイ時にユーザーはネットワークに接続する必要があります。<br>このようなアイテムを実現するには、サービスエンタイトルメントを作成するときに利用可能回数を設定してください。またアプリケーションには、そのアイテムを使用する前にNPマネージャユーティリティのチケットAPIを用いて残っている利用可能回数をNPサーバーに問い合わせ、アイテムが消費されたらそのことを同じくチケットAPIを用いてNPサーバーに通知するしくみを実装してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_4">
+<div style="margin-left:40px;"><h4><b>期限付きダウンローダブルゲーム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ダウンローダブルゲームを、購入してから一定の期間だけ利用できるようにすることができます。たとえば、タイトルの発売前にのみ起動できる体験版をユーザーに提供する、といった用途に適しています。<br>このようなダウンローダブルゲームを実現するには、DRMコンテンツを登録するときに有効期間を設定してください。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">現在のところ、追加ゲームデータをこの方法で販売しても、ユーザーが有効期限について知る方法を用意していません。そのため、追加ゲームデータを、この形態で提供することはできませんので、ご注意ください。ダウンローダブルゲームの有効期限については、ユーザーがシステムソフトウェアから確認することが可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1_5">
+<div style="margin-left:40px;"><h4><b>サブスクリプション型ネットワークサービス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">たとえばMMORPGなど、ゲームサーバーの利用に対して月ぎめで課金するといったようなサブスクリプション型のサービスを、有効期限付きのサービスエンタイトルメントを用いて実現することができます。上記の期限付き機能と同じしくみで実現することもできますし、また、ユーザーの権利が有効かどうかをクライアントアプリケーションではなくゲームサーバー側で判断するしくみにすることも可能です。<br>ゲームサーバー側で判断する場合は、クライアントアプリケーションはNPマネージャユーティリティのチケットAPIを用いてNPサーバーからチケットを取得してゲームサーバーに転送し、ゲームサーバー上は「TCM(Ticket Checker Module)」を用いてチケットに含まれる権利情報を検証し、その結果に応じてアクセスを制御する、という処理を行います。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_2">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">現在のところ、サブスクリプション型ネットワークサービスは使用できません。<br></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>開発工程の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PlayStation&reg;Networkのコマースサービスを利用するプロダクト/アプリケーションの開発にあたって、あらかじめいくつかの事務手続きが必要になります。詳細はPSP&reg; Developer Networkウェブサイトからお問い合わせください。<br><br>また、PSP&reg;開発ツールからNPサーバーにアクセスするために、ネットワークを適切に設定してアカウントを作成（サインアップ）していただく必要があります。具体的な手順はPSP&reg; Developer Networkウェブサイト上で公開されている「開発用NPユーザガイド」ドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>プロダクトとアプリケーションの開発工程</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下では、PlayStation&reg;Storeにアクセスしてアイテムや権利を購入する機能を持つアプリケーションと、そのアプリケーションで利用する追加ゲームデータとを合わせて開発する工程について概略を説明します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>追加ゲームデータの作成とローカルテスト</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">まず、追加ゲームデータとして配信するプログラムとデータを作成してください。作業上の要点を次に示します（詳細は「NPDRMライブラリ」「追加ゲームデータパッケージ作成ガイド」ドキュメントを参照してください）。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 暗号化したいデータファイルの拡張子を.edatとし、システムファイル、コンテンツ情報ファイルとあわせてZIPアーカイブを作成する
+<li> 弊社が提供するオーサリングサーバーにZIPアーカイブをアップロードし、追加ゲームデータパッケージを作成する
+<li> PlayStation&reg;3またはPCを用いて、Memory Stick&trade;に追加ゲームデータパッケージを展開する
+<li> PSP&reg;開発ツールにて、アプリケーションから正しく利用できることをテストする
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  追加ゲームデータの作成とローカルテスト</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>開発用サーバーへのアップロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ローカルテストした追加ゲームデータパッケージを開発用サーバーへアップロードし、コンテンツとして登録して、プロダクト情報やカタログを作成してください。サービスエンタイトルメントもこの段階で開発用サーバー上に作成してください。作業上の要点を次に示します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> NPDRMパッケージをDrop Pointにアップロードする
+<li> Network Platform Management Tool (NPMT)を用いてカタログおよびプロダクト情報を編集する
+<li> NPMTを用いてサービスエンタイトルメントを作成する
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  開発用サーバーへのアップロード</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>開発用サーバーでのテスト</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アプリケーションからPlayStation&reg;Storeにアクセスし商品をブラウズして購入する処理を、NP IN-GAMEコマース2ユーティリティを用いて実装してください。この処理が正しく動作することを、開発用サーバー上に作成したプロダクトをブラウズ・購入してテストしてください。<br><br>コンテンツについては、正しくダウンロードされゲームデータに正しく保存されること、アプリケーションから正しく利用できることを確認してください（購入ができれば、後の処理はローカルテストで確認していますから正しく動作するはずです）。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  コンテンツの購入テスト</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">サービスエンタイトルメントについては、NPマネージャユーティリティのチケットAPIを用いてユーザーが権利を持っているかどうか確認する処理を実装し、この処理が正しく動作することをテストしてください。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  サービスエンタイトルメントの購入テスト</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>QA</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">開発者側で開発用サーバーでのテストを終了したら、QA用サーバーへパブリッシュし、QA用サーバー上で弊社品質管理部がテストを行います。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>公開</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">テスト完了後、プロダクトはエンドユーザー向けの本番用サーバーへ移されます。このときに最終的な暗号化が行われます。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Commerce_Programming_Guide-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5  QAとリリース</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>開発支援機能</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>ウォレットのチャージ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">チェックアウト処理を完了するためには、購入するコンテンツの価格以上の金額がユーザーのウォレットにチャージされている必要があります。<br>ウォレットへのチャージは、システムソフトウェアのアカウント管理メニューで行うことができます。<br>開発用サーバーでは、以下のクレジットカード情報またはPlayStation&reg;Network Cardの番号を利用して自由にチャージすることができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_6">
+<div style="margin-left:40px;"><h4><b>クレジットカード</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・クレジットカード番号：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;下記表のクレジットカード番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・有効期限：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・住所：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・名前：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・CVCコード：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意の3桁の数字&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>国・地域</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カード種別</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カード番号</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Japan&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Taiwan&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Hong Kong&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Singapore&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;European Countries&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4111 1111 1111 1111&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;United States&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4444 4444 4444 4448&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Canada&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VISA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4444 4444 4444 4448&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_7">
+<div style="margin-left:40px;"><h4><b>PlayStation&reg;Network Card</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・PlayStation&reg;Network Cardの番号：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;下記表のPlayStation&reg;Network Cardの番号&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>国・地域</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PlayStation&reg;Network Cardの番号</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>チャージ金額</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Japan&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;M2LN-NHFM-66H9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;10,000 JPY&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;United States&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;77R2-CLFC-7AK9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Canada&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7NE3-KHFR-TT63&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 CAD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Taiwan, Province of China&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;7DKD-5CF5-J7H2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;600 TWD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Hong Kong&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5E2N-42FG-48NE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;160.00 HKD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;UK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;QGFF-LMFL-5CE6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 GBP&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Ireland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AM8T-NMF8-8A39&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Belgium&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RPQB-T7F5-NDG5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Luxembourg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;77DP-66F5-F2JL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Netherland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;BQ77-98FP-CCQK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;France&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Q5A3-2PF4-KPP4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Germany&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;R6PN-44FA-L4G9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Austria&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;D828-PEFE-L29H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Switzerland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8LCJ-7CFA-333C&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;80.00 CHF&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Italy&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;B676-EEFD-KQ6K&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Portugal&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;F6BN-DJF7-R9E9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Denmark&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FPKN-5HFN-C7CB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;400.00 DKK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Finland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3PGN-QDFF-Q2RJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Norway&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;TQTD-QEFN-QNEJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;400.00 NOK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sweden&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;37GT-AGFQ-3QTJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;400.00 SEK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Australia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5L85-4HFF-3A9B&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;80.00 AUD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;New Zealand&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4M2P-6JFP-M4QG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;100.00 NZD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Spain&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;6HC2-MEF9-77QE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Russia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;83NT-9QF2-QBQ6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1,500 RUB&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;UAE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;E3TE-TLF8-ETNK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;South Africa&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RFP5-8NFA-NNPD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;500.00 ZAR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Singapore&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4CAT-6MF6-KGND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;40.00 SGD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Korea&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;BK7N-HCFE-EG92&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50,000 KRW&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Czech Republic&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;L45D-3NFM-DKRM&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1,500.00 CZK&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Poland&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AGCF-FCF4-CPQT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;200.00 PLN&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Saudi Arabia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DP8B-85FK-P93A&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Greece&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;P2PH-T8FM-R55N&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 EUR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Mexico&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;EHJP-44FF-CCAB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;50.00 USD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Indonesia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GKD5-6NFA-7TG7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;175,000 IDR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Thailand&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;25JK-GQF7-QBM9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1,000.00 THB&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>タイトルストアのプレビュー</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;開発ツールのシステムソフトウェアには、タイトルストアのプレビューを行う機能が用意されています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>サインイン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">プレビューしたいタイトルストアのカタログへのアクセス権を持つアカウントでサインインしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>サービスIDの設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">システムソフトウェアのメニューで、「設定」&rarr;「Debug Settings」&rarr;「Service ID」を選んでください。オンスクリーンキーボードが表示されますので、サービスIDを入力してください。<br>例) IV0002-NPXS00004_00<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>プレビュー</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">システムソフトウェアのメニューで「PlayStation&reg;Network」&rarr;「Title Store Preview」を選択すると、開発用サーバー上のカタログが表示されます。4枚あるタブのうち、左端のタブにリージョナルストア用のGlobalカタログが表示され、その隣のタブにタイトルストア用のIn-Gameカタログが表示されます。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<html lang="en">
+<head>
+<title>Interrupt_Manager-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+intrman(PSP&trade; Interrupt Manager) Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelCpuSuspendIntr"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelCpuSuspendIntr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Interrupt Control]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Save interrupt enabled/disabled state and suspend interrupts<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelCpuSuspendIntr</b>(
+	void
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Previous interrupt enabled/disabled state <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This service call suspends all interrupts and returns the interrupt enabled/disabled state that was in effect immediately before the suspension operation. (The <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuResumeIntr">sceKernelCpuResumeIntr</a>() function is used to resume the state.)<br>All CPU interrupts are suspended independently of the individual interrupt enabled/disabled state for each interrupt cause (in other words, the interrupt controller's per-interrupt mask register does not change).<br>This service called is used as a pair with <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuResumeIntr">sceKernelCpuResumeIntr</a>() or <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuResumeIntrWithSync">sceKernelCpuResumeIntrWithSync</a>().<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelCpuResumeIntr"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelCpuResumeIntr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Interrupt Control]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Resume interrupt enabled/disabled state<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+void <b>sceKernelCpuResumeIntr</b>(
+	int <i>oldstat</i>
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oldstat</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Previous enabled/disabled state that was obtained by <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This service call returns the interrupt enabled/disabled state to the previous state, which was saved in <i>oldstat</i>. This service call is used in a pair with <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>().<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int oldstat;
+oldstat = <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>();
+/* Interrupts disabled period */
+sceKernelCpuResumeIntr( oldstat );
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelCpuResumeIntrWithSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelCpuResumeIntrWithSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Interrupt Control]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Resume interrupt enabled/disabled state<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+void <b>sceKernelCpuResumeIntrWithSync</b>(
+	int <i>oldstat</i>
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oldstat</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Previous enabled/disabled state that was obtained by <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This service call returns the interrupt enabled/disabled state to the previous state, which was saved in <i>oldstat</i>.<br>It differs from <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuResumeIntr">sceKernelCpuResumeIntr</a>() in that before a CPU interrupt enabled condition is changed, the sync instruction is executed and writing to the bus (or device) is terminated.<br>This service call is used in a pair with <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>().<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int oldstat;
+oldstat = <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>();
+/* Interrupts disabled period */
+/* Write operation for suspending or clearing device interrupts */
+sceKernelCpuResumeIntrWithSync( oldstat );
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelIsCpuIntrSuspended"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelIsCpuIntrSuspended<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Interrupt Control]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Return previous interrupt enabled/disabled state<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelIsCpuIntrSuspended</b>(
+	int<i> oldstat</i>
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oldstat</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Previous enabled/disabled state that was obtained by <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Zero is returned if the previous state was interrupts enabled.<br>A non-zero value is returned if the previous state was interrupts disabled.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This service call returns a value indicating whether or not the previous state that was obtained by <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>() was an interrupt-disabled state.<br>Its intended use is for verification during debugging.<br>Do not write code that omits a call to <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuResumeIntr">sceKernelCpuResumeIntr</a>(oldstat) if you know that the value for <i>oldstat</i> obtained by <a href="../kernel/Interrupt_Manager-Reference-English.htm#sceKernelCpuSuspendIntr">sceKernelCpuSuspendIntr</a>() is interrupt-disabled.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelIsCpuIntrEnable"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelIsCpuIntrEnable<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Interrupt Control]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Return whether CPU is currently interruptable<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelIsCpuIntrEnable</b>(
+	void
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">A non-zero value is returned if interrupts are currently enabled.<br>Zero is returned if interrupts are currently disabled.<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This service call returns whether or not the CPU is currently interruptable.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<html lang="jp">
+<head>
+<title>libgameupdate-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ゲームアップデートライブラリ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームアップデートライブラリ（libgameupdate）は、当該アプリケーションに対するパッチの有無を確認する機能を提供します。<br>実際のパッチのダウンロードおよびインストールは、システムソフトウェアがこれを行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgameupdateを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgameupdate.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgameupdate_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ゲームアップデートライブラリは、PRX形式のモジュールとして提供されます。ゲームアップデートライブラリモジュールを使用するためには、libgameupdate_stub_weak.aを静的にリンクした上、モジュールユーティリティのAPIにてロード・アンロードを行う必要があります。<br>モジュールのロード・アンロードについて詳しくは、「ユーティリティサービス リファレンス」ドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/net/libgameupdate</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ゲームアップデートライブラリの基本的な使い方を示したサンプルです。デバッガモードからの起動でも動作しますが、アップデートサーバーへの問い合わせは行いません。実際の動作確認を行う場合は、UMD&reg; Image GeneratorにてUMD&reg;イメージを作成し、DVD-Rディスク等に書き込んでからご使用ください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>依存するライブラリモジュールのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームアップデートライブラリは、以下のモジュールおよびモジュールセットに依存します。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET共通モジュールセット
+<li> PSPNETインフラストラクチャモードモジュールセット
+<li> libparse_uriモジュール
+<li> libparse_httpモジュール
+<li> HTTPモジュールセット
+<li> SSLモジュールセット
+</ul></div>
+<div style="margin-left:50px;">モジュールユーティリティを使用して、上記モジュールおよびモジュールセットをロードします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ゲームアップデートライブラリモジュールのロード処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">依存するモジュールのロードに引き続き、ゲームアップデートライブラリモジュールのロード処理を行います。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NET_GAMEUPDATE);
+if (ret &lt; 0) {
+    //J エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>依存するライブラリの使用準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームアップデートライブラリの初期化処理を行う前に、依存するライブラリの初期化処理を行います。以下は処理の流れの一例です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//J pspnetライブラリの初期化
+ret = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetInit">sceNetInit</a>(PSPNET_POOLSIZE, CALLOUT_TPL, 0, NETINTR_TPL, 0);
+if(ret &lt; 0){
+    //J エラー処理
+}
+
+//J pspnet_inetライブラリの初期化
+ret = <a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInit">sceNetInetInit</a>();
+if(ret &lt; 0){
+    //J エラー処理
+}
+
+//J pspnet_resolverライブラリの初期化
+ret = <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverInit">sceNetResolverInit</a>();
+if(ret &lt; 0){
+    //J エラー処理
+}
+
+//J pspnet_apctlライブラリの初期化
+ret = <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlInit">sceNetApctlInit</a>(SCE_APCTL_STACKSIZE, SCE_APCTL_PRIO);
+if(ret &lt; 0){
+    //J エラー処理
+}
+
+//J libsslの初期化
+ret = <a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>(LIBSSL_POOLSIZE);
+if(ret &lt; 0){
+    //J エラー処理
+}
+
+//J libhttpの初期化
+ret = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>(LIBHTTP_POOLSIZE);
+if(ret &lt; 0){
+    //J エラー処理
+}
+
+//J HTTPSの初期化
+ret = <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>(0, NULL, NULL, NULL);
+if(ret &lt; 0){
+    //J エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>初期化処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">依存するライブラリの初期化準備に引き続き、ゲームアップデートライブラリの初期化処理を行います。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>//J libgameupdateの初期化
+ret = <a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateInit">sceGameUpdateInit</a>(NULL);
+if(ret &lt; 0){
+    //J エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>パッチ確認処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">パッチ確認処理を実行するためには、実行時にTCP/IPネットワークに接続された状態であることが必要です。ネットワークへの接続は、インフラストラクチャモード用ネットワーク設定ユーティリティを呼び出して行います。<br>接続完了後、<a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateRun">sceGameUpdateRun</a>()を呼び出してパッチ確認処理を実行します。引数<i>result</i>には、結果を引き取るための<a href="../network/libgameupdate-Reference-Japanese.htm#SceGameUpdateResult">SceGameUpdateResult</a>構造体を指定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int ret;
+<a href="../network/libgameupdate-Reference-Japanese.htm#SceGameUpdateResult">SceGameUpdateResult</a> result;
+
+memset(&amp;result, 0, sizeof(result));
+result.size = sizeof(result);
+
+ret = <a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateRun">sceGameUpdateRun</a>(&amp;result);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">この関数はブロッキング関数で、呼び出しスレッドで以下の処理を行います。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> パッチサーバーへの接続処理
+<li> パッチバージョンファイルの取得と解析
+</ul></div>
+<div style="margin-left:50px;"><a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateRun">sceGameUpdateRun</a>()が成功（0を返す）すると、引数<i>result</i>の<a href="../network/libgameupdate-Reference-Japanese.htm#SceGameUpdateResult">SceGameUpdateResult</a>構造体の<i>status</i>メンバに結果が返されます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ステータス</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_NO_UPDATE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新たなパッチは存在しない&nbsp;&nbsp;<br>&nbsp;&nbsp;（最新版の状態になっている）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_UPDATE_FOUND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新たなパッチが存在する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_SYSTEM_UPDATE_NEEDED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムソフトウェアのアップデートが必要&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_MAINTENANCE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メンテナンス中&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">ステータスがSCE_GAMEUPDATE_RESULT_STATUS_UPDATE_FOUNDの場合、<i>app_ver</i>メンバにパッチのアプリケーションバージョンが"XX.YY"の形式で渡されます。例えばアプリケーションバージョンが1.01の場合は"01.01"となります。<br>なお新たなパッチが存在し、そのパッチが新しいシステムソフトウェアを必要とする場合は、ステータスとしてSCE_GAMEUPDATE_RESULT_STATUS_SYSTEM_UPDATE_NEEDEDが返されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>中断処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateAbort">sceGameUpdateAbort</a>()にて<a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateRun">sceGameUpdateRun</a>()の処理を強制的に中断することができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateAbort">sceGameUpdateAbort</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">強制的に中断された<a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateRun">sceGameUpdateRun</a>()には<a href="../network/libgameupdate-Reference-Japanese.htm#SCE_GAMEUPDATE_ERROR_ABORTED">SCE_GAMEUPDATE_ERROR_ABORTED</a>が返されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームアップデートライブラリの終了処理は<a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateTerm">sceGameUpdateTerm</a>()にて行います。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateTerm">sceGameUpdateTerm</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;"><a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateRun">sceGameUpdateRun</a>()実行中に呼び出した場合は、中断処理を行います。このとき<a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateTerm">sceGameUpdateTerm</a>()は中断処理が完了するまでブロックします。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>デバッガモードでの制限について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">起動パラメータに"デバッガモード"を選択して起動させたTOOLでは、ゲームアップデートライブラリは正しく動作しません。<a href="../network/libgameupdate-Reference-Japanese.htm#sceGameUpdateRun">sceGameUpdateRun</a>()はパッチサーバーへの問い合わせをせず、statusにSCE_GAMEUPDATE_RESULT_STATUS_NO_UPDATEを返します。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

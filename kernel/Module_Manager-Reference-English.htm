@@ -1,0 +1,1350 @@
+<html lang="en">
+<head>
+<title>Module_Manager-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&trade; Module Manager Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceKernelLMOption"></a>
+<table width="100%"><td width="70%"><font size=6>SceKernelLMOption<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>sceKernelLoadModule() option structure<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>typedef struct <b>SceKernelLMOption</b> {
+	SceSize <i>size</i>;
+	SceUID <i>mpidtext</i>;
+	SceUID <i>mpiddata</i>;
+	unsigned int <i>flags</i>;
+	char <i>position</i>;
+	char <i>access</i>;
+	char <i>creserved</i>[2];
+} SceKernelLMOption;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(SceKernelLMOption).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mpidtext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory partition into which the module's program part will be loaded.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mpiddata</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory partition into which the module's data part will be loaded. There are currently no valid options.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flags</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Currently undefined.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>position</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the module placement policy as one of the following.&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_KERNEL_LM_POS_Low (= 0):&nbsp;&nbsp;<br>&nbsp;&nbsp;  Place module in the lowest possible address &nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_KERNEL_LM_POS_High (= 1):  &nbsp;&nbsp;<br>&nbsp;&nbsp;  Place module in the highest possible address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>access</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the loading method. &nbsp;&nbsp;<br>&nbsp;&nbsp;This option is not currently valid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>creserved</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reserved area. Not currently valid.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure holds options for controlling the behavior of LoadModule.<br><br>If SCE_KERNEL_UNKNOWN_PARTITION (= 0) is specified for <i>mpidtext</i>, the module will be loaded in a memory partition suitable for the module. <br><br>If the values of the members are set as follows, the operation will be the same as if this option structure were not specified for the argument of LoadModule. <br><br></div>
+        <div style="margin-left:50px;"><pre><font size=3>  mpidtext = SCE_KERNEL_UNKNOWN_PARTITION;
+  position = SCE_KERNEL_LM_POS_Low;
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceKernelSMOption"></a>
+<table width="100%"><td width="70%"><font size=6>SceKernelSMOption<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>sceKernelStartModule()/sceKernelStopModule() option structure<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>
+typedef struct <b>SceKernelSMOption</b> {
+	SceSize <i>size</i>;
+	SceUID <i>mpidstack</i>;
+	SceSize <i>stacksize</i>;
+	int <i>priority</i>;
+	unsigned int <i>attribute</i>;
+} SceKernelSMOption;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of the structure. &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mpidstack</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Partition of the stack of the running thread. &nbsp;&nbsp;<br>&nbsp;&nbsp;If 0 is specified then the stack is allocated in the same partition as the data segment of the module.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>stacksize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stack size. If 0 is specified then the default system value is used.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>priority</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Priority of the running thread. &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>attribute</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute of the running thread. &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure holds options for controlling the behavior of <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>() and <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStopModule">sceKernelStopModule</a>().<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceKernelModuleInfo"></a>
+<table width="100%"><td width="70%"><font size=6>SceKernelModuleInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>sceKernelQueryModuleInfo() information structure<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#define SCE_KERNEL_MAX_MODULE_SEGMENT  4
+
+typedef struct <b>SceKernelModuleInfo</b> {
+	SceSize <i>size</i>;
+	char <i>nsegment;</i>
+	char <i>reserved[3]</i>;
+	int <i>segmentaddr</i>[SCE_KERNEL_MAX_MODULE_SEGMENT];
+	int <i>segmentsize</i>[SCE_KERNEL_MAX_MODULE_SEGMENT];
+	unsigned int <i>entry_addr</i>;
+	unsigned int <i>gp_value;</i>
+	unsigned int<i> text_addr</i>;
+	unsigned int <i>text_size</i>;
+	unsigned int <i>data_size</i>;
+	unsigned int<i> bss_size;</i>
+<i>	</i>unsigned short<i> modattribute;</i>
+<i>	</i>unsigned char<i> modversion[2];</i>
+<i>	</i>char<i> modname[27];</i>
+<i>	</i>char<i> terminal;</i>
+} SceKernelModuleInfo;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of structure&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nsegment</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of segments in the module&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>reserved</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reserved area. Not currently valid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>segmentaddr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Segment starting address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>segmentsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Segment size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>entry_addr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Entry function address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>gp_value</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gp value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>text_addr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Text segment address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>text_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Text segment size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>data_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data segment address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bss_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data segment size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modattribute</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Module attribute&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modversion</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Module version&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Module name&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>terminal</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String terminator. Always 0.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is an information structure. It is used by the <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelQueryModuleInfo">sceKernelQueryModuleInfo</a>() function for obtaining module information.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadModule"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadModule<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load a program module from a file path<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+SceUID <b>sceKernelLoadModule</b>(
+	const char *<i>fileName</i>,
+	int <i>flag</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> *<i>opt</i>
+);
+ 
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename of the module to be loaded.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;There is currently no valid specification.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>opt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specify a pointer to the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> structure which controls how the&nbsp;&nbsp;<br>&nbsp;&nbsp;module is loaded. Specify NULL if not needed. &nbsp;&nbsp;<br>&nbsp;&nbsp;When specifying a structure, set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of loaded module&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_OBJECT">SCE_KERNEL_ERROR_ILLEGAL_OBJECT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NO_MEMORY">SCE_KERNEL_ERROR_NO_MEMORY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NOFILE">SCE_KERNEL_ERROR_NOFILE</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_FILEERR">SCE_KERNEL_ERROR_FILEERR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL">SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Loads a program module specified with a filename.<br>After the program module is loaded, you must call <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>() to start the module. <br>When specifying the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> structure for the <i>opt</i> argument, be sure to set the size of the structure in the size field of the structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadModuleByID"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadModuleByID<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load a program module from a file ID<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+
+SceUID <b>sceKernelLoadModuleByID</b>(
+	int <i>inputid</i>
+	int <i>flag</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> *<i>opt</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>inputid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor opened with sceIoOpen().&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;There is currently no valid specification.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>opt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specify a pointer to the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> structure&nbsp;&nbsp;<br>&nbsp;&nbsp;which controls how the module is loaded. &nbsp;&nbsp;<br>&nbsp;&nbsp;Specify NULL if not needed. &nbsp;&nbsp;<br>&nbsp;&nbsp;When specifying a structure, set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of loaded module&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NO_MEMORY">SCE_KERNEL_ERROR_NO_MEMORY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_OBJECT">SCE_KERNEL_ERROR_ILLEGAL_OBJECT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_FILEERR">SCE_KERNEL_ERROR_FILEERR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_PARTITION_MISMATCH">SCE_KERNEL_ERROR_PARTITION_MISMATCH</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL">SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Loads a program module from a file ID. After that, you must call <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>() to start the module.<br>When specifying the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> structure for the <i>opt</i> argument, be sure to set the size of the structure in the size field of the structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadModuleWithBlockOffset"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadModuleWithBlockOffset<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load a program module in a specific memory block from a file path<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+SceUID <b>sceKernelLoadModuleWithBlockOffset</b>(
+	const char *<i>fileName</i>,
+	SceUID <i>block</i>,
+	SceOff <i>offset</i>
+);
+ 
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename of the module to be loaded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>block</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory block where the module is to be loaded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>offset</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the address where the module is to be loaded as an offset from the beginning of the memory block. The offset must be a multiple of 64.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid &gt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of loaded module&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_OBJECT">SCE_KERNEL_ERROR_ILLEGAL_OBJECT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NO_MEMORY">SCE_KERNEL_ERROR_NO_MEMORY</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NOFILE">SCE_KERNEL_ERROR_NOFILE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_FILEERR">SCE_KERNEL_ERROR_FILEERR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL">SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Loads a program module specified by its filename at the specified offset in the specified memory block.<br>After the program module is loaded, you must call <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>() to start the module.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadModuleByIDWithBlockOffset"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadModuleByIDWithBlockOffset<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load a program module in a specific memory block from a file ID<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+SceUID <b>sceKernelLoadModuleByIDWithBlockOffset</b>(
+	int <i>inputid</i>,
+	SceUID <i>block</i>,
+	SceOff <i>offset</i>
+);
+ 
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>inputid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File ID of the module to be loaded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>block</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory block where the module is to be loaded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>offset</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the address where the module is to be loaded as an offset from the beginning of the memory block. The offset must be a multiple of 64.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid &gt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of loaded module&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_OBJECT">SCE_KERNEL_ERROR_ILLEGAL_OBJECT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NO_MEMORY">SCE_KERNEL_ERROR_NO_MEMORY</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NOFILE">SCE_KERNEL_ERROR_NOFILE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_FILEERR">SCE_KERNEL_ERROR_FILEERR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL">SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Loads a program module specified by its file ID at the specified offset in the specified memory block.<br>After the program module is loaded, you must call <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>() to start the module.<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadModuleBufferUsbWlan"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadModuleBufferUsbWlan<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load program module starting from specified address<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;modulemgr_gamesharing&gt;
+
+SceUID <b>sceKernelLoadModuleBufferUsbWlan</b>(
+	SceSize <i>size,</i>
+	void <i>*base,</i>
+	int <i>flag</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> *<i>opt</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be in interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of region containing module's file image.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>base</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start address of module's file image.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No valid settings currently available.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>opt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies pointer to <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> structure which&nbsp;&nbsp;<br>&nbsp;&nbsp;specifies the behavior at load time. &nbsp;&nbsp;<br>&nbsp;&nbsp;If not needed, specify NULL. When specifying a structure, set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of module which was loaded&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NO_MEMORY">SCE_KERNEL_ERROR_NO_MEMORY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_OBJECT">SCE_KERNEL_ERROR_ILLEGAL_OBJECT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUPPORTED_PRX_TYPE">SCE_KERNEL_ERROR_UNSUPPORTED_PRX_TYPE</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_FILEERR">SCE_KERNEL_ERROR_FILEERR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_PARTITION_MISMATCH">SCE_KERNEL_ERROR_PARTITION_MISMATCH</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL">SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">From a program which was started up with game sharing, this function loads the program module which is present in the memory specified by the base address and size. The program module must then be started up by calling <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>(). <br>Moreover, modules which are loaded using sceKernelLoadModuleBufferUsbWlan() must be 64-byte aligned on a cache boundary.<br>When specifying the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> structure for the <i>opt</i> argument, be sure to set the size of the structure in the size field of the structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelStartModule"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelStartModule<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Start a loaded program module that has not been started<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelStartModule</b>(
+	SceUID <i>modid</i>,
+	SceSize <i>args</i>,
+	const void *<i>argp</i>,
+	int *<i>modresult</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> *<i>opt</i>
+);
+ 
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Loaded module identifier&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>args</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of parameter assigned to the module's start entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to parameter assigned to the module's start entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modresult</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value of module's start entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>opt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specify the behavior of a startup thread. &nbsp;&nbsp;<br>&nbsp;&nbsp;Specify NULL if not needed. When specifying a structure, set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of module that was started and made resident&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_LIBRARY_NOTFOUND">SCE_KERNEL_ERROR_LIBRARY_NOTFOUND</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Starts a program module that was previously loaded with <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelLoadModule">sceKernelLoadModule</a>().Once started, a module cannot be started until it has been stopped, unloaded, and reloaded. <i>args</i> and <i>argp</i> are passed to the module-specific start entry.<br><i>modresult</i> is the result of calling the module's start entry. For a resident module, the module identifier is returned. For a non-resident module, <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned. Note that deadlock will occur if the module is manipulated again within the start entry.<br>When specifying the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> structure for the <i>opt</i> argument, be sure to set the size of the structure in the size field of the structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelStopModule"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelStopModule<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Stop a program module that was previously loaded and started<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelStopModule</b>(
+	SceUID <i>modid</i>,
+	SceSize <i>args</i>,
+	const void *<i>argp</i>,
+	int *<i>modresult</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> *<i>opt</i>
+);
+ 
+</font></pre></div>
+
+<!-- Calling conditions -->
+<div style="margin-left:10px;"><b>Calling conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>	Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Loaded module identifier&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>args</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of parameter assigned to the module's stop entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to parameter assigned to the module's stop entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modresult</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value of module's stop entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>opt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specify the behavior of a stop thread. Specify NULL if not needed. When specifying a structure, set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid &gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of module for which stop processing failed&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ALREADY_STOPPING">SCE_KERNEL_ERROR_ALREADY_STOPPING</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ALREADY_STOPPED">SCE_KERNEL_ERROR_ALREADY_STOPPED</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Calls the stop entry routine of a module that was previously started with <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStartModule">sceKernelStartModule</a>(). If the stop entry routine succeeds, the module is stopped.<br>If a call to the stop entry is successful but stop processing fails, the module identifier is returned. If the stop entry succeeded in stopping the module, <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> is returned.<br>Deadlock will occur if the module is manipulated again within the stop entry.<br>When specifying the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> structure for the <i>opt</i> argument, be sure to set the size of the structure in the size field of the structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelUnloadModule"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelUnloadModule<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Unload a program module<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelUnloadModule</b>(
+	SceUID <i>modid</i>
+);
+
+</font></pre></div>
+
+<!-- Calling conditions -->
+<div style="margin-left:10px;"><b>Calling conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>	Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Module identifier&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of module for which unloading succeeded&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NOT_REMOVABLE">SCE_KERNEL_ERROR_NOT_REMOVABLE</a>	<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Unloads a program module. The module to be unloaded must not be started or must be stopped. The module identifier of the module which was successfully unloaded is returned.<br>A module cannot currently unload itself.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelStopUnloadSelfModuleWithStatus"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelStopUnloadSelfModuleWithStatus<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Stop and unload this program module<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelStopUnloadSelfModuleWithStatus</b>(
+	int <i>exitStatus</i>,
+	SceSize <i>args</i>,
+	const void <i>*argp,</i>
+	int <i>*modresult</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> <i>*pOpt</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>exitStatus</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the return value of the thread which executes the stop entry.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>args</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of the parameters provided to the module's stop entry routine.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the parameters provided to the module's stop entry routine.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modresult</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value of the module's stop entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the behavior of the stop thread. Specify NULL if not needed.&nbsp;&nbsp;<br>&nbsp;&nbsp;When specifying a structure, set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_CAN_NOT_STOP">SCE_KERNEL_ERROR_CAN_NOT_STOP</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NOT_REMOVABLE">SCE_KERNEL_ERROR_NOT_REMOVABLE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ALREADY_STOPPING">SCE_KERNEL_ERROR_ALREADY_STOPPING</a> <br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ALREADY_STOPPED">SCE_KERNEL_ERROR_ALREADY_STOPPED</a> <br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function stops and unloads the program module which called this API. Parameters can be provided to the stop entry.<br>The module to be unloaded must already be started. <br>The thread performing the call will also be stopped and deleted.<br>When specifying the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> structure for the <i>pOpt</i> argument, be sure to set the size of the structure in the size field of the structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelStopUnloadSelfModule"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelStopUnloadSelfModule<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Stop and unload this module<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelStopUnloadSelfModule</b>(
+	SceSize <i>args</i>,
+	const void <i>*argp,</i>
+	int <i>*modresult</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> <i>*pOpt</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>args</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of parameters assigned to the module's stop entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to parameters assigned to the module's stop entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>modresult</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value of module's stop entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Sets the behavior of the stop thread. Specify NULL if not needed. When specifying a structure, set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_CAN_NOT_STOP">SCE_KERNEL_ERROR_CAN_NOT_STOP</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NOT_REMOVABLE">SCE_KERNEL_ERROR_NOT_REMOVABLE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ALREADY_STOPPING">SCE_KERNEL_ERROR_ALREADY_STOPPING</a> <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ALREADY_STOPPED">SCE_KERNEL_ERROR_ALREADY_STOPPED</a> <br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function stops and unloads the program module that called this API. Parameters can be provided to the stop entry.<br>The module that is to be unloaded must have been started.<br>Also, the thread that called this function is stopped and deleted.<br>Functionally, this is a subset of <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelStopUnloadSelfModuleWithStatus">sceKernelStopUnloadSelfModuleWithStatus</a>(), so use that function. This function is retained for backward compatibility.<br>When specifying the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelSMOption">SceKernelSMOption</a> structure for the <i>pOpt</i> argument, be sure to set the size of the structure in the size field of the structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelQueryModuleInfo"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelQueryModuleInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Obtain program module information<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelQueryModuleInfo</b> (
+	SceUID <i>uid,</i>
+	<a href="../kernel/Module_Manager-Reference-English.htm#SceKernelModuleInfo">SceKernelModuleInfo</a> <i>*pInfo</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-enabled or -disabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Module identifer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pInfo</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Information structure for obtaining module information. &nbsp;&nbsp;<br>&nbsp;&nbsp;Set the size of the structure in the size field of the structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNKNOWN_MODULE">SCE_KERNEL_ERROR_UNKNOWN_MODULE</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_CANNOT_GET_MODULE_INFORMATION">SCE_KERNEL_ERROR_CANNOT_GET_MODULE_INFORMATION</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function obtains program module information.<br>The program module for which the information is to be obtained should be a module that was loaded using <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelLoadModule">sceKernelLoadModule</a>() or <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelLoadModuleByID">sceKernelLoadModuleByID</a>(). <br>The state of an unloaded module cannot be obtained.<br>Be sure to set the size of the structure in the size field of the <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelModuleInfo">SceKernelModuleInfo</a> structure. Otherwise, an <a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a> error will be returned.<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelGetModuleId"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelGetModuleId<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get self program module number<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelGetModuleId</b> (
+	void
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of self module&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns the module ID of the module that called the API.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelGetModuleIdByAddress"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelGetModuleIdByAddress<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get program module number specified by address<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelGetModuleIdByAddress</b> (
+	const void* <i>base</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>base</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address where module resides&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of module for address specified by<i> base</i>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>	<br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>	<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns the module ID of the module corresponding to the specified address. An address in user space must be specified for <i>base</i>.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelGetModuleIdList"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelGetModuleIdList<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Module Management]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get list of module numbers for modules residing in user space<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelGetModuleIdList</b> (
+	SceUID *<i>readbuf</i>,
+	int <i>readbufsize</i>,
+	int *<i>count</i>,
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>readbuf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Buffer for storing module identifier&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>readbufsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Byte size of above buffer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>count</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address for storing number of modules&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a> <br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Module_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a> <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns a list of IDs of user modules. If the IDs for all the modules do not fit in <i>readbufsize</i>, only the ones that fit are returned.<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="List of Error Codes"></a>
+<table width="100%"><td width="70%"><font size=6>List of Error Codes<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Error Codes]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Module Manager API Error Codes<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Some kind of abnormality&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020064&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Was called from an interrupt handler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x800200d3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_OBJECT">SCE_KERNEL_ERROR_ILLEGAL_OBJECT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002012d&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Object file format is not correct&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_UNKNOWN_MODULE">SCE_KERNEL_ERROR_UNKNOWN_MODULE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002012e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified module cannot be found&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NOFILE">SCE_KERNEL_ERROR_NOFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002012f&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified file cannot be found&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_FILEERR">SCE_KERNEL_ERROR_FILEERR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020130&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error occurred when reading a file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_PARTITION_MISMATCH">SCE_KERNEL_ERROR_PARTITION_MISMATCH</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020132&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Partition specified as PRX does not match&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ALREADY_STOPPED">SCE_KERNEL_ERROR_ALREADY_STOPPED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020135&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified module has already been stopped&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_CAN_NOT_STOP">SCE_KERNEL_ERROR_CAN_NOT_STOP</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020136&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Module could not be stopped&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NOT_REMOVABLE">SCE_KERNEL_ERROR_NOT_REMOVABLE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020138&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified module cannot be deleted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_LIBRARY_NOTFOUND">SCE_KERNEL_ERROR_LIBRARY_NOTFOUND</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002013c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The referenced library does not exist&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ALREADY_STOPPING">SCE_KERNEL_ERROR_ALREADY_STOPPING</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002013f&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified module is in the process of stopping&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_MODULE_MGR_BUSY">SCE_KERNEL_ERROR_MODULE_MGR_BUSY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020142&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Module manager is BUSY&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_UNSUPPORTED_PRX_TYPE">SCE_KERNEL_ERROR_UNSUPPORTED_PRX_TYPE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020148&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Object file format is incorrect or format is not permitted.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL">SCE_KERNEL_ERROR_ILLEGAL_PERM_CALL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020149&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;An unpermitted API was called&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_CANNOT_GET_MODULE_INFORMATION">SCE_KERNEL_ERROR_CANNOT_GET_MODULE_INFORMATION</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002014a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Could not obtain module information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NO_MEMORY">SCE_KERNEL_ERROR_NO_MEMORY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020190&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not enough memory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_SIZE">SCE_KERNEL_ERROR_ILLEGAL_SIZE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x800201bc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+<title>libbase64-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libbase64 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libbase64 is a library for performing base64 encoding and decoding as defined by RFC2045. The libhttp library uses libbase64 when performing basic and digest authentication, but libbase64 can also be used as a standalone library.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The files which are needed to use libbase64 are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase64.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Static link library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase64.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase64_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase64_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRX module file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase64.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following sample program shows how to use the libbase64 library.<br></div>
+<div style="margin-left:67px;">devkit/sample/net/libhttp/base64/<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">No particular initialization is necessary in order to use libbase64.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_1_1">
+<div style="margin-left:63px;"><h4><b>Encoding into base64</b><br><br></h4></a></div>
+<div style="margin-left:67px;">A byte stream can be encoded into base64 using the procedure shown below. Please note that since memory is not allocated within libbase64, the application must allocate memory for the output. The required memory size is ((input-byte-count + 2) / 3 * 4 + 1) bytes.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	plain[SOURCE_LEN];
+u_char	*base64;
+SceSize malloc_size;
+
+malloc_size =	(SOURCE_LEN + 2) / 3 * 4 + 1;	// Calculate output size
+base64 = (u_char*)malloc(malloc_size);		// Allocate output memory
+<a href="../network/libbase64-Reference-English.htm#sceBase64Encoder">sceBase64Encoder</a>(base64, plain, SOURCE_LEN);	// Encode
+
+</font></pre></div>
+<div style="margin-left:67px;">Base64 encoding is performed by using the <a href="../network/libbase64-Reference-English.htm#sceBase64Encoder">sceBase64Encoder</a>() function, as shown above.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_1_2">
+<div style="margin-left:63px;"><h4><b>Decoding from base64</b><br><br></h4></a></div>
+<div style="margin-left:67px;">A byte sequence which has been encoded into base64 can be decoded using the procedure shown below. Please note that since memory is not allocated within libbase64, the application must allocate memory for the output. The required memory size is (input-byte-count / 4 * 3 + 1) bytes.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	base64[SOURCE_LEN];
+u_char	*plain;
+SceSize malloc_size;
+
+malloc_size = SOURCE_LEN / 4 * 3 + 1;		// Calculate output size
+plain = (u_char*) malloc(malloc_size);		// Allocate output memory
+<a href="../network/libbase64-Reference-English.htm#sceBase64Decoder">sceBase64Decoder</a> (plain, base64, SOURCE_LEN);	// Decode
+</font></pre></div>
+<div style="margin-left:67px;"><br>Base64 decoding is performed by using the <a href="../network/libbase64-Reference-English.htm#sceBase64Decoder">sceBase64Decoder</a>() function, as shown above.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The libbase64 library is referenced from the libhttp library. Problems may occur if the source of libbase64 is overwritten while libhttp is being used. If you make changes to libbase64, be sure to define function names and the like separately. There are no particular restrictions if libhttp is not used together with libbase64.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

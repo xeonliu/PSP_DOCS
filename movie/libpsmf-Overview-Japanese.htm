@@ -1,0 +1,544 @@
+<html lang="jp">
+<head>
+<title>libpsmf-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libpsmf
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>ライブラリの概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfはPSMFファイルのヘッダ部分を解析し、ストリームについての情報を取得するライブラリです。<br>PSMFファイルはPSMFヘッダとPSMFストリームで構成されます。PSMFヘッダにはEP_mapやPSMFストリーム中でのビデオ、オーディオストリームの構成についての情報を格納しており、libpsmfを使うことでこれらの情報を取り出すことができます。取得できる情報は具体的には以下のものになります。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSMFストリーム全体の情報
+<li> PSMFストリームに多重化されたストリームの本数
+<li> PSMFストリームに多重化されたビデオストリームの情報
+<li> PSMFストリームに多重化されたオーディオストリームの情報
+<li> PSMFストリームに多重化されたビデオストリームのEP_map情報
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>PSMFヘッダから情報を取得するまでの流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfを利用した場合、以下のような流れでPSMFヘッダから必要な情報を取得します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libpsmf-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1　PSMFヘッダから情報を取得するまでの流れ</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfを利用する際に必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libpsmf.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;モジュールファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psmf.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psmf_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>関連ドキュメント</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> 動画データの作成と再生処理の概要<br>PSMFデータを作成するための素材データおよび作成方法の概要と、PSMFデータをlibmpegを用いて再生する方法の概要を解説したドキュメントです。
+<li> UMD&reg; Stream Composer(for Game Movie) User's Manual<br>PSMFデータを作成するツールの使用方法を解説したドキュメントです。
+<li> PSMF Composer User's manual<br>PSMFデータを作成するツールの使用方法を解説したドキュメントです。
+<li> libmpeg-Overview<br>libmpegの概要を解説したドキュメントです。
+<li> libmpeg-Reference<br>libmpegの関数リファレンスです。
+<li> libpsmf-Reference<br>libpsmfの関数リファレンスです。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>PSMFヘッダの構造</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>PSMFヘッダから取得できる情報</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSMFヘッダはPSMFストリームに関数情報を保持しています。これらを利用することでデコード後のデータについての情報を事前に知ることができ、またトリックプレイなどを実現することも可能となります。<br><br>PSMFヘッダは以下のような情報を保持しています<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ストリームの開始PTS
+<li> ストリームの終了PTS
+<li> 多重化されたストリームの総数
+<li> 多重化されたビデオストリームの情報
+<li> 多重化されたオーディオストリームの情報
+<li> PsmfMark
+</ul></div>
+<div style="margin-left:50px;"><br>ビデオストリームの情報としては以下のものを取得することができます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> MPEG4-AVCでエンコードされた画像の水平方向ピクセル数
+<li> MPEG4-AVCでエンコードされた画像の垂直方向ピクセル数
+<li> EP_map
+</ul></div>
+<div style="margin-left:50px;"><br>オーディオストリームの情報としてはATRAC3plus&trade;, PCMそれぞれ以下のものを取得することができます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> サンプリング周波数
+<li> チャンネルコンフィグレーション
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>EP_map</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfを用いることで、PSMFヘッダからPSMFストリームに多重化されているビデオストリームのEP_mapを取得することができます。<br>EP_mapとはEntry Pointと呼ばれるビデオストリームを途中から再生することができる地点の情報を集めたものです。PSMFではストリーム中の、途中から再生可能なIDRピクチャの情報がEntry PointとしてEP_mapに記載されます。<br><br>Entry Pointの間隔は400msecから2000msecの間でUMD&reg; Stream Composer(for Game Movie)のVideo Encode Advanced Settingにある、IDR durationによって決められます。また、UMD&reg; Stream Composer(for Game Movie)で強制IDRとして指定したフレームはEntry Pointとなります。したがってストリームの特定の場所から再生させる場合は、その地点を強制IDRとしてエンコードすることで途中からの再生を容易に行うことができます。<br><br>Entry Pointは以下の情報を持っています。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ビデオストリームが再生開始可能なIDRを示す、PSMFストリームの先頭からのオフセット
+<li> オフセットで指定されたIDRのPTS
+</ul></div>
+<div style="margin-left:50px;"><br>これらの情報を取得することで、トリックプレイやビデオストリームを途中から再生することが可能になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>PsmfMark</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfを用いることで、PSMFヘッダからPSMFストリームに多重化されているビデオストリームのPsmfMarkを取得することもできます。<br>PsmfMarkとは、PSMFストリーム中の特定の地点を指すMarkのことで、Chapter Mark、Event Markの2つが存在します。Event Markは特定のビデオストリームに関連付けることが可能です。Chapter Markは全てのストリームが対象となります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>libpsmfの使用手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfは以下のような手順で使用します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_1">
+<div style="margin-left:40px;"><h4><b>PSMFまたはストリームの情報を取得するとき</b><br><br></h4></div></a>
+
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>()を用いてPSMFヘッダのサイズを取得し、PSMFファイルからPSMFヘッダを確保しておきます。</li>
+<li VALUE=2> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>()によって、コンテキストを初期化します。</li>
+<li VALUE=3> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStream">scePsmfSpecifyStream</a>()、<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>()または<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>()を用いて対象とするストリームをセットします</li>
+<li VALUE=4> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPresentationStartTime">scePsmfGetPresentationStartTime</a>()などを用いてストリーム情報を取得します。</li>
+<li VALUE=5> 確保したPSMFヘッダを解放することで終了します。</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_2">
+<div style="margin-left:40px;"><h4><b>Entry Pointの情報を取得するとき</b><br><br></h4></div></a>
+
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>()を用いてPSMFヘッダのサイズを取得し、PSMFファイルからPSMFヘッダを確保しておきます。</li>
+<li VALUE=2> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>()によって、コンテキストを初期化します。</li>
+<li VALUE=3> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStream">scePsmfSpecifyStream</a>()、<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>()または<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>()を用いて対象とするビデオストリームをセットします。</li>
+<li VALUE=4> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>(), <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>()を用いることで必要とするEntry Pointの情報を取得します</li>
+<li VALUE=5> 確保したPSMFヘッダを解放することで終了します。</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_3">
+<div style="margin-left:40px;"><h4><b>PsmfMarkの情報を取得するとき</b><br><br></h4></div></a>
+
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>()を用いてPSMFヘッダのサイズを取得し、PSMFファイルからPSMFヘッダを確保しておきます。</li>
+<li VALUE=2> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>()によって、コンテキストを初期化します。</li>
+<li VALUE=3> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPsmfMarkWithTimestamp">scePsmfGetPsmfMarkWithTimestamp</a>(), <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPsmfMark">scePsmfGetPsmfMark</a>()を用いることで必要とするPsmfMarkの情報を取得します</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>初期化処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfを使用するためには、あらかじめPSMFヘッダを確保し、初期化処理を行う必要があります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+/* 初期化処理 */
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> iReadSize, offset;
+SceUID fd;
+<a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> stream_buf[2048];
+<a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a>* pHeader;
+
+/* open */
+if ( sceIoOpen (filename , SEEK_SET) &lt; 0) {
+/* seekに失敗 */
+}
+
+/* psmfファイルからstreamの先頭アドレスを求めるため、1pack分だけ取得する */
+if( (iReadSize  = sceIoRead(pStrFile, stream_buf, 2048)) &lt; 2048) {
+/*  先頭1packの読み込みに失敗 */
+}
+
+/* PSMFヘッダのサイズを取得する */
+if (<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegQueryStreamOffset">sceMpegQueryStreamOffset</a>(pMpeg, stream_buf, &amp;offset) != SCE_OK) {
+    /* PSMFヘッダのサイズ取得に失敗 */
+}
+	
+/* PSMFヘッダ分だけメモリを確保 */
+*pHeader = (<a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a>*)malloc(offset);
+if (pHeader == NULL) {
+    /* メモリ確保失敗 */
+}
+
+/* fileの位置を先頭にあわせる */
+if ( sceIoLseek (fd, 0L, SEEK_SET) &lt; 0) {
+    /* seek失敗*/
+}
+
+/* PSMFヘッダの読みこみ */
+if( (iReadSize  = sceIoRead(fd, *pHeader, offset)) &lt; offset){
+    /* ヘッダの読み込み失敗 */
+}
+
+/*J PSMFヘッダを設定 */
+if((ret = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSetPsmf">scePsmfSetPsmf</a>(&amp;psmf, pHeader)) != SCE_OK) {
+    /* PSMFヘッダの設定に失敗*/
+}
+
+/* PSMFヘッダから必要な情報を取得する */
+</font></pre></div>
+<div style="margin-left:50px;"><br>libpsmfを使用するには、必ず事前にPSMFヘッダを確保しておく必要があります。PSMFヘッダはPSMFファイルの先頭からPSMFストリームの先頭アドレスまでのオフセットでサイズを知ることができます。PSMFヘッダはlibpsmfを使用する間、必ず確保されていなければなりません。また、いったん確保したPSMFヘッダをメモリのほかのアドレスへ移動することはできません。そのような際は、再び初期化からやり直す必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>PSMF情報の取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfでは<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体を初期化することで、PSMFストリーム全体の情報を取得することができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> ret;
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a> psmf;
+
+/* <a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体を初期化 */
+
+/* presentation start time 取得 */
+if((ret = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPresentationStartTime">scePsmfGetPresentationStartTime</a> (&amp;psmf, &amp;start_time)) != SCE_OK) {
+    /* presentation start timeの取得失敗 */
+}
+
+/*J 総ストリーム数を取得 */
+if((ret = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetNumberOfStreams">scePsmfGetNumberOfStreams</a> (&amp;psmf)) &lt; 0) {
+    /* ストリーム数取得失敗 */
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br><a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体を初期化しておくことで、PSMFヘッダからストリームの開始PTS, 終了PTS, PSMFストリームに多重化されている総ストリーム数などを取得することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>ビデオストリームの情報取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">情報を取得したいビデオストリームを<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体にセットすることで、PSMFヘッダから特定のビデオストリームの情報を取得することができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> ret;
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmfVideoInfo">ScePsmfVideoInfo</a> vInfo;
+
+/* <a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体を初期化 */
+
+/* ch0のビデオストリームをセット */
+if((ret = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(&amp;psmf, SCE_MPEG_STREAM_M4AVC, 0)) != SCE_OK) {
+    /* ストリームのセットに失敗 */
+}
+
+/* SequenceInfoを取得 */
+if((ret = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetVideoInfo">scePsmfGetVideoInfo</a>(&amp;psmf, &amp;vInfo)) != SCE_OK) {
+    /* ビデオの情報取得失敗*/
+}
+
+/* 水平解像度 */
+printf (&quot;horizontal size = %d\n&quot;, vInfo.horizontalSize);
+
+/* 垂直解像度 */
+printf (&quot;vertical size = %d\n&quot;, vInfo.verticalSize);
+</font></pre></div>
+<div style="margin-left:50px;"><br>ストリームをセットする際は<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>()を用いてストリームタイプとチャンネルを指定する</li>
+<li VALUE=2> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>()を用いてストリームタイプと<i>streamTypeNumber</i>を指定する</li>
+<li VALUE=3> <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStream">scePsmfSpecifyStream</a>()を用いて<i>streamNumber</i>のうち、ビデオストリームを指しているものを指定する</li>
+</ol></div>
+<div style="margin-left:50px;"><br>という3通りの方法でストリームをセットすることができます。ストリームをセットすることで、セットしたストリームの情報を取得することができます。セットしたストリームがビデオストリームかどうかを調べる場合は<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetCurrentStreamType">scePsmfGetCurrentStreamType</a>()を用います。<br><a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(), <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>()で用いるストリームタイプ、チャンネルはlibmpegで使用するものと同じものとなります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>オーディオストリームの情報取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">情報を取得したいオーディオストリームを<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体にセットすることで、PSMFヘッダから特定のオーディオストリームの情報を取得することができます<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> ret;
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmfAudioInfo">ScePsmfAudioInfo</a> aInfo;
+
+/* <a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体を初期化 */
+
+/* ch0のオーディオストリームをセット */
+if((ret = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(&amp;psmf, SCE_MPEG_STREAM_ATRAC, 0)) != SCE_OK) {
+    /* ストリームのセットに失敗 */
+}
+
+/* SequenceInfoを取得 */
+if((ret = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetAudioInfo">scePsmfGetAudioInfo</a>(&amp;psmf, &amp;aInfo)) != SCE_OK) {
+    /* オーディオの情報取得失敗*/
+}
+
+/* サンプリング周波数 */
+printf (&quot;sampling frequency = %d\n&quot;, aInfo.samplingFrequency);
+
+/* チャンネルコンフィグレーション */
+printf (&quot;channel configuration = %d\n&quot;, aInfo.channelConfiguration);
+
+</font></pre></div>
+<div style="margin-left:50px;">ストリームをセットする際はVideoと同様の方法でAudioストリームをセットすることができます。<br><a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>()でストリームを指定する場合は、AudioストリームはATRAC3plus&trade;とPCMがあるため、streamTypeでどちらかを指定するか、もしくはSCE_MPEG_STREAM_AUDIOを選択することでストリームを選択することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>EP_mapから任意のEntry Pointの情報を取得</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmfEntryPoint">ScePsmfEntryPoint</a> entry;
+
+/* 初期化処理*/
+
+/* ストリームの特定*/
+if(<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamType">scePsmfSpecifyStreamWithStreamType</a>(&amp;psmf, SCE_MPEG_STREAM_M4AVC, 0) != SCE_OK) {
+    /* ストリームの特定失敗 */
+}
+
+/* PTSからEntry Pointを特定する */
+if(<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>(&amp;psmf, 90000, &amp;entry) != SCE_OK) {
+    /* Entry Point取得失敗*/
+}
+
+/* ep_idからEntry Pointを特定する*/
+if(<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>(&amp;psmf, 0, &amp;entry) != SCE_OK) {
+    /* Entry Point 取得失敗 */
+}
+
+printf (&quot;PTS = 0x%x\n&quot;, entry.pts);
+printf (&quot;OFFSET = 0x%x\n&quot;, entry.offset);
+</font></pre></div>
+<div style="margin-left:50px;"><br>EP_map中の特定のEntry Pointを特定するには、PTSを用いて特定するか、<i>epId</i>を利用します。PTSを用いる場合は<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>()を使用します。この関数を利用した場合は、指定したPTSと等しいか、直前のPTSを持つEntry Pointの情報が返ります。<br><i>epId</i>を使ってEntry Pointを特定する場合は<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>()を使用します。ここで指定する<i>epId</i>の範囲は0&lt;= <i>epId</i> &lt; <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetNumberOfEPentries">scePsmfGetNumberOfEPentries</a>()となります。EP_mapの有無は<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfCheckEPmap">scePsmfCheckEPmap</a>()を用いることで調べることができます。EP_mapが存在しないものからEntry Pointを取得することはできません。現在ビデオストリーム以外のストリームはEP_mapを持たないため、EP_mapからEntry Point情報を取得したい場合はビデオストリームをあらかじめ<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a>構造体にセットしておく必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>任意のPsmfMarkの情報を取得</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmf">ScePsmf</a> psmf;
+<a href="../movie/libpsmf-Reference-Japanese.htm#ScePsmfPsmfMark">ScePsmfPsmfMark</a> mark;
+int i, num;
+
+/* 初期化処理*/
+
+/* markの数を取得 */
+num = <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetNumberOfPsmfMarks">scePsmfGetNumberOfPsmfMarks</a>(&amp;psmf, SCE_PSMF_MARK_STREAM_ANY);
+
+if ( num &lt; 0 ) {
+	/* エラー処理 */
+}
+
+for (i = 0; i &lt; num; i++ ) {
+	if ( <a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPsmfMark">scePsmfGetPsmfMark</a>(&amp;psmf, SCE_PSMF_MARK_STREAM_ANY, i, &amp;mark) != SCE_OK){
+		/* エラー処理 */
+	}
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>PsmfMarkはChapter MarkとEvent Markの2種類が存在し、Event Markは特定のVideoストリームと関連付けることができます。<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetNumberOfPsmfMarks">scePsmfGetNumberOfPsmfMarks</a>()で<i>ch</i>をSCE_PSMF_MARK_STREAM_ANYにした場合は全ストリームのMark数が返ります。<i>ch</i>を特定のストリームにした場合は、指定のストリーム及び全ストリーム共通のPsmfMarkの総数が返ります。<br>PsmfMarkを取得する場合は、PTSを用いて特定するか、markIdを利用します。PTSを用いる場合は<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPsmfMarkWithTimestamp">scePsmfGetPsmfMarkWithTimestamp</a>()を使用します。この関数を利用した場合は、指定したPTSと等しいか、直前のPTSを持つ、指定のストリームの関連したPsmfMarkが返ります。<br>markIdを使ってPsmfMarkを特定する場合は<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPsmfMark">scePsmfGetPsmfMark</a>()を使用します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>stream, Entry Point, PsmfMarkを指定するためのIDについて</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>streamの指定方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libpsmfでは、チャンネル, <i>streamTypeNumber</i>, <i>streamNumber</i>を用いてストリームの指定することができます。<br><br>チャンネルとは、<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRegistStream">sceMpegRegistStream</a>()で使用するものと同様のもので、ストリームタイプとチャンネルを使用することでストリームを指定することができます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>要素ストリーム</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ストリームタイプ</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>(<i>iStreamType</i>)</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ストリームID</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>プライベート</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>ストリームID</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>チャンネル</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>(<i>ch</i>)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;MPEG4 AVC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_M4AVC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1110 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;なし&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_ATRAC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1011 1101b'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'0000 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PCM&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_PCM&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1011 1101b'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'0001 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;USER DATA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MPEG_STREAM_DATA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'1011 1101b'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'0010 xxxxb'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0-15&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;"><a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRegistStream">sceMpegRegistStream</a>()ではストリームタイプとチャンネルの組み合わせでストリームを指定しますが、チャンネルはプライベートストリームIDをわかりやすいように変換したものなので、0から順に割り振られず、1,2,3,4,6,10といったように割り振られている可能性があります。<br>したがってチャンネルを使用してストリームを指定するためには、あらかじめチャンネルを知っている必要があります。<br><br>一方で<i>streamTypeNumber</i>はストリームタイプ別に0から順に割り振られた番号です。したがってチャンネルなどを正確に知らない場合でもストリームを特定することができます。<i>streamTypeNumber</i>はPSMFヘッダ中に書かれた順に割り振られます。したがってチャンネルと<i>streamTypeNumber</i>は関連性がなく、まったく違う番号が割り振られている可能性があります。<br><br><i>streamTypeNumber</i>を用いてストリームを使用する際は、Audioの指定にSCE_MPEG_STREAM_AUDIOを用いることができます。SCE_MPEG_STREAM_AUDIOは<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfSpecifyStreamWithStreamTypeNumber">scePsmfSpecifyStreamWithStreamTypeNumber</a>()で使用するストリームタイプで、このストリームタイプを指定した場合はAudioのコーデックを考えずにAudioストリームを指定したい場合に使うことができます。SCE_MPEG_STREAM_AUDIOを指定した際のストリームの総数はSCE_MPEG_STREAM_ATRACとSCE_MPEG_STREAM_PCMを指定した際のストリームの総数の和となります。<br><br><i>streamNumber</i>とはPSMFヘッダに書かれた順に0から順番にストリームに割り当てたIDです。<br>PSMFストリームに多重化された全てのストリームに0から順に割り振られます。したがってストリームタイプの指定はありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Entry Pointの指定方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Entry Pointを指定するためには<i>epId</i>を利用します。<i>epId</i>とはEP_mapに存在するEntry Pointを特定するためのIDで、各ストリーム毎にPTSの小さいEntry Pointから順に、0から割り振られています。<i>epId</i>を指定することで、EP_mapから特定のEntry Pointを指定することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>PsmfMarkの指定方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PsmfMarkを指定するためにはmarkIdを利用します。markIdとはPsmfMarkを特定するためのIDで、PTSの小さい順に、0から割り振られています。markIdを指定することで、特定のPsmfMarkの情報を取得することができます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>重要な注意事項</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSMFヘッダをlibpsmfに設定後、PSMFヘッダの格納場所を移動させた場合の動作は保証されません。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

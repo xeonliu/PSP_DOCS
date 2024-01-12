@@ -1,0 +1,2504 @@
+<html lang="jp">
+<head>
+<title>libmp3-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libmp3
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceMp3InitArg"></a>
+<table width="100%"><td width="70%"><font size=6>SceMp3InitArg<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコード資源の初期化変数<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+typedef struct {
+	SceOff <i>mp3HeadPos</i>;
+	SceOff <i>mp3TailPos</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> <i>*mp3Buf</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>mp3BufByte</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> <i>*pcmBuf</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>pcmBufByte</i>;
+} <b>SceMp3InitArg</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3HeadPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3ファイル最初のオーディオデータの先頭位置&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3TailPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3ファイル最後のオーディオデータの末尾位置&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3Buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バッファの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3BufByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バッファのバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmBuf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バッファの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmBufByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バッファのバイト数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">MP3ハンドルの初期化に利用する構造体です。<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()の引数として利用されます。入出力バッファのアドレスと大きさ、ループ再生のためのファイル情報から構成されます。<br><i>mp3HeadPos</i>には、ファイル先頭のタグを除く最初のオーディオデータの先頭位置を指定してください。<i>mp3TailPos</i>には、ファイル末尾のタグを除く最後のオーディオデータの末尾位置を指定してください。タグの有無の判断、タグのサイズを求める方法に関しては、「libmp3概要」を参照してください。<br>入出力バッファのメモリアラインメントは、<b>64バイトアラインメント</b>である必要があります。また、必要な入出力バッファサイズは、以下のようになります。<br><br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> 入力(MP3)バッファサイズ<br>8192バイト以上、かつ64バイトの倍数
+<li> 出力(PCM)バッファサイズ<br>9216バイト(最大1152サンプル×2バイト×2チャネル×2バッファ)
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3InitResource"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3InitResource<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libmp3の計算資源の確保<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3InitResource</b>(
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libmp3に必要な計算資源を確保します。libmp3の各機能を利用するためには、まず、本関数を実行する必要があります。<br>この計算資源によって、複数個のMP3ストリームデータを並列でデコードすることが可能です。個々のデコード処理に必要な計算資源をlibmp3では、<b>デコード資源</b>と呼びます。同時に利用可能なデコード資源の数は、<b>2</b>です。デコード資源は後述するMP3ハンドルと一対一に対応するため、デコード資源の数は、MP3ハンドルの数に一致します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* libmp3に必要な計算資源を確保 */
+sceMp3InitResource ();
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3TermResource">sceMp3TermResource</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3TermResource"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3TermResource<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libmp3の計算資源の解放<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3TermResource</b>(
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libmp3のために確保した計算資源をすべて解放します。本関数を実行すると、取得したすべてのデコード資源が強制的にlibmp3に返還されます。アプリケーション上ですべてのMP3データ再生の必要がなくなった場合のみ、本関数を実行してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* libmp3のために確保した計算資源をすべて解放 */
+status = sceMp3TermResource ();
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3InitResource">sceMp3InitResource</a>()<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ReserveMp3Handle"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ReserveMp3Handle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコード資源の使用権の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3ReserveMp3Handle</b>(
+	const <a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a> <i>*mp3InitArg</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3InitArg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源の初期化変数を指すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得したMP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3InitResource">sceMp3InitResource</a></b>()によって確保されたデコード資源の使用権を取得します。この使用権は、<b>MP3ハンドル</b>というデコード資源と一対一に対応するIDによって管理されます。MP3データのデコード処理を実行する前には、必ずMP3ハンドルを取得する必要があります。<br>引数<i>mp3InitArg</i>の設定方法は2通りあり、それぞれ得られるMP3ハンドルの種別が異なります。1つは、MP3ハンドルに与える初期値を設定した<a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a>変数へのポインタを与える方法です。この場合、低レベルAPIであるsceMp3LowLevelXxx()を除く、すべてのAPIを利用することができます。もう1つは、NULLを与え、MP3ハンドルに初期値を与えない方法です。この場合、低レベルAPIであるsceMp3LowLevelXxx()および一部のAPIしか利用することができません。そのため、基本的には、初期値を与える方法を推奨します。API利用制限については、備考を参照してください。<br>また、libmp3には、同時に利用可能なデコード資源に制限があるため、利用可能なデコード資源の数だけ使用権を取得した後では、本関数を実行してもエラーが返り、新たにデコード資源を取得することができません。その場合には、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReleaseMp3Handle">sceMp3ReleaseMp3Handle</a></b>()を呼び、利用していないMP3ハンドルをlibmp3に返還してください。<br>本関数のMP3ハンドルを取得する手順に関しては、マルチスレッドセーフです。したがって、複数スレッドから本関数を呼び出しても、各スレッドで重複するMP3ハンドルが割り当てられることはありません。しかし、デコード処理など、その後の処理に関しては、マルチスレッドセーフではありません。取得したMP3ハンドル以外のMP3ハンドルを引数としてデコード処理などを行ったときの動作は、保証されませんので注意してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> handle;
+<a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a> mp3InitArg;
+/* mp3InitArg のメンバに初期値をセット*/
+/* デコード資源の使用権を管理するMP3ハンドルを取得 */
+handle = sceMp3ReserveMp3Handle(&amp;mp3InitArg);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>API</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>初期値を与えた場合</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>NULLを与えた場合</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReleaseMp3Handle">sceMp3ReleaseMp3Handle</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPositionByFrame">sceMp3ResetPlayPositionByFrame</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetFrameNum">sceMp3GetFrameNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>条件付で利用可</b>(*)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>条件付で利用可</b>(*)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetSamplingRate">sceMp3GetSamplingRate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>条件付で利用可</b>(*)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetBitRate">sceMp3GetBitRate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>条件付で利用可</b>(*)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMp3ChannelNum">sceMp3GetMp3ChannelNum</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>条件付で利用可</b>(*)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3LowLevelDecode">sceMp3LowLevelDecode</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;利用不可&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<b>利用可</b>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">(*) <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a>()実行時、引数でMP3ファイル先頭のMP3データをロードしたバッファを与えた場合のみ、正しい値を取得できます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a><br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReleaseMp3Handle">sceMp3ReleaseMp3Handle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ReleaseMp3Handle"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ReleaseMp3Handle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコード資源の使用権の返還<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3ReleaseMp3Handle</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得したデコード資源をlibmp3に返還します。返還されたデコード資源は、MP3ハンドルを取得し直すことによって再度利用することができます。取得していないMP3ハンドルを引数に与えた場合は、エラーが返ります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 取得したMP3ハンドルをlibmp3に返還 */
+sceMp3ReleaseMp3Handle(handle);
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3Init"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3Init<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコード資源の初期化<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3Init</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたMP3ハンドルに対応するデコード資源に対して、入力バッファに読み込まれたMP3データのMPEG/Audioフレームヘッダを元に初期化処理を行います。本関数の実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()の引数として与えた入力バッファにMP3データを読み込んでおく必要があります。<br>MP3ファイルからMP3データを入力バッファに読み込む方法は、以下の通りです。まず、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>()を実行し、MP3データを入力バッファに読み込むための情報を取得します。次にこれらの情報から入力バッファにMP3データを読み込みます。そして、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a></b>()を実行し、読み込んだMP3データサイズをlibmp3に通知します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 入力バッファにMP3データを読み込み */
+<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+/* 入力バッファに読み込んだMP3データサイズをlibmp3に通知 */
+<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+/* デコード資源を初期化 */
+sceMp3Init(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得しておいたMP3ハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3Decode"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3Decode<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MP3データのデコード<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3Decode</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceShort16">SceShort16</a> <i>**pcmDstPtr</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmDstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード結果の出力先アドレスを指すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>*pcmDstPtr</i>から読み出し可能なバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力バッファに読み込まれたMP3データを1フレームだけリニアPCMデータにデコードし、出力バッファに書き込みます。入力のMP3データ形式に依らず、出力のPCMデータのフォーマットは、ビット深度16ビットのステレオ形式になります。このPCMデータは、<i>pcmDstPtr</i>が指すアドレスを先頭アドレスとし、左、右、左、……のようにインタリーブ形式で左右交互に出力されます。出力されるPCMデータのサイズは、返り値によって取得することができます。出力されるPCMデータは、次に<b>sceMp3Decode</b>()を実行するまでの間だけ有効です。<br>デコード処理を実行することで入力バッファ内のMP3データが消費されます。デコード処理を行う前に必ず<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a></b>()を実行し、必要に応じてMP3データを追加してください。MP3データの読み込みは、同期または非同期に行うことができます。また、MP3データの追加完了が遅く、入力バッファ内のMP3データが残り1フレームもない場合、<b>sceMp3Decode</b>()は無音のPCMデータを出力します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>デコードされたPCMデータをvaudio経由でオーディオ出力する例を以下に示します。
+
+/* MP3データをデコード */
+sceMp3Decode(handle, &amp;pcmDstPtr);
+/* vaudioにPCMデータを受け渡し */
+<a href="../sound/Vaudio-Reference-Japanese.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>(vol, pcmDstPtr);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br>事前に、<a href="../sound/Vaudio-Reference-Japanese.htm#sceVaudioChReserve">sceVaudioChReserve</a>()によって、サンプリング周波数とPCMサンプル数をvaudioに指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3CheckStreamDataNeeded"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3CheckStreamDataNeeded<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MP3データを入力バッファへ追加する必要性のチェック<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3CheckStreamDataNeeded</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3データを入力バッファへ追加する必要性がある場合&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3データを入力バッファへ追加する必要性がない場合&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力バッファにMP3データを追加する必要性をチェックします。具体的には、未デコードのMP3データサイズが入力バッファサイズの半分を切った場合、入力バッファにMP3データを追加する必要があると見なします。デコード処理を行う前に必ず本関数を実行し、MP3ファイルからMP3データを追加する必要性をチェックしてください。MP3データの追加手順に関しては、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()の項を参照してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* MP3データを入力バッファに追加する必要性をチェック */
+if (sceMp3CheckStreamDataNeeded(handle) &gt; 0) {
+         /* 入力バッファにMP3データを読み込み */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* 入力バッファに読み込んだMP3データサイズをlibmp3に通知 */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得しておいたMP3ハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetInfoToAddStreamData"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetInfoToAddStreamData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MP3データを入力バッファに追加するための情報の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetInfoToAddStreamData </b>(
+<i>	</i><a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+<i>	</i><a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a><i> **mp3DstPtr,</i>
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a><i> *writableByte</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a><i> *mp3SrcPos</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3DstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;追加のMP3データの書き込み先アドレスを指すポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>writableByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>*mp3DstPtr</i>から書き込み可能なバイト数を指すポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3SrcPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3ファイルの読み出しシーク位置を指すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力バッファにMP3データを追加するための情報を取得します。本関数実行後、引数を通じて追加のMP3データの書き込み先アドレス<i>*mp3DstPtr</i>、データサイズ<i>*writableByte</i>、およびMP3ファイルの読み出しシーク位置<i>*mp3SrcPos</i>を取得できます。これらの情報を取得後、以下の方法にしたがってMP3データを入力バッファに追加します。<br>まず、ファイルディスクリプタをMP3ファイル先頭から<i>*mp3SrcPos</i>だけ移動させます。それから、移動させたファイルディスクリプタを利用し、<i>*writableByte</i>バイトのMP3データを追加先アドレス<i>*mp3DstPtr</i>に読み込みます。非同期に読み込むことも可能です。<br>MP3ファイルからMP3データの追加が終わった後は、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a></b>()によってlibmp3に対しMP3データの追加を通知します。詳しくは、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a></b>()の項を参照してください。<br>なお、MP3ファイル内のMP3データがすべて入力バッファに読み込まれている場合、またはMP3データを入力バッファに読み込む必要がない場合は、<i>*mp3DstPtr</i>としてNULL、<i>*writableByte</i>として0が返ります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* MP3データを入力バッファに追加する必要性をチェック */
+if (<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* 入力バッファにMP3データを読み込み */
+         sceMp3GetInfoToAddStreamData(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* 入力バッファに読み込んだMP3データサイズをlibmp3に通知 */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得しておいたMP3ハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3NotifyAddStreamData"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3NotifyAddStreamData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>追加したMP3データサイズをlibmp3に通知<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3NotifyAddStreamData</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>mp3AddByte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3AddByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バッファへ追加したMP3データのバイト数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">実際に入力バッファに追加したMP3データサイズ<i>mp3AddByte</i>をlibmp3に通知します。MP3データを入力バッファに追加した後は、本関数を必ず実行してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* MP3データを入力バッファに追加する必要性をチェック */
+if (<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* 入力バッファにMP3データを読み込み */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* 入力バッファに読み込んだMP3データサイズをlibmp3に通知 */
+         sceMp3NotifyAddStreamData(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得しておいたMP3ハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ResetPlayPosition"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ResetPlayPosition<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>再生位置のリセット<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3ResetPlayPosition</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">再生位置をMP3ファイルの先頭にリセットします。同時に、ループ再生回数消費による再生停止状態であれば再生を再開します。本関数の実行によって既に設定されていた「ループ再生回数」の値は、変化しません。また、本関数の実行によって<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a></b>()で取得可能な「デコードされた累計出力サンプル数」の値が0にリセットされます。<br>また、ループ再生を実行する際に明示的に本関数を呼ぶ必要はありません。<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>()によってループ再生回数に非零が指定されている場合、MP3ファイル最後のデータのデコード終了時に、ファイル先頭から再生し直すように<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>()の出力が変化し、ループ再生を実現します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 再生位置をMP3ファイル先頭にリセット */
+status = sceMp3ResetPlayPosition(handle);
+/* MP3データを入力バッファに追加する必要性をチェック */
+if (<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* 入力バッファにMP3データを読み込み */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* 入力バッファに読み込んだMP3データサイズをlibmp3に通知 */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3ResetPlayPositionByFrame"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3ResetPlayPositionByFrame<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MPEG/Audioフレーム番号指定による再生位置のリセット<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3ResetPlayPositionByFrame</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUInt32">SceUInt32</a> <i>frameIndex</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>frameIndex</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG/Audioフレーム番号&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定したMPEG/Audioフレーム先頭に再生位置をリセットします。同時に、ループ再生回数消費による再生停止状態であれば再生を再開します。本関数の実行によって既に設定されていた「ループ再生回数」の値は、変化しません。また、本関数の実行によって<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a></b>()で取得可能な「デコードされた累計出力サンプル数」の値が「<i>frameIndex</i>×1フレームデコードによる出力サンプル数」にリセットされます。ただし、「1フレームデコードによる出力サンプル数」は<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a></b>()で取得できる値に等しく、MPEG1の場合に1152サンプル、MPEG2/2.5の場合に576サンプルの値を取ります。<br>指定する<i>frameIndex</i>の値は、0以上、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetFrameNum">sceMp3GetFrameNum</a></b>()で取得される値以下である必要があります。また、<i>frameIndex</i>に0を指定すると、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a></b>()と等価な効果が得られます。<br>VBRのMP3ファイルの場合、指定されたMPEG/Audioフレームを特定するために、ファイル先頭のXINGヘッダおよびVBRIヘッダに埋め込まれたジャンプテーブルを利用しており、CBRを想定した場合より正確に再生位置を変更することができます。ただし、基本的には、各フレームサイズが一定でないため、指定された<i>frameIndex</i>と実際のMPEG/Audioフレーム番号の間にずれが生じます。これに伴い、現在再生時刻にも、ずれが生じますので、ご注意ください。<br>また、XINGヘッダおよびVBRIヘッダに埋め込まれたジャンプテーブルが破壊されているなどの原因により、指定されたMPEG/Audioフレームが見つからなかった場合、エラーコード<a href="../sound/libmp3-Reference-Japanese.htm#SCE_MP3_ERROR_FRAME_NOT_FOUND">SCE_MP3_ERROR_FRAME_NOT_FOUND</a>が返ります。この場合、本関数は、libmp3の他のAPIに影響を与えません。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 再生位置をframeIndexMP3ファイル先頭にリセット */
+status = sceMp3ResetPlayPositionByFrame(handle, frameIndex);
+/* MP3データを入力バッファに追加する必要性をチェック */
+if (<a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* 入力バッファにMP3データを読み込み */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a>(handle, &amp;mp3DstPtr, &amp;writableByte, &amp;mp3SrcPos);
+         sceIoLseek(fd, mp3SrcPos, SCE_SEEK_SET);
+         mp3AddByte = sceIoRead(fd, mp3DstPtr, writableByte);
+         /* 入力バッファに読み込んだMP3データサイズをlibmp3に通知 */
+         <a href="../sound/libmp3-Reference-Japanese.htm#sceMp3NotifyAddStreamData">sceMp3NotifyAddStreamData</a>(handle, mp3AddByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3CheckStreamDataNeeded">sceMp3CheckStreamDataNeeded</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetFrameNum">sceMp3GetFrameNum</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetSumDecodedSample">sceMp3GetSumDecodedSample</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetFrameNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetFrameNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MPEG/Audioフレーム数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetFrameNum</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG/Audioフレーム数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">MP3ファイルに存在するMPEG/Audioフレーム数を取得します。<br>ファイル先頭にXINGヘッダまたはVBRIヘッダが付加されている場合、各ヘッダで記述されているMPEG/Audioフレーム数を取得できます。いずれも付加されていない場合、CBRと見なし、全体のMP3データサイズを元に、内包されているMPEG/Audioフレーム数の推測値が得られます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* MPEG/Audioフレーム数を取得 */
+frameNum = sceMp3GetFrameNum(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPositionByFrame">sceMp3ResetPlayPositionByFrame</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3SetLoopNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3SetLoopNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>残りループ再生回数の設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3SetLoopNum</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle,</i>
+<i>	</i><a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a><i> loopNum</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>loopNum</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;残りループ再生回数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">残りループ再生回数を設定します。ループ再生回数は、MP3ハンドルごとに独立に管理されます。デフォルトのループ再生回数は、「無限回」です。<br>引数<i>loopNum</i>の指定値と解釈されるループ再生回数の対応関係については、以下の表を参照してください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;正(&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>loopNum</i>回&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループなし&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;無限回&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">本関数によってループ再生回数に正数が指定されている場合、MP3ファイル最後のデータのデコード終了時に、ファイル先頭から再生し直すように<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetInfoToAddStreamData">sceMp3GetInfoToAddStreamData</a></b>()の出力が変化します。<br>また、ループ開始・終了位置は、それぞれMP3ファイル先頭および末尾のタグとMP3データの境界です。その他の位置をループ再生の開始・終了位置に設定することはできません。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* ループ再生回数を10回に設定する */
+status = sceMp3SetLoopNum(handle, 10);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得しておいたMP3ハンドルを指定してください。<br><i>loopNum</i>に任意の負数をセットすれば無限回のループを実現できますが、libmp3は、<a href="../sound/libmp3-Reference-Japanese.htm#SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a>という負数のマクロを提供しています。ループ再生回数を無限回に設定する際にご利用ください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#ループ再生回数識別子">ループ再生回数識別子</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetLoopNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetLoopNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>残りループ再生回数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetLoopNum</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-1以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;残りループ再生回数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-1より小&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">残りループ再生回数を取得します。取得される値とlibmp3内で解釈される残りループ再生回数の対応関係については、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>()の項を参照してください。ただし、残りループ再生回数が無限回に設定されている場合には、必ず<a href="../sound/libmp3-Reference-Japanese.htm#SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a>という負数のマクロが返ります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 残りループ再生回数の取得 */
+loopNum = sceMp3GetLoopNum(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得しておいたMP3ハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#ループ再生回数識別子">ループ再生回数識別子</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetMaxOutputSample"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetMaxOutputSample<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコードの最大出力サンプル数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetMaxOutputSample</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;一回のデコードにおける最大出力サンプル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Decode">sceMp3Decode</a></b>()を一回実行した際に出力される1チャネルあたりの最大サンプル数を取得します。<br>MPEG1 Layer3の場合には1152サンプル、MPEG2/ 2.5 Layer3の場合には576サンプルが返ります。また、libmp3は出力バッファをダブルバッファとして扱います。したがって、すべてのMP3データをデコードできるようにするためには、出力バッファとして、1152サンプル×2バイト×2チャネル×2バッファ=9216バイトのバッファを用意してください。<b><a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a></b>の項も併せて参照してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* libmp3に必要な最大出力サンプル数を取得 */
+maxOutputSample = sceMp3GetMaxOutputSample(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br>同一のMP3ファイルフォーマットに対して常に同じ値を返します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#SceMp3InitArg">SceMp3InitArg</a><br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetSumDecodedSample"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetSumDecodedSample<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコードされた累計出力サンプル数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetSumDecodedSample</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードされた累計出力サンプル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行時までにデコードされた累計出力サンプル数を取得します。サンプル数のカウントは0から始まります。また、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a></b>()やループ再生によってファイル先頭のMP3データから再生し直す際には、デコードされた累計出力サンプル数は0にリセットされます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* デコードされた累計出力サンプル数を取得 */
+sumDecodedSample = sceMp3GetSumDecodedSample(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br>本関数によって取得可能な値は、デコードされた累計出力サンプル数であり、再生中のサンプル位置ではありません。正確な再生位置を利用したい場合には、オーディオドライバへの出力サンプル数を考慮する必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPosition">sceMp3ResetPlayPosition</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ResetPlayPositionByFrame">sceMp3ResetPlayPositionByFrame</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetMPEGVersion"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetMPEGVersion<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MPEGバージョンの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetMPEGVersion</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libmp3-Reference-Japanese.htm#MPEGバージョン識別子">MPEGバージョン識別子</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#MPEGバージョン識別子">MPEGバージョン識別子</a>を取得します。取得される値と実際のMPEGバージョンの対応関係については、MPEG規格に準じます。具体的には、<a href="../sound/libmp3-Reference-Japanese.htm#MPEGバージョン識別子">MPEGバージョン識別子</a>の項を参照してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* MPEGバージョンの取得 */
+version = sceMp3GetMPEGVersion(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#MPEGバージョン識別子">MPEGバージョン識別子</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetSamplingRate"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetSamplingRate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>PCMデータのサンプリング周波数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetSamplingRate</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PCMデータのサンプリング周波数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">出力するPCMデータのサンプリング周波数を取得します。単位はHzです。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* サンプリング周波数の取得 */
+fs = sceMp3GetSamplingRate(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetBitRate"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetBitRate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MP3データのビットレートの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetBitRate</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3データのビットレート&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力されたMP3データのビットレートを取得します。単位はkbpsです。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* ビットレートの取得 */
+fs = sceMp3GetBitRate(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3GetMp3ChannelNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3GetMp3ChannelNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MP3データのチャネル数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3GetMp3ChannelNum</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3データのチャネル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力されたMP3データのチャネル数を取得します。本関数は、モノラル音源であれば1を、ステレオ音源であれば2を返します。ただし、出力されるPCMデータのチャネル数は、現在、常に2です。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* チャネル数の取得 */
+channelNum = sceMp3GetMp3ChannelNum(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a></b>()によってデコード資源の初期化を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3Init">sceMp3Init</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3LowLevelInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3LowLevelInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>低レベルAPIにおけるデコード資源の初期化<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3LowLevelInit</b> (
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> *<i>mp3DstPtr</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;低レベルAPI用デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3DstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP3ファイル先頭のMP3データを指すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたMP3ハンドルに対応するデコード資源に対して、初期化処理を行います。ただし、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()の引数としてNULLを与えて得た低レベルAPI用MP3ハンドルのみ、本関数を実行可能です。<br>低レベルAPI用MP3ハンドルでは利用可能なAPIが制限されますが、本関数の引数<i>mp3DstPtr</i>にMP3ファイル先頭のMP3データを渡すことで、利用可能なAPIを増やすことができます。この操作によって、利用可能となるAPIは以下の通りです。<br></div>
+<div style="margin-left:60px;"><ul>
+<li> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMaxOutputSample">sceMp3GetMaxOutputSample</a></b>()
+<li> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a></b>()
+<li> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetSamplingRate">sceMp3GetSamplingRate</a></b>()
+<li> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetBitRate">sceMp3GetBitRate</a></b>()
+<li> <b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMp3ChannelNum">sceMp3GetMp3ChannelNum</a></b>()
+</ul></div>
+<div style="margin-left:50px;">この操作は任意であり、<i>mp3DstPtr</i>にNULLを渡すことも可能です。また、MP3ファイル先頭にタグ情報が付加されている場合、タグ情報を除いたMP3データを渡す必要がありますので、ご注意ください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 低レベルAPIにおけるデコード資源を初期化 */
+sceMp3LowLevelInit(handle, NULL);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a></b>()によって取得しておいたMP3ハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3ReserveMp3Handle">sceMp3ReserveMp3Handle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceMp3LowLevelDecode"></a>
+<table width="100%"><td width="70%"><font size=6>sceMp3LowLevelDecode<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>低レベルAPIにおけるMP3データのデコード<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libmp3.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceMp3LowLevelDecode</b>(
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> *<i>mp3DstPtr</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUInt32">SceUInt32</a> *<i>mp3UsedByte</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceShort16">SceShort16</a> *<i>pcmDstPtr</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUInt32">SceUInt32</a> <i>*pcmOutByte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用MP3ハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3DstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードしたいMP3データを指すポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mp3UsedByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードによって消費されたMP3データサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmDstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードによって出力されたPCMデータの書き込み先アドレスを指すポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmOutByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードによって出力されたPCMデータサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libmp3-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>mp3DstPtr</i>で指定した先にあるMP3データ1フレームだけリニアPCMデータにデコードし、に<i>pcmDstPtr</i>の先に書き込みます。入力のMP3データ形式に依らず、出力のPCMデータのフォーマットは、ビット深度16ビットのステレオ形式になります。このPCMデータは、<i>pcmDstPtr</i>が指すアドレスを先頭アドレスとし、左、右、左、……のようにインタリーブ形式で左右交互に出力されます。デコードによって消費されたMP3データサイズは、<i>mp3UsedByte</i>によって取得することができます。出力されるPCMデータサイズは、<i>pcmOutByte</i>によって取得することができます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>デコードされたPCMデータをvaudio経由でオーディオ出力する例を以下に示します。
+
+/* MP3データをデコード */
+sceMp3LowLevelDecode(handle, mp3DstPtr, &amp;mp3UsedByte, pcmDstPtr, &amp;pcmOutByte);
+/* vaudioにPCMデータを受け渡し */
+<a href="../sound/Vaudio-Reference-Japanese.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>(vol, pcmDstPtr);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a></b>()によってデコード資源の初期化を完了させてください。<br>事前に、<a href="../sound/Vaudio-Reference-Japanese.htm#sceVaudioChReserve">sceVaudioChReserve</a>()によって、サンプリング周波数とPCMサンプル数をvaudioに指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3LowLevelInit">sceMp3LowLevelInit</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="ループ再生回数識別子"></a>
+<table width="100%"><td width="70%"><font size=6>ループ再生回数識別子<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[定数定義]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ループ再生回数識別子<br></div><br>
+
+<!-- 定義 -->
+<div style="margin-left:10px;"><b>定義</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>識別子</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループ再生回数無限回&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>()の引数<i>loopNum</i>、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a></b>()の返り値である残りループ再生回数を無限回として表現するための定数です。しかし、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a></b>()の引数<i>loopNum</i>には、任意の負数を渡すことでループ再生回数が無限回に設定されます。一方、ループ再生回数が無限回に設定されている場合には、<b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a></b>()の返り値として、必ず<a href="../sound/libmp3-Reference-Japanese.htm#SCE_MP3_LOOP_INFINITY">SCE_MP3_LOOP_INFINITY</a>が返ります。特にこのマクロを必ず利用しなければいけないわけではありませんが、プログラムコードの可読性向上を目的としてご利用ください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3SetLoopNum">sceMp3SetLoopNum</a>()<br><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetLoopNum">sceMp3GetLoopNum</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="MPEGバージョン識別子"></a>
+<table width="100%"><td width="70%"><font size=6>MPEGバージョン識別子<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[定数定義]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>MPEGバージョン識別子<br></div><br>
+
+<!-- 定義 -->
+<div style="margin-left:10px;"><b>定義</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>識別子</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_MPEG_VERSION_2_5">SCE_MP3_MPEG_VERSION_2_5</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG2.5&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_MPEG_VERSION_2">SCE_MP3_MPEG_VERSION_2</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_MPEG_VERSION_1">SCE_MP3_MPEG_VERSION_1</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG1&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><b><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a></b>()の返り値として取得可能な値です。実際のMPEGバージョンとの対応関係は上記定義表の通りになります。この対応関係は、MPEG規格に準じます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libmp3-Reference-Japanese.htm#sceMp3GetMPEGVersion">sceMp3GetMPEGVersion</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libmp3の返すエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_SUCCESS">SCE_MP3_SUCCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;処理成功&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_ARG_MP3HANDLE_INVALID">SCE_MP3_ERROR_ARG_MP3HANDLE_INVALID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定したMP3ハンドルが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_ARG_PTR_INVALID">SCE_MP3_ERROR_ARG_PTR_INVALID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671002&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定したアドレスが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_ARG_OUTOFRANGE">SCE_MP3_ERROR_ARG_OUTOFRANGE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671003&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定した値が範囲外&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_RSRC_RESERVED">SCE_MP3_ERROR_RSRC_RESERVED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671101&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得済のデコード資源がある&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_RSRC_NOT_RESERVED">SCE_MP3_ERROR_RSRC_NOT_RESERVED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671102&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源を取得していない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_RSRC_NOT_INITIALIZED">SCE_MP3_ERROR_RSRC_NOT_INITIALIZED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671103&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源を&nbsp;&nbsp;<br>&nbsp;&nbsp;初期化していない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_NO_MORE_MP3HANDLE">SCE_MP3_ERROR_NO_MORE_MP3HANDLE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671201&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得可能な&nbsp;&nbsp;<br>&nbsp;&nbsp;MP3ハンドルがない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_MP3">SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_MP3</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671301&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込んだMP3が&nbsp;&nbsp;<br>&nbsp;&nbsp;MPEG1/ 2/ 2.5 Layer3&nbsp;&nbsp;<br>&nbsp;&nbsp;ではない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_SAMPLING_RATE">SCE_MP3_ERROR_FORMAT_NOT_AVAILABLE_SAMPLING_RATE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671302&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込んだMP3が再生可能な&nbsp;&nbsp;<br>&nbsp;&nbsp;サンプリング周波数ではない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_DECODE_NO_PCM">SCE_MP3_ERROR_DECODE_NO_PCM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671401&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード後のPCMが&nbsp;&nbsp;<br>&nbsp;&nbsp;存在しない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_DECODE_NEXT_FRAME_HEADER">SCE_MP3_ERROR_DECODE_NEXT_FRAME_HEADER</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671402&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現フレームのMP3データが&nbsp;&nbsp;<br>&nbsp;&nbsp;破損しているため、&nbsp;&nbsp;<br>&nbsp;&nbsp;次のフレームに移動した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_FRAME_NOT_FOUND">SCE_MP3_ERROR_FRAME_NOT_FOUND</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80671501&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたフレームが&nbsp;&nbsp;<br>&nbsp;&nbsp;見つからない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MP3_ERROR_LOWLEVEL_API_FAIL">SCE_MP3_ERROR_LOWLEVEL_API_FAIL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80672001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;低レベルAPIの実行に失敗&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

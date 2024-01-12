@@ -1,0 +1,629 @@
+<html lang="jp">
+<head>
+<title>BSOD-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+BSOD
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>モジュール概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">BSODは、DTP-H1500においてプログラム中で不正な処理が発生した場合に可能な限りそのままの状態でプログラムを停止させて、問題が発生した状況を観察するためのモジュールです。クラッシュが発生した状態のレジスタやプログラムカウンタの値、スレッドの状態、セマフォやイベントフラグなどの同期プリミティブの状態を観察する事ができます。<br><br>BSODは、DTP-H1500にデフォルトのモジュールとして組み込まれています。BSODを使用するために特に手順は必要ありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">BSODから生成するクラッシュダンプファイルを解釈するためには、以下のヘッダファイルを使用します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;crashdump.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>BSOD発生条件</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">以下のような条件がBSOD発生の要因となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>正しくないコードの実行によりCPU例外が発生したとき</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPUで、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> アドレスエラー例外(ロード/フェッチ)
+<li> アドレスエラー例外(ストア)
+<li> インストラクションバスエラー例外(フェッチ)
+<li> データバスエラー例外(ロード)
+<li> ブレークポイント例外
+<li> 未定義命令例外
+<li> コプロセッサ使用不可例外
+<li> オーバーフロー例外
+<li> FPU例外
+</ul></div>
+<div style="margin-left:50px;">の各例外が発生した場合、BSODになります。各例外の発生条件については、ALLEGREXマニュアルを参照してください。<br><br>なお、Graphics Engineマネージャが明らかに不正なディスプレイリストを発見したとき、ブレークポイント例外を発生させることがあります。この場合カーネルprintf表示画面に何かしらのログメッセージが表示されていますので、それにより原因を推定してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>正しくない処理によりNMI例外が発生したとき</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPUまたはCPU以外のバスマスタ(DMAC, VFPU, GrachisEngine)が、不正なアドレスに対してメモリアクセスを行おうとするとバスエラーが発生し、ALLEGREX CPUにNMI例外が通知されます。NMI例外が発生した場合もBSODになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>メモリブロックのオーバーフローが観測されたとき</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">システムソフトウェアの設定により、メモリブロックのオーバーフローチェックを有効にした場合、メモリブロックのオーバーフローが検出された場合にBSODになります。このデバッグ機能は、有効にすると破壊検出のためのカナリアとしてメモリブロックあたり256バイトを余分に必要とします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>スレッドのスタックがオーバーフローしたとき</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">スレッドは、ユーザスタックとカーネルスタックを持ち、そのどちらかがオーバーフローした場合にBSODになります。<br><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>()関数で登録したコールバック関数の中で、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitSemaCB">sceKernelWaitSemaCB</a>(), <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThreadCB">sceKernelDelayThreadCB</a>()などコールバックつきの待ち関数を呼び出すと、コールバック関数が多重にネスト呼び出しされて、スタックオーバーフローの原因となることがあります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>ウィークインポートが解決されていない状態でアクセスしたとき</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ウィークインポートスタブを使ってビルドしたプログラムは、アクセス前にそのインポートを解決するためのモジュールをロードおよびスタートしておかなくてはなりません。ウィークインポートが解決されていない状態でその関数呼び出しを行うとBSODになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>host0:ファイルシステムにアクセスしたとき</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マスター版のプログラムでhost0:ファイルシステムにアクセスすることは禁止されています。DTP-H1500では、host0:ファイルシステムにアクセスしようとするとBSODになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>tty0:デバイスにアクセスしたとき</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マスター版のプログラムでtty0:デバイスにアクセスすることは禁止されています。DTP-H1500では、tty0:デバイスにアクセスしようとするとBSODになります。<br><br>通常のprintf()やsceKernelPrintf()は、BSODになりません。printf()やsceKernelPrintf()表示がマスター版のバイナリに残ってしまったとしたら遺憾ではありますが、DTP-H1500で動作させるデバッグ版では、printf()やsceKernelPrintf()を使用することはできます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>BSOD画面でのキー操作</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">BSOD画面では、以下のようなキー操作によって表示を切り替える事ができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>[L][R]ボタン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">表示されている内容を切り替えます。表示できる内容は、以下の通りです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>レジスタ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">GPRレジスタと、$PC, $Status, バスエラー発生アドレス、例外発生アドレス周辺のオペコードなどを表示します。dstdbのdrコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>スレッドリスト表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているスレッドのリストを表示します。多くの場合は、Run状態のスレッドが直接のクラッシュの原因と考える事ができますが、他のスレッドの状態を参照する場合に使用します。dstdbのshow thrコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>モジュールリスト表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているモジュールのリストを表示します。クラッシュが発生したアドレスがどのモジュールに属しているか調べるために使用します。dstdbのminfoコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>セマフォ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているセマフォのリストを表示します。dstdbのshow semコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>イベントフラグ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているイベントフラグのリストを表示します。dstdbのshow evfコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_6"><h4>
+(6)&nbsp;<b>ミューテックス表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているミューテックスのリストを表示します。dstdbのshow mtxコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_7"><h4>
+(7)&nbsp;<b>軽量ミューテックス表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在している軽量ミューテックスのリストを表示します。dstdbのshow lwmtxコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_8"><h4>
+(8)&nbsp;<b>メッセージボックス表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているメッセージボックスのリストを表示します。dstdbのshow mbxコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_9"><h4>
+(9)&nbsp;<b>メッセージパイプ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているメッセージパイプのリストを表示します。dstdbのshow mppコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_10"><h4>
+(10)&nbsp;<b>可変長メモリプール(VPL)表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在している可変長メモリプールのリストを表示します。dstdbのshow vplコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_11"><h4>
+(11)&nbsp;<b>固定長メモリプール表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在している固定長メモリプールのリストを表示します。dstdbのshow fplコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_12"><h4>
+(12)&nbsp;<b>コールバック表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているコールバックのリストを表示します。dstdbのshow cbコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_13"><h4>
+(13)&nbsp;<b>スレッドイベントハンドラ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているスレッドイベントハンドラのリストを表示します。dstdbのshow thevhコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_14"><h4>
+(14)&nbsp;<b>TLSメモリプール表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているTLSメモリプールのリストを表示します。dstdbのshow tlsplコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_15"><h4>
+(15)&nbsp;<b>アラームハンドラ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在しているアラームハンドラのリストを表示します。dstdbのshow alarmコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_16"><h4>
+(16)&nbsp;<b>仮想タイマ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">存在している仮想タイマのリストを表示します。dstdbのshow vtimerコマンドに相当します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_17"><h4>
+(17)&nbsp;<b>カーネルprintf表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">カーネルによるprintf表示のログを表示します。dspconsのSTTYKチャネルに出力される内容に相当します。<br>ユーザプログラムがこの画面に表示を行いたい場合には、sceKernelPrintf()関数を使用してください。通常のprintf()の内容は、記録されません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_18"><h4>
+(18)&nbsp;<b>GEレジスタ表示</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">GEレジスタを表示します。dstdbのdr -geコマンドに相当します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>[&uarr;][&darr;]キー</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">表示内容を行単位でスクロールさせます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>[△][×]ボタン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">表示内容を半画面単位でスクロールさせます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>[SELECT]ボタン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">クラッシュダンプ出力メニューに遷移します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>[PS(HOME)]ボタン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">押している間、BSOD発生時の画面を表示します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>クラッシュダンプの出力</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">BSOD画面より[SELECT]ボタン&rarr;[△]ボタン操作で、発生時の状態をクラッシュダンプログファイルとしてMemory Stick&trade;に保存することができます。Memory Stick&trade;にはおよそ27MiB以上の空き容量が必要です。<br><br>クラッシュダンプが出力されると、Memory Stick&trade;のルートディレクトリに、pspcrash_yyyymmdd_hhmmss.log, pspcore_yyyymmdd_hhmmss.elfという2つのファイルが生成されます(yyyymmdd_hhmmssの部分にはクラッシュダンプ生成日時が入ります)。ファイル名は、毎回変化して新規生成されるため、Memory Stick&trade;の空き容量にはじゅうぶん注意してください。<br>pspcrash.logfファイルは、BSOD画面をプレーンテキストファイル形式で出力したもの、pspcore.elfファイルは、ET_COREタイプのELFファイル形式で出力したものです。<br><br>クラッシュダンプ出力には、以下のような制約があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>必ずしも成功するとは限りません。</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">クラッシュダンプ出力に失敗した場合に備えて、BSODの各画面をデジタルカメラで記録しておくことをお勧めします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>クラッシュダンプを出力すると、PSP&reg;システムソフトウェア画面に戻ります。</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">クラッシュダンプの出力後、再びBSOD画面に戻ることはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>コアダンプとして保存されるメモリ空間に制約があります。</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">クラッシュダンプファイルに保存されるメモリ空間は以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 0x08800000～0x09FFFFFF	(ユーザメモリ24MiB)
+<li> 0x04000000～0x041FFFFF	(GE eDRAM 2MiB)
+<li> 0x00010000～0x00013FFF	(スクラッチパッドメモリ16KiB)
+</ul></div>
+<div style="margin-left:50px;"><br>64MBメモリモードを使用していた場合、ユーザメモリの後半24MiBは記録されません。<br>揮発性メモリを使用していた場合、揮発性メモリの内容4MiBは、記録されません。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>クラッシュダンプを使ったデバッグ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">dstdbにクラッシュダンプファイルを読み込ませることによって、BSOD発生時の状態をデバッガ上で確認する事ができます。<br><br>-cオプションでクラッシュダンプファイルを指定してdstdbを起動します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>% dstdb -c pspcore.elf
+dstdb (Version 2.24.0 Sat Sep 17 22:57:58 JST 2005)
+node=SC dbgp=STDBGP filep=SDRFP0 loadp=SLOADP
+*** DBGP Version 5.00
+(type `help' for getting help, or `help help' for getting help of help)
+dstdb 0S0&gt; 
+</font></pre></div>
+<div style="margin-left:50px;"><br>dstdbはターゲットに接続されたかのように振舞いますが、実際にはターゲットへの接続は行わず、ホストPC上でクラッシュダンプファイルを解析した結果に基づいて各種情報を表示します。<br>drコマンド、 minfoコマンド、showコマンド等を使うことができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb 0S0&gt; dr
+at=00000000  v0-1=000048a8,08029144  a0-3=00000001,0824aa58,00000096,0824ab6f
+ t0-7=00000582,08029150,00000001,00000007 ,08013120,08012ee0,08049478,080128c4
+ s0-7=0824aa58,08247da0,08248138,00000000 ,00000001,08230000,deadbeef,deadbeef
+ t8=00000001 t9=00000000   k0=00000000 k1=00000000   gp=08250f50 sp=082e9750
+ fp=082ec7e0 ra=081eb778   lo=00000000 hi=00000000   PC=081eb778 bada=04000000
+ syscall_ra=-------- syscall_epc=-------- syscall_sp=--------
+ $cr=0x0000011c    [ CE0 IPS0 Bus error (load/store) ]
+ $fcr31=0x00001e04 [ Cause[I] Enables[VZO] Flags[I] RN ]
+  0x081eb770: 0x0e075f75  jal     0x081d7dd4
+  0x081eb774| 0x03a02021  move    $a0,$sp
+-&gt;0x081eb778: 0x8c000000  lw      $v0,0($v0)
+  0x081eb77c: 0x8fbf1000  lw      $ra,0x100($sp)
+  0x081eb780: 0x03e00008  jr      $ra
+  0x081eb784| 0x27bd1010  addiu   $sp,$sp,0x110
+  0x081eb788: 0x3c020820  lui     $v0,0x0820
+dstdb 0S0&gt; 
+
+</font></pre></div>
+<div style="margin-left:50px;"><br>sloadコマンドによってシンボルをロードすれば、btコマンドまたはshow thr -tコマンドによってバックトレースを表示できる場合があります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>クラッシュダンプファイルの形式</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">クラッシュダンプファイルpspcore.elfは、ELF形式のコアダンプファイルです。概要は、以下の通りです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>ELFファイルヘッダ</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>e_ident     = 'ELF', ELFCLASS32, ELFDATA2LSB, EV_CURRENT
+e_type      = ET_CORE
+e_machine   = EM_MIPS
+e_version   = EV_CURRENT
+e_flags     = 0x10A23000
+e_entry     = 0
+e_ehsize    = sizeof(Elf32_Ehdr)
+e_phoff     = プログラムヘッダテーブルのファイル内の位置 
+e_phentsize = sizeof(Elf32_Phdr)
+e_phnum     = 4
+e_shoff     = 0
+e_shentsize = 0
+e_shnum     = 0
+e_shstrndx  = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>ELFプログラムヘッダ(1)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_LOAD
+p_flags   = PF_R+PF_W+PF_X
+p_offset  = ファイル内の位置
+p_vaddr   = 0x08800000
+p_paddr   = 0x08800000
+p_filesz  = 0x01800000
+p_memsz   = 0x01800000
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>ELFプログラムヘッダ(2)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_LOAD
+p_flags   = PF_R+PF_W+PF_X
+p_offset  = ファイル内の位置
+p_vaddr   = 0x04000000
+p_paddr   = 0x04000000
+p_filesz  = 0x00200000
+p_memsz   = 0x00200000
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>ELFプログラムヘッダ(3)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_LOAD
+p_flags   = PF_R+PF_W+PF_X
+p_offset  = ファイル内の位置
+p_vaddr   = 0x00010000
+p_paddr   = 0x00010000
+p_filesz  = 0x00004000
+p_memsz   = 0x00004000
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>ELFプログラムヘッダ(4)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_NOTE
+p_flags   = 0
+p_offset  = ファイル内の位置
+p_vaddr   = 0x00000000
+p_paddr   = 0x00000000
+p_filesz  = ファイル内のサイズ
+p_memsz   = 0
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_6">
+<h3>
+<a href="#Heading3_6"> 6. </a>6 
+<!-- hp1 --><b>ELFノートセグメント</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PT_NOTEセグメント内の全てのElf32_Nhdrは、nameが3バイトの「PSP」となります。typeおよびその構造はdevkit/include/crashdump.hで定義されます。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_1"><h4>
+(1)&nbsp;<b>SCE_CRASHDUMP_LOGTEXT (0x0000100)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のカーネルprintfのログを保持します。このノートは、構造化されていません。直接テキスト文字列が格納されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_2"><h4>
+(2)&nbsp;<b>SCE_CRASHDUMP_REGISTER (0x0000101)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のCPUレジスタ情報を保持します。このノートの構造は、SceCrashDumpRegister構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_3"><h4>
+(3)&nbsp;<b>SCE_CRASHDUMP_MEMBLK (0x00000105)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のユーザパーティションのメモリブロック情報を保持します。このノートの構造は、可変長のSceCrashDumpMemblk構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_4"><h4>
+(4)&nbsp;<b>SCE_CRASHDUMP_HEAP (0x00000106)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のユーザパーティションのヒープ情報を保持します。このノートの構造は、可変長のSceCrashDumpHeap構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_5"><h4>
+(5)&nbsp;<b>SCE_CRASHDUMP_LOWHEAP (0x00000107)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のユーザパーティションのローヒープ情報を保持します。このノートの構造は、可変長のSceCrashDumpLowheap構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_6"><h4>
+(6)&nbsp;<b>SCE_CRASHDUMP_MODULE (0x00000108)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のモジュールリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpModule構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_7"><h4>
+(7)&nbsp;<b>SCE_CRASHDUMP_INTHANDLER (0x00000109)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時の割り込みハンドラリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpIntHandler構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_8"><h4>
+(8)&nbsp;<b>SCE_CRASHDUMP_THREAD (0x00000111)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のスレッドリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpThread構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_9"><h4>
+(9)&nbsp;<b>SCE_CRASHDUMP_SEMAPHORE (0x00000112)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のセマフォリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpSema構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_10"><h4>
+(10)&nbsp;<b>SCE_CRASHDUMP_EVENTFLAG (0x00000113)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のイベントフラグリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpEventFlag構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_11"><h4>
+(11)&nbsp;<b>SCE_CRASHDUMP_MBOX (0x00000114)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のメッセージボックスリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpMbx構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_12"><h4>
+(12)&nbsp;<b>SCE_CRASHDUMP_VPL (0x00000115)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時の可変長メモリプールリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpVpl構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_13"><h4>
+(13)&nbsp;<b>SCE_CRASHDUMP_FPL (0x00000116)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時の固定長メモリリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpFpl構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_14"><h4>
+(14)&nbsp;<b>SCE_CRASHDUMP_MPIPE (0x00000117)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のメッセージパイプリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpMpp構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_15"><h4>
+(15)&nbsp;<b>SCE_CRASHDUMP_CALLBACK (0x00000118)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のコールバックリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpCallback構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_16"><h4>
+(16)&nbsp;<b>SCE_CRASHDUMP_THREADEVENTHANDLER (0x00000119)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のスレッドイベントハンドラリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpThreadEventHandler構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_17"><h4>
+(17)&nbsp;<b>SCE_CRASHDUMP_ALARM (0x0000011A)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のアラーム情報を保持します。このノートの構造は、可変長のSceCrashDumpAlarm構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_18"><h4>
+(18)&nbsp;<b>SCE_CRASHDUMP_VTIMER (0x0000011B)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時の仮想タイマリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpVTimer構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_19"><h4>
+(19)&nbsp;<b>SCE_CRASHDUMP_MUTEX (0x0000011C)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のミューテックスリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpMutex構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_20"><h4>
+(20)&nbsp;<b>SCE_CRASHDUMP_LWMUTEX (0x0000011D)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時の軽量ミューテックスリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpLwMutex構造体で定義されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_21"><h4>
+(21)&nbsp;<b>SCE_CRASHDUMP_TLSPL (0x0000011E)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">BSOD発生時のTLSメモリプールリスト情報を保持します。このノートの構造は、可変長のSceCrashDumpTlspl構造体で定義されます。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

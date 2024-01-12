@@ -1,0 +1,942 @@
+<html lang="jp">
+<head>
+<title>libssl-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libssl
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libsslの初期化<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslInit</b> (
+	SceSize <i>pool_size</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pool_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SSL通信で使用するヒープメモリのサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435020&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_ALREADY_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>()を呼ぶことなく、&nbsp;&nbsp;<br>&nbsp;&nbsp;2回目の<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()を呼んだ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pool_size</i>に0を指定した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libsslの初期化を行います。libhttpでhttpsの通信を行う前に呼び出しておく必要があります。<i>pool_size</i>で指定されたメモリサイズをSSL通信の利用するヒープサイズとして使用します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>#define SSL_POOLSIZE 	(150 * 1024U)
+ret = sceSslInit(SSL_POOLSIZE);
+if(ret &lt; 0){
+	/* エラー処理 */
+}
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-Japanese.htm#sceSslEnd">sceSslEnd</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslEnd"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslEnd<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libsslの終了<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslEnd</b> (
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libsslを終了し、確保していたリソースを開放します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetUsedMemoryMax"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetUsedMemoryMax<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>現在までの最大消費メモリサイズ取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslGetUsedMemoryMax</b> (
+	SceSize *<i>p_max</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>p_max</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現在までのメモリ消費量の最大値を格納する変数へのポインタを指定します&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>p_max</i>にNULLを指定した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libsslの現在までの最大使用メモリサイズが<i>p_max</i>で指定されたメモリに格納されます。内部断片化のため、最大使用メモリサイズが<a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>()で指定した値未満の状態でメモリ確保に失敗する可能性があることにご注意ください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-Japanese.htm#sceSslGetUsedMemoryCurrent">sceSslGetUsedMemoryCurrent</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetUsedMemoryCurrent"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetUsedMemoryCurrent<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>現在消費中のメモリサイズ取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslGetUsedMemoryCurrent</b> (
+	SceSize *<i>p_current</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>p_current</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現在のメモリ消費量を格納するメモリへのポインタを指定します&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>p_max</i>にNULLを指定した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libsslの現在使用中のメモリサイズが<i>p_current</i>で指定されたアドレスに格納されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-Japanese.htm#sceSslGetUsedMemoryMax">sceSslGetUsedMemoryMax</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetSerialNumber"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetSerialNumber<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>証明書のシリアルナンバー取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetSerialNumber</b> (
+	const SceSslCert *<i>ssl_cert</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> **<i>sbo_data</i>,
+	SceSize *<i>sbo_len</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シリアルナンバーを取得したい証明書へのポインタを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;証明書のポインタは<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定するコールバック関数で&nbsp;&nbsp;<br>&nbsp;&nbsp;取得されます。(IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sbo_data</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シリアルナンバーの先頭アドレスを格納するためのメモリを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;シリアルナンバーはビッグエンディアンで格納されます。(OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sbo_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シリアルナンバーの長さを格納するためのメモリのアドレスを指定します。(OUT)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>, <i>sbo_data</i>, <i>sbo_len</i>にNULLを&nbsp;&nbsp;<br>&nbsp;&nbsp;指定した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">証明書オブジェクトのシリアルナンバーを取得するための関数です。証明書オブジェクトはHTTPライブラリの<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定するコールバック関数の引数として使用されます。シリアルナンバーが保存されているメモリ領域はコールバック関数の終了直後に開放されますので、保存が必要な場合はコールバック関数内で別メモリにコピーしてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetSubjectName"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetSubjectName<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>証明書のサブジェクトネームを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+const SceSslCertName *<b>sceSslGetSubjectName</b> (
+	const SceSslCert *<i>ssl_cert</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サブジェクトネームを取得したい証明書へのポインタを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;証明書のポインタは<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定するコールバック関数で&nbsp;&nbsp;<br>&nbsp;&nbsp;取得されます。(IN)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了のときSceSslCertNameオブジェクトへのポインタが返ります。<br>サブジェクトネームが取得できない時NULLが返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">証明書オブジェクトのサブジェクトのネームオブジェクトを取得するための関数です。証明書オブジェクトはHTTPライブラリの<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定するコールバック関数の引数として取得されます。サブジェクトネームオブジェクトの詳細を取得するには<a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>()でサブジェクトネームエントリの数を取得した後に<a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>()を用いて各ネームエントリの情報を取得してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetIssuerName"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetIssuerName<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>証明書の発行者情報取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+const SceSslCertName *<b>sceSslGetIssuerName</b> (
+	const SceSslCert *<i>ssl_cert</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;発行者情報を取得したい証明書へのポインタを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;証明書のポインタは<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定する&nbsp;&nbsp;<br>&nbsp;&nbsp;コールバック関数で取得されます。(IN)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了のときSceSslCertNameオブジェクトへのポインタが返ります。<br>発行者情報が取得できない時NULLが返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">証明書オブジェクトの発行者情報のSSLネームオブジェクトを取得するための関数です。証明書オブジェクトはHTTPライブラリの<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定するコールバック関数の引数として取得されます。ネームオブジェクトの詳細を取得するには<a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>()でネームエントリの数を取得した後に<a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>()を用いて各ネームエントリの情報を取得してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNameEntryCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNameEntryCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ネームエントリの数を取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNameEntryCount</b> (
+	const SceSslCertName *<i>cert_name</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ネームエントリの数を取得するSSLネームオブジェクトへの&nbsp;&nbsp;<br>&nbsp;&nbsp;ポインタを指定する。(IN)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正の値	<i>cert_name</i>に含まれるネームエントリの個数。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>, <i>sbo_data</i>, <i>sbo_len</i>にNULLを&nbsp;&nbsp;<br>&nbsp;&nbsp;指定した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SSLネームオブジェクトに含まれるネームエントリ数を取得するための関数です。SSLネームオブジェクトは<a href="../network/libssl-Reference-Japanese.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetIssuerName">sceSslGetIssuerName</a>()などで取得できます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNameEntryInfo"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNameEntryInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ネームエントリの情報を取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNameEntryInfo</b> (
+	const SceSslCertName *<i>cert_name</i>,
+	int <i>entry_num</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> **<i>oidname</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> **<i>value</i>,
+	SceSize *<i>value_len</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エントリを取得するSSLネームオブジェクトのポインタを指定する。(IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>entry_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得したいエントリの番号を指定する。SSLネームオブジェクトに格納されて&nbsp;&nbsp;<br>&nbsp;&nbsp;いるエントリの数は<a href="../network/libssl-Reference-Japanese.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>()で取得できる。(IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oidname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エントリのオブジェクトIDを表すASCIZされた文字列。&nbsp;&nbsp;<br>&nbsp;&nbsp;NULLの時はUnknownなオブジェクトIDを意味する。(OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>value</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エントリの値の先頭アドレスを格納するためのメモリを指定する。&nbsp;&nbsp;<br>&nbsp;&nbsp;ASCIZはされていない。(OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>value_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>value</i>のサイズを格納するためのメモリアドレスを指定。(OUT)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正の値	<i>cert_name</i>に含まれるネームエントリの個数。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>oid_name</i>, <i>value</i>, <i>value_len</i>にNULLを&nbsp;&nbsp;<br>&nbsp;&nbsp;指定した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SSLネームオブジェクトに含まれるネームエントリ数を取得するための関数です。SSLネームオブジェクトは<a href="../network/libssl-Reference-Japanese.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetIssuerName">sceSslGetIssuerName</a>()などで取得できます。当関数で取得した値が格納されているメモリは<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定したコールバック関数から抜けた直後に開放されるため、値を保存しておく場合はコールバック関数内で別メモリにコピーする必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNotAfter"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNotAfter<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>証明書の有効期間の終了時刻を取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNotAfter</b> (
+	const SceSslCert *<i>ssl_cert</i>,
+	<a href="../peripheral/RTC-Reference-Japanese.htm#SceRtcTick">SceRtcTick</a> *<i>limit</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;有効期間の終了時刻を取得したい証明書へのポインタを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;証明書のポインタは<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定する&nbsp;&nbsp;<br>&nbsp;&nbsp;コールバック関数で取得されます。(IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>limit</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;有効期間の終了時刻を格納するメモリのアドレスを指定します。(OUT)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正の値	<i>cert_name</i>に含まれるネームエントリの個数。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>, <i>limit</i>にNULLを指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435108&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>で指定された証明書から&nbsp;&nbsp;<br>&nbsp;&nbsp;終了時刻を取得できない。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">証明書オブジェクトの有効期間の終了時刻を取得するための関数です。証明書オブジェクトはHTTPライブラリの<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定するコールバック関数の引数として取得されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetNotBefore">sceSslGetNotBefore</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNotBefore"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNotBefore<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>証明書の有効期間の開始時刻を取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNotBefore</b> (
+	const SceSslCert *<i>ssl_cert</i>,
+	<a href="../peripheral/RTC-Reference-Japanese.htm#SceRtcTick">SceRtcTick</a> *<i>begin</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;有効期限の開始時刻を取得したい証明書へのポインタを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;証明書のポインタは<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定する&nbsp;&nbsp;<br>&nbsp;&nbsp;コールバック関数で取得されます。(IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>begin</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;有効期間の開始時刻を格納するメモリのアドレスを指定します。(OUT)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正の値	<i>cert_name</i>に含まれるネームエントリの個数。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ初期化前&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>, <i>begin</i>にNULLを指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435108&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>で指定された証明書から&nbsp;&nbsp;<br>&nbsp;&nbsp;開始時刻を取得できない。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">証明書オブジェクトの有効期間の開始時刻を取得するための関数です。証明書オブジェクトはHTTPライブラリの<a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()で設定するコールバック関数の引数として取得されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(), <a href="../network/libssl-Reference-Japanese.htm#sceSslGetNotAfter">sceSslGetNotAfter</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

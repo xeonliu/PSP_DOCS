@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+<title>BatteryIcon-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Battery Icon Display Guide
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Battery Icon Display Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The following figure shows the processing flow for drawing the battery icon on the PSP&trade;.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/BatteryIcon-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Drawing Processing Flow</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Information needed to draw the battery icon is obtained from the impose driver. The user program uses this information along with texture data provided by SCE to draw the battery icon.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Information Acquisition</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Be sure to use the following function to get the display status of the battery icon.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../peripheral/Impose-Reference-English.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(int *status, int *indicator);
+</font></pre></div>
+<div style="margin-left:50px;"><br>For details about this function, see the Impose Driver Reference Manual.<br><br>Example:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;impose.h&gt;
+
+int DrawBattery(void)
+{
+	int		status,indicator;
+
+	// Get battery icon status
+	<a href="../peripheral/Impose-Reference-English.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(&amp;status,&amp;indicator);
+
+		:
+		:
+		:
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Texture Data</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Texture data is stored by vertically stacking four 32 x 18 [pixel] icons as shown below.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/BatteryIcon-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 Texture Image</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">From top to bottom, these correspond to the following.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> When there are three indicator bars
+<li> When there are two indicator bars
+<li> When there is one indicator bar
+<li> When there are no indicator bars
+</ul></div>
+<div style="margin-left:50px;"><br>The texture data also includes alpha information.<br>When converting data, be sure to also convert the alpha information together with the data.<br><br>For texture data, use<br>    batteryicon.tga and batteryicon.h,<br>which are in<br>    /devkit/sample/guideline/batteryicon/.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Display Position</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The specified texture file is drawn at the following coordinates.<br><br>X coordinate 449 [pixels]<br>Y coordinate 5 [pixels]<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/BatteryIcon-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3 Screen Image</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Non-Displayed Status</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The battery icon on the PSP&trade; is not displayed if the unit is being powered by the AC adapter and the battery has been removed.<br><br>In this case, the SCE_IMPOSE_BATTICON_NONE bit will be set in the value returned in the first argument of <a href="../peripheral/Impose-Reference-English.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>().<br><br><br><br>Example:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>	int		status,indicator;
+
+	<a href="../peripheral/Impose-Reference-English.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(&amp;status,&amp;indicator);
+
+	// Non-displayed
+	if(status &amp; SCE_IMPOSE_BATTICON_NONE)
+		return;
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Blinking Display Status</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">When the battery is charging, the battery icon will be blinking.<br><br>In this case, the SCE_IMPOSE_BATTICON_BLINK bit will be set in the value returned in the first argument of <a href="../peripheral/Impose-Reference-English.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>().<br><br>To blink the icon, draw it so that every second it is displayed for 0.6 second and not displayed for 0.4 second.<br><br><br><br>Example:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>	static int	batticon_counter;
+	int		status,indicator;
+
+	batticon_counter=((batticon_counter+1)&amp;0xffff);
+	<a href="../peripheral/Impose-Reference-English.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(&amp;status,&amp;indicator);
+
+	// Blink the icon
+	if(status &amp; SCE_IMPOSE_BATTICON_BLINK) {
+		if((batticon_counter%60)&gt;=36)
+			return;		// Not displayed, so exit
+	}
+
+	// Display the icon
+	(Drawing routine)
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

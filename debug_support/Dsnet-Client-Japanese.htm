@@ -1,0 +1,497 @@
+<html lang="jp">
+<head>
+<title>Dsnet-Client</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+dsnet for PSP&reg;概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>DECI2Pデバッグ環境</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dsnet for PSP&reg;は、DECI2Pプロトコルを使用して、ターゲット上で動作するアプリケーションを効率よく開発するために、ホストとツールとのソフトウェアにおける連携を実現したデバッグ環境です。<br><br>DECI2Pデバッグ環境では、ターゲットとの通信は、DEIC2Pプロトコルと上位プロトコルからなるDECI2Pパケットを単位として行われます。図 1にDECI2Pデバッグ環境のブロックダイアグラムを示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Dsnet-Client-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  DECI2Pデバッグ環境</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">ホストPCのクライアントアプリケーションは、PSP&reg;ツール上で動作する「dsnetm_psp」との間でTCP/IPソケット間通信により、ツールとの通信を行います。<br><br>dsnet for PSP&reg;は、dsnetm_pspと通信を行うホストPC上のクライアントアプリケーションです。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>各クライアントの利用</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>-dオプション</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dsnet for PSP&reg;の各クライアントプログラムでは、-dオプションを使用して接続するホスト名ポートの指定を行います。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>-d オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ホスト名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ポート番号</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-d &lt;host&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;host&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8510&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-d &lt;host&gt;[:&lt;port&gt;]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;host&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;port&gt;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-d :&lt;port&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;default-host&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;port&gt;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">-dオプションは、通信先となるdsnetm_pspのホスト名およびポートの指定です。<br>-dオプションを指定しない場合には、クライアントプログラムを実行したマシンと同じマシン（default-host）のデフォルトポート（8510）の指定となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>環境変数DSNETM_PSP</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">dsnet for PSP&reg;の各コマンドでは、環境変数DSNETM_PSPを使用することで毎回-dオプションを指定しなくても接続先ターゲットの指定を行うことができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>export DSNETM_PSP=psptool.rd.scei.sony.co.jp
+
+</font></pre></div>
+<div style="margin-left:50px;">DTL-T1000のネットワーク設定ページで「ホスト名をDHCPサーバーに送信」設定と組み合わせて使用すると便利です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>dstdb - DS Thread debugger</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_1">
+<div style="margin-left:40px;"><h4><b>dstdb [&lt;options&gt;] &lt;cmd&gt; [&lt;arg&gt;]...]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dstdbは、ソースレベル/インストラクションレベルのデバッガです。<br>ターゲットからの標準入出力、ファイルアクセスにも対応しています。<br>使いかたの詳細は、「dstdbコマンドリファレンス」を参照してください。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-d &lt;host&gt;[:&lt;port&gt;]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dsnetm_pspのホスト、ポートの指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-ncmv&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;managerのversionをチェックしない(default)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-cmv&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;managerのversionをチェックする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-r&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;起動時にターゲットをresetする&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-nr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;起動時にターゲットをresetしない(default)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-nx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;起動時に自動実行ファイルの実行をしない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-sbootp &lt;sbootp&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブートパラメータの初期値指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-nokbd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;arg&gt;...の指定時にkeyboardを使わない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-noexit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&lt;arg&gt;...の指定時にexitしない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-p &lt;port&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リモートコンソールポートの指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-c &lt;crash dump file&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ポストモータムデバッグの指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-j &lt;device&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コントローラ操作中継の指定(linux)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-j&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コントローラ操作中継の指定(Win32)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">通常は、次に示すようにdstdbを起動して、対話的にデバッグを行います。<br></div>
+<br>
+        <div style="margin-left:80px;"><pre><font size=3>$ dstdb                                 # デバッガを起動
+dstdb 0R0&gt; bloadp abooti.bin            # ブートコードをロード
+dstdb 0R0&gt; reset                        # ターゲットをリセット
+   ...
+dstdb 0R0&gt; help                         # コマンドのヘルプ表示
+   ...
+dstdb 0R0&gt; mload sample.prx             # プログラムのロード
+   ...
+dstdb 0R0&gt; bp 0x8807e30c                # 0x8807e30cにブレークポイントを設定
+dstdb 0R0&gt; mstart -d                    # プログラムをデバッグモードで実行
+   ...
+at=deadbeef v0-1==deadbeef,...
+   ...
+dstdb 0R0&gt; db 0x8825f774                # 0x8825f774 番地をダンプ
+   ...
+dstdb 0R0&gt; step                         # ステップ実行
+   ...
+dstdb S&gt; cont                           # 継続実行
+   ... ^C                               # CTRL-C で強制中断
+dstdb S&gt; dr                             # レジスタの表示
+   ...
+dstdb S&gt; quit                           # dstdb の終了
+$
+
+</font></pre></div>
+<div style="margin-left:67px;">BSODによって生成されたクラッシュダンプファイルがある場合は、次に示すようにdstdbを-cオプションつきで起動して、ポストモータムデバッグを行うことができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ dstdb -c pspcore.elf                 # デバッガを起動
+
+</font></pre></div>
+<div style="margin-left:67px;">dstdbの-jオプションを指定すると、ホストPCにUSB経由で接続したPlayStation&reg;3のワイヤレスコントローラ(SIXAXIS)またはワイヤレスコントローラ(DUALSHOCK 3)の操作をターゲットに中継することができます。ただし、ワイヤレスコントローラ(SIXAXIS)またはワイヤレスコントローラ(DUALSHOCK 3)をワイヤレスで使用することはできません。<br><br>linuxでは-jオプションでjoystickデバイスのデバイスファイル（/dev/js0等）を指定してください。linuxカーネルは2.6.2以降が必要になります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ dstdb -j /dev/js0                    # デバッガを起動
+
+</font></pre></div>
+<div style="margin-left:67px;">Windowsでは、libpad for Windowsのlibpad_win.dllファイルをdstdb.exeと同じディレクトリにインストールする必要があります。オプションの指定は-jのみで、デバイスファイルの指定は不要です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ dstdb -j                             # デバッガを起動
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>dspcons</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_4_2">
+<div style="margin-left:40px;"><h4><b>dspcons [-d &lt;host&gt;[:&lt;port&gt;]] [-e &lt;escape&gt;] -nokbd -ns [0-9k]...</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dspconsは、ターゲットプログラムのTTYP入出力の相手となるコンソールプログラムです。<br><br>TTYPは、以下の11個のプロトコル番号があります。<br></div>
+<br>
+<div style="margin-left:67px;">S0TTYP, S1TTYP, ..., S9TTYP, SKTTYP<br></div>
+<br>
+<div style="margin-left:67px;">引数 [0-9k]...を指定した場合には、指定のprotocolのみを、指定しない場合には、11個すべてのTTYPプロトコルを受信し、画面に受信データを表示します。<br>キー入力データは、最初に指定されたプロトコル番号でターゲットに送ります。<br>指定がない場合には、S0TTYPで送ります。<br>-nokbdオプションが指定されている場合には、&lt;escape&gt;以外のキー入力は、すべて無視します。<br>-nsオプションを指定された場合には、Remote File Accessサーバーからのエラーメッセージの表示を行いません。<br>以下に [0-9k]...の指定方法を示します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dspcons 1 2 3          # S1TTYP,S2TTYP,S3TTYP
+dspcons 1-3 k          # S1TTYP,S2TTYP,S3TTYP,SKTTYP
+
+</font></pre></div>
+<div style="margin-left:67px;">キー入力が&lt;escape&gt;の場合は終了しますが、それ以外は、すべてキー入力としてターゲットプログラムに送ります。<br>&lt;escape&gt;のデフォルトは、CTRL-] (0x1d)です。&lt;escape&gt;にコントロールコードを指定するには、'^' を文字の前に付けて、たとえば '-e ^C'というように指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>dsxfilesv</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_3">
+<div style="margin-left:40px;"><h4><b>dsxfilesv [-d &lt;host&gt;[:&lt;port&gt;]] [-i] [-c &lt;cmd&gt;] [-t &lt;sec&gt;]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsxfilesvは、ターゲットプログラムから送られてくるRemote File Access要求を処理するファイルサーバープログラムです。通常は、dstdbがRemote File Access要求を処理するので、Remote File Access時のカレントディレクトリをdstdbのカレントディレクトリに依存しない固定の場所としたい場合以外には、使用する必要はありません。<br><br>dsxfilesvを使用する場合は、dstdbでのRemote File Accessの扱いを禁止する必要があります。dstdbのスタートアップファイル（~/.dstdbrcもしくは./.dstdbrc）に、以下の行を設定してください。<br><br>option file_priority=-1<br><br>-i オプションを指定しない限りdsxfilesvは、バックグラウンドで動作します。<br>dsxfilesvを終了するには、killコマンドを使います。<br>-c &lt;cmd&gt;オプションを指定すると、指定されたシェルコマンド(&lt;cmd&gt;)を実行し、<br>以下の条件が揃った時にプログラムを終了します。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Remote File Accessによってオープンされたファイルが、すべてクローズされている。</li>
+<li VALUE=2> シェルコマンド(&lt;cmd&gt;)が、終了した。</li>
+<li VALUE=3> -t &lt;sec&gt;によって指定された秒数（defaultは1秒）の間、上記 1)の状態が続いている。</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>dspstat</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_4">
+<div style="margin-left:40px;"><h4><b>dspstat [-d &lt;host&gt;[:&lt;port&gt;]]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dspstatは、ターゲット全体に接続されているクライアントプログラムの一覧を表示するクライアントプログラムです。現在ターゲットを使用している人を特定する場合などに使用します。<br>dspkillと組み合わせて使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>dspkill</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_7_5">
+<div style="margin-left:40px;"><h4><b>dspkill [-d &lt;host&gt;[:&lt;port&gt;]] [protocol]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dspkillは、ターゲット全体に接続されているクライアントプログラムより、特定のプロトコルに接続しているクライアントを強制切断するプログラムです。dspstatと組み合わせて使用し、現在ターゲットを占有している人を無断で強制排除する場合などに使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>dspmcons</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_8_6">
+<div style="margin-left:40px;"><h4><b>dspmcons [-d &lt;host&gt;[:&lt;port&gt;]] ...</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dspmconsは、PSP&reg; TOOL内のCPで動作しているdsnetm_pspのデバッグコンソールを操作するための専用コンソールプログラムです。通常は、使用する必要ありませんが、DECI2pプロトコル上に独自のプロトコル通信を行う場合のデバッグとしてdsnetm_pspが記録しているパケットログを参照する場合に使用する事ができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_9">
+<h3>
+<a href="#Heading3_2"> 2. </a>9 
+<!-- hp1 --><b>dsbloadp</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_9_7">
+<div style="margin-left:40px;"><h4><b>dsbloadp [-d &lt;host&gt;[:&lt;port&gt;]] &lt;fname&gt;</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsbloadpは、ターゲットにPSP&reg;ブートコードを送信するクライアントプログラムです。dstdbのbloadpコマンドの動作に相当します。<br>dspresetと組み合わせて使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_10">
+<h3>
+<a href="#Heading3_2"> 2. </a>10 
+<!-- hp1 --><b>dspreset</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_10_8">
+<div style="margin-left:40px;"><h4><b>dspreset [-d &lt;host&gt;[:&lt;port&gt;]] [sbootp]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dspresetは、ターゲット全体をリセットするクライアントプログラムです。<br>dsbloadpと組み合わせて使用します。<br><br>sbootpでブートパラメータを指定する事ができます。ブートパラメータは、dstdbのresetコマンドと共通で、以下のような定義になっています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_10_9">
+<div style="margin-left:40px;"><h4><b>ブートパラメータ</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>bit</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ設定 32MiB/64MiB切り替えビット。&nbsp;&nbsp;<br>&nbsp;&nbsp;0=32MiB&nbsp;&nbsp;<br>&nbsp;&nbsp;1=64MiB&nbsp;&nbsp;<br>&nbsp;&nbsp;ただし、上記メモリ領域の内、ともに8MiBはシステムが使用しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;また64MiBモードでは、さらに8MiBを予約領域として設定しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;従って、それぞれのモードでユーザが自由に使えるのは、&nbsp;&nbsp;<br>&nbsp;&nbsp;OFF時24MiB、ON時48MiBとなります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WLANと共存可能なPLLクロック起動切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0= 222MHz（PSP-1000相当）&nbsp;&nbsp;<br>&nbsp;&nbsp;1= 333MHz（PSP-2000以降相当）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 12&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;キャッシュ切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0=UMD&reg;キャッシュ無効&nbsp;&nbsp;<br>&nbsp;&nbsp;1=UMD&reg;キャッシュ有効&nbsp;&nbsp;<br>&nbsp;&nbsp;ただし、bit 10が1だった場合はbit 12の設定は無効になります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 15&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ether over DECI2p切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0=WLAN使用&nbsp;&nbsp;<br>&nbsp;&nbsp;1=Ether over DECI2p使用&nbsp;&nbsp;<br>&nbsp;&nbsp;Ether over DECI2pを選択するとWLANの代わりにDECI2p経由で&nbsp;&nbsp;<br>&nbsp;&nbsp;イーサパケットを送受信するようになります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 17&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GPI6によるMemory Stick&trade; LOCKスイッチエミュレーション&nbsp;&nbsp;<br>&nbsp;&nbsp;0=LOCKスイッチエミュレーションなし&nbsp;&nbsp;<br>&nbsp;&nbsp;1=LOCKスイッチエミュレーション有効&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 18&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DVD使用時の読み込み速度選択&nbsp;&nbsp;<br>&nbsp;&nbsp;0=UMD&reg;相当&nbsp;&nbsp;<br>&nbsp;&nbsp;1=DVDドライブの最高速度&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 19&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;/DVDの読み込みランダム遅延&nbsp;&nbsp;<br>&nbsp;&nbsp;0=ランダム遅延なし&nbsp;&nbsp;<br>&nbsp;&nbsp;1=ランダム遅延あり&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 20&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WLANパケットロス&nbsp;&nbsp;<br>&nbsp;&nbsp;0=ランダムパケットロスなし&nbsp;&nbsp;<br>&nbsp;&nbsp;1=ランダムパケットロスあり&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 22&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラモード切り替えビット。&nbsp;&nbsp;<br>&nbsp;&nbsp;0=グローバルモード&nbsp;&nbsp;<br>&nbsp;&nbsp;（スレッドマネージャはプロファイラレジスタを管理しない）&nbsp;&nbsp;<br>&nbsp;&nbsp;1=スレッドモード（プロファイラレジスタをスレッドごとに管理する）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 23&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのenable/disable切り替えビット。&nbsp;&nbsp;<br>&nbsp;&nbsp;0=プロファイラdisable&nbsp;&nbsp;<br>&nbsp;&nbsp;1=プロファイラ enable&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 24&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリブロックのオーバーフローチェックのenable/disable切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0=オーバーフローチェックdisable&nbsp;&nbsp;<br>&nbsp;&nbsp;1=オーバーフローチェックenable&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 29&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;開発環境/システムソフトウェア切り替えビット&nbsp;&nbsp;<br>&nbsp;&nbsp;0=開発環境&nbsp;&nbsp;<br>&nbsp;&nbsp;1=システムソフトウェア&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他のbit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reserved&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_11">
+<h3>
+<a href="#Heading3_2"> 2. </a>11 
+<!-- hp1 --><b>dsxstart</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_11_10">
+<div style="margin-left:40px;"><h4><b>dsxstart [-d &lt;host&gt;[:&lt;port&gt;]] -sc [-c &lt;cmd&gt;] [-t &lt;sec&gt;] &lt;fname&gt; [&lt;arg&gt;…]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsxstartは、ターゲット上にモジュールをロードするクライアントプログラムです。dstdbのmstartコマンドに類似した動作をします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_12">
+<h3>
+<a href="#Heading3_2"> 2. </a>12 
+<!-- hp1 --><b>dsxlist</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_12_11">
+<div style="margin-left:40px;"><h4><b>dsxlist [-d &lt;host&gt;[:&lt;port&gt;]] -sc [-c &lt;cmd&gt;] [-t &lt;sec&gt;]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsxlistは、ターゲット上にロードされているモジュールの一覧を表示するクライアントプログラムです。dstdbのminfoコマンドに類似した動作をします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_13">
+<h3>
+<a href="#Heading3_2"> 2. </a>13 
+<!-- hp1 --><b>dsxping</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_13_12">
+<div style="margin-left:40px;"><h4><b>dsxping [-d &lt;host&gt;[:&lt;port&gt;]] -sc [-c &lt;cmd&gt;] [-t &lt;sec&gt;]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsxpingは、ターゲットプログラムからの応答があるかどう診断するクライアントプログラムです。通常は、使用する必要はありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_14">
+<h3>
+<a href="#Heading3_2"> 2. </a>14 
+<!-- hp1 --><b>dsdcons</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_14_13">
+<div style="margin-left:40px;"><h4><b>dsdcons [-d &lt;host&gt;[:&lt;port&gt;]] [-e &lt;escape&gt;] -nokbd -ns [0-9k]...</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsdconsは、dstdbのリモートコンソール入出力の相手となるコンソールプログラムです。<br><br>dstdbの-pオプションでリモートコンソールを指定すると、dstdbは指定されたポート番号に対してDTTYPプロトコルのサーバーを開設してリモートコンソールが使用できるようにします。dsdconsでそのポートに接続することで、リモートからdstdbのコマンド操作を行う事ができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ dstdb -p 1234                        # デバッガを起動
+                                        # ポート1234でリモートコンソール
+dstdb 0R0&gt; 
+   ...
+
+</font></pre></div>
+<div style="margin-left:67px;">この状態から、dstdbを実行しているマシンに対してdsdconsで接続します。このときdsdconsの-dオプションでは、dstdbを実行しているホスト名およびポート番号を指定していることに注意してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ dsdcons -d localhost:1234            # リモートコンソールに接続
+dsdcons (Version 2.24.6 Sat Feb 18 22:09:20 JST 2006)
+target=HOST display=DTTYP keyboard=DTTYP escape=^]
+dstdb 0R0&gt;                              # dstdbのコンソールがあらわれます。
+dstdb 0R0&gt; dr                           # dstdbが操作できます。
+   ...
+
+</font></pre></div>
+<div style="margin-left:67px;">キー入力が&lt;escape&gt;の場合は終了しますが、それ以外はすべてキー入力としてターゲットプログラムに送ります。<br>&lt;escape&gt;のデフォルトは、CTRL-] (0x1d)です。&lt;escape&gt;にコントロールコードを指定するには、'^' を文字の前に付けて、たとえば '-e ^C'というように指定します。<br><br>dsdconsが接続を終了してもdstdbは終了しません。dsdconsからdstdbのquitコマンドを実行するとdstdbコマンド自体が終了されてしまうことに注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_15">
+<h3>
+<a href="#Heading3_2"> 2. </a>15 
+<!-- hp1 --><b>dsptun</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_15_14">
+<div style="margin-left:40px;"><h4><b>dsptun [-d &lt;host&gt;[:&lt;port&gt;]] -tapif &lt;tapif&gt;</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsptunは、ブートパラメータのbit 15でEther over DECI2p機能を有効にしたとき、ターゲットから送られてくるETHERPプロトコルに包まれたパケットをlinuxのtunデバイスに中継するためのプログラムです。linuxカーネル2.6.23.1以降が必要です。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

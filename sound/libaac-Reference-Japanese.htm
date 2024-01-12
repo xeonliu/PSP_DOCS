@@ -1,0 +1,1486 @@
+<html lang="jp">
+<head>
+<title>libaac-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libaac
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceAacInitArg"></a>
+<table width="100%"><td width="70%"><font size=6>SceAacInitArg<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコード資源の初期化変数<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+typedef struct {
+	SceOff <i>aacHeadPos</i>;
+	SceOff <i>aacTailPos</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> <i>*aacBuf</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>aacBufByte</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> <i>*pcmBuf</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>pcmBufByte</i>;
+<i>	</i><a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>fs</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>reserved;</i>
+} <b>SceAacInitArg</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aacHeadPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AACファイル最初のオーディオデータの先頭位置&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aacTailPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AACファイル最後のオーディオデータの末尾位置&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aacBuf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バッファの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aacBufByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バッファのバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmBuf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バッファの先頭アドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmBufByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;出力バッファのバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サンプリング周波数（Hz）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>reserved</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;予約領域&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">AACハンドルの初期化に利用する構造体です。<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()の引数として利用されます。入出力バッファのアドレスと大きさ、ループ再生のためのファイル情報、デコーダ初期化のためのサンプリング周波数から構成されます。<br><i>aacHeadPos</i>には、ヘッダを除く最初のオーディオデータの先頭位置を指定してください。<i>aacTailPos</i>には、ファイル末尾となるオーディオデータの末尾位置を指定してください。<br>入出力バッファのメモリアラインメントは、<b>64バイトアラインメント</b>である必要があります。また、必要な入出力バッファサイズは、以下のようになります。<br><br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> 入力(AAC)バッファサイズ<br>8192バイト以上、かつ64バイトの倍数
+<li> 出力(PCM)バッファサイズ<br>8192バイト(1024サンプル×2バイト×2チャネル×2バッファ)
+</ul></div>
+<div style="margin-left:50px;"><br><i>fs</i>にはサンプリング周波数をHzで指定します。<i>reserved</i>には必ず0を代入してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacGetMaxOutputSample">sceAacGetMaxOutputSample</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacInitResource"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacInitResource<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libaacの計算資源の確保<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacInitResource</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceUInt32">SceUInt32</a> <i>num</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;同時に必要とするデコード資源の個数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libaacに必要な計算資源を確保します。libaacの各機能を利用するためには、まず、本関数を実行する必要があります。<br>この計算資源によって複数個のAACストリームデータを並列でデコードすることが可能です。個々のデコード処理に必要な計算資源をlibaacでは、<b>デコード資源</b>と呼びます。同時に利用可能なデコード資源の数を引数<i>num</i>に指定します。デコード資源は後述するAACハンドルと一対一に対応するため、デコード資源の数は、AACハンドルの数に一致します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* libaacに必要な計算資源を2つ確保 */
+sceAacInitResource (2);
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacTermResource">sceAacTermResource</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacTermResource"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacTermResource<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libaacの計算資源の解放<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacTermResource</b>(
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">libaacのために確保した計算資源をすべて解放します。この関数を呼ぶ前に取得しているハンドルをすべて返却しておく必要があります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* libaacのために確保した計算資源を解放 */
+status = sceAacTermResource ();
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInitResource">sceAacInitResource</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコード資源の初期化とハンドルの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacInit</b> (
+	const <a href="../sound/libaac-Reference-Japanese.htm#SceAacInitArg">SceAacInitArg</a> <i>*aacInitArg</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aacInitArg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源初期化変数を指すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたデコード資源初期化変数に基づいて初期化処理を行い、ハンドルを返します。引数として与えた変数のメンバ変数にある入力バッファにはAACデータを読み込んでおく必要があり、AAC規格におけるraw_data_frame()を先頭とする必要があります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* デコード資源を初期化 */
+status = sceAacInit(&amp;initarg);
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacExit">sceAacExit</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacExit"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacExit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコードハンドルの解放<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacExit</b> (
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">取得したハンドルをシステムに返却します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* デコード資源を解放 */
+status = sceAacExit(handle);
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacDecode"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacDecode<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>AACデータのデコード<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacDecode</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceShort16">SceShort16</a> <i>**pcmSrcPtr</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pcmSrcPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード結果の出力先アドレスを指すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>*pcmSrcPtr</i>から読み出し可能なバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力バッファに読み込まれたAACデータを1フレームだけリニアPCMデータにデコードし、出力バッファに書き込みます。入力のAACデータ形式に依らず、出力のPCMデータのフォーマットは、ビット深度16ビットのステレオ形式になります。このPCMデータは、<i>pcmSrcPtr</i>が指すアドレスを先頭アドレスとし、左、右、左、……のようにインタリーブ形式で左右交互に出力されます。出力されるPCMデータのサイズは、返り値によって取得することができます。出力されるPCMデータは、次にsceAacDecode()を実行するまでの間だけ有効です。<br>デコード処理を実行することで入力バッファ内のAACデータが消費されます。デコード処理を行う前に必ず<a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>()を実行し、必要に応じてAACデータを追加してください。AACデータの読み込みは、同期または非同期に行うことができます。また、AACデータの追加完了が遅く、入力バッファ内のAACデータが残り1フレームもない場合、デコード呼び出しの１回目にはsceAacDecode()は無音のPCMデータを出力します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>デコードされたPCMデータをvaudio経由でオーディオ出力する例を以下に示します。
+
+/* AACデータをデコード */
+out_bytes = sceAacDecode(handle, &amp;pcmSrcPtr);
+/* vaudioにPCMデータを受け渡し */
+<a href="../sound/Vaudio-Reference-Japanese.htm#sceVaudioOutputBlocking">sceVaudioOutputBlocking</a>(vol, pcmSrcPtr);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によってデコード資源の初期化およびハンドルの取得を完了させてください。<br>サンプリング周波数が44100Hz以外のデータを出力する場合には、事前に<a href="../sound/Vaudio-Reference-Japanese.htm#sceVaudioChReserve">sceVaudioChReserve</a>()によって、サンプリング周波数とPCMサンプル数をvaudioに指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacCheckStreamDataNeeded"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacCheckStreamDataNeeded<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>AACデータを入力バッファへ追加する必要性のチェック<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacCheckStreamDataNeeded</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AACデータを入力バッファへ追加する必要性がある場合&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AACデータを入力バッファへ追加する必要性がない場合&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力バッファにAACデータを追加する必要性をチェックします。具体的には、未デコードのAACデータサイズが入力バッファサイズの半分を切った場合、入力バッファにAACデータを追加する必要があると見なします。デコード処理を行う前に必ず本関数を実行し、AACファイルからAACデータを追加する必要性をチェックしてください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* AACデータを入力バッファに追加する必要性をチェック */
+if (sceAacCheckStreamDataNeeded(handle) &gt; 0) {
+         /* 入力バッファにAACデータを読み込み */
+         <a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>(handle, &amp;aacDstPtr, &amp;writableByte, &amp;aacSrcPos);
+         sceIoLseek(fd, aacSrcPos, SCE_SEEK_SET);
+         addByte = sceIoRead(fd, aacDstPtr, writableByte);
+         /* 入力バッファに読み込んだAACデータサイズをlibaacに通知 */
+         <a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>(handle, addByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によって取得しておいたAACハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacGetInfoToAddStreamData"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacGetInfoToAddStreamData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>AACデータを入力バッファに追加するための情報の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacGetInfoToAddStreamData </b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a><i> **aacDstPtr</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a><i> *writableByte</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a><i> *aacSrcPos</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aacDstPtr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;追加のAACデータの書き込み先アドレスを指すポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>writableByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>*aacDstPtr</i>から書き込み可能なバイト数を指すポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aacSrcPos</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AACファイルの読み出しシーク位置を指すポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">入力バッファにAACデータを追加するための情報を取得します。本関数実行後、引数を通じて追加のAACデータの書き込み先アドレス<i>*aacDstPtr</i>、データサイズ<i>*writableByte</i>、およびAACファイルの読み出しシーク位置<i>*aacSrcPos</i>を取得できます。これらの情報を取得後、以下の方法にしたがってAACデータを入力バッファに追加します。<br>まず、ファイルディスクリプタをAACファイル先頭から<i>*aacSrcPos</i>だけ移動させます。それから、移動させたファイルディスクリプタを利用し、<i>*writableByte</i>バイトのAACデータを追加先アドレス<i>*aacDstPtr</i>に読み込みます。非同期に読み込むことも可能です。<br>AACファイルからAACデータの追加が終わった後は、<a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>()によってlibaacに対しAACデータの追加を通知します。詳しくは、<a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>()の項を参照してください。<br>なお、AACファイル内のAACデータがすべて入力バッファに読み込まれている場合、またはAACデータを入力バッファに読み込む必要がない場合は、<i>*aacDstPtr</i>としてNULL、<i>*writableByte</i>として0が返ります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* AACデータを入力バッファに追加する必要性をチェック */
+if (<a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* 入力バッファにAACデータを読み込み */
+         sceAacGetInfoToAddStreamData(handle, &amp;aacDstPtr, &amp;writableByte, &amp;aacSrcPos);
+         sceIoLseek(fd, aacSrcPos, SCE_SEEK_SET);
+         addByte = sceIoRead(fd, aacDstPtr, writableByte);
+         /* 入力バッファに読み込んだAACデータサイズをlibaacに通知 */
+         <a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>(handle, addByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によって取得しておいたAACハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacNotifyAddStreamData"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacNotifyAddStreamData<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>追加したAACデータサイズをlibaacに通知<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacNotifyAddStreamData</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>addByte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>addByte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入力バッファへ追加したAACデータのバイト数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">実際に入力バッファに追加したAACデータサイズ<i>addByte</i>をlibaacに通知します。AACデータを入力バッファに追加した後は、本関数を必ず実行してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* AACデータを入力バッファに追加する必要性をチェック */
+if (<a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* 入力バッファにAACデータを読み込み */
+         <a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>(handle, &amp;aacDstPtr, &amp;writableByte, &amp;aacSrcPos);
+         sceIoLseek(fd, aacSrcPos, SCE_SEEK_SET);
+         addByte = sceIoRead(fd, aacDstPtr, writableByte);
+         /* 入力バッファに読み込んだAACデータサイズをlibaacに通知 */
+         sceAacNotifyAddStreamData(handle, addByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によって取得しておいたAACハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacResetPlayPosition"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacResetPlayPosition<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>再生位置のリセット<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacResetPlayPosition</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">再生位置をAACファイルの先頭にリセットします。同時に、ループ再生回数消費による再生停止状態であれば再生を再開します。本関数の実行によって既に設定されていた「ループ再生回数」の値は、変化しません。また、本関数の実行によって<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetSumDecodedSample">sceAacGetSumDecodedSample</a>()で取得可能な「デコードされた累計出力サンプル数」の値が0にリセットされます。<br>また、ループ再生を実行する際に明示的に本関数を呼ぶ必要はありません。<a href="../sound/libaac-Reference-Japanese.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>()によってループ再生回数に非零が指定されている場合、AACファイル最後のデータのデコード終了時に、ファイル先頭から再生し直すように<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()の出力が変化し、ループ再生を実現します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 再生位置をAACファイル先頭にリセット */
+status = sceAacResetPlayPosition(handle);
+/* AACデータを入力バッファに追加する必要性をチェック */
+if (<a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>(handle) &gt; 0) {
+         /* 入力バッファにAACデータを読み込み */
+         <a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>(handle, &amp;aacDstPtr, &amp;writableByte, &amp;aacSrcPos);
+         sceIoLseek(fd, aacSrcPos, SCE_SEEK_SET);
+         addByte = sceIoRead(fd, aacDstPtr, writableByte);
+         /* 入力バッファに読み込んだAACデータサイズをlibaacに通知 */
+         <a href="../sound/libaac-Reference-Japanese.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>(handle, addByte);
+}
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によってデコード資源の初期化とハンドルの取得を完了させてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacGetSumDecodedSample">sceAacGetSumDecodedSample</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacSetLoopNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacSetLoopNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>残りループ再生回数の設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacSetLoopNum</b> (
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle,</i>
+<i>	</i>const<i> </i><a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a><i> loopNum</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>loopNum</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;残りループ再生回数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">残りループ再生回数を設定します。ループ再生回数は、AACハンドルごとに独立に管理されます。デフォルトのループ再生回数は、「無限回」です。<br>引数<i>loopNum</i>の指定値と解釈されるループ再生回数の対応関係については、以下の表を参照してください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;正(&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>loopNum</i>回&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループなし&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;無限回&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">本関数によってループ再生回数に正数が指定されている場合、AACファイル最後のデータのデコード終了時に、ファイル先頭から再生し直すように<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>()の出力が変化します。<br>また、ループ開始・終了位置は、それぞれAACファイル先頭および末尾のタグとAACデータの境界です。その他の位置をループ再生の開始・終了位置に設定することはできません。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* ループ再生回数を10回に設定する */
+status = sceAacSetLoopNum(handle, 10);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によって取得しておいたAACハンドルを指定してください。<br><i>loopNum</i>に任意の負数をセットすれば無限回のループを実現できますが、libaacは、<a href="../sound/libaac-Reference-Japanese.htm#SCE_AAC_LOOP_INFINITY">SCE_AAC_LOOP_INFINITY</a>という負数のマクロを提供しています。ループ再生回数を無限回に設定する際にご利用ください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacGetLoopNum">sceAacGetLoopNum</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#ループ再生回数識別子">ループ再生回数識別子</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacGetMaxOutputSample"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacGetMaxOutputSample<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコードの最大出力サンプル数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacGetMaxOutputSample</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;一回のデコードにおける最大出力サンプル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacDecode">sceAacDecode</a>()を一回実行した際に出力される1チャネルあたりの最大サンプル数を取得します。<br>MPEG4 AAC-LCのデータに対する具体的な出力サンプル数は、1024サンプルになります。また、libaacは出力バッファをダブルバッファとして扱います。このため、本関数によって取得した値を8倍(2バイト×2チャネル×2バッファ)することでlibaacに必要な出力バッファサイズを計算することができます。<a href="../sound/libaac-Reference-Japanese.htm#SceAacInitArg">SceAacInitArg</a>の項も併せて参照してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* libaacに必要な最大出力サンプル数を取得 */
+maxOutputSample = sceAacGetMaxOutputSample(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行前に<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によってデコード資源の初期化とハンドルの取得を完了させてください。<br>同一のAACファイルフォーマットに対して常に同じ値を返します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#SceAacInitArg">SceAacInitArg</a><br><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacGetSumDecodedSample"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacGetSumDecodedSample<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デコードされた累計出力サンプル数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacGetSumDecodedSample</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;非負(&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードされた累計出力サンプル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負(&lt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数実行時までにデコードされた累計出力サンプル数を取得します。サンプル数のカウントは0から始まります。また、<a href="../sound/libaac-Reference-Japanese.htm#sceAacResetPlayPosition">sceAacResetPlayPosition</a>()やループ再生によってファイル先頭のAACデータから再生し直す際には、デコードされた累計出力サンプル数は0にリセットされます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* デコードされた累計出力サンプル数を取得 */
+sumDecodedSample = sceAacGetSumDecodedSample(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によって取得しておいたAACハンドルを指定してください。<br>本関数によって取得可能な値は、デコードされた累計出力サンプル数であり、再生中のサンプル位置ではありません。正確な再生位置を利用したい場合には、オーディオドライバへの出力サンプル数を考慮する必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacResetPlayPosition">sceAacResetPlayPosition</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceAacGetLoopNum"></a>
+<table width="100%"><td width="70%"><font size=6>sceAacGetLoopNum<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>残りループ再生回数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libaac.h&gt;
+<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <b>sceAacGetLoopNum</b> (
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>handle</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>handle</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源管理用AACハンドル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-1以上&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;残りループ再生回数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-1より小&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラー時の返り値については、巻末の「<a href="../sound/libaac-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>」をご覧ください。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">残りループ再生回数を取得します。取得される値とlibaac内で解釈される残りループ再生回数の対応関係については、<a href="../sound/libaac-Reference-Japanese.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>()の項を参照してください。ただし、残りループ再生回数が無限回に設定されている場合には、必ず<a href="../sound/libaac-Reference-Japanese.htm#SCE_AAC_LOOP_INFINITY">SCE_AAC_LOOP_INFINITY</a>という負数のマクロが返ります。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>/* 残りループ再生回数の取得 */
+loopNum = sceAacGetLoopNum(handle);
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">本関数の引数には、あらかじめ<a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()によって取得しておいたAACハンドルを指定してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacInit">sceAacInit</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#ループ再生回数識別子">ループ再生回数識別子</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="ループ再生回数識別子"></a>
+<table width="100%"><td width="70%"><font size=6>ループ再生回数識別子<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[定数定義]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ループ再生回数識別子<br></div><br>
+
+<!-- 定義 -->
+<div style="margin-left:10px;"><b>定義</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>識別子</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_LOOP_INFINITY">SCE_AAC_LOOP_INFINITY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループ再生回数無限回&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>()の引数<i>loopNum</i>、<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetLoopNum">sceAacGetLoopNum</a>()の返り値である残りループ再生回数を無限回として表現するための定数です。しかし、<a href="../sound/libaac-Reference-Japanese.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>()の引数<i>loopNum</i>には、任意の負数を渡すことでループ再生回数が無限回に設定されます。一方、ループ再生回数が無限回に設定されている場合には、<a href="../sound/libaac-Reference-Japanese.htm#sceAacGetLoopNum">sceAacGetLoopNum</a>()の返り値として、必ず<a href="../sound/libaac-Reference-Japanese.htm#SCE_AAC_LOOP_INFINITY">SCE_AAC_LOOP_INFINITY</a>が返ります。特にこのマクロを必ず利用しなければいけないわけではありませんが、プログラムコードの可読性向上を目的としてご利用ください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libaac-Reference-Japanese.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>()<br><a href="../sound/libaac-Reference-Japanese.htm#sceAacGetLoopNum">sceAacGetLoopNum</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>libaacの返すエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_SUCCESS">SCE_AAC_SUCCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;処理成功&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_ARG_AACHANDLE_INVALID">SCE_AAC_ERROR_ARG_AACHANDLE_INVALID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定したAACハンドルが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_ARG_PTR_INVALID">SCE_AAC_ERROR_ARG_PTR_INVALID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691002&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定したアドレスが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_ARG_OUTOFRANGE">SCE_AAC_ERROR_ARG_OUTOFRANGE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691003&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定した値が範囲外&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_RSRC_RESERVED">SCE_AAC_ERROR_RSRC_RESERVED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691101&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得済のデコード資源がある&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_RSRC_NOT_RESERVED">SCE_AAC_ERROR_RSRC_NOT_RESERVED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691102&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源を取得していない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_RSRC_NOT_INITIALIZED">SCE_AAC_ERROR_RSRC_NOT_INITIALIZED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691103&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコード資源を初期化していない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_NO_MORE_AACHANDLE">SCE_AAC_ERROR_NO_MORE_AACHANDLE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691201&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得可能なAACハンドルがない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_DECODE">SCE_AAC_ERROR_DECODE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691401&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードできない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_OUT_OF_MEMORY">SCE_AAC_ERROR_OUT_OF_MEMORY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691501&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ不足&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_MEMORY_IN_USE">SCE_AAC_ERROR_MEMORY_IN_USE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691502&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ使用中&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_NOT_INITIALIZED">SCE_AAC_ERROR_NOT_INITIALIZED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691503&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリが初期化されていない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_AAC_ERROR_ALREADY_INITIALIZED">SCE_AAC_ERROR_ALREADY_INITIALIZED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80691504&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ライブラリが初期化済み&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

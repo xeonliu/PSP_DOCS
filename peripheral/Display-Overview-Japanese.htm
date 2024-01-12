@@ -1,0 +1,171 @@
+<html lang="jp">
+<head>
+<title>Display-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ディスプレイサービス
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ディスプレイサービスは、PSP&reg;のLCD出力およびVBLANK割り込みに同期した表示フレームバッファのフリップ制御を行うためのサービスです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ディスプレイサービスを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;display_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;displaysvc.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>ライブラリの初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ディスプレイサービスは、デフォルトのモジュールとして動作しますので、明示的に初期化処理を行う必要はありません。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>画面出力モードの設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Display-Reference-Japanese.htm#sceDisplaySetMode">sceDisplaySetMode</a>()関数によって、表示形式を設定します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int res;
+
+res = <a href="../peripheral/Display-Reference-Japanese.htm#sceDisplaySetMode">sceDisplaySetMode</a>(<a href="../peripheral/Display-Reference-Japanese.htm#SCE_DISPLAY_MODE_LCD">SCE_DISPLAY_MODE_LCD</a>, 480, 272);
+
+</font></pre></div>
+<div style="margin-left:67px;">LCDに表示するとき、表示エリアサイズは480×272固定です。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>フレームバッファ形式の設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Display-Reference-Japanese.htm#sceDisplaySetFrameBuf">sceDisplaySetFrameBuf</a>()関数によって、表示するフレームバッファの先頭アドレス、横幅ピクセル数、表示ピクセルフォーマットを設定します。フレームバッファの横幅ピクセル数は64の整数倍にしてください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int res;
+
+res = <a href="../peripheral/Display-Reference-Japanese.htm#sceDisplaySetFrameBuf">sceDisplaySetFrameBuf</a>(pFrameBuf, 512, <a href="../peripheral/Display-Reference-Japanese.htm#SCE_DISPLAY_PIXEL_RGBA8888">SCE_DISPLAY_PIXEL_RGBA8888</a>, SCE_DISPLAY_UPDATETIMING_NEXTVSYNC);
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>VBLANK待ち</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">処理をVSYNC（垂直同期）期間に同期させるためには、<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankStartCB">sceDisplayWaitVblankStartCB</a>()関数を用います。PSP&reg;では、各種ペリフェラルのデバイスサービスがマルチスレッドで動作しているため、VBLANK（垂直ブランキング）期間の開始を待つためにポーリングを用いてはいけません。<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankStartCB">sceDisplayWaitVblankStartCB</a>()関数を呼び出したスレッドは、次の垂直ブランキング期間が開始されるタイミングまでWAIT状態になりますので、他のスレッドに実行権を譲ることができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// メインループ
+while (1) {
+
+	// VBLANK期間の開始まで待つ
+	<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankStartCB">sceDisplayWaitVblankStartCB</a>();
+
+	// キー入力, 演算, 描画…
+}
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>表示フレームバッファのフリップ予約</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Display-Reference-Japanese.htm#sceDisplaySetFrameBuf">sceDisplaySetFrameBuf</a>()関数により、表示するフレームバッファの先頭アドレスを指定します。このとき、引数<i>iMode</i>により表示アドレスの更新操作を、次のHSYNCで即時行う（SCE_DISPLAY_UPDATETIMING_NEXTHSYNC）か、次のVBLANK割り込み時に行うように予約する（SCE_DISPLAY_UPDATETIMING_NEXTVSYNC）かを選ぶ事ができます。<br>ただし、フレームバッファの横幅ピクセル数またはピクセルフォーマットを変更する場合は、即時に(SCE_DISPLAY_UPDATETIMING_NEXTHSYNCで)更新することができません。かならず引数<i>iMode</i>にSCE_DISPLAY_UPDATETIMING_NEXTVSYNCを指定して、次のVBLANK期間での切り替えを指定してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ディスプレイ出力モード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;本体では、PSP-1000シリーズはLCD出力のみ、PSP-2000, PSP-3000, PSP-N1000シリーズではLCD出力または外部ディスプレイへの480p出力が可能です。<br>PSP&reg;開発ツールでは、背面のVGAコネクタを使用してVESA 1A(VGA)信号を出力することができます。<br><br>ディスプレイ出力モード設定は<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplaySetMode">sceDisplaySetMode</a>()関数によって行います。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>LCD出力(SCE_DISPLAY_MODE_LCD)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">通常のLCD出力モードです。PSP&reg;本体では、このモードのみが有効となります。<br>PSP&reg;開発ツールでは、LCDとモニタに同じ内容の表示を行います。VGAへ出力される映像信号はLCDへの信号を変換して生成されるため若干の遅延とジッターがあります。<br>LCD出力時の垂直同期周波数は、59.94005995Hz(理論値)となります。この周波数はNTSCと同じです。有効解像度は272ラインですが、VLBANK期間を含めた1Vの長さは286ラインで構成されます。<br>PSP-2000シリーズでD端子ケーブル(PSP-S170)またはコンポーネントAVケーブル(PSP-S180)を使用したとき、またはPSP-3000, PSP-N1000シリーズでAVケーブル(PSP-S150, PSP-N150), S端子ケーブル(PSP-S160), D端子ケーブル(PSP-S170, PSP-N170), コンポーネントAVケーブル(PSP-S180, PSP-N180)のいずれかを使用したとき、ゲームの映像を外部ディスプレイに表示する事ができます。この場合でも画面出力モードは、<a href="../peripheral/Display-Reference-Japanese.htm#SCE_DISPLAY_MODE_LCD">SCE_DISPLAY_MODE_LCD</a>を使用されます。PSP-2000シリーズでは外部ディスプレイに出力される信号は480pで、720x480の中心に480x272映像がドットバイドットで表示されます。PSP-3000, PSP-N1000シリーズでは外部ディスプレイに出力される信号は480pまたは480iで、接続されたケーブルおよびシステムソフトウェアの設定によってどちらの信号形式が使われるか変化します。いずれの場合でも垂直同期周波数にも変化はありません。アプリケーションが、現在の出力モードがLCD出力か外部ディスプレイ出力かを判別する方法はありません。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>VESA 1A出力(SCE_DISPLAY_MODE_VESA1A)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">VESA 1A(VGA)信号を出力するモードです。PSP&reg;本体では、このモードは使用できません。PSP&reg;開発ツールでのみ使用できます。PSP&reg;開発ツールでこのモードを選択すると、LCDへの出力は停止します。<br><br>VESA 1A(VGA)出力時の垂直同期周波数は、59.94047618Hz(理論値)となります。このため、LCDに出力した場合とはフレームレートが変化します。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>擬似VGA出力(SCE_DISPLAY_MODE_PSEUDO_VGA)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">規格外の擬似VGA信号を出力するモードです。PSP&reg;本体では、このモードは使用できません。PSP&reg;開発ツールでのみ使用できます。PSP&reg;開発ツールでこのモードを選択するとLCDへの出力は停止します。<br><br>このモードでは、擬似的なVGA信号を出力します。厳密なVESA規格からは逸脱しますが、LCD出力時と同じ垂直同期周波数である59.94005995Hz(理論値)で出力されます。ただし、ドットクロック周波数が正規のVESA 1A信号とは異なりますので、ピクセルのアスペクト比が変化しています。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

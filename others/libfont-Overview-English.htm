@@ -1,0 +1,541 @@
+<html lang="en">
+<head>
+<title>libfont-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libfont Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The libfont library provides font glyph images to an application program.<br><br>By using libfont, an application program can get information about fonts that are installed on the PSP&trade; and from which the application can select arbitrary fonts to be used. The application program can find a matching font from abstract information (such as italic bold Latin) or a font that comes closest to the matching criteria.<br><br>libfont also enables an application program to get glyph image data for specific characters included in specific fonts that are part of font groups installed on the PSP&trade;. These glyph images are made up of pixels that are quantized using two or more values.<br><br>libfont also provides an application program with information it needs to lay out characters. By using this layout information, the application program can arrange proportional fonts attractively.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libfont.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libfont.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libfont_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libfont_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">libfont uses the following library.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Static link library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsha1.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following sample programs are provided with libfont.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_1"><h4>
+(1)&nbsp;<b>devkit/sample/font/basho</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Shows the basic method for using libfont. It creates texture images by sequentially opening a Japanese font and multiple Latin fonts.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_2"><h4>
+(2)&nbsp;<b>devkit/sample/font/fontcache</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Shows how to implement a font cache for external fonts and how to use it with libfont.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_3"><h4>
+(3)&nbsp;<b>devkit/sample/font/simple</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Shows how to write a program using the smallest amount of code.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Library Initialization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use libfont, a library instance must be created with the <a href="../others/libfont-Reference-English.htm#sceFontNewLib">sceFontNewLib</a> function. The library is initialized when this instance is created. The <a href="../others/libfont-Reference-English.htm#sceFontNewLib">sceFontNewLib</a> function returns a library ID that points to the newly created library instance.<br>The <a href="../others/libfont-Reference-English.htm#sceFontNewLib">sceFontNewLib</a> function enables an application program to use multiple instances of the library. However, if libfont is used as an ordinary library, it is not meaningful to have multiple instances of the library.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Finding a Font</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The number of fonts that are installed in the PSP&trade; can be obtained by using the <a href="../others/libfont-Reference-English.htm#sceFontGetNumFontList">sceFontGetNumFontList</a> function. Detailed font design information can be obtained by using the <a href="../others/libfont-Reference-English.htm#sceFontGetFontList">sceFontGetFontList</a> function, and a font can be found by using the <a href="../others/libfont-Reference-English.htm#sceFontFindOptimumFont">sceFontFindOptimumFont</a> or <a href="../others/libfont-Reference-English.htm#sceFontFindFont">sceFontFindFont</a> function.<br>Font information can be obtained for a font by using the <a href="../others/libfont-Reference-English.htm#sceFontGetFontInfoByIndexNumber">sceFontGetFontInfoByIndexNumber</a> function and providing it with a font index number. Font information can also be obtained after a font is opened by calling the <a href="../others/libfont-Reference-English.htm#sceFontGetFontInfo">sceFontGetFontInfo</a> function and providing it with the relevant font ID.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Opening a Font</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The <a href="../others/libfont-Reference-English.htm#sceFontOpen">sceFontOpen</a> function opens a font having the specified index number and returns its font ID. Two modes are available when opening the font. SCE_FONT_FILEBASEDSTREAM performs the required processing while reading font data sequentially from a file. SCE_FONT_MEMORYBASEDSTREAM first reads all font data into memory, then performs the required processing. Although SCE_FONT_FILEBASEDSTREAM mode requires less memory than SCE_FONT_MEMORYBASEDSTREAM mode, it will cause the application program to run slower.<br><br>An application program can also open a font by using <a href="../others/libfont-Reference-English.htm#sceFontOpenUserFile">sceFontOpenUserFile</a>() or <a href="../others/libfont-Reference-English.htm#sceFontOpenUserMemory">sceFontOpenUserMemory</a>().<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Getting Character Metrics</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Character metrics information can be obtained by calling the <a href="../others/libfont-Reference-English.htm#sceFontGetCharInfo">sceFontGetCharInfo</a> function and providing it with the font ID and character code.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Getting the Glyph Image for a Character</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The glyph image for a character can be obtained by calling the <a href="../others/libfont-Reference-English.htm#sceFontGetCharGlyphImage">sceFontGetCharGlyphImage</a> function and providing it with the font ID and character code. This function stores glyph images in user memory space with a 1/64 pixel precision.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Closing a Font</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A font is closed by calling the <a href="../others/libfont-Reference-English.htm#sceFontClose">sceFontClose</a> function and providing it with the font ID that was obtained from the <a href="../others/libfont-Reference-English.htm#sceFontOpen">sceFontOpen</a> function when the font was opened.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>Library Termination</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A library instance is closed by calling the <a href="../others/libfont-Reference-English.htm#sceFontDoneLib">sceFontDoneLib</a> function and providing it with the library ID that was obtained from the <a href="../others/libfont-Reference-English.htm#sceFontNewLib">sceFontNewLib</a> function. This will close all fonts opened by that library instance, free the memory used by that instance, and finally destroy the instance.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>Example of Library Use</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A program example is shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;malloc.h&gt;
+#include &lt;libfont.h&gt;
+
+/* Memory allocation function */
+static <a href="../others/libfont-Reference-English.htm#SceFont_t_pointer">SceFont_t_pointer</a> cb_Alloc
+(
+ <a href="../others/libfont-Reference-English.htm#SceFont_t_pointer">SceFont_t_pointer</a> pMyData, /* Pointer to user data */
+ <a href="../others/libfont-Reference-English.htm#SceFont_t_u32">SceFont_t_u32</a> size /* Requested size */
+ )
+{
+    return ( malloc (size) );
+}
+
+/* Memory release function */
+static void cb_Free
+(
+ <a href="../others/libfont-Reference-English.htm#SceFont_t_pointer">SceFont_t_pointer</a> pMyData, /* Pointer to user data */
+ <a href="../others/libfont-Reference-English.htm#SceFont_t_pointer">SceFont_t_pointer</a> p /* Pointer to area to be freed */
+ )
+{
+    free (p);
+}
+
+/* libfont test function */
+void myTest_libfont ( void ) 
+{
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_error">SceFont_t_error</a> errorCode;
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_libId">SceFont_t_libId</a> libID;
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_initRec">SceFont_t_initRec</a> initParams = {
+       NULL, / Pointer to user data */
+       4, /* Maximum number of fonts to be opened simultaneously */
+       NULL, /* Handle for cache instance */
+       cb_Alloc, /* Memory allocation function */
+       cb_Free,    /* Memory free function */
+       NULL, /* Open (NULL is OK if <a href="../others/libfont-Reference-English.htm#sceFontOpenUserFile">sceFontOpenUserFile</a> is not used) */
+       NULL, /* Close (NULL is OK if <a href="../others/libfont-Reference-English.htm#sceFontOpenUserFile">sceFontOpenUserFile</a> is not used) */
+       NULL, /* Read (NULL is OK if <a href="../others/libfont-Reference-English.htm#sceFontOpenUserFile">sceFontOpenUserFile</a> is not used) */
+       NULL, /* Seek (NULL is OK if <a href="../others/libfont-Reference-English.htm#sceFontOpenUserFile">sceFontOpenUserFile</a> is not used) */
+       NULL, /* Reserved area */
+       NULL, /* Reserved area */
+    };
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_int">SceFont_t_int</a> numFontList;
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_fontStyleInfo">SceFont_t_fontStyleInfo</a> aFontStyleInfoList [30];
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_fontId">SceFont_t_fontId</a> fontID;
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_fontInfo">SceFont_t_fontInfo</a> fontInfo;
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_charCode">SceFont_t_charCode</a> charCode=(0x795d);
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_charInfo">SceFont_t_charInfo</a> charInfo;
+    <a href="../others/libfont-Reference-English.htm#SceFont_t_userImageBufferRec">SceFont_t_userImageBufferRec</a> myImage;
+#define MYIMAGE_WIDTH (128)
+#define MYIMAGE_HEIGHT (128)
+    unsigned char *myImageBuffer [(MYIMAGE_WIDTH / 2) * MYIMAGE_HEIGHT];
+
+
+    /* Create font library instance */
+    libID = <a href="../others/libfont-Reference-English.htm#sceFontNewLib">sceFontNewLib</a> (&amp;initParams, &amp;errorCode);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error processing */
+
+    /* Get number of installed fonts */
+    numFontList = <a href="../others/libfont-Reference-English.htm#sceFontGetNumFontList">sceFontGetNumFontList</a> (libID, &amp;errorCode);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+    fprintf (stderr, "numFontList=%d\n", (int)numFontList);
+
+    /* Get font list */
+    errorCode = <a href="../others/libfont-Reference-English.htm#sceFontGetFontList">sceFontGetFontList</a> (libID, aFontStyleInfoList, numFontList);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+
+    /* Open font */
+    fontID = <a href="../others/libfont-Reference-English.htm#sceFontOpen">sceFontOpen</a> (libID, 0, SCE_FONT_FILEBASEDSTREAM, &amp;errorCode);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+
+    /* Get information about opened font */
+    errorCode = <a href="../others/libfont-Reference-English.htm#sceFontGetFontInfo">sceFontGetFontInfo</a> (fontID, &amp;fontInfo);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+
+    /* Get information related to characters having character code charCode */
+    /* that are included in the opened font */
+    errorCode = <a href="../others/libfont-Reference-English.htm#sceFontGetCharInfo">sceFontGetCharInfo</a> (fontID, charCode, &amp;charInfo);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+            
+    myImage.pixelFormat = SCE_FONT_USERIMAGE_DIRECT4_L;
+    myImage.rect.width = MYIMAGE_WIDTH;
+    myImage.rect.height = MYIMAGE_HEIGHT;
+    myImage.bytesPerLine = MYIMAGE_WIDTH / 2;
+    myImage.reserved = 0;
+    myImage.buffer = (<a href="../others/libfont-Reference-English.htm#SceFont_t_u8">SceFont_t_u8</a> *)myImageBuffer;
+    myImage.xPos64 = 20;
+    myImage.yPos64 = 40;
+    /* Get character glyph images */
+    errorCode = <a href="../others/libfont-Reference-English.htm#sceFontGetCharGlyphImage">sceFontGetCharGlyphImage</a> (fontID, charCode, &amp;myImage);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+
+    /* Close font */
+    errorCode = <a href="../others/libfont-Reference-English.htm#sceFontClose">sceFontClose</a> (fontID);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+
+    /* Destroy font library */
+    errorCode = <a href="../others/libfont-Reference-English.htm#sceFontDoneLib">sceFontDoneLib</a> (libID);
+    if ( errorCode != <a href="../others/libfont-Reference-English.htm#SCE_FONT_NOERROR">SCE_FONT_NOERROR</a> ) ; /* Error handling */
+
+    return;
+}
+
+/* Main function */
+int main ( void )
+{
+    myTest_libfont ();
+    return ( 0 );
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Explanation of Operation</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>libfont Internal Processing</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_1">
+<div style="margin-left:40px;"><h4><b>sceFontNewLib()</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">This function accesses the PSP&trade; system registry to get PSP&trade; screen resolution information.<br>It then accesses the registry to get information related to installed fonts and copies that information to a memory area that is managed by the library instance.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_2">
+<div style="margin-left:40px;"><h4><b>sceFontFindFont()</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">This function compares search information with information obtained from the system registry to find a desired font and returns its number.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_3">
+<div style="margin-left:40px;"><h4><b>sceFontFindOptimumFont()</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">This function compares search information with information obtained from the system registry to find a font that most closely matches the requested font attributes and returns its number.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_4">
+<div style="margin-left:40px;"><h4><b>sceFontOpen()</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">This function opens the font having the specified number and returns its font ID. That font ID will be owned by the library instance specified in the argument.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>sceFontClose()</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">This function closes the font having the specified font ID.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_6">
+<div style="margin-left:40px;"><h4><b>sceFontDoneLib()</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">This function closes all unclosed fonts that are owned by the library instance specified in an argument and frees all memory that was allocated by that instance.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Information That an Application Program Can Obtain From libfont</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An application can use libfont to get the information shown below from the PSP&trade; system.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Information</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Information related to&nbsp;&nbsp;<br>&nbsp;&nbsp;the installed font group&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The number of fonts installed on the PSP&trade; and related&nbsp;&nbsp;<br>&nbsp;&nbsp;information (<a href="../others/libfont-Reference-English.htm#SceFont_t_fontStyleInfo">SceFont_t_fontStyleInfo</a>, <a href="../others/libfont-Reference-English.htm#SceFont_t_fontInfo">SceFont_t_fontInfo</a>) &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Information related to a&nbsp;&nbsp;<br>&nbsp;&nbsp;specific font in the&nbsp;&nbsp;<br>&nbsp;&nbsp;installed font group&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Information (<a href="../others/libfont-Reference-English.htm#SceFont_t_iGlyphMetricsInfo">SceFont_t_iGlyphMetricsInfo</a>,&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../others/libfont-Reference-English.htm#SceFont_t_fGlyphMetricsInfo">SceFont_t_fGlyphMetricsInfo</a>) that is common to all&nbsp;&nbsp;<br>&nbsp;&nbsp;characters included in the specified font installed on the&nbsp;&nbsp;<br>&nbsp;&nbsp;PSP&trade;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Information related to a&nbsp;&nbsp;<br>&nbsp;&nbsp;specific character of a&nbsp;&nbsp;<br>&nbsp;&nbsp;specific font of the&nbsp;&nbsp;<br>&nbsp;&nbsp;installed font group&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Glyph information (<a href="../others/libfont-Reference-English.htm#SceFont_t_charInfo">SceFont_t_charInfo</a>) for a specific&nbsp;&nbsp;<br>&nbsp;&nbsp;character that is part of a specific font installed on the PSP&trade;&nbsp;&nbsp;<br>&nbsp;&nbsp;can be obtained.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Glyph Metrics</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Glyph metrics (<a href="../others/libfont-Reference-English.htm#SceFont_t_iGlyphMetricsInfo">SceFont_t_iGlyphMetricsInfo</a>, <a href="../others/libfont-Reference-English.htm#SceFont_t_fGlyphMetricsInfo">SceFont_t_fGlyphMetricsInfo</a>) consists of the elements shown in the figure below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Name of Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;width&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Glyph width&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;height&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Glyph height&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ascender&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Distance from the base line to the virtual top of the character in&nbsp;&nbsp;<br>&nbsp;&nbsp;the design. This is a positive value in the horizontal typesetting&nbsp;&nbsp;<br>&nbsp;&nbsp;example in the figure below.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;descender&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Distance from the base line to the virtual bottom of the character&nbsp;&nbsp;<br>&nbsp;&nbsp; in the design. This is a negative value in the horizontal&nbsp;&nbsp;<br>&nbsp;&nbsp;typesetting example in the figure below.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;horizontalBearingX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value used when laying out characters horizontally.&nbsp;&nbsp;<br>&nbsp;&nbsp;Distance on the X-axis from the character reference point to the&nbsp;&nbsp;<br>&nbsp;&nbsp;left edge of the character rectangle of that character.&nbsp;&nbsp;<br>&nbsp;&nbsp;A positive value is taken towards the right.&nbsp;&nbsp;<br>&nbsp;&nbsp;This is a negative value in the horizontal typesetting example in&nbsp;&nbsp;<br>&nbsp;&nbsp;the figure below.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;horizontalBearingY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value used when laying out characters horizontally.&nbsp;&nbsp;<br>&nbsp;&nbsp;Distance on the Y-axis from the character reference point to the&nbsp;&nbsp;<br>&nbsp;&nbsp;top edge of the character rectangle of that character.&nbsp;&nbsp;<br>&nbsp;&nbsp;A positive value is taken upwards.&nbsp;&nbsp;<br>&nbsp;&nbsp;This is a negative value in the example in the figure below.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;horizontalAdvance&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value used when laying out characters horizontally.&nbsp;&nbsp;<br>&nbsp;&nbsp;Horizontal distance from the character reference point to the next&nbsp;&nbsp;<br>&nbsp;&nbsp;character reference point.&nbsp;&nbsp;<br>&nbsp;&nbsp;A positive value is taken towards the right.&nbsp;&nbsp;<br>&nbsp;&nbsp;This is a positive value in example in the figure below.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;verticalBearingX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value used when laying out characters vertically.&nbsp;&nbsp;<br>&nbsp;&nbsp;Distance on the X-axis from the character reference point to the&nbsp;&nbsp;<br>&nbsp;&nbsp;left edge of the character rectangle of that character.&nbsp;&nbsp;<br>&nbsp;&nbsp;A positive value is taken towards the right.&nbsp;&nbsp;<br>&nbsp;&nbsp;This is a negative value in the vertical typesetting example in the&nbsp;&nbsp;<br>&nbsp;&nbsp; figure below.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;verticalBearingY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value used when laying out characters vertically.&nbsp;&nbsp;<br>&nbsp;&nbsp;Distance on the Y-axis from the character reference point to the&nbsp;&nbsp;<br>&nbsp;&nbsp;top edge of the character rectangle of that character.&nbsp;&nbsp;<br>&nbsp;&nbsp;A positive value is taken downward.&nbsp;&nbsp;<br>&nbsp;&nbsp;This is a positive value in the example in the figure below.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;verticalAdvance&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value used when laying out characters vertically.&nbsp;&nbsp;<br>&nbsp;&nbsp;Vertical distance from the character reference point to the next&nbsp;&nbsp;<br>&nbsp;&nbsp;character reference point.&nbsp;&nbsp;<br>&nbsp;&nbsp;A positive value is taken downward.&nbsp;&nbsp;<br>&nbsp;&nbsp;This is a positive value in the example in the figure below.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The units for these numeric values are pixels. Pixels are different from points, which are used as the units of character size. Members of <a href="../others/libfont-Reference-English.htm#SceFont_t_iGlyphMetricsInfo">SceFont_t_iGlyphMetricsInfo</a> whose names end in &quot;64&quot; contain values that are 64 times that of members whose names do not end in &quot;64.&quot;<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Bitmapped Glyph Images</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An application program can get glyph images whose brightness is quantized as two or more values.<br><br>An application program can specify the buffer memory to be used for output, and the position at which glyph images are to be output in a structure of type <a href="../others/libfont-Reference-English.htm#SceFont_t_userImageBufferRec">SceFont_t_userImageBufferRec</a>.  The application copies the glyph image to the buffer by calling the <a href="../others/libfont-Reference-English.htm#sceFontGetCharGlyphImage">sceFontGetCharGlyphImage</a> function and passing it the desired character code.<br><br>The precision of the position is 1/64 pixel. This is related to the fact that the horizontalAdvance value of a character is in units of 1/64 pixel. The brightness of pixels of a glyph that is placed spanning the pixel boundary of the buffer is divided internally among the neighboring pixels.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_7">
+<div style="margin-left:40px;"><h4><b>Breakdown of SceFont_t_fGlyphMetricsInfo (Breakdown of SceFont_t_iGlyphMetricsInfo)</b><br><br><br></h4></div></a>
+
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/libfont-Overview-English001.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Glyph metrics for horizontal typesetting</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br><br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libfont-Overview-English002.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Glyph metrics for vertical typesetting</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libfont-Overview-English003.jpg">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Bitmap information contained in SceFont_t_charInfo</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Name of Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bitmapWidth&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Integer value that indicates the horizontal size of bitmap data in&nbsp;&nbsp;<br>&nbsp;&nbsp;pixel units&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bitmapHeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Integer value that indicates the vertical size of bitmap data in pixel&nbsp;&nbsp;<br>&nbsp;&nbsp;units&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bitmapLeft&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Integer value indicating the distance in pixel units from the&nbsp;&nbsp;<br>&nbsp;&nbsp;character reference point to the left edge of the bitmap.&nbsp;&nbsp;<br>&nbsp;&nbsp;This value indicates the position of the character's origin on the&nbsp;&nbsp;<br>&nbsp;&nbsp;bitmapped glyph image along the X-axis.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bitmapTop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Integer value indicating the distance in pixel units from the&nbsp;&nbsp;<br>&nbsp;&nbsp;character reference point to the top edge of the bitmap.&nbsp;&nbsp;<br>&nbsp;&nbsp;This value indicates the position of the character's origin on the&nbsp;&nbsp;<br>&nbsp;&nbsp;bitmapped glyph image along the Y-axis.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_8">
+<div style="margin-left:40px;"><h4><b>Notes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The numeric value indicating the position of the character's origin for vertical typesetting layout of a bitmapped glyph image is not saved.<br>When characters are composed vertically, do not expect to place subpixels of bitmapped glyph images precisely. Instead, use the verticalBearingX, verticalBearingY, and verticalAdvance values of <a href="../others/libfont-Reference-English.htm#SceFont_t_iGlyphMetricsInfo">SceFont_t_iGlyphMetricsInfo</a> or <a href="../others/libfont-Reference-English.htm#SceFont_t_fGlyphMetricsInfo">SceFont_t_fGlyphMetricsInfo</a> to place bitmapped glyph images.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

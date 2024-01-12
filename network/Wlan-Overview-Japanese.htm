@@ -1,0 +1,302 @@
+<html lang="jp">
+<head>
+<title>Wlan-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+WLANドライバ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ドライバ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;用WLANドライバモジュール(以下WLANドライバ)はPSP&reg;に内蔵されているIEEE 802.11b ワイヤレスLANモジュール(以下WLAN モジュール)をPSP&reg;で利用可能にするソフトウェアの実装で、IEEE 802.11b規格のワイヤレスLAN機能をネットワークプロトコルスタック経由で提供します。<br>その他、ネットワークプロトコルスタックに依るところが無い、WLAN モジュールの状態および情報を直接提供します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;wlan.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;wlan_stub.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ドライバの初期化</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">WLANドライバは暗黙のうちに初期化されています。明示的な初期化を行う必要はありません。<br>このドライバはIEEE 802.11bワイヤレスLANを使用する通信機能を、直接は提供しません。PSP&reg;用ネットワークプロトコルスタックモジュール(以下PSPNET)が、ネットワーク通信機能を提供します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>提供する機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">通常WLANドライバはPSPNET経由で操作を行いますが、以下の機能に関してはWLANドライバ自体が直接提供します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> MACアドレスの取得
+<li> PSP&reg;のWLANスイッチの状態
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>MACアドレスの取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../network/Wlan-Reference-Japanese.htm#sceWlanGetEtherAddr">sceWlanGetEtherAddr</a>()関数によりWLANモジュールに格納されているMACアドレスが取得できます。この関数はWLANモジュールの電源状態に依るところはありません。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+struct <a href="../network/Wlan-Reference-Japanese.htm#SceWlanEtherAddr">SceWlanEtherAddr</a> addr;
+int ret = 0;
+
+ret = <a href="../network/Wlan-Reference-Japanese.htm#sceWlanGetEtherAddr">sceWlanGetEtherAddr</a>(&amp;addr);
+if(ret &lt; 0){
+	/* エラー処理 */
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>ワイヤレスLANスイッチ状態取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../network/Wlan-Reference-Japanese.htm#sceWlanGetSwitchState">sceWlanGetSwitchState</a>()関数により、PSP&reg;のワイヤレスLANスイッチの状態を取得できることが出来ます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int ret;
+
+ret = <a href="../network/Wlan-Reference-Japanese.htm#sceWlanGetSwitchState">sceWlanGetSwitchState</a>()
+if(ret == <a href="../network/Wlan-Reference-Japanese.htm#SCE_WLAN_SWITCH_STATE_ON">SCE_WLAN_SWITCH_STATE_ON</a>){
+	/* WLANスイッチがオンの際の処理 */
+}
+else {
+	/* WLANスイッチがオフの際の処理 */
+}
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>動作解説</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>WLANドライバスレッド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">WLANドライバはSceWlanMacスレッドとSceWlanHalスレッドの２つのスレッドで動作します。２つのスレッドの優先度は39です。SceWlanHalスレッドはワイヤレスLANスイッチがオンの状態のときのみ存在します。<br>またファームウェアロード時には別途専用のSceWlanChipInitスレッドを生成します。スレッドの優先度は120です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>ワイヤレスLANスイッチオン時</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ワイヤレスLANスイッチがオンになると、通信機能の使用状態の有無に関わらずファームウェアロード用のSceWlanChipInitスレッドを生成し、WLANモジュールのファームウェアロードを実行します。<br>なおファームウェアロード中（ワイヤレスLANスイッチオン直後など）にネットワーク接続処理が開始された場合は、SceWlanChipInitスレッドの優先度を39まで引き上げます。<br>ファームウェアロードが完了すると、SceWlanChipInitスレッドは終了・削除されます。その後、SceWlanHalスレッドを起動して待機状態に移行します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>ワイヤレスLANスイッチオフ時</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ワイヤレスLANスイッチがオフになると、通信機能を使用中の場合にはPSPNETライブラリに対してスイッチオフを通知します。その後、SceWlanHalスレッドを終了させます。<br>ファームウェアロード中の場合は、ファームウェアロードを中断し、SceWlanChipInitスレッドを終了・削除します。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Ether over DECI2pを用いた有線通信機能</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">無線LANによるインフラストラクチャ接続の一部をDECI2pプロトコルにて擬似することによって、DECI2pプロトコルを使用したホストとの通信と、ホスト側のブリッジ機能の組み合わせによってネットワーク接続を実現する機能です。DECI2pを利用するため、DTP-T1000上でのみ使用可能です。<br>以下にモジュール構成のブロックダイアグラムを示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Wlan-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 Ether over DECI2p モジュール構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>使用方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ホストとなるLinux PC設定を行います。スーパーユーザにて以下の例のようにブリッジの設定を行ってください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_1">
+<div style="margin-left:40px;"><h4><b>Linuxカーネル設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">modprobe tun<br>modprobe bridge<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_2">
+<div style="margin-left:40px;"><h4><b>有線インタフェース設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ifconfig eth0 0.0.0.0<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_3">
+<div style="margin-left:40px;"><h4><b>ブリッジ設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">brctl addbr br0<br>brctl addif br0 eth0<br>ifconfig br0 up XXX.XXX.XXX.XXX netmask XXX.XXX.XXX.XXX<br>route add default gateway XXX.XXX.XXX.XXX<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_4">
+<div style="margin-left:40px;"><h4><b>トンネルインタフェース設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsptun -d XXX.XXX.XXX.XXX<br>brctl addif br0 tap0<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_5">
+<div style="margin-left:40px;"><h4><b>PSP&reg;側設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ブートパラメータのbit15を指定することで、本機能を有効にできます。ブートパラメータの指定方法は「dstdbコマンドリファレンス」を参照してください。<br>上記オプションを指定して起動した場合、SSIDが"WLAN_DECI2P"というアクセスポイントが擬似的に存在します。このアクセスポイントに対する接続設定をネットワーク設定ユーティリティにて作成してください。<br>設定の詳細内容に関しては、以下に従って作成してください。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_1">
+<div style="margin-left:63px;"><h4><b>SSID</b><br><br></h4></a></div>
+<div style="margin-left:80px;">WLAN_DECI2P<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_2">
+<div style="margin-left:63px;"><h4><b>ワイヤレスLANセキュリティ設定</b><br><br></h4></a></div>
+<div style="margin-left:80px;">なし<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_3">
+<div style="margin-left:63px;"><h4><b>認証設定</b><br><br></h4></a></div>
+<div style="margin-left:80px;">なし<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_4">
+<div style="margin-left:63px;"><h4><b>アドレス設定(IPアドレス設定,DNS設定,プロキシサーバー)</b><br><br></h4></a></div>
+<div style="margin-left:80px;">接続するホスト側の設定に合わせて適切な設定を行ってください。<br></div>
+<div style="margin-left:50px;"><br>上記のとおり作成した設定を指定して接続すること以外は、通常のWLAN接続と同様です。WLAN接続を行うことで、DECI2p経由でネットワークへの接続を開始します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>使用上の注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">本機能はDECI2p機能を使用しているため、CPU負荷等が実機でWLANを使用した場合と異なることに注意してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>ワイヤレスLANスイッチオン時の接続動作について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">動作解説にも示しましたように、ワイヤレスLANスイッチオン時にはファームウェアロードが実行されます。ファームウェアロードが完了するまで、PSPNETライブラリは接続動作に入ることができません。接続動作時に処理負荷が高く、SceWlanChipInitスレッドに十分処理が回らない状態が続きますと接続できない状態が続くことになりますので、注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>ワイヤレスLAN機能使用禁止について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PLLクロック周波数が266MHz、333MHzで動作している時ワイヤレスLAN機能は使用できません。該当周波数で動作している場合にワイヤレスLANを使用するAPIを使用した場合には<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_WLAN_INHIBITED">SCE_ERROR_NET_WLAN_INHIBITED</a>のエラーを返します。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

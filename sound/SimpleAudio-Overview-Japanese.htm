@@ -1,0 +1,189 @@
+<html lang="jp">
+<head>
+<title>SimpleAudio-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Simple Audio Output
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の概要と特長</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simple Audio Outputライブラリはその名の通り、シンプルなオーディオ出力機能を提供します。44.1kHz 16ビットリニアPCM、2chステレオ形式のオーディオ1音声を出力することが出来ます。これ以外の形式の音声データや、複数音声の出力などを行いたい場合は、ユーザーによりデータ変換やミキシングなどを行なう必要があります。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_1">
+<div style="margin-left:63px;"><h4><b>特長</b><br><br></h4></a></div>
+</ol>
+<div style="margin-left:70px;"><ul>
+<li> 対応フォーマットは44.1kHzサンプリング、16ビットリニアPCM (Little Endian)、2chステレオのみ
+<li> オーディオドライバを直接操作
+<li> CPUはオーディオデータに触れることがありません
+<li> オーディオデータ転送は全てDMAなどで行なわれます(このため、オーディオデータは32ビットバス側からアクセス可能な領域にあることが必要です)
+<li> ハードウェアのデジタルボリューム機能を用いたボリューム設定(L/R共通)が可能
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>サウンド出力までの流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simple Audio Outputライブラリを利用した場合、ゲームタイトルからの音声出力要求はそのままAudio Driverに渡されます。Audio Driverは要求されたデータを、オーディオ出力用ハードウェアのデジタルボリューム機能をもった系統に受け渡します。オーディオ出力ハードウェアはこの音声に指定されたデジタルボリューム値を掛け合わせた上で、他の出力系統とミキシングを行い、オーディオ信号の出力を行ないます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simple Audio Outputライブラリを使用するには次のファイルが必要です。Simple Audio Outputライブラリのオーディオドライバ操作を行なう部分はlibwaveと共通であるため、必要な.aファイルはlibwaveと同じになります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libwave.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;audiooutput.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simple Audio Outputライブラリを利用したサンプルプログラムには以下のものがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_4_1">
+<div style="margin-left:40px;"><h4><b>psp/devkit/sample/sound/at3mix</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libwaveを用いたサンプルstarmixと同様に、libsasとlibatrac3plusを用いたサンプルですが、ME側でミキシングを行い、Simple Audio Outputライブラリにて出力するようにしています。これによりメインCPUにかかる負荷を軽くしています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Simple Audio Outputライブラリの使用手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simple Audioは以下のような手順にて利用します。<br><br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <b><a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2Reserve">sceAudioOutput2Reserve</a></b>()にて初期化処理を行います。</li>
+<li VALUE=2> <b><a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a></b>()などでサウンド出力処理を行います。</li>
+<li VALUE=3> <b><a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2Release">sceAudioOutput2Release</a></b>()にて終了処理を行います。</li>
+</ol></div>
+<div style="margin-left:50px;"><br>Simple Audioで音声を出力するには、<b><a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2Reserve">sceAudioOutput2Reserve</a></b>()関数によりオーディオ出力機能の使用を宣言するとともに、一度に出力するデータの出力サンプル長を設定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+int iRc;
+
+/* 一度に256サンプルずつ出力する */
+iRc = <a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2Reserve">sceAudioOutput2Reserve</a>(256);
+if (iRc != SCE_OK){
+	/* 設定に失敗した */
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>実際のサウンド出力には<b><a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a></b>()関数を利用します。<b><a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a></b>()は指定されたバッファに格納されているPCM形式の音声データをオーディオドライバに登録します。登録されたサウンドデータは既にオーディオドライバに登録されていたサウンドデータが再生された後に再生が開始されます。また、再生が開始されるまでこの関数を呼び出したスレッドはwait状態になります。<br>オーディオドライバに登録したからといって即座に再生が行われるとは限りません。また関数から戻ってきた時点で、登録したサウンドデータの再生は開始されていますが、終了しているわけではありませんし、そのデータがどこかにコピーされているわけでもありません。そのため実際に再生が終了するまでにバッファの内容を書き換えてしまうと正しく再生されません。サウンド出力用バッファはダブルバッファ以上にし、登録直後のバッファ内容を書き換えてしまわないようにしてください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例)
+/* pcmBuf はダブルバッファとする */
+int iSide = 0;
+
+/* pcmBuf[iSide] にある 16 bit PCM STEREOデータを出力する */
+<a href="../sound/SimpleAudio-Reference-Japanese.htm#sceAudioOutput2OutputBlocking">sceAudioOutput2OutputBlocking</a>(
+	<a href="../sound/SimpleAudio-Reference-Japanese.htm#SCE_AUDIO_VOLUME_0dB">SCE_AUDIO_VOLUME_0dB</a>,
+	pcmBuf[iSide]
+);
+iSide ^= 1;
+</font></pre></div>
+<div style="margin-left:50px;"><br>同様の注意が終了時にも必要となります。PCMデータを動的に確保したメモリ領域(malloc関数で確保した領域や、関数内部で確保される自動変数など)においていた場合、該当データの出力が終了する前にメモリ領域を開放してしまうと、実行するときの状況によって異なる雑音が出力される可能性があります。「最後のデータ」の出力が確実に終了していることを確認してから、メモリの開放などを行うようにしてください。また、PCM形式のサウンド出力には、専用のスレッドを用いることが多いですが、そのような場合、サウンド出力スレッドがまだデータを出力している最中にスレッドを強制終了するようなことがない様に、スレッド間の同期を取って処理を行うようにしてください(詳しくはサンプルプログラムをご覧ください)。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>スレッド切り替え、優先度に関する重要な注意事項</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simple Audio Outputライブラリを使った場合、ハードウェアへのサウンド出力は出力関数を呼び出したユーザーのスレッドにて行なわれます。このため、スレッドがRun状態になれない場合、音声出力が停止して耳障りなノイズが発生する可能性があります。音声出力を行っている最中には、割り込み禁止期間、ディスパッチ禁止期間が長くなりすぎないように注意してください。目安として、長くても数百マイクロ秒程度となるようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>オーディオデータの配置とサイズについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Simple Audio Outputライブラリを使った場合、オーディオデータは直接DMAによりサウンド出力ブロックへ出力されます。このため、オーディオデータはDMACがアクセス可能なExtended Memory部分におかれていることが必要になります。eDRAM、Scratch Padメモリなどにおかれていた場合、バスエラーが発生しますのでご注意ください。<br>また、DMA長、CPUのキャッシュサイズなどの関係により、オーディオデータは64バイトアラインメントのとれた場所から配置し、データ長が64バイトの倍数となるよう、粒度サンプル数は16の倍数とすることを推奨します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>ミキシングとCPU負荷に関する注意事項</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">CPUにかかる負荷を軽くするために、Simple Audio Outputライブラリでは使用可能な機能を限定しています。このため、同時に出力できる音声は一音に限られます。複数音を出したい場合は、アプリにより複数PCMデータをミキシングするか、libwaveを使う必要があります。<br>ただ、libwaveを使ったり、CPUでミキシングを行なうなどした場合、Simple Audio Outputライブラリを用いたにもかかわらず、負荷が高くなってしまう可能性もあります。Simple Audio Outputライブラリを有効に利用するには、<b><a href="../sound/libsas-Reference-Japanese.htm#sceSasCoreWithMix">sceSasCoreWithMix</a></b>()関数を使ってMedia Engine側でミキシングを行なう、常時発音されるBGMなどにはlibwaveを用いない、といった工夫が必要となります。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

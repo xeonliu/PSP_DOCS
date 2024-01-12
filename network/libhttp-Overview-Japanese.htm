@@ -1,0 +1,464 @@
+<html lang="jp">
+<head>
+<title>libhttp-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libhttp
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">HTTPライブラリ（libhttp）は、HTTPを使用するアプリケーションを支援するライブラリです。アプリケーションから指定されたURIに対してHTTPリクエストを送信し、それに対するレスポンスの受信を行います。PSP&reg;ネットワークライブラリ（PSPNET）上で動作します。<br>本ライブラリでサポートする機能は以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> HTTP/1.0, 1.1
+<li> GET, HEAD, POST
+<li> Redirect
+<li> Keep-Alive
+<li> Cookie
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpを使用するには、PSPNETが必要です。PSPNETが必要とするファイルは「PSP&reg;ネットワークライブラリのドキュメント」をご参照ください。<br>libhttpが独自に必要とするファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp/http_methods.h&nbsp;&nbsp;<br>&nbsp;&nbsp;libhttp/schemes.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libhttp_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_uri_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libparse_http_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpはHTTP/1.1に準拠しています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>モジュールのロード処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpモジュールは、HTTPモジュールセットに含まれています。<br>HTTPモジュールセットをロードする前に、以下のモジュールセットをあらかじめロードしておく必要があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET共通モジュールセット
+<li> PSPNETインフラストラクチャモードモジュールセット
+<li> libparse_uriモジュール
+<li> libparse_httpモジュール
+</ul></div>
+<div style="margin-left:50px;">モジュールセットのロード方法については、「PSPNET概要ドキュメントおよびユーティリティ概要ドキュメント」をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ネットワークライブラリの初期化とネットワーク接続</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpの使用に先立って、ネットワークライブラリの初期化とネットワーク接続を行う必要があります。それぞれの手順については「PSP&reg;ネットワークライブラリのドキュメント」をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ライブラリの初期化</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ネットワークモジュールユーティリティAPIにてlibparse_uriモジュール、libparse_httpモジュール、HTTPモジュールセットをロードした後に<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()を呼び出します。引数にはlibhttp内部で使用するメモリプールのサイズを指定します。<br>libhttpでは、アプリケーションが用意したメモリ管理関数を設定することもできます。その場合<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()の引数に0を指定して初期化した後、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetMallocFunction">sceHttpSetMallocFunction</a>()を使用して設定してください。アプリケーションが用意すべき関数のAPIはmalloc(), free()と同じです。<br>realloc関数も引数に必要になりますが、現在reallocは使用していませんので、ダミー関数で構いません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *my_malloc(size_t);
+void my_free(void *);
+void *my_realloc(void *, size_t);
+
+	...
+
+/* libhttの初期化 */
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>(0);
+
+/* 動的メモリ管理関数をユーザ設定 */
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetMallocFunction">sceHttpSetMallocFunction</a>(my_malloc, my_free, my_realloc);
+
+/* 以降、libhttpのAPIを呼び出す */
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>HTTP処理の手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>Template, Connectionの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">まず始めにHTTPリクエストを送信するのに必要な設定を行います。libhttpではHTTPリクエストを送信するための設定を、Template、Connectionという2段階に分けて管理しています。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Template(テンプレート)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Connection作成のためのテンプレート設定。&nbsp;&nbsp;<br>&nbsp;&nbsp;Connection毎に変化しない設定をまとめている。&nbsp;&nbsp;<br>&nbsp;&nbsp;- HTTPバージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;- user-agent値&nbsp;&nbsp;<br>&nbsp;&nbsp;- システム設定の使用の有無&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Connection(コネクション)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;接続先ごとの設定。&nbsp;&nbsp;<br>&nbsp;&nbsp;- サーバーのホスト名&nbsp;&nbsp;<br>&nbsp;&nbsp;- 接続スキーム（HTTP）&nbsp;&nbsp;<br>&nbsp;&nbsp;- ポート番号&nbsp;&nbsp;<br>&nbsp;&nbsp;- Keep-Aliveの使用の有無&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">TemplateおよびConnectionは<a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateTemplate">sceHttpCreateTemplate</a>()、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>()を呼び出して作成します。作成したTemplate、Connectionにはライブラリで一意なIDが割り当てられます。以降、これらのIDをテンプレートID、コネクションIDと呼びます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>Requestの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">次に実際のHTTPリクエストに対応したRequestを作成します。Requestは<a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateRequest">sceHttpCreateRequest</a>()を呼び出して作成します。引数にコネクションID、メソッド、パスなどを指定します。作成したRequestにはライブラリで一意なIDが割り当てられます。以降、このIDをリクエストIDと呼びます。<br>Template、Connection、Requestの関係を図示すると以下のようになります。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libhttp-Overview-Japanese001.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_3"><h4>
+(3)&nbsp;<b>HTTPリクエストの送信とレスポンスヘッダの受信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Requestを作成した後に<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()を呼ぶことで、サーバーとの実際の通信を行います。既にサーバーとのTCPコネクションが張られていた場合は、Keep-Aliveを利用して同一コネクションでリクエストが送信されます。<br>libhttpは内部スレッドを作成しないため<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()は処理が完了するまでブロッキングされます。具体的にはHTTPリクエストを送信し、サーバーからのレスポンスヘッダを受信したところで呼び出しから戻ります。<br><a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()を呼んだあとのリクエストIDからはサーバーからのレスポンス情報を取得することができます。<a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>()で200(OK)などのステータスコード、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>()でサーバーからのレスポンスボディのContent-Length、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>()でその他ヘッダを取得することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_4"><h4>
+(4)&nbsp;<b>メッセージボディの受信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">レスポンスヘッダ受信後は<a href="../network/libhttp-Reference-Japanese.htm#sceHttpReadData">sceHttpReadData</a>()でサーバーからのメッセージボディを受信します。メッセージボディのサイズは前もって<a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>()で取得する事ができます。Content-Length分のメッセージボディを読みこんだところで、HTTPリクエスト処理は完了です。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_5"><h4>
+(5)&nbsp;<b>Requestの削除</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>()に対象のリクエストIDを指定して削除します。<br><br></div>
+<div style="margin-left:50px;">再びHTTPリクエストを送信する場合は、Requestの作成から行います。また接続先を変更する場合は、接続先に対応したConnectionを作成してからRequestを作成します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+/*HTTP処理の手順のサンプル*/
+#define LIBHTTP_POOLSIZE	(20 * 1000)
+#define USER_AGENT		"PSPHTTP/0.1 test/0.1"
+#define SCHEME 		&quot;http&quot;
+#define SERVER 		&quot;www.scei.co.jp&quot;
+#define PATH   		&quot;/&quot;
+#define PORT   		(80)
+#define URL    		&quot;http://www.scei.co.jp&quot;
+int		ret, template_id, connection_id, request_id, status_code, counter;
+unsigned char	buf[128];
+<a href="../kernel/Types-Reference-Japanese.htm#SceULong64">SceULong64</a>	content_length;
+(ネットワークライブラリの初期化処理)
+...
+/*libhttpの初期化*/
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>(LIBHTTP_POOLSIZE);
+/*Templateの作成*/
+template_id = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateTemplate">sceHttpCreateTemplate</a>(USER_AGENT, SCE_HTTP_VERSION_1_1,
+ 	SCE_HTTP_DISABLE);
+if (template_id &lt; 0){
+	ERROR;
+}
+/*Connectionの作成*/
+connection_id = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateConnection">sceHttpCreateConnection</a>(template_id, SERVER, SCHEME,
+	PORT, SCE_HTTP_ENABLE);
+/* URLの文字列を利用してConnectionを作成することもできます。
+connection_id = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateConnectionWithURL">sceHttpCreateConnectionWithURL</a>(template_id, URL, SCE_HTTP_ENABLE);
+*/
+if (connection_id) &lt; 0){
+	ERROR;
+}
+/*Requestの作成*/
+request_id = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateRequest">sceHttpCreateRequest</a>(connection_id, SCE_HTTP_METHOD_GET, PATH, 0);
+/* URLの文字列を利用してリクエストを作成することもできます
+request_id = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateRequestWithURL">sceHttpCreateRequestWithURL</a>(connection_id, SCE_HTTP_METHOD_GET,
+	URL, 0);
+*/
+if (request_id &lt; 0){
+	ERROR;
+}
+/*Requestの送信とレスポンスヘッダの受信 */
+ret = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>(request_id);
+if (ret &lt; 0){
+	ERROR;
+}
+ret = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>(request_id, &amp;status_code);
+if ( (ret &lt; 0) || (status_code != 200) ){
+	ERROR;
+}
+ret = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>(request_id, &amp;content_length);
+if (ret &lt; 0){
+	ERROR;
+}
+/*メッセージボディの受信 */
+while (content_length &gt; 0){
+	ret = <a href="../network/libhttp-Reference-Japanese.htm#sceHttpReadData">sceHttpReadData</a>(request_id, buf, sizeof(buf));
+	if (ret &lt; 0){
+		ERROR;
+	} else if (ret == 0){
+		break; /*コネクションが切断された */
+	} else {
+		for (counter = 0; counter &lt; ret; counter++){
+			putchar(buf[counter]);
+		}
+	}
+}
+printf(&quot;\n&quot;);
+/*Requestの削除 */
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>(request_id);
+/* ライブラリの終了処理 */
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>(connection_id);
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteTemplate">sceHttpDeleteTemplate</a>(template_id);
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>();
+(ネットワークの終了処理)
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>ライブラリの終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーションはlibhttpを終了する前に、作成したTemplate、Connection、Requestを<a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteTemplate">sceHttpDeleteTemplate</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>()で削除しておく必要があります。まずリクエストを削除した後に、コネクション、最後にテンプレートの順で削除してください。<br>それぞれ削除し終えた後、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>()を呼び出します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* これ以前に作成したTemplate、Connection、Requestをすべて削除する */
+
+/* libhttpの終了処理 */
+<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>();
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>動作解説</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Keep-Alive処理のしくみ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">通信の効率化のためHTTPのバージョン1.1から、TCPコネクションを切断せずに複数回のHTTP通信を行うKeep-Aliveという機能が導入されています。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libhttp-Overview-Japanese002.gif">
+</div>
+<div style="margin-left:50px;"><br>libhttpではKeep-Aliveを自動的に行う機能があります。libhttpは以下の全ての条件が満たされた時にKeep-Aliveを用いた通信を行います。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> コネクション設定のKeep-Alive機能が有効
+<li> 接続するサーバーがKeep-Aliveに対応している
+<li> 同一のコネクション設定を使用したリクエストオブジェクトを使用している
+</ul></div>
+<div style="margin-left:50px;">Keep-Aliveの有効化/無効化はコネクション設定単位で可能です。またコネクション設定の内部で現在サーバーと接続が継続しているかどうかの情報が管理されますので、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()関数を呼んだときにサーバーとの接続性を確認し、既存のコネクションが存在しない時のみコネクションを作成します。<br>Keep-Aliveを使用したときには1つのTCPコネクションで複数のリクエスト、レスポンスをやりとりします。またサーバーは受け取ったリクエストと同じ順番でレスポンスを送ります。そのため、アプリケーションが同じコネクション設定で複数のリクエストを送信し、後発のリクエストに対するレスポンスが受信し終わるのを、先発のリクエストに対する受信スレッドが待ってしまうような構造にしてしまうとデッドロックが発生してしまいますのでご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Redirect処理のしくみ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">HTTPにはURLが変更されたことをクライアントに知らせるため、サーバーからリダイレクトという種類の応答を返すことができます。libhttpではサーバーからリダイレクトの応答を受け取った時に、自動的に指定のURLへリクエストし直す機能があります。具体的にはサーバーから300, 301, 302, 303, 307のレスポンスステータスが返された時に指定されたURLに再度リクエストを送りなおします。305の時は指定されたURLのProxyサーバーを用いて通信を行います。この機能の有効化/無効化には<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnableRedirect">sceHttpEnableRedirect</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDisableRedirect">sceHttpDisableRedirect</a>()関数を使用します。デフォルトでは有効に設定されています。この機能を無効にした時は、アプリケーションがサーバーからのレスポンスを解析しリダイレクト先へのリクエストを自前で作成、送信する必要があります。<br>サーバーのレスポンスステータスにより、リダイレクト先の保存の扱いが変わります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 300, 302, 303, 305, 307の場合はリダイレクト先を保存しない。
+<li> 301の場合はリダイレクト先を保存し、今後おなじURLへのアクセスがあった場合はライブラリ内部で自動的にリダイレクト先へのリクエストとして変換する。
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_1">
+<div style="margin-left:40px;"><h4><b>メソッドの変更について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libhttpは基本的にはRFCに基づきリダイレクト時にメソッドの変更をしますが、メソッドがGETに変更されることを期待しユーザID、パスワードをPOST送信するサービスも存在するため、RFCに逸脱した挙動も組み込まれていますがご了承ください。<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetRedirectCallback">sceHttpSetRedirectCallback</a>()を使用することで、アプリケーションでメソッドの変更を制御することも可能です。<br><br>RFCの規定<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> 301, 302, 305, 307の時にはメソッドの変更はしない。
+<li> 303の時はメソッドをGETに変更する。
+</ul></div>
+<div style="margin-left:67px;">libhttp独自の規定(RFC違反部分)<br></div>
+<div style="margin-left:70px;"><ul>
+<li> HEADメソッドの時は303の時もHEADのままリダイレクトする
+<li> httpsからhttpのサイトにリダイレクトされつつメソッドがPOSTの時は301,302の時もGETメソッドに変更する
+</ul></div>
+<div style="margin-left:67px;"><br>またPOSTメソッド使用時のリダイレクトには制限があり、複数回<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()を呼ぶことで分割してリクエストボディを送信した時は、メソッドがGETに変更される種類のリダイレクトのみ自動リダイレクトが有効となります。これは再送に使用するリクエストボディの保存上の都合となります、ご了承ください。具体的な例としては複数回に分けたPOSTデータの送信の結果307がサーバーから返信された場合などは、自動リダイレクトは発生せず<a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>()で307がそのまま取得されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Basic/Digest認証</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpはベーシック認証、ダイジェスト認証をサポートします。<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetAuthInfoCallback">sceHttpSetAuthInfoCallback</a>()関数であらかじめユーザとパスワードを取得するためのコールバック関数を指定しておくことで、これらの認証が必要となった時にコールバック関数が呼び出されユーザとパスワードを設定する事ができます。コールバック関数以外にも<a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateConnectionWithURL">sceHttpCreateConnectionWithURL</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpCreateRequestWithURL">sceHttpCreateRequestWithURL</a>()で指定したURLにユーザ名、パスワードを含める事もできます。<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnableAuth">sceHttpEnableAuth</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDisableAuth">sceHttpDisableAuth</a>()関数で有効化、無効化することができます。<br>コールバック関数で渡されたユーザ名とパスワードはライブラリ内部に保存され、必要に応じて再利用されます。保存されるユーザ名とパスワードの組は最大で16個です。これを超える場合は、最も古くに参照されたものから順に消されます。また<a href="../network/libhttp-Reference-Japanese.htm#sceHttpFlushAuthList">sceHttpFlushAuthList</a>()を呼び出すことにより内部に保存されたすべての情報を消すことができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Cookie処理のしくみ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpにはCookieを自動的に保存、送信する機能があります。この機能の有効化/無効化には<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnableCookie">sceHttpEnableCookie</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDisableCookie">sceHttpDisableCookie</a>()を用います。デフォルトでは有効に設定されています。またCookieの情報はメモリ上に置かれるため、Cookieが有効なのは<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnd">sceHttpEnd</a>()関数が呼ばれるまでとなります。Cookieをlibhttpの生存期間を超えて保存するためには<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSaveSystemCookie">sceHttpSaveSystemCookie</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpLoadSystemCookie">sceHttpLoadSystemCookie</a>()を使用します。これらの関数を呼ぶ場合はユーザの環境によって最大100KBのCookie管理空間が必要となるため、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()で指定するメモリサイズをSCE_HTTP_LOAD_COOKIE_LEAST_HEAP_SIZE以上に設定する必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>HTTP Proxy</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpはHTTPプロキシサーバーを介した通信をサポートします。プロキシの設定は自動的に接続の設定をPSP&reg;の接続設定から読み込む方法と、アプリケーションが手動で設定する方法の2種類があります。<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetProxy">sceHttpSetProxy</a>(), <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetProxy">sceHttpGetProxy</a>()で両者を設定する事ができますが、前者はテンプレート設定作成する時の引数でも有効/無効を選択できます。無線LANの性質上、接続する基地局でプロキシサーバーを使用するか否か、どのプロキシサーバーを使うかが変化する可能性が高いので、PSP&reg;の接続設定から読み込む方法を推奨します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Cache処理の仕組み</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libhttpはメモリ上の簡易的なキャッシュを使用することができます。キャッシュを使用するには<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInitCache">sceHttpInitCache</a>()でキャッシュに使用するメモリを指定した後、キャッシュを使用するテンプレート設定、コネクション設定、またはリクエストオブジェクトを<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEnableCache">sceHttpEnableCache</a>()で指定します。キャッシュに使用するメモリはlibhttp全体で使用するメモリと共有で、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInitCache">sceHttpInitCache</a>()で指定されたサイズ以下の値を使用します。したがってキャッシュを使用する場合はそのサイズ分<a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()で指定するサイズを増やす必要があります。<br>現在、キャッシュされる対象は、GETメソッドのリクエストでレスポンスがContent-Lengthを持つものです。また<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetCacheContentLengthMaxSize">sceHttpSetCacheContentLengthMaxSize</a>()によって、キャッシュすべきレスポンスボディの最大値を指定することができます。デフォルトはキャッシュに指定されたサイズになっています。キャッシュデータが指定されたサイズを超える場合は、現在参照中でないキャッシュのうち最も古くに参照されたものから順に消されていきます。この時キャッシュの有効期限は考慮されず、単純にキャッシュの参照時間が古い順に消されます。また<a href="../network/libhttp-Reference-Japanese.htm#sceHttpFlushCache">sceHttpFlushCache</a>()を呼び出すことにより、すべてのキャッシュデータを無効化することができます。<br>キャッシュの使用を終了するには、キャッシュを使用するリクエストオブジェクトを全て削除してから<a href="../network/libhttp-Reference-Japanese.htm#sceHttpEndCache">sceHttpEndCache</a>()を呼び出してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>スタックサイズについて</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>API呼び出しに必要なスタックサイズ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libhttpのAPI呼び出しに必要なスタックサイズは、APIにより異なります。<br></div>
+</ol>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1> 10240バイト（SCE_HTTP_NET_LEAST_STACK_SIZE）必要なAPI</li>
+</ol></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequestInCacheFirstMode">sceHttpSendRequestInCacheFirstMode</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpAbortRequest">sceHttpAbortRequest</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpReadData">sceHttpReadData</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteConnection">sceHttpDeleteConnection</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpDeleteRequest">sceHttpDeleteRequest</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetContentLength">sceHttpGetContentLength</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetStatusCode">sceHttpGetStatusCode</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetProxy">sceHttpSetProxy</a>()
+</ol></div>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=2> 2048バイト（SCE_HTTP_LEAST_STACK_SIZE）必要なAPI</li>
+</ol></div>
+<div style="margin-left:70px;"><ul>
+<li> 上記以外のAPIすべて
+</ul></div>
+</ol>
+<div style="margin-left:67px;">スタックサイズが不足の場合はSCE_HTTP_INSUFFICIENT_STACKSIZEのエラーが返ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>コールバック関数のスタックサイズ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libhttpの下記関数にて設定するコールバック関数のスタックサイズは、4096バイト（SCE_HTTP_CALLBACK_LEAST_STACK_SIZE）になります。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetAuthInfoCallback">sceHttpSetAuthInfoCallback</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetRedirectCallback">sceHttpSetRedirectCallback</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetCookieSendCallback">sceHttpSetCookieSendCallback</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpSetCookieRecvCallback">sceHttpSetCookieRecvCallback</a>()
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>マルチスレッド環境における制限事項</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">ある1つのコネクションIDは、リダイレクト等の特殊な状況を除いて1つのTCPソケットしか持ちません。そのため複数スレッドから通信処理が発生する関数（<a href="../network/libhttp-Reference-Japanese.htm#sceHttpReadData">sceHttpReadData</a>()または<a href="../network/libhttp-Reference-Japanese.htm#sceHttpSendRequest">sceHttpSendRequest</a>()）を同時に呼ぶとエラーが返ります。上記の状況が発生するのが避けられない構造の場合は、スレッド毎にConnectionを作成してください。同時に関数を呼ばない場合や、異なるコネクションIDから作成されたリクエストを複数スレッドから同時に扱うのは問題ありません。また、<a href="../network/libhttp-Reference-Japanese.htm#sceHttpAbortRequest">sceHttpAbortRequest</a>()を通信の発生する関数と同時に呼ぶのは問題ありません。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,2000 @@
+<html lang="jp">
+<head>
+<title>PSPNET-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+pspnet
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;には、IEEE 802.11無線LANデバイス（略称 無線LANデバイス）が内蔵されており、このデバイスを利用するためのネットワークライブラリ群が用意されています。このネットワークライブラリ群を総称して、PSPNETと呼びます。<br>PSPNETは、pspnetモジュールを基盤とした複数のモジュールで構築され、プロトコルスタックとAPI、およびネットワーク接続機能を提供します。無線LANデバイスには、2つの動作モードがあり、それぞれの動作モードに対して、独立したプロトコルスタックを提供します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>無線LANデバイス動作</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>モード</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>プロトコルスタック</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>API</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ネットワーク</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>接続機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;インフラストラクチャ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;TCP/IP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;BSDソケットAPI&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DHCP&nbsp;&nbsp;<br>&nbsp;&nbsp;PPPoE&nbsp;&nbsp;<br>&nbsp;&nbsp;手動&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;アドホック&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;専用（アドホックモード&nbsp;&nbsp;<br>&nbsp;&nbsp;通信プロトコル）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドホックソケット&nbsp;&nbsp;<br>&nbsp;&nbsp;API&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;－&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP/IPプロトコルを使用するために必要なファイルは、次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_inet.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_apctl.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_ap_dialog_dummy.h（開発時）&nbsp;&nbsp;<br>&nbsp;&nbsp;utility_module.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;モジュールファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_ap_dialog_dummy.prx（開発時）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_inet_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_apctl_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_ap_dialog_dummy_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;utility_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポート&nbsp;&nbsp;<br>&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_inet_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_apctl_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_ap_dialog_dummy_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">アドホックモード専用プロトコルを使用するために必要なファイルは、次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhocctl.h&nbsp;&nbsp;<br>&nbsp;&nbsp;utility_module.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhocctl_stub.a&nbsp;&nbsp;<br>&nbsp;&nbsp;utility_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポート&nbsp;&nbsp;<br>&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_stub_weak.a&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhocctl_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ライブラリ以外に、開発支援のために以下のモジュールファイルも提供しています。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;近隣のBSSをスキャンし、結果を表示する&nbsp;&nbsp;<br>&nbsp;&nbsp;プログラム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scan.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;WLANインタフェースのMACアドレスを表示する&nbsp;&nbsp;<br>&nbsp;&nbsp;プログラム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;show_macaddr.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;アドホックIDチェックツール&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;adhoc_id_check.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>モジュールのロードおよびアンロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ネットワークモジュールのロードおよびアンロードは、モジュールユーティリティを用いて行います。ネットワークモジュールは、機能ブロック毎にモジュールセットに分けられており、モジュールセット毎にロードおよびアンロードを行います。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>ロード処理</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// PSPNET 共通モジュールセットのロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NET_COMMON);
+if (ret &lt; 0) {
+	//エラー処理
+}
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>アンロード処理</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// PSPNET 共通モジュールセットのアンロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NET_COMMON);
+if (ret &lt; 0) {
+	//エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">モジュールユーティリティの詳細については、「ユーティリティドキュメント」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>TCP/IPプロトコルを使用する場合</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>モジュールロード処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">TCP/IPプロトコルを使用するために必要なモジュールセットをロードします。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// PSPNET 共通モジュールセットのロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NET_COMMON);
+if (ret &lt; 0) {
+	//エラー処理
+}
+// PSPNET インフラストラクチャモジュールセットのロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NET_INET);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>初期化処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">各モジュールの初期化関数を呼び出します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// pspnet モジュールの初期化
+ret = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetInit">sceNetInit</a>(PSPNET_POOLSIZE, CALLOUT_SPL, 0, NETINTR_SPL, 0);
+if(ret &lt; 0){
+	// エラー処理
+}
+
+// pspnet_inet モジュールの初期化
+ret = <a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInit">sceNetInetInit</a>();
+if(ret &lt; 0){
+	// エラー処理
+}
+
+// pspnet_apctl モジュールの初期化
+ret = <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlInit">sceNetApctlInit</a>(SCE_APCTL_STACKSIZE, SCE_APCTL_PRIO);
+if(ret &lt; 0){
+	// エラー処理
+}
+
+// ダイアログダミーpspnet_ap_dialog_dummy モジュールの初期化
+ret = <a href="../network/PSPNET_Ap_Dialog_Dummy-Reference-Japanese.htm#sceNetApDialogDummyInit">sceNetApDialogDummyInit</a>();
+if(ret &lt; 0){
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>ネットワーク接続処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">初期化処理のあと、ネットワーク接続を行います。ここでは、ダミーダイアログモジュールを用いた接続処理を示します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// 接続関数呼び出し
+// 接続パラメータ ap_dialog_dummy_param で SSID を指定
+ret = <a href="../network/PSPNET_Ap_Dialog_Dummy-Reference-Japanese.htm#sceNetApDialogDummyConnect">sceNetApDialogDummyConnect</a>(&amp;ap_dialog_dummy_param);
+if(ret &lt; 0){
+	// エラー処理
+}
+
+while(1){
+	// 接続状態のポーリング
+	ret = <a href="../network/PSPNET_Ap_Dialog_Dummy-Reference-Japanese.htm#sceNetApDialogDummyGetState">sceNetApDialogDummyGetState</a>(&amp;ap_dialog_dummy_state);
+	if(ret == 0){
+		// 接続完了もしくは切断完了状態ならループから抜ける
+		if(ap_dialog_dummy_state.state
+			== <a href="../network/PSPNET_Ap_Dialog_Dummy-Reference-Japanese.htm#SceNetApDialogDummyState_Connected">SceNetApDialogDummyState_Connected</a>
+		||
+		ap_dialog_dummy_state.state
+			== <a href="../network/PSPNET_Ap_Dialog_Dummy-Reference-Japanese.htm#SceNetApDialogDummyState_Disconnected">SceNetApDialogDummyState_Disconnected</a>)
+				break;
+	}
+	// ポーリング間隔sleepする
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(1*1000*1000);
+}
+// 切断状態でループを抜けた場合はエラー処理
+if(ap_dialog_dummy_state.state
+	== <a href="../network/PSPNET_Ap_Dialog_Dummy-Reference-Japanese.htm#SceNetApDialogDummyState_Disconnected">SceNetApDialogDummyState_Disconnected</a>){
+	// エラー処理
+}
+// 接続完了
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_4"><h4>
+(4)&nbsp;<b>アプリケーションによる通信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UNIXなどで一般的に用いられているBSDソケットAPIを用いて通信を行います。BSDソケットAPIの詳細については、各種参考文献を参照して下さい。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_5"><h4>
+(5)&nbsp;<b>スキャン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">インフラストラクチャモードでは、近隣のアクセスポイントを探索するスキャンを行うことができます。スキャンの結果を基に接続するアクセスポイントを選択したり、ネットワーク設定に保存したりすることが可能です。<br><br>スキャンはその時点でどの状態にいても実行可能です。ただし、スキャン実行中は送受信処理がブロックしてしまうため、むやみに行うとネットワークを扱うライブラリやユーティリティ、アプリケーションの通信が正常に動作しなくなります。連続で呼び出す場合は、必要最低限の頻度で行うようにしてください。<br><br>スキャン要求は、<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlScanSSID2">sceNetApctlScanSSID2</a>()で行います。この関数は内部スレッドへスキャン要求を通知し、ブロックせずに戻ります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlScanSSID2">sceNetApctlScanSSID2</a>(const char *ssid);
+</font></pre></div>
+<div style="margin-left:67px;"><br>内部スレッドは、スキャン要求を受け取るとその時点の状態の中でスキャンを実行し、スキャンが完了したら<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SCE_NET_APCTL_EVENT_SCAN2">SCE_NET_APCTL_EVENT_SCAN2</a>イベントと共に同じ状態へ遷移します。Scanning状態への遷移や、<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SCE_NET_APCTL_EVENT_SCAN_COMPLETED">SCE_NET_APCTL_EVENT_SCAN_COMPLETED</a>イベント・<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SCE_NET_APCTL_EVENT_ERROR">SCE_NET_APCTL_EVENT_ERROR</a>イベントは現れないことに注意してください。これらの状態およびイベントは内部用途のためのものです。<br>アプリケーションは、スキャン要求後は<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SCE_NET_APCTL_EVENT_SCAN2">SCE_NET_APCTL_EVENT_SCAN2</a>イベントを伴う状態遷移を待たなければいけません。スキャンがエラーになった場合は、<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SCE_NET_APCTL_EVENT_SCAN2">SCE_NET_APCTL_EVENT_SCAN2</a>イベントとともにエラーコードが返されます。<br><br>スキャン結果は、"BSSディスクリプタ"として表現され、1つのアクセスポイントに対して1つのBSSディスクリプタが存在します。近隣に存在するアクセスポイントの数によって、スキャン結果のBSSディスクリプタ数は変化します。<br><br>スキャン結果は、pspnet_apctl内に保持されます。スキャン結果を受け取るには、<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetBSSDescIDList2">sceNetApctlGetBSSDescIDList2</a>()を使用してBSSディスクリプタの数とIDリストを取得します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetBSSDescIDList2">sceNetApctlGetBSSDescIDList2</a>(int *buflen, struct <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SceNetApctlBSSDescID">SceNetApctlBSSDescID</a> *buf);
+</font></pre></div>
+<div style="margin-left:67px;"><br>スキャンを行い、スキャン結果リストを取得するコード例を以下に示します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void
+scan(
+    void
+)
+{
+    int ret = 0, buflen;
+    struct <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SceNetApctlBSSDescID">SceNetApctlBSSDescID</a> *bssdesc;
+
+    /* スキャン実行 */
+    ret = <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlScanSSID2">sceNetApctlScanSSID2</a>(NULL);
+    if(ret &lt; 0){
+       /* エラー処理 */
+    }
+
+    /* スキャン完了イベントを待つ */
+
+    /* スキャン結果のサイズの取得 */
+    ret = <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetBSSDescIDList2">sceNetApctlGetBSSDescIDList2</a>(&amp;buflen, NULL);
+    if(ret &lt; 0){
+       /* エラー処理 */
+    }
+
+    /* buflen サイズのメモリを確保し、ポインタを bssdesc に格納 */
+    ...
+
+    /* BSS ディスクリプタ ID リストの取得 */
+    ret = <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetBSSDescIDList2">sceNetApctlGetBSSDescIDList2</a>(&amp;buflen, bssdesc);
+    if(ret &lt; 0){
+       /* エラー処理 */
+    }
+
+    /* bssdesc を先頭とするリストとして保持 */
+}
+
+</font></pre></div>
+<div style="margin-left:67px;">BSSディスクリプタIDを取得後は、BSSディスクリプタの内容の各項目を<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetBSSDescEntry2">sceNetApctlGetBSSDescEntry2</a>()関数経由で取得できます。<br>例として、BSSディスクリプタからBSSIDを取得するコードを以下に示します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int
+get_ssid_from_bssdesc(
+    int bssdesc_id,
+    char *bssid
+    )
+{
+    int ret;
+    union <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SceNetApctlBSSDescEntry">SceNetApctlBSSDescEntry</a> bssdesc;
+
+    ret = <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetBSSDescEntry2">sceNetApctlGetBSSDescEntry2</a>(bssdesc_id,
+        <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SCE_NET_APCTL_BSSDESC_BSSID">SCE_NET_APCTL_BSSDESC_BSSID</a>, &amp;bssdesc);
+    if(ret &lt; 0){
+       /* エラー処理 */
+    }
+
+    memcpy(bssid, bssdesc.bssid, sizeof(bssdesc.bssid));
+
+    return ret;
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_6"><h4>
+(6)&nbsp;<b>ネットワーク切断処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">通信が終了したら、ネットワーク切断を行います。切断には、<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDisconnect">sceNetApctlDisconnect</a>()を使用します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// 切断関数呼び出し
+disconnected = 0;
+ret = <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDisconnect">sceNetApctlDisconnect</a>();
+if(ret &lt; 0){
+	// エラー処理
+}
+
+// 切断完了待ち合わせ
+// イベントハンドラがDISCONNECTイベントを受けてdisconnectedを1にするのを待つ
+while(disconnected == 0){
+	// ポーリング間隔sleepする
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(1*1000*1000);
+}
+// 切断完了
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_7"><h4>
+(7)&nbsp;<b>終了処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">各モジュールの終了処理関数を呼び出します。このとき、各モジュールのAPIを呼び出し中のスレッドがいないことを確認してください。<br></div>
+<div style="margin-left:80px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// ダイアログダミーpspnet_ap_dialog_dummy モジュールの終了処理
+<a href="../network/PSPNET_Ap_Dialog_Dummy-Reference-Japanese.htm#sceNetApDialogDummyTerm">sceNetApDialogDummyTerm</a>();
+// pspnet_apctl モジュールに登録したイベントハンドラを削除
+if(0 &lt;= handler_id)
+	<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDelHandler">sceNetApctlDelHandler</a>(handler_id);
+// pspnet_apctl モジュールの終了処理
+<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlTerm">sceNetApctlTerm</a>();
+// pspnet_inet モジュールの終了処理
+<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetTerm">sceNetInetTerm</a>();
+// pspnet モジュールの終了処理
+<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetTerm">sceNetTerm</a>();
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_8"><h4>
+(8)&nbsp;<b>モジュールアンロード処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">モジュールセットをアンロードします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// PSPNET インフラストラクチャモジュールセットのアンロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NET_INET);
+if (ret &lt; 0) {
+	//エラー処理
+}
+// PSPNET 共通モジュールセットのアンロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NET_COMMON);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>アドホックモード通信プロトコルを利用する場合</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_1"><h4>
+(1)&nbsp;<b>モジュールロード処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アドホックモード通信プロトコルを使用するために必要なモジュールセットをロードします。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// PSPNET 共通モジュールセットのロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NET_COMMON);
+if (ret &lt; 0) {
+	//エラー処理
+}
+// PSPNETアドホックモジュールセットのロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NET_ADHOC);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_2"><h4>
+(2)&nbsp;<b>初期化処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">各モジュールの初期化関数を呼び出します。<br></div>
+<div style="margin-left:80px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// pspnet モジュールの初期化
+ret = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetInit">sceNetInit</a>(PSPNET_POOLSIZE, CALLOUT_TPL, 0, NETINTR_TPL, 0);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+// pspnet_adhoc モジュールの初期化
+ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocInit">sceNetAdhocInit</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+// pspnet_adhocctl モジュールの初期化
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlInit">sceNetAdhocctlInit</a>(ADHOCCTL_STACKSIZE, ADHOCCTL_TPL, &amp;adhoc_id);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_3"><h4>
+(3)&nbsp;<b>イベントハンドラの登録</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">pspnet_adhocctlからネットワーク接続に関するイベント通知を受けるためのイベントハンドラを登録します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// pspnet_adhocctl イベントハンドラの登録
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlAddHandler">sceNetAdhocctlAddHandler</a>(adhocctl_handler, NULL);
+if (ret &lt; 0) {
+	// エラー処理
+}
+// ハンドラIDを保存
+handlerId = ret;
+
+</font></pre></div>
+<div style="margin-left:67px;">以下はイベントハンドラのサンプルです。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int error_code = 0;	// エラーコード格納場所
+int evf = 0;		// イベントフラグ
+
+void
+adhocctl_handler(int event, int error, void *arg)
+{
+	if (event == <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_ERROR">SCE_NET_ADHOCCTL_EVENT_ERROR</a>) {
+		error_code = error;
+		evf |= EVF_ERROR;
+	}	
+	else if (event == <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_CONNECT">SCE_NET_ADHOCCTL_EVENT_CONNECT</a>) {
+		error_code = 0;
+		evf |= EVF_CONNECT;
+	}
+	else if (event == <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_DISCONNECT">SCE_NET_ADHOCCTL_EVENT_DISCONNECT</a>) {
+		error_code = 0;
+		evf |= EVF_DISCONNECT;
+	}
+	else if (event == <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_SCAN">SCE_NET_ADHOCCTL_EVENT_SCAN</a>) {
+		error_code = 0;
+		evf |= EVF_SCAN;
+	}
+
+	return;
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_4"><h4>
+(4)&nbsp;<b>アドホックネットワーク接続処理</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_4_1">
+<div style="margin-left:63px;"><h4><b>sceNetAdhocctlConnect()を利用する場合</b><br><br></h4></a></div>
+<div style="margin-left:80px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()では、タイトルアプリケーションがIBSSの作成・参加を意識することなくIBSSへ接続できます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// グループ名の設定（&quot;test&quot;に設定）
+memset(&amp;group_name, 0, sizeof(struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlGroupName">SceNetAdhocctlGroupName</a>));
+memcpy(&amp;group_name.data, &quot;test&quot;, sizeof(&quot;test&quot;));
+// 接続関数呼び出し
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>(&amp;group_name);
+if (ret &lt; 0) {
+	// エラー処理
+}
+// 接続状態のポーリング
+while (1) {
+	// 接続完了状態ならループから抜ける
+	if (evf &amp; EVF_CONNECT) {
+		break;
+	}
+	// エラー処理へ
+	if (evf &amp; EVF_ERROR) {
+		// エラー処理
+	}
+	
+	//ポーリング間隔sleepする
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(1*1000*1000);
+}
+// 接続完了
+</font></pre></div>
+<div style="margin-left:80px;"><br>エラー後、再接続する場合は<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()から再開します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_4_2">
+<div style="margin-left:63px;"><h4><b>sceNetAdhocctlCreate()とsceNetAdhocctlJoin()を組み合わせて利用する場合</b><br><br></h4></a></div>
+<div style="margin-left:80px;">一台の端末が<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()でIBSSを作成してから、他の端末が<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()で参加します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()を使用する端末の場合
+</ul></div>
+<div style="margin-left:80px;">グループ名を指定してIBSSを作成します。<br></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// グループ名の設定（&quot;test&quot;に設定）
+memset(&amp;group_name, 0, sizeof(struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlGroupName">SceNetAdhocctlGroupName</a>));
+memcpy(&amp;group_name.data, &quot;test&quot;, sizeof(&quot;test&quot;));
+// IBSS作成関数呼び出し
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>(&amp;group_name);
+if (ret &lt; 0) {
+	// エラー処理
+}
+// 接続状態のポーリング
+while (1) {
+	// 接続完了状態ならループから抜ける
+	if (evf &amp; EVF_CONNECT) {
+		break;
+	}
+	// エラー処理へ
+	if (evf &amp; EVF_ERROR) {
+		// エラー処理
+	}
+	
+	//ポーリング間隔sleepする
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(1*1000*1000);
+}
+// 接続完了
+
+</font></pre></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()を使用する端末の場合
+</ul></div>
+<div style="margin-left:80px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>() を呼ぶ前に<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>()を行い、接続したいグループ名のIBSSを検索します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int ret, buflen;
+struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlScanInfo">SceNetAdhocctlScanInfo</a> *buf, *ptr;
+struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlGroupName">SceNetAdhocctlGroupName</a> group_name;
+
+// グループ名 "test" の IBSS をスキャン
+memset(&amp;group_name, 0x00, sizeof(group_name));
+memcpy(group_name.data, "test", sizeof("test"));
+
+// スキャン処理
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+// スキャン状態のポーリング
+while (1) {
+	// スキャン完了状態ならループから抜ける
+	if (evf &amp; EVF_SCAN) {
+		break;
+	}
+	// エラー処理へ
+	if (evf &amp; EVF_ERROR) {
+		// エラー処理
+	}
+	
+	//ポーリング間隔sleepする
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(1*1000*1000);
+}
+// スキャン結果のバッファサイズを取得
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetScanInfo">sceNetAdhocctlGetScanInfo</a>(&amp;buflen, NULL);
+if (ret &lt; 0) {
+	// エラー処理へ
+}
+if (buflen == 0) {
+	// スキャン結果が0だった場合の処理へ
+}
+
+buf = (struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlScanInfo">SceNetAdhocctlScanInfo</a> *)malloc(buflen);
+if (buf == NULL ) {
+	// エラー処理へ
+}
+
+// スキャン結果の本体を取得する
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetScanInfo">sceNetAdhocctlGetScanInfo</a>(&amp;buflen, buf);
+if (ret &lt; 0) {
+	// エラー処理へ
+}
+for (ptr=buf; ptr!=NULL; ptr=ptr-&gt;next) {
+	// リスト処理
+	// グループ名が同じ IBSS に接続する。
+	if (memcmp(&amp;ptr-&gt;group_name, &amp;group_name, sizeof(group_name)) == 0)
+		break;
+}
+
+if (ptr == NULL)
+	// 目的のIBSS は見つからなかったので、終了処理へ
+
+// スキャン結果のリスト処理で目的のSSID が存在していれば、Join する。
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>(ptr);
+if (ret &lt; 0) {
+	// エラー処理
+}
+// 接続状態のポーリング
+while (1) {
+	// 接続完了状態ならループから抜ける
+	if (evf &amp; EVF_CONNECT) {
+		break;
+	}
+	// エラー処理へ
+	if (evf &amp; EVF_ERROR) {
+		// エラー処理
+	}
+	
+	//ポーリング間隔sleepする
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(1*1000*1000);
+}
+// 接続完了
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_5"><h4>
+(5)&nbsp;<b>アプリケーションによる通信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アドホックソケットAPIを用いて通信を行います。<br>このときイベントハンドラからのイベント通知を定期的に監視します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// ユーザプログラムメインループ
+while (1) {
+	…
+
+	if (evf &amp; EVF_ERROR) {
+		// エラー処理
+	}
+
+	…
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>エラーが発生した場合、再接続する場合は、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()または<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>/Join()から再開します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_6"><h4>
+(6)&nbsp;<b>アドホックネットワーク切断処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">通信が終了したら、ネットワーク切断を行います。<br></div>
+<div style="margin-left:80px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// 切断関数呼び出し
+ret = <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlDisconnect">sceNetAdhocctlDisconnect</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+// 接続状態のポーリング
+while (1) {
+	// 切断完了状態ならループから抜ける
+	if (evf &amp; EVF_DISCONNECT) {
+		break;
+	}
+	
+	// ポーリング間隔sleepする
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(1*1000*1000);
+}
+// 切断完了
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_7"><h4>
+(7)&nbsp;<b>終了処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">各モジュールの終了処理関数を呼び出します。このとき、各モジュールのAPIを呼び出し中のスレッドがいないことを確認してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// pspnet_adhocctlイベントハンドラの削除
+<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlDelHandler">sceNetAdhocctlDelHandler</a>(handlerId);
+// pspnet_adhocctl モジュールの終了処理
+<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlTerm">sceNetAdhocctlTerm</a>();
+// pspnet_adhoc モジュールの終了処理
+<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocTerm">sceNetAdhocTerm</a>();
+// pspnet モジュールの終了処理
+<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetTerm">sceNetTerm</a>();
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_8"><h4>
+(8)&nbsp;<b>モジュールアンロード処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">モジュールセットをアンロードします。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// PSPNETアドホックモジュールセットのアンロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NET_ADHOC);
+if (ret &lt; 0) {
+	//エラー処理
+}
+// PSPNET 共通モジュールセットのアンロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NET_COMMON);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>アドホックソケットAPIサンプル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックモード通信プロトコルPDPおよびPTPにのソケットAPI使用手順を、サンプルを用いて説明します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>PDPを用いてエコーバックするサンプル（"/usr/local/psp/devkit/sample/net/adhoc/pdp_echo"）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">echo_server_func()は、PDPソケットで受信したデータをそのまま送信元に送り返すサンプルです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+echo_server_func(
+	void
+	)
+{
+	int ret, len;
+	int id = 0;
+	struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> server_addr, client_addr;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUShort16">SceUShort16</a> client_port;
+	char etherstr[18];
+	char server_buf[SERVER_BUFSIZE];
+
+	// ローカルMACアドレスを取得
+	ret = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetLocalEtherAddr">sceNetGetLocalEtherAddr</a>(&amp;server_addr);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetLocalEtherAddr">sceNetGetLocalEtherAddr</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+	// PDPソケットを生成
+	// ローカルアドレスとポート番号を指定する
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpCreate">sceNetAdhocPdpCreate</a>(&amp;server_addr, SERVER_PORT, SERVER_BUFSIZE, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpCreate">sceNetAdhocPdpCreate</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+	// ソケットIDをidに保存
+	id = ret;
+
+	<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(&amp;server_addr, etherstr);
+	printf("server started at addr %s, port %d.\n", etherstr, SERVER_PORT);
+
+	while (1) {
+		// lenにバッファサイズを格納
+		len = SERVER_BUFSIZE;
+		// データ受信
+		ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpRecv">sceNetAdhocPdpRecv</a>(id, &amp;client_addr, &amp;client_port,
+				server_buf, &amp;len, 0, 0);
+		if (ret &lt; 0) {
+			printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpRecv">sceNetAdhocPdpRecv</a>() failed. ret = 0x%x\n", ret);
+			break;
+		}
+		// client_addr と client_port に送信元のアドレスとポート番号、
+		// len に受信データサイズが返される
+		<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(&amp;client_addr, client);
+		printf("Received from %s, port %d, len = %d\n",
+			client, client_port, len);
+		// 受信したデータをそのまま返信する
+		ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpSend">sceNetAdhocPdpSend</a>(id, &amp;client_addr, client_port,
+			server_buf, len, 0, 0);
+		if (ret &lt; 0) {
+			printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpSend">sceNetAdhocPdpSend</a>() failed. ret = 0x%x\n", ret);
+			break;
+		}
+	}
+
+bad:
+	if (id &gt; 0) 
+		// ソケットを削除
+		<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpDelete">sceNetAdhocPdpDelete</a>(id, 0);
+
+	printf("echo server terminated.\n");
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>PTPを用いてファイルを取得するサンプル（"/usr/local/psp/devkit/sample/net/adhoc/ptp_ftp"）</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_4_2_1">
+<div style="margin-left:63px;"><h4><b>サーバー（送信側）</b><br><br></h4></a></div>
+<div style="margin-left:80px;">server_func()は、PTPコネクション接続を待ち受けてコネクション確立後にファイルデータを送信するサンプルです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+server_func(
+	void
+	)
+{
+	int ret, len;
+	int fd = 0, id0 = 0, id = 0;
+	unsigned int datasize, leftsize;
+	char *server_buf = NULL;
+	struct SceIoStat stat;
+	struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> server_addr, client_addr;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceUShort16">SceUShort16</a> client_port;
+	char etherstr[18];
+
+	// 送信バッファを確保
+	server_buf = (char *)malloc(SERVER_BUFSIZE);
+	if (server_buf == NULL) {
+		printf("malloc() failed.\n");
+		goto bad;
+	}
+
+	// 送信対象ファイルを開く
+	ret = sceIoOpen(filename, SCE_O_RDONLY, 0644);
+	if (ret &lt; 0) {
+		printf("sceIoOpen() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+	// ファイルディスクリプタをfdに保存
+	fd = ret;
+
+	// ファイル情報の取得
+	ret = sceIoGetstat(filename, &amp;stat);
+	if (ret &lt; 0) {
+		printf("sceIoGetstat() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+	// ローカルMACアドレスの取得
+	ret = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetLocalEtherAddr">sceNetGetLocalEtherAddr</a>(&amp;server_addr);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetLocalEtherAddr">sceNetGetLocalEtherAddr</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+	// PTPソケットを生成し、コネクション接続を待ち受ける
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpListen">sceNetAdhocPtpListen</a>(&amp;server_addr, SERVER_PORT,
+			TXBUFLEN, RXBUFLEN, REXMT_INTERVAL, REXMT_COUNT, 1, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpListen">sceNetAdhocPtpListen</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+	// ソケットIDをid0の保存
+	id0 = ret;
+
+	<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(&amp;server_addr, etherstr);
+	printf("server started at addr %s, port %d.\n", etherstr, SERVER_PORT);
+
+	// コネクション確立待ち受け
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpAccept">sceNetAdhocPtpAccept</a>(id0, &amp;client_addr, &amp;client_port, 0, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpAccept">sceNetAdhocPtpAccept</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+	// 新しいソケットIDをidに保存
+	id = ret;
+
+	// client_addr と client_port に接続元のアドレスとポート番号が返される
+	<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(&amp;client_addr, client);
+	printf("Accepted from %s, port %d\n", client, client_port);
+
+	// ファイルサイズ（ネットワークバイトオーダー）を送信
+	datasize = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetHtonl">sceNetHtonl</a>(stat.st_size);
+	len = sizeof(datasize);
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpSend">sceNetAdhocPtpSend</a>(id, (void *)&amp;datasize, &amp;len, 0, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpSend">sceNetAdhocPtpSend</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+	// 残りデータサイズの初期値としてファイルサイズを設定
+	leftsize = stat.st_size;
+	while (leftsize &gt; 0) {
+		// ファイルから送信バッファにデータ読み込み
+		ret = sceIoRead(fd, server_buf, SERVER_BUFSIZE);
+		if (ret &lt; 0) {
+			printf("sceIoRead() failed. ret = 0x%x\n", ret);
+			goto bad;
+		}
+		// 読み込んだデータサイズをlenに設定
+		len = ret;
+		// データ送信
+		<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpSend">sceNetAdhocPtpSend</a>(id, server_buf, &amp;len, 0, 0);
+		if (ret &lt; 0) {
+			printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpSend">sceNetAdhocPtpSend</a>() failed. ret = 0x%x\n", ret);
+			goto bad;
+		}
+		// 残りデータサイズを更新
+		leftsize -= len;
+	}
+
+	// 送信完了待ち合わせ
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpFlush">sceNetAdhocPtpFlush</a>(id, 0, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpFlush">sceNetAdhocPtpFlush</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+bad:
+	if (id &gt; 0)
+		// コネクションを切断し、ソケットをクローズ
+		<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpClose">sceNetAdhocPtpClose</a>(id, 0);
+	if (id0 &gt; 0)
+		// コネクション確立を待ち受けていたソケットもクローズ
+		<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpClose">sceNetAdhocPtpClose</a>(id0, 0);
+	if (fd &gt; 0)
+		// ファイルをクローズ
+		sceIoClose(fd);
+	if (server_buf)
+		// 送信バッファを解放
+		free(server_buf);
+
+	printf("server_func() terminated.\n");
+}
+</font></pre></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_4_2_2">
+<div style="margin-left:63px;"><h4><b>クライアント（受信側）</b><br><br></h4></a></div>
+<div style="margin-left:80px;">client_func()は、PTPコネクション接続を開始しコネクション確立後にファイルデータを受信するサンプルです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+client_func(
+	void
+	)
+{
+	int ret, len, offset;
+	int fd = 0, id = 0;
+	unsigned int datasize, leftsize;
+	struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> server_addr, client_addr;
+	char *receiver_buf = NULL;
+
+	// 受信バッファの確保
+	client_buf = (char *)malloc(SENDER_BUFSIZE);
+	if (client_buf == NULL) {
+		printf("malloc() failed.\n");
+		goto bad;
+	}
+
+	// 受信データを保存するファイルを開く
+	ret = sceIoOpen(filename, SCE_O_WRONLY|SCE_O_CREAT|SCE_O_TRUNC, 0644);
+	if (ret &lt; 0) {
+		printf("sceIoOpen() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+	// ファイルディスクリプタをfdに保存
+	fd = ret;
+
+	// ローカルMACアドレスを取得
+	ret = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetLocalEtherAddr">sceNetGetLocalEtherAddr</a>(&amp;client_addr);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetLocalEtherAddr">sceNetGetLocalEtherAddr</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+	// サーバー（送信側）のアドレスserver_addr_str("XX:XX:XX:XX:XX:XX")を
+	// server_addrに変換
+	<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetEtherStrton">sceNetEtherStrton</a>(server_addr_str, &amp;server_addr);
+	// PTPソケットを生成しサーバー（送信側）に接続
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpOpen">sceNetAdhocPtpOpen</a>(&amp;client_addr, 0, &amp;server_addr, SERVER_PORT,
+			TXBUFLEN, RXBUFLEN, REXMT_INTERVAL, REXMT_COUNT, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpOpen">sceNetAdhocPtpOpen</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+	// ソケットIDをidに保存
+	id = ret;
+
+	// コネクション確立待ち
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpConnect">sceNetAdhocPtpConnect</a>(id, 0, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpConnect">sceNetAdhocPtpConnect</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+	printf("Connected to %s, port %d\n", server, SERVER_PORT);
+
+	// ファイルサイズ（ネットワークバイトオーダー）をdatasizeに取得
+	len = sizeof(datasize);
+	ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpRecv">sceNetAdhocPtpRecv</a>(id, (void *)&amp;datasize, &amp;len, 0, 0);
+	if (ret &lt; 0) {
+		printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpRecv">sceNetAdhocPtpRecv</a>() failed. ret = 0x%x\n", ret);
+		goto bad;
+	}
+
+	// 残りデータサイズの初期値としてファイルサイズを設定
+	leftsize = <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetNtohl">sceNetNtohl</a>(datasize);
+	while (leftsize &gt; 0) {
+		// len に受信バッファサイズを設定
+		len = CLIENT_BUFSIZE;
+		// データ受信
+		ret = <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpRecv">sceNetAdhocPtpRecv</a>(id, client_buf, &amp;len, 0, 0);
+		if (ret &lt; 0) {
+			printf("<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpRecv">sceNetAdhocPtpRecv</a>() failed. ret = 0x%x\n", ret);
+			goto bad;
+		}
+		offset = 0;
+		while (offset &lt; len) {
+			// 受信データをファイルに書き込む
+			ret = sceIoWrite(fd, client_buf + offset,  len - offset);
+			if (ret &lt; 0) {
+				printf("sceIoWrite() failed. ret = 0x%x\n", ret);
+				goto bad;
+			}
+			offset += ret;
+		}
+		// 残りデータサイズを更新
+		leftsize -= len;
+	}
+bad:
+	if (id &gt; 0)
+		// コネクションを切断し、ソケットをクローズ
+		<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpClose">sceNetAdhocPtpClose</a>(id, 0);
+	if (fd &gt; 0)
+		// ファイルをクローズ
+		sceIoClose(fd);
+	if (client_buf)
+		// 受信バッファを解放
+		free(client_buf);
+
+	printf("client_func() terminated.\n");
+}
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>TCP/IPプロトコルにおける接続管理</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETでTCP/IPプロトコルを使用するためには、ネットワークへの接続やIPアドレス設定を完了し、通信可能な状態にしなければなりません。<br>TCP/IPでの接続処理は、pspnet_apctlライブラリが担当します。アプリケーションでは、接続に関して以下の処理を行う必要があります。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> 未接続状態からの、接続開始および接続完了待ち</li>
+<li VALUE=2> 接続完了後の接続状態での、エラー監視</li>
+<li VALUE=3> 接続状態からの、切断開始および切断完了待ち</li>
+</ol></div>
+<div style="margin-left:50px;"><br>以下、pspnet_apctlライブラリの機能を解説します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>pspnet_apctlライブラリ状態遷移図</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_apctlライブラリは、内部スレッドを持ちます。このスレッドは、以下の状態遷移図にしたがって動作します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1　pspnet_apctl状態遷移図</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>pspnet_apctlライブラリ使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlInit">sceNetApctlInit</a>()で初期化を行います。<br>本関数は、pspnet_apctlライブラリを初期化し、内部スレッドを作成します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlInit">sceNetApctlInit</a>(SceSize stacksize, int prio);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_2"><h4>
+(2)&nbsp;<b>イベントハンドラの登録</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">pspnet_apctl内部スレッドは、状態遷移の際にイベントを発生します。<br>アプリケーションは、イベントハンドラを登録して内部スレッドのイベントを受け取る必要があります。登録関数は<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>()です。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>(sceNetApctlHandler handler, void *arg);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_3"><h4>
+(3)&nbsp;<b>スキャン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アプリケーションは、任意のタイミングでスキャンを行うことができます。<br>詳細は「使用手順の概略」‐「TCP/IPプロトコルを使用する場合」‐「スキャン」を参照してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_4"><h4>
+(4)&nbsp;<b>接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アプリケーションからの接続には、ネットワーク設定ユーティリティ(開発時はダミーダイアログライブラリも使用可能)を使用するため、pspnet_apctlを直接扱う必要はありません。<br>接続時は、指定されたネットワーク設定内容によって適切な状態を経て、接続が完了するとIPObtained状態に遷移します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_5"><h4>
+(5)&nbsp;<b>エラー監視</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">TCP/IP接続の接続完了後は、IPObtained状態にとどまりますが、エラーが発生するとERRORイベントが発生し、Disconnected状態に遷移します。IPObtained状態から発生するエラーには、ワイヤレスLANスイッチOFFやアクセスポイントからの切断などがあります。<br>アプリケーションは、IPObtained状態にいる間は常にイベントハンドラからのERRORイベントを監視し、エラー発生時のダイアログ表示などの対応を行う必要があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_6"><h4>
+(6)&nbsp;<b>接続情報取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">IPObtained状態にいる際、接続に関する情報(接続先アクセスポイントのSSIDや自端末のIPアドレスなど)を取得することができます。<br>取得には、<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetInfo">sceNetApctlGetInfo</a>()を使用します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlGetInfo">sceNetApctlGetInfo</a>(int code, union <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#SceNetApctlInfo">SceNetApctlInfo</a> *info);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_7"><h4>
+(7)&nbsp;<b>切断</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDisconnect">sceNetApctlDisconnect</a>()で、内部スレッドに切断要求を出します。これを受けた内部スレッドは、TCP/IP接続の切断およびIPアドレスの解放を行います。<br>切断要求を受けて内部スレッドは、切断処理を開始し、切断が完了するとDisconnected状態に遷移します。<b>切断要求を出した後は、DISCONNECTイベントによるDisconnected状態への遷移を待たなければなりません。</b><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDisconnect">sceNetApctlDisconnect</a>(void);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_8"><h4>
+(8)&nbsp;<b>イベントハンドラの削除</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>()で登録したイベントハンドラを削除します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDelHandler">sceNetApctlDelHandler</a>(int id);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_9"><h4>
+(9)&nbsp;<b>終了処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlTerm">sceNetApctlTerm</a>()でpspnet_apctlライブラリ終了処理を行います。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlTerm">sceNetApctlTerm</a>(void);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>ダイアログ表示</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_1">
+<div style="margin-left:40px;"><h4><b>概要</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSPNETを使用する場合、接続時やエラー発生時などにユーザに対してダイアログ表示を行う必要があります。TCP/IP接続では、これらのダイアログとしてタイトルで使用可能なGUI付ライブラリ、ユーティリティが提供されています。<br>接続時には、<b>ネットワーク設定ユーティリティ</b>、エラー発生時には、<b>メッセージダイアログユーティリティ</b>が使用可能です。<br>ネットワーク設定ユーティリティには、接続状態(IPObtained状態)での接続情報を表示する機能もあります。<br>なおネットワーク切断は、所要時間が短いため、特にダイアログを表示する必要はありません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_2">
+<div style="margin-left:40px;"><h4><b>接続時のダイアログ</b><br><br></h4></div></a>
+
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_1"><h4>
+(1)&nbsp;<b>ネットワーク設定ユーティリティ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">TCP/IPネットワーク接続に使用するライブラリとして、インフラストラクチャモード用ネットワーク設定ユーティリティが用意されており、TCP/IPプロトコルを使用するタイトルは、接続の際にはこのライブラリを使用しなければなりません。接続時に必要なダイアログ表示はライブラリ内での接続処理に包含されていますので、タイトルとして個別にダイアログ表示を行う必要はありません。<br>また、インフラストラクチャモード用ネットワーク設定ユーティリティでは、接続後に接続情報（IPアドレスやDNSサーバーなど）を表示するためのダイアログも用意されています。<br>ネットワーク設定ユーティリティの使用方法に関しては、ユーティリティサービスドキュメントを参照してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_2"><h4>
+(2)&nbsp;<b>ダイアログダミーライブラリ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">開発時の効率のために、GUIなしで接続が可能なダイアログダミーライブラリ(pspnet_ap_dialog_dummy)を提供しています。開発時に限り、ダイアログダミーライブラリを使用することが可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_2_3">
+<div style="margin-left:40px;"><h4><b>接続状態でのエラー表示ダイアログ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">IPObtained状態でERRORイベントが発生した場合、タイトルはエラーに対応するメッセージをユーザに表示しなければなりません。メッセージの表示は、<b>メッセージダイアログユーティリティ</b>を使用します。メッセージダイアログユーティリティの使用方法に関しては、ユーティリティサービスドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>接続関連の注意事項</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_4">
+<div style="margin-left:40px;"><h4><b>切断時のイベント待ちについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDisconnect">sceNetApctlDisconnect</a>()で切断要求を出した後は、必ずDISCONNECTイベントによるDisconnected状態への遷移を待たなければなりません。このイベント発生をもって、切断処理完了となります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_5">
+<div style="margin-left:40px;"><h4><b>Disconnected状態からの切断について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Disconnected状態から<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlDisconnect">sceNetApctlDisconnect</a>()で切断要求を出した場合、通常の切断と同様、DISCONNECTイベントによるDisconnected状態への遷移が発生します。エラーにはなりませんので注意してください。<br>また、上記の注意事項の通り、DISCONNECTイベントによるDisconnected状態への遷移を必ず待つようにしてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_6">
+<div style="margin-left:40px;"><h4><b>APから切断された際の再接続について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Authenticating状態、KeyInfoExchanging状態、IPObtaining状態、IPObtained状態にいるとき、APから切断された(Deauthenticationフレーム、Disassociationフレームを受信した)場合、pspnet_apctlはそのAPに再接続を試みます。<br>再接続は、RECONNECTイベントによってJoining状態へ遷移することで実現されます。<br>IPObtained状態から再接続が発生した場合、IPアドレスを保持したまま再接続が実行され、IPObtaining状態をスキップします。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>アドホックモードにおける接続管理</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETでアドホックモードを使用するためには、ネットワークへの接続を完了し、通信可能な状態にしなければなりません。<br>アドホックモードでの接続処理は、pspnet_adhocctlライブラリが担当します。アプリケーションでは、接続に関して以下の処理を行う必要があります。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> 未接続状態からの、接続開始および接続完了待ち</li>
+<li VALUE=2> 接続完了後の接続状態での、エラー監視</li>
+<li VALUE=3> 接続状態からの、切断開始および切断完了待ち</li>
+</ol></div>
+<div style="margin-left:50px;"><br>以下、pspnet_adhocctlライブラリの機能を、初期化、近隣IBSSのスキャン時、アドホックモード接続時に分けて解説します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>初期化手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlInit">sceNetAdhocctlInit</a>()で初期化を行います。<br>本関数はpspnet_adhocctlライブラリを初期化し、内部スレッドを作成します。<br>アドホックIDを指定します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlInit">sceNetAdhocctlInit</a>(SceSize stacksize, int prio, struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlAdhocId">SceNetAdhocctlAdhocId</a> *adhoc_id);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>イベントハンドラの登録</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">pspnet_adhocctl内部スレッドは、状態遷移の際にイベントを発生します。<br>アプリケーションは、イベントハンドラを登録して内部スレッドのイベントを受け取る必要があります。登録関数は、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlAddHandler">sceNetAdhocctlAddHandler</a>()です。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlAddHandler">sceNetAdhocctlAddHandler</a>(sceNetAdhocctlHandler handler, void *arg);
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2　pspnet_adhocctl状態遷移図（スキャン・アドホックモード接続）</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>スキャン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>()で、近隣の同一アドホックIDのIBSSをスキャンできます。スキャン開始後、SCANNING状態に遷移し、スキャンが完了するとDISCONNECTED状態に遷移します。<br>スキャン完了後、探索結果のIBSSリストを受け取るには、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetScanInfo">sceNetAdhocctlGetScanInfo</a>()を使用します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>(void);
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetScanInfo">sceNetAdhocctlGetScanInfo</a>(int *buflen, void *buf);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>アドホックモード接続</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_7">
+<div style="margin-left:40px;"><h4><b>接続</b><br><br></h4></div></a>
+
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_4_1">
+<div style="margin-left:63px;"><h4><b>sceNetAdhocctlConnect()を利用する場合</b><br><br></h4></a></div>
+<div style="margin-left:80px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()では、タイトルアプリケーションがIBSSの作成・参加を意識することなくIBSSへ接続できます。<br>接続要求を出した後、CONNECTEDイベントまたはERRORイベントを待ちます。<br>接続が完了するとCONNECTED状態に遷移します。<br>接続エラー発生後、再接続する場合は<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()から再開します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_4_2">
+<div style="margin-left:63px;"><h4><b>sceNetAdhocctlCreate()とsceNetAdhocctlJoin()を組み合わせて利用する場合</b><br><br></h4></a></div>
+<div style="margin-left:80px;">一台の端末(ホスト)が<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()でIBSSを作成してから、他の端末(ゲスト)が<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()で参加します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:80px;">全体の接続フローを下図に示します。<br></div>
+<div style="margin-left:67px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3　sceNetAdhocctlCreate/Join()使用例</b><br>
+</div>
+<br>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()を使用するホスト端末の場合<br>接続要求を出した後、CONNECTEDイベントまたはERRORイベントを待ちます。<br>接続が完了するとCONNECTED状態に遷移します。<br>接続エラー発生後、再接続する場合は<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()から再開します。
+<li> <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()を使用するゲスト端末の場合<br><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()を呼ぶ前に<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>()を行い、接続したいグループ名のIBSSを検索します。検索結果の中の１つのIBSSに対して、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()を行います。<br>接続要求を出した後、CONNECTEDイベントまたはERRORイベントを待ちます。<br>接続が完了するとCONNECTED状態に遷移します。<br>接続エラー発生後、再接続する場合は<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()から再開します。
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_2_8">
+<div style="margin-left:40px;"><h4><b>エラー監視</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックモード接続の接続完了後はCONNECTED状態にとどまりますが、エラーが発生するとERRORイベントが発生し、DISCONNECTED状態に遷移します。CONNECTED状態から発生するエラーには、ワイヤレスLANスイッチOFF、サスペンドの発生などがあります。<br>アプリケーションは、CONNECTED状態にいる間は常にイベントハンドラからのERRORイベントを監視し、エラー発生時のダイアログ表示などの対応を行う必要があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_2_9">
+<div style="margin-left:40px;"><h4><b>接続情報取得</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">CONNECTED状態にいる際、接続先のIBSSに関する情報(BSSIDやチャンネルなど)を取得することができます。<br>取得には、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetParameter">sceNetAdhocctlGetParameter</a>()を使用します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetParameter">sceNetAdhocctlGetParameter</a>(struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlParameter">SceNetAdhocctlParameter</a> *parameter);
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_2_10">
+<div style="margin-left:40px;"><h4><b>他端末情報取得</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">CONNECTED状態にいる際、同じIBSSに接続している他端末の情報を取得することができます。取得には、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetPeerList">sceNetAdhocctlGetPeerList</a>()もしくは<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetPeerInfo">sceNetAdhocctlGetPeerInfo</a>()を使用します。<br>また、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetAddrByName">sceNetAdhocctlGetAddrByName</a>()で他端末のニックネームからMACアドレスを、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetNameByAddr">sceNetAdhocctlGetNameByAddr</a>()でMACアドレスからニックネームを取得できます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetPeerList">sceNetAdhocctlGetPeerList</a>(int *buflen, void *buf);
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetPeerInfo">sceNetAdhocctlGetPeerInfo</a>(struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> *addr, int size, struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlPeerInfo">SceNetAdhocctlPeerInfo</a> *peer_info);
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetAddrByName">sceNetAdhocctlGetAddrByName</a>(struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlNickname">SceNetAdhocctlNickname</a> *nickname, int *buflen,  void *buf);
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlGetNameByAddr">sceNetAdhocctlGetNameByAddr</a>(struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> *addr, struct  <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlNickname">SceNetAdhocctlNickname</a> *nickname);
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_2_11">
+<div style="margin-left:40px;"><h4><b>切断</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlDisconnect">sceNetAdhocctlDisconnect</a>()で、内部スレッドに切断要求を出します。これを受けた内部スレッドは、アドホックモード接続の切断を行います。<br>切断要求を受けて内部スレッドは切断処理を開始し、切断が完了するとDISCONNECTED状態に遷移します。<b>切断要求を出した後は、DISCONNECTイベントを待たなければなりません。</b><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlDisconnect">sceNetAdhocctlDisconnect</a>(void);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>終了手順</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_12">
+<div style="margin-left:40px;"><h4><b>イベントハンドラの削除</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlAddHandler">sceNetAdhocctlAddHandler</a>()で登録したイベントハンドラを削除します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlDelHandler">sceNetAdhocctlDelHandler</a>(int id);
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_13">
+<div style="margin-left:40px;"><h4><b>終了処理</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlTerm">sceNetAdhocctlTerm</a>()でpspnet_adhocctlライブラリ終了処理を行います。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlTerm">sceNetAdhocctlTerm</a>(void);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>ダイアログ表示</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_14">
+<div style="margin-left:40px;"><h4><b>概要</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSPNETを使用する場合、接続時やエラー発生時などにユーザに対してダイアログ表示を行う必要があります。アドホックモード接続では、これらのダイアログとしてタイトルで使用可能なGUI付ライブラリ、ユーティリティが提供されています。<br>ネットワーク切断は、所要時間が短いため、特にダイアログを表示する必要はありません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_15">
+<div style="margin-left:40px;"><h4><b>アドホックモード通信プロトコル使用時（接続）</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックモード通信プロトコルを使用するタイトルは、<b>ネットワーク設定ユーティリティ</b>を使用してネットワーク接続を行うか、アドホックネットワーク接続ライブラリを直接使用してネットワーク接続を行うかを選択できます。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> ネットワーク設定ユーティリティを使用する場合<br>アドホックネットワーク接続に使用するライブラリとして、アドホックモード用ネットワーク設定ユーティリティが用意されています。アドホックモード通信プロトコルを使用するタイトルは、接続の際にこのユーティリティを使用することができます。接続時に必要なダイアログ表示は、ライブラリ内での接続処理に包含されていますので、タイトルとして個別にダイアログ表示を行う必要はありません。<br>ネットワーク設定ユーティリティの使用方法に関しては、ユーティリティサービスドキュメントを参照してください。</li>
+<li VALUE=2> アドホックネットワーク接続ライブラリを直接使用する場合<br>アドホックネットワーク接続ライブラリを直接使用する場合、タイトルに必須となるダイアログ表示の詳細を以下に解説します。</li>
+</ol></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_6_1">
+<div style="margin-left:63px;"><h4><b>ダイアログ表示詳細</b><br><br></h4></a></div>
+<div style="margin-left:80px;">sceNetAdhocctl{Connect,Create,Join}()呼び出し後、イベントハンドラから<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_CONNECT">SCE_NET_ADHOCCTL_EVENT_CONNECT</a>イベントが発生するまで、以下のようなメッセージを表示します。<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4　接続処理中の状態表示・サンプル</b><br>
+</div>
+<br>
+<div style="margin-left:80px;"><br>sceNetAdhocctl{Connect,Create,Join}()呼び出し後、イベントハンドラから<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_CONNECT">SCE_NET_ADHOCCTL_EVENT_CONNECT</a>イベントの前に<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_ERROR">SCE_NET_ADHOCCTL_EVENT_ERROR</a>イベントが発生した場合、エラーコードに応じて以下のようなメッセージを表示します。<br><br></div>
+</ol>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_ADHOCCTL_WLAN_SWITCH_OFF">SCE_ERROR_NET_ADHOCCTL_WLAN_SWITCH_OFF</a>
+<li> <a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_WLAN_POWER_OFF">SCE_ERROR_NET_WLAN_POWER_OFF</a>
+</ul></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5　ワイヤレスLANスイッチがオフのときのエラー表示・サンプル</b><br>
+</div>
+<br>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:70px;"><ul>
+<li> その他のエラー
+<li> ユーザの操作ミスなど
+</ul></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 6　その他エラー発生時のエラー表示・サンプル</b><br><b>（XXXXXXXXはエラーコードの16進数）</b><br>
+</div>
+<br>
+<div style="margin-left:80px;">エラー後、再接続する場合はsceNetAdhocctl{Connect,Create,Join}()から再開します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_6_2">
+<div style="margin-left:63px;"><h4><b>文言について</b><br><br></h4></a></div>
+<div style="margin-left:80px;">表示する文言は、一字一句同じものである必要はありません。内容が同じであれば、表現を修正することはかまいません。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_6_3">
+<div style="margin-left:63px;"><h4><b>サンプル</b><br><br></h4></a></div>
+<div style="margin-left:80px;">アドホックモード通信プロトコル用ダイアログのGUIサンプルとして、/usr/local/psp/devkit/sample/net/adhoc/adhoc_dialogが提供されています。以下のサンプルは、実際にこのadhoc_dialogサンプルをダイアログとして利用していますので、ご参照ください。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> /usr/local/psp/devkit/sample/net/adhoc/network_flow
+<li> /usr/local/psp/devkit/sample/net/adhoc/matching_room
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_3_16">
+<div style="margin-left:40px;"><h4><b>アドホックモード通信プロトコル使用時（接続完了後のエラー表示）</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックモード通信プロトコルを使用する場合、ネットワーク接続完了後、任意のタイミングで切断エラーが起こる可能性があります。<br>たとえば、ユーザによってワイヤレスLANスイッチがOFFされた場合などです。<br>切断エラーは、接続完了後にpspnet_adhocctlに登録したイベントハンドラから<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_ERROR">SCE_NET_ADHOCCTL_EVENT_ERROR</a>イベントが発生することで通知されます。<br>タイトルは、切断エラーが起こった場合、対応するエラーメッセージを表示する必要があります。メッセージの表示は、<b>メッセージダイアログユーティリティ</b>を使用するか、直接画面に表示するかどちらかを選択できます。<br><br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> メッセージダイアログユーティリティを使用する場合<br>PSPNETでは、切断エラーのエラーコードに対応したメッセージを表示するために、メッセージダイアログユーティリティを使用できます。<br>pspnet_adhocctlに登録したイベントハンドラから、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_ERROR">SCE_NET_ADHOCCTL_EVENT_ERROR</a>イベントとともに渡されるエラーコードを指定することで、対応するメッセージを表示することができます。<br>メッセージダイアログユーティリティの使用方法に関しては、ユーティリティサービスドキュメントを参照してください。</li>
+<li VALUE=2> 直接画面に表示する場合<br>ネットワーク接続完了後、イベントハンドラから<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SCE_NET_ADHOCCTL_EVENT_ERROR">SCE_NET_ADHOCCTL_EVENT_ERROR</a>イベントが発生した場合、エラーコードに応じて以下のようなメッセージを表示します。</li>
+</ol></div>
+<div style="margin-left:80px;"><br></div>
+</ol>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_ADHOCCTL_WLAN_SWITCH_OFF">SCE_ERROR_NET_ADHOCCTL_WLAN_SWITCH_OFF</a>
+<li> <a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_WLAN_POWER_OFF">SCE_ERROR_NET_WLAN_POWER_OFF</a>
+</ul></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese007.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 7　ワイヤレスLANスイッチがオフになったときのエラー表示・サンプル</b><br>
+</div>
+<br>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;">エラーが発生した場合、アドホックソケットAPIの呼び出しをすべて中断・終了し、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlDisconnect">sceNetAdhocctlDisconnect</a>()を呼び出してください。<br>その後再接続する場合はsceNetAdhocctl{Connect,Create,Join}()から再開します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_6_4">
+<div style="margin-left:63px;"><h4><b>文言について</b><br><br></h4></a></div>
+<div style="margin-left:80px;">表示する文言は、一字一句同じものである必要はありません。内容が同じであれば、表現を修正することはかまいません。<br>ただし、以下の固有名詞に関しては、そのまま使用してください。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> ワイヤレスLANスイッチ
+</ul></div>
+<div style="margin-left:80px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>アドホックモードにおける生存確認</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックモードによる通信対戦を行う場合、ゲーム進行上、通信相手が通信可能な状態であるかどうかの確認（生存確認）する必要が生じます。ここでは、アドホックモード接続時において、生存確認を行う方法について解説します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>アドホックモード接続時</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックモード接続時の生存確認には、端末情報（struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlPeerInfo">SceNetAdhocctlPeerInfo</a>）を利用する方法があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_2_1"><h4>
+(1)&nbsp;<b>端末情報について</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">端末情報とは、機器認証が成功したPSP&reg;についてPSPNETライブラリ内で保持する端末毎の情報です。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_2_1_1">
+<div style="margin-left:63px;"><h4><b>登録</b><br><br></h4></a></div>
+<div style="margin-left:80px;">アドホックモード接続時には、接続完了時から切断完了時までPSP&reg;間で機器認証を行うプロトコルが動作しています。各端末は１秒間隔で認証開始パケットをブロードキャスト送信します。新たな端末からの認証開始パケットを受信した端末は、パケット送信元の端末と機器認証を開始します。機器認証が成功すると、端末情報が登録されます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_2_1_2">
+<div style="margin-left:63px;"><h4><b>削除</b><br><br></h4></a></div>
+<div style="margin-left:80px;">以下のいずれかの場合、端末は認証終了パケットをブロードキャスト送信します。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 切断時
+<li> サスペンド時
+<li> PSボタン(HOMEボタン)もしくは蓋開けによるゲーム終了時
+</ul></div>
+<div style="margin-left:80px;">認証終了パケット受信した端末は、送信元の端末との機器認証を直ちに終了し、端末情報を削除します。<br>また機器認証が成功した端末は30秒間隔でキープアライブパケットを送信しますが、5分以上キープアライブパケットを受信できなかった場合も機器認証を終了し、端末情報を削除します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_2_1_3">
+<div style="margin-left:63px;"><h4><b>パケット受信時刻の更新</b><br><br></h4></a></div>
+<div style="margin-left:80px;">端末情報（struct <a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#SceNetAdhocctlPeerInfo">SceNetAdhocctlPeerInfo</a>）のうち、last_recvは対象端末から最後にパケットを受信時したシステム時刻（<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetSystemTimeWide">sceKernelGetSystemTimeWide</a>()で取得した値）を表します。更新対象となるパケットは、ユーザが送受信するパケットのほかに機器認証プロトコルのパケットも含まれます。アドホックモード接続時には機器認証のための認証開始パケットが１秒間隔でブロードキャスト送信されているため、対象端末が通信可能な範囲に存在していればユーザが全く送受信を行わない場合でもlast_recvは1秒間隔で更新されることが期待できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_2_2"><h4>
+(2)&nbsp;<b>生存確認フロー</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アドホックモード接続時の生存確認には、前述の端末情報の存在の有無とパケット受信時刻を組み合わせて判断します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 8　アドホックモード接続時の生存確認フロー</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">last_recvと現在のシステム時刻の比較における判断時間は、ゲーム進行上妥当と思われる時間を設定してください。ただし極端に短い時間（10秒未満）にすると、ネットワークの混雑状況や電波強度の変化によっては、通信が続行できるにも関わらず通信不能であると判断してしまう可能性があります。判断時間は、10秒から30秒を目安とし、必要に応じてユーザキャンセル可能とするなどの対応をとるようにしてください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>スタックサイズ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETを使用するために必要なネットワークモジュールは、フラッシュメモリ上からロードされます。これらのモジュールはシステムアップデートによって更新される可能性があります。<br>将来に渡る互換性の維持のため、PSPNETライブラリではAPI毎に呼び出しに必要なスタックサイズを設定しています。またコールバック関数に割り当てられるスタックサイズも一意に決定されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>API呼び出しに必要なスタックサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETの各APIでは、呼び出し直後に呼び出しスレッドの残りのスタックサイズをチェックし、各API毎に定めるサイズに満たない場合は、<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a>というエラーを返します。<br>API呼び出しに必要なスタックサイズは、モジュール毎に決められおり、以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>モジュール名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>API呼び出しに必要なスタックサイズ（バイト）</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1024 (SCE_NET_PSPNET_LEAST_STACK_SIZE)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_inet&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4096 (SCE_NET_INET_LEAST_STACK_SIZE)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_apctl&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5120 (SCE_NET_APCTL_LEAST_STACK_SIZE)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2048 (SCE_NET_PSPNET_ADHOC_LEAST_STACK_SIZE)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhocctl&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3072 (SCE_NET_PSPNET_ADHOCCTL_LEAST_STACK_SIZE)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>内部スレッドのスタックサイズとコールバック関数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_apctlライブラリとpspnet_adhoctlライブラリでは、初期化時にそれぞれ内部スレッドのスタックサイズを指定できます。スタックサイズは、<b>内部スレッドが使用するスタックサイズとコールバック関数が使用するスタックサイズの合計値</b>を指定してください。<br>内部スレッドが使用するスタックサイズは、以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>モジュール名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内部スレッドが使用するスタックサイズ（バイト）</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_apctl&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;5120 (SCE_NET_APCTL_LEAST_STACK_SIZE)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhocctl&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;3072 (SCE_NET_PSPNET_ADHOCCTL_LEAST_STACK_SIZE)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>メモリ関連の注意事項</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_17">
+<div style="margin-left:40px;"><h4><b>メモリ管理</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSPNETでは、pspnetモジュール初期化時に指定されたプールサイズ分のメモリプールを内部で確保します。それ以降、以下のPSPNETライブラリ群はこのメモリプールを利用します。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> pspnet_core
+<li> pspnet_adhoc
+<li> pspnet_adhocctl
+<li> pspnet_inet
+<li> pspnet_apctl
+</ul></div>
+<div style="margin-left:67px;">メモリプールの使用状況は、<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetMallocStat">sceNetGetMallocStat</a>()で取得可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_18">
+<div style="margin-left:40px;"><h4><b>メモリプールのサイズについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSPNET全体の動作に必要なメモリプールサイズは、アプリケーションの通信状況によって変化します。<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetGetMallocStat">sceNetGetMallocStat</a>() を利用すると、メモリプールの最大消費量が取得できますので、これを参考にしてサイズ調整を行ってください。<br>ただし、パケットの送受信時にも内部メモリが消費されますので、ぎりぎりまでメモリ消費量を削減した場合、アプリケーションパケットの送受信が失敗する可能性が高くなります。<br>インフラストラクチャモードでは、DHCP でのアドレス更新パケットやPPPoEのLCP Echoパケットがやりとりできずインタフェースがダウンする可能性がありますので注意して下さい。<br>アドホックモードでは、機器認証が失敗して通信できない可能性がありますので、注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>スレッド関連の注意事項</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2_19">
+<div style="margin-left:40px;"><h4><b>スレッド個別のデータ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSPNETでは、エラーコードや排他制御情報など、スレッド個別のデータを内部で動的に確保し、管理します。このスレッド個別データは、動的に削除されることは無く、アプリケーションから明示的に削除する必要があります。<br>このスレッド個別データの削除には、<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetFreeThreadinfo">sceNetFreeThreadinfo</a>()を使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>TCP/IP使用時の注意事項</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_20">
+<div style="margin-left:40px;"><h4><b>複数のスレッドからの同一ソケットに対するAPI呼び出し</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">pspnet_inetのソケットAPIは、複数スレッドからの呼び出しに対する排他制御を行っていません。同一ソケットに対して複数のスレッドからAPI呼び出しを行う場合は、<br></div>
+<div style="margin-left:70px;"><ul>
+<li> ソケットをノンブロッキングモードにして使う
+<li> アプリケーション側で排他制御を行う
+</ul></div>
+<div style="margin-left:67px;">のいずれかの方法を取るようにして下さい。<br>排他制御が必要なAPIは、ソケット操作関数のうち、<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSocketAbort">sceNetInetSocketAbort</a>()を除いた関数です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_21">
+<div style="margin-left:40px;"><h4><b>TCPコネクション状態の即時解放について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetCloseWithRST">sceNetInetCloseWithRST</a>()は、TCPコネクションのクローズ処理をすると同時にRSTフラグが立ったパケットを送信します。<br>このときTCP 状態遷移図で通常 2MSL （Maximum Segment Lifetime －pspnet_inetでは60秒間です）留まるべきTIME_WAIT状態から直ちにCLOSED状態に移行します。<br>これにより、TCPコネクションの状態を保持する内部構造体のメモリ領域が解放され、頻繁なコネクション接続／切断による無駄なメモリ消費の削減が期待できます。<br>ただしアクティブクローズ（こちら側からクローズ処理を開始する）の場合、相手側から送信されるFIN, ACKパケットを待たずにRSTパケットを送信するため、相手側から見た場合、通常のクローズ処理ではなくコネクションがリセットされたようにみえます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_22">
+<div style="margin-left:40px;"><h4><b>ネットマスクについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ネットマスクに0.0.0.0を指定された場合、IPアドレスのクラスから算出したネットマスクが適用されます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> IPアドレス10.0.0.1、ネットマスク0.0.0.0の場合<br>ネットマスク 255.0.0.0となる
+<li> IPアドレス192.168.0.1、ネットマスク0.0.0.0の場合<br>ネットマスク 255.255.255.0となる
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_23">
+<div style="margin-left:40px;"><h4><b>ブロードキャスト送信について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">pspnet_inetでは、アドレス設定によってブロードキャストアドレスは次のように設定されます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> IPアドレス手動設定<br>指定されたIPアドレスとネットマスクから計算したアドレス。
+<li> DHCP<br>DHCPサーバーから指定されたブロードキャストアドレス。ブロードキャストアドレスが指定されない場合は、取得したIPアドレスとネットマスクから計算したアドレス。
+</ul></div>
+<div style="margin-left:67px;">ブロードキャストとして255.255.255.255に送信すると、pspnet_inet内で送信先アドレスを上記のブロードキャストアドレスに変換して送信します。<br>送信先アドレスを255.255.255.255にしたい場合は、<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSetsockopt">sceNetInetSetsockopt</a>()の<a href="../network/PSPNET_Inet-Reference-Japanese.htm#SCE_NET_INET_SO_ONESBCAST">SCE_NET_INET_SO_ONESBCAST</a>ソケットオプションを使います。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_3_24">
+<div style="margin-left:40px;"><h4><b>UDP送信時のARP解決について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">pspnet_inetの送信関数は、UDPソケットに対してはノンブロッキングであり、エラーとしてはENOMEM以外は返りません。このとき、送信先へのARP解決が済んでいない場合でも送信関数は正常終了することに注意してください。<br>pspnet_inetでは、ARP未解決パケットは1つだけ保持する空間を持っており、ARP回答パケットを受信した際に未解決パケットは初めて送信されます。<br>ARP未解決パケットキューは1個分しかないため、内部スレッドがARP回答パケットの受信処理をする前にアプリケーションスレッドが送信関数を連続で呼んだ場合などは、実質は最後の1パケットしかネットワーク上に流れないことになります。<br>UDPで連続送信する場合は、適度に内部スレッドに処理が渡るようにして下さい。<br><br>UDPは、信頼性のないプロトコルですので、ARP未解決によるパケット破棄と通信路でのパケット喪失は、本質的に同等になります。<br>pspnet_inetでは、プロトコルスタック内でARP未解決パケットをキューに保持するなどして UDPの性質を失うよりも、再送が必要とされる場合は、アプリケーション側での対応に任せています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_4">
+<h3>
+<a href="#Heading3_7"> 7. </a>4 
+<!-- hp1 --><b>アドホックモード使用時の注意事項</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_25">
+<div style="margin-left:40px;"><h4><b>PTPコネクションのクローズ処理について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpClose">sceNetAdhocPtpClose</a>()を呼び出してPTPコネクションを自分自身からクローズすると、送信バッファおよび受信バッファにあるデータはすべて破棄され、ただちにFINメッセージが送信されます。したがって、送信バッファにあるデータがすべて送信されてからクローズしたい場合は、必ず<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpFlush">sceNetAdhocPtpFlush</a>()で送信完了待ち合わせを行ってからコネクションをクローズしてください。<br>相手がPTPコネクションをクローズしてFINメッセージを受信した場合、その時点で送信バッファ中のデータは送信できなくなり、また新たに<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpSend">sceNetAdhocPtpSend</a>()を呼び出すこともできなくなります（<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_ADHOC_DISCONNECTED">SCE_ERROR_NET_ADHOC_DISCONNECTED</a>が返ります）。ただし受信バッファにデータがある場合は、データをすべて受信するまで<a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpRecv">sceNetAdhocPtpRecv</a>()を呼び出すことができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_26">
+<div style="margin-left:40px;"><h4><b>再送間隔と再送回数について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PTPでは、再送間隔についてバックオフ処理をせず、APIで指定した値を固定値として再送を試みます。このためあまり短い再送間隔を指定すると、無線LAN混雑時に輻輳状態に陥る可能性があります。パケットのRTT（Round Trip Time）は無線LANの通信速度と混雑度によって変化しますが、一般的に再送間隔を100ms以下に設定することは推奨されません。<br>またPTPでは、再送間隔×（再送回数＋1）の間相手からの応答がない場合、タイムアウトとみなしてコネクションをクローズします。電波状況によっては、通信可能な範囲にあっても数秒間から十数秒間、連続して通信不能になる状況も考えられますので、再送回数の設定には余裕をみてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_27">
+<div style="margin-left:40px;"><h4><b>同一のIBSSへの接続台数について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">同じグループ名を用いたIBSSに対する接続端末数に関して制限はありません。ただし認証できる端末数は自端末を除いて16台に制限されます。同じIBSSに18台以上の端末が接続していた場合、各端末は他の端末のうち任意の16台までの認証処理を行います。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_28">
+<div style="margin-left:40px;"><h4><b>アドホックモードのチャンネル番号設定について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックモードのチャンネル番号設定は、ユーティリティサービスのシステム情報取得関数<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityGetSystemParamInt">sceUtilityGetSystemParamInt</a>()にSCE_UTILITY_SYSTEM_PARAM_ADHOC_CHANNELを指定することで取得できます。値がチャンネル番号を表し、0は「自動」を意味します。チャンネル番号設定は、システムソフトウェアのみで変更可能です。詳しくは、ユーティリティサービスのドキュメントをご参照ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_29">
+<div style="margin-left:40px;"><h4><b>チャンネル番号設定が異なった端末間の接続について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">チャンネル番号が「自動」に設定された端末は、同じく「自動」に設定された端末と接続することが前提となっています。「自動」に設定された端末と「1ch」「6ch」「11ch」に指定された端末による接続は、「自動」に設定された端末が選択するチャンネルによって接続できる場合とできない場合が生じます。ご注意ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_30">
+<div style="margin-left:40px;"><h4><b>通信グループ変更時およびアドホック通信時のタイムアウト判定について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックモードの通信グループ変更を行う場合（例：ロビー用のグループから対戦用のグループに移動する）、一旦切断してから再度接続を行う必要があります。この際に<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 新しい通信グループにジョインするためにスキャンで検索
+<li> 接続後に通信相手が新しい通信グループに接続できたかどうかを確認にするためにプローブパケットを送信する
+</ul></div>
+<div style="margin-left:67px;">などの繰り返し動作を行い、タイムアウトを用いて成否を判定することがあります。<br>このような切断～接続～接続確認の処理過程において<br></div>
+<div style="margin-left:70px;"><ul>
+<li> UMD&reg;からの読み込み動作を行ってから接続動作を始める
+<li> 接続完了後にUMD&reg;からの読み込み動作を行ってから接続確認のための通信を始める
+</ul></div>
+<div style="margin-left:67px;">などの方法を取りますと、UMD&reg;からの読み込み動作にかかる時間のばらつきにより、端末毎の処理時間に差異が生じ、正しく接続できているにもかかわらずタイムアウトと判定される、といった問題が生じることがあります。<br>また通常のアドホック通信時においても<br></div>
+<div style="margin-left:70px;"><ul>
+<li> ステージ変更でUMD&reg;から必要なデータをロードする際、端末間でロード完了の待ち合わせを行う
+</ul></div>
+<div style="margin-left:67px;">という場合に、同様にUMD&reg;からの読み込み動作にかかる時間のばらつきにより、端末毎の処理時間に差異が生じ、タイムアウトと判定されてゲームが進行できない、といった問題が生じることがあります。<br>したがって、<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 切断～接続～接続確認の一連の処理に、UMD&reg;読み込み動作などの時間が可変となる可能性がある処理を入れない。
+<li> タイムアウト判定時間は、十分長く（60秒もしくはそれ以上）取り、端末毎の処理時間に差異があっても許容できるようにする。あわせて必要に応じてユーザキャンセルが可能なような作りをする。
+</ul></div>
+<div style="margin-left:67px;">などの方法を取り、アプリケーションの処理速度に依存しないようにしてください。<br>またタイムアウト判定に際しては、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetSystemTimeWide">sceKernelGetSystemTimeWide</a>()などで取得する絶対時間で計測してください。VSYNC周期を利用したカウンタなどで行いますと、描画負荷によってフレームレートが一定に保たれなくなった場合に、期待されたタイムアウト時間とは異なる結果となります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_31">
+<div style="margin-left:40px;"><h4><b>パケット送受信時のスレッドの動作詳細について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックモードでパケットを送受信する際のネットワーク関連スレッドの動作詳細は、以下のようになります。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 送信時<br>ユーザスレッドは、送信API呼出し後、ライブラリ内部でPSPNET全体のセマフォを取得します。その後ヘッダなどを付与してパケットの組み立てを行い、PDPの場合は直接インタフェース送信キューにつないで、sceWlanMacスレッドに対して<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSendMbx">sceKernelSendMbx</a>()を呼び出し、送信パケットのキューイングを通知します。PTPの場合には、一旦送信ソケットバッファに格納し、送信すべきパケットがあればインタフェース送信キューにキューイングします。<br>sceWlanMacスレッドは通知を受けると、インタフェース送信キューから送信パケットを取り出し、暗号化・署名添付を行って送信可能の割り込みが来るのを待ち合わせます。既に送信可能状態にある場合、またsceWlanHalスレッドから送信可能通知が来た場合は、パケットをデバイスに対して送信し、次のタスクを待ちます。<br>ユーザスレッドの優先度がsceWlanMacスレッドの優先度39よりも大きい（＝優先度が低い）場合、ユーザスレッドは、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSendMbx">sceKernelSendMbx</a>()の呼出し後に直ちに戻ることはできず、sceWlanMacスレッドが送信動作を終えるのを待たされる可能性があることに注意してください。
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese009.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 9　パケット送信時のスレッド動作詳細</b><br>
+</div>
+<br>
+<div style="margin-left:40px;"><ul>
+<li> 受信時<br>デバイスから受信割り込みが入ると、sceWlanHalスレッドがドライバ内の受信バッファにパケットを取り込みます。その後受信パケットをドライバ受信キューにつないでsceWlanMacスレッドに対して<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSendMbx">sceKernelSendMbx</a>()を呼び出し、受信パケットのキューイングを通知します。<br>sceWlanMacスレッドは、ドライバ受信キューから受信パケットを取り出し、PSPNETのバッファ領域にコピーした後にインタフェース受信キューにつなぎます。そして、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSetEventFlag">sceKernelSetEventFlag</a>()を呼び出してsceNetIntrスレッドに通知します。<br>sceNetIntrスレッドは、インタフェース受信キューから受信パケットを取り出し、復号化・署名検証を行った後にヘッダを取り除いて受信ソケットバッファに格納します。このとき該当ソケットに対して受信待ち合わせを行っているスレッドがあれば、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelSignalSema">sceKernelSignalSema</a>()を呼び出してブロックを解除します。<br>ユーザスレッドは、受信API呼出し後、ライブラリ内部でPSPNET全体のセマフォを取得します。受信ソケットバッファにデータがあれば、指定したバッファ領域にパケットをコピーして戻ります。データがない場合には、データ到着を待ち合わせるか、ノンブロッキングモードの場合には、エラーを返します。
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET-Overview-Japanese010.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 10　パケット受信時のスレッド動作詳細</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_32">
+<div style="margin-left:40px;"><h4><b>SCE_ERROR_NET_ADHOC_INVALID_ADDRについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックネットワークに接続していない状態で以下のAPIを呼び出すと、<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_ADHOC_INVALID_ADDR">SCE_ERROR_NET_ADHOC_INVALID_ADDR</a>が返ります。接続後に呼び出すようにしてください。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPdpCreate">sceNetAdhocPdpCreate</a>()
+<li> <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpOpen">sceNetAdhocPtpOpen</a>()
+<li> <a href="../network/PSPNET_Adhoc-Reference-Japanese.htm#sceNetAdhocPtpListen">sceNetAdhocPtpListen</a>()
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_5">
+<h3>
+<a href="#Heading3_7"> 7. </a>5 
+<!-- hp1 --><b>サスペンド/レジューム関連の注意事項</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETでは、サスペンドおよびスタンバイが発生するとエラーとして処理します。TCP/IPプロトコル使用時は、サスペンド/スタンバイ前に必要な切断手続き（IPアドレスの返却等）を行います。<br>サスペンドの場合、上位レイヤーにはレジューム後にイベントハンドラ経由でエラーが通知されます。エラーコードは、pspnet_apctlでは<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_APCTL_WLAN_SUSPENDED">SCE_ERROR_NET_APCTL_WLAN_SUSPENDED</a>、pspnet_adhocctlでは<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_ADHOCCTL_WLAN_SUSPENDED">SCE_ERROR_NET_ADHOCCTL_WLAN_SUSPENDED</a>が返されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>使用リソース</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>TCP/IP使用時</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_8_1_33">
+<div style="margin-left:40px;"><h4><b>スレッド</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">wlanでは、内部スレッドを2つ使用します。<br>pspnetでは、内部スレッドを2つ使用します。<br>pspnet_apctlでは、内部スレッドを1つ使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>アドホックモード使用時</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_8_2_34">
+<div style="margin-left:40px;"><h4><b>スレッド</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">wlanでは、内部スレッドを2つ使用します。<br>pspnetでは、内部スレッドを2つ使用します。<br>pspnet_adhoc_authでは、内部スレッドを1つ使用します。<br>pspnet_adhocctlでは、内部スレッドを1つ使用します。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

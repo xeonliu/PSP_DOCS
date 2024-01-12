@@ -1,0 +1,208 @@
+<html lang="en">
+<head>
+<title>GameData-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+iofilemgr_dnas-Format Game Data API Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpenDNAS"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpenDNAS<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Open game data file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dnas_inline.h&gt;
+
+SceUID <b>sceIoOpenDNAS</b>(
+	const char *<i>fileName</i>,
+	const char* <i>secureInstallId</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game data filename&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>secureInstallId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16-byte security ID (same value that was specified when the data was created)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specify SCE_O_RDONLY&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ignored since game data is read-only&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd (fd &gt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../others/GameData-Reference-English.htm#SCE_GAMEDATA_ERROR_INVALID_ARG">SCE_GAMEDATA_ERROR_INVALID_ARG</a><br><a href="../others/GameData-Reference-English.htm#SCE_GAMEDATA_ERROR_MFILE">SCE_GAMEDATA_ERROR_MFILE</a><br><a href="../others/GameData-Reference-English.htm#SCE_GAMEDATA_ERROR_BADF">SCE_GAMEDATA_ERROR_BADF</a><br><a href="../others/GameData-Reference-English.htm#SCE_GAMEDATA_ERROR_INVALID_FORMAT">SCE_GAMEDATA_ERROR_INVALID_FORMAT</a><br><a href="../others/GameData-Reference-English.htm#SCE_GAMEDATA_ERROR_UNKNOWN_VERSION">SCE_GAMEDATA_ERROR_UNKNOWN_VERSION</a><br><a href="../others/GameData-Reference-English.htm#SCE_GAMEDATA_ERROR_SECURE_INSTALL_ID">SCE_GAMEDATA_ERROR_SECURE_INSTALL_ID</a><br><a href="../others/GameData-Reference-English.htm#SCE_GAMEDATA_ERROR_BROKEN_DATA">SCE_GAMEDATA_ERROR_BROKEN_DATA</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative number&nbsp;&nbsp;<br>&nbsp;&nbsp;(normally, error macro in kerror.h)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;<br>&nbsp;&nbsp;io file manager error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function opens an iofilemgr_dnas-format file that was previously encrypted by the SCE authoring server for reading from a Memory Stick&trade;. <i>secureInstallId</i> is the security ID that was specified when the data was created.<br>After a file is opened successfully, it can be accessed using sceIoRead(), sceIoLseek(), etc.  When finished accessing the file, always use sceIoClose() to close it.<br><br>This function is defined as an inline function in iofilemgr_dnas_inline.h.<br>The file is opened by ORing SCE_FGAMEDATA with the <i>flag</i> argument of sceIoOpen(), and the security ID is set via sceIoIoctl(). If it is necessary to derive an API such as for performing asynchronous opens, refer to this procedure and replace sceIoOpen() with appropriate code.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>static __inline__
+SceUID sceIoOpenDNAS(const char *filename,
+		const char* secureInstallId, int flag, SceMode mode)
+{
+	SceUID fd;
+	int ret;
+
+	/* file open */
+	fd = sceIoOpen(filename, flag|SCE_FGAMEDATA, mode);
+	if (fd &lt; 0) { return fd; }
+
+	/* set secureInstallId */
+	ret = sceIoIoctl(fd, SCE_GAMEDATA_SET_SECURE_INSTALL_ID,
+			secureInstallId, 16, SCE_NULL, 0);
+	if (ret &lt; 0) {
+		sceIoClose(fd);
+		return ret;
+	}
+
+	return fd;
+}
+
+</font></pre></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">A maximum of eight encrypted files can be opened simultaneously with sceIoOpenDNAS().<br>Since additional data distributed from the PlayStation&reg;Store (NPDRM EDATA file) also uses the same encryption processing, the eight file maximum is for both file types combined.<br><br>The file size obtained from sceIoGetstat() includes the encryption envelope. To find out the decrypted data size of a file, use sceIoLseek() to seek to the end of the file after successfully opening it with sceIoOpenDNAS(), and then reference the return value.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="List of Error Codes"></a>
+<table width="100%"><td width="70%"><font size=6>List of Error Codes<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Error Codes]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Error codes returned by the game data API<br></div><br>
+The following error codes may be returned when a file is opened as game data or while that file is being accessed.<br><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_INVALID_ARG">SCE_GAMEDATA_ERROR_INVALID_ARG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510201&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Argument is out of valid range&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_MFILE">SCE_GAMEDATA_ERROR_MFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510202&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Too many files opened &nbsp;&nbsp;<br>&nbsp;&nbsp;simultaneously&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_BADF">SCE_GAMEDATA_ERROR_BADF</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510203&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid file descriptor&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_INVALID_FORMAT">SCE_GAMEDATA_ERROR_INVALID_FORMAT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510204&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid file format&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_UNKNOWN_VERSION">SCE_GAMEDATA_ERROR_UNKNOWN_VERSION</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510205&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unknown file format version&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_SECURE_INSTALL_ID">SCE_GAMEDATA_ERROR_SECURE_INSTALL_ID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510206&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid <i>secureInstallId</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_BROKEN_DATA">SCE_GAMEDATA_ERROR_BROKEN_DATA</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510207&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data is corrupted&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

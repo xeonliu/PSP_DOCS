@@ -1,0 +1,241 @@
+<html lang="en">
+<head>
+<title>RTC-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+RTC Service Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The RTC service is a library for providing time information. It combines a hardware RTC and CPU internal timers managed by the kernel to provide the current time, which can always be obtained safely.<br><br>The RTC service also provides conversion functions for various types of time formats.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the RTC service.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;rtc_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;rtcsvc.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Library Initialization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RTC service is initialized implicitly. No explicit initialization need be performed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Referencing the Current Time</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since the base time is calculated when the RTC service is initialized, the current time calculated by the RTC service can be obtained thereafter without referencing the hardware RTC.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#ScePspDateTime">ScePspDateTime</a> clk;
+
+<a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentClockLocalTime">sceRtcGetCurrentClockLocalTime</a>(&amp;clk);	// Get current time (local time)
+printf(&quot;%04d/%02d/%02d %02d:%02d:%02d\n&quot;,
+		clk.year, clk.month, clk.day,
+		clk.hour, clk.minute, clk.second);
+</font></pre></div>
+<div style="margin-left:50px;"><br>If the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentClock">sceRtcGetCurrentClock</a>() function is used instead of the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentClockLocalTime">sceRtcGetCurrentClockLocalTime</a>() function, the local time corresponding to an arbitrary time zone can be obtained. The current time according to UTC time can be obtained by specifying 0 for the time zone offset in the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentClock">sceRtcGetCurrentClock</a>() function. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Time Information Formatting</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RTC service also provides processing for converting time information to a string.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/RTC-Reference-English.htm#SceRtcTick">SceRtcTick</a> tick;
+char szBuf[128];
+
+<a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentTick">sceRtcGetCurrentTick</a>(&amp;tick);			// Get UTC time
+<a href="../peripheral/RTC-Reference-English.htm#sceRtcFormatRFC2822LocalTime">sceRtcFormatRFC2822LocalTime</a>(szBuf, &amp;tick);	// Convert to string with RFC2822 
+						// format
+printf(&quot;Date: %s\n&quot;, szBuf);
+</font></pre></div>
+<div style="margin-left:50px;"><br>This example first uses the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentTick">sceRtcGetCurrentTick</a>() function to get the Tick representation of the current time (UTC) and then converts that time to the local time represented in RFC2822 format.<br>RTC service also provides a formatting function for converting to RFC3339 (ISO8601) format.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Referencing Network Time</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can use the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentNetworkTick">sceRtcGetCurrentNetworkTick</a>() function to obtain the network time that was synchronized with the time reported by the server at PlayStation&reg;Network sign-in. Once synchronized, you can continue to obtain the network time even if the network is disconnected, until you call the <a href="../kernel/Loadexec-Reference-English.htm#sceKernelLoadExec">sceKernelLoadExec</a>() function. <br><br>When writing specifications that use these functions, be careful not to create any problems for the user.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Referencing Cumulative Time</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In contrast to the clock which the user sets via PSP&trade; system software, when the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetAccumulativeTime">sceRtcGetAccumulativeTime</a>() function is used, it is possible to obtain the cumulative time which has been continuously tracked, provided that the battery has not run out. <br>In addition, by using this function in conjunction with the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetLastReincarnatedTime">sceRtcGetLastReincarnatedTime</a>() and <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetLastAdjustedTime">sceRtcGetLastAdjustedTime</a>() functions, it is possible to detect whether or not the clock has been manipulated by the user when the application was not running. <br><br>When drafting specifications which utilize these functions, be careful that they do not become detrimental to the user.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Referencing the RTC Alarm </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The RTC alarm provides a feature that enables a suspended PSP&trade; system to be automatically powered on at a specified time. To use this feature, call the <a href="../peripheral/RTC-Reference-English.htm#sceRtcSetAlarmTick">sceRtcSetAlarmTick</a>() function to specify a scheduled wakeup time and use it together with the <a href="../peripheral/Power-Reference-English.htm#scePowerRequestSuspend">scePowerRequestSuspend</a>() function of the power service. This will place the system in suspend state until the specified time. <br>If an AC adapter is not connected to a suspended PSP&trade; and the remaining battery life is too low, it may not be possible to perform a resume even when the scheduled wakeup time is reached. If this happens, the system will be resumed automatically and wake up in an "overslept" state when an AC adapter is connected.<br><br>If the user uses the POWER/HOLD switch to perform a standby operation, all RTC alarm settings are automatically canceled. RTC alarms are also canceled when <a href="../kernel/Loadexec-Reference-English.htm#sceKernelLoadExec">sceKernelLoadExec</a>() or <a href="../kernel/Loadexec-Reference-English.htm#sceKernelExitGame">sceKernelExitGame</a>() is called to perform an application transition.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Tick Units</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RTC service performs operations with 1 microsecond as the smallest unit of time. This value is called a Tick unit, and the time represented by the <a href="../peripheral/RTC-Reference-English.htm#SceRtcTick">SceRtcTick</a> structure indicates the cumulative number of Ticks from 0001/01/01 00:00:00.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Tick Calculations</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since the <a href="../kernel/Types-Reference-English.htm#ScePspDateTime">ScePspDateTime</a> structure in which fields are separated into elements for year, month, day, hours, minutes, seconds, and milliseconds, is not suited for calculations, the RTC service performs almost all calculations in terms of Tick units. Calculations using Ticks are provided as the sceRtcTickAdd*() functions, which take a pointer to a <a href="../peripheral/RTC-Reference-English.htm#SceRtcTick">SceRtcTick</a> structure as an argument.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>SceRtcTick Range</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since, as described earlier, the value in the <a href="../peripheral/RTC-Reference-English.htm#SceRtcTick">SceRtcTick</a> structure is represented as a 64-bit value for the number of 1 MHz ticks with the year 001 as the base point, increasing values starting from 0001/01/01 00:00:00 constitute the range.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>MS-DOS-Compatible Format Range</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since, in MS-DOS-compatible time information, the year is represented as a 7-bit value with 1980 as the base point, the values 1980/01/01 00:00:00 to 2107/12/31 23:59:58 constitute the range. For seconds, odd numbers cannot be represented.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Win32 FILETIME-Compatible Format Range</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since Win32 FILETIME-compatible time information is represented as a 64-bit value for the number of 100 nsec ticks with the year 1601 as the base point, the values increasing from 1601/01/01 00:00:00 constitute the range.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>POSIX time_t-Compatible Format Range</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since POSIX time_t-compatible time information is represented as a signed 32-bit value for the number of one-second ticks with the year 1970 as the base point, the values 1970/01/01 00:00:00 to 2038/01/19 03:14:07 constitute the range.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>time() Function in libc</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The time() function in libc is provided via devkit/src/crt0/kernel_bridge.c. The time() function will reach its maximum at 03:14:07 on January 19, 2038; it has a so-called year 2038 problem. In the PSP&trade; system software, the time can be set beyond the year 2038, so care must be exercised when using the time() function in libc.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>Years 1999 and 2100</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Note that in the PSP&trade; system software, January 1, 2000 through December 31, 2099 can be set, but due to time zone relationships, December 31, 1999 and January 1, 2100 may exist as well.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_9">
+<h3>
+<a href="#Heading3_3"> 3. </a>9 
+<!-- hp1 --><b>Relationship between the RTC Service and the Time Management Feature of the Thread Manager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The RTC service uses the RTC hardware together with the time management feature of the thread manager to provide the current time to an application. When the PSP&trade; system is booted or resumed from sleep mode, the RTC service is synchronized with the RTC hardware. During normal operation, the current time is calculated using the time management feature of the thread manager without accessing the RTC hardware.<br><br>However, during a suspend/resume, there will be a loss of continuity if the time is obtained from the <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentTick">sceRtcGetCurrentTick</a>(), <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentClock">sceRtcGetCurrentClock</a>(), <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentClockLocalTime">sceRtcGetCurrentClockLocalTime</a>(), or <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentNetworkTick">sceRtcGetCurrentNetworkTick</a> functions. The phenomenon of time moving backward may also be observed due to synchronization with the hardware RTC.<br>Also, when a game is suspended (placed in hibernation) by the hibernation feature on a PSP-N1000 series system and the game is restarted from PSP&trade; system software, the system returns to a state in which the network time obtained by <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentNetworkTick">sceRtcGetCurrentNetworkTick</a>() is temporarily disabled.<br><br>Because of this, do not use <a href="../peripheral/RTC-Reference-English.htm#sceRtcGetCurrentTick">sceRtcGetCurrentTick</a>() to measure execution time or to perform thread scheduling. The RTC service provides a real-time clock that is linked with real-world time. When a counter is needed during runtime that monotonically increases uniformly, the time management functions provided by the thread manager should be used instead. Each should be used properly according to the desired function.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

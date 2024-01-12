@@ -1,0 +1,779 @@
+<html lang="jp">
+<head>
+<title>Sas-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+SAS概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">SAS(Software Audio Synthesizer)はPSP&reg;上で動作する、ソフトウェアのみで構成された音源です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>特徴</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 主にMedia Engineにて動作します。
+<li> PSP&reg;のExtended Memory上に置かれた音素片データを用いることができます。Extended Memory上のユーザ領域であれば、音素片を置く場所に特に制約はありません。
+<li> 音素片としてモノラルのATRAC3&trade;、16bit PCM形式、あるいはADPCM形式で圧縮された音声データを用います。詳細は「波形データフォーマッ<u>ト</u>」章を参照してください。
+<li> ピッチ変換により、ボイスごとに-12オクターブから+2オクターブまで、ピッチを変化させることができます。また、ボイスごとに音量変化も可能です。
+<li> 音源データを使わず、ノイズジェネレータを音源として使用することも可能です。
+<li> ボイスごとにADSR形式のエンベロープ処理を行うことが可能です。
+<li> 同時発声可能数は最大32ボイスです。ただし、音源種類や同時動作している他のMedia Engineの負荷状況などによっては処理落ちが発生し、音が途切れることがあります。
+<li> エフェクト処理を使用可能です。
+<li> 出力周波数は44.1kHz、出力チャネル数は2（ステレオモード時、エフェクトあり）または4（マルチチャネルモード時、エフェクトなし）です。
+<li> すべての処理はバッチ処理的に行われます（リアルタイム処理ではありません）。
+<li> ボイスごとに発音のポーズの設定と解除を行うことが可能です。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>ボイスごとの処理について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASは発音中のボイス1つに対して、以下のような処理を行います。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> 元となる音声波形データを取得します。音素片がPCMデータであればそのデータをそのまま、ATRAC3&trade;/ADPCMデータであればデコードしてPCMデータを得ます。音源としてノイズが選択されていたときは、ノイズジェネレータを動作させてPCMデータを得ます。</li>
+<li VALUE=2> 音源がATRAC3&trade;/PCM/ADPCMであった場合はピッチ変換を行い、ピッチを変化させます。ピッチ変化可能な領域は、-12～+2オクターブです。</li>
+<li VALUE=3> エンベロープ処理を行い、キーオンからキーオフ、リリース後の発声音量変化を再現します。</li>
+<li VALUE=4> 音量変換を行います。ボイスごとにLチャネル、Rチャネルの音量を指定することができます。</li>
+<li VALUE=5> ミキシングを行い、すべてのボイス出力を合成します。</li>
+</ol></div>
+<div style="margin-left:50px;">上記を32ボイス分行うことで、同時発声数32が実現されます。詳細は「ボイス処<u>理</u>」章を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>ポーズ処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">主にゲームの効果音などでの利用することを考えて、ボイスごとに発音を一時停止・再開させることが可能です。ボイスごとに指定できますので、BGMに使っているボイスは発音を続けたまま、効果音のみ停止する、といったことも可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>エフェクト処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ミキシングされたサウンドに対して、リバーブ、エコー、ディレイなどのデジタルエフェクトを加えることができます。詳細は「デジタルエフェクト処<u>理</u>」章を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>SASの内部ブロック図</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASのブロック図は以下のようになります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_6">
+<h3>
+<a href="#Heading3_1"> 1. </a>6 
+<!-- hp1 --><b>注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASはあくまでシンセサイザでしかないため、実際に音声を出力する際はlibwaveなどと組み合わせる必要があります。また、SASは全体的にバッチ処理を行います。リアルタイムに内部パラメータなどが変化することはありません。音声合成処理を明示的に実行したときにのみ時間が進み、内部パラメータの更新が行われます。詳しくは「SAS使用時の全体の流<u>れ</u>」章を参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>波形データフォーマット</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">SASでは、各ボイスのサウンドソースとなる波形データとして、PCM形式、またはATRAC3&trade;/ADPCM形式で圧縮した音声データを用います。シンセサイザの音源として使いやすいよう、ATRAC3&trade;以外のフォーマットを使用した時は再生位置のループを指定することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ADPCMデータのブロックフォーマット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">波形データは16バイトを1ブロックとして、ブロック単位で構成されます。ブロックはデコード係数とループ情報を記録したヘッダ部分2バイトと14バイトのサウンドデータからなり、28サンプル分の音声データを圧縮したものになっています。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  ADPCMデータフォーマット</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ADPCMデータのループ情報について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ADPCMデータの各ブロックの先頭2バイト目はループ情報になります。ループ情報に適切なデータを設定することにより、ブロック単位で音声データのループを実現することができます。<br>この値がどのように使用されるかは、ボイスごとに設定できる再生モードによって変わります。再生モードには「ループ再生」と「ワンショット再生」の2通りがあります。それぞれにおける解釈のされ方を以下で説明します。<br>なお、音素片の設定の際に音素片データのサイズを指定しますが、このサイズ分のデコードが終了した時点で、ループ再生の有効・無効やループ情報の値に関係なく発声は終了し、該当ボイスは無音となります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>ループ再生有効時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">以下の表のように解釈されます。表にない値は無視されます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ループ情報値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループの終了ブロックを示します。このブロックをデコードした後、&nbsp;&nbsp;<br>&nbsp;&nbsp;内部に保存された開始ブロック位置に戻ります。開始ブロックが&nbsp;&nbsp;<br>&nbsp;&nbsp;見つからないまま終了ブロックに達したときは、音素片指定時に&nbsp;&nbsp;<br>&nbsp;&nbsp;設定された音素片の開始位置に戻ります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループの開始ブロックを示します。終了ブロックに到達したとき、&nbsp;&nbsp;<br>&nbsp;&nbsp;次にデコードされるブロックはここになります。複数の開始ブロック&nbsp;&nbsp;<br>&nbsp;&nbsp;が存在した場合は最後に通過したものが有効となります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再生終了位置を示します。このブロックに到達した時点で該当ボイス&nbsp;&nbsp;<br>&nbsp;&nbsp;の発声は終了し、無音となります。よって、このブロックは&nbsp;&nbsp;<br>&nbsp;&nbsp;デコードされません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>ループ再生無効（ワンショット再生）時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">以下の表のように解釈されます。表にない値は無視されます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ループ情報値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再生終了位置を示します。このブロックに到達した時点で該当ボイスの&nbsp;&nbsp;<br>&nbsp;&nbsp;発声は終了し、無音となります。よって、このブロックは&nbsp;&nbsp;<br>&nbsp;&nbsp;デコードされません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ADPCMデータの作成について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PCMデータよりSASで使用できるADPCMデータを作成するために、AIFF2VAGなどのツールが提供されます。詳しくは別文章をご参照ください。また、同ツールなどが出力するVAGファイルは、元になったデータなどのメタデータを格納したヘッダ部分に続けてADPCMデータを組み合わせたものとなっています。メタデータ部分のフォーマットなどについては、別紙VAGファイルフォーマットをご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>PCMデータのフォーマット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASで用いるPCM形式は、ヘッダのない一般的な16bitサンプリングのリトルエンディアン、モノラル形式のものとなります。再生位置のループに関する情報はPCMデータ内には含まれません。PCMのデータとは別に、SASを使用するアプリ側で別途管理し、音素片の設定関数を呼び出す際に指定する必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>ATRAC3&trade;データのフォーマット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASで用いることができるATRAC3&trade;データは、at3toolで作成したループのなしのモノラル形式だけです。これ以外のデータを指定するとエラーとなります。また、ATRAC3plus&trade;形式にも対応しません。よって、現状で使えるビットレートは、52kbps, 66kbpsのみとなります。<br>詳しくはat3tool概要などをご覧ください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>ボイス処理</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ひとつの発声ボイスごとに行う処理（ボイス処理）は、波形データをデコードし、音量・ピッチを変化させ、時間的変化を与えて実際の音声を生成する作業からなります。また、外部より与えられた発声開始要求（キーオン）の処理もボイスごとに行われます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>音源生成処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">音源として指定された方式に従って、波形データを得ます。音源種別はボイスごとに、PCM、ADPCM、ATRAC3&trade;とノイズジェネレータが選択できます。音源種別の変更は常時行えますが、発声中のボイスに対して行った場合でも特にフェードインなどの処理を行うことなく切り替えが行われるため、切り替え時にクリック音が出る可能性があります。<br>音源がADPCMまたはATRAC3&trade;の場合、「波形データフォーマッ<u>ト</u>」章にて説明した音素片データをデコードすることにより、波形データ（PCMデータ）を得ます。PCMの場合は、入力されたPCMデータをそのまま使用します。これらの音源を使う場合、音素片データの位置は、ボイス設定関数を用いて発音に先立って設定します。<br>ノイズジェネレータの場合は、計算により擬似乱数を発生させ、ノイズのPCMデータを得ます。擬似乱数に使用するパラメータを外部より与えることにより、性質の異なるノイズ音を発生させることが可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>ピッチ変換</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">音源がPCM、ADPCMまたはATRAC3&trade;であった場合、デコード後の音声データを最大で2(<img src="gif/Sas-Overview-Japanese003.gif">)オクターブ上げから12(-<img src="gif/Sas-Overview-Japanese004.gif">)オクターブ下げまでの範囲でピッチを変化させることができます。</div>
+<div style="margin-left:50px;">ピッチ変化量はピッチ値<img src="gif/Sas-Overview-Japanese005.gif">で指定します。<img src="gif/Sas-Overview-Japanese006.gif">のとりうる範囲は</div>
+<div style="margin-left:50px;">	<img src="gif/Sas-Overview-Japanese007.gif"></div>
+<div style="margin-left:50px;">であり、音素片の元々のピッチを<img src="gif/Sas-Overview-Japanese008.gif">、そのサンプリングレートを<img src="gif/Sas-Overview-Japanese009.gif">(Hz)とすると、最終的に発声されるボイスのピッチ<img src="gif/Sas-Overview-Japanese010.gif">は</div>
+<div style="margin-left:50px;">	<img src="gif/Sas-Overview-Japanese011.gif"></div>
+<div style="margin-left:50px;">となります。<br>音素片データを用意する段階で音程を高く（<img src="gif/Sas-Overview-Japanese012.gif">を小さく）しておき、再生時に<img src="gif/Sas-Overview-Japanese013.gif">を小さい値にして再生させることで、見掛け上のデータサイズを小さくすることができます（ただし、サンプリング定理により高い周波数成分が消えてしまうので、音質は劣化します）。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>エンベロープ処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">エンベロープ処理は、実在する楽器のキーオンからキーオフ、およびその後の発声音量の時間的変化を擬似的に再現するための処理です。また、この時間変化する音量のことをエンベロープ値と呼びます。SASではエンベロープ値の変化を<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> アタック (Attack)<br>キーオンした直後からエンベロープ値がピークに達するまでの間</li>
+<li VALUE=2> ディケイ (Decay)<br>Attack後、エンベロープ値が指定レベル（Sustain Level）に落ちるまでの間</li>
+<li VALUE=3> サスティン (Sustain)<br>Decay後、キーオフされるまでの間</li>
+<li VALUE=4> リリース (Release)<br>キーオフ後、エンベロープ値が0になるまでの間</li>
+</ol></div>
+<div style="margin-left:50px;">の4つの時間帯に分け、それぞれの状態に応じて様々なパラメータを設定することができるようになっています。<br>これらのパラメータについて詳しくは「4 エンベロープ処理」章を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>キーオン・キーオフ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">キーオン（発声開始）、キーオフ（発声終了）を、ボイスごとに指定することができます。<br>キーオンを行うことにより、音素片のデコード、ピッチやエンベロープ、ボリュームなどの処理が開始されます。<br>キーオフを行うことにより、該当ボイスのエンベロープ変化状態がリリース状態に移行し、リリースレートに従って発声音量が変化します（キーオフを行ってすぐに発声が終わるわけではありません）。リリース状態で音量が0になった時点で発声が終了します。<br>なお、キーオフ前であっても、音素片データが終了（終了を意味するループ情報があったとき、および音素片データのサイズとして指定された領域の再生が終了したとき）した場合はそこで該当ボイスの発声は終了し、該当ボイスの発声終了フラグがセットされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>ボリューム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">各ボイスに対して左右通常出力（DryL/DryR）および左右エフェクト入力（WetL/WetR）へのボリュームを独立して設定することができます。これにより、もともとモノラルであった音素片を、任意のパンをもたせてステレオ音声として出力することができます。<br>ボリューム値には指定した値が直接使われます。エンベロープ値のように、時間変化するボリューム値を与えることはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>ミキシング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">各ボイスの出力はDryL/DryR/WetL/WetRの4つのチャネルにミキシングされます。<br>ミキシングされた結果のうち、WetL/WetRの2チャネルの内容はデジタルエフェクタに入力され、特殊効果が加えられた上で、DryL/DryRと合成されます（後述）。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>エンベロープ処理</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">エンベロープ処理は、前述のとおり、多くの楽器がもつ発声音量の時間的遷移を再現するための処理です。この章ではエンベロープ処理の詳細について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>状態遷移について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">前述のとおり、SASではエンベロープ変化は4つの時間帯に分けられます。<br>キーオンされた直後はアタック状態となります。アタック状態における変化形式（アタック形状）と変化率（アタックレート）にしたがってエンベロープ値は変化します。<br>エンベロープ値が最大値になったところでディケイ状態に遷移します。同様にディケイ状態における変化形状（ディケイ形状）、変化率（ディケイレート）に従ってエンベロープ値は変化します。<br>その後、エンベロープ値がサスティンレベルに達したところでサスティン状態に遷移し、キーオフされた段階でリリース状態に遷移します。それぞれ、サスティン形状とサスティンレート、リリース形状とリリースレートに従ってエンベロープ値は変化します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>変化率に関するパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">時間当たりのエンベロープ値変化の大きさをパラメータとして与えることができます。<br>大きな値を与えるほど、変化の度合いが大きくなります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;アタックレート (Attack Rate, AR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アタック状態における変化率&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ディケイレート (Decay Rate, DR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディケイ状態における変化率&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サスティンレート (Sustain Rate, SR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サスティン状態における変化率&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;リリースレート (Release Rate, RR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リリース状態における変化率&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>変化位置に関するパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ディケイからサスティンに移行する際の境界となる値を外部から設定することができます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サスティンレベル (Sustain Level, SL)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディケイからサスティンへ遷移する境界&nbsp;&nbsp;<br>&nbsp;&nbsp;となるエンベロープ値&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>変化形状に関するパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASでは以下の6種類の変化形状（mode）が使用できます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>変化形状</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;直線的増加 (+lin)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;折れ線型増加 (+bent lin)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;指数関数的増加 (+exp)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;直線的減少 (-lin)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;指数関数的減少 (-exp)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;直接値指定 (direct)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ここで、「折れ線型増加」は、直線的に音量が増加し、エンベロープ最大値の75%を超えたところで増加率を小さくするという増加の仕方です。また、直接値指定を使うと変化率として与えた値そのものにエンベロープ値を直接変化させることができます。<br>エンベロープ処理の4つの状態のそれぞれに対して、変化形状をひとつ選択できますが、どの状態にあるかによって、選択できる形状には以下のような制限があります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>+lin</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>+bent lin</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>+exp</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>-lin</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>-exp</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>direct</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;アタック形状 (AM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ディケイ形状 (DM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サスティン形状 (SM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;リリース形状 (RM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">各形状を図にすると以下のようになります。なお、ここで<i>y</i>軸の値はエンベロープの最大値との相対値です。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese014.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br>また、エンベロープを表現する4つの状態の状態遷移と、各パラメータの関係を例示すると、以下のようになります。ここで<i>y</i>軸の値はエンベロープの最大値との相対値です。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese015.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br><br>なお、Sustain、Release状態においてエンベロープ値が0に達した場合、そこで該当ボイスの発声は終了し、発声終了フラグに1がセットされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>二つのエンベロープ指定方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASでは2つの方法でエンベロープパラメータを指定することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_5_1"><h4>
+(1)&nbsp;<b>詳細な方法</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">変化率に関するパラメータ4つ（AR, DR, SR, RR）、変化位置に関するパラメータ1つ（SL）、変化形状に関するパラメータ4つ（AM, DM, SM, RM）を、それぞれ専用の関数を用いて設定する方式です。<br>SASのもつ機能すべてを設定することができますが、コードは少々煩雑になります。<br>ここで、AR, DR, SR, RRはアタック、ディケイ、サスティン、リリースの各状態における変化率を指定するパラメータです。大きな値を指定するほど、該当する状態における変化率は大きくなります。<br>SLはディケイとサスティン状態の境界となる位置を指定するパラメータです。大きな値にするほど、サスティンレベルが高くなります。<br>AM, DM, SM, RMは各状態における変化形状を指定するパラメータです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_5_2"><h4>
+(2)&nbsp;<b>単純な方法</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">2つの16bit値ADSR1とADSR2で全パラメータを指定する方法です。2つの値は以下のようなビットフィールド値となっています。各パラメータに割り振られたビット数はSASのもつ分解能や全機能を表現できるよりも少ないので、大まかな指定しかできませんが、パラメータ設定は容易に行えます。<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese016.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  ADSR1のビット割り当て</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese017.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  ADSR2のビット割り当て</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>X, Y, Zはカーブ形状を指定するパラメータです。<br>Xはアタック形状を示し、0の時に直線的増加、1の時に折れ線増加になります。<br>Yはサスティン形状を示し、000bの時に直線的増加、010bの時に直線的減少、100bの時に折れ線増加、110bの時に指数関数的減少となります。これ以外の数を指定したときにはエラーとなります。<br>Zはリリース形状を示し、0のときに直線的減少、1の時に指数関数的減少となります。<br>なお、単純な方式でのエンベロープ変化指定を用いた場合、ディケイ形状は指数関数的減少で固定されます。<br>また、ar, dr, sr, rrはアタック、ディケイ、サスティン、リリース各状態における変化率を指定するパラメータです。AR, DR, SR, RRとは逆に、小さい値であるほど該当する状態における変化率は大きくなります。slはサスティンレベルを示し、大きな値にするほどサスティンレベルが高くなります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>デジタルエフェクト処理</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ボイスごとの処理の後、各ボイスの出力をミキシングした結果に対してデジタルエフェクトをかけて、リバーブ、エコー、ディレイなどのさまざまな音響効果を付加することができます。<br>エフェクタに関係するブロックのブロック図は以下のようになります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese018.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br><br>各ボイスの出力をデジタルエフェクタ経由で出力したい場合には、該当ボイスのエフェクタへのセンドボリューム（Wet Vol L/R）を適当に設定し、かつエフェクタの有効スイッチをOnにする必要があります。また、エフェクタを経由しない出力成分に対する音量（Dry Vol L/R）とのバランスを変更することにより、エフェクトのかかり具合をボイスごとに変化させることができます。<br>エフェクタに対して、エフェクトタイプ、ディレイタイム、フィードバック係数といったパラメータを与えることで、かけるエフェクトの内容を変えることが可能です。また、エフェクト出力に対する音量（Effect Volume L/R）を指定することが可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>デジタルエフェクトの種類</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">10種類のエフェクトタイプの中から1つを選びます。<br>タイプ=OFFはエフェクト効果をかけず、入力された音をそのままスルーします。<br>それ以外はすべて残響効果を加えるエフェクトとなっています。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>エフェクトタイプ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;OFF&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Room Reverb&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Studio Reverb A&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Studio Reverb B&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Studio Reverb C&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Hall Reverb&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Space Echo&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Echo&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Delay&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Pipe Echo&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>エフェクトパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">エフェクトタイプにEchoおよびDelayを選んだ場合、Delay timeとFeedbackを設定することができます。その他のエフェクトに対してはこれらの設定は無視されます。<br>Delay Timeの値を大きくすると重ね合わせる音の遅延時間が長くなります。Feedbackの値を大きくするとフィードバックレベルが大きくなりエフェクトの効果が深くなります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータ名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定範囲</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Delay Time&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Feedback Level&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0～127&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>入力スイッチとエフェクトボリューム</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_1"><h4>
+(1)&nbsp;<b>Enable switch (DRY, WET)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">それぞれ、エフェクトをかけない音（Dry側）、エフェクトをかける音（Wet側）のOn/Off制御ができます。両スイッチとも左右チャネルで同じ値になります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_2"><h4>
+(2)&nbsp;<b>Effect Volume (L, R)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Effect Volume (L, R)により、エフェクト処理結果の出力レベルを設定することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>初期化時の設定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">初期化時のエフェクトの設定は、エフェクトタイプOFF、Enable switch (DRY)=ON，Enable switch (WET)=OFF，Effect Volume (L,R) =(0, 0)となっています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>出力モード</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">出力モードを切り換えることによって、SASの出力チャネル数を変えることができます。出力モードの切り換えは、個々の音源に別々のエフェクトを付加する際に役立ちます。出力モードには、ステレオモードとマルチチャネルモードがあります。それぞれの出力モードの違いを以下に図示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese019.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>ステレオモード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ステレオモードは、これまでSASが提供してきた出力形式です。そのオーディオデータフローは本資料の「デジタルエフェクト処理」の項におけるブロック図と同一です。出力音声は、ドライな音声と、それを元に作られたエフェクトであるウェットな音声との混合音声になります。出力チャネル数は左と右の2チャネルです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>マルチチャネルモード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マルチチャネルモードは、ステレオモードにおけるEnable switch前のオーディオデータを直接、出力させるモードです。マルチチャネルモード時には、エフェクトはいずれの出力音声にも付加されません。また、エフェクト関連のパラメータを変更することはできません。<br>出力チャネル数は4チャネルです。エンベロープ処理後の出力音声の各チャネルへの割り振りは、4つの音量DryVolL、DryVolR、WetVolL、WetVolRによって決定されます。各チャネルにはステレオモードとの対応関係をわかりやすくするため、便宜上、DryL、DryR、WetL、WetRという名称を付けていますが、4つのチャネルはすべて等価な関係にあり、各チャネルの役割を制約するものではありません。<br>マルチチャネルモードの応用例としては、移動音源の3Dポジショナルオーディオ再生があります。移動音源を再現する際には、定位感とともに、そのドップラー効果をシミュレートすることによって、高い臨場感が得られます。ドップラー効果はSASのピッチ変更処理によって実現可能です。ところで、3Dポジショナルオーディオ再生を実現するライブラリlibp3daでは、最大4つの3Dポジショナルオーディオ処理が実行可能です。しかし、SASのステレオモードの出力は2チャネルしかないため、4つの音源に対して独立にドップラー効果を付加することができません。マルチチャネルモードを利用すれば、この問題を解決できます。<br><br>SASでは2つの出力モードを動的に切り換えることができます。ただし、チャネル数が変化すると出力バッファに必要なバッファサイズも変化することに注意してください。また、バッファに出力されるPCMデータの並びも以下のように変わります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-Japanese020.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br><br>ステレオモードの出力PCMデータは、直接libwaveなどのサウンド出力ライブラリに渡すことができますが、マルチチャネルモードの出力PCMデータは直接渡すことができません。マルチチャネルモードはあくまで出力音声を直接発音させることは考慮されておらず、何らかのエフェクトを加えた上で発音させることを想定しています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>SAS使用時の全体の流れ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">SASはソフトウェアだけで構成されているため、明示的に呼び出されない限り自動的に内部のパラメータが更新されるということはありません。このあたりは従来のハードウェアによるシンセサイザと大きく異なります。<br>SASを使って実際に音を出すまでの実機上での大まかな流れは以下のようになります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1"><h4>
+(1)&nbsp;<b>初期化処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">最初に呼び出すときにのみ、全体の初期化が必要です。初期化関数を呼び出してください。デフォルトの出力モードはステレオモードです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_2"><h4>
+(2)&nbsp;<b>パラメータ設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">必要ボイスに対して、元音となる音源の選択や、音素片、ADSRのパラメータ、ピッチ、ボリュームを設定し、KeyOn,KeyOffを行います。また、必要であれば全体にかけるエフェクトの設定や出力モードの変更を行います。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3"><h4>
+(3)&nbsp;<b>合成関数の呼び出し</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">これにより、上記で設定したパラメータにしたがって音声が出力されます。また、この時初めて内部変数の更新が行われ、各ボイスの発声終了フラグ（endflag）、ボイスごとのエンベロープ値やADSR状態の更新などが行われます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4"><h4>
+(4)&nbsp;<b>CPU処理による改変</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">合成関数の出力として、合成結果が出力されますが、この出力に対してCPUで何らかの処理を行い、さらにエフェクトを加えるといったことも可能です。必要に応じて行ってください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_5"><h4>
+(5)&nbsp;<b>オーディオデバイスへの出力</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libwaveなどを用いて、オーディオ出力へ合成結果を渡します。この時、出力音量を変化させることで全体のフェードイン・フェードアウトなどを実現できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6"><h4>
+(6)&nbsp;<b>(2)に戻る</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">この時、libwaveのブロッキング出力機能を使うことで、ちょうどよいタイミングで次の処理に移ることが可能です。<br></div>
+<div style="margin-left:50px;"><br>なお、意図的に(3)などの処理を行わないことにより、音声再生を一時停止状態にすることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>メモリのコヒーレンシ確保について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASのメイン処理を行う部分はMedia Engineといわれる別のCPUにて動作しています。このため、音素片はMedia Engineからもアクセスできる拡張メモリ（Extended Memory）上に置かれている必要があります。音素片データをメインCPUにて書き換えた場合は、確実にキャッシュのメモリへの書き出しを行う必要があります。また、実際の発声が終了するまで、書き換えたり他の目的で使うことがないようにしてください。ただし、<a href="../sound/libsas-Reference-Japanese.htm#sceSasConcatenateATRAC3">sceSasConcatenateATRAC3</a>()関数を用いたストリーミング再生処理に関しては、動的にメモリを書き換えることが前提となる関係で、ライブラリ内部でキャッシュ操作が行われます。このため、ストリーミング再生の時は特にキャッシュ操作を行う必要はありません。<br>音素片以外のデータに関するキャッシュ操作や、Media Engine上でのキャッシュ操作はライブラリ（libsas）内部で行われますので、特に意識する必要はありません。<br>なお、単純にキーオフを行っただけでは残響音部分が鳴り続けるため、発音終了まで時間がかかり、音声データの入れ替えに時間がかかることがあります。このようなケースは、音声データの入れ替えを行うときのみリリースレートを大きくして、残響部分を短くすることによって改善することができます。<br>PSP&reg;のCPU構成について詳しくは別ドキュメント「PSP&reg;システム概要」を、キャッシュ操作の方法については「キャッシュ操作ユーティリティ」をご覧ください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>発音中のボイスに対する設定変更</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">発声中であっても音源種別を切り替えることは可能ですが、その場合クリック音が発生することがあります。<br>一粒度内で複数回のKeyOn, KeyOffを同一ボイスに対して行った場合、該当ボイスのリリース部分における発声音は不定となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>ポーズについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASには主にゲームでの使用を考慮してボイスごとのポーズ機能が実装されています。ポーズを有効にすると、該当ボイスで発音していた音はフェードアウトされ、ポーズ解除されるまでの間、無音となります。無音状態のボイスに対してポーズを有効にすると、無音のまま維持されます。<br>ただし、この機能はあくまでボイス単位での処理部分に対してのみ動作します。エフェクト部分はボイス単位での動作をしていませんので、ポーズをかけても動作します。このため、たとえば非常に長い残響音を発生させるタイプのエフェクトを使用した場合、ポーズをかけた音の、ポーズをかける直前の発声内容に対する残響音は、ポーズ中であっても鳴り続けます。また同様に、ポーズ再開直後のエフェクトのかかり方は、ポーズを途中に挟まなかった時とは異なるものになります。<br>ポーズ中のボイスに対しては、キーオン、キーオフなどを行うことはできません。また、ボイス種別の変更（ADPCM音素片を変更する、ノイズ音源に切り替えるなど）、ピッチの変更などを行うこともできますが、それが反映されるのはポーズが解除されてからになります。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

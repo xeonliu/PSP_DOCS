@@ -1,0 +1,779 @@
+<html lang="en">
+<head>
+<title>Sas-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+SAS Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The Software Audio Synthesizer (SAS), which runs on the PSP&trade;, is a software-only sound source.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Features</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Runs mainly on the Media Engine.
+<li> Phoneme region data placed in the extended memory of the PSP&trade; can be used. There are no specific restrictions on where this data is placed provided it is in the user area in extended memory.
+<li> Audio data that is used for the phoneme region can be either ATRAC3&trade; or 16-bit PCM monaural, or compressed using ADPCM format. For details, see the "<u><a href="../sound/Sas-Overview-English.htm#Heading3_2">Waveform Data Format</a></u>" section.
+<li> The pitch can be varied from the -12 octave to the +2 octave for each voice according to a pitch transformation. The volume can also be varied for each voice.
+<li> Without using sound source data, a noise generator can also be used as a sound source.
+<li> ADSR-format envelope processing can be performed for each voice.
+<li> Thirty-two voices can vocalize simultaneously. However, sound may be interrupted due to a degradation of processing, depending on the type of sound source and other loads on the Media Engine that are running at the same time.  
+<li> Effects processing can be used.
+<li> The output frequency is 44.1kHz, and the number of output channels is 2 (with effects in stereo mode) or 4 (with no effects in multichannel mode).
+<li> All processing is performed as batch processing (it is not performed in real-time).
+<li> A pause in vocalization can be set and canceled for each voice.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Operations for Each Voice</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SAS performs the following processing for a single voice that is vocalizing.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Get the original audio format data. If the phoneme region is PCM data, get the data directly. If the phoneme region is ATRAC3&trade;/ADPCM data, decode it first to get PCM data. If noise is selected as the sound source, activate the noise generator to get PCM data.</li>
+<li VALUE=2> If the sound source was ATRAC3&trade;/PCM/ADPCM, perform pitch transformation to vary the pitch. The range over which the pitch can vary is from -12 octaves to +2 octaves.</li>
+<li VALUE=3> Perform envelope processing and reproduce the variation in volume after release, from key on to key off.</li>
+<li VALUE=4> Perform volume transformation. The L-channel and R-channel volume can be specified for each voice.</li>
+<li VALUE=5> Perform mixing to combine all voice outputs.</li>
+</ol></div>
+<div style="margin-left:50px;">By performing the above processing for 32 voices, 32 simultaneous vocalizations are implemented. For details, see "<u><a href="../sound/Sas-Overview-English.htm#Heading3_3">Voice Processing</a></u>".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Pause Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Considering that this processing will mainly be used for game sound effects, vocalization can be paused and restarted for each voice. Since a pause can be specified for each voice, a voice that is being used for background music can continue to be vocalized while stopping only the sound effects.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Effects Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Digital effects such as reverb, echo, and delay can be added to sound that was mixed. For details, see "<u><a href="../sound/Sas-Overview-English.htm#Heading3_5">Digital Effects Processing</a></u>."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>SAS Internal Block Diagram</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following figure shows a block diagram of SAS.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_6">
+<h3>
+<a href="#Heading3_1"> 1. </a>6 
+<!-- hp1 --><b>Note</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since SAS is only a synthesizer, it must be combined with a library such as libwave to actually output vocalizations. Also, SAS performs batch processing overall. Internal parameters do not change in real-time. Time progresses and internal parameters are updated only when vocalization combination processing is explicitly executed. For details, see the section entitled, "<u><a href="../sound/Sas-Overview-English.htm#Heading3_7">Overall Processing Flow When SAS is Used</a></u>".<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Waveform Data Format</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">For the waveform data that is the sound source of each voice, SAS uses either PCM data, or audio data that was compressed using ATRAC3&trade;/ADPCM. Looping of the playback position can be specified when a format other than ATRAC3&trade; is used so that it can easily be used as the synthesizer sound source.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ADPCM Data Block Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Waveform data consists of blocks of 16 bytes each. A block consists of a 2-byte header in which the decoding coefficient and loop information are recorded and 14 bytes of sound data, comprising 28 samples worth of compressed audio data.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  ADPCM Data Format</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ADPCM Data Loop Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The second byte of each block of ADPCM data is loop information. By setting appropriate data for loop information, vocalization data loops can be implemented in terms of individual blocks.<br>How this value is used differs according to the playback mode that can be set for each voice. The two playback modes are "loop play" and "one-shot play." Interpretations of each mode are explained below.<br>Although the size of phoneme region data is specified when the phoneme region is set, when decoding this amount of data ends, vocalization ends and the relevant voice is muted regardless of the loop information value or whether loop playback is enabled or disabled.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>When loop play is enabled</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Loop information is interpreted as shown in the following table. Values not in the table are ignored.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Loop Information Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the ending block of the loop. After this block is&nbsp;&nbsp;<br>&nbsp;&nbsp;decoded, decoding returns to the starting block, which was&nbsp;&nbsp;<br>&nbsp;&nbsp;saved internally. If the ending block is reached without finding&nbsp;&nbsp;<br>&nbsp;&nbsp;the starting block, decoding returns to the phoneme region&nbsp;&nbsp;<br>&nbsp;&nbsp;starting position that was set when the phoneme region was&nbsp;&nbsp;<br>&nbsp;&nbsp;specified.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the starting block of the loop. When the ending block&nbsp;&nbsp;<br>&nbsp;&nbsp;is reached, this becomes the block that is decoded next. If&nbsp;&nbsp;<br>&nbsp;&nbsp;multiple starting blocks existed, the one that was traversed&nbsp;&nbsp;<br>&nbsp;&nbsp;last is valid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the playback ending position. When this block is&nbsp;&nbsp;<br>&nbsp;&nbsp;reached, vocalization of the relevant voice is stopped and the&nbsp;&nbsp;<br>&nbsp;&nbsp;voice is muted. As a result, this block is not decoded.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>When loop play is disabled (one-shot play)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Loop information is interpreted as shown in the following table. Values not in the table are ignored.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Loop Information Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the playback ending position. When this block is&nbsp;&nbsp;<br>&nbsp;&nbsp;reached, vocalization of the relevant voice is stopped and the&nbsp;&nbsp;<br>&nbsp;&nbsp;voice is muted. As a result, this block is not decoded.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Creating ADPCM Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The AIFF2VAG tool is provided for creating ADPCM data from PCM data that can be used by SAS.. For details, refer to a separate document. The AIFF2VAG tool also outputs a VAG file that contains a header in which metadata such as the original data is stored, followed by the ADPCM data. For information about the format of the metadata, refer to the separate document that describes about the VAG file format.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>PCM Data Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PCM format used by SAS is a headerless, general 16-bit sampling, little-endian, monaural format. No information related to looping of the playback position is contained in the PCM data. An application that uses SAS must manage this information separately from the PCM data and must specify it when calling functions that set the phoneme region.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>ATRAC3&trade; Data Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The only ATRAC3&trade; data that can be used by SAS is monaural data without looping that was created using at3tool. If any other data is specified, an error will occur. Also, ATRAC3plus&trade; data is not supported. Therefore, the only bit rates that can currently be used are 52 kbps and 66 kbps.<br>For details, refer to the at3tool Overview.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Voice Processing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The processing that is performed for each individual vocalized voice (voice processing) consists of tasks for decoding waveform data, varying volume and pitch, assigning temporal variations, and generating actual vocalizations. Processing for an externally assigned vocalization starting request (key on) is also performed for each voice.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Sound Source Generation Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Waveform data is obtained according to the method specified as the sound source. PCM, ADPCM, ATRAC3&trade; or noise generator can be selected for the sound source type for each voice. Although the sound source type normally can be changed, a click tone may be issued when switching occurs because switching is performed without specifically performing a fade in even when it is performed for a voice that is being vocalized.<br>When the sound source is either the ADPCM or the ATRAC3&trade; decoder, waveform data (PCM data) is obtained by decoding phoneme region data, which is explained in the section entitled, "<u><a href="../sound/Sas-Overview-English.htm#Heading3_2">Waveform Data Format</a></u>." When the sound source is PCM, the PCM data that was input is used directly. When using these sound sources, the position of the phoneme region data that should be decoded is set by using the voice setting function before sound is produced.<br>When the sound source is the noise generator, a pseudo-random number is generated by a calculation to obtain noise PCM data. Noise tones having different properties can be generated by externally assigning parameters used for the pseudo-random numbers.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Pitch Transformation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the sound source is PCM, or the ADPCM or ATRAC3&trade; decoder, the pitch can be varied for the decoded vocalization data in the maximum range from a 2 (<img src="gif/Sas-Overview-English003.gif">) octave increase to a 12 (-<img src="gif/Sas-Overview-English004.gif">) octave decrease.</div>
+<div style="margin-left:50px;">The amount of pitch variation is specified by the pitch value <img src="gif/Sas-Overview-English005.gif">. The range of values that <img src="gif/Sas-Overview-English006.gif"> can have is as follows.</div>
+<div style="margin-left:50px;">	<img src="gif/Sas-Overview-English007.gif"></div>
+<div style="margin-left:50px;">If <img src="gif/Sas-Overview-English008.gif"> denotes the original pitch of the phoneme region and <img src="gif/Sas-Overview-English009.gif"> (Hz) denotes its sampling rate, then the final pitch <img src="gif/Sas-Overview-English010.gif"> of the voice that is vocalized is given as follows.</div>
+<div style="margin-left:50px;">	<img src="gif/Sas-Overview-English011.gif"></div>
+<div style="margin-left:50px;"><br>Note that you can reduce the apparent data size by raising the pitch (making<img src="gif/Sas-Overview-English012.gif">smaller) when preparing the phoneme region data and then making<img src="gif/Sas-Overview-English013.gif">smaller during playback. However, since this will eliminate the high-frequency components according to sampling theory, sound quality will deteriorate.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Envelope Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Envelope processing simulates the reproduction of the key on to key off of existing musical instruments and the subsequent temporal variation of the vocalization volume. This temporally varying volume is also known as the envelope value. SAS divides the variation of the envelope value into the following four stages and enables various parameters to be set corresponding to each state.<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Attack<br>Stage from immediately after key on is performed until the envelope value reaches its peak</li>
+<li VALUE=2> Decay<br>Stage after Attack until the envelope value falls to a specified level (Sustain Level)</li>
+<li VALUE=3> Sustain<br>Stage after Decay until key off is performed</li>
+<li VALUE=4> Release<br>Stage after key off is performed until the envelope value becomes 0</li>
+</ol></div>
+<div style="margin-left:50px;">For details about these parameters, see the section entitled, "4 <u><a href="../sound/Sas-Overview-English.htm#Heading4_3_3">Envelope Processing</a></u>."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Key On/Key Off</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Key on (vocalization start) and key off (vocalization end) can be specified for each voice.<br>When key on is performed, processing concerning phoneme region decoding, pitch, envelope, and volume is started.<br>When key off is performed, the envelope variation state of the relevant voice switches to release state and the vocalization volume varies according to the release rate (vocalization does not end immediately when key off is performed). Vocalization ends when the volume becomes zero in the release state.<br>Note that even before key off is performed, if the phoneme region data ends (when there is loop information that means it ends or when the playing of the area specified as the size of the phoneme region data ends), vocalization of the relevant voice ends there and the vocalization end flag of the relevant voice is set.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Volume</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The volume of the left and right normal output (DryL and DryR) and left and right effects input (WetL and WetR) can be set independently for each voice. This enables a phoneme region that was originally monaural to be made to have an arbitrary pan and be output as a stereo vocalization.<br>The specified value is directly used for the volume value. A temporally varying volume value cannot be assigned as with the envelope value.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Mixing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The outputs of each voice are mixed in the four channels DryL, DryR, WetL, and WetR.<br>Among the mixed results, the contents of the two channels WetL and WetR are entered in the digital effector, and after special effects are added, they are combined with DryL and DryR (described later).<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Envelope Processing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Envelope processing, as described earlier, reproduces the temporal transitions of the vocalization volumes of numerous musical instruments. This section explains details of envelope processing.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>State Transitions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As described earlier, SAS divides the envelope variation into four time bands. The attack state occurs immediately after key on is performed. The envelope value varies in the attack state according to the variation format (attack shape) and variation rate (attack rate).<br>The transition to the decay state occurs when the envelope value reaches its maximum value. Similarly, the envelope value varies in the decay state according to the variation format (decay shape) and variation rate (decay rate).<br>Subsequently, the transition to the sustain state occurs when the envelope value reaches the sustain level, and the transition to the release state occurs in the state when key off was performed. The envelope value varies in each state according to the sustain shape and sustain rate and the release shape and release rate, respectively.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Parameters Related to Variation Rate</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The size of the envelope value (temporal varying volume) variation per unit time can be assigned as a parameter.<br>If a larger value is assigned, a greater degree of variation will occur.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Parameter</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Attack Rate (AR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Variation rate of the envelope value in the attack state&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Decay Rate (DR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Variation rate of the envelope value in the decay state&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sustain Rate (SR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Variation rate of the envelope value in the sustain state&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Release Rate (RR)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Variation rate of the envelope value in the release state&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Parameter Related to Variation Position</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The value that is the boundary where the state switches from decay state to sustain state can be set externally.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Parameter</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sustain Level (SL)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Envelope value that is the boundary where the state transitions from decay state to sustain state&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Parameters Related to Variation Shape</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In SAS, the following six variation shapes (modes) can be used.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Variation Shape (Mode)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Linear increase (+lin)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Linear increase according to a broken line (+bent lin)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Exponential increase (+exp)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Linear decrease (-lin)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Exponential decrease (-exp)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Direct specification (direct)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The variation shape mode described here as a "linear increase according to a broken line" indicates an increase mechanism in which the rate of increase gets smaller when 75% of the maximum envelope value is reached. Also, when a direct specification is used, the envelope value can be directly changed to the value that was assigned as the variation rate.<br>Although one variation shape (mode) can be selected for each of the four states of envelope processing, the shapes (modes) that can be selected are limited as follows according to the state that is in effect.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Parameter</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>+lin</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>+bent lin</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>+exp</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>-lin</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>-exp</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>direct</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Attack mode (AM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Decay mode (DM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sustain mode (SM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Release mode (RM)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;---&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;O&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Each shape (mode) is illustrated in the following figure. The <i>y</i>-axis value in this figure indicates a value relative to the maximum envelope value.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English014.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br>Also, the following figure shows examples of the relationships between each parameter and the state transitions of the four states that represent the envelope. The <i>y</i>-axis value in this figure indicates a relative value to the maximum envelope value.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English015.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br>Note that in the Sustain and Release states, if the envelope value reaches 0, vocalization of the relevant voice ends there, and 1 is set for the vocalization end flag.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Envelope Specification Methods</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SAS enables two methods to be used to specify envelope parameters.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_5_1"><h4>
+(1)&nbsp;<b>Detailed method</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is a method in which four parameters related to the variation rate (AR, DR, SR, RR), one parameter related to the variation position (SL), and four parameters related to the variation shape (AM, DM, SM, RM) are set by using the respective dedicated functions.<br>Although all functions that SAS has can be set, the code becomes somewhat complex.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_5_2"><h4>
+(2)&nbsp;<b>Simple method</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is a method in which all parameters are specified by using the two 16-bit values ADSR1 and ADSR2. The two values become the following bit field values. Since the numbers of bits allotted to each parameter are less than the numbers that can represent all functions or the resolution that SAS has, only rough specifications can be made. However, the parameters can be set easily.<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English016.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  ADSR1 Bit Assignments</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English017.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  ADSR2 Bit Assignments</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>AR, DR, SR, and RR in these figures are the parameters for specifying the attack rate, decay rate, sustain rate, and release rate. If a larger value is specified, a larger variation rate will occur in the relevant state.<br>SL is the parameter for specifying the sustain level. The larger the value, the higher the sustain level.<br>X, Y, and Z are parameters for specifying the curve shape.<br>X indicates the attack shape, where 0 is linear increase and 1 is linear increase according to a broken line.<br>Y indicates the sustain shape, where 000b is linear increase, 010b is linear decrease, 100b is linear increase according to a broken line, and 110b is exponential decrease. If any other value is specified, an error occurs.<br>Z indicates the release shape, where 0 is linear decrease and 1 is exponential decrease.<br>Note that when the simple method is used for specifying the envelope variation, the decay shape is always an exponential decrease.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Digital Effects Processing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">After processing is performed for each voice, various acoustic effects such as reverb, echo, and delay can be added by applying digital effects to the results of mixing the outputs of the various voices.<br>The following figure shows a block diagram of the blocks related to the effector.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English018.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br>To output the output of each voice via the digital effector, the volume of the relevant voice to be sent to the effector (WetVolL and WetVolR) must be set appropriately and the effector enable switch must be set to On. Also, by changing the balance with the volume for the output components that do not pass through the effector (DryVolL and DryVolR), the conditions for applying the effect can be varied for each voice.<br>The contents of the effects to be applied can be changed by assigning parameters corresponding to the effect type, delay time, and feedback coefficient for the effector. The volume for the effect output (Effect Volume L and Effect Volume R) can also be specified.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Digital Effect Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">One of the following 10 effect types can be selected.<br>If the effect type is OFF, the sound that is input is passed directly through without applying any effects.<br>A reverberation effect is added for all the other effects.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Effect Type</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;OFF&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Room Reverb&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Studio Reverb A&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Studio Reverb B&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Studio Reverb C&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Hall Reverb&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Space Echo&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Echo&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Delay&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Pipe Echo&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Effect Parameter</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If Echo or Delay is selected for the effect type, the Delay time and Feedback can be selected. These settings are ignored for other effects.<br>If a larger Delay Time value is set, a longer delay interval for the overlaid sound will occur. <br>If a larger Feedback value is set, a greater feedback level and stronger effect will occur.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Parameter Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting Range</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Delay Time&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Feedback Level&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 127&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Input Switch and Effect Volume</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_1"><h4>
+(1)&nbsp;<b>Enable switch (DRY, WET)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">These switches can turn on or off the sound to which the effect is not applied (Dry side) and the sound to which the effect is applied (Wet side). Both switches have the same value in the left and right channels.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_2"><h4>
+(2)&nbsp;<b>Effect Volume (L, R)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The Effect Volume (L, R) can set the output level of the effect processing result.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>Settings When Initialization is Performed</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The effect settings when initialization is performed are effect type OFF, Enable switch (DRY)=ON, Enable switch (WET)=OFF, and Effect Volume (L,R) =(0, 0).<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Output Mode</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The number of SAS output channels can be changed by switching the output mode. Output mode switching is useful when adding separate effects to individual sound sources. The available output modes are stereo mode and multichannel mode. The following figure shows the differences between the output modes.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English019.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Stereo Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Stereo mode is the output format that had previously been provided by SAS. Its audio data flow is the same as that shown in the block diagram in the "Digital Effects Processing" section in this document. An output voice is a mixture of a dry voice and a wet voice, which is a created effect upon which it is based. The number of output channels is two, consisting of a left channel and a right channel.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Multichannel Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In multichannel mode, the audio data that appears before the Enable Switches in stereo mode is output directly. In multichannel mode, effects are not added to any output voice, and parameters related to effects cannot be changed.<br>The number of output channels is four. The assignments to the various channels of the output voice after envelope processing are determined by the four volumes indicated by DryVolL, DryVolR, WetVolL, and WetVolR. Although the names DryL, DryR, WetL, and WetR are appended to each channel for convenience to make it easier to understand the correspondence with stereo mode, all four channels are equivalent and the role of each channel cannot be restricted.<br>An example of a multichannel mode application is the 3D positional audio playback of a moving sound source. When the moving sound source is reproduced, the listener has a significant feeling of realism in addition to a sense of orientation because the Doppler effect of the moving sound source is simulated. SAS can implement the Doppler effect through processing that changes the pitch. The libp3da library, which implements 3D positional audio playback, can execute up to four 3D positional audio processes. However, since SAS stereo mode output has only two channels, the Doppler effect cannot be added independently to four sound sources. If multichannel mode is used, this problem can be resolved.<br><br>SAS enables the two output modes to be dynamically switched. However, note that if the number of channels changes, the buffer size required for the output buffer also changes. In addition, the ordering of the PCM data that is output to the buffer changes as follows.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Sas-Overview-English020.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br>Although stereo mode output PCM data can be directly passed to a sound output library such as libwave, multichannel mode output PCM data cannot. Multichannel mode does not take into consideration that sound is directly produced by the output voice, but assumes that the sound is produced after adding some kind of effect. <br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>Overall Processing Flow When SAS is Used</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Since SAS is based only on software, internal parameters are not automatically updated unless an explicit call is made. This is a major difference from a future hardware-based synthesizer.<br>The major processing flow on an actual device until sound is actually produced by using SAS is described below.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1"><h4>
+(1)&nbsp;<b>Initialization processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Overall initialization is required only when SAS is first called. Call the initialization function. The default output mode is stereo.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_2"><h4>
+(2)&nbsp;<b>Parameter setting</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">For the required voices, select the sound source that is the base sound, set the phoneme region, ADSR parameters, pitch, and volume, and perform KeyOn and KeyOff. If necessary, set effects to be applied to all voices and change the output mode.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3"><h4>
+(3)&nbsp;<b>Call synthesis function</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This causes vocalization to be output according to the settings of the parameters described above. Internal variables are updated, the voice generation end flags (endflag) for each voice are updated, and the envelope value and ADSR state of each voice are updated.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4"><h4>
+(4)&nbsp;<b>Modification by the CPU</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Although the synthesis results are output by the synthesis function, additional processing of this output can be performed by the CPU, and effects can also be added. Perform this processing as necessary.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_5"><h4>
+(5)&nbsp;<b>Output to audio device</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A library such as libwave is used to pass the synthesis results to the audio output. At this time, overall fade in or fade out can be implemented by varying the output volume.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6"><h4>
+(6)&nbsp;<b>Return to step (2)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A libwave blocking output function can be used at this time to jump to the next processing at exactly the right timing.<br><br></div>
+<div style="margin-left:50px;">Playback can be suspended by optionally not performing a process, such as (3). <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>Ensuring Memory Coherency</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The main processing of SAS is executed on a separate CPU called the Media Engine. As a result, a phoneme region must be placed in extended memory that is accessible from the Media Engine. Also, when phoneme region data is overwritten by the main CPU, it must be accurately written to cache memory. It must not be overwritten or used for another purpose until the actual sound production ends. Note that when streaming playback is performed using the <a href="../sound/libsas-Reference-English.htm#sceSasConcatenateATRAC3">sceSasConcatenateATRAC3</a>() function, the library manages the cache internally to handle issues related to the dynamic overwriting of memory. As a result, you need not be specifically concerned with cache operations during streaming playback.<br>Likewise, since cache operations related to non-phoneme region data or cache operations on the Media Engine are performed internally within the library (libsas), you need not be specifically concerned with them. <br>Note that reverberation will continue if only a simple key-off is performed, so it may take time for vocalization to end and for voice data to be switched. This situation can be improved by increasing the release rate which will shorten the reverberation time, only when switching voice data.<br>For details related to the PSP&trade; CPU configuration, refer to the separate document entitled, "PSP&trade; System Overview." For details related to cache manipulation, refer to the document entitled, "Cache Manipulation Utilities."<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>Changing a Setting for a Voice that is Vocalizing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although the sound source type can be switched even during vocalization, a click sound may end up getting generated as a result.<br>If KeyOn and KeyOff are performed multiple times for the same voice within one unit of granularity, the vocalization of the relevant voice will be uncertain during release.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>Pause</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Taking into consideration that this processing will mainly be used in games, a pause function for each voice has been implemented in SAS. When pause is enabled for a voice, sound that had been vocalized by the respective voice is faded out and that voice is muted until the pause is canceled. If pause is enabled for a voice that is muted, the mute will continue.<br>However, this function only works for processing that is performed for individual voices. Since effects parts do not operate in terms of individual voices, they will function even if a pause is applied. As a result, if an effect is used that produces an extremely long reverberation is used, for a sound that is paused, the reverberation of the vocalized sound immediately before the pause was applied will continue, even during the pause. Similarly, applying an effect immediately after a pause is restarted will result in different behavior from when the effect is inserted in the middle of a pause.<br>Key-on and key-off cannot be performed for a voice that is being paused. Also, although the voice type can be changed (such as changing the vicinity of an ADPCM phoneme or switching the noise sound source) or the pitch can be changed, these kinds of changes are reflected after the pause is canceled.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

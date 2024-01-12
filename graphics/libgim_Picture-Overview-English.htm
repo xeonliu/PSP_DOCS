@@ -1,0 +1,201 @@
+<html lang="en">
+<head>
+<title>libgim_Picture-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgim_picture Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgim_picture is a library for handling 2D graphics data that are to be used as textures. It provides functions for parsing 2D graphics data files into picture structures having image and palette subblocks, functions for animating picture structures, and functions for setting textures in conjunction with libgu by creating display lists based on picture structures.<br><br>The only output that libgim_picture performs is to pass drawing command sequences to libgu that are used for setting textures. The application should manage display lists and perform image output by controlling libgu in a manner suitable for drawing the model.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libgim_picture.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gim/gim_picture.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgim_picture.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Since libgim_picture calls libgu functions internally, files related to libgu are also required. In addition, to directly access a structure such as <a href="../graphics/libgim_Picture-Reference-English.htm#SceGimPicture">SceGimPicture</a>, be sure to include gim/gim_protected.h.<br>Source files are publicly available for libgim. Refer to devkit/src/gim_picture/.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/graphics/picture</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample program loads sample graphics data, creates three copies of the data, and plays each of the copies back at a different frame rate. The controller can be used to perform rotations, translations and to switch dissolves on and off.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Reference Materials</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GIM_Format-Overview<br>GIM-Converter<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Although libgim itself does not need to be initialized, the following callback functions must be registered.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Function for allocating / freeing memory for picture structures
+<li> Function for allocating / freeing memory for DMA transfers (not needed if the function for allocating / freeing memory for picture structures also provides this function)
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Read data file</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use an appropriate method to read a 2D data file and store the binary image in an arbitrary buffer in memory.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Create a picture structure and load the data</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">First, use <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureCreate">sceGimPictureCreate</a>() to create a picture structure (<a href="../graphics/libgim_Picture-Reference-English.htm#SceGimPicture">SceGimPicture</a>) and then use <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureLoadFile">sceGimPictureLoadFile</a>() to load the picture data in the file image into the picture structure.<br>If <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureGetChunk">sceGimPictureGetChunk</a>() is first used to get a pointer to the picture data (<a href="../graphics/libgim_Picture-Reference-English.htm#SceGimChunk">SceGimChunk</a>), the picture structure can be created and the picture data can be loaded into it at the same time by passing that pointer to <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureCreate">sceGimPictureCreate</a>(). <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureLoad">sceGimPictureLoad</a>() can also be used to load picture data into an existing picture structure.<br>In addition, <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureDuplicate">sceGimPictureDuplicate</a>() can be used to make a copy of a picture structure that was previously created and loaded with data.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Set drawing parameters</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use a function such as <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureSetFrameRate">sceGimPictureSetFrameRate</a>() or <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureSetEnableBits">sceGimPictureSetEnableBits</a>() as necessary to set parameters to be used for drawing.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>Start building the display list</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Allocate an appropriate amount of memory for the display list and use <a href="../graphics/libgu-Reference-English.htm#sceGuStart">sceGuStart</a>() to start building the display list. Any display list mode setting can be used.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>Update and draw pictures</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureAnimate">sceGimPictureAnimate</a>() to advance the animation time, and use <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureActivate">sceGimPictureActivate</a>() to insert the display list as a texture. Since libgim does not provide support for drawing primitives, this must be done by the application as needed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Dissolve Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The dissolve function transparently overlays two frames and controls the transparency rate to create intermediate frames. It is used for smoothing motion by interpolating a low frame rate picture with "jerky movement." It is different from the dissolve (overlap) function used in video editing.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libgim_Picture-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Frame Interpolation Using a Dissolve</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">If the <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureSetEnableBits">sceGimPictureSetEnableBits</a>() function is used to enable SCEGIM_ENABLE_DISSOLVE, the dissolve function is active for that picture. Specifically, when <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureAnimate">sceGimPictureAnimate</a>() is used to compute the current frame, an appropriate dissolve value is calculated.<br>libgim only calculates and maintains dissolve values. It does not do anything to affect the display during drawing operations. Since the basic frame is output at mipmap level 0 and the dissolve frame is output at mipmap level 1, the application should use a mechanism that calls <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureGetDissolve">sceGimPictureGetDissolve</a>() to get the dissolve value and adjust it appropriately for the model, before calling <a href="../graphics/libgu-Reference-English.htm#sceGuTexLevelMode">sceGuTexLevelMode</a>() to reflect it in the drawing. Since mipmaps are used by the dissolve function as described above, only the level 1 image is used and they are ignored even if the picture includes a mipmap image.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Image Cropping</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Image cropping is a function used for cutting out and displaying part of an image. The range to be used for the display is specified according to the four parameters x, y, w, and h. These values are ratios relative to the sizes obtained by rounding up the width and height of the image to a power of 2. Each parameter can have a value in the range 0.0 to 1.0.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libgim_Picture-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 Image Cropping Range Specification</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">If <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureLoadFile">sceGimPictureLoadFile</a>() or <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureLoad">sceGimPictureLoad</a>() is used to load a picture in which the image width or height is not a power of 2, image cropping is automatically set so that the entire image is represented (so the part less than the power of 2 size is masked). Also, <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureSetImageCrop">sceGimPictureSetImageCrop</a>() can be used by the application to set image cropping arbitrarily for zooming, panning, and other processing.<br><br>libgim only maintains and manages image cropping values for each picture. It does not do anything to affect the display during drawing operations. The application should call <a href="../graphics/libgim_Picture-Reference-English.htm#sceGimPictureGetImageCrop">sceGimPictureGetImageCrop</a>() to get the image cropping values and adjust them appropriately to suit the processing related to the model before calling <a href="../graphics/libgu-Reference-English.htm#sceGuTexOffset">sceGuTexOffset</a>() or <a href="../graphics/libgu-Reference-English.htm#sceGuTexScale">sceGuTexScale</a>() to reflect them in drawing operations.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

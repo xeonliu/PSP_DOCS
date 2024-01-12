@@ -1,0 +1,422 @@
+<html lang="en">
+<head>
+<title>libg729-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libg729 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>What is G729?</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">G729 is an audio compression codec similar to ATRAC&trade; or MP3. It is intended for use with devices such as digital mobile telephones as it is designed for the audio band that is used for human conversation.<br>libg729 provides an encoder and decoder for the G729 audio codec.<br>G729 is an international standard that was recommended (*) in 1996 by the ITU Telecommunications Standardization Sector (ITU-T) of the International Telecommunication Union. It was developed to improve the sound quality of PDC-based digital mobile telephones that had previously been using PSI-CELP.<br></div>
+<div style="margin-left:67px;">* It was officially announced by the ITU-T as an ITU-T Recommendation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>G729 Protocol</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The G729 protocol uses the CS-ACELP (Conjugate Structure-Algebraic Code Excited Linear Prediction) method to guarantee error-free call quality comparable to landline telephones. It operates at a rate of 10ms per frame (*). Since it does not contain any error correction bits, separate support is necessary if error correction is required. For information about specific methods for the framing of RTP packets when using G729 encoded data with VoIP, refer to RFC3551.<br></div>
+<div style="margin-left:67px;">* One communication (processing) unit is called a "frame."<br>With other audio codecs for the PSP&trade;, the term "grain" (or one unit of granularity) is often used, however, in this document "frame" is used instead to conform to the ITU-T convention. Both terms can be used interchangeably.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Functions and Features of the Library</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729 is a G729 encoder and decoder library that runs on the Media Engine. It provides functions for encoding PCM waveforms into the G729 format and functions for decompressing (decoding) G729 compressed data into PCM waveforms.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Supported Audio Formats</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The input waveform data sent to the encoder and output from the decoder consists only of 16-bit integer monaural data with a sampling frequency of 8KHz. The bitrate for encoding can be selected from 8kbps, 6.4kbps, and 11.8kbps. Voice Activity Detection (VAD) can also be specified for each of these bitrates. If VAD is specified, smaller size SID and DTX frames are generated, and the amount of information can be reduced.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Library Files and Sample Program</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Library Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libg729.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libg729.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;g729_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;g729_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following is a lib729 sample program.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/g729_rec/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample program uses libg729 for recording and playback. It inputs sound from a headset microphone, encodes it into G729 and saves (records) it in memory. The recorded G729 data is decoded and the resultant audio is played back. A feature of this sample program is that it performs sampling rate conversion by converting the 44.1KHz sampling frequency of the microphone input to the 8KHz sampling frequency used by G729. The vaudio library is used to play the 8KHz audio directly. Since the sound processing frames are different between the audio input/output and G729, buffering is performed during input/output.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Input/Output Data</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Active Frames</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">G729 encoding and decoding is performed in units of frames, with each frame containing 10ms worth of data. Since the input waveform consists of 16-bit monaural data, at a sampling rate of 8KHz, each frame will have 80 samples (= 160 bytes). The table below shows the frame size for different bitrates.<br>These frames are called active frames.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Bitrate</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Size of One Frame</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Comments</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;8kbps&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;80 bits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729,G729_Annex-A standard&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;6.4kbps&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;64 bits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-D standard&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;11.8kbps&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;118 bits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-E standard&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">* Annex-A, Annex-D, and Annex-E are extensions to the original standard. Annex-A adds compressed data optimization, Annex-B adds VAD frame support, Annex-D adds 6.4kbps support, and Annex-E adds 11.8kbps support. (Although Annex-C adds floating-point support for input/output, it is not supported by libg729.)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>VAD Frames</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When encoding is performed with the VAD (Voice Activity Detection) flag specified, three types of frames are generated. These are the SID and DTX frames shown below in addition to the active frames.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>When VAD is Enabled</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Size of One Frame</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Comments</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SID frame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-B standard&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DTX frame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 bits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-B standard&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">SID frames are generated when the volume energy that is input falls below a certain value. A SID frame contains only energy and spectral information. When the decoder receives a SID frame, it generates noise based on this information. A DTX frame is always generated after a SID frame. Although the size of a DTX frame is zero, when the decoder receives a DTX frame, it generates noise using information from the previous SID frame.<br>The sizes of SID and DTX frames are the same regardless of the type of active frame on which they are based.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libg729-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  VAD Frames</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>Size of a SID Frame</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The ITU-T standard stipulates that the size of a SID frame is 15 bits, however, it is often handled as 16 bits from an operational standpoint. In libg729, a SID frame is only handled as 16 bits. This applies to both encoding and decoding. Both 15-bit (<a href="../sound/libg729-Reference-English.htm#SCE_G729_RATE_SID">SCE_G729_RATE_SID</a>) and 16-bit (<a href="../sound/libg729-Reference-English.htm#SCE_G729_RATE_SID_OCTET">SCE_G729_RATE_SID_OCTET</a>) SID frames are defined in libg729.h, however, <a href="../sound/libg729-Reference-English.htm#SCE_G729_RATE_SID">SCE_G729_RATE_SID</a> is not used by the library.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Processing Flow and Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Module Loading and Unloading</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use libg729, the G729 module must be loaded to perform the necessary processing.<br>Use <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>() to load the G729 module as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;utility/utility_module.h&gt;
+<a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_AV_LIBG729);
+
+</font></pre></div>
+<div style="margin-left:50px;">When the libg729 module is no longer necessary, use <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>() to unload the module.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_AV_LIBG729);
+
+</font></pre></div>
+<div style="margin-left:50px;">For details about loading and unloading modules, refer to the "Utility Overview."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Encoding Flow</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The processing flow for encoding is shown by the series of function calls in the diagram below. * Error handling is omitted from the diagram.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<b><a href="../sound/libg729-Reference-English.htm#sceG729EncodeInitResource">sceG729EncodeInitResource</a></b>();	Specify required resources and allocate memory
+	handle=<b><a href="../sound/libg729-Reference-English.htm#sceG729EncodeInit">sceG729EncodeInit</a></b>();	Get handle and initialize resources
+<b>		<a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a></b>(handle,..);	Core processing
+			|
+		(Call <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>() repeatedly)
+			|
+<b>		<a href="../sound/libg729-Reference-English.htm#sceG729EncodeReset">sceG729EncodeReset</a></b>(handle,..);	Clear work area (call as needed)
+			|
+		(Call <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>() repeatedly)
+			|	
+<b>	<a href="../sound/libg729-Reference-English.htm#sceG729EncodeExit">sceG729EncodeExit</a></b>(handle,..);	Release handle (declare end of resource use)
+<b><a href="../sound/libg729-Reference-English.htm#sceG729EncodeTermResource">sceG729EncodeTermResource</a></b>();	Release memory
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_3">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeInitResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function allocates work memory for the library. When multiple voice channels are to be encoded simultaneously, specify at least two channels. Values from 1 to 4 can be specified as the number of channels that can be used simultaneously.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_4">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeTermResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When all G729 encoding is finished, call <a href="../sound/libg729-Reference-English.htm#sceG729EncodeTermResource">sceG729EncodeTermResource</a>() to release memory.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_5">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeInit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function allocates (declares the use of) resources for encoding one voice channel from the memory that was obtained by <a href="../sound/libg729-Reference-English.htm#sceG729EncodeInitResource">sceG729EncodeInitResource</a>(), initializes the corresponding resource memory, and returns the corresponding handle. To encode multiple channels, you can continue to call <a href="../sound/libg729-Reference-English.htm#sceG729EncodeInit">sceG729EncodeInit</a>() to obtain new handles up to the number that was set with <a href="../sound/libg729-Reference-English.htm#sceG729EncodeInitResource">sceG729EncodeInitResource</a>().<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_6">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeExit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function releases (declares the end of the use of) channel resources that were obtained from <a href="../sound/libg729-Reference-English.htm#sceG729EncodeInit">sceG729EncodeInit</a>().<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_7">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeCore()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function encodes one frame. It processes 80 samples (= 10ms) of 8KHz 16-bit monaural PCM data per frame and returns the encoded result. The data size of the result is returned as a bit size by the return value of <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>(). To handle consecutive waveform data, you must repeatedly call <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>() to match the timing of the input waveform data.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_8">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeReset()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If <a href="../sound/libg729-Reference-English.htm#sceG729EncodeReset">sceG729EncodeReset</a>() is called while encoding is being performed by <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>(), the encoded result from the next call to <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>() will be the same as if encoding had been performed from an initialized state.<br><a href="../sound/libg729-Reference-English.htm#sceG729EncodeReset">sceG729EncodeReset</a>() can be used in the following application. If libg729 is used to implement telephone functionality and a call is put on hold, encoding (calls to <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>()) will be stopped. Later, when the held call is resumed, the encoded result will be output as a continuation of the input waveform data that was last input to <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>(), which would normally be heard as noise by the receiver, even if silence were input to <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>() immediately after the held call was resumed. Therefore, by calling <a href="../sound/libg729-Reference-English.htm#sceG729EncodeReset">sceG729EncodeReset</a>() when the held call is resumed, encoding can start from a state of silence and output noise can be avoided.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_9">
+<div style="margin-left:40px;"><h4><b>Thread Safe Functions</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-English.htm#sceG729EncodeInit">sceG729EncodeInit</a>(), <a href="../sound/libg729-Reference-English.htm#sceG729EncodeExit">sceG729EncodeExit</a>(), <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>(), and <a href="../sound/libg729-Reference-English.htm#sceG729EncodeReset">sceG729EncodeReset</a>() are all thread safe. <a href="../sound/libg729-Reference-English.htm#sceG729EncodeInit">sceG729EncodeInit</a>() may even be called from another thread.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Decoding Flow</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The processing flow for decoding is shown by the series of function calls in the diagram below. * Error handling is omitted from the diagram.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><b><a href="../sound/libg729-Reference-English.htm#sceG729DecodeInitResource">sceG729DecodeInitResource</a></b>();	Specify required resources and allocate memory
+	handle=<b><a href="../sound/libg729-Reference-English.htm#sceG729DecodeInit">sceG729DecodeInit</a></b>();	Get handle and initialize resources
+		<b><a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a></b>(handle,..);	Core processing
+			|
+		(Call <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>() repeatedly)
+			|
+		<b><a href="../sound/libg729-Reference-English.htm#sceG729DecodeReset">sceG729DecodeReset</a></b>(handle,..);	Clear work area (call as needed)
+			|
+		(Call <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>() repeatedly)
+			|	
+	<b><a href="../sound/libg729-Reference-English.htm#sceG729DecodeExit">sceG729DecodeExit</a></b>(handle,..);	Release handle (declare end of resource use)
+<b><a href="../sound/libg729-Reference-English.htm#sceG729DecodeTermResource">sceG729DecodeTermResource</a></b>();	Release memory
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_10">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeInitResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function allocates work memory for the library. When multiple voice channels are to be decoded simultaneously, specify at least two channels. Values from 1 to 4 can be specified as the number of channels that can be used simultaneously.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_11">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeTermResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When all G729 decoding is finished, call <a href="../sound/libg729-Reference-English.htm#sceG729DecodeTermResource">sceG729DecodeTermResource</a>() to release memory.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_12">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeInit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function allocates (declares the use of) resources for decoding one voice channel from the memory that was obtained by <a href="../sound/libg729-Reference-English.htm#sceG729DecodeInitResource">sceG729DecodeInitResource</a>(), initializes the corresponding resource memory, and returns the corresponding handle. To decode multiple channels, you can continue to call <a href="../sound/libg729-Reference-English.htm#sceG729DecodeInit">sceG729DecodeInit</a>() to obtain new handles up to the number that was set with <a href="../sound/libg729-Reference-English.htm#sceG729DecodeInitResource">sceG729DecodeInitResource</a>().<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_13">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeExit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function releases (declares the end of the use of) channel resources that were obtained from <a href="../sound/libg729-Reference-English.htm#sceG729DecodeInit">sceG729DecodeInit</a>().<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_14">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeCore()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This function decodes one frame. When the function is passed one frame of encoded data, it returns 80 samples (= 10ms) worth of 8KHz 16-bit monaural PCM data as the output result. To play the output without interruption, you must repeatedly call <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>() to match the timing of the playback library.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_15">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeReset()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If <a href="../sound/libg729-Reference-English.htm#sceG729DecodeReset">sceG729DecodeReset</a>() is called while decoding is being performed by <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>(), the decoded result from the next call to <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>() will be the same as if decoding had been performed from an initialized state.<br><a href="../sound/libg729-Reference-English.htm#sceG729DecodeReset">sceG729DecodeReset</a>() can be used in the following application. If libg729 is used to implement telephone functionality and a call is put on hold, decoding (calls to <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>()) will be stopped. Later, when the held call is resumed, the encoded result will be output as a continuation of the input waveform data that was last input to <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>(), which would normally be heard as noise by the receiver (yourself), even if silence were input to <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>() immediately after the held call was resumed. Therefore, by calling <a href="../sound/libg729-Reference-English.htm#sceG729DecodeReset">sceG729DecodeReset</a>() when the held call is resumed, encoding can start from a state of silence and output noise can be avoided.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_16">
+<div style="margin-left:40px;"><h4><b>Thread Safe Functions</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-English.htm#sceG729DecodeInit">sceG729DecodeInit</a>(), <a href="../sound/libg729-Reference-English.htm#sceG729DecodeExit">sceG729DecodeExit</a>(), <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>(), and <a href="../sound/libg729-Reference-English.htm#sceG729DecodeReset">sceG729DecodeReset</a>() are all thread safe. <a href="../sound/libg729-Reference-English.htm#sceG729DecodeInit">sceG729DecodeInit</a>() may even be called from another thread.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Input/Output Buffer Memory Alignment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With libg729, you need not be particularly concerned with input/output buffer alignment. PCM data can be read and written with 2-byte alignment, and encoded data can be read and written with 1-byte alignment.<br>However, be careful to prevent the input/output data buffers from being carelessly overwritten during calls to <a href="../sound/libg729-Reference-English.htm#sceG729EncodeCore">sceG729EncodeCore</a>() or <a href="../sound/libg729-Reference-English.htm#sceG729DecodeCore">sceG729DecodeCore</a>().<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Stack Size of Threads That Use libg729</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To reduce the stack size of threads that use libg729 to the minimum required size, use <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelGetThreadStackFreeSize">sceKernelGetThreadStackFreeSize</a>() to verify the required stack size, which is defined in thread.h.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Termination Processing for Threads That Use libg729</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729, which uses CPU functions on the Media Engine, uses semaphores to manage computational resources of the Media Engine. Therefore, if <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>() and <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>() are used to forcibly delete a thread that is using a libg729 function while another libg729 function is being executed, then, depending on the timing, the thread may end up getting deleted while the Media Engine's computational resources would remain allocated. As a result, there is a risk that other libraries besides libg729 that use the Media Engine's CPU, will no longer function properly. To stop a thread, design the program according to the following thread management technique.<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> From the side that issues the request for stopping the thread;<br>Use an event flag to report the stop request to the thread<br>Then, call <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitThreadEnd">sceKernelWaitThreadEnd</a>() to wait until the thread has ended.
+<li> On the side that receives the stop request:<br>Routinely monitor event flags to check for a stop request.<br>If a stop request is detected, verify that libg729 is not running, and then use <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelExitThread">sceKernelExitThread</a>() to stop the thread itself.
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

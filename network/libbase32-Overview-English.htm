@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>libbase32-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libbase32 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libbase32 is a library for performing BASE32-format or BASE32HEX encoding/decoding, as defined in RFC4648.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libbase32.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>File Name</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase32.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Static link library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase32.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase32_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase32_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRX module file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libbase32.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Using the Library</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">No specific initialization is required to use libbase32.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_1">
+<div style="margin-left:40px;"><h4><b>Encoding to BASE32 format</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The following procedure can be used to encode a byte sequence into BASE32 format. Note that since libbase32 does not allocate memory internally, the application must allocate memory for the output in advance. The required memory size is ((number of input bytes + 4) / 5 * 8 + 1) bytes.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	plain[SOURCE_LEN];
+u_char	*base32;
+SceSize malloc_size;
+
+malloc_size = 	(SOURCE_LEN + 4) / 5 * 8 + 1;	// Calculate output size
+base32 = (u_char*)malloc(malloc_size);		// Allocate memory for output
+<a href="../network/libbase32-Reference-English.htm#sceBase32Encoder">sceBase32Encoder</a>(base32, plain, SOURCE_LEN);	// Encode
+
+</font></pre></div>
+<div style="margin-left:67px;">BASE32 encoding is performed by calling the <a href="../network/libbase32-Reference-English.htm#sceBase32Encoder">sceBase32Encoder</a>() function as shown above. To encode into BASE32HEX format, use the <a href="../network/libbase32-Reference-English.htm#sceBase32HexEncoder">sceBase32HexEncoder</a>() function.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_2">
+<div style="margin-left:40px;"><h4><b>Decoding from BASE32 format</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The following procedure can be used to decode a byte sequence that was previously encoded into BASE32 format. Note that since libbase32 does not allocate memory internally, the application must allocate memory for the output in advance. The required memory size is ((number of input bytes) / 8 * 5 + 1) bytes.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	base32[SOURCE_LEN];
+u_char	*plain;
+SceSize malloc_size;
+
+malloc_size = SOURCE_LEN / 8 * 5 + 1;		// Calculate output size
+plain = (u_char*) malloc(malloc_size);		// Allocate memory for output
+<a href="../network/libbase32-Reference-English.htm#sceBase32Decoder">sceBase32Decoder</a> (plain, base32, SOURCE_LEN);	// Decode
+</font></pre></div>
+<div style="margin-left:67px;"><br>BASE32 decoding is performed by calling the <a href="../network/libbase32-Reference-English.htm#sceBase32Decoder">sceBase32Decoder</a>() function as shown above. To decode BASE32HEX format, use the <a href="../network/libbase32-Reference-English.htm#sceBase32HexDecoder">sceBase32HexDecoder</a>() function.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

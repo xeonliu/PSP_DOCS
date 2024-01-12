@@ -1,0 +1,1023 @@
+<html lang="en">
+<head>
+<title>libsas-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsas Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Overview and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsas is a library for controlling SAS. libsas enables waveform data such as ADPCM (.vag) to be used as phoneme data for performing functions such as waveform data sound generation, pitch change, envelope processing and digital effects on voice data.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_1">
+<div style="margin-left:63px;"><h4><b>Features</b><br><br></h4></a></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> Controls the software audio synthesizer (SAS), which runs on the Media Engine
+<li> The output data format is 44.1kHz 16-bit 2-channel (with effects for stereo mode) or 4-channel output (without effects for multichannel mode)
+<li> The granularity (number of PCM data samples that are generated each time internal processing is executed) can be selected from 64 to 2048 in multiples of 32.
+<li> Supported waveform formats are ATRAC3&trade; (monaural only with no looping), ADPCM (.vag), and PCM (16-bit monaural)
+<li> Built-in noise sound source
+<li> Maximum number of simultaneously active voices is 32 (varies depending on process load.)
+<li> Built-in digital effects functions
+<li> Pitch can be controlled from the -12 octave to the +2 octave
+<li> Built-in ADSR mode envelope
+<li> Built-in pause function for a voice that is being vocalized
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>SAS Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As mentioned above, SAS runs on the Media Engine and is controlled from libsas. For details about audio synthesis processing performed by SAS (such as input/output data formats and internal audio processing), refer to the "SAS Overview."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Processing Flow Up to Sound Output</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following figure shows the processing flow up to sound output when libsas is used.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libsas-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Processing Flow Up to Sound Output</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libsas.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsas.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Weak import library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsas_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsas.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Also, a utility function must be used to load modules for performing libsas-related functions. For details, refer to the Utility Overview.<br>Note that to use ATRAC3&trade; data for the phoneme region, libatrac3plus must be used together with libsas to analyze and decode the ATRAC3&trade; data. For details, refer to the libatrac3plus Overview.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following sample programs use libsas.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_1"><h4>
+(1)&nbsp;<b>psp/devkit/sample/sound/starsas</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This program adds sound effects, pause, and other playback functions to the graphics sample program psp/devkit/sample/graphics/stars using libsas. libwave is used for PCM sound output.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_2"><h4>
+(2)&nbsp;<b>psp/devkit/sample/sound/ryukyu</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This program is similar to (1). It adds processing that uses pitch changes to control music playback to the graphics sample program psp/devkit/sample/graphics/stars using libsas. libwave is used for PCM sound output.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_3"><h4>
+(3)&nbsp;<b>psp/devkit/sample/sound/starmix</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This program adds sound effect playback processing using libsas and BGM playback processing using the ATRAC3plus&trade; library (libatrac3plus) to the graphics sample program psp/devkit/sample/graphics/stars. libwave is used for PCM sound output.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_4"><h4>
+(4)&nbsp;<b>psp/devkit/sample/sound/at3mix</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This program uses libsas and libatrac3plus concurrently, just like starmix.<br>By using the Simple Audio feature, sound is output using a method that has a lighter CPU load than starmix. Check the load reduction.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_5"><h4>
+(5)&nbsp;<b>psp/devkit/sample/sound/p3da_revolve</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This program plays 3D positional audio effects in step with the image of a revolving box. It is an example of an application that uses multichannel mode, which is one of the output modes of libsas. If the USE_SAS macro is defined during compilation, libsas multichannel mode is used to reproduce the Doppler effect of four moving sound sources. For details about output modes, refer to the "SAS Overview" document.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_6"><h4>
+(6)&nbsp;<b>psp/devkit/sample/sound/sas-streaming</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This program uses the ATRAC3&trade; streaming playback feature of libsas.<br>The voice that is being played by streaming playback can be switched.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Overview of Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Procedure for Using libsas</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following procedure shows how to use libsas.<br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Use <a href="../sound/libsas-Reference-English.htm#sceSasInit">sceSasInit</a>() to perform initialization processing.</li>
+<li VALUE=2> Use <a href="../sound/libsas-Reference-English.htm#sceSasSetVoice">sceSasSetVoice</a>() to set the basic parameters for the voice for which sound is to be produced</li>
+<li VALUE=3> Use a function such as <a href="../sound/libsas-Reference-English.htm#sceSasSetKeyOn">sceSasSetKeyOn</a>() to perform various types of sound processing (such as key on processing).</li>
+<li VALUE=4> Use <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() to generate PCM sound based on key on information.</li>
+<li VALUE=5> Use <a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>() to output the generated PCM sound</li>
+<li VALUE=6> Use <a href="../sound/libsas-Reference-English.htm#sceSasExit">sceSasExit</a>() to perform termination processing.</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Initialization and Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use libsas, <a href="../sound/libsas-Reference-English.htm#sceSasInit">sceSasInit</a>() must be used to perform initialization processing. Also, after using libsas, use <a href="../sound/libsas-Reference-English.htm#sceSasExit">sceSasExit</a>() to perform termination processing when the application ends.<br><br>Example:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int iRc;
+
+/* Initialization processing */
+iRc = <a href="../sound/libsas-Reference-English.htm#sceSasInit">sceSasInit</a>();
+if (iRc != SCE_OK){
+	/* Initialization failed */
+}
+
+/* Specify processing for using libsas functions here */
+
+/* Termination processing */
+iRc = <a href="../sound/libsas-Reference-English.htm#sceSasExit">sceSasExit</a>();
+if (iRc != SCE_OK){
+	/* Termination processing failed */
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Method of Outputting PCM Sound That was Generated by sceSasCore()</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With libsas, PCM sound is generated by the <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() function. The generated PCM sound is output by using the libwave function <a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>(). To output PCM sound, first set information such as the output sample length.<br><br>Example:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int iRc;
+
+/* Set channel 0 to stereo output */
+iRc = <a href="../sound/libwave-Reference-English.htm#sceWaveAudioSetFormat">sceWaveAudioSetFormat</a>(0, SCE_WAVE_AUDIO_FMT_S16_STEREO);
+if (iRc != SCE_OK){
+	/* Setting failed */
+}
+/* Set the output sample length for channel 0 to 256 samples */
+iRc = <a href="../sound/libwave-Reference-English.htm#sceWaveAudioSetSample">sceWaveAudioSetSample</a>(0,256);
+if (iRc != SCE_OK){
+	/* Setting failed */
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>A function such as <a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>() is used to output PCM-format sound. <a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>() registers the PCM-format sound that is stored in the specified buffer in the audio driver. Playback of the registered sound data is started after sound data that had already been registered in the audio driver is played.<br>Audio is not necessarily played back immediately because it was registered in the driver. Also, the audio driver does not create a copy of the sound data. As a result, if the buffer contents are overwritten before playback is actually started or while playback is in progress, the contents are not played back correctly. Make sure that the sound output-only buffer is at least a double buffer so that the buffer contents immediately after sound is registered are not overwritten.<br><br>Example:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* Let pcmBuf be a double buffer */
+/* The buffer that is passed as an argument of <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() must have */
+/* 64-byte alignment */
+int iSide = 0;
+
+<a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>( pcmBuf[iSide] );
+
+/* Output 16-bit PCM STEREO data that is in pcmBuf[iSide] to channel 0 */
+<a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>(
+	0,
+	SCE_WAVE_AUDIO_VOL_MAX,
+	SCE_WAVE_AUDIO_VOL_MAX,
+	pcmBuf[iSide]
+);
+iSide ^= 1;
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Linking With ATRAC3&trade;</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes how to use ATRAC3&trade; in libsas and how it differs from ADPCM.<br>By using libatrac3plus together with libsas, an ATRAC3&trade; sound source can be used for the SAS phoneme region. Unlike ADPCM and PCM sound sources which only support on-memory playback, libsas also supports streaming playback for ATRAC3&trade;, which can easily be performed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Overview of the Usage Procedure (for On-Memory Playback)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After SAS initialization is completed, ATRAC3&trade; data can be used in libsas according to the following procedure.<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Use a utility to load modules used by the libatrac3plus library.</li>
+<li VALUE=2> Read ATRAC3&trade; data.</li>
+<li VALUE=3> Use a function such as <a href="../sound/libatrac3plus-Reference-English.htm#sceAtracSetDataAndGetID">sceAtracSetDataAndGetID</a>() to register ATRAC3&trade; data in libatrac3plus and obtain an ATRAC&trade; ID (handle for decoding).</li>
+<li VALUE=4> Use the phoneme region setting function <a href="../sound/libsas-Reference-English.htm#sceSasSetVoiceATRAC3">sceSasSetVoiceATRAC3</a>() to register the data that was registered for the acquired ATRAC&trade; ID for a specific voice of SAS. </li>
+</ol></div>
+<div style="margin-left:50px;">Subsequently, the normal playback method is similar. <a href="../sound/libsas-Reference-English.htm#sceSasSetADSR">sceSasSetADSR</a>() and <a href="../sound/libsas-Reference-English.htm#sceSasSetVolume">sceSasSetVolume</a>() can be used to set playback parameters such as the volume and envelope shape, and the <a href="../sound/libsas-Reference-English.htm#sceSasSetKeyOn">sceSasSetKeyOn</a>() function can be used to begin sound production for the relevant voice.<br><br>Since the requirement for reading data is no different from that for a normal ADPCM voice, the only differences until the voice is vocalized are the following three.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> In addition to libsas, modules related to libatrac3plus must be loaded.
+<li> An ATRAC3&trade; decoding handle is obtained before setting the phoneme region.
+<li> <a href="../sound/libsas-Reference-English.htm#sceSasSetVoiceATRAC3">sceSasSetVoiceATRAC3</a>() is used instead of the <a href="../sound/libsas-Reference-English.htm#sceSasSetVoice">sceSasSetVoice</a>() function. 
+</ul></div>
+<div style="margin-left:50px;"><br>One more difference is termination processing. For ADPCM or PCM data, you need not do anything in particular to destroy voice data that is no longer used, but for ATRAC3&trade; data, you must explicitly release the ATRAC&trade; ID. <a href="../sound/libsas-Reference-English.htm#sceSasReleaseATRAC3Id">sceSasReleaseATRAC3Id</a>() is used for this. You must also release the ATRAC&trade; ID if you want to register different voice data after you have registered ATRAC3&trade; voice data for a certain ATRAC&trade; ID.<br>Also, if you attempt to change the sound source of a voice for which the ATRAC3&trade; phoneme region is registered, an error will occur. Make sure you release the ATRAC&trade; ID first before changing the sound source.<br><br>An ATRAC&trade; ID that is registered for a SAS voice will be used exclusively by SAS and cannot be used by libatrac3plus until it is released with <a href="../sound/libsas-Reference-English.htm#sceSasReleaseATRAC3Id">sceSasReleaseATRAC3Id</a>(). In other words, the number of ATRAC&trade; IDs that can normally be used is reduced while one is being used by SAS.<br>Note that although the number of ATRAC&trade; IDs that can normally be used simultaneously by libatrac3plus is two for ATRAC3plus&trade; and two for ATRAC3&trade;, since ATRAC3plus&trade; data cannot be used by SAS, the number of ATRAC3&trade; voices that can be used by SAS is at most two. If you need to use more than two ATRAC3&trade; voices, you can use the <a href="../sound/libatrac3plus-Reference-English.htm#sceAtracReinit">sceAtracReinit</a>() function to reduce the number that can be used for ATRAC3plus&trade; data and increase the number that can be used for ATRAC3&trade; data. For details, refer to the libatrac3plus documentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Overview of the Usage Procedure (for Streaming Playback)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since it is assumed that relatively long-duration data will be played using ATRAC3&trade;, libsas has a feature for supporting ATRAC3&trade; streaming playback. (However, libsas does not have fine-grained control of reading like libatrac3plus. It also does not support sound source data with looping.)<br>The ATRAC3&trade; voice generation method when the streaming support feature is used is roughly as follows.<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Read some ATRAC3&trade; data into buffer A.</li>
+<li VALUE=2> Use a function such as <a href="../sound/libatrac3plus-Reference-English.htm#sceAtracSetDataAndGetID">sceAtracSetDataAndGetID</a>() to register ATRAC3&trade; data in libatrac3plus and obtain an ATRAC&trade; ID (handle for decoding).</li>
+<li VALUE=3> Use the phoneme region setting function <a href="../sound/libsas-Reference-English.htm#sceSasSetVoiceATRAC3">sceSasSetVoiceATRAC3</a>() to register the data that was registered for the acquired ATRAC&trade; ID for a specific voice of SAS. </li>
+<li VALUE=4> (Use a function such as <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() to synthesize and output a voice.)</li>
+<li VALUE=5> Look at the return value of <a href="../sound/libsas-Reference-English.htm#sceSasCheckATRAC3BufferStatus">sceSasCheckATRAC3BufferStatus</a>() and wait until the other half of the double buffer can be safely overwritten.</li>
+<li VALUE=6> Read the continuation of the ATRAC3&trade; data into the other buffer (buffer B) of the double buffer.</li>
+<li VALUE=7> Use <a href="../sound/libsas-Reference-English.htm#sceSasConcatenateATRAC3">sceSasConcatenateATRAC3</a>() to report that buffer B contains continuation data.</li>
+<li VALUE=8> Repeat (alternately switching buffer A and B) until the end of the file is reached.</li>
+</ol></div>
+<div style="margin-left:50px;"><br>To prevent the buffer that is currently playing from being overwritten and the data being destroyed, call <a href="../sound/libsas-Reference-English.htm#sceSasCheckATRAC3BufferStatus">sceSasCheckATRAC3BufferStatus</a>() to check if it is safe to overwrite the data. Since the position of the buffer during playback changes when a voice synthesis function such as <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() is called, using <a href="../sound/libsas-Reference-English.htm#sceSasCheckATRAC3BufferStatus">sceSasCheckATRAC3BufferStatus</a>() to check the buffer status is sufficient if it is only done once after the synthesis function call.<br>Also, since file reading normally takes time, sound might break up if a blocking function such as sceIoRead() uses the same thread to read data as the one playing sound. The asynchronous IO feature should be used instead.<br>Be careful about the buffer size when using streaming playback. In particular, since the amount of data required by the voice synthesis function at one time increases when a pitch change is performed to raise the pitch, the data required for voice synthesis may be insufficient. Also, to prevent a high rate of file reading, prepare a buffer that corresponds roughly to several seconds worth of data at normal playback speed (for example, approximately 64 KB for 66 kbps of data).<br><br>For details, see the sas-streaming sample program.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Streaming Playback of a Stereo Voice</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SAS only supports monaural ATRAC3&trade; files. As a result, to play a stereo voice, two voices must be assigned to the left and right channels and then sound production should begin for both voices simultaneously.<br>It is important that processing for both voices be performed <i>simultaneously</i>. In particular, when streaming playback is performed, since data reading may not be completed in time depending on the state of the media, if data for only one voice is replenished at this time, the subsequent playback positions will be displaced, and the sound will be of extremely poor quality. Be sure to replenish the data for both voices in this situation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Proper Use of libatrac3plus and libsas</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although libatrac3plus and libsas can both be used to perform streaming playback of ATRAC3&trade; data, the features they support differ with respect to the relationship between available memory and processing load.<br>Generally, libatrac3plus is better for playing several minutes or more of sound (such as BGM) without applying any particular effects, and libsas is better for playing and applying a variety of effects to voices (dialog, yelling, cheering, and some phrase-sampled tunes) when interactive changes are needed for periods from several seconds to several tens of seconds.<br>Detailed differences are listed below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Feature Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Supported by libsas</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Supported by libatrac3plus</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Looped voice&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;<br>&nbsp;&nbsp;(supported by executing key-on &nbsp;&nbsp;<br>&nbsp;&nbsp;again after performance ends)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stereo voice&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;<br>&nbsp;&nbsp;(supported by using monaural for &nbsp;&nbsp;<br>&nbsp;&nbsp;two voices)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Pitch change&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Supported&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Effects&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Supported&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Maximum number of &nbsp;&nbsp;<br>&nbsp;&nbsp;voices&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Six monaural&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Six stereo&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Support for lower bit &nbsp;&nbsp;<br>&nbsp;&nbsp;rates (ATRAC3plus&trade;) &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Supported&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Proper Use of PCM, ADPCM, and ATRAC3&trade; Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although PCM, ADPCM, and ATRAC3&trade; data can be used in libsas, the special characteristics of each and how best to use them are described below for your reference so that you can use them properly.<br><br>Since PCM data is an uncompressed sound source, it theoretically has the highest sound quality, but it is also has the largest footprint (approximately 86 KB per second at 706 kbps). A sound source that was saved in any compressed format can be decoded to PCM, which can be used by SAS, and voices synthesized by SAS can be fed back into SAS again (to obtain an echo-like effect). Due to size constraints, PCM data may often be difficult to use as raw phoneme region data.<br><br>ADPCM data has a format that is compressed by approximately 1/3.5 (approximately 25 KB per second at 202 kbps) compared to PCM. Since decoding is simpler, more voices can be played at the same time. It also has a relatively small size, making it suitable for use as phoneme region data such as for the voice of an ordinary musical instrument. Also, by using loops, data can be made even smaller in parts such as the reverberation of a musical instrument.<br><br>Since a higher compression rate is realized for ATRAC3&trade; data (approximately 8 KB per second at 66 kbps or 52 kbps), a longer interval of voice can be recorded with a smaller size. In other words, memory utilization and loading time can be improved. However, since a greater number of calculations and memory are required to play (decode) ATRAC3&trade; data compared to ADPCM, currently a maximum of six monaural voices can be played simultaneously with ATRAC3&trade;.<br><br>You can balance data size and sound quality by using ATRAC3&trade; for voices that have a relatively long playback time and which need to produce any number of sounds simultaneously (fragments of phrase sampled BGM or sound effects such as cheering or yelling) and using ADPCM data for voices for which the data is short but the release rate is long and for which the playback of multiple voices overlap (such as the reverberation of a piano).<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Important Precautions</b><br><b>Thread Priority Settings</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Make the priority of the sound processing thread that uses a function such as <a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>() to output PCM sound that was generated by <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() as high as possible. As long as there is no specific problem, setting SCE_KERNEL_USER_HIGHEST_PRIORITY is recommended. If the priority of the sound processing thread is low, a phenomenon may occur such as the generated sound being mixed with noise or the generated sound being intermittent or not even being played back at all.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>When Raising the Pitch</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although the maximum number of simultaneous sound-producing voices is 32, if the pitch is raised for many of the sound-producing voices, the playback sound could become intermittent. In this case, try not to raise the pitch very much (prepare a phoneme region that is recorded with increasing pitch) or try to decrease the number of simultaneous sound-producing voices.<br>In particular, note that the processing load will increase if ATRAC3&trade; data is used as the phoneme region.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Using SAS Simultaneously With Other Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The software audio synthesizer (SAS), runs on the Media Engine. As a result, if other processing (such as playing movies or ATRAC3plus&trade;, etc) that runs on the Media Engine is also executing at the same time, SAS sound may end up becoming intermittent. This is due to the fact that playing movies and ATRAC3plus&trade; decoding can take over the Media Engine for a long period of time.<br>The following table shows roughly the number of voices which can be used before sound becomes intermittent, when SAS is running with a granularity of 256 samples and  other processing is also running on the Media Engine. Note that these values are for reference purposes and do not guarantee functionality. Performance may vary because processing running at the same time on the main CPU may also consume memory bandwidth.<br>Note that the number of voices shown below is for ADPCM or PCM sound sources. When using ATRAC3&trade; as the sound source, convert the number of voices shown below by assuming that six ADPCM voices are roughly equivalent to one ATRAC3&trade; voice.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Processing&nbsp;Executed&nbsp;<br>&nbsp;Simultaneously</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>SAS&nbsp;Voice&nbsp;Pitch&nbsp;<br>&nbsp;Setting</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Number&nbsp;of&nbsp;Voices&nbsp;Which&nbsp;<br>&nbsp;Can&nbsp;Produce&nbsp;Sound&nbsp;in&nbsp;<br>&nbsp;SAS&nbsp;Before&nbsp;Becoming&nbsp;<br>&nbsp;Intermittent</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;None&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;24&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3&trade;&nbsp;(66kbps&nbsp;stereo)&nbsp;stream&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;23&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3&trade;&nbsp;(66kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;29&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;21&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;stream&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;29&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;21&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;28&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(32kbps&nbsp;mono)&nbsp;stream&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;23&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(32kbps&nbsp;mono)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;29&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;21&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(48kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;27&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(48kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;22&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;15&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(128kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;26&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;18&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(128kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;18&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;15&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(256kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;18&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;13&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(256kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;12&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;7&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(320kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;15&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;9&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(320kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;6&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;2&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(66k&nbsp;stereo)&nbsp;+&nbsp;ATRAC3plus&trade;&nbsp;(32k&nbsp;mono)&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;29&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;21&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132k&nbsp;stereo)+&nbsp;ATRAC3plus&trade;&nbsp;(32k&nbsp;mono)&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;28&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(66k&nbsp;stereo)&nbsp;+&nbsp;ATRAC3plus&trade;&nbsp;(256k&nbsp;stereo)&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;11&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132k&nbsp;stereo)+&nbsp;ATRAC3plus&trade;&nbsp;(256k&nbsp;stereo)&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;17&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;11&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(105k&nbsp;stereo)&nbsp;*2&nbsp;+&nbsp;ATRAC3plus&trade;&nbsp;(128k&nbsp;stereo)&nbsp;*2&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;17&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;12&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MPEG&nbsp;movie(with&nbsp;Audio)&nbsp;play&nbsp;back&nbsp;(*)&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;5&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;3&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;32kbps&nbsp;mono)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;30&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;21&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;32kbps&nbsp;mono)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;25&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;128kbps&nbsp;mono)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;29&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;21&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;128kbps&nbsp;mono)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;26&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;21&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;mono)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;28&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;20&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;mono)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;22&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;17&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;32kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;26&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;32kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;14&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;128kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;23&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;16&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;128kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;16&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;11&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;23&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;16&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;17&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;13&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(48000Hz,&nbsp;320kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;12&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;10&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(48000Hz,&nbsp;&nbsp;<br>&nbsp;32&nbsp;to&nbsp;320kbps&nbsp;VBR&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;13&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;10&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(24000Hz,&nbsp;160kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;22&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;16&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(8000Hz,&nbsp;160kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;22&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;15&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;AAC&nbsp;(44100Hz,&nbsp;192kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;26&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;18&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;AAC&nbsp;(44100Hz,&nbsp;128kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;26&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;AAC&nbsp;(44100Hz,&nbsp;64kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;27&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;19&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;AAC&nbsp;(44100Hz,&nbsp;128kbps&nbsp;mono)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;20&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;3D&nbsp;processing&nbsp;of&nbsp;4&nbsp;voices&nbsp;using&nbsp;P3DA;&nbsp;normal&nbsp;playback&nbsp;for&nbsp;other&nbsp;voices&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;30&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;22&nbsp;voices&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<div style="margin-left:50px;">(*): Provided as an example. The number of SAS voices producing sound will change according to the movie or audio bit rate.<br>The following table shows the number of voices that can be used before sound becomes intermittent after <b><a href="../peripheral/Power-Reference-English.htm#scePowerSetClockFrequency">scePowerSetClockFrequency</a></b>() has been used to set the CPU clock frequency to 333 MHz, under the same conditions as above.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Processing&nbsp;Executed&nbsp;&nbsp;<br>&nbsp;Simultaneously</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>SAS&nbsp;Voice&nbsp;Pitch&nbsp;&nbsp;<br>&nbsp;Setting</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Number&nbsp;of&nbsp;Voices&nbsp;Which&nbsp;<br>&nbsp;Can&nbsp;Produce&nbsp;Sound&nbsp;in&nbsp;<br>&nbsp;SAS&nbsp;Before&nbsp;Becoming&nbsp;&nbsp;<br>&nbsp;Intermittent</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;None&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(32kbps&nbsp;mono)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(32kbps&nbsp;mono)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(48kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(48kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;28&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(128kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;31&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(128kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;25&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;ATRAC3plus&trade;&nbsp;(320kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;27&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;ATRAC3plus&trade;&nbsp;(320kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;31&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;24&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MPEG&nbsp;movie(with&nbsp;Audio)&nbsp;playback&nbsp;(*)&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;17&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;15&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;mono)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;mono)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;stereo)&nbsp;stream&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;29&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;two&nbsp;MP3&nbsp;(44100Hz,&nbsp;320kbps&nbsp;stereo)&nbsp;streams&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;26&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Play&nbsp;back&nbsp;one&nbsp;AAC&nbsp;(44100Hz,&nbsp;128kbps&nbsp;stereo)&nbsp;stream&nbsp;<br>&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;3D&nbsp;processing&nbsp;of&nbsp;4&nbsp;voices&nbsp;using&nbsp;P3DA;&nbsp;<br>&nbsp;normal&nbsp;playback&nbsp;for&nbsp;other&nbsp;voices&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;All&nbsp;2&nbsp;Octaves&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;Up&nbsp;to&nbsp;32&nbsp;voices&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">(*): Provided as an example. The number of SAS voices producing sound will change according to the movie or audio bit rate.<br><br>One method of keeping SAS sound from becoming intermittent even if the conditions are such that SAS sound might be intermittent is to increase the granularity. Normally, <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() is executed once to generate 256-sample PCM data which is then output by one call to <a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>(). However, the load can be reduced by changing this. Specifically, by executing <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() multiple times or by using the <a href="../sound/libsas-Reference-English.htm#sceSasInitWithGrain">sceSasInitWithGrain</a>() function to increase the number of samples per unit of granularity and then calling <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>(), you can generate PCM sound for more than 256 samples and output that generated PCM sound for a greater number of samples by using a single <a href="../sound/libwave-Reference-English.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>(). Since this increases the amount of PCM data that is output at one time and increases the interval in which that data is being output as sound, the result is that the sound is less likely to become intermittent. However, there is also the disadvantage that since the amount of PCM data that is generated at one time increases, the time until the next sound is produced increases.<br>Note that when <a href="../sound/libsas-Reference-English.htm#sceSasInitWithGrain">sceSasInitWithGrain</a>() is used to increase the granularity, the load will be lighter when compared to calling <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() multiple times with the granularity left unchanged, however, a delay or tempo discrepancy is more likely to occur.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libsas-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 Method of Lowering the Granularity</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Parameter Update Timing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SAS uses batch processing to update internal parameters within the synthesis function (this function is called internally when a function such as <a href="../sound/libsas-Reference-English.htm#sceSasCore">sceSasCore</a>() is called). As a result, the following are examples of the kinds of phenomena that occur.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_1"><h4>
+(1)&nbsp;<b>When sceSasSetVolume() is used to change the volume, the volume will not change immediately</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After the <a href="../sound/libsas-Reference-English.htm#sceSasSetVolume">sceSasSetVolume</a>() function is called, the volume won't be changed until the next time the synthesis function is called. The volume of the sound occurring at the instant <a href="../sound/libsas-Reference-English.htm#sceSasSetVolume">sceSasSetVolume</a>() is called will not change.<br>This phenomenon is not limited to the volume setting, but also occurs for all key on, key off, and envelope shape changes.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_2"><h4>
+(2)&nbsp;<b>The value that is returned by the sceSasGetEndFlag() function is not immediately updated after a key on or key off function (sceSasSetKeyOn() or sceSasSetKeyOff() function) is called</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The <a href="../sound/libsas-Reference-English.htm#sceSasGetEndFlag">sceSasGetEndFlag</a>() function is used to get the sound generation end flags for all voices, however, the flags are updated only once at the moment when the synthesis function call ends. Therefore, when multiple key on or key off operations are performed for the same voice before the synthesis function is called, you cannot use the end flags obtained from <a href="../sound/libsas-Reference-English.htm#sceSasGetEndFlag">sceSasGetEndFlag</a>() to verify that a voice is in an inactive state.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsas internally calls the Media Engine's CPU functions and performs exclusive processing of the Media Engine's internal resources at that time. <br>Therefore, if <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>() is used to terminate a thread that is using libsas or if the thread is forcibly deleted by using <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>() before the thread has transitioned to DORMANT state, then depending on the timing, the thread may end up getting terminated and deleted while it is still holding internal resources. As a result, there is a risk that another library that is using the Media Engine's CPU functions, including libsas, may no longer operate properly.<br><br>To terminate a thread, make sure the following actions are taken (the samples that use libsas are also constructed in this way):<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> The side that requests the thread to terminate uses a shared variable or event flag to communicate its request to the thread.
+<li> The thread that is to be terminated periodically monitors this flag to determine whether a termination request was issued. If a request was issued, the thread first verifies that libsas is not currently running and then it calls <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelExitThread">sceKernelExitThread</a>() to terminate itself.<br>
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

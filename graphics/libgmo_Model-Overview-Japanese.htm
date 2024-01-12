@@ -1,0 +1,176 @@
+<html lang="jp">
+<head>
+<title>libgmo_Model-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgmo_model
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgmoは、3Dモデルデータを取り扱うライブラリです。まず第１に、3Dモデルデータファイルの内容を解釈してボーンやパートやマテリアルといったサブブロックを持つモデル構造体に取り込む機能、第2に、モデル構造体をアニメートする機能、第３に、libguと連携してモデル構造体をもとにディスプレイリストを作成する機能を提供します。<br>ディスプレイリストの出力に関して、libgmoは描画コマンドシーケンスをlibguに渡すだけの処理を行います。ディスプレイリストの管理と画像出力は、アプリケーション側で適切にlibguを制御して行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgmoを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gmo/gmo_model.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgmo_model.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">内部でlibgumの関数を呼び出していますので、libgumおよびlibguの関連ファイルも必要になります。<br>SceGmoModelなどの構造体の内部にアクセスする場合は gmo/gmo_protected.h もインクルードしてください。<br>libgmoはソースファイルが公開されています。devkit/src/gmo_model/を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/graphics/model</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サンプルのモデルデータをファイルから読み込み、３つのコピーを表示して、コントローラの操作に応じて回転・移動するサンプルプログラムです。モーションや、ライティング / フォグ / テクスチャのon/offもコントローラの操作に応じて切り替えるしくみになっています。<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GMO_Format-Overview<br>GMO_Format-Reference<br>GMO-Converter<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">次に示すのは、libgmoを使用するプログラム例の主要部分です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;gmo/gmo_model.h&gt;
+
+// モデルデータをロード
+SceGmoModel *model = <a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelCreate">sceGmoModelCreate</a>( 0 ) ;
+<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelLoadFile">sceGmoModelLoadFile</a>( model, data, size, 0 ) ;
+SceGmoModel *copy =<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelDuplicate">sceGmoModelDuplicate</a>( model, SCEGMO_DUPLICATE_AUTOMATIC ) ;
+<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelSetCurrentMotion">sceGmoModelSetCurrentMotion</a>( copy, 0, 0.0f ) ;
+
+for ( ; ; ) {
+	//  ディスプレイリストを開始
+	. . .
+	//  モデルデータを表示
+	<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelSetWorldMatrix">sceGmoModelSetWorldMatrix</a>( copy, &amp;world_matrix ) ;
+	<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelAnimate">sceGmoModelAnimate</a>( copy, 1.0f / 60.0f ) ;
+	<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelUpdate">sceGmoModelUpdate</a>( copy ) ;
+	<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelDraw">sceGmoModelDraw</a>( copy ) ;
+	. . .
+	//  ディスプレイリストを終了
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libgmo自体の初期化は不要ですが、コールバック関数を登録する必要があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> モデル構造体用のメモリを確保 / 解放する関数
+<li> 頂点配列などDMA転送用のメモリを確保 / 解放する関数（モデル構造体用のメモリ確保 / 解放関数と兼用するときは不要）
+<li> テクスチャとして使用する画像データの登録 / 取得を行う関数
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>モデルデータファイルの読み込み</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">モデルデータファイルを適宜の方法で読み込み、バイナリイメージをメモリ上の任意のバッファに格納してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>モデル構造体の作成とモデルデータのロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">まず<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelCreate">sceGmoModelCreate</a>()を用いてモデル構造体（SceGmoModel）を生成し、続いて<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelLoadFile">sceGmoModelLoadFile</a>()を用いてファイルイメージ中のモデルデータをモデル構造体に読み込んでください。<br>あらかじめ<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelGetChunk">sceGmoModelGetChunk</a>()を用いてモデルデータファイルのバイナリイメージからモデルデータ（SceGmoChunk）へのポインタを取得しておくと、そのポインタを<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelCreate">sceGmoModelCreate</a>()に渡すことでモデル構造体の生成とモデルデータの読み込みを同時に行うことができます。また、<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelLoad">sceGmoModelLoad</a>()を用いて既存のモデル構造体にモデルデータを読み込むこともできます。<br>また、<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelDuplicate">sceGmoModelDuplicate</a>()を用いると、すでに生成しロードしてあるモデル構造体のコピーを作成することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>描画オプションの設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelSetWorldMatrix">sceGmoModelSetWorldMatrix</a>() / <a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelSetEnableBits">sceGmoModelSetEnableBits</a>()などを用いて描画に必要なパラメータを設定し、<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelSetCurrentMotion">sceGmoModelSetCurrentMotion</a>()を用いてモーションを選択してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>ディスプレイリストの作成開始</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ディスプレイリスト用のメモリを適宜に確保し、<a href="../graphics/libgu-Reference-Japanese.htm#sceGuStart">sceGuStart</a>()でディスプレイリストの作成を開始してください。ディスプレイリストのモード設定などは任意です。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>モデルデータの更新と描画</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelAnimate">sceGmoModelAnimate</a>()を用いてアニメーションの時間を進める処理を行い、さらに必要なら、物理計算や衝突判定やユーザの操作に応じて<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoBoneSetTranslate">sceGmoBoneSetTranslate</a>()などの関数を用いてモデルの状態を任意に変更してください。<br>変更したモデルの状態を<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelUpdate">sceGmoModelUpdate</a>()を用いてモデル構造体に反映し、<a href="../graphics/libgmo_Model-Reference-Japanese.htm#sceGmoModelDraw">sceGmoModelDraw</a>()を呼び出して描画コマンドシーケンスをディスプレイリストに挿入してください。IMMEDIATEモードであればそのまま画像出力が行われますし、LISTモードまたはCALLモードであればディスプレイリストが作成されます。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

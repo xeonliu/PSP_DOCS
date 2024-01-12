@@ -1,0 +1,921 @@
+<html lang="en">
+<head>
+<title>NP_In_Game_Commerce2-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NP IN-GAME Commerce 2 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Purpose and Characteristics</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAME commerce 2 provides browsing functions and enables products to be purchased from the PlayStation&reg;Store (the title store). The NP IN-GAME commerce 2 functions are divided into the NP IN-GAME Commerce 2 library and the checkout utility library. By using these two libraries, users can access the title store from the application and purchase data of additional items and scenarios, as well as access rights to the game server<br><br>NP IN-GAME commerce 2 provides two ways in which products can be purchased. In one, the checkout utility executes all of the processing, from the browsing to the purchases. In the other, the application uses the NP IN-GAME commerce 2 library to obtain the product catalog and enables browsing. When the user chooses a product, the checkout utility executes the purchase processing.<br>In the current release, only the second method is available.<br><br>This document does not provide information of creating and preparing the products for the title store. Relevant information can be found in the documents listed in the section &quot;Reference Materials&quot;.<br><br>When the user purchases additional items and other products, it is necessary for application behavior to be modified accordingly. The NP IN-GAME commerce 2 library itself does not enable the application to check whether or not a product has been purchased, but the np_auth library and NP TCM library can be used as described in this document to determine if service entitlements (subscription-type products) have been purchased. Information of checking the purchase status of DRM content (download-type products) can be found in the documents in the section &quot;Reference Materials&quot;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use NP IN-GAME commerce 2.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np/np_commerce2.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_commerce2_stub{,_weak}.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The following files are required to use the np_auth library.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np/np_auth.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_auth_stub{,_weak}.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Link the stub library statically to the application program according to the desired processing. Then load/unload PRX modules with the module utility API as described later in this document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>np_gui_commerce2</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample includes browsing of product catalogs, purchase processing, and the display and consumption of entitlements.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Reference Materials</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Detailed information on PlayStation&reg;Store, and the specifications of products distributed through PlayStation&reg;Store can be found in the following documents.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> "PlayStation&reg;Network Commerce Service Overview"
+<li> "PlayStation&reg;Network Commerce Programming Guide"
+<li> "PlayStation&reg;Store Content Guidelines"
+<li> "PSP&trade; Additional Game Data Package Creation Guide"
+<li> "PSP&trade; Downloadable Game Package Creation Guide"
+</ul></div>
+<div style="margin-left:50px;">Information on making products available in PlayStation&reg;Store can be found in the following document.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> "NP Product Management Guide"
+</ul></div>
+<div style="margin-left:50px;">Information on the library for handling DRM content can be found in the following document.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> "NPDRM Library Overview", "NPDRM Library Reference"
+</ul></div>
+<div style="margin-left:50px;">Information on the libraries to check if service entitlements have been purchased can be found in the following documents.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> "np_auth Library Reference"
+<li> "NP TCM Overview", "NP TCM Reference"
+</ul></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Purchase Processing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">In this chapter, the procedure for using NP IN-GAME commerce 2 to obtain a product catalog and enable browsing is described. Then the processing for product purchases is described.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Preparation</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Load the PRX Module</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Before loading the NP IN-GAME commerce 2 PRX module, you must load the following dependent modules.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> SCE_UTILITY_MODULE_NET_COMMON
+<li> SCE_UTILITY_MODULE_NET_INET
+<li> SCE_UTILITY_MODULE_NET_PARSE_URI
+<li> SCE_UTILITY_MODULE_NET_PARSE_HTTP
+<li> SCE_UTILITY_MODULE_NET_HTTP
+<li> SCE_UTILITY_MODULE_NET_SSL
+<li> SCE_UTILITY_MODULE_NP
+<li> SCE_UTILITY_MODULE_NP_SERVICE
+</ul></div>
+<div style="margin-left:67px;">Next, call <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>() with SCE_UTILITY_MODULE_NP_COMMERCE2 specified as the module ID to load the NP IN-GAME commerce 2 PRX module.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The dependent libraries must be initialized first by calling the following functions.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Core-Reference-English.htm#sceNetInit">sceNetInit</a>()
+<li> <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInit">sceNetInetInit</a>()
+<li> <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverInit">sceNetResolverInit</a>()
+<li> <a href="../network/PSPNET_Apctl-Reference-English.htm#sceNetApctlInit">sceNetApctlInit</a>() and use <a href="../network/PSPNET_Apctl-Reference-English.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>() to register a callback function
+<li> <a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>()
+<li> <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()
+<li> <a href="../network/NP-Reference-English.htm#sceNpInit">sceNpInit</a>()
+<li> <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthInit">sceNpAuthInit</a>()
+<li> <a href="../network/NP_Service-Reference-English.htm#sceNpServiceInit">sceNpServiceInit</a>()
+</ul></div>
+<div style="margin-left:67px;">Next, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2Init">sceNpCommerce2Init</a>() to initialize the NP IN-GAME commerce 2 library. When the library has been successfully initialized, <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2Init">sceNpCommerce2Init</a>() returns 0.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Connect to the Network and Sign In</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Sign-in must be completed before NP IN-GAME commerce 2 processing can begin. Refer to the "PlayStation&reg;Network Overview" document, and then connect to the network and sign in.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Create a Commerce 2 Context</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateCtx">sceNpCommerce2CreateCtx</a>() to create a commerce 2 context. Specify as an argument the variable to receive the ID of the created context.<br>When successful, <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateCtx">sceNpCommerce2CreateCtx</a>() stores the context ID to the argument and returns 0.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>Create a Commerce 2 Session</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To perform NP IN-GAME commerce 2 processing such as obtaining a product catalog, you must first create a commerce 2 session on the NP server.<br>To create a commerce 2 session, first call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionCreateReq">sceNpCommerce2CreateSessionCreateReq</a>() to create a request. Then, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionStart">sceNpCommerce2CreateSessionStart</a>() to send the session creation request to the server. Next, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>() and specify the buffer for receiving the data.<br>Finally, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>() to destroy the request.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Create a Commerce 2 Session</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionStart">sceNpCommerce2CreateSessionStart</a>() and <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>() do not run in the background but instead perform communication via the calling thread. For this reason, these functions block until communication completes. To abort the communication, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>().<br><br>After calling <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>() to get session data for the commerce 2 session, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetSessionInfo">sceNpCommerce2GetSessionInfo</a>() to get session information. This completes the creation of the commerce 2 session and you can now obtain the product catalog.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Obtaining the Product Catalog</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The product catalog is organized into hierarchical categories, and the information is obtained as either category content information or product information. Also, because the data structure is undisclosed, this data can only be obtained in two steps. First, data is obtained from the server, and then this data is parsed so that information can be taken out.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>Obtain Category Content Data</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To obtain category content data, first call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsCreateReq">sceNpCommerce2GetCategoryContentsCreateReq</a>() to create a request. Then call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsStart">sceNpCommerce2GetCategoryContentsStart</a>(), specifying the ID of the target category and the required range of content.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1_1">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">The category ID of the main category is the same as the service ID. For example, if the service ID is UP0001-SXXX00001_00, the category ID of the main category is also UP0001-SXXX00001_00.<br></div>
+<div style="margin-left:67px;"><br>Then call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>(), specifying the buffer to receive the data.<br>Finally, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>() to delete the request.<br><br></div>
+<br>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English002.gif">
+</div>
+<br>
+<br><br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Obtain Category Content Data </b><br>
+</div>
+<br>
+<div style="margin-left:67px;">Note that <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsStart">sceNpCommerce2GetCategoryContentsStart</a>() and <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>() do not execute processing in the  background but instead execute communications in the calling thread. For this reason, these functions are blocking until communication completes. To abort the communication, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>Take Out Category Content Information</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The data structure of the category content data obtained with <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>() is undisclosed. The information contained is taken out as necessary by calling the appropriate function.<br>First call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2InitGetCategoryContentsResult">sceNpCommerce2InitGetCategoryContentsResult</a>() to initialize the category content data obtained.<br>This enables category content information to be taken out with functions like <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryInfo">sceNpCommerce2GetCategoryInfo</a>() and <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetContentInfo">sceNpCommerce2GetContentInfo</a>().<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Take Out Category Content Information</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">Category content information is in the following format.<br><br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English004.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  Category Content Information Structure</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">Category content information of subcategories can be obtained to reproduce the hierarchical structure of the product catalog. Specify the category IDs of subcategories as arguments.<br><br>The product information that can be obtained from category content information is a shortened version. To obtain the complete information of a product, obtain product data first and take out product information from this data.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>Obtain Product Data</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The procedure for obtaining product data is much like the procedure for obtaining category content data.<br>First call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoCreateReq">sceNpCommerce2GetProductInfoCreateReq</a>() to create a request. Then call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoStart">sceNpCommerce2GetProductInfoStart</a>() with the product ID specified.<br>Then call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>(), specifying the buffer to receive the data.<br>Finally, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>() to delete the request.<br><br></div>
+<br>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English005.gif">
+</div>
+<br>
+<br><br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  Obtain Product Data</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">Note that <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoStart">sceNpCommerce2GetProductInfoStart</a>() and <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>() do not execute processing in the background but instead execute communications in the calling thread. For this reason, these functions are blocking until communication completes. To abort the communication, call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_4"><h4>
+(4)&nbsp;<b>Take Out Game Product Information</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The data structure of the product data obtained with <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>() is undisclosed. The information contained is taken out as necessary by calling the appropriate function.<br>First call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2InitGetProductInfoResult">sceNpCommerce2InitGetProductInfoResult</a>() to initialize the data obtained. This enables game product information to be taken out with <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetGameProductInfo">sceNpCommerce2GetGameProductInfo</a>().<br></div>
+<br>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English006.gif">
+</div>
+<br>
+<br><br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6  Take Out Game Product Information</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">Game product information is in the following format.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7  Game Product Information Structure</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">To take out SKU information from game product information, use <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetGameSkuInfoFromGameProductInfo">sceNpCommerce2GetGameSkuInfoFromGameProductInfo</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_5"><h4>
+(5)&nbsp;<b>Take Out Rating Information</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Rating information is available for both categories and products, and is in the following format.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8  Rating Information Structure</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_5_1">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Normally, it is not necessary for the application to handle rating information. The system displays the rating and blocks inappropriate content depending on the user's age.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Browsing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After obtaining and taking out the category content information and product information, display this information in the application and enable the user to choose the products to purchase. It is possible to implement a shopping cart method that enables the user to purchase multiple products at once. Refer to the sample program for an example of a shopping cart implementation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Checkout (Purchase Processing)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Checkout Utility is in charge of checkout (purchase processing). For details, refer to the "Store Checkout Utility" document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Termination</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To terminate the use of the NP IN-GAME commerce 2 library, first call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyCtx">sceNpCommerce2DestroyCtx</a>() to destroy the commerce 2 context.<br>When successful, <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyCtx">sceNpCommerce2DestroyCtx</a>() returns 0.<br>Then call <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2Term">sceNpCommerce2Term</a>() and <a href="../network/NP-Reference-English.htm#sceNpTerm">sceNpTerm</a>() to terminate the use of NP.<br>Finally, unload the PRX module. Call <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>() with SCE_UTILITY_MODULE_NP_COMMERCE2 specified for the module ID.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>List of Functions</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_2">
+<div style="margin-left:40px;"><h4><b>Initialize and Terminate the Utility</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2Init">sceNpCommerce2Init</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Initialize the NP IN-GAME commerce 2 library&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2Term">sceNpCommerce2Term</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Terminate the NP IN-GAME commerce 2 library&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_3">
+<div style="margin-left:40px;"><h4><b>Create and Delete Contexts</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateCtx">sceNpCommerce2CreateCtx</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Create a commerce 2 context&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyCtx">sceNpCommerce2DestroyCtx</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Destroy a commerce 2 context&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_4">
+<div style="margin-left:40px;"><h4><b>Create Sessions</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionCreateReq">sceNpCommerce2CreateSessionCreateReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Create a request for creating a commerce 2 session&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionStart">sceNpCommerce2CreateSessionStart</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start creating a commerce 2 session&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get commerce 2 session creation result data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetSessionInfo">sceNpCommerce2GetSessionInfo</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get information about commerce 2 session that was created&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_5">
+<div style="margin-left:40px;"><h4><b>Obtain Category Content Data</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsCreateReq">sceNpCommerce2GetCategoryContentsCreateReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Create a request to obtain category content data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsStart">sceNpCommerce2GetCategoryContentsStart</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start obtaining category content data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Obtain category content data&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_6">
+<div style="margin-left:40px;"><h4><b>Take Out Category Content Information</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2InitGetCategoryContentsResult">sceNpCommerce2InitGetCategoryContentsResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Initialize category content data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryInfo">sceNpCommerce2GetCategoryInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out category information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetContentInfo">sceNpCommerce2GetContentInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out information of content in the category&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetCategoryInfoFromContentInfo">sceNpCommerce2GetCategoryInfoFromContentInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out subcategory information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetGameProductInfoFromContentInfo">sceNpCommerce2GetGameProductInfoFromContentInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out product information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyGetCategoryContentsResult">sceNpCommerce2DestroyGetCategoryContentsResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Destroy category content data&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_7">
+<div style="margin-left:40px;"><h4><b>Obtain Product Data</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoCreateReq">sceNpCommerce2GetProductInfoCreateReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Create a request to obtain product data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoStart">sceNpCommerce2GetProductInfoStart</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start obtaining product data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Obtain product data&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_8">
+<div style="margin-left:40px;"><h4><b>Take Out Product Information</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2InitGetProductInfoResult">sceNpCommerce2InitGetProductInfoResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Initialize product data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetGameProductInfo">sceNpCommerce2GetGameProductInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out product information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyGetProductInfoResult">sceNpCommerce2DestroyGetProductInfoResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Destroy product information&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_9">
+<div style="margin-left:40px;"><h4><b>Take Out Rating Information</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetContentRatingInfoFromGameProductInfo">sceNpCommerce2GetContentRatingInfoFromGameProductInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out rating information of a product&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetContentRatingInfoFromCategoryInfo">sceNpCommerce2GetContentRatingInfoFromCategoryInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out rating information of a category&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetContentRatingDescriptor">sceNpCommerce2GetContentRatingDescriptor</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out rating descriptors&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_10">
+<div style="margin-left:40px;"><h4><b>Take Out SKU Information</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2GetGameSkuInfoFromGameProductInfo">sceNpCommerce2GetGameSkuInfoFromGameProductInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Take out SKU information&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_11">
+<div style="margin-left:40px;"><h4><b>Abort and Destroy Requests</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Destroy commerce 2 request&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-English.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Abort commerce 2 request&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Verifying Purchases</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter outlines the procedure for checking whether or not a service entitlement (subscription-type product) was purchased. For information about the library for handling DRM content to check whether or not DRM content (download-type product) was purchased, refer to the "NPDRM Library Overview" and "NPDRM Library Reference" documents shown in the section entitled "Reference Materials."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Service Entitlement Purchased Check (Check by Application)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To have a client application check an entitlement, use the ticket API implemented by the np_auth library. The procedure is described below.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>Load PRX modules</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The np_auth library is dependent on the following modules. They must be loaded before the np_auth library can be loaded.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> SCE_UTILITY_MODULE_NET_COMMON
+<li> SCE_UTILITY_MODULE_NET_INET
+<li> SCE_UTILITY_MODULE_NET_PARSE_URI
+<li> SCE_UTILITY_MODULE_NET_PARSE_HTTP
+<li> SCE_UTILITY_MODULE_NET_HTTP
+<li> SCE_UTILITY_MODULE_NET_SSL
+</ul></div>
+<div style="margin-left:67px;">After loading these modules, call <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>() with SCE_UTILITY_MODULE_NP specified as the module ID to load the PRX module of the np_auth library.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>Initialize libraries</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The group of libraries on which the np_auth library depends must be initialized in advance. Initialize these libraries by calling the following functions.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Core-Reference-English.htm#sceNetInit">sceNetInit</a>()
+<li> <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInit">sceNetInetInit</a>()
+<li> <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverInit">sceNetResolverInit</a>()
+<li> <a href="../network/PSPNET_Apctl-Reference-English.htm#sceNetApctlInit">sceNetApctlInit</a>() and register callback function by using <a href="../network/PSPNET_Apctl-Reference-English.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>()
+<li> <a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>()
+<li> <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()
+</ul></div>
+<div style="margin-left:67px;">Next, call <a href="../network/NP-Reference-English.htm#sceNpInit">sceNpInit</a>() to initialize the NP library. <a href="../network/NP-Reference-English.htm#sceNpInit">sceNpInit</a>() returns 0 if the library has been successfully initialized.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>Establish network connection and sign in</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Sign-in must be completed before starting processing for verifying service entitlement purchases. Refer to the "PlayStation&reg;Network Overview" document to find out how to establish a network connection and sign in.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>Get ticket</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>() to issue a request to get a ticket. Specify the ticket acquisition completion notification callback and service ID of the ticket to be obtained in the parameter structure of the argument. If the request is successfully started, <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>() will return 0. Then, when the ticket is successfully obtained or if ticket acquisition fails, the callback function will be called. Call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>() inside the callback function to get the ticket when the ticket is successfully obtained.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>Check subscription-type entitlement privilege</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When a subscription-type entitlement is used, call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>() for the ticket that was obtained to check whether or not the entitlement is valid. Specify the entitlement ID of the entitlement that you want to check in the argument. If the entitlement is valid (it has the necessary privileges), <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>() will return 0. If the entitlement is no longer valid, the entitlement can no longer be obtained from the ticket, and <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>() will return an error. <br>To implement automatic updating of the subscription service, an entitlement is considered to be valid for a fixed deferment period even if the service period has expired. Although the service period of an entitlement can be strictly obtained by calling <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetEntitlementById">sceNpAuthGetEntitlementById</a>(), an application should not be written so that entitlement validity is strictly determined based on the service period that is obtained.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_6"><h4>
+(6)&nbsp;<b>Get available count of a consumption-type entitlement</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To get the available count of a consumption-type entitlement, call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetEntitlementById">sceNpAuthGetEntitlementById</a>() for the ticket that was obtained. Specify the entitlement ID of the entitlement for which you want to get the available count in the argument. The remaining count and cumulative used count are obtained in the <i>remaining_count</i> and <i>consumed_count</i> members, respectively, of the <a href="../network/NP_Auth-Reference-English.htm#SceNpEntitlement">SceNpEntitlement</a> structure that was obtained.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_7"><h4>
+(7)&nbsp;<b>Consume consumption-type entitlement count</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To consume the available count of a consumption-type entitlement, call the same <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>() function as for getting a ticket. However, specify the ID of the entitlement that you wish to consume and the number of times you want to consume it in the parameter structure of the argument. After this function is called, the callback function will be called when processing succeeds or fails in a similar manner as in step (4). After the entitlement count is successfully consumed, the ticket will be returned with the updated entitlement count. Subsequently, you can call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>() to get the ticket.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_8"><h4>
+(8)&nbsp;<b>Terminate NP</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call <a href="../network/NP-Reference-English.htm#sceNpTerm">sceNpTerm</a>() to terminate NP.<br>Then, call <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>() with SCE_UTILITY_MODULE_NP specified for the module ID to unload the PRX module.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Service Entitlement Purchased Check (Check by Server)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To have the game server check an entitlement, first get a ticket by using the ticket API provided by the np_auth library from the client application, then send that ticket to the game server and use the NP TCM (Ticket Checker Module) on the game server to verify it.<br>The procedure is described below.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>Load PRX modules</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The np_auth library is dependent on the following modules. They must be loaded before the np_auth library can be loaded.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> SCE_UTILITY_MODULE_NET_COMMON
+<li> SCE_UTILITY_MODULE_NET_INET
+<li> SCE_UTILITY_MODULE_NET_PARSE_URI
+<li> SCE_UTILITY_MODULE_NET_PARSE_HTTP
+<li> SCE_UTILITY_MODULE_NET_HTTP
+<li> SCE_UTILITY_MODULE_NET_SSL
+</ul></div>
+<div style="margin-left:67px;">Next, call <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>() with SCE_UTILITY_MODULE_NP specified for the module ID to load the PRX module of the np_auth library.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>Initialize libraries</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The group of libraries on which the np_auth library depends must be initialized in advance. Initialize these libraries by calling the following functions.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Core-Reference-English.htm#sceNetInit">sceNetInit</a>()
+<li> <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInit">sceNetInetInit</a>()
+<li> <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverInit">sceNetResolverInit</a>()
+<li> <a href="../network/PSPNET_Apctl-Reference-English.htm#sceNetApctlInit">sceNetApctlInit</a>() and register callback function by using <a href="../network/PSPNET_Apctl-Reference-English.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>()
+<li> <a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a>()
+<li> <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>()
+<li> <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>()
+</ul></div>
+<div style="margin-left:67px;">Next, call <a href="../network/NP-Reference-English.htm#sceNpInit">sceNpInit</a>() to initialize the NP library. <a href="../network/NP-Reference-English.htm#sceNpInit">sceNpInit</a>() will return 0 if the library has been successfully initialized.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>Establish network connection and sign in</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Sign-in must be completed before starting processing for verifying service entitlement purchases. Refer to the "PlayStation&reg;Network Overview" document to find out how to establish a network connection and sign in.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>Get ticket</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>() to issue a request to get a ticket. Specify the ticket acquisition completion notification callback and service ID of the ticket to be obtained in the parameter structure of the argument. If the request is successfully started, <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>() will return 0. Then, when the ticket is successfully obtained or if ticket acquisition fails, the callback function will be called. Call <a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>() inside the callback function to get the ticket when the ticket is successfully obtained.<br>You can specify the ticket version to be obtained in the parameter structure. A ticket version supported by the TCM that is installed on the server must be specified.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>Send ticket data to server</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Send the ticket data that was obtained to the game-specific server over the network.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_6"><h4>
+(6)&nbsp;<b>Use TCM to check entitlement</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">On the server, use TCM to verify the entitlement that is contained in the ticket.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_7"><h4>
+(7)&nbsp;<b>Terminate NP</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call <a href="../network/NP-Reference-English.htm#sceNpTerm">sceNpTerm</a>() to terminate NP.<br>Then, call <a href="../utility/Utility-Reference-English.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>() with SCE_UTILITY_MODULE_NP specified for the module ID to unload the PRX module.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>List of Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Functions for getting a ticket and checking an entitlement (np_auth library APIs)<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function </b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start ticket request processing &nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get ticket &nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetEntitlementIdList">sceNpAuthGetEntitlementIdList</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get entitlement ID list &nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-English.htm#sceNpAuthGetEntitlementById">sceNpAuthGetEntitlementById</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get entitlement information &nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-English.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Check entitlement&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>SKU Purchase Status Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAME commerce 2 enables SKU information to be obtained in the <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#SceNpCommerce2GameSkuInfo">SceNpCommerce2GameSkuInfo</a> structure when game product information is obtained.<br>The <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#SceNpCommerce2GameSkuInfo">SceNpCommerce2GameSkuInfo</a> structure contains the <i>annotation</i> member, which is a bit mask that contains SKU-related information.<br>The following flags are defined for the <i>annotation</i> bit mask and indicate whether or not this SKU was already purchased.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMERCE2_SKU_ANN_PURCHASED_CANNOT_PURCHASE_AGAIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80000000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Purchased, cannot be purchased again&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMERCE2_SKU_ANN_PURCHASED_CAN_PURCHASE_AGAIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x40000000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Purchased, can be purchased again&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Note that this purchased information is only SKU-level information and does not indicate whether or not a service entitlement or DRM content was purchased. To check whether a service entitlement or DRM content was purchased, use the method described in the section entitled "Verifying Purchases."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Relationship With libhttp</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAME commerce 2 uses libhttp internally for communication with the server. Therefore, a libhttp error code may be returned from each API involved in network processing.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Commerce 2 Session Duration</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the NP IN-GAME commerce 2 library is used, the application must first create a commerce 2 session. The commerce 2 session that was created is subsequently used to get category content data or product data.<br>Note that the commerce 2 session is deleted by the server if no communication occurs for a certain amount of time during the session. If the session is deleted by the server, an <a href="../network/NP_In_Game_Commerce2-Reference-English.htm#SCE_NP_COMMERCE2_SERVER_ERROR_SESSION_EXPIRED">SCE_NP_COMMERCE2_SERVER_ERROR_SESSION_EXPIRED</a> error will be returned when subsequent communication is attempted. To communicate again from this state, destroy and recreate the commerce 2 context and then try communicating again.<br>Although the server-side session timeout interval is currently 15 minutes, this value may be changed in the future. Therefore, avoid writing program code that depends on this value. Also, do not routinely initiate communication in order to prevent a session timeout since this may adversely affect the server load.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

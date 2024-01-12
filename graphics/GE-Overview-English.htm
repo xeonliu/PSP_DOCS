@@ -1,0 +1,836 @@
+<html lang="en">
+<head>
+<title>GE-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Graphics Engine Manager(geman) Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Graphics Engine manager (geman) is a service for controlling the Graphics Engine, which is the drawing engine of the PSP&trade;.<br>geman provides functions for managing display lists (sequences of commands that are transferred to the Graphics Engine) as a queue. By using geman, an application can create and transfer display lists without being concerned with when drawing actually ends. Also, drawing processing and application processing can be synchronized by making the application wait for the end of drawing or, conversely, by making drawing processing wait by specifying a stall address or by calling a callback function at a specific location during drawing processing.<br>geman can queue up to 64 display lists, and when drawing ends, the respective queue is automatically released.<br>In addition, geman provides functions related to the Graphics Engine's eDRAM, command registers, and matrix registers.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use geman.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;geman.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ge_user_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialize library</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Since geman operates as the default module, initialization does not need to be explicitly performed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Set callback function</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() function to register a signal callback function and finish callback function as necessary. Callback IDs are returned, and since they are used later when queuing is performed, be sure to save them in appropriate variables.<br>An example of setting a callback function is shown below. For details, see "<u><a href="../graphics/GE-Overview-English.htm#Heading3_5">Using Callback Functions to Synchronize Processing</a></u>."<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+static void callback_sig(int intrcode, void *cookie, const void *madr);
+static void callback_fin(int intrcode, void *cookie, const void *madr);
+static int intrId;
+<a href="../graphics/GE-Reference-English.htm#SceGeCbParam">SceGeCbParam</a>	cbParam;
+
+cbParam.pSignalFunc = callback_sig;
+cbParam.pFinishFunc = callback_fin;
+cbParam.pSignalCookie = NULL;
+cbParam.pFinishCookie = NULL;
+intrId = <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>(&amp;cbParam);
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Initialize Graphics Engine</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Graphics Engine commands have indeterminate values immediately after a reset. To ensure stable operation, we recommend that Graphics Engine commands be initialized to zero first. Initialization uses a queuing function to transfer a display list in which zero was set for each command as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+static const unsigned int initCmd[] = {
+//	((SCE_GE_CMD_NOP	&lt;&lt; 24) | 0),	// 0x00
+	((SCE_GE_CMD_VADR	&lt;&lt; 24) | 0),	// 0x01
+	((SCE_GE_CMD_IADR	&lt;&lt; 24) | 0),	// 0x02
+		:
+		: (intermediate portion omitted)
+		:
+	((SCE_GE_CMD_XSIZE	&lt;&lt; 24) | 0),	// 0xEE
+	((SCE_GE_CMD_FINISH	&lt;&lt; 24) | 0),	// terminate display list
+	((SCE_GE_CMD_END	&lt;&lt; 24) | 0)	//
+};
+int	queId;
+
+queId = <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(initCmd, NULL, -1, NULL);
+<a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>(queId, 0);
+
+</font></pre></div>
+<div style="margin-left:67px;">Note that since a command for kicking drawing or a command for generating the display list address need not be initialized, no problem will occur even if they are not included in the initialization display list. Initialization is not required for the following commands.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>CMD_NOP, CMD_PRIM, CMD_BEZIER, CMD_SPLINE, CMD_BBOX, CMD_JUMP, CMD_BJUMP, 
+CMD_CALL, CMD_RET, CMD_END, CMD_SIGNAL, CMD_FINISH, CMD_ORIGIN, CMD_XSTART
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Create and enqueue a display list</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Create a display list by using a suitable method for the relevant application. Since geman has specific restrictions and function extensions, see "<u><a href="../graphics/GE-Overview-English.htm#Heading3_3">Display List</a></u>."<br>Use the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function to enqueue a display list that was created. At this time, specify a stall address, callback ID, or context save buffer address as necessary. For details about these specifications, see "<u><a href="../graphics/GE-Overview-English.htm#Heading3_4">Queuing</a></u>."<br>The <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function returns the queue ID. The queue ID is used to specify the display list when waiting for the end of drawing by using the <a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>() function or when interrupting drawing processing by using the <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int		queId;
+<a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a>	ctx;
+void 		*disp_list;
+	:
+	: (Display list creation processing:  Omitted)
+	:
+queId = <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>(disp_list, NULL, intrId, &amp;ctx);
+<a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>(queId, 0);
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Context Switching</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The settings that are currently being maintained by the Graphics Engine are collectively called the context. Since the context affects the drawing results, each display list must be drawn based on a suitable context. A mechanism that enables the context to be easily saved and restored is provided for cases in which the context is to be temporarily changed to perform drawing and then the context is to be returned to the original context to continue drawing.<br>Specifically, to enqueue a display list, specify the address of the context save buffer <a href="../graphics/GE-Reference-English.htm#SceGeContext">SceGeContext</a>, which is the pGeContext member of the <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> structure, as the forth argument of the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function. Once this is done, processing is performed automatically in which the context is first saved, then the display list is drawn, and when drawing ends, the context is restored.<br>Also, to change context that spans multiple display lists, the <a href="../graphics/GE-Reference-English.htm#sceGeSaveContext">sceGeSaveContext</a>() and <a href="../graphics/GE-Reference-English.htm#sceGeRestoreContext">sceGeRestoreContext</a>() functions can be used to explicitly save and restore the context. The <a href="../graphics/GE-Reference-English.htm#sceGeSaveContext">sceGeSaveContext</a>() and <a href="../graphics/GE-Reference-English.htm#sceGeRestoreContext">sceGeRestoreContext</a>() functions must be called when the display list is stopped. The <a href="../graphics/GE-Reference-English.htm#sceGeSaveContext">sceGeSaveContext</a>() and <a href="../graphics/GE-Reference-English.htm#sceGeRestoreContext">sceGeRestoreContext</a>() functions cannot be called while a display list is being executed.<br>However, overhead is required for saving and restoring the context. Better performance can be obtained by adjusting the drawing order so that the context is not saved and restored.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Interrupting Drawing and Inserting a Display List</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The queue that is currently being drawn can be interrupted by using the <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function. The <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>() function is used to restart the interrupted queue.<br>A display list can be inserted at the beginning of the queue by using <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueueHead">sceGeListEnQueueHead</a>() while drawing is interrupted. The inserted display list is drawn first when drawing is restarted by calling the <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>() function.<br>For example, when drawing is being performed at 60fps, drawing at 30fps can also be displayed on the same screen by performing processing that interrupts drawing by using a V-Blank callback, inserts a display list, and restarts drawing each time.<br>Drawing that is interrupted by the <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function cannot be used while drawing a display list that contains <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Display List</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Restrictions Related to Display Lists</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A display list is a list of commands for the Graphics Engine. For geman to handle display lists properly, the following restrictions exist concerning the placement of CMD_FINISH and CMD_END within a display list.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>CMD_FINISH+CMD_END must be placed at the end of a display list</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Valid Display List</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>CMD_FINISH must not be included in the middle of a display list</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Invalid Display List 1</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>CMD_END must not be included in the middle of a display list (except when it follows CMD_SIGNAL)</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Invalid Display List 2</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>If a display list that violates these restrictions is queued, a problem may occur in which drawing does not end because queue switching will not be performed normally.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>CMD_SIGNAL Function Extension</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">CMD_SIGNAL is a command for generating an interrupt at an arbitrary time during drawing processing. In addition to normal signal processing, geman uses CMD_SIGNAL for calling and returning display lists. This enables calls to be nested to a depth of up to 32 levels. (The number of call nesting levels supported by the Graphics Engine hardware is at most 2.)<br>As a result, CMD_SIGNAL has the following function extension and limitation in a display list handled by geman.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> CMD_END must be placed after CMD_SIGNAL
+<li> Bits 16 to 23 of CMD_SIGNAL are interpreted as the extended command code
+</ul></div>
+<div style="margin-left:50px;"><br>Extended command codes are explained below.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>SCE_GE_SIGNAL_SIGNAL_WAIT(0x01) - Generate signal interrupt (with Wait)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL in which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>(0x01) is read, geman pauses drawing and calls the registered signal callback function. At this time, the low-order 16 bits of CMD_SIGNAL are passed to the signal callback function as the first argument. <br>When control returns from the signal callback function, drawing is restarted.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  Generate Signal Interrupt (With Wait)</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>SCE_GE_SIGNAL_SIGNAL_NOWAIT(0x02) - Generate signal interrupt (without Wait)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL in which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>(0x02) is read, geman continues drawing and calls the registered signal callback function. At this time the low-order 16 bits of CMD_SIGNAL are passed to the signal callback function as the first argument.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English005.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  Generate Signal Interrupt (Without Wait)</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>SCE_GE_SIGNAL_SIGNAL_PAUSE(0x03) - Generate signal interrupt (Pause)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL in which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>(0x03) is read, geman pauses drawing and calls the registered signal callback function. At this time the low-order 16 bits of CMD_SIGNAL are passed to the signal callback function as the first argument. <br>To restart drawing, <a href="../graphics/GE-Reference-English.htm#sceGeContinue">sceGeContinue</a>() function must be explicitly called.<br>Note that when this extended command is used, CMD_FINISH + CMD_END must be placed after CMD_SIGNAL + CMD_END.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English006.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6  Generate Signal Interrupt (Pause)</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">The <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function cannot be used while drawing a display list that contains <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>. This is prohibited to prevent the ambiguous operation of whether processing is paused due to execution of <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a> or stopped due to execution of the <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() function depending on the timing.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>SCE_GE_SIGNAL_DRAWSYNC (0x08) - Synchronize drawing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_DRAWSYNC">SCE_GE_SIGNAL_DRAWSYNC</a> (0x08) is read, geman temporarily completes the drawing and executes the playlist continuation after drawing is completed.<br>Note that to use this extended command, you must place CMD_FINISH + CMD_END following CMD_SIGNAL + CMD_END as shown in the figure.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7  Synchronize drawing</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">The succeeding command is restarted after all of the commands in the sequence CMD_SIGNAL + CMD_END + CMD_FINISH + CMD_END are completed.<br><a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_DRAWSYNC">SCE_GE_SIGNAL_DRAWSYNC</a> can be used when CMD_XSTART is used for copying a display list to the GE eDRAM or when CMD_JUMP or CMD_CALL are used to transfer control. The completion of the CMD_XSTART transfer can only be detected by a FINISH interrupt as a result of a CMD_FINISH. This is because the display list must be stopped by the CMD_END command and restarted again to disable the display list read ahead operation that is performed by the Graphics Engine and to recognize the data that was transferred by CMD_XSTART as a new display list.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>SCE_GE_SIGNAL_JUMP (0x10) - Jump</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_JUMP">SCE_GE_SIGNAL_JUMP</a> (0x10) is read, geman performs an absolute address unconditional jump in the display list. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the jump destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the jump destination address.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8 Jump</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_6"><h4>
+(6)&nbsp;<b>SCE_GE_SIGNAL_CALL (0x11) - Call</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_CALL">SCE_GE_SIGNAL_CALL</a> (0x11) is read, geman performs an absolute address call of the display list. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the call destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the call destination address.<br><br>The maximum call nesting depth is specified by <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> when the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function is used to enqueue the display list.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English009.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 9 Call</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_7"><h4>
+(7)&nbsp;<b>SCE_GE_SIGNAL_RET (0x12) - Return</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RET">SCE_GE_SIGNAL_RET</a> (0x12) is read, geman returns to the location from which the display list had previously been called.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English010.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 10  Return</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_8"><h4>
+(8)&nbsp;<b>SCE_GE_SIGNAL_RJUMP (0x13) - Relative address jump</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RJUMP">SCE_GE_SIGNAL_RJUMP</a> (0x13) is read, geman performs a relative address unconditional jump in the display list. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address. The relative address reference point is the address at which CMD_SIGNAL had been placed.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English011.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 11  Relative address jump</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_9"><h4>
+(9)&nbsp;<b>SCE_GE_SIGNAL_RCALL (0x14) -  Relative address call</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RCALL">SCE_GE_SIGNAL_RCALL</a> (0x14) is read, geman performs a relative address call in the display list. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address. The relative address reference point is the address at which CMD_SIGNAL had been placed.<br><br>The maximum call nesting depth is specified by <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> when the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function is used to enqueue the display list.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English012.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 12  Relative address call</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_10"><h4>
+(10)&nbsp;<b>SCE_GE_SIGNAL_OJUMP (0x15) - Relative offset jump</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OJUMP">SCE_GE_SIGNAL_OJUMP</a> (0x15) is read, geman performs a relative offset unconditional jump in the display list. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address. The relative address reference point is the offset address that had been set by the CMD_OFFSET or CMD_ORIGIN command.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English013.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 13  Relative offset jump</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_11"><h4>
+(11)&nbsp;<b>SCE_GE_SIGNAL_OCALL (0x16) - Relative offset call</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OCALL">SCE_GE_SIGNAL_OCALL</a> (0x16) is read, geman performs a relative offset call in the display list. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address. The relative address reference point is the offset address that had been set by the CMD_OFFSET or CMD_ORIGIN command.<br><br>The maximum call nesting depth is specified by <a href="../graphics/GE-Reference-English.htm#SceGeListOptParam">SceGeListOptParam</a> when the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function is used to enqueue the display list.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English014.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 14  Relative offset call</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_12"><h4>
+(12)&nbsp;<b>SCE_GE_SIGNAL_RTBP0-7 (0x20-27) - Relative address texture</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RTBP0-7">SCE_GE_SIGNAL_RTBP0-7</a> (0x20-27) is read, geman rewrites the display list to CMD_TBP0-7 + CMD_TBW0-7, which sets the calculated texture base point according to a relative address. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address, and bits 23 to 15 of CMD_END are the texture buffer width. The relative address reference point is the address at which CMD_SIGNAL had been placed.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English015.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 15  Relative address texture</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_13"><h4>
+(13)&nbsp;<b>SCE_GE_SIGNAL_OTBP0-7 (0x28-2F) - Relative offset texture</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OTBP0-7">SCE_GE_SIGNAL_OTBP0-7</a> (0x20-27) is read, geman rewrites the display list to CMD_TBP0-7 + CMD_TBW0-7, which sets the calculated texture base point according to a relative address. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address, and bits 23 to 15 of CMD_END are the texture buffer width. The relative address reference point is the offset address that had been set by the CMD_OFFSET or CMD_ORIGIN command.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English016.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 16  Relative offset texture</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_14"><h4>
+(14)&nbsp;<b>SCE_GE_SIGNAL_RCBP (0x30) - Relative address CLUT</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_RCBP">SCE_GE_SIGNAL_RCBP</a> (0x30) is read, geman rewrites the display list to CMD_CBP + CMD_CBW, which sets the calculated CLUT base point according to a relative address. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address. The relative address reference point is the address at which CMD_SIGNAL had been placed.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English017.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 17  Relative address CULT</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_15"><h4>
+(15)&nbsp;<b>SCE_GE_SIGNAL_OCBP (0x38) - Relative offset CLUT</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When CMD_SIGNAL for which bits 16 to 23 are <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_OCBP">SCE_GE_SIGNAL_OCBP</a> (0x38) is read, geman rewrites the display list to CMD_CBP + CMD_CBW, which sets the calculated CLUT base point according to a relative address. Bits 15 to 0 of CMD_SIGNAL are the high-order 16 bits of the relative destination address, and bits 15 to 0 of CMD_END are the low-order 16 bits of the relative destination address. The relative address reference point is the offset address that had been set by the CMD_OFFSET or CMD_ORIGIN command.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English018.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 18  Relative offset CLUT</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_16"><h4>
+(16)&nbsp;<b>SCE_GE_SIGNAL_BREAK (0xFF) - Display list breakpoint</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When bits 16 to 23 of CMD_SIGNAL have the value <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_BREAK">SCE_GE_SIGNAL_BREAK</a> (0xFF), then when that command is read, geman stops the display list and CPU. The display list is stopped so that the debugger can perform step execution of display list commands. This stopped state is different from that which occurs when <a href="../graphics/GE-Reference-English.htm#sceGeBreak">sceGeBreak</a>() is called to interrupt drawing.<br>Bits 15 to 0 of CMD_SIGNAL can be freely set and used as a mark for distinguishing breakpoints.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/GE-Overview-English019.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 19  Display List Breakpoint</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Queuing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function is used to enqueue a created display list. When this function is called, the specified display list is added at the end of the queue that is being managed by geman.<br>Pointers to the display list starting address, stall address, callback ID, and context save area are specified as arguments of the <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() function.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1">
+<div style="margin-left:40px;"><h4><b>Stall Address</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If a stall address is specified, processing stalls when processing for transferring commands to the Graphics Engine has advanced to the specified location within the display list. By specifying a stall address in advance, processing can be performed in which only the leading part of the display list is created and queued and the continuation is created and added while geman is transferring that leading part. When the display list continuation is added, the stall address should be updated by using the <a href="../graphics/GE-Reference-English.htm#sceGeListUpdateStallAddr">sceGeListUpdateStallAddr</a>() function.<br></div>
+<div style="margin-left:50px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GE-Overview-English020.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 20  Synchronization According to the Stall Address</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">The commands that are actually transferred are the ones up to the command immediately preceding the stall address. If the transfer address matches the stall address, processing stalls without transferring the command at that address.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2">
+<div style="margin-left:40px;"><h4><b>Callback ID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If a callback ID is specified, the specified callback function is called when the end of drawing is reached for that display list, or a CMD_SIGNAL is executed in that display list. Use <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() funtion to register a callback function in advance and specify the callback ID that was returned at that time. If a callback function need not be called, specify a negative value as the callback ID.<br>For an additional explanation, refer to the section entitled "<u><a href="../graphics/GE-Overview-English.htm#Heading3_5">Using Callback Functions to Synchronize Processing</a></u>."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3">
+<div style="margin-left:40px;"><h4><b>Context Saving</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If a pointer to a context save area is specified, processing is performed for saving the context before drawing of that display list starts, and restoring that context when drawing ends. If context saving is unnecessary, specify NULL.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4">
+<div style="margin-left:40px;"><h4><b>sceGeListEnQueue() function Return Value</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The value returned by <a href="../graphics/GE-Reference-English.htm#sceGeListEnQueue">sceGeListEnQueue</a>() is a queue ID for uniquely representing the queued display list. For example, to synchronize with the end of drawing of a specific display list, specify the queue ID when calling <a href="../graphics/GE-Reference-English.htm#sceGeListSync">sceGeListSync</a>(). To synchronize with the end of the entire geman queue, call <a href="../graphics/GE-Reference-English.htm#sceGeDrawSync">sceGeDrawSync</a>().<br>Since the queue ID is recovered when the <a href="../graphics/GE-Reference-English.htm#sceGeDrawSync">sceGeDrawSync</a>() is called with blocking, the <a href="../graphics/GE-Reference-English.htm#sceGeDrawSync">sceGeDrawSync</a>() function must be called each time the drawing of one screen is completed.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Using Callback Functions to Synchronize Processing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">geman supports two types of callbacks. An interrupt is generated when the Graphics Engine processes a CMD_SIGNAL or CMD_FINISH that is contained in a display list, and when that interrupt is received, geman calls a signal callback function or finish callback function.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_1"><h4>
+(1)&nbsp;<b>Callback function registration</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To register a callback function, use <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() function. Entry pointers to signal callback functions and a finish callback function, respectively, and a pointer to a cookie area that is passed as an argument when each of those functions is called can be registered. Up to 16 callback functions can be registered at the same time. <a href="../graphics/GE-Reference-English.htm#sceGeSetCallback">sceGeSetCallback</a>() funtion returns a callback ID for identifying a registered callback function.<br>You must cancel the registration of a callback function that will no longer be used by using the <a href="../graphics/GE-Reference-English.htm#sceGeUnsetCallback">sceGeUnsetCallback</a>() function.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_2"><h4>
+(2)&nbsp;<b>Queuing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the callback ID that was returned when a callback function was registered is specified when queuing a display list, the relevant callback function is called when the Graphics Engine processes a CMD_SIGNAL or CMD_FINISH that is contained in that display list.<br>When queuing a display list for which a callback is unnecessary, specify a negative number as the callback ID.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3"><h4>
+(3)&nbsp;<b>Calling a Signal Callback</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The signal callback function is called when the extended function of the CMD_SIGNAL command is used to execute <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_WAIT">SCE_GE_SIGNAL_SIGNAL_WAIT</a>, <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>, or <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_PAUSE">SCE_GE_SIGNAL_SIGNAL_PAUSE</a>. The signal callback function is executed as an interrupt handler and does not return a value.<br><br>The low-order 16 bits of the CMD_SIGNAL that caused the callback function to be called are passed in the first argument <i>intrcode</i>. A pointer to the Cookie area that was specified by <i>pSignalCookie</i> when the callback function was registered is passed as is, in the second argument <i>cookie</i>. The display list address when this interrupt occurred is passed in the third argument. However, when the signal callback function is called due to <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_SIGNAL_NOWAIT">SCE_GE_SIGNAL_SIGNAL_NOWAIT</a>, the argument <i>madr</i> is meaningless. This is because the execution of the subsequent display list has been restarted before the signal callback function is called.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_4"><h4>
+(4)&nbsp;<b>Calling a Finish Callback</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the display list is interfered with due to the CMD_FINISH+CMD_END commands, the finish callback function is called. The finish callback function is executed as an interrupt handler and does not return a value.<br></div>
+<div style="margin-left:67px;"><br>The low-order 16 bits of the CMD_FINISH that caused the callback function to be called is passed in the first argument <i>intrcode</i>. A pointer to the Cookie area that was specified by <i>pSignalCookie</i> when the callback function was registered is passed as is, in the second argument <i>cookie</i>. The address at which the display list ended is passed in the third argument.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Display List Debugging</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">By placing <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_BREAK">SCE_GE_SIGNAL_BREAK</a> in a display list, you can perform debugging operations such as single step execution of the display list. This section explains how to perform debugging by using dstdb.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>SCE_GE_SIGNAL_BREAK Array</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">First, set <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_BREAK">SCE_GE_SIGNAL_BREAK</a> in advance in the display list to be debugged.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>_sceGupCommand(pCtx, SCE_GE_SET_SIGNAL_BREAK(0x1234));
+_sceGupCommand(pCtx, SCE_GE_SET_END_BREAK());
+</font></pre></div>
+<div style="margin-left:50px;"><br>With SCE_GE_SET_SIGNAL_BREAK(), an arbitrary 16-bit value can be used as a mark. When breakpoints are set at multiple locations, this mark can be freely used to verify the position at which execution stopped.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Notification That a Breakpoint was Reached</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the Graphics Engine reaches an <a href="../graphics/GE-Reference-English.htm#SCE_GE_SIGNAL_BREAK">SCE_GE_SIGNAL_BREAK</a> in a display list, a notification is sent to the debugger. With dstdb, the following message is displayed and the program is stopped.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb 0S0&gt; reset
+dstdb 0S0&gt; mstart ????.prx
+*** Unexpected reply - type=BREAKR code=ff result=AWBRKPT
+*** Target program stopped. Check the location by dr -ge command.
+dstdb 0S0&gt; 
+</font></pre></div>
+<div style="margin-left:50px;"><br>When the program is stopped by the Graphics Engine, threads and interrupt handlers that run within ALLEGREX CPU are not executed, and not just the Graphics Engine.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Verification of the State When a Breakpoint is Reached</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a display list breakpoint is reached, the dr -ge command of dstdb can be used to verify the display list stopped state.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>*** Unexpected reply - type=BREAKR code=ff result=AWBRKPT
+*** Target program stopped. Check the location by dr -ge command.
+dstdb 0S0&gt; dr -ge
+ ge_cur=  0c000000 ge_list= 00000000 ge_oadr= 00000000
+ ge_madr= 0880f610 ge_sadr= 00000000 ge_vadr= 00000000 ge_iadr= 00000000
+ ge_radr1=00000000 ge_radr2=00000000 ge_oadr1=00000000 ge_oadr2=00000000
+ ge_ist=  -------- ge_iss=  -------- ge_ies=  --------
+  0x0880f600: 0x00000000  CMD_NOP (LABEL=0x00000000)
+  0x0880f604: 0x0880edfc  CMD_JUMP (ADDR=0x0080edfc)
+  0x0880f608: 0x0e120000  CMD_SIGNAL (CMD=RET)
+  0x0880f60c: 0x0c000000  CMD_END (noparam)
+-&gt;0x0880f610: 0x0eff1234  CMD_SIGNAL (CMD=BREAK, MARK=0x1234)
+  0x0880f614: 0x0c000000  CMD_END (noparam)
+  0x0880f618: 0x00000001  CMD_NOP (LABEL=0x00000001)
+  0x0880f61c: 0x00000002  CMD_NOP (LABEL=0x00000002)
+dstdb 0S0&gt; 
+</font></pre></div>
+<div style="margin-left:50px;"><br>Some of the Graphics Engine control registers and the location where the display list stopped are displayed here.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Register Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_CUR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Command that was executed last&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_LIST&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;List operation&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_OADR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_MADR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display list address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_SADR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stall address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_VADR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Vertex buffer address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_IADR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Index buffer address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_RADR1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return address stack 1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_RADR2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return address stack 2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_OADR1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset address stack 1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GE_OADR2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset address stack 2&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Although details about each register are not publicly available, the only relevant one here is GE_MADR, which indicates the current address. dstdb displays a -&gt; mark at the current address of the display list.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>Verification of Graphics Engine Command Registers</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The dr command can be used to verify the contents of command registers that are set by the display list.<br><br>If the following command is entered<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb 0S0&gt; dr ge
+</font></pre></div>
+<div style="margin-left:50px;"><br>All displayable Graphics Engine registers are displayed. It is also possible to display only the commands or to display only a specific command register or specific matrix register.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb 0S0&gt; dr ge_cmd
+dstdb 0S0&gt; dr ge_cmd_le0
+dstdb 0S0&gt; dr ge_proj
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>Single Step Execution of the Display List</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">From a program which was stopped by the Graphics Engine, the following display list can be executed a single step at a time. The dstdb gstep command is used to do this.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb 0S0&gt; gstep
+*** MADR=0x0880f618
+*** AW Step or Next
+ ge_cur=  0c000000 ge_list= 00000000 ge_oadr= 00000000
+ ge_madr= 0880f618 ge_sadr= 00000000 ge_vadr= 00000000 ge_iadr= 00000000
+ ge_radr1=00000000 ge_radr2=00000000 ge_oadr1=00000000 ge_oadr2=00000000
+ ge_ist=  -------- ge_iss=  -------- ge_ies=  --------
+  0x0880f608: 0x0e120000  CMD_SIGNAL (CMD=RET)
+  0x0880f60c: 0x0c000000  CMD_END (noparam)
+  0x0880f610: 0x0eff1234  CMD_SIGNAL (CMD=BREAK, MARK=0x1234)
+  0x0880f614: 0x0c000000  CMD_END (noparam)
+-&gt;0x0880f618: 0x00000001  CMD_NOP (LABEL=0x00000001)
+  0x0880f61c: 0x00000002  CMD_NOP (LABEL=0x00000002)
+  0x0880f620: 0x00000003  CMD_NOP (LABEL=0x00000003)
+  0x0880f624: 0x00000004  CMD_NOP (LABEL=0x00000004)
+</font></pre></div>
+<div style="margin-left:50px;"><br>The Graphics Engine stops after only one command is executed, and the program is again placed in a stopped state. Note that, at this time, the ALLEGREX CPU is momentarily running in order to execute the Graphics Engine for a single step. Thread or interrupt handler processing may be dispatched.<br><br>The gstep, gnext, and gcont commands can be used with dstdb. The gcont command is used to continue execution of the following display list to the end. At the same time, a breakpoint can be set from the debugger by using the gbp command.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

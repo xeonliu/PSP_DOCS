@@ -1,0 +1,535 @@
+<html lang="jp">
+<head>
+<title>libmp4-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libmp4
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>libmp4の概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4は、MP4ファイルの動画、音声ストリームデータを多重分離(demultiplex)するライブラリです。多重分離(demultiplex)により得られたビデオトラック、オーディオトラックは、それぞれ、libmpegのAVCデコード機能とlibmp4のAACデコード機能を使うことでデコードすることができます。<br>取り出したビデオ、オーディオトラックのデータについては、1サンプル(1アクセスユニット)ずつデコードすることができます。PSP&reg;はAVCおよびAACのデコード専用ハードウェアを搭載していますので、デコードを高速で行うことができます。<br><br>扱えるMP4ファイルのフォーマットは以下の通りになります(MP4ファイルを作成するツールは提供していません。外部の一般的なツールを使って生成してください)。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>MP4</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> フラグメントムービーではないもの
+<li> ビデオ、オーディオそれぞれ0ないし1トラックずつの多重分離(demultiplex)
+<li> 4GBまでのファイルサイズのもの
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2">
+<div style="margin-left:40px;"><h4><b>ビデオ</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> AVC Main Profile Lv2.1 (エントロピー符号はCABACのみ対応)
+<li> 画枠は64x64から480x272pixel (16pixel単位) 参照画像3枚
+<li> フレームレートは29.97Hzでプログレッシブのもの
+<li> Durationは1frameから4.97時間
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_3">
+<div style="margin-left:40px;"><h4><b>オーディオ</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> 対応サンプリング周波数は24000/32000/44100/48000Hz
+<li> 対応コーデックはMPEG4 AAC-LC(SBRなし)
+<li> ヘッダなし(faw_data_frame()のみ)のAACデータ
+<li> ステレオあるいはモノラルのみに対応
+<li> Durationは1frameから4.97時間
+</ul></div>
+<div style="margin-left:50px;"><br>PSP&reg;システムソフトウェアから起動するビデオ機能で再生できることがひとつの目安になりますが、必ずしも再生できるもの全てがlibmp4で使えるとは限りません。例えばビデオ再生機能にはAVC Baselineプロファイルにも対応していますが、libmp4では非対応なので再生できません。<br><br>AVCデコードはlibmpegを使用します。AVCデコードやデコード後のYCbCrやRGBAでの画像の扱いや注意事項に関してはlibmpegのドキュメントを参考にしてください。<br><br>AACデコード出力可能なPCMデータのフォーマットは、ビット深度16ビットのステレオのみです。入力がモノラルのAACデータであってもデコード結果としては、左右同一のステレオデータが出力されます。また、libmp4はデコードされたPCMデータをオーディオ出力する機能は提供していません。PCMデータをオーディオ出力する場合には、vaudioを併せて利用する必要があります。libwaveまたはsimple audioは44100HzのPCMデータしか扱えないため、必ずvaudioを利用してください。PCMデータをオーディオ出力するための方法は、別資料の「サウンド概要」に記載されていますので必要に応じて参照してください。<br>また、libmp4はlibaacと同時に使用することはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4の構成を以下に示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp4-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  libmp4の構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4を利用する際に必要なファイルは、次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp4.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp4_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libmp4_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">MP4ファイル中のAVCトラックを扱うのであれば、libmpegモジュールも必要になります。また、libmp4, libmpegモジュールおよびその下請けとなる処理を行うモジュールをロードするために、utility機能を用いる必要があります。詳しくはutility概要をご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>関連ドキュメント</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> libmpeg<br>AVCデコードはlibmpegの関数を使用します。ビデオを扱う場合に参照してください
+<li> ユーティリティサービス概要ドキュメント「モジュールユーティリティ」章<br>libmp4モジュール他をロードするのに用いるutility機能に関するドキュメントです。
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>動画再生処理の流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">次の図は、データフローを具体的な関数名 / 構造体名に置き換えて示したものです。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp4-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  具体的なデータフロー</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">これらの関数 / 構造体を用いて動画再生を行う処理全体の流れは次のようになります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libmp4-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  動画再生処理の流れ</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">まず、AVCデコードも行う場合には先にlibmpegの初期化を行います(AACデコードのみ扱う場合にはlibmpegの初期化は不要です)。<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegInit">sceMpegInit</a>()を呼び出します。その後<i>iMpegMode</i>引数にSCE_MPEG_MODE_ONLY_AVC_DECODEを指定して<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegQueryMemSize">sceMpegQueryMemSize</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegCreate">sceMpegCreate</a>()と呼び出し、libmp4向けのAVCデコーダの初期化を行います。<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegCreate">sceMpegCreate</a>()の<i>pAVCTop</i>引数には<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>()呼び出し後に使える<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceGetAvcDecTopAddr">sceMpegAvcResourceGetAvcDecTopAddr</a>()の戻り値を使用します。<br>次に<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Init">sceMp4Init</a>()を行い、libmp4の初期化を行います。その後<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Create">sceMp4Create</a>()でMP4ファイルに対応するMP4ファイルの多重分離(demultiplex)の準備を行います。この関数の<i>pSceMp4FileFp</i>を使ってlibmp4はファイルアクセスを行い、<i>pReadCacheBuf</i>から<i>iReadCacheSize</i>分をファイルリードの為のバッファ領域として使用します。<br><a href="../movie/libmp4-Reference-Japanese.htm#sceMp4RegistTrack">sceMp4RegistTrack</a>()によって、多重分離(demultiplex)するためのAVCトラック、AACトラックの設定をします。ここでも<i>pSceMp4FileFp</i>を使って各トラックのバッファリング時に使用するファイルアクセスの設定を行います。また、各トラックのバッファリングの設定をこの後の<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>()で行います。その後、多重分離(demultiplex)の際に生成されるデコード前の1サンプル(1アクセスユニット)を格納するバッファ領域を設定するために、<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4InitAu">sceMp4InitAu</a>()(もしくは<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegInitAu">sceMpegInitAu</a>()でも可)を呼び出して設定を行います。AVCトラックの場合には先ほど呼び出した<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>()でメインメモリ上に専用の領域が確保されるので、<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceGetAvcEsBuf">sceMpegAvcResourceGetAvcEsBuf</a>()を使ってバッファリング領域を取り出します。AACトラックの場合にはユーザがメインメモリから64byteアラインメントで8192byte分のサイズを確保して設定を行ってくださいAACデコードを行う場合には<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecodeInitResource">sceMp4AacDecodeInitResource</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecodeInit">sceMp4AacDecodeInit</a>()を呼び出してAACデコーダの準備を行います。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>サンプルバッファへのデータ読み込み</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>()を使い<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>()を使って設定したサンプルバッファ格納領域へMP4ファイルより読み込みを行います。MP4ファイルアクセスにより読み込まれる単位は<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Create">sceMp4Create</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>()の<i>iReadCacheSize</i>がベースになるので、必ずファイルシステムの基準となる単位での設定にしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>エレメンタリストリームの取り出し（多重分離処理）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サンプルバッファ中のMP4データから、1アクセスユニット分のストリームを取り出すには、ストリームの種類ごとに別の関数を用いる必要があります。具体的にはビデオストリームは<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>()、オーディオストリームは<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>()を用います。これらの関数を呼び出した際、タイムスタンプ（PTS, DTS）が取得できる場合はこれらの情報も取得されます。<br>サンプルバッファ中にあるMP4データが1アクセスユニット分に満たないときに上記多重分離(demultiplex)関数を呼び出すと、<a href="../movie/libmp4-Reference-Japanese.htm#SCE_MPEG_ERROR_MP4_NO_DATA">SCE_MPEG_ERROR_MP4_NO_DATA</a>が戻り値として返されます。この場合、手順(2)に戻って<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>()でサンプルバッファにMP4データを読み込み、もう一度上記関数を呼び出すことで、ビデオ/オーディオデコードに必要なエレメンタリストリームを取り出すことができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>ビデオ / オーディオデータのデコード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ビデオトラックのデコードはlibmpegのAVCデコード関数<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcDecode">sceMpegAvcDecode</a>()で行います。デコード結果はRGBA(32bit)形式で左上から右下の方向にラスタスキャンした画像となります。デコード結果をYCbCr形式で取得する関数もありますがここでは説明を省略します。<br>AAC形式のオーディオストリームをデコードするには<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecode">sceMp4AacDecode</a>()を使います。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>ビデオ / オーディオデータのデータ出力</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">デコード後のビデオ / オーディオデータをLCDやオーディオデバイスに出力する処理は、libmp4ではサポートしていませんので適宜行ってください。<br>出力後は手順(3)に戻り、エレメンタリストリームの続きを取り出し、デコードし、出力する処理を繰り返します。<br><a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAvcTrackInfoData">sceMp4GetAvcTrackInfoData</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAacTrackInfoData">sceMp4GetAacTrackInfoData</a>()で各トラックの総サンプル数、総再生時間が取得できるのと<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>()で得られるサンプルのサンプル番号やPTS, DTSより再生停止を判定して(6)終了へ進みます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>終了</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ビデオストリームの最後のフレームの参照画像がAVCデコーダに残っていることがありますので、<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcDecodeStop">sceMpegAvcDecodeStop</a>()を呼び出して残っているデータを読み出します。<br>一連の処理の為のリソースの解放の為に多重分離(demultiplex)後のエレメンタリストリームの保存先AACデコードバッファを解放し<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecodeExit">sceMp4AacDecodeExit</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecodeTermResource">sceMp4AacDecodeTermResource</a>()を使ってAACデコードリソースを解放します。ビデオストリーム用のデコードバッファは<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegDelete">sceMpegDelete</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceFinish">sceMpegAvcResourceFinish</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegFinish">sceMpegFinish</a>()で解放します。<br>MP4の多重分離(demultiplex)に関してのリソースの解放のために<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufDestruct">sceMp4TrackSampleBufDestruct</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4UnregistTrack">sceMp4UnregistTrack</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Delete">sceMp4Delete</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Finish">sceMp4Finish</a>()を呼び出して終了します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>トラックタイプについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">MP4ファイル中の扱えるトラックタイプは以下のものになります。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>要素トラック</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>トラックタイプ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;AVC(CABAC)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MP4_TRACK_AVC_CABAC&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;AAC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_MP4_TRACK_AAC&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">上記のようにビデオデータとしてはAVCのデータ、オーディオデータとしてはAACのデータを1本ずつ扱うことができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>バッファの確保について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4を使用する際には、以下に示すバッファがlibmp4によって確保される、もしくはユーザが用意する必要があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_4">
+<div style="margin-left:40px;"><h4><b>libmp4が多重分離(demultiplex)の為に使用するワークメモリ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Init">sceMp4Init</a>()関数を呼び出した際にスレッドマネージャの固定長メモリプール機能を使用してメモリを割り当てます。SCE_MP4_DEMUX_NORMAL_TYPE_OF_BUFFER_SIZE, SCE_MP4_DEMUX_HIGH_TYPE_OF_BUFFER_SIZEのどちらかを設定する必要がありますがそれぞれ64KB, 256KBずつ消費します。<br>通常のMP4ファイルではSCE_MP4_DEMUX_NORMAL_TYPE_OF_BUFFER_SIZEの指定で十分ですが、複数トラック構成のMP4ファイルではメモリが足りなくなることがあり、<a href="../movie/libmp4-Reference-Japanese.htm#SCE_MPEG_ERROR_MP4_MEMORY_ALLOC">SCE_MPEG_ERROR_MP4_MEMORY_ALLOC</a>エラーが発生します。その場合にはSCE_MP4_DEMUX_HIGH_TYPE_OF_BUFFER_SIZEに設定することでエラーを回避することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_5">
+<div style="margin-left:40px;"><h4><b>libmp4が多重分離(demultiplex)の為にファイル読み込みを行うためのリードバッファ領域</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libmp4は多重分離(demultiplex)を行うためにMP4ファイル情報(moov box)を読むためのファイルリードバッファが必要になり<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Create">sceMp4Create</a>()で設定する必要があります。大きく確保することで、ファイルへのアクセスを減らすことができます。1024byte以上であれば任意の値を設定できますが、ファイルアクセスのアラインメントおよび一度に読み込むサイズになりますので、ファイルが格納されているメディアに合わせて設定をしないと多重分離(demultiplex)のパフォーマンスが落ちることになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_6">
+<div style="margin-left:40px;"><h4><b>sceMp4TrackSampleBufConstruct()で設定するSampleBuf用のバッファリング領域</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">SampleBufには、それぞれのトラックにあわせて多重分離(demultiplex)されたサンプルのデータを確保しておきます。平均、最大ビットレートの値とバッファリングを行うサンプル数、及びファイルアクセスの為のバッファ領域のサイズより使用するメモリサイズを<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufQueryMemSize">sceMp4TrackSampleBufQueryMemSize</a>()より決定し、ユーザにメモリ領域を確保してもらった後に<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>()にて設定します。SampleBufのバッファリングサイズを大きくすることでファイルアクセスによるシークの揺らぎを吸収することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_7">
+<div style="margin-left:40px;"><h4><b>デコーダに入力するサンプルデータを保存するバッファ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">AVCデコーダに入力するためのバッファ領域としてはlibmpegの<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceGetAvcEsBuf">sceMpegAvcResourceGetAvcEsBuf</a>()で返されるハンドルを使います。<br>AACデコーダに入力するためのバッファ領域はユーザーが用意した64byteアラインメントで8192byte確保した領域を用意してください。<br>その後、<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4InitAu">sceMp4InitAu</a>()(もしくは<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegInitAu">sceMpegInitAu</a>())を使って<a href="../movie/libmpeg-Reference-Japanese.htm#SceMpegAu">SceMpegAu</a>構造体を初期化してください。<br>AVCデコーダとしては、libmpegの<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcResourceInit">sceMpegAvcResourceInit</a>()を呼び出す際に128KiBほど確保されます。<br>AacAACデコーダとしては、別途AACデコーダのワークエリアとして100KiBほど<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecodeInitResource">sceMp4AacDecodeInitResource</a>()を呼び出す際に確保されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_8">
+<div style="margin-left:40px;"><h4><b>デコード後に出力されるデータバッファ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">AVCデコーダからの出力はRGBA形式でデコードする場合、デコード結果を保存するバッファは、<i>iFrameWidth</i>×垂直方向のピクセル数×4(RGBA)byte以上必要です。また必ず16byteアラインメントで確保してください。YCbCr形式で出力することも可能ですが、詳しくはlibmpegのマニュアルを参照ください。<br>AVCデコーダからの出力は1アクセスユニット分のAVCデコードに対して出力が0～4frameとふらつきがあります(格納されているAVCストリームに依存します)。<br>AACデコーダからの出力は1024サンプルで16bit長で2ch分のデータとして4096byteのデータとして出力されます。必ず64byteアラインメントで確保してください<br>初期化してから最初の2アクセスユニットのAACデコードに関しては出力がありません。その後は常に1024サンプル分の出力が続きます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>libmp4でのファイルからのデータ読み出しについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4では、多重分離を行うために<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegCreate">sceMpegCreate</a>()および<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4RegistTrack">sceMp4RegistTrack</a>()で指定する<a href="../movie/libmp4-Reference-Japanese.htm#SceMp4FileFp">SceMp4FileFp</a>構造体で指定するファイルハンドラと、libmp4がファイルアクセスに使用するコールバック関数を登録します。<br>それぞれ、<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Create">sceMp4Create</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>()で指定した<i>iReadCacheSize</i>を元にファイルアクセスを行います。どちらも1024byte以上の単位であれば設定できますが、あまりにも小さなファイルや半端なサイズでは、ファイルの格納メディアによってはファイルアクセスが非常に遅くなる可能性があります。それぞれのファイル格納のメディアにあわせて適切なサイズを設定してください。<br>また、コールバック関数内での読み込みでsceIoRead()などで読む場合には問題ないですが、memcpy()などでデータキャッシュを経由する場合には、必ず<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>()などでデータキャッシュからメインメモリに書き出してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>ファイル格納メディアについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">MP4ファイルの特性上、MP4ファイル中のAVC, AACのエレメンタリストリームが配置してある箇所(mdat box)とデータベースの配置してある箇所(moov box)の間隔に制約ない及びビデオ、オーディオのインタリーブの間隔に制約がないため、UMD&reg;にファイルを格納して再生させた場合にシークが発生してしまい、これによりAV同期を保証することができません。オープニングムービーなどをUMD&reg;にファイルとして格納して運用する場合には、可能な限りPSMFを使うようにしてください。どうしてもMP4ファイルでないと問題があるような場合にのみ使用するようにして、扱うMP4ファイルで十分チェックを行って問題ない場合にのみ使用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>ビデオデコードに関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">AVCデコードに関してはlibmpegのドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>AACデコード結果のオーディオデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecode">sceMp4AacDecode</a>()でデコードした結果のオーディオデータは1024サンプル単位での出力となり、PCMデータのフォーマットはビット深度16ビットのステレオのみです。入力がモノラルのAACデータであっても、デコード結果としては左右同一のステレオデータが出力されます。また、libmp4は、デコードされたPCMデータをオーディオ出力する機能は提供していません。PCMデータをオーディオ出力する場合には、vaudioを併せて利用する必要があります。libwaveまたはsimple audioは44100HzのPCMデータしか扱えないため、必ずvaudioを利用してください。PCMデータをオーディオ出力するための方法は、別資料の「サウンド概要」に記載されていますので必要に応じて参照してください。<br>また、libmp4はlibaacと同時に使用することはできませんのでご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>AACデコードに関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">AACエレメンタリストリームのデコードは、必ず<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecode">sceMp4AacDecode</a>()を使用して行ってください。また、新たな再生位置からデコードを開始する場合には、そのたび毎にAACデコーダを初期化してください。<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecode">sceMp4AacDecode</a>()の<i>iInitFlag</i>引数を1にして呼び出すことで初期化できます。連続して2回目以降のAACデコードをする際には<i>iInitFlag</i>変数を0にしてデコードしてください。なお、初期化から2回目のAACデコードまでは出力がありません。3回目のデコードよりPCMデータの出力が始まります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_9">
+<h3>
+<a href="#Heading3_2"> 2. </a>9 
+<!-- hp1 --><b>参考：libmpegに慣れている方へ libmp4を使う場合の相異点に関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">関数の使い方に関しては、名前が異なるだけで基本的なところはかなり似ています。大きな違いとしては、多重分離(demux)のバッファの扱い方となります。<br>まずlibmpegでは、扱うストリームがPSMFでバッファリングの単位がファイル全体を扱う<a href="../movie/libmpeg-Reference-Japanese.htm#SceMpegRingbuffer">SceMpegRingbuffer</a>構造体で管理しておき、それぞれデコードをしたいAVC, ATRAC3plus&trade;ストリームを多重分離(demux)してデコードする流れでした。<br>一方libmp4では、扱うストリームがMP4ファイルとなりバッファリングがファイル全体ではなく、それぞれのAVC, AACのストリーム(トラック)単位となります。このAVC, AACのエレメンタリストリームをバッファリングするものをSampleBufという概念で管理し、多重分離(demux)を行います。多重分離(demux)後は、<a href="../movie/libmpeg-Reference-Japanese.htm#SceMpegAu">SceMpegAu</a>構造体に1アクセスユニット(サンプル)単位に取り出されますので、後はlibmpegと同様にデコードを行います。<br><br>上記を具体的に書くと<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../movie/libmpeg-Reference-Japanese.htm#SceMpegRingbuffer">SceMpegRingbuffer</a>構造体を使用する関数<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRingbufferPut">sceMpegRingbufferPut</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRingbufferAvailableSize">sceMpegRingbufferAvailableSize</a>()の代わりに、<a href="../movie/libmp4-Reference-Japanese.htm#SceMp4Track">SceMp4Track</a>構造体を使用する関数<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufAvailableSize">sceMp4TrackSampleBufAvailableSize</a>()を使用します。
+<li> <a href="../movie/libmpeg-Reference-Japanese.htm#SceMpegRingbuffer">SceMpegRingbuffer</a>構造体で保持しているデータよりそれぞれ<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegGetAvcAu">sceMpegGetAvcAu</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegGetAtracAu">sceMpegGetAtracAu</a>()の代わりに、<a href="../movie/libmp4-Reference-Japanese.htm#SceMp4Track">SceMp4Track</a>構造体のSampleBufferで保持しているデータより<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>(), <a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>()を使って多重分離(Demux)を行います。
+<li> AVCのデコードに関しては、libmpegのAVCデコード関数<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcDecode">sceMpegAvcDecode</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAvcDecodeYCbCr">sceMpegAvcDecodeYCbCr</a>()をそのまま使います。AACのデコードに関しては、libmpegの<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegAtracDecode">sceMpegAtracDecode</a>()の代わりにlibmp4のAACデコード関数<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4AacDecode">sceMp4AacDecode</a>()で行います。
+</ul></div>
+<div style="margin-left:50px;"><br>またlibmp4では、基本的にMP4規格書(ISO/IEC 14496-12, 14496-15)の用語を使用しています。分からない用語がありましたら、「参考：用語に関して」をご参照ください。<br>これだけ理解できていれば基本的な操作はできるはずです。<br><br>API機能イメージとしては以下がほぼ等価になります。詳しい機能説明は、リファレンスマニュアルをご参照ください。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>libmpeg関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>libmp4関数</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegInit">sceMpegInit</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Init">sceMp4Init</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegFinish">sceMpegFinish</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Finish">sceMp4Finish</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegCreate">sceMpegCreate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Create">sceMp4Create</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegDelete">sceMpegDelete</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4Delete">sceMp4Delete</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRegistStream">sceMpegRegistStream</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4RegistTrack">sceMp4RegistTrack</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegUnRegistStream">sceMpegUnRegistStream</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4UnregistTrack">sceMp4UnregistTrack</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegGetAvcAu">sceMpegGetAvcAu</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegGetAtracAu">sceMpegGetAtracAu</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAacAu">sceMp4GetAacAu</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRingbufferQueryMemSize">sceMpegRingbufferQueryMemSize</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufQueryMemSize">sceMp4TrackSampleBufQueryMemSize</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRingbufferConstruct">sceMpegRingbufferConstruct</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufConstruct">sceMp4TrackSampleBufConstruct</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRingbufferDestruct">sceMpegRingbufferDestruct</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufDestruct">sceMp4TrackSampleBufDestruct</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegFlushStream">sceMpegFlushStream</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufFlush">sceMp4TrackSampleBufFlush</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRingbufferAvailableSize">sceMpegRingbufferAvailableSize</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufAvailableSize">sceMp4TrackSampleBufAvailableSize</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegRingbufferPut">sceMpegRingbufferPut</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4TrackSampleBufPut">sceMp4TrackSampleBufPut</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetNumberOfSpecificStreams">scePsmfGetNumberOfSpecificStreams</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetNumberOfSpecificTrack">sceMp4GetNumberOfSpecificTrack</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;prsmf.prxで利用するEP_Mapを扱う関数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetSampleNumWithTimeStamp">sceMp4GetSampleNumWithTimeStamp</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4SearchSyncSampleNum">sceMp4SearchSyncSampleNum</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithTimestamp">scePsmfGetEPWithTimestamp</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetSampleNumWithTimeStamp">sceMp4GetSampleNumWithTimeStamp</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetEPWithId">scePsmfGetEPWithId</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4SearchSyncSampleNum">sceMp4SearchSyncSampleNum</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPresentationStartTime">scePsmfGetPresentationStartTime</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetPresentationEndTime">scePsmfGetPresentationEndTime</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../movie/libpsmf-Reference-Japanese.htm#scePsmfGetNumberOfStreams">scePsmfGetNumberOfStreams</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetMovieInfo">sceMp4GetMovieInfo</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_10">
+<h3>
+<a href="#Heading3_2"> 2. </a>10 
+<!-- hp1 --><b>参考：用語に関して</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">基本的にMP4規格書(ISO/IEC 14496-12, 14496-15)の用語を使用している関係でlibmpegに慣れている方にはわかりづらくなっています。以下に簡単ですがlibmp4とlibmpegでの用語の違いについて解説します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>libmp4での用語</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>用語の解説</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ムービー&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MP4ファイル全体を管理している階層での情報や呼び名。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;トラック&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ビデオ・オーディオのそれぞれ1本の再生単位&nbsp;&nbsp;<br>&nbsp;&nbsp;libmpeg, libpsmfのビデオ、オーディオストリームの概念に相当します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サンプル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アクセスユニットと同じです。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;シンクサンプル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードが開始できるサンプル。AACの場合はどのサンプルからでも&nbsp;&nbsp;<br>&nbsp;&nbsp;デコード開始できます。AVCの場合にはIDR pictureとなります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DT&nbsp;&nbsp;<br>&nbsp;&nbsp;(Decoding Times)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デコードする時間です。libmpeg, libpsmfのDTSに相当します。&nbsp;&nbsp;<br>&nbsp;&nbsp;libmp4ではlibmpeg同様に単位が90kHzとなります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CT&nbsp;&nbsp;<br>&nbsp;&nbsp;(Composition Ttimes)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;表示する時間です。libmpeg, libpsmfのPTSに相当します。&nbsp;&nbsp;<br>&nbsp;&nbsp;libmp4ではlibmpeg同様に単位が90kHzとなります。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ライブラリ注意事項</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4の使用に関して以下の注意事項があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../movie/libmp4-Reference-Japanese.htm#SceMp4">SceMp4</a>構造体はプログラム全体で一つしか生成できません。複数生成した場合の動作は保証されません。
+<li> 複数のAVCおよびAACのエレメンタリストリームを多重化したMP4ストリームを扱うことはできません。一度にAVCおよびAACそれぞれに対して1つずつのデコードとなります。
+<li> あるMP4ファイルのデコード後に、別のMP4ファイルを続けて入力する場合は必ず多重分離(demultiplex)のSampleBufを初期化してください。
+<li> libmp4でMP4ファイルの読み込みの為に使用しているコールバック関数の実装は、sceIoRead()などで読む場合には問題ありませんが、memcpy()などでデータキャッシュを経由する場合には、必ず<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>()などでデータキャッシュからメインメモリに書き出してください。
+<li> MP4ファイルの特性上、MP4ファイル中のAVC, AACのエレメンタリストリームが配置してある箇所(mdat box)とデータベースの配置してある箇所(moov box)の間隔に制約がない及び、ビデオ / オーディオのインタリーブの間隔に制約がないため、UMD&reg;にファイルを格納して再生させた場合にシークが発生してしまい、AV同期を保証することができません。UMD&reg;にファイルを格納して運用する場合には、扱うMP4ファイルでチェックを行って問題ない場合にのみ使用してください。
+<li> AVCデコードに関しては、libmp4には機能はないのでlibmpegのAVC Decode機能を利用してください。MP4ファイル中のAVCストリームを再生する場合には、必ず新設されたlibmpegへの定義SCE_MPEG_MODE_ONLY_AVC_DECODEを<i>iMpegMode</i>引数に指定して<a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegQueryMemSize">sceMpegQueryMemSize</a>(), <a href="../movie/libmpeg-Reference-Japanese.htm#sceMpegCreate">sceMpegCreate</a>()を呼び出してください。PSMFファイルは、エンコーダで制約を加えたストリームを作成しており、一般的なMP4ファイルのAVCストリームをデコードできません。
+<li> 一般的なMP4 AVCトラックでは、B-ピクチャが存在する可能性があり、リオーダーが発生していることがあります。注意が必要なのは、<a href="../movie/libmp4-Reference-Japanese.htm#sceMp4GetAvcAu">sceMp4GetAvcAu</a>()での多重分離(demux)結果では、表示順(PTS)ではなく、デコード順(DTS)となっていることです。一方、PSP&reg;でのAVC Decoderのでデコード結果のイメージ出力(RGBAまたはYCbCr)は、必ず表示順(PTS)となります。よって、デコードに使用した<a href="../movie/libmpeg-Reference-Japanese.htm#SceMpegAu">SceMpegAu</a>構造体の順番とは違う順番でイメージ出力(RGBAまたはYCbCr)となることがあります。<a href="../movie/libmpeg-Reference-Japanese.htm#SceMpegAu">SceMpegAu</a>構造体のPTSと出力イメージ(RGBAまたはYCbCr)のマッチングを取る場合には、ソートして時間順にならべておく必要があります。具体的な方法については、mp4strサンプルなどをご参照ください。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>スタックサイズについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4のAPI呼び出しに必要なスタックサイズは、4096byteです。これよりも大きなスタックサイズを確保してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>終了処理について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libmp4では、内部的にMedia Engine側CPUの機能を呼び出しており、その際Media Engine内部資源の排他処理のためにセマフォなどを用いています。<br>その為libmp4の関数を実行中にlibmp4を呼び出しているスレッドを、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>()およびスレッドがDORMANT状態になる以前に<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>()を使って強制的に削除すると、タイミングによっては内部資源を握った状態でスレッドが削除されてしまうことがあります。この結果、libmp4などのMedia Engine側CPUの機能を用いる他のライブラリが正しく動作しなくなったりする危険性があります。<br><br>スレッドを停止させる場合は、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> スレッド停止を命じる側からスレッドに対して共有変数、イベントフラグなどを用いて終了を伝達する。
+<li> 停止させられるスレッド側は、上記フラグなどを定期的に監視しておき、停止命令が出ていないかを確認する。出ていた時は現在libmp4が動作していないことを確認した上で<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitThread">sceKernelExitThread</a>()を呼び出し、自スレッドを停止させる。
+</ul></div>
+<div style="margin-left:50px;">ようにして下さい(libmp4を用いた各種サンプルもこのような作りになっています)。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

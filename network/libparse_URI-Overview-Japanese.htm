@@ -1,0 +1,238 @@
+<html lang="jp">
+<head>
+<title>libparse_URI-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libparse_uri
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_uriは、RFC2396で定義されるURIをパース/ビルドするための機能と、URIに使用できない文字列などをエスケープ／アンエスケープ処理を行うための機能を提供するライブラリです。主にlibhttpが内部で使用するライブラリですが、単独でも使用することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_uriを使用するために必要なファイルは、次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">devkit/sample/net/libhttp/parse_uri/<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モジュールユーティリティAPIにてlibparse_uriモジュールをロードします。libparse_uriの使用には、特に初期化は必要ありません。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>文字列のエスケープ処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">URIに使用できる文字はアルファベット、数字、一部の記号("-", "_", ".", "!", "~", "*", "'", "(", ")"）、及び予約文字(";", "/", "?", ":", "@", "&amp;", "=", "+" , "$", ",")です。これら以外の文字を使用したい時や、予約文字を決められた場所以外に使用したい時には、文字列のエスケープ処理が必要となります。より詳しくは、Request for Comment(RFC)2396の付録Aに記述されていますので、ご覧ください。<br><br>以下のような手順で、文字列をエスケープ処理することができます。ただしlibparse_uri内部ではメモリを確保しないため、アプリケーションで出力用メモリを確保しておく必要があることにご注意ください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceSize	malloc_size;
+u_char	*plain =&quot;@=+/&quot;;
+u_char	*escape;
+
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriEscape">sceUriEscape</a>(NULL, &amp;malloc_size, 0, plain);
+escape = (u_char*)malloc (malloc_size); 
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriEscape">sceUriEscape</a>(escape, NULL, malloc_size, plain);
+
+</font></pre></div>
+<div style="margin-left:67px;">以上のように<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriEscape">sceUriEscape</a>()関数を使用することで、文字列のエスケープ処理が行われます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>文字列のアンエスケープ処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">以下のような手順でエスケープされた文字列をデコードできます。ただしlibparse_uri内部では、メモリを確保しないため、アプリケーションが出力用メモリを確保しておく必要があることにご注意ください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceSize	malloc_size;
+u_char	*escape = &quot;%40%3d%2b%2f&quot;;
+u_char	*plain;
+
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriUnescape">sceUriUnescape</a>(NULL, &amp;malloc_size, 0, escape );
+plain = (u_char*)malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriUnescape">sceUriUnescape</a> (plain, NULL, malloc_size, escape);
+
+</font></pre></div>
+<div style="margin-left:67px;">以上のように<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriUnescape">sceUriUnescape</a>()関数を使用することで、文字列のアンエスケープ処理が行われます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>URIのパース処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">下記のような構造をとるスキームのURIをパースすることが可能です。<br></div>
+<br>
+<div style="margin-left:67px;">&lt;scheme&gt;://&lt;username&gt;:&lt;password&gt;@&lt;hostname&gt;:&lt;port&gt;/&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;<br>&lt;scheme&gt;:&lt;username&gt;@&lt;hostname&gt;<br></div>
+<br>
+<div style="margin-left:67px;">後者は正確にはRFC2396に違反しているのですが、&lt;mailto:foo@foo.com&gt;のような表現と互換性をとるためにパース可能となっています。またスキームがないURI（相対URI）のパースには対応しておりません。<br><br>以下のような手順で、URIの文字列をパースすることができます。ただしlibparse_uri内部では、メモリを確保しないため、アプリケーションがメモリを確保する必要があることにご注意ください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	*uri = &quot;http://foo.com:443?hoge=1#test&quot;;
+void	*pool;
+SceSize	malloc_size;
+<a href="../network/libparse_URI-Reference-Japanese.htm#SceUriElement">SceUriElement</a>	element;
+
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriParse">sceUriParse</a>(NULL, uri, NULL, &amp;malloc _size, 0);
+pool = malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriParse">sceUriParse</a>(&amp;element, uri, pool, NULL, malloc_size);
+
+printf(&quot;scheme = %s\n&quot;, element.scheme);		//&quot;http&quot;
+printf(&quot;hostname = %s\n&quot;, element.hostname);		//&quot;foo.com&quot;
+printf(&quot;port = %d\n&quot;, element.port);			//443
+printf(&quot;path= %s\n&quot;, element.path);			//&quot;&quot;
+printf(&quot;query = %s\n&quot;, element.query);		//&quot;?hoge=1&quot;
+printf(&quot;fragment = %s\n&quot;, element.fragment);		//&quot;#test&quot;
+
+</font></pre></div>
+<div style="margin-left:67px;">以上のように<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriParse">sceUriParse</a>()関数を使用することで、URIのパース処理が行われます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>URIのビルド処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/libparse_URI-Reference-Japanese.htm#SceUriElement">SceUriElement</a>にセットされた構成要素でURIの文字列を作成します。URIは以下のようなルールで作成されます。<i>opaque</i>フラグは、スキームの直後の2連続のスラッシュのみから判定されます。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> <i>opaque</i>フラグがSCE_TRUEの時<br>&lt;scheme&gt;:&lt;username&gt;:&lt;password&gt;@&lt;hostname&gt;?&lt;port&gt;/&lt;path&gt;&lt;query&gt;#&lt;fragment&gt;
+<li> <i>opaque</i>フラグがSCE_FALSEの時<br>&lt;scheme&gt;://&lt;username&gt;:&lt;password&gt;@&lt;hostname&gt;:&lt;port&gt;/&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;
+</ul></div>
+<div style="margin-left:67px;"><br>以下のような手順で、URIの文字列を作成することができます。ただしlibparse_uri内部ではメモリを確保しないため、出力用のメモリをアプリケーションで確保する必要があることにご注意ください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	*uri;
+SceSize	malloc_size;
+<a href="../network/libparse_URI-Reference-Japanese.htm#SceUriElement">SceUriElement</a>	element;
+memset(element, 0, sizeof(<a href="../network/libparse_URI-Reference-Japanese.htm#SceUriElement">SceUriElement</a>));
+
+element.scheme = &quot;http&quot;;
+element.hostname = &quot;foo.com&quot;;
+element.port = 80;
+element.username = &quot;aa&quot;;
+element.password = &quot;bb&quot;;
+element.path = &quot;/cgi-bin/test.cgi&quot;;
+
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriBuild">sceUriBuild</a>(NULL, &amp;malloc_size, 0, &amp;element, SCE_URI_BUILD_WITH_ALL);
+uri = (u_char*)malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriBuild">sceUriBuild</a>(uri, NULL, malloc_size, &amp;element, SCE_URI_BUILD_WITH_ALL);
+printf(&quot;Build URI = %s\n&quot;, uri);// &quot;http://aa:bb@foo.com/cgi-bin/test/cgi&quot;
+
+</font></pre></div>
+<div style="margin-left:67px;">以下のように使用するURIの要素を指定することもできます。ただし、作成された文字列がURIとして正しいかの検証は行われません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	*uri;
+SceSize	malloc_size;
+<a href="../network/libparse_URI-Reference-Japanese.htm#SceUriElement">SceUriElement</a>	element;
+memset(element, 0, sizeof(<a href="../network/libparse_URI-Reference-Japanese.htm#SceUriElement">SceUriElement</a>));
+
+element.scheme = &quot;http&quot;;
+element.hostname = &quot;foo.com&quot;;
+element.port = 80;
+element.username = &quot;aa&quot;;
+element.password = &quot;bb&quot;;
+element.path = &quot;/cgi-bin/test.cgi&quot;;
+element.opaque = SCE_TRUE;
+
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriBuild">sceUriBuild</a>(NULL, &amp;malloc_size, 0, &amp;element,
+	SCE_URI_BUILD_WITH_USERNAME |
+	SCE_URI_BUILD_WITH_PASSWORD);
+uri = (u_char*)malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriBuild">sceUriBuild</a>(uri, NULL, malloc_size, &amp;element, 
+	SCE_URI_BUILD_WITH_USERNAME |
+	SCE_URI_BUILD_WITH_PASSWORD);
+printf(&quot;Build URI = %s\n&quot;, uri);// &quot;aa:bb&quot;
+
+</font></pre></div>
+<div style="margin-left:67px;">以上のように<a href="../network/libparse_URI-Reference-Japanese.htm#sceUriBuild">sceUriBuild</a>()関数を使用することで、URI文字列を作成することができます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>API呼び出しに必要なスタックサイズについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_uriのAPI呼び出しに必要なスタックサイズは、1024バイト（SCE_PARSE_URI_LEAST_STACK_SIZE）です。スタックサイズが不足の場合は、<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a>のエラーが返ります。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<html lang="jp">
+<head>
+<title>scepng-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PNGライブラリ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の概要と特長</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SCEPNGライブラリはRFC-2083で規定されるPNG形式の画像ファイルを扱うためのライブラリです。ただし、PNGは非常に柔軟なフォーマットであるため、すべてに対応するとコードサイズが大きくなるだけでなく、ライブラリの使い勝手も悪化してしまいます。このため、本ライブラリでは一部の必要十分な機能のみをサポートしています。<br>ソースコード公開ライブラリとなっていますので、不足部分については拡張することも可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>特長</b><br><br></h4></div></a>
+
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> デコードできるのは一般的に使われる形式(シーケンシャルスキャン、単一IDAT形式)のみ
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> RGB888形式は扱いやすいRGBA8888形式に変換されて出力されます。
+<li> CLUT使用の場合、CLUTには透過色情報がマージして格納されます。
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> 無圧縮形式によるエンコードをサポート
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> 出力データは常にRGB888(24bit フルカラー)形式PNGとなります。
+<li> 無圧縮なのでファイルサイズは大きくなりますが、高速にエンコードできます。
+<li> PNG規格を満たしていますので、作ったデータをセーブデータユーティリティなどで使うことができます。もちろんシステムソフトウェアなどからも正しく見えます。
+</ul></div>
+</ul>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SCEPNGライブラリを使用するには次のファイルが必要です。<br>SCEPNGライブラリの内部でlibdefltを利用しますので、psp-gccに対して-lオプションでリンクを行う場合は、-lscepngの後に-ldefltを指定するようにしてください。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libscepng.a&nbsp;&nbsp;<br>&nbsp;&nbsp;libdeflt.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scepng.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_1"><h4>
+(1)&nbsp;<b>devkit/sample/png/dec/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">デコードのサンプルです。PNGファイルをデコードして画面に表示します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_2"><h4>
+(2)&nbsp;<b>devkit/sample/png/enc/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">エンコードのサンプルです。画面表示内容をキャプチャしてPNGデータにエンコードし、セーブデータユーティリティに渡しています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>エンコード手順の概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>エンコードしたいデータの準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">一般的には表示しているフレームバッファの内容をそのまま使うことができます。また、たいていリアルタイムに描画する必要がないため、特別に画質を高くする（ポリゴン数を多くする、ビット深度を大きくする、など）ことも可能です。<br>なお、エンコードの際に画サイズの変更などはできませんので、適切な方法でリサイズ他を行うようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>エンコード結果の格納先の準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">エンコード結果を格納するバッファを用意します。バッファのサイズは<a href="../still/scepng-Reference-Japanese.htm#scePngGetEncSize">scePngGetEncSize</a>()関数を呼び出すことで確認できます。なお、この関数に同じ引数を与えた場合、常に同じ値が返ります。<br>また、この関数の引数は画像サイズのみです。つまり、ピクセルフォーマットなどによらず常に出力データのサイズは同じになります。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1">
+<div style="margin-left:63px;"><h4><b>例: LCDサイズの画像をエンコードしたいとき</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>char *pngbuf = malloc(<a href="../still/scepng-Reference-Japanese.htm#scePngGetEncSize">scePngGetEncSize</a>(480,272));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>エンコード関数呼び出し</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../still/scepng-Reference-Japanese.htm#scePngEnc">scePngEnc</a>()関数を呼び出して実際のエンコードを行います。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_1">
+<div style="margin-left:63px;"><h4><b>例: LCDに表示中の画像をエンコードしたいとき</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *pFB;
+int pixformat;
+int pixelformat = <a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayGetFrameBuf">sceDisplayGetFrameBuf</a>(&amp;pFB, NULL, &amp;pixformat, 0);
+int res = <a href="../still/scepng-Reference-Japanese.htm#scePngEnc">scePngEnc</a>(
+		pngbuf,
+		pFB,
+		480, 272, 512,
+		pixelformat);
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>デコード手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>デコードしたいデータの取り込み</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デコードしたいPNGデータはメモリ上に連続した領域にロードされている必要があります（分割して読み込むといったことはできません）。また、出力も一度に行われ、特定の部分だけをデコードするということもできません。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_1">
+<div style="margin-left:63px;"><h4><b>例:</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>char pngbuf[100*1024];
+int pngsize = sceIoRead(fd, sizeof(pngbuf));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>出力バッファを用意する</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">出力バッファはデコード途中の中間バッファとしても使われます。このため、実際に出力される画像サイズよりも大きな領域を用意しなければなりません。画像サイズ（ピクセル数）がW * Hで、1ピクセルあたりのビット数がnであった場合、出力バッファの画像部分にはint((W*n+7)/8)*Hではなく、int((W*n+7)/8+1)*Hだけ必要です（ここで、int(x)はxの小数点以下を切り捨てた値です）。<br>また、CLUTが使われていたときはCLUTの内容を記録するために(4&lt;&lt;n)バイトの領域も必要です。出力バッファのサイズが両者の合計に満たない場合、デコード時にエラーが返ります。<br>デコードする画像が決まっていない場合、その時点で想定される最大サイズの画像サイズ(W*H)に対して、(W*4+1)*H程度のバッファを用意するようにして、適切にエラーハンドリングするようにしてください（代替イメージで置き換えて表示するなど）。<br>また、デコードバッファは4バイト整列された場所に確保しなければなりません。これは出力バッファをint型の配列として確保するか、コンパイラに対してaligned(4)アトリビュートを指定することで実現できます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>デコード関数を呼び出す</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">入出力バッファとそのサイズを指定して<a href="../still/scepng-Reference-Japanese.htm#scePngDec">scePngDec</a>()関数を呼び出すことでデコードが行われます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_3_1">
+<div style="margin-left:63px;"><h4><b>例:</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>int decbuf[80*(80*3+1)/sizeof(int)];
+int width, height, format;
+int res = <a href="../still/scepng-Reference-Japanese.htm#scePngDec">scePngDec</a>(
+		decbuf, sizeof(decbuf),
+		pngbuf, pngsize,
+		&amp;width, &amp;height, &amp;format);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>デコード結果のフォーマットについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デコードが成功したとき、出力バッファは（もしあれば）CLUTの内容で始まり、その後に画像データが続きます。<br>CLUTは常にRGBA8888形式で、もし入力にtRNSチャンクがあればアルファの値も書き出されます。tRNSチャンクがなかった場合のアルファの値は0xffすべて0となります。CLUTの個数は画像データのビット深度をnとすると、(1&lt;&lt;n)となります。<br>画像データ部分は基本的にPNGに含まれるピクセルフォーマットのまま、変換を行わずに出力されます。ただし、RGB888形式のみ、自動的にRGBA8888形式に変換して出力されます。<br>画像データは入力されたPNGファイルと同じ幅を持ち、バイトに満たない部分のみパディングされます。つまり、1ピクセルあたりのビット数がnで、幅がWピクセルの画像をデコードした時、1ラスターのデータ量（バイト数）はint((n*W+7)/8)となります。<br>ピクセルフォーマットがRGB888フルカラー形式で、かつtRNSチャンクがあった場合、透明色として指定された色のアルファ値は0に、それ以外の色のアルファ値は0xffになります（この機能はピクセルフォーマットがグレースケールおよびRGB161616の時には動作しません）。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>描画時の注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PNGのデコード結果は前述のとおりバイト単位のパディングのみが行われます。このため、グラフィックスエンジン(GE)で直接操作することができないことがあります。このような場合はCPUなどで適切に並び替えやパディングを行うなどしてください。特に、ビット深度が1または2bitの場合、GEでは直接描画することができません。このようなデータが入力して使われる可能性がある場合は、CPUで4bit CLUTに展開するなどしてからGEで処理するなどの工夫が必要です。<br>また、デコード結果を画面に表示する場合には、Dキャッシュの書き出しを行ってキャッシュコヒーレンシを確保するようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>ビット深度4の画像について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ビット深度が8未満であった場合、PNG規格では「左側に位置するピクセルがバイト内でMSB側に配置される」ように規定されています。一方で、GEの4bit CLUTは「左側に位置するピクセルはLSB側に配置」されます。このため、直接描画することができません。CPUで変換する必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>グレースケール表示について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GEは直接モノクロ画像描画を行うことができません。グレースケールCLUTをCPUで作成するか、RGBA8888などに変換してから表示する必要があります。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<html lang="en">
+<head>
+<title>Kernel-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&trade; Kernel Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>PSP&trade; Kernel Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; kernel is the operating system that runs on the PSP&trade;. The kernel uses a priority-based multithreaded scheduling mechanism, making it suitable for simple real-time processing. Semaphores, event flags and message boxes are used to provide functions such as inter-thread synchronization and communication. The kernel also provides interrupt handler and memory pool management functions, file interfacing functions, and timer management functions.<br>The PSP&trade; kernel supports functions for managing PSP&trade; programs as modules in memory as well as "resident library" functions that make part of a module available as a subroutine to another module.<br>The PSP&trade; kernel is initialized and enters a usable state when the PSP&trade; is started up.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Kernel Software Hierarchy</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Kernel software that resides in PSP&trade; memory has the following hierarchical structure.<br></div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  PSP&trade; Kernel Software Hierarchy</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>System Memory Manager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The system memory manager manages the entire memory.<br>Memory is divided into memory partitions. Kernel mode and user mode access restrictions and the default memory allocation policy (either SMEM_Low or SMEM_High) can be set for each memory partition.<br>The following two memory allocation services are provided for each memory partition.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Memory block service<br>The memory block service allocates and frees relatively large blocks of memory in the partition, at a relatively low frequency. This service is expected to be used for allocating locations in memory that will be used for loading program modules, and for allocating a thread stack.
+<li> Heap memory service<br>The heap memory service allocates memory blocks for heap memory use, and allocates and frees relatively small memory blocks, at a relatively high frequency, within those blocks. This service is expected to be used just like malloc() and free().
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Memory Management Structure</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Normally, only the multithread manager and program loader directly call the system memory manager to allocate memory; programs at the device driver level and above use the multithread manager's memory allocation service.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Program Loader</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The program loader loads program modules into memory from various sources such as a UMD&trade;, Memory Stick&trade;, or flash memory, and manages the modules once they have been loaded. It consists of a lower-level loader and an upper-level module manager.<br>The loader has the following functions.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Managing program modules in memory 
+<li> Managing resident libraries (including linking of resident libraries when loading) 
+<li> Placing relocatable modules in memory 
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:50px;">The module manager calls the loader and filesystem to implement the following functions.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Loading program module files
+<li> Executing program modules
+<li> Stopping program modules
+<li> Unloading program modules
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Interrupt Handler Manager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The interrupt handler manager consists of routines which provide interrupt handler registration and management functions, and an integrated interrupt handler for determining the cause of an interrupt and passing control to the appropriate handler. The PSP&trade; has multiple interrupt causes and provides functions for enabling and disabling interrupts for each cause by setting both a per-cause mask register and a master mask register. When an interrupt occurs, the interrupt handler manager reads the interrupt status register and the mask registers to determine the interrupt cause and calls the appropriate registered interrupt handler.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Multithread Manager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The multithread manager manages CPU resources, memory resources, and interrupt resources, and provides the following functions to higher level software.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Thread management 
+<li> Thread scheduling 
+<li> Inter-thread synchronization 
+<li> Memory management 
+<li> Interrupt management 
+<li> Callbacks
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>IO/File Manager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The IO/file manager provides a device-independent file access API similar to that of sceIoOpen(), sceIoClose(), sceIoRead(), and sceIoWrite(). It also performs registration management for entry groups of these APIs, which are kept by device drivers and the filesystem.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Device Drivers, Filesystem, and Kernel Services Group</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_1">
+<div style="margin-left:40px;"><h4><b>Device Drivers</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Device drivers are modules that use the functions of the multithread manager to handle I/O devices. A device driver consists of the following three components.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Interrupt processing routine (if needed)
+<li> Device control thread (0 or more)
+<li> Entry function group
+</ul></div>
+<div style="margin-left:80px;">The entry function group is called from a higher-level program. It is responsible for passing I/O requests to device control threads and for directly controlling devices. The entry function group is executed in the calling thread's context.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_2">
+<div style="margin-left:40px;"><h4><b>Filesystem</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The filesystem is responsible for linking a general-purpose file interface to block devices. It also provides directory services.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_3">
+<div style="margin-left:40px;"><h4><b>Kernel Services</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Kernel services use drivers or kernel modules to provide services to higher-level programs.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Multithread Management</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This section describes the multithread management features of the PSP&trade; kernel.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Thread Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Threads serve as the logical unit of programs, as seen from the perspective of parallel processing. The processing performed by an application program is divided into multiple threads, and these threads are run simultaneously and in parallel. Since there is only one CPU, however, only one thread will be running during any given time slice. Which thread to run is determined by a thread's state and priority level. <br>Priority levels are absolute, so if a thread with high priority is running, a thread with lower priority will not be executed until the high-priority thread enters a wait state or its state is changed by an interrupt handler. This is quite different from the method used in a TSS (Time Sharing System), where multiple tasks (or processes) are switched to provide even execution.<br>Adjustments must be made so that resources such as I/O devices and specific work areas in memory can be used exclusively between threads. For this purpose, the PSP&trade; kernel provides semaphores, mutexes, lightweight mutexes, event flags, and message boxes for synchronization and communication between threads.<br>A clear distinction is made between threads and interrupt handlers. Threads are executed as part of user programs, but interrupt handlers are executed as part of the kernel. Also, threads and interrupt handlers run under different system states. As a result, the points described below must be carefully considered when writing programs.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Thread States and Operation </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Threads managed by the PSP&trade; kernel have the following seven (or five, depending on how broadly they are categorized) states.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>State</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;RUN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Running state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CPU is executing the thread&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;READY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ready for execution&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Thread is in stand-by as the CPU is executing&nbsp;&nbsp;<br>&nbsp;&nbsp;another thread&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;WAIT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Wait state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The thread has put itself in this state until a&nbsp;&nbsp;<br>&nbsp;&nbsp;certain condition is met&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SUSPEND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Forced wait state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The thread has been forced into a waiting state by&nbsp;&nbsp;<br>&nbsp;&nbsp;a system call issued by another thread.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;WAIT-SUSPEND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Double-wait state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The thread was forced into a waiting state by&nbsp;&nbsp;<br>&nbsp;&nbsp;another state while it was in WAIT state&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DORMANT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Inactive state &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The thread has been created but has not been&nbsp;&nbsp;<br>&nbsp;&nbsp;activated yet, or the thread has terminated but has&nbsp;&nbsp;<br>&nbsp;&nbsp;not yet been deleted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NON-EXISTENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Thread is not registered&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;An imaginary state for a thread that has not been&nbsp;&nbsp;<br>&nbsp;&nbsp;created or that has already been deleted&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>RUN: Running state</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Indicates that the CPU is executing the thread. At any given moment, only one thread will be in this state.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>READY: Ready for execution</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The thread meets all conditions for execution but is on stand-by because a thread with higher (or the same) priority is running. If more than one thread is in READY state, the threads form a queue to wait for CPU availability. This is referred to as the Ready Queue.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>WAIT: Wait state, SUSPEND: Forced wait state, WAIT-SUSPEND: Double-wait state</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The thread is stopped since it does not meet conditions for execution. WAIT state occurs when execution is stopped due to a system call issued by the thread itself. SUSPEND state occurs when a thread has been forced into a waiting state by another thread. WAIT-SUSPEND state occurs when a thread is forced into a waiting state by another state when it was already in WAIT state. When execution is resumed after a waiting state, execution picks up from where it was interrupted, and information representing the execution state of the program (the context) such as the program counter and the registers are all restored to their original values.<br>Since the system may become deadlocked if the thread that is accessing a device is set to SUSPEND or WAIT-SUSPEND state, these states should only be used for debugging.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>DORMANT: Inactive state</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This state occurs when the thread has not been activated yet or after it has finished. This state is enabled right after a thread is created.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>NON-EXISTENT: Unregistered state</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">An imaginary state that occurs before a thread is created or after it is deleted.<br>A thread goes into DORMANT state once it is created, then enters READY state when it is activated and put in the Ready Queue (see below). Execution is performed for the thread at the head of the Ready Queue, with the thread being placed in RUN state. The thread in RUN state enters WAIT state when it is put to sleep or waits for a semaphore or some other condition. When the wait conditions are met, the thread goes back to READY state.<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  State Transition Diagram for Threads</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Thread Scheduling </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When more than one thread is in READY state, a decision needs to be made as to which thread to execute next (which thread will move to RUN state). This process is known as scheduling. Scheduling for the PSP&trade; kernel is described below.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_4">
+<div style="margin-left:40px;"><h4><b>Priority</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Each thread has a priority associated with it, and threads that are in READY state are scheduled and executed based on that priority. A fundamental rule is that an executing thread is never removed from RUN state and never gives up the CPU to a thread of the same or lower priority. Thread priorities can range from 1 to 126, where smaller numbers represent higher priorities. Some priorities have been reserved by the system. User programs are restricted to using priorities in the range from SCE_KERNEL_USER_HIGHEST_PRIORITY (=16) to SCE_KERNEL_USER_LOWEST_PRIORITY (=111).<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_5">
+<div style="margin-left:40px;"><h4><b>Ready Queue</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Threads in RUN and READY states are arranged in the Ready Queue in the order in which they will be executed, from highest to lowest priority. If two threads have the same priority, the thread that transitioned to READY state first will appear first in the queue.<br>For example, assume that thread A has priority 21, threads B, C, and D have priority 22, and threads E and F have priority 23, and that they are arranged in the Ready Queue as shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br>Since thread A has the highest priority in the Ready Queue, it is executed first. By tacit agreement, execution will not be switched to another thread while thread A is executing. If thread A enters WAIT state, thread B will begin executing and the Ready Queue will be as shown in the following figure.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English005.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br>In actual programming, each thread should be placed in WAIT state when a process pauses or when waiting for some external process.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_6">
+<div style="margin-left:40px;"><h4><b>Interrupts and Scheduling</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When an interrupt occurs, control transitions to an interrupt handler (provided the system is not in an interrupt-disabled state). When control returns from the interrupt handler, scheduling is performed again, based on the state and priority of each thread.<br>When the interrupt handler returns, thread B will be executed provided that nothing occurred to cause thread A to transition to READY state or that caused the priority of thread B to be lowered while the interrupt handler was executing. However, if thread A had indeed transitioned to READY state while the interrupt handler was executing, when the interrupt handler returns, thread A will be switched to RUN state and thread B will be switched from RUN to READY state (thread B is said to be preempted). Even if this were to happen, the position of thread B within the Ready Queue wouldn't change, so thread B would again be executed, once thread A had been removed from the Ready Queue.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Kernel-Overview-English006.gif">
+</div>
+<div style="margin-left:67px;"><br>When an interrupt occurs, it is common programming practice to defer a process that needs to be performed by placing its thread in WAIT state, then switching that thread to READY state within the interrupt handler, before the handler returns.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Changing the Priority of a Thread</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The priority of a thread can be changed by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelChangeThreadPriority">sceKernelChangeThreadPriority</a>(). A thread can change its own priority as well as the priority of other threads. In addition, the function <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelRotateThreadReadyQueue">sceKernelRotateThreadReadyQueue</a>() can be used to change the execution order of threads having the same priority by rotating them in the Ready Queue. For example, if <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelRotateThreadReadyQueue">sceKernelRotateThreadReadyQueue</a>() is used to rotate all threads with priority 12 in the Ready Queue, the thread at the head of the queue will be moved to the end, and the new order will be C, D, B. When a thread in a wait state is switched to READY state, that thread will be inserted at the last position in the Ready Queue corresponding to that priority level.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Synchronization Between Threads</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; kernel provides several synchronization functions to prevent contention when accessing I/O devices and to synchronize processing between threads.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_7">
+<div style="margin-left:40px;"><h4><b>Sleeping and Waking Up Threads</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When a thread doesn't need to use the CPU immediately, <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSleepThread">sceKernelSleepThread</a>() can be called to switch that thread to WAIT state. This is called "putting the thread to sleep" and can be used to pause a process while it is waiting for some external device. A sleeping thread can be returned to READY state by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWakeupThread">sceKernelWakeupThread</a>() from another thread or from thread-independent code. This is known as "waking up the thread."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_8">
+<div style="margin-left:40px;"><h4><b>Event Flags</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Event flags can be used to perform synchronization processing more flexibly. They are useful in programs that need to wake up many threads all at the same time. To use an event flag, first create one and set its initial value. Next, the thread that is to wait for some condition to be satisfied calls <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitEventFlag">sceKernelWaitEventFlag</a>() and specifies a cancellation condition. This causes the thread to transition to WAIT state. When another thread or interrupt handler calls <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSetEventFlag">sceKernelSetEventFlag</a>() and updates the value of the flag, the cancellation conditions of threads waiting on that event flag are compared against the updated value of the flag. If they match, the corresponding threads will be returned to READY state.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_9">
+<div style="margin-left:40px;"><h4><b>Semaphores</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When multiple threads are using the same device or buffer areas, the semaphore (signaling) feature allows other threads to be notified of the usage status in order to provide synchronization.<br>Threads that want to use a device, etc. must acquire the semaphore resource by executing <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitSema">sceKernelWaitSema</a>(), i.e., usage privilege is obtained by setting an in-use flag. Once the thread is done using the resource, <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSignalSema">sceKernelSignalSema</a>() is executed and the semaphore resource is returned to the system.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br>If another thread is using the device, etc. when <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitSema">sceKernelWaitSema</a>() is executed, the semaphore resource will not be available, causing the calling thread to go into WAIT state and enter a semaphore waiting queue. When the thread using the device, etc. executes <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSignalSema">sceKernelSignalSema</a>() and returns the semaphore resource to the system after it is done, the returned semaphore resource will be given to the thread at the head of the semaphore waiting queue. The thread will return to READY state and will be executed according to priority-based scheduling, thus allowing use of the device, etc.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br>The number of semaphore resources can be specified when a semaphore is created. Thus, in addition to providing exclusive control as described above, semaphores can also be used to indicate the valid data count in data buffers shared by multiple threads. When a thread supplies data that is stored in a shared buffer, <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSignalSema">sceKernelSignalSema</a>() is executed to increase the valid data count. When a thread retrieving the data tries to fetch data from the shared buffer, <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitSema">sceKernelWaitSema</a>() is executed. If the semaphore resource can be acquired, the data in the shared buffer is processed. If the resource cannot be acquired, the thread is put in WAIT state and waits for data to be provided.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_10">
+<div style="margin-left:40px;"><h4><b>Mutexes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A mutex, like a semaphore, allows other threads to be notified of the usage status of a device or buffer area in order to provide synchronization, when multiple threads are using the same device or buffer area.<br>Threads that want to use a resource must acquire the mutex resource by executing <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelLockMutex">sceKernelLockMutex</a>(), i.e., usage privilege is obtained by setting an in-use flag. Once the thread is done using the resource, <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelUnlockMutex">sceKernelUnlockMutex</a>() is executed and the mutex resource is returned to the system.<br>A mutex differs from a semaphore in that while a semaphore counts the number of resources, a mutex is associated with only one resource and the mutex counts the number of times that the resource is locked. With a mutex, the resource is owned by the locked thread, and when a mutex is locked recursively, the resource is not returned until the resource is unlocked the same number of times. Unlocking can only be performed by the thread that locked the mutex resource, and a thread that has not locked the mutex cannot perform an unlock operation. A mutex that is not locked recursively can only have a lock count of 0 or 1.<br>If a thread terminates when a mutex resource it owns is still allocated, the mutex is automatically unlocked.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_11">
+<div style="margin-left:40px;"><h4><b>Lightweight Mutexes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A lightweight mutex is like an ordinary mutex except with faster lock and unlock times, because part of its work area is located in user memory.<br>Threads that want to use a resource must acquire the lightweight mutex resource by executing <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelLockLwMutex">sceKernelLockLwMutex</a>(), i.e., usage privilege is obtained by setting an in-use flag. Once the thread is done using the resource, <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelUnlockLwMutex">sceKernelUnlockLwMutex</a>() is executed and the mutex resource is returned to the system.<br>Unlike an ordinary mutex, the work area for a lightweight mutex must be allocated in advance by the user. A wait cancellation operation cannot be performed for a thread that is waiting for a lightweight mutex by specifying that lightweight mutex. Furthermore, a lightweight mutex that is still allocated when a thread terminates is not automatically cancelled.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_12">
+<div style="margin-left:40px;"><h4><b>Message Boxes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A message box is a service that enables threads to exchange data. It can be thought of as a combination semaphore and ring buffer. <br>To use a message box, first create one by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateMbx">sceKernelCreateMbx</a>() (multiple message boxes can also be created). If a thread wishes to wait for a message, it should call <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelReceiveMbx">sceKernelReceiveMbx</a>() and specify a message box number. This will put the thread in WAIT state. Then, if <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSendMbx">sceKernelSendMbx</a>() is called from another thread or from thread-independent code to send a message to that message box, the waiting thread will be put in READY state.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_13">
+<div style="margin-left:40px;"><h4><b>Message Pipes</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A message pipe is similar to a message box in that it enables threads to exchange data. However, unlike a message box which can only exchange data pointers, a message pipe can copy data from a sending buffer to a receiving buffer.<br>To use a message pipe, first call <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateMsgPipe">sceKernelCreateMsgPipe</a>() to create one. You can also choose to set up an internal buffer for the message pipe (it is also possible to not have an internal buffer). If a thread wishes to send a message, it calls <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSendMsgPipe">sceKernelSendMsgPipe</a>(). If the message can fit in the message pipe's internal buffer, the function returns immediately. If the message is too large or if the message pipe doesn't have an internal buffer, the sending thread enters WAIT state. The thread remains in WAIT state until another thread with a suitable receive buffer receives the message. If a thread calls <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelReceiveMsgPipe">sceKernelReceiveMsgPipe</a>(), to receive a message in the message pipe's internal buffer and the message size is such that it fills the receive buffer provided by the thread, or if there is a sending thread in WAIT state, the message will be retrieved and the function will return immediately. If there is no pending message that exactly fills the receive buffer, the receiving thread will enter a WAIT state until the sending thread can send the message.<br>Message data exchanged using a message pipe is not delimited. If a sending thread uses <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSendMsgPipe">sceKernelSendMsgPipe</a>() to send 10 bytes of data 10 times, a receiving thread can call <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelReceiveMsgPipe">sceKernelReceiveMsgPipe</a>() to receive the entire 100 bytes of data all at once.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Memory Pools</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To make it easier for the system memory manager to manage memory, the PSP&trade; kernel provides variable-length, fixed-length and TLS memory pool management functions.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_14">
+<div style="margin-left:40px;"><h4><b>Variable-length Memory Pool</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Threads can obtain variable-length memory blocks from a variable-length memory pool allocated by the system memory manager.<br>A variable-length memory pool is created by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateVpl">sceKernelCreateVpl</a>(). Variable-length memory blocks can be allocated from this memory pool by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelAllocateVpl">sceKernelAllocateVpl</a>(). Once a memory block is no longer needed, it can be returned to the memory pool by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelFreeVpl">sceKernelFreeVpl</a>(). <br>If there is not enough free space in the memory pool to allocate a memory block, the allocating thread enters WAIT state. When a memory block is returned to the memory pool by another thread so that sufficient free space becomes available, the allocating thread returns to READY state.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_15">
+<div style="margin-left:40px;"><h4><b>Fixed-length Memory Pool</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Threads can obtain fixed-length memory blocks from a fixed-length memory pool allocated by the system memory manager. The size of a memory block is specified when the memory pool is created. Allocating fixed-length blocks and returning them to the pool can be done faster than with variable-length blocks. <br>A fixed-length memory pool is created by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateFpl">sceKernelCreateFpl</a>(). Fixed-length memory blocks can be allocated from this memory pool by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelAllocateFpl">sceKernelAllocateFpl</a>(). Once a memory block is no longer needed, it can be returned to the memory pool by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelFreeFpl">sceKernelFreeFpl</a>(). <br>If there is not enough free space in the memory pool to allocate a memory block, the allocating thread enters WAIT state. When a memory block is returned to the memory pool by another thread so that sufficient free space becomes available, the allocating thread returns to READY state.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_16">
+<div style="margin-left:40px;"><h4><b>TLS Memory Pool</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Threads can obtain TLS (thread local storage) memory blocks from a TLS memory pool allocated by the system memory manager. The size of a memory block and the number of blocks (that is, the number of threads that can use TLS memory blocks) are specified when the memory pool is created. <br>A TLS memory pool is created by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateTlspl">sceKernelCreateTlspl</a>(). Fixed-length memory blocks can be allocated from this TLS memory pool and used as TLS memory blocks by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelGetTlsAddr">sceKernelGetTlsAddr</a>(). Once allocated, a TLS memory block is valid until its thread enters DORMANT state or is deleted via DORMANT state. As long as a given thread survives, every call to <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelGetTlsAddr">sceKernelGetTlsAddr</a>() will return the same value. A TLS memory block that is no longer needed cannot be explicitly returned to the TLS memory pool. <br>The TLS memory pool can be deleted by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDeleteTlspl">sceKernelDeleteTlspl</a>().<br>When a thread calls <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelGetTlsAddr">sceKernelGetTlsAddr</a>(), if there is not enough free space in the TLS memory pool to allocate a TLS memory block, the allocating thread will enter WAIT state. After a TLS memory block is returned to the TLS memory pool by another thread such that sufficient free space becomes available, the allocating thread will return to READY state.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Thread Events</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The operations performed by the multithread manager for creating, starting, stopping, and deleting threads are called thread events. Thread events are handled by specific thread event handlers, which are registered in advance.<br>A thread event handler is registered by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelRegisterThreadEventHandler">sceKernelRegisterThreadEventHandler</a>(), and deleted by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelReleaseThreadEventHandler">sceKernelReleaseThreadEventHandler</a>(). The four types of thread events shown below determine which thread event handler will be called. The execution context of a thread event handler differs depending on the thread event.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_1"><h4>
+(1)&nbsp;<b>Thread creation event (TE_CREATE)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Generated when <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateThread">sceKernelCreateThread</a>() is called to create a new thread. The handler for this thread event is executed in the context of the thread that called <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateThread">sceKernelCreateThread</a>() immediately after the new thread is created.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_2"><h4>
+(2)&nbsp;<b>Thread startup event (TE_START)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Generated when <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelStartThread">sceKernelStartThread</a>() is called to start a thread. The handler for this thread event is executed in the context of the started thread, immediately before it begins execution from its entry address.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_3"><h4>
+(3)&nbsp;<b>Thread termination event (TE_EXIT)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Generated when either <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelExitThread">sceKernelExitThread</a>(), <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelExitDeleteThread">sceKernelExitDeleteThread</a>(), <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>(), or <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>() is called to terminate thread execution. The handler for this thread event is executed in the context of the terminating thread.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_7_4"><h4>
+(4)&nbsp;<b>Thread deletion event (TE_DELETE)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Generated when <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelExitDeleteThread">sceKernelExitDeleteThread</a>(), <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDeleteThread">sceKernelDeleteThread</a>(), or <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>() is called to delete a thread. The handler for this thread event is executed in the context of the calling thread that initiated the delete, immediately before the target thread is deleted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>Callbacks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A callback is a means of conveying an asynchronous phenomenon to a thread. A thread generates a callback by setting up a callback function that will be called when the phenomenon occurs. When the phenomenon occurs and is reported to the generated callback, the callback function that had previously been set up is called. The callback function executes in the context of the thread that generated the callback.<br>When the generation of a callback is reported, its state is recorded in the thread that generated the callback. The actual execution of the callback function is delayed until the thread that generated the callback can check for the existence of a callback notification by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>().<br>The thread that generated the callback checks for the existence of a callback notification even if it enters a wait state as a result of executing a wait function with a CB suffix such as <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitSemaCB">sceKernelWaitSemaCB</a>(). In either case, the callback function is executed in the context of the thread that generated the callback.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_9">
+<h3>
+<a href="#Heading3_3"> 3. </a>9 
+<!-- hp1 --><b>Timers</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The multithread manager virtualizes hardware counters so that they can be used simultaneously from multiple user programs to provide timer functions, such as the system time, virtual timers, or alarms. Timer functions are also used for timeouts when an inter-thread synchronization primitive is waiting, or when calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDelayThread">sceKernelDelayThread</a>(), which delays a thread.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_9_17">
+<div style="margin-left:40px;"><h4><b>System Time</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The system time gives the elapsed time since the PSP&trade; kernel was started up. The system time is 64 bits wide and is the sole counter in the system that can only be referenced. Since it cannot be stopped and the count value cannot be set, it can be used as a common time that can be referenced at any time by all threads or by thread-independent code.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_9_18">
+<div style="margin-left:40px;"><h4><b>Virtual Timers</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Virtual timers are provided as timers that the user can freely start, stop or change their count values. Since virtual timers are independent of each another, an operation on one virtual timer does not affect any other. The frequency of a virtual timer is the same as that of the system time.<br>To use a virtual timer, first call <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateVTimer">sceKernelCreateVTimer</a>() to create the virtual timer and then use <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelStartVTimer">sceKernelStartVTimer</a>() and <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelStopVTimer">sceKernelStopVTimer</a>() to start and stop the timer.<br>A handler function for a virtual timer can be registered by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSetVTimerHandler">sceKernelSetVTimerHandler</a>(). The handler is called from thread-independent code, as a function of the count value of the virtual timer. If the handler returns zero, the handler is canceled. If the handler returns a positive value, then that value can be used to specify a relative time from the currently scheduled time when the handler will be called next. A cyclic timer can be implemented by having the handler always return the same non-zero value, with that value becoming the period of the timer.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_9_19">
+<div style="margin-left:40px;"><h4><b>Alarms</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">An alarm function is provided for performing one-shot type timer processing such as timeout detection. An alarm is set by calling <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSetAlarm">sceKernelSetAlarm</a>() or <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSetSysClockAlarm">sceKernelSetSysClockAlarm</a>(), and after the set time expires, the alarm handler is called as thread-independent code. Although the first alarm scheduled time is determined by the relative time from when <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSetAlarm">sceKernelSetAlarm</a>() or <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSetSysClockAlarm">sceKernelSetSysClockAlarm</a>() was called, to continuously execute an alarm, the relative time from the current scheduled time to the next scheduled time can be specified by the return value of the alarm handler. If the alarm handler returns zero, then the alarm is canceled.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>IO/File Manager</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; supports the following three device drivers.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Resident library with its own API</li>
+<li VALUE=2> Resident module that can be used only from the IO/file manager's API</li>
+<li VALUE=3> Resident module that runs as a resident library with its own API, but can also be used via the IO/file manager's API</li>
+</ol></div>
+<div style="margin-left:50px;">The IO/file manager enables an application program to use file access APIs such as sceIoOpen(), sceIoClose(), sceIoRead(), and sceIoWrite() to call a device driver (the above type (2) or (3)). It is also responsible for managing device driver registration.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Filenames Supported by the IO/File Manager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Filenames for IO/file manager function calls such as sceIoOpen(), sceIoDopen(), sceIoMkdir(), or sceIoRemove() that require filenames or directory names must have the following format.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><i>device-name:filename-within-device</i>
+</font></pre></div>
+<div style="margin-left:50px;"><br><i>device-name</i> can be one of the following.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Physical block device name
+<li> Physical character device name
+<li> Alias
+</ul></div>
+<div style="margin-left:50px;"><i>filename-within-device</i>, the string to the right of the colon (:), is a filename unique to each particular device driver. It is passed directly to the device driver, and ignored by the IO/file manager. If a device does not use individual files internally, this string may not be present.<br>Filenames have the following restrictions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Paths are delimited by "/" 
+<li> Filenames can be a maximum of 255 characters
+<li> The full pathname can be a maximum of 1024 characters
+<li> Upper case and lower case characters are considered equivalent in a device name. For a filename, they may be unique depending on the filesystem.
+</ul></div>
+<div style="margin-left:50px;">In addition, every thread that uses the IO/file manager has a unique Current Working Directory (CWD). The CWD is represented by <i>device-name</i> + <i>directory-name-within-that-device</i>. When an API requires a filename, but the device name is omitted, the path is considered to be relative from the CWD.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_20">
+<div style="margin-left:40px;"><h4><b>Examples</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>"tty0:"
+"host0:/usr/local/psp/devkit/module/xxx.prx"
+"TEST.DAT"   (if the CWD is "disc0:/DATA," this is considered to be 
+"disc:/DATA/TEST.DAT")
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Asynchronous I/O Access Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The IO/file manager provides asynchronous I/O versions of the sceIoOpen(), sceIoClose(), sceIoRead(), sceIoWrite(), sceIoLseek(), and sceIoIoctl() functions. These versions are used by adding &quot;Async&quot; to the function names as in sceIoOpenAsync(), sceIoCloseAsync(), sceIoReadAsync(), <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWriteAsync">sceIoWriteAsync</a>(), sceIoLseekAsync(), and sceIoIoctlAsync().<br><br>Asynchronous I/O is implemented in the IO/file manager by creating a worker thread and then having that thread perform the I/O access instead of the thread that called the asynchronous I/O access function.<br>To determine when the worker thread has completed, call sceIoPollAsync(), sceIoWaitAsync(), or sceIoWaitAsyncCB(). sceIoPollAsync() obtains the worker thread completion status without blocking. sceIoWaitAsync() and sceIoWaitAsyncCB() block the calling thread and cause it to wait until the worker thread has completed.<br>After making an asynchronous I/O request, either call sceIoPollAsync() regularly until the asynchronous I/O operation has completed, or call sceIoWaitAsync() or sceIoWaitAsyncCB() and wait for completion.<br>The asynchronous I/O result is reported by the <i>result</i> argument of sceIoPollAsync(), sceIoWaitAsync(), and sceIoWaitAsyncCB(). The application cannot make another asynchronous I/O request for the same fd until the completion of the current asynchronous I/O request is verified. Also, functions such as sceIoPollAsync() must not be called for an fd that has not requested asynchronous I/O.<br><br>Since asynchronous I/O processing is executed by the worker thread, a deadlock will occur if an attempt is made to wait for completion of the operation by using just sceIoPollAsync() after an asynchronous I/O request. When using sceIoPollAsync() to detect completion, processing must be inserted for releasing the execution right of the appropriate thread such as a thread delay, VBLANK wait, etc.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Memory Space</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">User memory is duplicated and mapped into two sets of virtual addresses to support different cache usage modes. By using the appropriate set of virtual addresses, a program can control how the cache will be used.<br>The memory space is further divided into separate kernel and user areas. The kernel area is protected from illegal accesses.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Kernel-Overview-English009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  Memory Space</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Thread and Thread-independent Code</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Under the multithread manager, the system state will be different depending on whether thread code is executing or non-thread code is executing. A programmer must be aware of the different system states when writing non-thread code, such as an interrupt handler.<br>A feature of thread-independent code such as an interrupt handler or timer handler is that the thread that was executing immediately before entering the thread-independent code cannot be identified, and there is no concept of "the self thread". Furthermore, since the thread that is currently executing cannot be identified, thread dispatching will not occur. Even when it is necessary to perform thread dispatching, it is delayed until the thread-independent code is no longer being executed (this is called a delayed dispatch).<br>Theoretically, a service call that enters a wait state or a service call that implicitly specifies the self thread cannot be issued from thread-independent code. Depending on the implementation of the multithread manager, there may also be cases in which the internal processing for a service call will be different depending on whether it was issued from thread code or thread-independent code, even for the same function. Issuing a service call from an inappropriate system state will return an error.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

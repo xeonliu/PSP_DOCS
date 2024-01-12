@@ -1,0 +1,2728 @@
+<html lang="en">
+<head>
+<title>IO_File_Manager-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+IO/File Manager Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceIoStat"></a>
+<table width="100%"><td width="70%"><font size=6>SceIoStat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Structure for obtaining status<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>struct <b>SceIoStat</b> {
+	SceMode<i> st_mode</i>;
+	unsigned int <i>st_attr</i>;
+	SceOff <i>st_size</i>;
+	<a href="../kernel/Types-Reference-English.htm#ScePspDateTime">ScePspDateTime</a> <i>st_ctime</i>;
+	<a href="../kernel/Types-Reference-English.htm#ScePspDateTime">ScePspDateTime</a><i> st_atime;</i>
+	<a href="../kernel/Types-Reference-English.htm#ScePspDateTime">ScePspDateTime</a> <i>st_mtime;</i>
+	unsigned int <i>st_private[6]</i>;
+};
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File type (file/dir) and mode (R/W/X) &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_attr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device-dependent attribute &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File size &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_ctime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Creation time  &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_atime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Last access time &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_mtime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Last modification time &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_private[6]</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Other&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The following structure is used by the <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoGetstat">sceIoGetstat</a>(), <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoChstat">sceIoChstat</a>() functions.<br>This structure is defined in iofilemgr_stat.h. Be sure to include iofilemgr_stat.h when you use the SceIoStat structure.<br>The st_mode field of SceIoStat contains 32 bits of information representing the file type and access permissions.<br>Bits 0-11 contain flags representing the file access permissions.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Symbol</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_XOTH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;other execute permission &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0002&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_WOTH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;other write permission &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0004&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_ROTH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;other read permission &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0010&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_XGRP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;group execute permission&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0020&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_WGRP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;group write permission &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0040&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_RGRP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;group read permission &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0100&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_XUSR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;user execute permission&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0200&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_WUSR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;user write permission&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0400&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_RUSR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;user read permission &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Bits 12-15 store file type information. <br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Symbol</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x1000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_FDIR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;directory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x2000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_FREG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;regular file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x4000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_STM_FLNK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;symbolic link  &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">All time data is set to NULL if the device has no time data. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceIoDirent"></a>
+<table width="100%"><td width="70%"><font size=6>SceIoDirent<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Directory entry structure<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>struct <b>SceIoDirent</b> {
+	struct <a href="../kernel/IO_File_Manager-Reference-English.htm#SceIoStat">SceIoStat</a><i> d_stat;</i> 
+	char <i>d_name[256]</i>;
+	void <i>*d_private;</i>
+};
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>d_stat</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File status&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>d_name[256]</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File name (not full path)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>*d_private</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reserved &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used by the <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoDread">sceIoDread</a>() function.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpen"></a><a name="sceIoOpenCB"></a>
+<a name="sceIoOpen / sceIoOpenCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpen / sceIoOpenCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Open file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceUID <b>sceIoOpen</b>(
+	const char *<i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+SceUID <b>sceIoOpenCB</b>(
+	const char *<i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>filename</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Specifies&nbsp;the&nbsp;filename&nbsp;to&nbsp;be&nbsp;opened.&nbsp;The&nbsp;filename&nbsp;must&nbsp;have&nbsp;the&nbsp;following&nbsp;format.&nbsp;&nbsp;<br>&nbsp;Device&nbsp;name:[Filename&nbsp;within&nbsp;device]&nbsp;&nbsp;<br>&nbsp;Example&nbsp;&nbsp;<br>&nbsp;"tty0:"&nbsp;<br>&nbsp;"tty:"&nbsp;(same&nbsp;as&nbsp;"tty0:")&nbsp;<br>&nbsp;"tty1:"&nbsp;<br>&nbsp;"host0:hostfilename"&nbsp;<br>&nbsp;"disc0:/PSP_GAME/USRDIR/demo01.pmf"&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 11  valign="top">&nbsp;<i>flag</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Specifies&nbsp;one&nbsp;of&nbsp;SCE_O_RDONLY,&nbsp;SCE_O_WRONLY,&nbsp;&nbsp;<br>&nbsp;SCE_O_RDWR&nbsp;for&nbsp;the&nbsp;mode&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;opened.&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;SCE_O_RDONLY&nbsp;</td>
+<td>&nbsp;Open&nbsp;for&nbsp;read&nbsp;only&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;SCE_O_WRONLY&nbsp;</td>
+<td>&nbsp;Open&nbsp;for&nbsp;write&nbsp;only&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;SCE_O_RDWR&nbsp;</td>
+<td>&nbsp;Open&nbsp;for&nbsp;read&nbsp;and&nbsp;write&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;In&nbsp;addition,&nbsp;depending&nbsp;on&nbsp;the&nbsp;device,&nbsp;the&nbsp;following&nbsp;can&nbsp;also&nbsp;be&nbsp;logically&nbsp;ORed&nbsp;with&nbsp;mode.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_APPEND&nbsp;</td>
+<td>&nbsp;Append&nbsp;write&nbsp;mode.&nbsp;Writes&nbsp;are&nbsp;always&nbsp;&nbsp;<br>&nbsp;done&nbsp;to&nbsp;the&nbsp;end&nbsp;of&nbsp;the&nbsp;file.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_CREAT&nbsp;</td>
+<td>&nbsp;Create&nbsp;the&nbsp;file&nbsp;if&nbsp;it&nbsp;does&nbsp;not&nbsp;already&nbsp;exist&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_TRUNC&nbsp;</td>
+<td>&nbsp;When&nbsp;the&nbsp;file&nbsp;is&nbsp;opened&nbsp;for&nbsp;writing,&nbsp;<br>&nbsp;&nbsp;discard&nbsp;the&nbsp;contents&nbsp;and&nbsp;reset&nbsp;the&nbsp;size&nbsp;to&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_EXCL&nbsp;</td>
+<td>&nbsp;Report&nbsp;an&nbsp;error&nbsp;if&nbsp;a&nbsp;file&nbsp;with&nbsp;the&nbsp;same&nbsp;&nbsp;<br>&nbsp;name&nbsp;exists&nbsp;when&nbsp;SCE_O_CREAT&nbsp;is&nbsp;specified&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_FDEXCL&nbsp;</td>
+<td valign="top">&nbsp;Report&nbsp;an&nbsp;error&nbsp;if&nbsp;a&nbsp;thread&nbsp;other&nbsp;than&nbsp;the&nbsp;thread&nbsp;that&nbsp;opened&nbsp;the&nbsp;file&nbsp;operates&nbsp;the&nbsp;file&nbsp;descriptor&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_PWLOCK&nbsp;</td>
+<td valign="top">&nbsp;Disable&nbsp;control&nbsp;of&nbsp;the&nbsp;power&nbsp;state&nbsp;from&nbsp;the&nbsp;time&nbsp;the&nbsp;file&nbsp;is&nbsp;opened&nbsp;until&nbsp;it&nbsp;is&nbsp;closed.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>mode</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;When&nbsp;<i>flag</i>&nbsp;is&nbsp;set&nbsp;to&nbsp;SCE_O_CREAT,&nbsp;<i>mode</i>&nbsp;specifies&nbsp;the&nbsp;mode&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;&nbsp;<br>&nbsp;created.&nbsp;This&nbsp;value&nbsp;is&nbsp;reflected&nbsp;in&nbsp;the&nbsp;<i>st_mode</i>&nbsp;field&nbsp;of&nbsp;the&nbsp;<a href="../kernel/IO_File_Manager-Reference-English.htm#SceIoStat">SceIoStat</a>&nbsp;structure&nbsp;&nbsp;<br>&nbsp;when&nbsp;the&nbsp;file&nbsp;status&nbsp;is&nbsp;obtained&nbsp;from&nbsp;<a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoGetstat">sceIoGetstat</a>().&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd(fd&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Opens a file. If the open is successful, returns a small positive integer (the file descriptor). <br>sceIoOpenCB() is a service call equivalent to sceIoOpen() except that a function has been added for checking for the existence of a callback notification when a wait state is entered. If a callback is reported while waiting for the completion of processing, the wait state is temporarily exited, the callback function is executed, and then the wait state is entered again.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1">
+<div style="margin-left:40px;"><h4><b>Note</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">If SCE_O_PWLOCK is specified, a power lock will be in effect from the time the file is opened until <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoClose">sceIoClose</a>() is called to close the respective fd. While the power lock is active, the user will no longer be able to turn off the power by operating the POWER/HOLD switch. Consequently, usability will be reduced if SCE_O_PWLOCK is carelessly used.<br>As mentioned above, if a file is opened with SCE_O_PWLOCK, a POWER/HOLD switch operation will be delayed until <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoClose">sceIoClose</a>() is called to cancel the lock state. However, if an error occurs in a function such as <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoRead">sceIoRead</a>() and the operation is retried, the power lock may end up staying active for a long time, and the power may turn off at an unexpected time from the user's viewpoint.<br><br>Also, after suspend/standby processing has begun, if sceIoOpen() is called to open a file with SCE_O_PWLOCK, the thread may be blocked before the file is opened.<br><br>Always use the power lock discreetly. Avoid using it carelessly.<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoClose"></a><a name="sceIoCloseCB"></a>
+<a name="sceIoClose / sceIoCloseCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoClose / sceIoCloseCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Close file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoClose</b>(
+	SceUID <i>fd</i>
+);
+int <b>sceIoCloseCB</b>(
+	SceUID <i>fd</i>
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the file was opened with <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Closes an open file. <br>sceIoCloseCB() is a service call equivalent to sceIoClose() except that a function has been added for checking for the existence of a callback notification when a wait state is entered. If a callback is reported while waiting for the completion of processing, the wait state is temporarily exited, the callback function is executed, and then the wait state is entered again.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRead"></a><a name="sceIoReadCB"></a>
+<a name="sceIoRead / sceIoReadCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRead / sceIoReadCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Read file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceSSize <b>sceIoRead</b>(
+	SceUID <i>fd</i>,
+	void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+SceSSize <b>sceIoReadCB</b>(
+	SceUID <i>fd</i>,
+	void *<i>buf,</i>
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read buffer address &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read size &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bytes(bytes&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns no. of bytes read&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                 &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Reads data from a file. <br>sceIoReadCB() is a service call equivalent to sceIoRead() except that a function has been added for checking for the existence of a callback notification when a wait state is entered. If a callback is reported while waiting for the completion of processing, the wait state is temporarily exited, the callback function is executed, and then the wait state is entered again.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWrite"></a><a name="sceIoWriteCB"></a>
+<a name="sceIoWrite / sceIoWriteCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWrite / sceIoWriteCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Write file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceSSize <b>sceIoWrite</b>(
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+SceSSize <b>sceIoWriteCB</b>(
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write data address&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write size&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bytes(bytes&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns no. of bytes written.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                   &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Writes data to file. <br>sceIoWriteCB() is a service call equivalent to sceIoWrite() except that a function has been added for checking for the existence of a callback notification when a wait state is entered. If a callback is reported while waiting for the completion of processing, the wait state is temporarily exited, the callback function is executed, and then the wait state is entered again.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseek"></a><a name="sceIoLseekCB"></a>
+<a name="sceIoLseek / sceIoLseekCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseek / sceIoLseekCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Move file pointer (64-bit version)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;iofilemgr_fcntl.h&gt;
+#include &lt;kerror.h&gt;
+
+SceOff <b>sceIoLseek</b>(
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+SceOff <b>sceIoLseekCB</b>(
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arrguments -->
+<div style="margin-left:10px;"><b>Arrguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>fd</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;File&nbsp;descriptor&nbsp;returned&nbsp;by&nbsp;<a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;when&nbsp;the&nbsp;file&nbsp;was&nbsp;opened&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>offset</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Amount&nbsp;of&nbsp;movement&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;<i>whence</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Specify&nbsp;one&nbsp;of&nbsp;the&nbsp;following&nbsp;as&nbsp;the&nbsp;starting&nbsp;position.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_SET&nbsp;</td>
+<td>&nbsp;offset&nbsp;is&nbsp;the&nbsp;distance&nbsp;from&nbsp;the&nbsp;start&nbsp;of&nbsp;the&nbsp;file&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_CUR&nbsp;</td>
+<td>&nbsp;offset&nbsp;is&nbsp;the&nbsp;relative&nbsp;distance&nbsp;from&nbsp;the&nbsp;current&nbsp;point&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_END&nbsp;</td>
+<td>&nbsp;offset&nbsp;is&nbsp;the&nbsp;distance&nbsp;from&nbsp;the&nbsp;end&nbsp;of&nbsp;the&nbsp;file&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pos(pos&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Value of new file pointer&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a> (sign-extended to 64 bits)<br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a> (sign-extended to 64 bits)<br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_INVAL">SCE_KERNEL_ERROR_INVAL</a> (sign-extended to 64 bits)<br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a> (sign-extended to 64 bits)<br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Changes the point where the next read/write will be performed for an open file.<br>sceIoLseekCB() is a service call equivalent to sceIoLseek() except that a function has been added for checking for the existence of a callback notification when a wait state is entered. If a callback is reported while waiting for the completion of processing, the wait state is temporarily exited, the callback function is executed, and then the wait state is entered again.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoIoctl"></a><a name="sceIoIoctlCB"></a>
+<a name="sceIoIoctl / sceIoIoctlCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoIoctl / sceIoIoctlCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>File/Device control (with return data)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoIoctl</b>(
+	SceUID <i>fd</i>,
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+int <b>sceIoIoctlCB</b>(
+	SceUID <i>fd</i>,
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Command code&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to device-driver-dependent parameter block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No. of bytes in device-driver-dependent parameter block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to return data storage block &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of return data storage block&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Non-negative(N&gt;=0)                    &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal value (driver-dependent)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                   &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Performs device-dependent operations on open files. <br>sceIoIoctlCB() is a service call equivalent to sceIoIoctl() except that a function has been added for checking for the existence of a callback notification when a wait state is entered. If a callback is reported while waiting for the completion of processing, the wait state is temporarily exited, the callback function is executed, and then the wait state is entered again.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRemove"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRemove<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Remove file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoRemove</b>(
+	const char *<i>filename</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Name of file to be deleted&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                 &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Deletes a file. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDopen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDopen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Open directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dirent.h&gt;
+#include &lt;kerror.h&gt;
+
+SceUID <b>sceIoDopen</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Directory name&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd(fd&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                   &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Opens a directory. Once a directory has been opened, information on files in the directory can be read by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoDread">sceIoDread</a>(). <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDclose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDclose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Close directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dirent.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoDclose</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the directory was opened with <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoDopen">sceIoDopen</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Closes a file descriptor previously opened with <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoDopen">sceIoDopen</a>(). <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDread"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDread<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Read directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dirent.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoDread</b>(
+	SceUID <i>fd</i>,
+	struct <a href="../kernel/IO_File_Manager-Reference-English.htm#SceIoDirent">SceIoDirent</a> *<i>buf</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the directory was opened with <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoDopen">sceIoDopen</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read address of data&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No entries could be read&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Positive (N&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The directory entry was read.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Returns directory entries one by one from the beginning, after <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoDopen">sceIoDopen</a>() is called. <br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoMkdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoMkdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Make directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoMkdir</b>(
+	const char *<i>dirname</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New directory name &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Sets the mode for the directory to be created. This value is reflected in the st_mode field of the <a href="../kernel/IO_File_Manager-Reference-English.htm#SceIoStat">SceIoStat</a> structure when the directory status is obtained using <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoGetstat">sceIoGetstat</a>(). &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Creates a directory. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRmdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRmdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Remove directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoRmdir</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Name of directory to delete&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                 &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Deletes a directory. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRename"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRename<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Move or rename file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoRename</b>(
+	const char *<i>oldname</i>,
+	const char *<i>newname</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oldname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Original filename&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>newname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New filename&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_XDEV">SCE_KERNEL_ERROR_XDEV</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Moves or renames a file. <i>oldname</i> and <i>newname</i> must have the same unit number and must be on the same device. The device specification can be omitted from <i>newname</i>. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Change current directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoChdir</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Directory name&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                 &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Changes the current directory for the device.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Change status of file or directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_stat.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoChstat</b>(
+	const char *<i>name</i>,
+	const struct <a href="../kernel/IO_File_Manager-Reference-English.htm#SceIoStat">SceIoStat</a> *<i>buf</i>,
+	unsigned int <i>cbit</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>name</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;File&nbsp;/&nbsp;directory&nbsp;name&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>buf</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;New&nbsp;status&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;<i>cbit</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Bit&nbsp;specification&nbsp;of&nbsp;field&nbsp;to&nbsp;be&nbsp;changed&nbsp;(i.e.&nbsp;valid&nbsp;field&nbsp;in&nbsp;<i>buf</i>)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_CST_MODE&nbsp;&nbsp;<br>&nbsp;SCE_CST_ATTR&nbsp;&nbsp;<br>&nbsp;SCE_CST_SIZE&nbsp;&nbsp;<br>&nbsp;SCE_CST_CT&nbsp;<br>&nbsp;SCE_CST_AT&nbsp;<br>&nbsp;SCE_CST_MT&nbsp;<br>&nbsp;SCE_CST_PRVT&nbsp;</td>
+<td valign="top">&nbsp;0x0001&nbsp;<br>&nbsp;0x0002&nbsp;<br>&nbsp;0x0004&nbsp;<br>&nbsp;0x0008&nbsp;<br>&nbsp;0x0010&nbsp;<br>&nbsp;0x0020&nbsp;<br>&nbsp;0x0040&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Changes the status of the specified file or directory.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get status of file or directory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_stat.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoGetstat</b>(
+	const char *<i>name</i>,
+	struct <a href="../kernel/IO_File_Manager-Reference-English.htm#SceIoStat">SceIoStat</a> *<i>buf</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File / directory name &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Buffer that will store status&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Get status of specified file or directory.<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDevctl"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDevctl<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Device Control<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoDevctl</b>(
+	const char *<i>devname</i>,
+	int <i>cmd</i>,
+	const void *<i>arg</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>devname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified device("&lt;devname&gt;&lt;unit&gt;:") &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Command code &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to device-driver-dependent parameter block &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No. of bytes in device-driver-dependent parameter block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to return data storage block &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of return data storage block&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Non-negative (N&gt;=0)                        &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal value(driver-dependent)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                          &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Perform device-specific operations. <br>The details of the operation are driver-dependent. Please see the documentation for each device driver. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Synchronize device with memory<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoSync</b>(
+	const char *<i>devname</i>,
+	int <i>flag</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>devname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device name&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device-dependent flag&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Synchronizes the memory state and device state. For devices such as disks, performs operations such as writing the contents of buffers to disk. Details of the operation are device driver-dependent.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpenAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpenAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Open file asynchronously<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+SceUID <b>sceIoOpenAsync</b>(
+	const char *<i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>filename</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Name&nbsp;of&nbsp;file&nbsp;to&nbsp;be&nbsp;opened.&nbsp;The&nbsp;filename&nbsp;must&nbsp;have&nbsp;the&nbsp;following&nbsp;format.&nbsp;&nbsp;<br>&nbsp;Device&nbsp;name:[Filename&nbsp;within&nbsp;device]&nbsp;&nbsp;<br>&nbsp;Example&nbsp;<br>&nbsp;"tty0:"&nbsp;<br>&nbsp;"tty:"&nbsp;(same&nbsp;as&nbsp;"tty0:")&nbsp;<br>&nbsp;"tty1:"&nbsp;<br>&nbsp;"host0:hostfilename&nbsp;"&nbsp;<br>&nbsp;"disc0:/PSP_GAME/USRDIR/demo01.pmf&nbsp;"&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 16  valign="top">&nbsp;<i>flag</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Specifies&nbsp;one&nbsp;of&nbsp;SCE_O_RDONLY,&nbsp;SCE_O_WRONLY,&nbsp;SCE_O_RDWR&nbsp;for&nbsp;the&nbsp;mode&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;opened.&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;SCE_O_RDONLY&nbsp;</td>
+<td>&nbsp;Open&nbsp;for&nbsp;read-only&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;SCE_O_WRONLY&nbsp;</td>
+<td>&nbsp;Open&nbsp;for&nbsp;write-only&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;SCE_O_RDWR&nbsp;</td>
+<td>&nbsp;Open&nbsp;for&nbsp;read&nbsp;and&nbsp;write&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;In&nbsp;addition,&nbsp;depending&nbsp;on&nbsp;the&nbsp;device,&nbsp;the&nbsp;following&nbsp;can&nbsp;also&nbsp;be&nbsp;logically&nbsp;&nbsp;<br>&nbsp;ORed&nbsp;with&nbsp;mode.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_APPEND&nbsp;</td>
+<td>&nbsp;Append&nbsp;write&nbsp;mode.&nbsp;Writes&nbsp;are&nbsp;always&nbsp;done&nbsp;&nbsp;<br>&nbsp;to&nbsp;the&nbsp;end&nbsp;of&nbsp;the&nbsp;file.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_CREAT&nbsp;</td>
+<td>&nbsp;Create&nbsp;the&nbsp;file&nbsp;if&nbsp;it&nbsp;does&nbsp;not&nbsp;already&nbsp;exist&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_TRUNC&nbsp;</td>
+<td>&nbsp;When&nbsp;the&nbsp;file&nbsp;is&nbsp;opened&nbsp;for&nbsp;writing,&nbsp;<br>&nbsp;&nbsp;discard&nbsp;the&nbsp;contents&nbsp;and&nbsp;reset&nbsp;the&nbsp;size&nbsp;to&nbsp;0&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_EXCL&nbsp;</td>
+<td>&nbsp;Report&nbsp;an&nbsp;error&nbsp;if&nbsp;a&nbsp;file&nbsp;with&nbsp;the&nbsp;same&nbsp;name&nbsp;&nbsp;<br>&nbsp;exists&nbsp;when&nbsp;SCE_O_CREAT&nbsp;is&nbsp;specified&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_FDEXCL&nbsp;</td>
+<td valign="top">&nbsp;Report&nbsp;an&nbsp;error&nbsp;if&nbsp;a&nbsp;thread&nbsp;other&nbsp;than&nbsp;the&nbsp;thread&nbsp;that&nbsp;opened&nbsp;the&nbsp;file&nbsp;operates&nbsp;the&nbsp;file&nbsp;descriptor&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_PWLOCK&nbsp;</td>
+<td valign="top">&nbsp;Disable&nbsp;control&nbsp;of&nbsp;the&nbsp;power&nbsp;state&nbsp;from&nbsp;the&nbsp;time&nbsp;the&nbsp;file&nbsp;is&nbsp;opened&nbsp;until&nbsp;it&nbsp;is&nbsp;closed&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;The&nbsp;4-bit&nbsp;retry&nbsp;count&nbsp;is&nbsp;specified&nbsp;in&nbsp;bits&nbsp;16-19.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_RETRY_0&nbsp;</td>
+<td>&nbsp;No&nbsp;retries.&nbsp;Only&nbsp;execute&nbsp;once.&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_RETRY_1&nbsp;</td>
+<td>&nbsp;Retry&nbsp;1&nbsp;time&nbsp;</td>
+</tr>
+<tr>
+<td colspan= 2  valign="top">&nbsp;...&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_O_RETRY_15&nbsp;</td>
+<td>&nbsp;Retry&nbsp;15&nbsp;times&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>mode</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;When&nbsp;<i>flag</i>&nbsp;is&nbsp;set&nbsp;to&nbsp;SCE_O_CREAT,&nbsp;mode&nbsp;specifies&nbsp;the&nbsp;<i>mode</i>&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;&nbsp;<br>&nbsp;be&nbsp;created.&nbsp;This&nbsp;value&nbsp;is&nbsp;reflected&nbsp;in&nbsp;the&nbsp;<i>st_mode</i>&nbsp;field&nbsp;of&nbsp;the&nbsp;<a href="../kernel/IO_File_Manager-Reference-English.htm#SceIoStat">SceIoStat</a>&nbsp;&nbsp;<br>&nbsp;structure&nbsp;when&nbsp;the&nbsp;file&nbsp;status&nbsp;is&nbsp;obtained&nbsp;from&nbsp;<a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoGetstat">sceIoGetstat</a>().&nbsp;&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd(fd&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h) <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Opens a file. This function returns immediately once it can allocate a file descriptor. The existence of the file is checked asynchronously. You must call <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() or <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoPollAsync">sceIoPollAsync</a>() to get the execution result. <br>Even if sceIoOpenAsync() completes normally, open processing might still fail for some reason like file not found. In this case, when <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() gets the execution result of asynchronous processing, the file descriptor which had been previously allocated, is freed. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoCloseAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoCloseAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Close file asynchronously<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoCloseAsync</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the file was opened with <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                         &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Closes an open file. The actual close processing is performed asynchronously. You must call <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() or <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoPollAsync">sceIoPollAsync</a>() to get the execution result of processing.<br>When a file is successfully closed, the file descriptor is released when a function such as <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() is used to obtain the asynchronous processing result.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoReadAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoReadAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Read file asynchronously<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoReadAsync</b>(
+	SceUID <i>fd</i>,
+	void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read buffer address &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read size &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                      &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h) <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Reads data from a file. The actual operation is performed asynchronously. You must call a function such as <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() to get the result of processing. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWriteAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWriteAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Write file asynchronously<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoWriteAsync</b>(
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write data address &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write size&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                        &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Writes data to file. The actual operation is performed asynchronously. You must call a function such as <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() to get the result of processing. <br>You must maintain the contents of the write data specified by <i>buf</i> until asynchronous I/O has completed.<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseekAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseekAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Move file pointer asynchronously (64-bit version)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;iofilemgr_fcntl.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoLseekAsync</b>(
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>fd</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;File&nbsp;descriptor&nbsp;returned&nbsp;by&nbsp;<a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;when&nbsp;the&nbsp;file&nbsp;was&nbsp;opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>offset</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Amount&nbsp;of&nbsp;movement&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;<i>whence</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;Specify&nbsp;one&nbsp;of&nbsp;the&nbsp;following&nbsp;as&nbsp;the&nbsp;starting&nbsp;position.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_SET&nbsp;</td>
+<td>&nbsp;offset&nbsp;is&nbsp;the&nbsp;distance&nbsp;from&nbsp;the&nbsp;start&nbsp;of&nbsp;the&nbsp;file&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_CUR&nbsp;</td>
+<td>&nbsp;offset&nbsp;is&nbsp;the&nbsp;relative&nbsp;distance&nbsp;from&nbsp;the&nbsp;current&nbsp;point&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_SEEK_END&nbsp;</td>
+<td>&nbsp;offset&nbsp;is&nbsp;the&nbsp;distance&nbsp;from&nbsp;the&nbsp;end&nbsp;of&nbsp;the&nbsp;file&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_INVAL">SCE_KERNEL_ERROR_INVAL</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                         &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h) <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Changes the point of the next read/write in an open file. The actual operation is performed asynchronously. You must call a function such as <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() to get the result of processing. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoIoctlAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoIoctlAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>File / device asynchronous control (with return data)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoIoctlAsync</b>(
+	SceUID <i>fd</i>,
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Command code&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to device-driver-dependent parameter block &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No. of bytes in device-driver-dependent parameter block &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to return data storage block &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of return data storage block &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                       &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Performs device-dependent operations on an open file. The actual operation is performed asynchronously. You must call a function such as <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a>() to get the result of processing. <br>You must maintain the contents of the parameter block specified by <i>arg</i> until asynchronous I/O has completed.<br><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWaitAsync"></a><a name="sceIoWaitAsyncCB"></a><a name="sceIoPollAsync"></a>
+<a name="sceIoWaitAsync / sceIoWaitAsyncCB / sceIoPollAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWaitAsync / sceIoWaitAsyncCB / sceIoPollAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get execution result of asynchronous I/O processing<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoWaitAsync</b>(
+	SceUID <i>fd</i>,
+	SceIores *<i>result</i>
+);
+int <b>sceIoWaitAsyncCB</b>(
+	SceUID<i> fd</i>,
+	SceIores <i>*result</i>
+);
+int<b> sceIoPollAsync</b>(
+	SceUID <i>fd,</i>
+	SceIores <i>*result</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>result</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to variable for storing the result of file I/O processing that was executed asynchronously&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronous processing completed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronous processing still executing&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_NOASYNC">SCE_KERNEL_ERROR_NOASYNC</a>	<br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Gets the execution result of file I/O processing being executed asynchronously. <br>sceIoWaitAsync() waits until asynchronous I/O processing is completed and returns 0 after storing the result in the variable pointed to by the result argument.<br>sceIoWaitAsyncCB() is a service call equivalent to the sceIoWaitAsync() service call with a function added for checking for the existence of a callback notification when the PSP&trade; enters a wait state. If a callback is reported while the PSP&trade; is waiting for the completion of asynchronous I/O processing, the PSP&trade; temporarily exits the wait state to execute the callback function and then enters the wait state again.<br>sceIoPollAsync() is a service call equivalent to the sceIoWaitAsync() service call with the function for entering a wait state if asynchronous I/O processing is not completed removed. If asynchronous I/O processing is not completed, 1 is returned for the return value. In this case, the value of the variable pointed to by the result argument is not changed.<br><br>When 0 is returned by the function, it means that asynchronous I/O processing that was started by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoReadAsync">sceIoReadAsync</a>() or <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoWriteAsync">sceIoWriteAsync</a>() has completed. In that case, the asynchronous I/O result can be obtained by any of the sceIoWaitAsync(), sceIoWaitAsyncCB(), or sceIoPollAsync() APIs.<br>Other asynchronous I/O processing cannot be invoked for the same file descriptor until the current asynchronous I/O processing has completed.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoSetAsyncCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoSetAsyncCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set callback for asynchronous processing notification<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoSetAsyncCallback</b>(
+	SceUID <i>fd</i>,
+	SceUID <i>cbid</i>,
+	int <i>arg</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when the file was opened with <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of the callback that notifes when the asynchronous processing has been completed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Argument to be passed to the callback function&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                  &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Sets the callback ID of the thread manager that notifies when the asynchrnous processing of the file I/O has been completed.<br>The callback must be generated in advance with <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(). When the asynchronous I/O processing is completed, <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelNotifyCallback">sceKernelNotifyCallback</a>() will notify to the specified callback ID. After that, the thread that generated the specified callback will check the existence of the notification with <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>(), or by executing a wait API with callback calling (such as <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelSleepThreadCB">sceKernelSleepThreadCB</a>()), the callback function set when the callback was generated will be called.<br>In order to complete the asynchronous I/O processing, it is necessary to execute a function such as <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoPollAsync">sceIoPollAsync</a>() within the callback function that has been called and receive the execution result of the file I/O processing.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChangeAsyncPriority"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChangeAsyncPriority<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set thread priority of asynchronous I/O processing<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoChangeAsyncPriority</b>(
+	SceUID <i>fd</i>,
+	int <i>level</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor for which the thread priority will be changed &nbsp;&nbsp;<br>&nbsp;&nbsp;When -1 is specified, the default priority will be set when &nbsp;&nbsp;<br>&nbsp;&nbsp;asynchronous I/O processing threads are started &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>level</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Thread priority &nbsp;&nbsp;<br>&nbsp;&nbsp;When -1 is specified, an asynchronous I/O processing thread inherits &nbsp;&nbsp;<br>&nbsp;&nbsp;the priority from its parent thread (the thread which called the &nbsp;&nbsp;<br>&nbsp;&nbsp;asynchronous I/O API) &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a><br><a href="../kernel/IO_File_Manager-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_PRIORITY">SCE_KERNEL_ERROR_ILLEGAL_PRIORITY</a><br><br></div>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values                                     &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error code&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Changes the thread priority for asynchronous file I/O processing. <br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetDevType"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetDevType<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get device type of open file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoGetDevType</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor returned by <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpen">sceIoOpen</a>() when the file was opened&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dt_type&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(dt_type&gt;=0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Values of dt_type in the device structure&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* Dummy device */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_CHAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* Physical character device */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_BLOCK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x4&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* Physical block device */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_FS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* Filesystem logical device */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_ALIAS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x20&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* Alias name(device alias) */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;#define SCE_D_TYPE_MOUNTPT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x40&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;/* Alias name(mount point) */&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other negative values&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Driver error code &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">(normally an error macro from kerror.h)<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Gets the device type of an open file descriptor.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetFdList"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetFdList<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get list of open file descriptors<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+#include &lt;kerror.h&gt;
+
+int <b>sceIoGetFdList</b>(
+	SceUID *<i>readbuf</i>,
+	int <i>readbufsize</i>,
+	int *<i>fdcount</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>readbuf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to beginning of SceUID type array for storing list of file descriptors&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>readbufsize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;readbuf size (number of file descriptors that can be stored)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fdcount</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to variable for getting number of open file descriptors.&nbsp;&nbsp;<br>&nbsp;&nbsp;If NULL is specified, the number of file descriptors is not obtained.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;count&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;count&gt;=0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of entries read into buffer&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This service call is provided to aid debugging.<br>It gets the number of file descriptors that are currently open and a list of these file descriptors.<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="List of Error Codes"></a>
+<table width="100%"><td width="70%"><font size=6>List of Error Codes<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Error Codes]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>IO/File Manager Error Codes<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_BADF">SCE_KERNEL_ERROR_BADF</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_PRIORITY">SCE_KERNEL_ERROR_ILLEGAL_PRIORITY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified priority is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_INVAL">SCE_KERNEL_ERROR_INVAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified value of whence is&nbsp;&nbsp;<br>&nbsp;&nbsp;invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_MFILE">SCE_KERNEL_ERROR_MFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Exceeded the maximum number&nbsp;&nbsp;<br>&nbsp;&nbsp;of files that can be handled&nbsp;&nbsp;<br>&nbsp;&nbsp;simultaneously&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NODEV">SCE_KERNEL_ERROR_NODEV</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specified device does not exist&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_UNSUP">SCE_KERNEL_ERROR_UNSUP</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsupported function for this device&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_XDEV">SCE_KERNEL_ERROR_XDEV</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;More than one device was&nbsp;&nbsp;<br>&nbsp;&nbsp;specified&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ALIAS_USED">SCE_KERNEL_ERROR_ALIAS_USED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Alias name is already in use&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_CANNOT_MOUNT">SCE_KERNEL_ERROR_CANNOT_MOUNT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Could not be mounted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_DRIVER_DELETED">SCE_KERNEL_ERROR_DRIVER_DELETED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Applicable driver was deleted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ASYNC_BUSY">SCE_KERNEL_ERROR_ASYNC_BUSY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronous operation has not&nbsp;&nbsp;<br>&nbsp;&nbsp;completed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NOASYNC">SCE_KERNEL_ERROR_NOASYNC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No asynchronous operation has&nbsp;&nbsp;<br>&nbsp;&nbsp;been performed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NOCWD">SCE_KERNEL_ERROR_NOCWD</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Current directory does not exist&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_NAMETOOLONG">SCE_KERNEL_ERROR_NAMETOOLONG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename is too long&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

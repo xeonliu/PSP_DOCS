@@ -1,0 +1,422 @@
+<html lang="jp">
+<head>
+<title>libg729-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libg729
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>G729とは</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729は、オーディオコーデックG729規格のエンコーダおよびデコーダを提供します。<br>「G729」とはATRAC&trade;やMP3等と同様のオーディオ圧縮コーデックの種類の名称です。ただしデジタル携帯電話など人間の会話に特化した音声帯域での利用を想定しています。<br>G729は、国際電気通信連合・電気通信標準化部門（ITU-T）において1996年に勧告(※)された国際規格で、それまでのPSI-CELP方式を採用しているPDC方式のデジタル携帯電話に比べより音質を改善させることを目的に開発されました。<br></div>
+<div style="margin-left:67px;">※ITU-Tでは「ITU-T勧告」(ITU-T Recommendation)という表現で公表を行ないます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>G729プロトコル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">CS-ACELP(Conjugate Structure-Algebraic Code Excited Linear Prediction/共役構造代数励振型線形予測)という方式で、特徴としてはエラー・フリーで、固定電話並みの通話品質が確保でき、1フレーム(※)が10[msec]です。誤り訂正ビットは含まれていませんので誤り訂正が必要な場合は、別途対応が必要です。またG729のエンコードデータをVoIPなどで利用する場合のRTPパケットへの具体的なフレーミング方法は、RFC3551等を参照ください。<br></div>
+<div style="margin-left:67px;">※１回の通信（処理）単位を「フレーム(frame)」と言います。<br>PSP&reg;の他のオーディオコーデックの「粒度(Grain)」と同じ意味ですがITU-Tの表現に合わせて、このドキュメントでは「フレーム」と表記しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>本ライブラリの機能と特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729は、Media Engine上で動作するG729エンコーダおよびG729デコーダライブラリです。PCM波形からG729形式へのエンコード機能と、G729圧縮形式のデータをPCM波形に解凍（デコード）する機能を持ちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>対応音声フォーマット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">エンコーダへの入力波形データおよびデコーダからの出力は、整数16bitサンプリング周波数=8KHzモノラルのみです。エンコード時のビットレートは、8kbps/6.4kbps/11.8kbpsから選択できます。またそれぞれのビットレートにおいて、VAD(Voice Activity Detection)を指定することができます。VADを指定するとより小さいサイズのSIDフレームおよびDTXフレームが生成され情報量が削減できます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>ライブラリファイルとサンプルプログラム</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ライブラリファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729を使用するために必要なファイルは、以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libg729.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;g729_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;g729_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729のサンプルプログラムとして以下のものがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/g729_rec/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libg729を使った録音再生プログラムです。ヘッドセットのマイクから入力したサウンドをG729エンコードしてメモリへ保存（録音）します。録音結果はG729でデコードして音声再生します。特徴としてマイク入力のサンプリング周波数44.1KHzからG729のサンプリング周波数8KHzへサンプリングレートコンバートを行っています。再生はvaudioライブラリを使うことで8KHzのまま再生します。また、サウンド処理のフレーム単位がオーディオ入出力とG729では異なるため入出力においてバッファリング処理を行っています。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>入出力データ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>通常フレーム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">エンコード／デコードの処理単位は、１フレームで10msのデータです。G729では、入力波形は8KHz 16bitモノラルのみなので80サンプル(=160バイト)が入力単位になります。<br>エンコード結果は、各ビットレートにより以下になります。<br>これらのフレームを通常フレーム(Active Frame)と言います。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ビットレート</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>１フレームのサイズ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>備考</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;8kbps&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;80bit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729,G729_Annex-A規格&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;6.4kbps&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;64bit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-D規格&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;11.8kbps&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;118bit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-E規格&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">※Annex-A/D/Eとは、オリジナルからの機能拡張のバージョン名です。Annex-Aでは圧縮データの最適化、Annex-BではVADフレーム対応、Annex-Dは6.4kbps対応、Annex-Eでは11.8kbps対応が規定されました。（ちなみにAnnex-Cは浮動小数点入出力対応ですが、libg729では未対応です。）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>VADフレーム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAD(Voice Activity Detection)フラグを指定してエンコードした場合、生成されるフレームは通常フレームの他、以下に示すSIDフレームとDTXフレームの計３種類のフレームが生成されます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>VAD有効時</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>１フレームのサイズ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>備考</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SIDフレーム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16bit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-B規格&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DTXフレーム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0bit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;G729_Annex-B規格&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">SIDフレームは、入力される音量エネルギーがある程度小さくなった時に生成されます。SIDフレームは、エネルギー情報とスペクトル情報のみを含むデータで、デコーダはSIDフレームを受信するとこの情報を元にノイズを生成します。DTXフレームは必ずSIDフレームに続いて生成されるフレームです。DTXフレームは、サイズがゼロですがデコーダはDTXフレームを取得すると最後に取得したSIDフレームの情報でノイズを生成します。<br>SIDフレームおよびDTXフレームのサイズは基本となる通常フレームの種類によらず同じサイズです。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libg729-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  VADフレーム</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>SIDフレームのサイズについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ITU-TによるとSIDフレームのサイズは規格上15bitですが、運用上では一般に16bitとして扱われていることが多いため、libg729においてはSIDフレームは、エンコードおよびデコード共に16bitのみを扱います。"libg729.h"内では、SIDフレームサイズの定義値は15bit(<a href="../sound/libg729-Reference-Japanese.htm#SCE_G729_RATE_SID">SCE_G729_RATE_SID</a>)と16bit(<a href="../sound/libg729-Reference-Japanese.htm#SCE_G729_RATE_SID_OCTET">SCE_G729_RATE_SID_OCTET</a>)の両方を定義してありますが、本ライブラリでは<a href="../sound/libg729-Reference-Japanese.htm#SCE_G729_RATE_SID">SCE_G729_RATE_SID</a>は使用しません。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>処理の流れと利用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>モジュールのロードとアンロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729を利用するためには、処理の下請けを行うモジュールをロードする必要があります。<br>以下のように<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>()によりG729モジュールをロードします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;utility/utility_module.h&gt;
+<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_AV_LIBG729);
+
+</font></pre></div>
+<div style="margin-left:50px;">libg729モジュールが不要になったら<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>()でモジュールをアンロードしてください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_AV_LIBG729);
+
+</font></pre></div>
+<div style="margin-left:50px;">モジュールのロード／アンロード等についての詳細は、「utility概要」をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>エンコード処理の流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">エンコード処理は以下のような構成で呼び出されます。※エラー処理などは省かれています。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInitResource">sceG729EncodeInitResource</a></b>();	必要なリソースを指定してメモリ確保
+	handle=<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInit">sceG729EncodeInit</a></b>();	ハンドルを取得しリソースを初期化
+<b>		<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a></b>(handle,..);	コア処理
+			|
+		（<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()を繰り返し呼び出します）
+			|
+<b>		<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeReset">sceG729EncodeReset</a></b>(handle,..);	ワークのクリア(必要に応じて呼びます)
+			|
+		（<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()を繰り返し呼び出します）
+			|	
+<b>	<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeExit">sceG729EncodeExit</a></b>(handle,..);	ハンドルの開放(リソース利用終了宣言)
+<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeTermResource">sceG729EncodeTermResource</a></b>();	メモリを開放
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_3">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeInitResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ライブラリがワークメモリを確保します。複数の音声チャンネルを同時にエンコードする場合は、チャンネル数を２以上に指定します。同時に利用可能なチャンネル数として、１から４までの値を指定できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_4">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeTermResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">G729による全てのエンコード処理が終了したら、<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeTermResource">sceG729EncodeTermResource</a>()を呼んでメモリを開放してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_5">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeInit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInitResource">sceG729EncodeInitResource</a>()で獲得したメモリから、１音声チャンネル分のエンコード用リソースを確保し（使用を宣言し）対応するリソースメモリの初期化を行い、対応するハンドル値を返します。複数のチャンネルをエンコードする場合は、続けて<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInit">sceG729EncodeInit</a>()を呼ぶことで<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInitResource">sceG729EncodeInitResource</a>()で設定した数までは新たなハンドルを取得できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_6">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeExit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInit">sceG729EncodeInit</a>()で確保したチャンネルのリソースを開放（使用終了を宣言）します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_7">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeCore()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">１フレーム分のエンコード処理を行います。１フレームで8KHz 16bitモノラルのPCMを80サンプル(=10ms分)処理しエンコード結果を返します。結果のデータサイズは、ビットサイズとして<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()の戻り値で返されます。連続した入力波形データを扱うためには、入力波形データのタイミングに合わせて繰り返し<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()を呼ぶ必要があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_8">
+<div style="margin-left:40px;"><h4><b>sceG729EncodeReset()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()でエンコード処理をしている合間に<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeReset">sceG729EncodeReset</a>()を呼ぶことにより、次の<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()のエンコード結果は、初期化状態からのエンコードと同様になります。<br><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeReset">sceG729EncodeReset</a>()の利用を想定する場面は、例えば電話機能に実装して利用する場合、通話の保留操作をしてエンコード（<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()の呼び出し）を停止し、しばらくして保留再開をした場合、保留再開直後の<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()で無音を入力したとしても最後に<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()に入力した入力波形データの続きとしてエンコード結果が出力されてしまい受話側ではノイズとして聞こえてしまいます。そこで保留再開時に<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeReset">sceG729EncodeReset</a>()を呼ぶことで無音からのエンコード結果を出力させることができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_9">
+<div style="margin-left:40px;"><h4><b>スレッドセーフについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInit">sceG729EncodeInit</a>(), <a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeExit">sceG729EncodeExit</a>(), <a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>(), <a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeReset">sceG729EncodeReset</a>()は、スレッドセーフです。<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeInit">sceG729EncodeInit</a>()を別々のスレッドから呼び出しても構いません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>デコード処理の流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">デコード処理は以下のような構成で呼び出されます。※エラー処理などは省かれています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><b><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInitResource">sceG729DecodeInitResource</a></b>();	必要なリソースを指定してメモリ確保
+	handle=<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInit">sceG729DecodeInit</a></b>();	ハンドルを取得しリソースを初期化
+		<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a></b>(handle,..);	コア処理
+			|
+		（<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()を繰り返し呼び出します）
+			|
+		<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeReset">sceG729DecodeReset</a></b>(handle,..);	ワークのクリア(必要に応じて呼びます)
+			|
+		（<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()を繰り返し呼び出します）
+			|	
+	<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeExit">sceG729DecodeExit</a></b>(handle,..);	ハンドルの開放(リソース利用終了宣言)
+<b><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeTermResource">sceG729DecodeTermResource</a></b>();	メモリを開放
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_10">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeInitResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ライブラリがワークメモリを確保します。複数の音声チャンネルを同時にデコードする場合は、チャンネル数を２以上に指定します。同時に利用可能なチャンネル数として、１から４までの値を指定できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_11">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeTermResource()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">G729による全てのデコード処理が終了したら、<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeTermResource">sceG729DecodeTermResource</a>()でメモリを開放してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_12">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeInit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInitResource">sceG729DecodeInitResource</a>()で獲得したメモリから、１音声チャンネル分のデコード用リソースを確保し（使用を宣言し）対応するリソースメモリの初期化を行い、対応するハンドル値を返します。複数のチャンネルをエンコードする場合は、続けて<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInit">sceG729DecodeInit</a>()を呼ぶことで<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInitResource">sceG729DecodeInitResource</a>()で設定した数までは新たなハンドルを取得できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_13">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeExit()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInit">sceG729DecodeInit</a>()で確保したチャンネルのリソースを開放（使用終了を宣言）します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_14">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeCore()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">１フレーム分のデコード処理を行います。１フレームのエンコードデータを渡すと8KHz 16bitモノラルのPCMを80サンプル(=10ms分)の出力結果を返します。途切れなく再生を行うためには、再生ライブラリのタイミングに合わせて繰り返し<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()を呼ぶ必要があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_15">
+<div style="margin-left:40px;"><h4><b>sceG729DecodeReset()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()でデコード処理をしている合間に<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeReset">sceG729DecodeReset</a>()を呼ぶと、次の<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()のエンコード結果が初期化した状態からのエンコードと同様になります。<br><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeReset">sceG729DecodeReset</a>()の利用を想定する場面は、例えば電話機能に実装して利用する場合、通話の保留操作をしてデコード（<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()の呼び出し）を停止し、しばらくして保留再開をした場合、保留再開直後の<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()で無音を入力したとしても最後に<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>()に入力した入力波形データの続きとしてデコード結果が出力されてしまい受話側（自分側）ではノイズとして聞こえてしまいます。そこで保留再開時に<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeReset">sceG729DecodeReset</a>()を呼ぶことで無音からのデコード結果を出力させることができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_16">
+<div style="margin-left:40px;"><h4><b>スレッドセーフについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInit">sceG729DecodeInit</a>(), <a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeExit">sceG729DecodeExit</a>(), <a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>(), <a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeReset">sceG729DecodeReset</a>()は、スレッドセーフです。<a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeInit">sceG729DecodeInit</a>()を別々のスレッドから呼び出しても構いません。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>入出力バッファのメモリアラインメント</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729では、入出力バッファのアラインメントにあまり気を使う必要はありません。PCMデータは2バイトアラインメント、エンコードデータは1バイトアラインメントで読み書きができます。<br>ただし<a href="../sound/libg729-Reference-Japanese.htm#sceG729EncodeCore">sceG729EncodeCore</a>(), <a href="../sound/libg729-Reference-Japanese.htm#sceG729DecodeCore">sceG729DecodeCore</a>()関数の呼び出し中は、外部から入出力データバッファを不用意に書き換えないよう注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>スレッドのスタックサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729を利用するスレッドのスタックサイズを必要最低限まで削減したい場合には、thread.hにて定義されている<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelGetThreadStackFreeSize">sceKernelGetThreadStackFreeSize</a>()により、必要なスタックサイズを確認してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>スレッドの終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libg729は、Media Engine側CPUの機能を利用しており、Media Engine内の計算資源を管理するためにセマフォ等の機能を利用しています。そのため、libg729の関数を実行中に、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>()および<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>()を使ってlibg729の関数を利用しているスレッドを強制的に削除すると、タイミングによってはMedia Engine側の計算資源を確保した状態のまま、スレッドが削除されてしまう可能性があります。その結果libg729だけでなく、他のMedia Engine側CPUを利用するライブラリが正しく動作しなくなる恐れがあります。スレッドを停止させる場合は、以下のスレッド管理方法にしたがった設計をしてください。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> スレッド停止指示を与える側<br>イベントフラグなどを利用し、スレッドに対して終了を通知する。<br>その後<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitThreadEnd">sceKernelWaitThreadEnd</a>()等でスレッドの終了を確認。
+<li> 停止指示を受けるスレッド側<br>イベントフラグなどを定期的に監視し、停止指示の有無を確認する。<br>停止指示が検出された場合、libg729が動作していない状態で<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitThread">sceKernelExitThread</a>()によって自スレッドを停止させる。
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

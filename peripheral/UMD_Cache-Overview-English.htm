@@ -1,0 +1,267 @@
+<html lang="en">
+<head>
+<title>UMD_Cache-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+UMD&trade; Cache Driver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Document Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This document describes the UMD&trade; cache driver, which implements a fixed-size cache for the UMD&trade;. The cache is allocated out of the 32MB of memory not used by game titles, from the 64MB of memory built into the PSP&trade; system (PSP-2000 and PSP-3000).<br><br>The PSP-2000 maintains compatibility with PSP-1000 game titles, so a title still has 28MB of memory available to it while it is starting up. This leaves 32MB of memory available for the cache.<br>The purpose of the cache driver is to speed up reading of title data in a title-independent manner in order to effectively utilize this remaining memory.<br>The size of the cache is subject to change without prior notice, so there is no commitment to a specific size.<br><br>Cache driver operation can be verified by enabling &quot;UMD&trade; Cache&quot; mode in the DTP-<br>T1000, DTP-2000, DTP-H2500 or DTP-H1500 debugger configuration.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>UMD&trade; Cache Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>UMD&trade; Cache Types</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The UMD&trade; cache consists mainly of two types of cache memory.<br>One type is called <b>drive cache </b>and is implemented as memory in the UMD&trade; drive.<br>The other type is referred to as <b>cache memory</b> and consists of memory allocated by the current PSP-2000 and PSP-3000 cache driver.<br>There also exists a memory area of several kilobytes that is used repeatedly to speed up reading a little. However, any mention of the UMD&trade; cache for models up to the PSP-1000 only meant the drive cache.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD_Cache-Overview-English001.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Data Access Sequences</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Data access sequences, showing data flow through the cache driver in the PSP-2000 and PSP-3000 are summarized below. Consider a normal access on the PSP-1000 to be the same as an access on the PSP-2000 and PSP-3000 with the SCE_O_NOBUF and SCE_FNBUF flags set.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>Normal Access</b><br><br></h4></div></a>
+
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> The game title accesses data via the block device or via the filesystem.</li>
+<li VALUE=2> The UMD&trade; cache driver decides whether the data is in the cache. If a cache hit occurs, it passes that data to the title.</li>
+<li VALUE=3> If a cache miss occurred in step (2), the device driver sends an I/O request to the UMD&trade; drive.</li>
+<li VALUE=4> The UMD&trade; drive receives the request from the device driver and decides whether the requested data is in the drive cache. If it is, the UMD&trade; drive transfers that data to the device driver. (Go to step (6))</li>
+<li VALUE=5> If the drive cache did not have the requested data from step (4), the data is obtained from the UMD&trade; disc.</li>
+<li VALUE=6> The retrieved data is cached in the drive cache and in UMD&trade; cache memory, and passed to the title.</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_2">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_UNCACHED_READ and SCE_UMD_UNCACHED_READ Accesses</b><br><br></h4></div></a>
+
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> The game title accesses data via the block device or via the filesystem.</li>
+<li VALUE=2> An I/O request is sent to the UMD&trade; drive without passing through the UMD&trade; cache driver.</li>
+<li VALUE=3> The UMD&trade; drive gets data from the UMD&trade; disc without checking to see whether the data is in the drive cache.</li>
+<li VALUE=4> The data read from the disc is cached only in the drive cache and passed to the title.</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_3">
+<div style="margin-left:40px;"><h4><b>Accesses With SCE_O_NOBUF and SCE_FNBUF Flags</b><br><br></h4></div></a>
+
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> The game title accesses data via the block device or via the filesystem.</li>
+<li VALUE=2> An I/O request is sent to the UMD&trade; drive without passing through the UMD&trade; cache driver.</li>
+<li VALUE=3> The UMD&trade; drive receives the request from the device driver and decides whether the requested data is in the drive cache. If it is, the UMD&trade; drive transfers that data to the device driver. (Go to step (5))</li>
+<li VALUE=4> If the drive cache did not have the requested data from step (3), the data is obtained from the UMD&trade; disc. </li>
+<li VALUE=5> The data is cached only in the drive cache and passed to the title.</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_4">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_READ_AHEAD, SCE_ISOFS_ACQ_READ_AHEAD, SCE_UMD_READ_AHEAD, and SCE_UMD_ACQ_READ_AHEAD Commands</b><br><br></h4></div></a>
+
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> The game title executes a read ahead command.</li>
+<li VALUE=2> If the command from step (1) is accepted, the device driver allocates the required memory from the UMD&trade; cache memory and sends an I/O request to the UMD&trade; drive.</li>
+<li VALUE=3> The UMD&trade; drive receives the request from the device driver and determines whether the data is in the drive cache. If it is, the UMD&trade; drive transfers that data to the device driver. (Go to step (5)) </li>
+<li VALUE=4> If the drive cache did not have the requested data from step (3), the UMD&trade; drive gets the data from the UMD&trade; disc.</li>
+<li VALUE=5> Although the data is cached in the drive cache and in UMD&trade; cache memory, the data is not passed to the title.</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Basically, the purpose of the cache driver is to speed up reading of data, when the same data is read more than once. A cache hit not only increases throughput, but also helps reduce power consumption of the drive.<br><br>Cache memory is handled in units of <b>128KB (64 sectors)</b>.<br>The cache algorithm consists of a combination of the following methods.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_5">
+<div style="margin-left:40px;"><h4><b>LRU (Least Recently Used)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The LRU (Least Recently Used) method discards the least recently used data first. Cached data is linked to the beginning of a list when data is entered in the cache or when a cache hit occurs. When there is not enough cache memory, new memory is allocated by freeing data in order, starting from the end of the list.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_6">
+<div style="margin-left:40px;"><h4><b>Deletion Count</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Cache memory is managed based on the LRU method, however, if a cache entry is expected to be referenced often (i.e. cache hits will occur often), it is sometimes desirable to retain that entry in the cache so a high reuse rate can be achieved. To delay deletion of a cache entry that is referenced often, a deletion count is added to the entry. The cache data is deleted when the reference count matches the deletion count.<br>The deletion count is incremented by the LRU method for cache entries that are subject to deletion.<br>However, the following exceptions exist.<br></div>
+</ol>
+<div style="margin-left:70px;"><ul>
+<li> If the deletion count of an entry exceeds 16, LRU takes priority and that entry will be subject to deletion, even if the entry is referenced often.
+<li> Under the above condition, if no entry can be found that should be deleted even after the entire list is searched, LRU will be invoked and the least recently used cache entry will be deleted.
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_7">
+<div style="margin-left:40px;"><h4><b>Read-Ahead</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UMD&trade; related drivers use the cache driver to perform read-ahead processing.<br>However, in this case, read-ahead is not performed speculatively. If the cache driver determines that a request is for a streaming data access, a read-ahead will be performed to stream additional data.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Cache Deletion Timing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Cache memory is deleted at the following times.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> When there is not enough room in the cache for new cache data
+<li> When a disc is detected (when a resume occurs from sleep mode or when a disc is inserted/ejected)
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Cache-Related Settings and APIs</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>loctl Commands That Bypass the Drive Cache and Cache Driver</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SCE_ISOFS_UNCACHED_READ<br>SCE_UMD_UNCACHED_READ<br>When these commands are used to issue a read request, the drive cache and cache driver are always bypassed when the disc is accessed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Setting SCE_O_NOBUF or SCE_FNBUF Flags in the 2nd Argument of sceIoOpen*()</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If these flags are set for a file, the cache driver is bypassed when data is transferred.<br>Therefore, the request reaches the UMD&trade; drive without it being determined whether the data was in the cache.<br>Setting these flags on the PSP-1000 has no effect on reading since the cache driver is not resident.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Read-Ahead Request Commands</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SCE_ISOFS_READ_AHEAD<br>SCE_ISOFS_ACQ_READ_AHEAD<br>SCE_UMD_READ_AHEAD<br>SCE_UMD_ACQ_READ_AHEAD<br>These commands request the cache driver to cache specific data in advance.<br>Although the commands themselves can be used on the PSP-1000, since no cache driver exists, no reading ahead is performed and no cache hit will occur even for a subsequent read.<br><br>SCE_ISOFS_ACQ_READ_AHEAD<br>SCE_UMD_ACQ_READ_AHEAD<br>These two commands can be used to obtain the status of a read ahead request.<br>The status values that can be obtained are WAIT, WORKING, and FINISH.<br>When the read ahead status is checked on a PSP-1000, FINISH is always returned because read ahead requests are not executed on the PSP-1000.<br><br>To check the status of a read ahead request using the SCE_UMD_POLL_READ_AHEAD and SCE_UMD_WAIT_READ_AHEAD commands, specify the index value corresponding to the request that is returned by SCE_UMD_ACQ_READ_AHEAD.<br>Note that if an invalid index is specified, FINISH status will be returned and no error will be reported.<br><br>For SCE_ISOFS_POLL_STAT_READ_AHEAD and SCE_ISOFS_WAIT_STAT_READ_AHEAD, the status of the request is obtained from a file descriptor, and not from an index. When multiple read ahead requests are executed for a single descriptor, these commands will obtain the status of the last request.<br><br>For information about how to use these commands, refer to the ISO9660 and UMD&trade; Block References.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Read-Ahead Request Commands</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A read-ahead request is a function for requesting that specific data be read ahead into cache memory.<br>The purpose of the cache driver, as described in the overview, is to speed up reading of data when the same data is read more than once. Read-ahead, on the other hand, enables loading to be sped up beginning with the first read.<br><br>Using read-ahead effectively can dramatically reduce loading time. However, the following points should be taken into consideration when using this function.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Reading During Read-Ahead Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The only difference between reading and read-ahead is whether data is passed to the cache driver or to the title. For that reason, reading is blocked while read-ahead processing is being performed.<br>For example, consider the following situation.<br></div>
+<div style="margin-left:67px;">If it is known during <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> A that a transition to <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> B will occur next, it is reasonable to read ahead the data required for <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> B. However, if background music is streaming in <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> A, that streaming may be disrupted as a result of the read-ahead.<br><br></div>
+<div style="margin-left:50px;">Be careful when using read-ahead together with streaming.<br>Although reading is blocked during read-ahead processing, if the read resulted in a cache hit, the read thread will return to the title without being blocked.<br>A read can get blocked either because it caused a cache miss or because it bypassed the cache driver.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Effective Use of Read-Ahead</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If the cache is full, a read-ahead will cause existing cache data to be replaced. Although this is not a problem if the data being replaced is no longer needed, depending on the amount of data being read ahead or the read-ahead timing, a subsequent read-ahead may end up replacing data that had been read ahead which was intended to cause a cache hit.<br>For example, consider the following situation.<br></div>
+<div style="margin-left:67px;">During <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> A, the data required for the scene is in the cache, and cache hits occur repeatedly during reading.<br>If it is known that a transition to <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> B will occur next, it is reasonable to read ahead the data required for <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> B. However, in this case, if cache hits continue to occur repeatedly for <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> A data, in some cases, cache entries for the data that was read ahead in advance for <a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a> B will be added to the end of the list and they will then become the first candidates for cache replacement, because of the replacement algorithm.<br><br></div>
+<div style="margin-left:50px;">When caching data, be sure to replace existing cache memory rather than memory that had just been newly allocated.<br><br>As long as cache hits occur repeatedly, the cache will not be newly replaced. However, if cache misses occur frequently after a read-ahead, the data in the cache that was read ahead (and as a result, will not have an increasing reference count) may immediately become a target for replacement. In this case, it may not be possible to fully realize the benefits of read-ahead.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Precautions When Using the Cache</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Consider Usability With the PSP-1000</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The cache driver is resident in the PSP-2000 and PSP-3000. If it is assumed that a title will only be used on the PSP-2000 or PSP-3000, read time on the PSP-1000 may not be taken into account and usability may decrease.<br><br>Although performing suitable read operations for the cache driver significantly contributes to reduced loading time on the PSP-2000 and PSP-3000, do not focus only on this processing.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Try Not to Depend on a Fixed Throughput</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With the PSP-1000, it was possible to calculate a fixed throughput for sequential accesses as long as there was no significant interference. However, by making the cache driver resident in the PSP-2000 andPSP-3000, throughput will vary significantly when cache hits and cache misses occur even for sequential accesses.<br>When the driver determines that a sequential access is occurring, it tries to maintain a fixed throughput by reading ahead to cause cache hits as much as possible. However, the read-ahead operations are not necessarily performed in time.<br>When using streaming playback to play movies or music, a certain amount of throughput variation must be supported.<br>If you want to avoid variations in throughput during streaming, set the SCE_O_NOBUF and SCE_FNBUF flags so that the data will bypass the cache driver.<br><b>To use the cache effectively, these flags should be set when the data will be used only once, such as with movie data or music data.</b><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Consider the Communication Timeout Period</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When two PSP-1000s are communicating, the loading times between the two devices will vary only slightly. However, when a PSP-1000 and PSP-2000 or PSP-3000 are communicating, the loading times may vary on the order of several tens of seconds because of cache hits on the PSP-2000.<br><br>In this case, if the communication timeout period is too short, a communication error will occur on the PSP&trade; where the cache hit occurred, and network game play between the PSP&trade; systems may not be possible. Therefore, when communicating, set the timeout period carefully according to the loading time.<br>(*) Refer to the &quot;Precautions&quot; chapter in the &quot;pspnet Overview&quot; document.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

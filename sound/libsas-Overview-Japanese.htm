@@ -1,0 +1,1027 @@
+<html lang="jp">
+<head>
+<title>libsas-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsas
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の概要と特長</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasはSASを制御するためのライブラリです。libsasを用いることで、ADPCM(.vag)形式などで用意した波形データを音素片として利用して、波形データの発音・ピッチ変換・エンベロープ処理・デジタルエフェクトなどの処理を行った音声データを得ることができます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_1">
+<div style="margin-left:63px;"><h4><b>特長</b><br><br></h4></a></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> Media Engineにて動作するソフトウェアオーディオシンセサイザ(SAS)を制御
+<li> 出力データ形式は44.1kHz 16ビットの2チャネル出力（ステレオモード時、エフェクトあり）または4チャネル出力（マルチチャネルモード時、エフェクトなし）
+<li> 粒度(1回の内部処理で生成されるPCMデータサンプル数)を64から2048の間の32の倍数から選択可能
+<li> 対応波形フォーマットはATRAC3&trade;(ループなしのモノラル形式のみ), ADPCM(.vag)およびPCM(16bitモノラル形式)
+<li> ノイズ音源搭載
+<li> 最大同時発音ボイス数は32 (処理負荷により変動)
+<li> デジタルエフェクト機能を搭載
+<li> -12オクターブ～+2オクターブまでのピッチ制御が可能
+<li> ADSR方式のエンベロープを搭載
+<li> 発音中の音声に対するポーズ機能を搭載
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>SASの機能について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">上記のとおり、libsasはMedia Engine上で動作するSASを呼び出すライブラリとなっています。SASが行う音声合成処理についての詳細(入出力データ形式や音声の加工内容など)については、「SAS概要」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サウンド出力までの流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasを利用した場合、サウンド出力までの流れは以下のようになります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libsas-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 サウンド出力までの流れ</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasを使用するには次のファイルが必要です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsas.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ウィークインポートライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsas_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsas.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">また、libsasの下請けを行うモジュールをロードするために、utility機能を用いる必要があります。詳しくはutility概要をご覧ください。<br>また、音素片としてATRAC3&trade;形式のデータを用いる場合には、ATRAC3&trade;データの解析およびデコード処理のために、libatrac3plusを同時に使用する必要があります。詳しくはlibatrac3plus概要をご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasを利用したサンプルプログラムには以下のものがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_1"><h4>
+(1)&nbsp;<b>psp/devkit/sample/sound/starsas</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">グラフィックスのサンプルであるpsp/devkit/sample/graphics/starsにlibsasを利用した効果音再生処理、再生の一時停止などを追加したものです。PCMサウンドの出力にはlibwaveを利用しています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_2"><h4>
+(2)&nbsp;<b>psp/devkit/sample/sound/ryukyu</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">(1)と同様に、グラフィックスのサンプルであるpsp/devkit/sample/graphics/starsにlibsasを利用して音程変化による楽音再生処理を追加したものです。PCMサウンドの出力にはlibwaveを利用しています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_3"><h4>
+(3)&nbsp;<b>psp/devkit/sample/sound/starmix</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">グラフィックスのサンプルであるpsp/devkit/sample/graphics/starsにlibsasを使った効果音再生及びATRAC3plus&trade;ライブラリ(libatrac3plus)を使ったBGM再生処理を追加したものです。PCMサウンドの出力にはlibwaveを利用しています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_4"><h4>
+(4)&nbsp;<b>psp/devkit/sample/sound/at3mix</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">starmixと同様の、libsas及びlibatrac3plusを同時に使ったサンプルです。<br>starmixと比べて、Simple Audio機能を使うなどすることで、よりCPU負荷の軽い方法でのサウンド出力を行っています。負荷削減の参考にしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_5"><h4>
+(5)&nbsp;<b>psp/devkit/sample/sound/p3da_revolve</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">周回運動をする箱の画に合わせて、3Dポジショナルオーディオ効果を再生するサンプルプログラムです。これはlibsasの出力モードであるマルチチャネルモードの応用例になります。コンパイル時にUSE_SASというマクロを定義すれば、libsasのマルチチャネルモードを利用し、4つの移動音源のドップラー効果を再現します。出力モードの詳細については、別資料の「SAS概要」を参照してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_6"><h4>
+(6)&nbsp;<b>psp/devkit/sample/sound/sas-streaming</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">libsasのATRAC3&trade;ストリーミング再生機能を用いたサンプルです。<br>ストリーミング再生している音声を切り替えるなどを行っています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>libsasの使用手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasは以下のような手順にて利用します。<br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../sound/libsas-Reference-Japanese.htm#sceSasInit">sceSasInit</a>()にて初期化処理を行います</li>
+<li VALUE=2> <a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVoice">sceSasSetVoice</a>()にて発音したいボイスに基本パラメータをセットします</li>
+<li VALUE=3> <a href="../sound/libsas-Reference-Japanese.htm#sceSasSetKeyOn">sceSasSetKeyOn</a>()などで各種サウンド処理(キーオンなど)を行います</li>
+<li VALUE=4> <a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()にてキーオン情報などを元にPCMサウンドを生成します</li>
+<li VALUE=5> <a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>()にて生成したPCMサウンドを出力します</li>
+<li VALUE=6> <a href="../sound/libsas-Reference-Japanese.htm#sceSasExit">sceSasExit</a>()にて終了処理を行います</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>初期化及び終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasを利用する場合には<a href="../sound/libsas-Reference-Japanese.htm#sceSasInit">sceSasInit</a>()にて初期化処理を行う必要があります。またlibsasを利用後、アプリケーションを終了する際には<a href="../sound/libsas-Reference-Japanese.htm#sceSasExit">sceSasExit</a>()にて終了処理を行ってください。<br><br>例)<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int iRc;
+
+/* 初期化処理 */
+iRc = <a href="../sound/libsas-Reference-Japanese.htm#sceSasInit">sceSasInit</a>();
+if (iRc != SCE_OK){
+	/* 初期化に失敗 */
+}
+
+/* libsasの関数を利用する処理はここに記述してください */
+
+/* 終了処理 */
+iRc = <a href="../sound/libsas-Reference-Japanese.htm#sceSasExit">sceSasExit</a>();
+if (iRc != SCE_OK){
+	/* 終了処理に失敗 */
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>sceSasCore()にて生成したPCMサウンドの出力方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasでは<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()関数にてPCMサウンドの生成を行います。生成されたPCMサウンドはlibwaveの<a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>()関数などを利用して出力します。PCMサウンドの出力に際して、まず出力サンプル長などを設定します。<br></div>
+<br>
+<div style="margin-left:50px;">例)<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int iRc;
+
+/* 0chをステレオ出力に設定 */
+iRc = <a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioSetFormat">sceWaveAudioSetFormat</a>(0, SCE_WAVE_AUDIO_FMT_S16_STEREO);
+if (iRc != SCE_OK){
+	/* 設定に失敗した */
+}
+/* 0chの出力サンプル長を256サンプルに設定 */
+iRc = <a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioSetSample">sceWaveAudioSetSample</a>(0,256);
+if (iRc != SCE_OK){
+	/* 設定に失敗した */
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">PCM形式のサウンドの出力には<a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>()などの関数を利用します。<a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>()は指定されたバッファに格納されているPCM形式のサウンドをオーディオドライバに登録します。登録されたサウンドデータは既にオーディオドライバに登録されていたサウンドデータが再生された後に再生が開始されます。<br>オーディオドライバに登録したからといって即座に再生が行われるとは限りません。またオーディオドライバはサウンドデータのコピーを作成しません。そのため実際に再生が開始される前及び再生中にバッファの内容を書き換えてしまうと正しく再生されません。サウンド出力用バッファはダブルバッファ以上にし、登録直後のバッファ内容を書き換えてしまわないようにしてください。<br></div>
+<br>
+<div style="margin-left:50px;">例)<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* pcmBuf はダブルバッファとする */
+/* <a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()の引数として渡すバッファは64バイトアラインメントと */
+/* なっている必要があります */
+int iSide = 0;
+
+<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>( pcmBuf[iSide] );
+
+/* pcmBuf[iSide] にある 16 bit PCM STEREOデータを0chに出力する */
+<a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>(
+	0,
+	SCE_WAVE_AUDIO_VOL_MAX,
+	SCE_WAVE_AUDIO_VOL_MAX,
+	pcmBuf[iSide]
+);
+iSide ^= 1;
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>ATRAC3&trade;との連携について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">本章ではlibsasでATRAC3&trade;を使う方法や、ADPCMとの違いについて説明します。<br>libatrac3plusとlibsasを組み合わせて使用することにより、ATRAC3&trade;音源をSASの音素片として使うことができます。また、ADPCM, PCM音源と異なり、オンメモリ再生だけでなく、ストリーミング再生を支援する機能もありますので、容易にストリーミング再生を行うことが可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>使用方法の概要(オンメモリ再生時)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASの初期化処理の後、以下のような手順によりlibsasでATRAC3&trade;を使うことができます。<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> libatrac3plusライブラリが用いるモジュールをutilityを用いてロードする</li>
+<li VALUE=2> ATRAC3&trade;データを読み込む</li>
+<li VALUE=3> <a href="../sound/libatrac3plus-Reference-Japanese.htm#sceAtracSetDataAndGetID">sceAtracSetDataAndGetID</a>()関数などを用いて、libatrac3plusにATRAC3&trade;データを登録し、ATRAC&trade; ID(デコード用ハンドル)を取得する</li>
+<li VALUE=4> 音素片設定関数<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVoiceATRAC3">sceSasSetVoiceATRAC3</a>()にて、取得したATRAC&trade; IDに登録されたデータをSASの特定ボイスに登録する</li>
+</ol></div>
+<div style="margin-left:50px;">以降の通常の再生を行う方法は同様です。<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetADSR">sceSasSetADSR</a>()や<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVolume">sceSasSetVolume</a>()を用いて音量やエンベロープ形状などの再生パラメータを設定し、<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetKeyOn">sceSasSetKeyOn</a>()関数で該当ボイスの発音を開始するなどができます。<br><br>データの読み込みが必要なのは通常のADPCM音声などと変わりませんので、音声を鳴らすまでの違いは、<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> libsasのほか、libatrac3plusに関連するモジュールをロードする必要がある
+<li> 音素片設定の前にATRAC3&trade;のデコードハンドルを先立って取得する
+<li> <a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVoice">sceSasSetVoice</a>()関数の代わりに<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVoiceATRAC3">sceSasSetVoiceATRAC3</a>()を使う
+</ul></div>
+<div style="margin-left:50px;">の3点となります。<br><br>もう一つの違いとして、終了時の処理があります。ADPCMやPCMでは、使用しなくなった音声データを破棄する場合、特に何もしなくてよいのですが、ATRAC3&trade;ではATRAC&trade; IDを明示的に開放する必要があります。これには<a href="../sound/libsas-Reference-Japanese.htm#sceSasReleaseATRAC3Id">sceSasReleaseATRAC3Id</a>()を用います。あるATRAC&trade; IDにATRAC3&trade;音声データを登録した後、違う音声データを登録したい場合にも一旦ATRAC&trade; ID解放を行う必要があります。<br>またATRAC3&trade;音素片が登録されているボイスの音源を他のものに変更しようとした場合、エラーとなります。一旦ATRAC&trade; IDを解放してから変更するようにしてください。<br><br>SASのボイスに登録したATRAC&trade; IDはSAS側で占有され、<a href="../sound/libsas-Reference-Japanese.htm#sceSasReleaseATRAC3Id">sceSasReleaseATRAC3Id</a>()を用いて解放するまでlibatrac3plusでは使用することができなくなります。つまり、SASで使っている間、通常利用できるATRAC&trade; IDの数は減ります。<br>なお、通常libatrac3plusで同時利用できるATRAC&trade; IDの数はATRAC3plus&trade;とATRAC3&trade;がそれぞれ2つとなりますが、SASではATRAC3plus&trade;を使用することができませんので、そのままだとSASで使えるATRAC3&trade;ボイス数は最大で2となります。これ以上のボイス数が必要な場合は、<a href="../sound/libatrac3plus-Reference-Japanese.htm#sceAtracReinit">sceAtracReinit</a>()関数を用いることで、ATRAC3plus&trade;の利用可能数を減らして、代わりにATRAC3&trade;の利用可能数を増やすことができます。詳しくはlibatrac3plusのドキュメントをご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>使用方法の概要(ストリーミング再生時)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ATRAC3&trade;では比較的長いデータを再生することが想定されるため、libsasにはATRAC3&trade;のストリーミング再生を支援する機能があります(ただし、libatrac3plusのような細かいファイル読み込み制御などはできません。またループのある音源データはそもそもサポートしていません)。<br>ストリーミング支援機能を用いた場合のATRAC3&trade;音声再生方法は大まかに以下のようになります。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> ATRAC3&trade;データを途中までバッファAに読み込む</li>
+<li VALUE=2> <a href="../sound/libatrac3plus-Reference-Japanese.htm#sceAtracSetDataAndGetID">sceAtracSetDataAndGetID</a>()関数などを用いて、libatrac3plusにATRAC3&trade;データを登録し、ATRAC&trade; ID(デコード用ハンドル)を取得する</li>
+<li VALUE=3> 音素片設定関数<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVoiceATRAC3">sceSasSetVoiceATRAC3</a>()にて、取得したATRAC&trade; IDに登録されたデータをSASの特定ボイスに登録する</li>
+<li VALUE=4> (<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()関数などにより、音声合成・出力を行う)</li>
+<li VALUE=5> <a href="../sound/libsas-Reference-Japanese.htm#sceSasCheckATRAC3BufferStatus">sceSasCheckATRAC3BufferStatus</a>()の戻り値を見て、ダブルバッファのもう一つ側を上書きしてよい状態になるまで待つ</li>
+<li VALUE=6> ダブルバッファのもう一つのバッファ(バッファB)にATRAC3&trade;データの続きを読み込む</li>
+<li VALUE=7> <a href="../sound/libsas-Reference-Japanese.htm#sceSasConcatenateATRAC3">sceSasConcatenateATRAC3</a>()を用いて、バッファBが続きのデータであることを伝える</li>
+<li VALUE=8> 以下(バッファA, Bを交互に入れ替えて)ファイル終端まで繰り返し</li>
+</ol></div>
+<div style="margin-left:50px;"><br>現在再生しているバッファを上書きしてしまい、データが破損してしまうのを防ぐため、<a href="../sound/libsas-Reference-Japanese.htm#sceSasCheckATRAC3BufferStatus">sceSasCheckATRAC3BufferStatus</a>()を呼び出してデータを上書きしてよいかをチェックします。再生中のバッファの位置は<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()などの音声合成関数が呼び出されたときに変化しますので、<a href="../sound/libsas-Reference-Japanese.htm#sceSasCheckATRAC3BufferStatus">sceSasCheckATRAC3BufferStatus</a>()でバッファ状態をチェックするのは、合成関数の呼び出し後に一度だけ行えば十分です。<br>また、ファイル読み込みは通常それなりに時間のかかる処理となりますので、サウンド再生スレッドと同一スレッドでブロッキング処理となるsceIoRead()などを直接読み込むと音途切れの原因となります。非同期IO機能を用いるようにしてください。<br>ストリーミング再生をする場合はバッファのサイズに注意してください。特にピッチを上げる方向に音程変化などをさせた場合、一度の音声合成関数で必要になるデータの量が大きくなるため、音声合成に必要なデータ足りない状態になる可能性があります。ファイル読み込みの頻度などが高くならないようにするためにも、通常速度再生にて数秒程度に相当するぐらいのバッファ(例えば、66kbpsのデータに対して64KB程度)を用意するようにしてください。<br><br>詳しくはサンプルプログラムのsas-streamingを参考にしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>ステレオ音声のストリーミング再生について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASではモノラルのATRAC3&trade;ファイルしか対応していません。このため、ステレオ音声を再生するには、2ボイスを左右に割り当てて、同時に発音開始させるなどの処理が必要になります。<br>「同時」に処理をすることが重要になります。特に、ストリーミング再生をした場合、メディアの状況によりデータの読み込みが間に合わないといったことがありえるのですが、この時に片側のボイスのみデータが継ぎ足されたといった状態になると、その後の再生位置がずれたままとなり、非常に聞き苦しい音声となってしまいます。両方のボイス用のデータが読み込めた時点でデータを継ぎ足すようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>libatrac3plusとlibsasの使い分けについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libatrac3plusとlibsasの両方でATRAC3&trade;のストリーミング再生を行うことができますが、使用できるメモリ量や負荷の関係により、両者のサポートする機能には違いがあります。<br>大まかには、libatrac3plusでは数分以上の音(BGMなど)を特にエフェクトなどをかけずに再生すること、libsasはインタラクティブな変化が必要な数秒～数十秒程度の音声(セリフや掛け声、フレーズサンプリングされた楽曲の一部など)に対して、各種エフェクトをかけながら再生することに向いています。<br>詳細な違いは以下のようになります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>libsasでのサポート</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>libatrac3plusでのサポート</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ループ音声&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未対応&nbsp;&nbsp;<br>&nbsp;&nbsp;(演奏終了後に再キーオンして対応)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ステレオ音声&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未対応&nbsp;&nbsp;<br>&nbsp;&nbsp;(モノラルを二音使うことで対応)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;音程変化&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対応&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;エフェクト&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対応&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;最大ボイス数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;モノラル6音&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ステレオ6音&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;より低いビットレート&nbsp;&nbsp;<br>&nbsp;&nbsp;(ATRAC3plus&trade;)の対応&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未対応&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対応&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>PCM, ADPCMとATRAC3&trade;の使い分けについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasではPCM, ADPCM, ATRAC3&trade;を使うことができますが、それらの特徴や、便利な使い方を示します。使い分けの参考にしてください。<br><br>PCMは未圧縮の音源ですので、原理上音質は最も高くなりますが、サイズも大きくなります(706kbps、一秒あたりおよそ86KB)。任意の圧縮形式で格納された音源をPCMにデコードして、それをSASで使う、あるいはSASで合成された音声をさらにもう一度SASに入力させる(エコーのような効果を得る)といった使い方もできます。サイズ的な制約により、生の音素片として使うのは困難なことが多いかもしれません。<br><br>ADPCMは通常のPCM形式に比べておおよそ1/3.5程度(202kbps、一秒あたり25KB程度)に圧縮された形式となります。デコードが軽いため、一度に多くの音声を同時に再生することが可能です。サイズも比較的小さくなりますので、通常の楽器の音声などの音素片として使用するのに適しています。またループを使うことによって、楽器の残響音のような部分ではさらにデータを小さくすることができます。<br><br>ATRAC3&trade;はさらに高い圧縮率を実現しています(66kbpsまたは52kbps、一秒あたり8KB程度)ので、より小さいサイズでより長い時間の音声を記録することができます。つまり、メモリ使用量、ロード時間などを改善することができます。ただし一方で、ATRAC3&trade;の方がADPCMよりも再生時(デコード)に必要な計算量、メモリともに大きくなるため、現状では最大でもモノラル6音までしか同時に再生することができません。<br><br>比較的長い再生時間があるが、同時に何音も発音させないような音声(フレーズサンプリングされたBGMの断片や、掛け声や叫び声のような効果音)はATRAC3&trade;、短いデータであるがリリースレートが長く、複数ボイスでの再生が重なることの多い音声(ピアノの残響音など)はADPCMという風に使い分けることで、データサイズと音質のバランスをとることが可能です。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>重要な注意事項</b><br><b>スレッドのプライオリティ設定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()で生成したPCMサウンドを<a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>()などで出力するサウンド処理スレッドのプライオリティはなるべく高くしてください。特に問題がない限りSCE_KERNEL_USER_HIGHEST_PRIORITYに設定されることをお勧めします。サウンド処理スレッドのプライオリティが低い場合、ノイズ混じりで再生される・再生される音が途切れる・まったく再生されない、などの現象が発生します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ピッチを上げる場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">最大同時発音ボイス数は32ですが発音中の多くのボイスに対してピッチを上げると再生音が途切れる場合があります。この場合はピッチをあまり上げないようにする(ピッチが上がった状態で記録された音素片を用意する)か同時発音数を少なくしてください。<br>特にATRAC3&trade;を音素片として使用した場合には負荷が高くなりますのでご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>他の処理との同時使用</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ソフトウェアオーディオシンセサイザ(以下SAS)はMedia Engine上で動作します。そのためMedia Engine上で動作する他の処理(ムービー再生やATRAC3plus&trade;等)を同時に行うとSASの音が途切れてしまう場合があります。これはムービー再生やATRAC3plus&trade;のデコード処理がMedia Engineを長い時間占有してしまうことが要因となっています。<br>粒度を256サンプルとしたSASと、Media Engine上で動作する他の処理を同時に利用した場合の音が途切れないボイス数のおおよその目安は以下の表の通りです。なお、この値は参考値であり性能を保証するものではありません。またメインCPUなどで同時に実行される処理の影響によりメモリ帯域などが消費されるため、性能が変化することがあります。<br>なお、ボイス数はADPCMまたはPCM音源を使った時の値となっています。ATRAC3&trade;音源を用いたボイス1つはADPCM音源のボイス6音程度と同じ程度と換算してください。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>同時に実行する処理</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>SASのVoiceの&nbsp;<br>&nbsp;Pitch設定</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>SASで音が途切れずに発音&nbsp;<br>&nbsp;できるボイス数の目安</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;なし&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;24ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(66kbps&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;23ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(66kbps&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;29ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;21ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;29ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;21ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;28ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(32kpbs&nbsp;mono)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;23ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(32kpbs&nbsp;mono)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;29ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;21ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(48kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;27ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(48kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;22ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;15ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(128kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;26ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;18ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(128kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;18ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;15ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(256kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;18ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;13ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(256kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;12ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;7ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(320kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;15ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;9ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(320kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;6ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;2ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(66k&nbsp;stereo)&nbsp;+&nbsp;&nbsp;<br>&nbsp;ATRAC3plus&trade;&nbsp;(32k&nbsp;mono)&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;29ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;21ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132k&nbsp;stereo)+&nbsp;&nbsp;<br>&nbsp;ATRAC3plus&trade;&nbsp;(32k&nbsp;mono)&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;28ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(66k&nbsp;stereo)&nbsp;+&nbsp;&nbsp;<br>&nbsp;ATRAC3plus&trade;&nbsp;(256k&nbsp;stereo)&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;11ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132k&nbsp;stereo)+&nbsp;&nbsp;<br>&nbsp;ATRAC3plus&trade;&nbsp;(256k&nbsp;stereo)&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;17ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;11ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(105k&nbsp;stereo)&nbsp;*2&nbsp;+&nbsp;&nbsp;<br>&nbsp;ATRAC3plus&trade;&nbsp;(128k&nbsp;stereo)&nbsp;*2&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;17ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;12ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MPEG動画(Audio付き)再生（※）&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;5ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;3ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、32kpbs&nbsp;mono)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;30ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;21ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、32kpbs&nbsp;mono)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;25ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、128kpbs&nbsp;mono)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;29ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;21ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、128kpbs&nbsp;mono)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;26ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;21ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;mono)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;28ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;20ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;mono)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;22ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;17ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、32kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;26ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、32kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;14ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、128kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;23ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;16ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、128kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;16ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;11ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;23ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;16ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;17ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;13ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(48000Hz、320kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;12ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;10ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(48000Hz、&nbsp;<br>&nbsp;32～320kpbs&nbsp;VBR&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;13ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;10ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(24000Hz、160kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;22ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;16ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(8000Hz、160kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;22ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;15ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;AAC&nbsp;(44100Hz、192kbps&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;26ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;18ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;AAC&nbsp;(44100Hz、128kbps&nbsp;stereo)&nbsp;1本再生&nbsp;<br>&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;26ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;AAC&nbsp;(44100Hz、64kbps&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;27ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;19ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;AAC&nbsp;(44100Hz、128kbps&nbsp;mono)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;20ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;P3DAで4ボイスを3D処理、&nbsp;<br>&nbsp;その他のボイスは通常再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;30ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て&nbsp;2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;22ボイスまで&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<div style="margin-left:50px;">※一例として挙げました。動画およびオーディオのビットレートによりSASの発音ボイス数も変わります。<br><br>また、同じ条件下で<b><a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetClockFrequency">scePowerSetClockFrequency</a></b>()を用いてCPUクロック周波数を333MHzで動作させた場合については次の表を参考にしてください。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>同時に実行する処理</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>SASのVoiceの&nbsp;<br>&nbsp;Pitch設定</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>SASで音が途切れずに発音&nbsp;<br>&nbsp;できるボイス数の目安</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;なし&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3&trade;&nbsp;(132kbps&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(32kpbs&nbsp;mono)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(32kpbs&nbsp;mono)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(48kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(48kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;28ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(128kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;31ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(128kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;25ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(320kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;27ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;ATRAC3plus&trade;&nbsp;(320kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;31ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;24ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MPEG動画(Audio付き)再生（※）&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;17ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;15ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;mono)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;mono)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;stereo)&nbsp;1本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;29ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;MP3&nbsp;(44100Hz、320kpbs&nbsp;stereo)&nbsp;2本再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;26ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;AAC&nbsp;(44100Hz、128kbps&nbsp;stereo)&nbsp;1本再生&nbsp;<br>&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;P3DAで4ボイスを3D処理、&nbsp;<br>&nbsp;その他のボイスは通常再生&nbsp;</td>
+<td valign="top">&nbsp;通常&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;全て&nbsp;2&nbsp;Octave&nbsp;Up&nbsp;</td>
+<td valign="top">&nbsp;32ボイスまで&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<div style="margin-left:50px;">※一例として挙げました。動画およびオーディオのビットレートによりSASの発音ボイス数も変わります。<br><br>SASの音が途切れてしまうような状況下でもSASの音が途切れないようにする方法の一つとして、粒度を増やす方法があります。通常利用では<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()を1回実行することによって生成した256サンプルのPCMデータを一度の<a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>()にて出力しますが、これを変更することで負荷を低減することが可能です。具体的には、<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()を複数回実行する、あるいは<a href="../sound/libsas-Reference-Japanese.htm#sceSasInitWithGrain">sceSasInitWithGrain</a>()関数を用いて粒度あたりのサンプル数を多くして<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()を呼び出すことにより256サンプルより多くのPCMサウンドを生成し、生成された多くのPCMデータを一度の<a href="../sound/libwave-Reference-Japanese.htm#sceWaveAudioWrite">sceWaveAudioWrite</a>()で出力するようにします。これにより一度に出力されるPCMデータが増え、音として出力されている時間も長くなるため結果的に音が途切れにくくなります。ただし一度に生成されるPCMデータが多くなりますので、次の発音までの遅延が大きくなるという欠点もあります。<br>なお、<a href="../sound/libsas-Reference-Japanese.htm#sceSasInitWithGrain">sceSasInitWithGrain</a>()を用いて粒度を増やした場合、粒度はそのままで<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()を複数回呼んだときに比べ、より負荷は軽くなりますが、遅延やテンポずれなどは発生しやすくなりますのでご注意ください。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libsas-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 粒度を落とす方法</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>パラメータ更新のタイミングについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SASは合成関数(<a href="../sound/libsas-Reference-Japanese.htm#sceSasCore">sceSasCore</a>()などを呼び出したときに内部的に呼び出される関数)内部で、バッチ的に内部パラメータを更新します。このため、例えば以下のような現象が発生します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_1"><h4>
+(1)&nbsp;<b>sceSasSetVolume()関数で音量を変化させても、すぐには音量が変化しない</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVolume">sceSasSetVolume</a>()関数を呼び出した後、次回に合成関数が呼び出されたときに初めて音量が変化します。<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetVolume">sceSasSetVolume</a>()を呼び出した瞬間になっている音の音量は変化しません。<br>これは、音量設定などに限った話ではなく、キーオンやキーオフ、エンベロープ形状変更など、すべてで発生します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_2"><h4>
+(2)&nbsp;<b>sceSasGetEndFlag()関数で返る値がキーオン、キーオフ関数(sceSasSetKeyOn()及びsceSasSetKeyOff()関数)呼び出し後すぐに更新されない</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../sound/libsas-Reference-Japanese.htm#sceSasGetEndFlag">sceSasGetEndFlag</a>()で取得できる全ボイスの発音終了フラグは、合成関数を呼び出し終わった時点で一度だけ更新されます。したがって、合成関数を呼び出す前に、同一ボイスに対して複数回キーオン、キーオフを行うような場合、発声終了フラグをあるボイスが空き状態にあることを確認することには使うことはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>終了処理について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsasは内部的にMedia Engine側CPUの機能を呼び出しており、その際Media Engine内部資源の排他処理を行っています。<br>そのため、libsasを使用しているスレッドに対して<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>()を使用したり、スレッドがDORMANT状態になる以前に<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>()を使ってスレッドを強制的に削除すると、タイミングによっては内部資源を握った状態でスレッドが停止・削除されてしまうことがあります。この結果libsasを含め、Media Engine側CPUの機能を用いる他のライブラリが正しく動作しなくるなどの問題が起きる危険性があります。<br><br>スレッドを停止させる場合は<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> スレッド停止を命じる側からスレッドに対して共有変数、イベントフラグなどを用いて終了を伝達する。
+<li> 停止させられるスレッド側は、上記フラグなどを定期的に監視しておき、停止命令が出ていないかを確認する。出ていた時は現在libsasが動作していないことを確認した上で<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelExitThread">sceKernelExitThread</a>()を呼び出し、自スレッドを停止させる。
+</ul></div>
+<div style="margin-left:50px;">ようにして下さい(libsasを用いた各種サンプルもこのような作りになっています)。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

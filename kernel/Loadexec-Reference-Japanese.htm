@@ -1,0 +1,315 @@
+<html lang="jp">
+<head>
+<title>Loadexec-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;の再起動とアプリケーション起動(loadexec)
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceKernelLoadExecParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceKernelLoadExecParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>sceKernelLoadExecのオプション構造体<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>typedef struct <b>SceKernelLoadExecParam</b> {
+	SceSize <i>size;</i>
+	SceSize <i>args</i>;
+	const void *<i>argp;</i>
+	const char *<i>key</i>;
+} SceKernelLoadExecParam;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(SceKernelLoadExecParam)を指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>args</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../kernel/Loadexec-Reference-Japanese.htm#sceKernelLoadExec">sceKernelLoadExec</a> APIによって起動されるプログラムに渡す引数の&nbsp;&nbsp;<br>&nbsp;&nbsp;サイズを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;上記で指定した引数へのポインタを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;バイト列で渡される引数は、標準crtによってより一般的な&nbsp;&nbsp;<br>&nbsp;&nbsp;argc, argv形式に変換されます。その変換ルールは&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;#define MAXARG 20&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;char *argv[MAXARG], *ap;&nbsp;&nbsp;<br>&nbsp;&nbsp;int argc;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;for( argc = 0, ap = argp; argc &lt; MAXARG &amp;&amp; &nbsp;&nbsp;<br>&nbsp;&nbsp;    ap-argp &lt; args; argc++){&nbsp;&nbsp;<br>&nbsp;&nbsp;    argv[argc] = ap;&nbsp;&nbsp;<br>&nbsp;&nbsp;    ap += strlen(ap)+1;&nbsp;&nbsp;<br>&nbsp;&nbsp;}&nbsp;&nbsp;<br>&nbsp;&nbsp;argv[argc] = (void*)0;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;となっています。すなわち、<i>args, argp</i>で与えられた領域を&nbsp;&nbsp;<br>&nbsp;&nbsp;0で終端された文字列のリストとみなして処理します。&nbsp;&nbsp;<br>&nbsp;&nbsp;なお、<i>args, argp</i>で指定した領域は再起動によって、&nbsp;&nbsp;<br>&nbsp;&nbsp;システムによって移動されます。また再起動時に&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリを初期化するためポインタを渡すことはできません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>key</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現在は利用できません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">loadexecの細かな制御を指定するためのオプション構造体です。<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadExec"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadExec<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[再起動とアプリケーション起動]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>PSP&reg;を再起動してプログラムモジュールをファイルパスからロードする<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+int <b>sceKernelLoadExec</b>(
+	const char *<i>fileName</i>,
+	const <a href="../kernel/Loadexec-Reference-Japanese.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a> *<i>param</i>
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再起動後実行されるプログラムのファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>param</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;再起動時の挙動を指定するための<a href="../kernel/Loadexec-Reference-Japanese.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a>構造体への&nbsp;&nbsp;<br>&nbsp;&nbsp;ポインタを指定します。不要な場合は、NULLを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a><br><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE">SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE</a><br><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME">SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME</a><br><br>上記はAPIの呼び出しに対するカーネルからのエラーコードで、正常時には再起動が行われ、指定したプログラムが起動するため何も値が返されません。ただし、再起動の途中でエラーが起き、プログラムを起動できなかっ場合は、再起動後にFLASH上のアプリケーションがエラーコードを表示します。可能性としては全てのエラーコードが表示される可能性がありますが、代表的なものとしては以下が存在いたします。<br></div>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br>SCE_KERNEL_ERROR_ILLEGAL_PERM<br>SCE_KERNEL_ERROR_ILLEGAL_OBJECT<br><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE">SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE</a><br>SCE_KERNEL_ERROR_UNSUPPORTED_PRX_TYPE<br>SCE_KERNEL_ERROR_NO_MEMORY<br></div>
+<br>
+<div style="margin-left:50px;">SCE_ERROR_ERRNO_EIO<br>SCE_ERROR_ERRNO_ENOENT<br>SCE_ERROR_ERRNO_ENOMEDIUM<br></div>
+<br>
+<div style="margin-left:50px;">SCE_UMD_NOT_DEVICE_READY<br>SCE_UMD_NO_MEDIUM<br>SCE_UMD_UNKNOWN_MEDIUM<br>SCE_UMD_HARDWARE_FAILURE<br>SCE_UMD_POWER_OFF<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">PSP&reg;を再起動し、ファイル名で指定されたアプリケーションを起動します。正常実行時には関数から戻りません。指定するプログラムは、ユーザモードプログラムで、ディスクもしくはhost0上になければなりません。<br>また、このAPIを呼んだ時点でUMD&reg;の入れ替えを禁止した状態になっていなければいけません。UMD&reg;が入れ替え可能な状態であれば、<a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>が返ります。UMD&reg;入れ替えに関する詳細は、「UMD-Overviewドキュメント」を参照してください。<br>起動するプログラムに対し<a href="../kernel/Loadexec-Reference-Japanese.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a>でパラメータを渡すことが可能です。<a href="../kernel/Loadexec-Reference-Japanese.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a>の説明をご覧ください。<br>UMD&reg;上のプログラムを起動する場合、再起動後実行されるアプリケーションのファイル名に関する引数filenameは、以下のように指定してください。<br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> "disc0:/PSP_GAME/SYSDIR/BOOT.BIN"
+</ul></div>
+<div style="margin-left:50px;">このときEBOOT.BINを指定した場合は正しく起動が行われませんのでご注意ください。なお、システムソフトウェアからの起動及びUMD&reg;を入れた状態で電源を入れた場合、argpに渡される値は<br></div>
+<div style="margin-left:60px;"><ul>
+<li> "disc0:/PSP_GAME/SYSDIR/EBOOT.BIN\0\0" 
+</ul></div>
+<div style="margin-left:50px;">となっています。<br><br>なお、PSP&reg;のFLASH上のアプリケーションからゲームを起動する場合は、無線LAN経由の場合、パス、マックアドレス、IBSSを渡します。例えば、argpは"wlan0\008:00:46:xx:xx:xx \0 Akasaka1\0\0"が渡され、argc/argv形式に変換された際は、以下のように3つのNULL終端された文字列の配列が渡されます。<br></div>
+<div style="margin-left:60px;"><ul>
+<li> "wlan0"
+<li> "08:00:46:xx:xx:xx "
+<li> "Akasaka1"
+</ul></div>
+<div style="margin-left:50px;">ここでibssの実態は、IBSSのサブパートで、"グループ名"として独自定義しているものです。<br>一方、UMD&reg;経由の場合は、"disc0:/PSP_GAME/SYSDIR/EBOOT.BIN\0\0"が渡されます。<br><br>このAPIを呼んだ時点から画面が停止し、PSP&reg;を再起動してアプリケーションを起動するまでは暗転して真っ暗になりますが、表示中のフレームバッファを保持したまま次のプログラムに遷移することもできます。<br>後者を実現する場合は、「ディスプレイサービス」の「<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplaySetHoldMode">sceDisplaySetHoldMode</a>()」を参照してください。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelExitGame"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelExitGame<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[再起動とアプリケーション起動]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Gameを終了してPSP&reg;を再起動しアプリケーションを起動する<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+
+int <b>sceKernelExitGame</b> (
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Gameを終了し、PSP&reg;を再起動し、Flash上のアプリケーションを起動します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelRegisterExitCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelRegisterExitCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[再起動とアプリケーション起動]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>終了コールバックの登録<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+
+int <b>sceKernelRegisterExitCallback</b> (
+	SceUID <i>uid</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバック識別子&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Loadexec-Reference-Japanese.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">PSボタン(HOMEボタン)からGame終了を選択した際に、呼び出されるコールバックを登録します。コールバック中では、データ保存などの終了処理を行い、最後に<a href="../kernel/Loadexec-Reference-Japanese.htm#sceKernelExitGame">sceKernelExitGame</a>()を呼び出してください。<br>この関数は、main関数のできるだけ早い時期で呼び出してください。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>loadexecの返すエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;なんらかの異常&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020064&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;割り込みハンドラからの&nbsp;&nbsp;<br>&nbsp;&nbsp;呼びだしだった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x800200d3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドレスが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE">SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020147&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;loadexecが禁止されている&nbsp;&nbsp;<br>&nbsp;&nbsp;デバイス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME">SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002014c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象ファイルの指定が&nbsp;&nbsp;<br>&nbsp;&nbsp;正しくない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

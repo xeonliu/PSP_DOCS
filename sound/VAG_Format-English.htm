@@ -1,0 +1,199 @@
+<html lang="en">
+<head>
+<title>VAG_Format</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+VAG File Format
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>VAG File Format</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Features of the VAG File Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAG is waveform data that has been compressed using ADPCM . VAG data consists of the waveform data and 48 bytes of information about the waveform data such as the sampling frequency.<br>A VAG file has a ".vag" extension.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Overall Structure of a VAG File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following figure shows the format of a VAG file.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/VAG_Format-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  VAG File Structure</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Identification ID ('V','A','G','p' = 0x56,0x41,0x47,0x70)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Version&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;data size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Waveform data size (bytes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Sampling frequency (Hz)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserved&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reserved area (filled with 0)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[16]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Waveform data name&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">(*) unsigned int type field values are all Big Endian.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Waveform Data Format</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Waveform data is compressed using ADPCM and stored in its own format.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ADPCM Data Block Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Waveform data consists of blocks of 16 bytes each. A block consists of a 2-byte header that records the decoding coefficient and loop information followed by 14 bytes of sound data. The sound data is 28 samples worth of compressed voice data.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/VAG_Format-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  ADPCM Data Format</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>About Loop Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The second byte of each block of ADPCM data contains information about loops. By setting appropriate data here, voice data loops can be implemented on a per-block basis.<br>How this information is used depends on the playback mode that is set for each voice. Valid playback modes are "loop play" and "one-shot play." The meaning of loop information for each mode is described below.<br>Although the size of phoneme region data is specified when the phoneme region is set, after this amount of data is decoded, voice generation ends and the relevant voice is muted regardless of the loop information value and regardless of whether loop play is enabled or disabled.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>When loop play is enabled</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Loop information is interpreted as shown in the following table. Values not in the table are ignored.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Loop</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Information</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the ending block of the loop. After this block is decoded,&nbsp;&nbsp;<br>&nbsp;&nbsp;decoding returns to the starting block position, which was saved&nbsp;&nbsp;<br>&nbsp;&nbsp;internally. If the ending block is reached without finding the&nbsp;&nbsp;<br>&nbsp;&nbsp;starting block, decoding returns to the phoneme region starting&nbsp;&nbsp;<br>&nbsp;&nbsp;position that was set when the phoneme region was specified.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the starting block of the loop. When the ending block is&nbsp;&nbsp;<br>&nbsp;&nbsp;reached, this becomes the block that is decoded next. If multiple&nbsp;&nbsp;<br>&nbsp;&nbsp;starting blocks are present, the one that was traversed last is&nbsp;&nbsp;<br>&nbsp;&nbsp;valid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the playback ending position. When this block is&nbsp;&nbsp;<br>&nbsp;&nbsp;reached, vocalization of the relevant voice is stopped and the voice&nbsp;&nbsp;<br>&nbsp;&nbsp;is muted. As a result, this block is not decoded.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>When loop play is disabled (one-shot play)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Loop information is interpreted as shown in the following table. Values not in the table are ignored.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Loop </b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Information</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates the playback ending position. When this block is reached,&nbsp;&nbsp;<br>&nbsp;&nbsp;vocalization of the relevant voice is stopped and the voice is muted. As a&nbsp;&nbsp;<br>&nbsp;&nbsp;result, this block is not decoded.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

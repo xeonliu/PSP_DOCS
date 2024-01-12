@@ -1,0 +1,244 @@
+<html lang="jp">
+<head>
+<title>NPDRM-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NPDRMライブラリ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の概要と特長</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMライブラリは、NPDRMのしくみによって暗号化され保護されているファイル(NPDRM EDATAおよびNPDRM SPRX)にアクセスするためのライブラリです。PlayStation&reg;Store経由で追加ゲームデータとして配布するプログラム、および追加ゲームデータにアクセスするプログラムは、NPDRMライブラリを用いてユーザーがそれらのファイルに対するアクセス権を持っていることと、ファイルが改竄されていないことを確認する必要があります。また、ファイルの内容を復号するための鍵をセットする処理もNPDRMライブラリを用いて行います。ファイルへのアクセス処理自体はsceIoRead()など通常のファイルアクセスAPIによって行い、そのとき自動的に復号が行われます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMライブラリを使用するには次のファイルが必要です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;npdrm_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;npdrm_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_drm.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">上記のスタブライブラリまたはweakインポートスタブライブラリをリンクしておくとともに、プログラム中でNPDRMモジュールを読み込む処理を行う必要があります。詳しくは「使用手順の概略」で説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMライブラリのサンプルプログラムは、以下が提供されています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/np/np_drm</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">暗号化されているデータファイルtestrnd1k.edatを、NPDRMライブラリを用いて復号しながら読み出し、暗号化されていないデータファイルtestrndk1k_plainと比較するプログラムです。また、暗号化されているPRXファイルnpdrmtestmodule.sprxのロードも行います。これらのファイルは、Memory Stick&trade;の/PSP/GAME/SXXX00001/に置かれているものとして読み込みます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>NPDRMファイル</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>NPDRMファイルとは</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMファイルとは、PlayStation&reg;Storeから配布可能な、アクセス権管理つきの暗号化ファイルです。有償配布に対応するため、ユーザーのNPアカウントに基づいてアクセス権を管理し、正規のインストール手段によらずファイルだけコピーしてもアクセスできないしくみになっています。また、暗号化によって改竄を防止するとともに、任意の鍵を指定して暗号化することによって不正なプログラムに内容を読み取られることを防止できます。<br>データを配布するためのNPDRM EDATAと、プログラムを配布するためのNPDRM SPRXとの２種類があり、両者をあわせてNPDRMファイルと呼びます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>NPDRMファイルの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMファイルを作成する手順の概略を図 1に示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NPDRM-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  NPDRMファイルの作成手順</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">PlayStation&reg;Storeで配布するデータファイルやプログラムファイルを開発したら、アイコン画像などのコンテンツ情報ファイルと、PlayStation&reg;Storeでの識別子となるコンテントIDを記述した設定ファイルを作成し、弊社が提供するオーサリングサーバーを用いてオーサリングすることにより、開発用NPDRMファイルを作成することができます。開発用NPDRMファイルは開発ツールでのみ使用できます。<br><br>開発用NPDRMファイルを用いてプログラムの動作テストが完了したら、マスターとして弊社に提出していただきます。QAテストの後、PSP&reg;で使用できるリリース用NPDRMファイルに変換されて、PlayStation&reg;Storeに配置されます。<br><br>作成手順の詳細は「PSP&reg;追加ゲームデータパッケージ作成ガイド」ドキュメントに記載されていますので、必要に応じて参照してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>モジュールのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMライブラリを使用する前に、NPDRMモジュールをロードする必要があります。具体的には、モジュールユーティリティの提供する<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>()を、引数にSCE_UTILITY_MODULE_NPDRMを指定して呼び出してください。<br>詳しくは「ユーティリティサービス」ドキュメントをご覧ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>NPDRM EDATAファイルへのアクセス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRM EDATAファイルへのアクセスは、以下の手順で行います。<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()を用いて、鍵データ（作成時に指定した<i>k_licensee</i>）を設定してください。アクセスしたいNPDRM EDATAファイルが鍵付きでない場合は、このステップは不要です。</li>
+<li VALUE=2> sceIoOpen()の引数<i>flag</i>にFGAMEDATAフラグを論理和で与えてオープンし、返り値として<i>fd</i>を得てください。非同期APIのsceIoOpenAsync()やコールバック待ちの<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpenCB">sceIoOpenCB</a>()を使用してもかまいません。</li>
+<li VALUE=3> <a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()の引数<i>fd</i>に(2)で得られた値を指定して、アクセス権の確認と復号鍵の設定を行ってください。</li>
+<li VALUE=4> sceIoRead(), sceIoLseek(), sceIoClose()など通常のファイルアクセスAPIを用いて、ファイルにアクセスしてください。ファイルの内容は自動的に復号されます。</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>インライン関数sceNpDrmOpen()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmOpen">sceNpDrmOpen</a>()を呼び出すことで、sceIoOpen()によるファイルオープンと<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()による復号鍵の設定を続けて行うことができます。<br><br><a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmOpen">sceNpDrmOpen</a>()が返すエラーには、ファイルオープンに関するエラーの他に、ユーザーがアクセス権を持っていない、ファイルが破損している、ファイルがNPDRM EDATAでないなどNPDRMに関するエラーがあります。NPDRMに関するエラーはリトライしても回復しませんので、sceIoOpen()のエラーと同じ感覚で<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmOpen">sceNpDrmOpen</a>()のエラーに対して無限リトライを試みると無限ループに陥る可能性があります。<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmOpen">sceNpDrmOpen</a>()でファイルを開けない場合は、エラーダイアログを表示するなど、適切な処理を行ってください。<br>また、ファイルオープンのエラーリトライを付加したい場合、非同期APIのsceIoOpenAsync()やコールバック待ちの<a href="../kernel/IO_File_Manager-Reference-Japanese.htm#sceIoOpenCB">sceIoOpenCB</a>()を使用したい場合は、それらの関数と<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()とを組みあわせて使用してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_3">
+<div style="margin-left:40px;"><h4><b>復号後のデータサイズの取得</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NPDRM EDATAファイルは、暗号化エンベロープと呼ばれる管理情報が付加されているため、元のデータファイルよりもサイズが大きくなっています。sceIoGetstat()でサイズを調べると、暗号化エンベロープを含むファイルサイズが得られます。暗号化エンベロープを除いた正味のデータサイズを知りたい場合は、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()に成功して自動復号が有効になっている状態で<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataGetDataSize">sceNpDrmEdataGetDataSize</a>()を呼び出してください。<br>なお、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()に成功して自動復号が有効な状態であれば、sceIoRead()やsceIoLseek()でNPDRM EDATAファイルにアクセスする際に暗号化エンベロープのサイズを意識する必要はありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>NPDRM SPRXファイルへのアクセス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRM SPRXファイルのアクセスは、以下の手順で行います。<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> <a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()の引数として、作成時に指定した<i>k_licensee</i>を指定して、鍵データを設定してください。</li>
+<li VALUE=2> <a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>()を用いてNPDRM SPRXファイルをロードしてください。または<a href="../network/NPDRM-Reference-Japanese.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>()を用いてNPDRM SPRXファイルを実行してください。アクセス権が確認されてから、ロードまたは実行されます。</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>モジュールのアンロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アンロードは、<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>()を用いて行います。詳しくは「ユーティリティサービス」ドキュメントをご覧ください。<br>NPDRM EDATAファイルへのアクセスの場合、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()が成功したらNPDRMモジュールをアンロードしてもかまいません。ファイルアクセス自体は、NPDRMモジュールがなくても実行可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>NPDRMファイルのパス名</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMファイルは、NPDRMライブラリを利用してアクセスするときには必ずMemory Stick&trade;（ms0:）上の所定のディレクトリに置かれている必要があります。host0: などに置いた状態では、アクセス権の確認に失敗します。<br>開発用NPDRMファイルは、オーサリングサーバーから出力されたZIPファイルを<br>Memory Stick&trade;のルートディレクトリに展開すれば適切なディレクトリに配置されますので、むやみに移動しないでください。ディレクトリ構成の詳細は、別ドキュメント「PSP&reg;追加ゲームデータパッケージ作成ガイド」に記載されています。<br><br>NPDRM EDATAの拡張子は「.edat」、NPDRM SPRXの拡張子は「.sprx」に固定されています。ただしMemory Stick&trade;のファイルシステムは大文字小文字を区別しないので、.EDATや.Sprxなども許容されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>開発用のNPDRM権利情報ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">オーサリングサーバーから出力される開発用NPDRMファイルのパッケージには、アクセス権の確認に使用されるNPDRM権利情報ファイルも含まれています。オーサリングサーバーから出力されたZIPファイルをMemory Stick&trade;のルートディレクトリに展開すると、/PSP/LICENSE/フォルダに<i>コンテントID</i>.rifという名前のファイルが作成されます。このファイルが存在すれば、ユーザーがアクセス権を持っているものとみなされ、<a href="../network/NPDRM-Reference-Japanese.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()などの関数が成功します。一方、このファイルが存在しなければアクセス権の確認に失敗しますので、これを利用してユーザーがアクセス権を持たないときのアプリケーションの挙動を確認してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>NPDRMファイルの保護</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイルシステムには、NPDRMファイルを特別に保護するしくみがありません。NPDRMファイルを通常のファイルと同じようにオープンして、内容を書き換えたりすることができるようになっています。ただし内容を書き換えると、アクセス権を確認する時点で破損ファイルとみなされ、NPDRMファイルとしてはアクセスできなくなりますので注意してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>アクセス権消失への対処</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPDRMファイルのアクセス権は、消失する場合があります。例えば権利情報ファイルが削除されたり、PSP&reg;のディアクティベーション（認証解除）や有効期限の終了などの理由で、NPDRMファイル自体は存在していてもユーザーのアクセス権がなくなってアクセスできなくなる場合があります。そのような場合にもアプリケーションが適切に動作するよう、注意してプログラミングしてください。<br>特に、追加シナリオや追加キャラクターなどのアクセス権が消失した場合、そのファイルを追加する前と同程度に動作することが期待されます。アクセス権が消失したことはエラーコードで判断できますので、エラーダイアログの表示やその他適切な対処を行ってください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

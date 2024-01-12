@@ -1,0 +1,921 @@
+<html lang="jp">
+<head>
+<title>NP_In_Game_Commerce2-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NP IN-GAMEコマース2 概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>用途と特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAMEコマース2では、PlayStation&reg;Store（タイトルストア）に陳列されている商品をブラウズし購入するための機能を提供します。NP IN-GAMEコマース2機能は、NP IN-GAMEコマース2ライブラリとチェックアウトユーティリティの2つのライブラリに分かれています。<br>この2つのライブラリを使用することによって、タイトルストアにアクセスする機能をアプリケーション内に設けて、追加アイテムや追加シナリオといったデータやゲームサーバーへのアクセス権などを販売することができます。<br><br>NP IN-GAMEコマース2では、大きく分けて2種類の商品購入方法を提供します。ひとつは、ブラウジングから購入処理まですべてをチェックアウトユーティリティ内で行う方法です。もうひとつは、NP IN-GAMEコマース2ライブラリを通じて商品カタログを取得し、その情報を用いてアプリケーションが独自にブラウジングを行い、ユーザが商品を選択したら、その商品の購入処理をチェックアウトユーティリティ内で行う方法です。<br>現在のリリースでは、後者の方法のみが提供されています。<br><br>タイトルストアで販売する商品の作成方法および作成した商品を陳列するための作業については、このドキュメントでは取り上げません。「参考資料」節に示されているドキュメントを適宜参照してください。<br><br>ユーザが追加アイテムなどの商品を購入した場合には、それに応じてアプリケーションの挙動を変更する必要があります。商品を購入済みかどうか調べるための機能はNP IN-GAMEコマース2ライブラリでは提供していませんが、np_authライブラリおよびNP TCMライブラリを用いてサービスエンタイトルメント（権利型の商品）が購入済みか調べる手順の概略をこのドキュメントで説明しています。DRMコンテンツ（ダウンロード型の商品）が購入済みかどうか調べる方法については、「参考資料」節に示されているドキュメントを適宜参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAMEコマース2を使用するために必要なファイルは次のとおりです。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np/np_commerce2.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_commerce2_stub{,_weak}.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">np_authライブラリを使用するために必要なファイルは次のとおりです。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np/np_auth.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_auth_stub{,_weak}.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">目的の処理に応じてスタブライブラリをアプリケーションのプログラムにスタティックリンクし、後述する手順に沿って、モジュールユーティリティのAPIを用いてPRXモジュールをロード・アンロードしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>np_gui_commerce2</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">商品カタログのブラウズと購入処理、およびエンタイトルメントの表示・消費を行うサンプルを含んでいます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PlayStation&reg;StoreのしくみやPlayStation&reg;Storeで販売できる商品の概略および作成方法については、次のドキュメントを参照してください。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 「PlayStation&reg;Networkコマースサービスの概要」
+<li> 「PlayStation&reg;Networkコマースプログラミングガイド」
+<li> 「PlayStation&reg;Storeコンテンツガイドライン」
+<li> 「PSP&reg;追加ゲームデータパッケージ作成ガイド」
+<li> 「PSP&reg;ダウンローダブルゲームパッケージ作成ガイド」
+</ul></div>
+<div style="margin-left:50px;">PlayStation&reg;Storeに商品を陳列する作業については、次のドキュメントを参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 「NPプロダクトマネジメントガイド」
+</ul></div>
+<div style="margin-left:50px;">DRMコンテンツを取り扱うためのライブラリについては、次のドキュメントを参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 「NPDRMライブラリ概要」「NPDRMライブラリリファレンス」
+</ul></div>
+<div style="margin-left:50px;">サービスエンタイトルメントが購入済みかどうかを調べるためのライブラリについては、次のドキュメントを参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 「np_authライブラリリファレンス」
+<li> 「NP TCM概要」「NP TCMリファレンス」
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>購入処理</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、NP IN-GAMEコマース2を用いて商品カタログを取得してブラウズし、商品を購入する処理の手順を説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>準備</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>PRXのロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">NP IN-GAMEコマース2モジュールをロードする前に、依存する以下のモジュール群をロードしておく必要があります。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> SCE_UTILITY_MODULE_NET_COMMON
+<li> SCE_UTILITY_MODULE_NET_INET
+<li> SCE_UTILITY_MODULE_NET_PARSE_URI
+<li> SCE_UTILITY_MODULE_NET_PARSE_HTTP
+<li> SCE_UTILITY_MODULE_NET_HTTP
+<li> SCE_UTILITY_MODULE_NET_SSL
+<li> SCE_UTILITY_MODULE_NP
+<li> SCE_UTILITY_MODULE_NP_SERVICE
+</ul></div>
+<div style="margin-left:67px;">その後、モジュールIDにSCE_UTILITY_MODULE_NP_COMMERCE2を指定して<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>()を呼び出し、NP IN-GAMEコマース2のPRXモジュールをロードしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">事前に依存するライブラリ群の初期化が必要です。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetInit">sceNetInit</a>()
+<li> <a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInit">sceNetInetInit</a>()
+<li> <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverInit">sceNetResolverInit</a>()
+<li> <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlInit">sceNetApctlInit</a>()および<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>()によるコールバック関数の登録
+<li> <a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()
+<li> <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()
+<li> <a href="../network/NP-Reference-Japanese.htm#sceNpInit">sceNpInit</a>()
+<li> <a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthInit">sceNpAuthInit</a>()
+<li> <a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()
+</ul></div>
+<div style="margin-left:67px;">を呼び出して初期化を行ってください。<br>続いて、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2Init">sceNpCommerce2Init</a>()を呼び出してNP IN-GAMEコマース2ライブラリの初期化を行ってください。<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2Init">sceNpCommerce2Init</a>()は初期化に成功すると0を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>ネットワーク接続とサインイン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">NP IN-GAMEコマース2処理を開始する前に、サインインが完了している必要があります。「PlayStation&reg;Network概要」ドキュメントを参照して、ネットワーク接続とサインインを行ってください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>コマース2コンテキストの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateCtx">sceNpCommerce2CreateCtx</a>()を呼び出してコマース2コンテキストを作成してください。このとき引数として、作成されたコンテキストのIDを受け取るための変数を指定してください。<br><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateCtx">sceNpCommerce2CreateCtx</a>()はコンテキストの作成に成功すると、引数にコンテキストIDを格納して0を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>コマース2セッションの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">商品カタログ取得などのNP IN-GAMEコマース2処理を行うには、事前にNPサーバー側でコマース2セッションを作成しておく必要があります。<br>コマース2セッションを作成するには、まず<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionCreateReq">sceNpCommerce2CreateSessionCreateReq</a>()を呼び出してリクエストを作成してください。次に、セッション作成要求をサーバーに送信するため、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionStart">sceNpCommerce2CreateSessionStart</a>()を呼び出してください。次に、データを受け取るバッファを指定して<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>()を呼び出してください。<br>最後に、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>()を呼び出して、リクエストを破棄してください。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  コマース2セッションの作成処理</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionStart">sceNpCommerce2CreateSessionStart</a>()および<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>()はバックグラウンドで処理を行うものではなく、呼び出しスレッド内部で通信を行います。そのため、これらの関数は通信が完了するまでブロックします。通信を中断するには<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>()を呼び出してください。<br><br><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>()でコマース2セッションのセッションデータを取得したら、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetSessionInfo">sceNpCommerce2GetSessionInfo</a>()を呼び出してセッション情報を取得してください。これでコマース2セッションの作成は完了し、商品カタログ取得が可能になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>商品カタログの取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">商品カタログは階層的なカテゴリで構成されているため、カテゴリコンテンツ情報とプロダクト情報の2種類に分けて取得するしくみになっています。また、データ構造が非公開となっているため、サーバーからデータを取得する段階と、そのデータを解釈して情報を読み出す段階と、2段階に分けて取得するしくみになっています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>カテゴリコンテンツデータの取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">カテゴリコンテンツを取得するには、まず<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsCreateReq">sceNpCommerce2GetCategoryContentsCreateReq</a>()を呼び出してリクエストを作成してください。次に、取得したいカテゴリのカテゴリIDと取得したいコンテンツの範囲を指定して<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsStart">sceNpCommerce2GetCategoryContentsStart</a>()を呼び出してください。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1_1">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">トップカテゴリのカテゴリIDは、サービスIDと同じです。たとえば、サービスIDがIV0002-NPXS00004_00だとすると、トップカテゴリのカテゴリIDはIV0002-NPXS00004_00となります。<br></div>
+<div style="margin-left:67px;"><br>次に、データを受け取るバッファを指定して<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>()を呼び出してください。<br>最後に、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>()を呼び出して、リクエストを破棄してください。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  カテゴリコンテンツデータの取得処理</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsStart">sceNpCommerce2GetCategoryContentsStart</a>()および<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>()はバックグラウンドで処理を行うものではなく、呼び出しスレッド内部で通信を行います。そのため、これらの関数は通信が完了するまでブロックします。通信を中断するには<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>()を呼び出してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>カテゴリコンテンツ情報の読み出し</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>()で取得したカテゴリコンテンツデータの構造は非公開で、それに含まれる情報はそれぞれ適切な関数を用いて読み出すしくみになっています。<br>最初に<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2InitGetCategoryContentsResult">sceNpCommerce2InitGetCategoryContentsResult</a>()を呼び出して、取得したカテゴリコンテンツデータを初期化してください。すると、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryInfo">sceNpCommerce2GetCategoryInfo</a>()や<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetContentInfo">sceNpCommerce2GetContentInfo</a>()などの関数を用いて、カテゴリコンテンツ情報を読み出すことができるようになります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  カテゴリコンテンツ情報の読み出し処理</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">カテゴリコンテンツ情報の内容構成を次に示します。<br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese004.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  カテゴリコンテンツ情報構造体の構成</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">サブカテゴリが含まれている場合、サブカテゴリのカテゴリIDを引数としてさらにカテゴリコンテンツ取得を行うことで、階層構造の商品カタログをたどることができます。<br><br>カテゴリコンテンツ情報から得られるプロダクトの情報は省略版です。プロダクトについて完全な情報を得るには、次に説明する手順でプロダクトデータを取得し、そのデータからゲームプロダクト情報を読み出してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>プロダクトデータの取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">プロダクトデータを取得する手順は、カテゴリコンテンツデータの取得手順とよく似ています。<br>まず<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoCreateReq">sceNpCommerce2GetProductInfoCreateReq</a>()を呼び出してリクエストを作成してください。次に、プロダクトIDを指定して<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoStart">sceNpCommerce2GetProductInfoStart</a>()を呼び出してください。<br>次に、データを受け取るバッファを指定して<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>()を呼び出してください。最後に、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>()を呼び出してリクエストを破棄してください。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5  プロダクトデータの取得処理</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoStart">sceNpCommerce2GetProductInfoStart</a>()および<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>()はバックグラウンドで処理を行うものではなく、呼び出しスレッド内部で通信を行います。そのため、これらの関数は通信が完了するまでブロックします。通信を中断するには<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>()を呼び出してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_4"><h4>
+(4)&nbsp;<b>ゲームプロダクト情報の読み出し</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>()で取得したプロダクトデータの構造は非公開で、それに含まれる情報はそれぞれ適切な関数を用いて読み出すしくみになっています。<br>最初に<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2InitGetProductInfoResult">sceNpCommerce2InitGetProductInfoResult</a>()を呼び出して、取得したプロダクトデータを初期化してください。すると、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetGameProductInfo">sceNpCommerce2GetGameProductInfo</a>()を用いて、ゲームプロダクト情報を読み出すことができるようになります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese006.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 6  ゲームプロダクト情報の読み出し処理</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">ゲームプロダクト情報の内容構成を次に示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 7  ゲームプロダクト情報構造体の構成</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">ゲームプロダクト情報に含まれるSKU情報を読み出すには、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetGameSkuInfoFromGameProductInfo">sceNpCommerce2GetGameSkuInfoFromGameProductInfo</a>()を使用してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_5"><h4>
+(5)&nbsp;<b>レーティング情報の読み出し</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">カテゴリおよびプロダクトにはレーティング情報が付随しています。<br>レーティング情報の内容構成を次に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_In_Game_Commerce2-Overview-Japanese008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 8  レーティング情報構造体の構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_5_1">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">通常、レーティング情報をアプリケーションが取り扱う必要はありません。レーティングを表示したり、ユーザの年齢制限と照らし合わせて不適切なコンテンツをブロックしたりする処理はシステムが行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ブラウジング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">取得・読み出したカテゴリコンテンツ情報・プロダクト情報を表示し、ユーザに購入する商品を選ばせる処理は、アプリケーションで任意に実装してください。複数の商品を選択させて一度に購入するショッピングカート方式も可能です。ショッピングカートの実装例は、サンプルプログラムを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>チェックアウト（購入処理）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">チェックアウト（購入処理）はチェックアウトユーティリティが担当します。詳細は「ストアチェックアウトユーティリティ」ドキュメントをご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>終了</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAMEコマース2ライブラリの使用を終了するときは、まず<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyCtx">sceNpCommerce2DestroyCtx</a>()を呼び出して、コマース2コンテキストを破棄してください。<br><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyCtx">sceNpCommerce2DestroyCtx</a>()は、コンテキストの破棄に成功すると0を返します。<br>その後、<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2Term">sceNpCommerce2Term</a>()および<a href="../network/NP-Reference-Japanese.htm#sceNpTerm">sceNpTerm</a>()を呼び出してNPを終了してください。<br>続いて、モジュールIDにSCE_UTILITY_MODULE_NP_COMMERCE2を指定して<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>()を呼び出し、PRXをアンロードしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>関数一覧</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_2">
+<div style="margin-left:40px;"><h4><b>初期化・終了関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2Init">sceNpCommerce2Init</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NP IN-GAMEコマース2ライブラリの初期化&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2Term">sceNpCommerce2Term</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NP IN-GAMEコマース2ライブラリの終了&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_3">
+<div style="margin-left:40px;"><h4><b>コンテキスト作成・破棄を行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateCtx">sceNpCommerce2CreateCtx</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマース2コンテキストの作成&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyCtx">sceNpCommerce2DestroyCtx</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマース2コンテキストの破棄&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_4">
+<div style="margin-left:40px;"><h4><b>セッション作成を行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionCreateReq">sceNpCommerce2CreateSessionCreateReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマース2セッションのリクエストを作成&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionStart">sceNpCommerce2CreateSessionStart</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマース2セッションの作成を開始&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2CreateSessionGetResult">sceNpCommerce2CreateSessionGetResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマース2セッションの作成結果データを取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetSessionInfo">sceNpCommerce2GetSessionInfo</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;作成したコマース2セッション情報を取得&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_5">
+<div style="margin-left:40px;"><h4><b>カテゴリコンテンツデータの取得を行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsCreateReq">sceNpCommerce2GetCategoryContentsCreateReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリコンテンツデータの&nbsp;&nbsp;<br>&nbsp;&nbsp;取得リクエストを作成&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsStart">sceNpCommerce2GetCategoryContentsStart</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリコンテンツデータの取得開始&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryContentsGetResult">sceNpCommerce2GetCategoryContentsGetResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリコンテンツデータの取得&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_6">
+<div style="margin-left:40px;"><h4><b>カテゴリコンテンツ情報の読み出しを行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2InitGetCategoryContentsResult">sceNpCommerce2InitGetCategoryContentsResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリコンテンツデータの&nbsp;&nbsp;<br>&nbsp;&nbsp;初期化&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryInfo">sceNpCommerce2GetCategoryInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリ情報の読み出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetContentInfo">sceNpCommerce2GetContentInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリ配下のコンテンツ情報&nbsp;&nbsp;<br>&nbsp;&nbsp;の読み出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetCategoryInfoFromContentInfo">sceNpCommerce2GetCategoryInfoFromContentInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サブカテゴリ情報の読み出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetGameProductInfoFromContentInfo">sceNpCommerce2GetGameProductInfoFromContentInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクト情報の読み出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyGetCategoryContentsResult">sceNpCommerce2DestroyGetCategoryContentsResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリコンテンツデータの&nbsp;&nbsp;<br>&nbsp;&nbsp;破棄&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_7">
+<div style="margin-left:40px;"><h4><b>プロダクトデータの取得を行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoCreateReq">sceNpCommerce2GetProductInfoCreateReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクトデータの取得リクエストを作成&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoStart">sceNpCommerce2GetProductInfoStart</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクトデータの取得開始&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetProductInfoGetResult">sceNpCommerce2GetProductInfoGetResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクトデータの取得&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_8">
+<div style="margin-left:40px;"><h4><b>プロダクト情報の読み出しを行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2InitGetProductInfoResult">sceNpCommerce2InitGetProductInfoResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクトデータの初期化&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetGameProductInfo">sceNpCommerce2GetGameProductInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクト情報の読み出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyGetProductInfoResult">sceNpCommerce2DestroyGetProductInfoResult</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクト情報の破棄&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_9">
+<div style="margin-left:40px;"><h4><b>レーティング情報の読み出しを行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetContentRatingInfoFromGameProductInfo">sceNpCommerce2GetContentRatingInfoFromGameProductInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロダクトの&nbsp;&nbsp;<br>&nbsp;&nbsp;レーティング情報の&nbsp;&nbsp;<br>&nbsp;&nbsp;読み出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetContentRatingInfoFromCategoryInfo">sceNpCommerce2GetContentRatingInfoFromCategoryInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カテゴリの&nbsp;&nbsp;<br>&nbsp;&nbsp;レーティング情報の&nbsp;&nbsp;<br>&nbsp;&nbsp;読み出し&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetContentRatingDescriptor">sceNpCommerce2GetContentRatingDescriptor</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レーティング&nbsp;&nbsp;<br>&nbsp;&nbsp;ディスクリプタの&nbsp;&nbsp;<br>&nbsp;&nbsp;読み出し&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_10">
+<div style="margin-left:40px;"><h4><b>SKU情報の読み出しを行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2GetGameSkuInfoFromGameProductInfo">sceNpCommerce2GetGameSkuInfoFromGameProductInfo</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SKU情報の読み出し&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6_11">
+<div style="margin-left:40px;"><h4><b>リクエストの中断・破棄を行う関数</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2DestroyReq">sceNpCommerce2DestroyReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマース2リクエストの破棄&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#sceNpCommerce2AbortReq">sceNpCommerce2AbortReq</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマース2リクエストの中断&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>購入済みの確認処理</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、サービスエンタイトルメント（権利型の商品）が購入済みかどうか調べる手順の概略を説明します。DRMコンテンツ（ダウンロード型の商品）が購入済みかどうか調べるなど、DRMコンテンツを取り扱うためのライブラリについては、「参考資料」節に示されている「NPDRMライブラリ概要」「NPDRMライブラリリファレンス」ドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>サービスエンタイトルメントの購入済みチェック（アプリケーションでのチェック）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">クライアントアプリケーションでエンタイトルメントのチェックを行うには、np_authライブラリに実装されているチケットAPIを使用します。手順を以下に説明します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>PRXのロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">np_authライブラリをロードする前に、依存する以下のモジュール群をロードしておく必要があります。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> SCE_UTILITY_MODULE_NET_COMMON
+<li> SCE_UTILITY_MODULE_NET_INET
+<li> SCE_UTILITY_MODULE_NET_PARSE_URI
+<li> SCE_UTILITY_MODULE_NET_PARSE_HTTP
+<li> SCE_UTILITY_MODULE_NET_HTTP
+<li> SCE_UTILITY_MODULE_NET_SSL
+</ul></div>
+<div style="margin-left:67px;">その後、モジュールIDにSCE_UTILITY_MODULE_NPを指定して<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>()を呼び出し、np_authライブラリのPRXモジュールをロードしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">事前に依存するライブラリ群の初期化が必要です。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetInit">sceNetInit</a>()
+<li> <a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInit">sceNetInetInit</a>()
+<li> <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverInit">sceNetResolverInit</a>()
+<li> <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlInit">sceNetApctlInit</a>()および<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>()によるコールバック関数の登録
+<li> <a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()
+<li> <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()
+</ul></div>
+<div style="margin-left:67px;">を呼び出して初期化を行ってください。<br>続いて、<a href="../network/NP-Reference-Japanese.htm#sceNpInit">sceNpInit</a>()を呼び出してNPライブラリの初期化を行ってください。<a href="../network/NP-Reference-Japanese.htm#sceNpInit">sceNpInit</a>()は初期化に成功すると0を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>ネットワーク接続とサインイン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サービスエンタイトルメントの購入確認処理を開始する前に、サインインが完了している必要があります。「PlayStation&reg;Network概要」ドキュメントを参照して、ネットワーク接続とサインインを行ってください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>チケットの取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>()を呼び出してチケット取得のリクエストを行います。このとき、引数のパラメータ構造体にチケット取得完了通知コールバックや取得対象チケットのサービスIDを指定します。リクエストの開始に成功すると、<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>()は0を返します。その後、チケットの取得に成功もしくは失敗すると、コールバック関数が呼び出されます。チケット取得に成功したら、コールバック関数内部で<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>()を呼び出し、チケットを取得してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>サブスクリプション型エンタイトルメントの権利チェック</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サブスクリプション型エンタイトルメントを利用する場合は、エンタイトルメントが有効であるかどうかをチェックするために、取得したチケットに対して<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>()を呼び出します。このとき、引数にはチェックしたいエンタイトルメントのエンタイトルメントIDを指定します。エンタイトルメントが有効な（権利を持っている）場合は、<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>()は0を返します。エンタイトルメントが有効でなくなると、エンタイトルメントがチケットから取得できなくなり、<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>()はエラーを返します。<br>サブスクリプションサービスの自動更新などを実現するために、エンタイトルメントのサービス期間を過ぎても、一定の猶予期間はエンタイトルメントは有効とみなされます。<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetEntitlementById">sceNpAuthGetEntitlementById</a>()を利用すると、エンタイトルメントのサービス期間を厳密に取得することもできますが、取得したサービス期間を元に厳密にエンタイトルメントの有効判定をするようなコーディングはしないでください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_6"><h4>
+(6)&nbsp;<b>消費型エンタイトルメントの利用可能回数取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">消費型エンタイトルメントの利用可能回数を取得する場合は、取得したチケットに対して<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetEntitlementById">sceNpAuthGetEntitlementById</a>()を呼び出します。このとき、引数には利用可能回数を取得したいエンタイトルメントのエンタイトルメントIDを指定します。取得した<a href="../network/NP_Auth-Reference-Japanese.htm#SceNpEntitlement">SceNpEntitlement</a>構造体の<i>remaining_count</i>メンバに残数、<i>consumed_count</i>に使用累積数が取得されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_7"><h4>
+(7)&nbsp;<b>消費型エンタイトルメントの回数消費</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">消費型エンタイトルメントの利用可能回数を消費するには、チケット取得と同じ<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>()を呼び出します。ただし、引数のパラメータ構造体に消費したいエンタイトルメントのIDと消費したい個数を指定します。呼出し後は手順(4)と同様に成功もしくは失敗した時点でコールバック関数が呼び出されます。消費に成功した場合は、エンタイトルメント消費後のチケットが返されるので、<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>()を呼び出してチケットを取得できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_8"><h4>
+(8)&nbsp;<b>終了</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP-Reference-Japanese.htm#sceNpTerm">sceNpTerm</a>()を呼び出してNPを終了します。<br>続いて、モジュールIDにSCE_UTILITY_MODULE_NPを指定して<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>()を呼び出し、PRXをアンロードしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>サービスエンタイトルメントの購入済みチェック（サーバーでのチェック）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームサーバーでエンタイトルメントのチェックを行うには、まずクライアントアプリケーションでnp_authライブラリに実装されているチケットAPIを使用してチケットを取得し、そのチケットをゲームサーバーに送信して、ゲームサーバー上でNP TCM（Ticket Checker Module）を用いて検証を行います。<br>手順を以下に説明します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>PRXのロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">np_authライブラリをロードする前に、依存する以下のモジュール群をロードしておく必要があります。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> SCE_UTILITY_MODULE_NET_COMMON
+<li> SCE_UTILITY_MODULE_NET_INET
+<li> SCE_UTILITY_MODULE_NET_PARSE_URI
+<li> SCE_UTILITY_MODULE_NET_PARSE_HTTP
+<li> SCE_UTILITY_MODULE_NET_HTTP
+<li> SCE_UTILITY_MODULE_NET_SSL
+</ul></div>
+<div style="margin-left:67px;">その後、モジュールIDにSCE_UTILITY_MODULE_NPを指定して<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>()を呼び出し、np_authライブラリのPRXモジュールをロードしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">事前に依存するライブラリ群の初期化が必要です。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetInit">sceNetInit</a>()
+<li> <a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInit">sceNetInetInit</a>()
+<li> <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverInit">sceNetResolverInit</a>()
+<li> <a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlInit">sceNetApctlInit</a>()および<a href="../network/PSPNET_Apctl-Reference-Japanese.htm#sceNetApctlAddHandler">sceNetApctlAddHandler</a>()によるコールバック関数の登録
+<li> <a href="../network/libssl-Reference-Japanese.htm#sceSslInit">sceSslInit</a>()
+<li> <a href="../network/libhttp-Reference-Japanese.htm#sceHttpInit">sceHttpInit</a>()
+<li> <a href="../network/HTTPS-Reference-Japanese.htm#sceHttpsInit">sceHttpsInit</a>()
+</ul></div>
+<div style="margin-left:67px;">を呼び出して初期化を行ってください。<br>続いて、<a href="../network/NP-Reference-Japanese.htm#sceNpInit">sceNpInit</a>()を呼び出してNPライブラリの初期化を行ってください。<a href="../network/NP-Reference-Japanese.htm#sceNpInit">sceNpInit</a>()は初期化に成功すると0を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>ネットワーク接続とサインイン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サービスエンタイトルメントの購入確認処理を開始する前に、サインインが完了している必要があります。「PlayStation&reg;Network概要」ドキュメントを参照して、ネットワーク接続とサインインを行ってください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>チケットの取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>()を呼び出してチケット取得のリクエストを行います。このとき、引数のパラメータ構造体にチケット取得完了通知コールバックや取得対象チケットのサービスIDを指定します。リクエストの開始に成功すると、<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>()は0を返します。その後、チケットの取得に成功もしくは失敗すると、コールバック関数が呼び出されます。チケット取得に成功したら、コールバック関数内部で<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>()を呼び出し、チケットを取得してください。<br>パラメータ構造体には取得するチケットバージョンを指定できます。チケットバージョンは、サーバーにインストールするTCMが対応しているチケットバージョンを指定する必要があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>サーバーへの送信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">取得したチケットデータをネットワークを通じてゲーム独自のサーバーに送信します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_6"><h4>
+(6)&nbsp;<b>TCMでのエンタイトルメントチェック</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サーバー側で、TCMを利用してチケットに含まれるエンタイトルメントを検証してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_7"><h4>
+(7)&nbsp;<b>終了</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP-Reference-Japanese.htm#sceNpTerm">sceNpTerm</a>()を呼び出してNPを終了します。<br>続いて、モジュールIDにSCE_UTILITY_MODULE_NPを指定して<a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>()を呼び出し、PRXをアンロードしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>関数一覧</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">チケットの取得とエンタイトルメントチェックを行う関数（np_authライブラリAPI）<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チケット要求処理の開始&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チケット取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetEntitlementIdList">sceNpAuthGetEntitlementIdList</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エンタイトルメントIDリストの取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetEntitlementById">sceNpAuthGetEntitlementById</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エンタイトルメント情報の取得&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCheckEntitlementById">sceNpAuthCheckEntitlementById</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エンタイトルメントのチェック&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>SKU情報として取得できる購入済み属性について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAMEコマース2では、ゲームプロダクト情報を取得する際にSKUの情報を<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#SceNpCommerce2GameSkuInfo">SceNpCommerce2GameSkuInfo</a>構造体として取得できます。<br><a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#SceNpCommerce2GameSkuInfo">SceNpCommerce2GameSkuInfo</a>構造体には、SKUの付属情報として<i>annotation</i>メンバが含まれており、このフィールドはビットマスクになっています。<br><i>annotation</i>のビットマスクには、このSKUが既に購入済みかどうかを示す情報として、以下のフラグが定義されています。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMERCE2_SKU_ANN_PURCHASED_CANNOT_PURCHASE_AGAIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80000000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;購入済みであり、&nbsp;&nbsp;<br>&nbsp;&nbsp;再購入不可&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMERCE2_SKU_ANN_PURCHASED_CAN_PURCHASE_AGAIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x40000000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;購入済みであり、&nbsp;&nbsp;<br>&nbsp;&nbsp;再購入可能&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">この購入済み情報は、あくまでSKUレベルの情報であり、サービスエンタイトルメントやDRMコンテンツが購入済みかを示すわけではないことに注意してください。サービスエンタイトルメントやDRMコンテンツの購入済みチェックを行う場合は、「購入済みの確認処理」章で説明している方法をご利用ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>libhttpとの関係</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAMEコマース2では、サーバーとの通信にlibhttpを内部的に使用しています。そのため、ネットワーク処理を伴う各APIからlibhttpのエラーコードが返る場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>コマース2セッションの持続時間</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAMEコマース2ライブラリ使用時、アプリケーションは最初にコマース2セッションを作成する必要があります。作成されたコマース2セッションは、以後カテゴリコンテンツデータの取得やプロダクトデータの取得を行う際に使用されます。<br>作成されたコマース2セッションは、セッション上で一定時間通信が発生しない場合は、サーバー側で削除されることにご注意ください。サーバー側でセッションが削除されると、その後の通信時に<a href="../network/NP_In_Game_Commerce2-Reference-Japanese.htm#SCE_NP_COMMERCE2_SERVER_ERROR_SESSION_EXPIRED">SCE_NP_COMMERCE2_SERVER_ERROR_SESSION_EXPIRED</a>エラーが返ります。この状態から再度通信を行うためには、いったんコマース2コンテキストを破棄し、再度作成するところからやり直してください。<br>現状、サーバー側でのセッションタイムアウト時間は15分となっていますが、今後この値は変更される可能性がありますので、この値に依存するようなプログラミングは避けてください。また、サーバーの負荷に悪影響を及ぼす恐れがありますので、セッションタイムアウトを回避する目的で定期的に通信を発生させることはしないでください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

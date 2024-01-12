@@ -1,0 +1,1500 @@
+<html lang="jp">
+<head>
+<title>libp3da-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libp3da概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">"libp3da"は、PSP&reg;上で3Dポジショナルオーディオ"P3DA"(Positional 3D Audio)を実現するライブラリです。モノラルの波形データに対し３Ｄ座標の位置を指定することにより、PSP&reg;のステレオ（2ch）再生環境において、明確な3次元音像定位を再現します。座標位置は、リアルタイムにコントロールができますので、３Ｄグラフィックスによるダイナミックなアクションに連動したリアルな音像空間を再現することができます。<br><br>例えば：<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ゾンビがプレーヤーの背後からせまってくる。ゾンビの足音とうなり声、ドアのきしむ音。
+<li> 戦場で上空を飛ぶ戦闘機や通過する戦車、近づいてくる砲弾の音。
+<li> レーシングカーを運転するドライバー（＝プレーヤー）とそれを抜き去るライバル車、ホームストレートで後ろに抜けてゆく観客の歓声。
+<li> 空中ロボットバトル。ロケット砲やレーザー銃の音、自機内に響く衝突音。
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1">
+<div style="margin-left:40px;"><h4><b>処理について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">P3DAは、自然環境で発生する音の反射や残響をシミュレートすることにより、音の定位が頭の外の離れた位置に聞こえるような処理を行っています。さらに音像の位置を頭部周辺に近づけたり頭内に定位させる場合には、頭部による遮蔽効果により左右の耳に届く音量や音質の差が大きくなるため、特別なシミュレーション処理を行っております。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> リスナー位置に対し、3次元空間全方向(X,Y,Z 方向)に音像を定位させることができます。
+<li> 同時に4つまでのサウンドを独立して定位させることができます。
+<li> ドップラー効果のサポート機能を持ちます。
+<li> 距離が離れるにつれ、音量が小さく聞こえる効果（ロールオフ）を設定できます。
+<li> サウンドの指向性を表現できます（サウンドコーン）。
+<li> 出力モード（スピーカーもしくはヘッドホン）の指定はありません。ヘッドホンを利用するとスピーカーより3D効果を知覚しやすくなります。
+<li> 出力フォーマットは、そのままサウンド出力用ライブラリ libwave に入力できるフォーマットです。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>動作環境</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> 主にMedia Engineにて動作します。
+<li> PSP&reg;のExtended Memory上に置かれた音素辺データをサウンドソースとします。Extended Memory上のユーザ領域であれば、音素辺を置く場所に制約はありません。
+<li> 音素辺として16bit 44.1KHz のPCMモノラル音声データを用います。
+<li> 出力周波数は44.1KHz、出力チャネル数は2(ステレオ)です。
+<li> すべての処理は、バッチ処理的に実行されます(リアルタイム処理ではありません)。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ライブラリlibp3daを利用するためには、以下のファイルが必要です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ウィーク インポート ライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル（関数定義）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル（定数定義）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da_values.h&nbsp;&nbsp;<br>&nbsp;&nbsp;(libp3da.hより#includeされます)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル（構造体定義）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libp3da_types.h&nbsp;&nbsp;<br>&nbsp;&nbsp;(libp3da.hより#includeされます)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>モジュールのロード・アンロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3daを利用するためには、処理の下請けを行うモジュールをロードする必要があります。<br>ロードするモジュールは、ソフトウェアシンセサイザlibsas用の<b>sascore</b>モジュールと同じです（sascoreモジュール内にlibp3daのモジュールが入っています）。<br>モジュールをロードするためには、<b>utility</b>機能を用います。モジュールのロード／アンロード等についての詳細は、<b>utility</b>概要をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ライブラリlibp3daを利用したサンプルプログラムには、以下のものがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_5_2">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/p3da_revolve</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">周回運動をする箱の画に合わせて３Ｄポジショナルオーディオ効果を再生するサンプルプログラムです。また、libsasのマルチチャネルモードを利用し、4つの移動音源のドップラー効果を再現するサンプルにもなっています。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese001.jpg">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  サンプルプログラム</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_6">
+<h3>
+<a href="#Heading3_1"> 1. </a>6 
+<!-- hp1 --><b>入力チャンネルごとの処理について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3daは、各入力チャンネルに対して、以下のような処理を行います。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> リスナーと各サウンドソースとの相対位置より3D処理を行います。
+<li> リスナーと各サウンドソースとの相対距離より音量の減衰（ロールオフ）処理を行います。
+<li> リスナーと各サウンドソースの指向性の形と方向（サウンドコーン）より音量の減衰処理を行います。
+<li> リスナーと各サウンドソースの速度ベクトルの差より、ドップラー効果によるピッチ変換の値を計算します。（libp3daでは、変化させるピッチ値の取得ができますが、PCM波形データに対するピッチ変換処理は行いません。）
+<li> ミキシングを行い、全てのチャンネル出力を合成します。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_7">
+<h3>
+<a href="#Heading3_1"> 1. </a>7 
+<!-- hp1 --><b>注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3daは、入力された波形データの信号処理を行いますが、PSP&reg;より音声を発音する機能はありません。音声を出力する際は、ライブラリ<b>libwave</b>などと組み合わせる必要があります。<br><br>libp3daは、ブロックサンプル単位でバッチ処理を行わせる利用方法です。また、リアルタイムに内部パラメータなどが変化することはありません。変換処理（関数: <a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>）を明示的に呼び出したときに、波形データのサンプリング周波数に合わせた時間で、内部パラメータの更新が行われます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>入出力データ形式</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3daの入力は、モノラル1～4チャンネル、出力は2チャンネル（ステレオ）です。<br>関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()で波形データを渡し、処理結果を得ます。<br><b>入力するサウンドを以後「サウンドソース」という名称で解説します。</b><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>入力データ形式</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">入力データは、16bit 44.1KHzのモノラル波形データを<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daInit">sceP3daInit</a>()で指定した、ブロックサンプルのサンプルサイズのサウンドをサウンドソースの数1～4用意し、ポインタの配列として渡します。例えばサンプルサイズに1024を指定し、サウンドソースの数が4である場合<br></div>
+<div style="margin-left:67px;">1024 * 2(16bit) * 1(モノラル) * 4(サウンドソースの数) = 8192バイト<br></div>
+<div style="margin-left:50px;">のサウンド用バッファが、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()を呼ぶたびに処理されます。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_3">
+<div style="margin-left:40px;"><h4><b>注意</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">下図において関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()に渡す配列inputs[]には、各サウンドソース用メモリの先頭アドレスを格納しておく必要があります。<br>必ず<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daInit">sceP3daInit</a>()で指定したサウンドソース数の配列を確保し、当初利用しないサウンドソースがある場合は、NULLを書いてください（無効なアドレスが入っているとエラーが返ります）。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  入力データ</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>出力データ形式</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ライブラリ利用者は、データ出力先として<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daInit">sceP3daInit</a>()で指定したサンプルサイズで、44.1KHz, 16bit 2チャンネルのメモリを用意します。<br>サンプルサイズに1024を指定したならば、1024 * 2(16bit) * 2(ステレオ) = 4096 バイトです。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  出力データ</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_4">
+<div style="margin-left:40px;"><h4><b>注意</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">初期化関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daInit">sceP3daInit</a>()で指定するサンプルサイズは、終了関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daExit">sceP3daExit</a>()を呼び出すまで有効です。途中で変更することはできません。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>座標表現</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3daでは、3次元空間のベクトルを表現するために、直交座標および極座標を用います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>直交座標</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">直行座標による表現では、直交座標の各X,Y,Z軸上の要素で構成されるベクトルにより、リスナーやサウンドソースの位置、向き（方向）、および速度の指定をします。座標系は、右手座標系でPSP&reg;標準のグラフィックスライブラリの座標系と同じです。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  直行座標は右手座標系</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>ベクトル量の単位</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">位置、距離および方向を指定するベクトルの各座標軸の単位は、ミリメートル[mm]になります。<br>値の範囲は、28bitの整数範囲とします。<br>（理由：リスナーとサウンドソースが最も離れた場合に32bit処理で扱える範囲）<br>したがって指定できる値の範囲は、±2^28 -1 = ±0x0fffffff<br>－268435455 ～ 0 ～ ＋268435455 [mm] となります。<br><br>速度のベクトルは、サウンドソースが移動している速度を現します。<br>速度の値の単位は、[ミリメートル／秒]です。<br>値の範囲は、－268435455 ～ 0 ～ ＋268435455 [mm]となります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_6">
+<div style="margin-left:40px;"><h4><b>ベクトルの構造体</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">直交座標表現のベクトル表現として、以下の構造体があります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct{
+	int <i>x</i>,
+	int <i>y</i>,
+	int <i>z</i>
+} <b><a href="../sound/libp3da-Reference-Japanese.htm#SceP3daVector">SceP3daVector</a></b>;
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>極座標</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">極座標は、元となる座標からの角度と距離(Distance)による相対ベクトル表現です。<br>libp3daでは、サウンドソースの相対位置指定で利用されます。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5  極座標表現</b><br>
+</div>
+<br>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Azimuth :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;平行位置の角度（方位角）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Elevation :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;上下方向の角度（仰角）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Distance :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;距離&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_7">
+<div style="margin-left:40px;"><h4><b>ベクトルの構造体</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">極座標表現のベクトル表現として、以下の構造体があります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+typedef struct{
+	int <i>azimuth</i>,
+	int <i>elevation</i>,
+	int <i>distance</i>
+} <b><a href="../sound/libp3da-Reference-Japanese.htm#SceP3daPolar">SceP3daPolar</a></b>;
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>Azimuth（方位角）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">角度の単位は、[degree]です。（degreeは1回転を360で表す単位です）<br>Azimuthは、リスナーやサウンドソースの水平面の角度です。頭上方向から見たとき時計回りの方向がプラスの角度、反時計回りがマイナスの角度となります。<br><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>()では、-180 ～ 0 ～ +180[degree]の範囲で設定します。<br>±180[degree]を越えた値を入力してもエラーにはならず、指定位置は360°範囲での設定が繰り返されます。たとえば450[degree]は、+90[degree]と同じ効果です。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese006.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 6  Azimuth</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>Elevation（仰角）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Elevationは、リスナーやサウンドソースの水平面からの上下方向の角度（仰角）で、上方向がプラスの角度、下方向がマイナスの角度となります。<br><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>()では、-90 ～ 0 ～ +90[degree]の範囲が有効です。この範囲を越える値は、エラーが返されます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 7  Elevation</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>Distance（距離）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Distanceは、リスナーからの直線距離です。単位は、ミリメートルです。<br><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>()では、0 ～ 0x0fffffff(=268435455)[mm]の範囲で、指定します。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>リスナーの設定</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">リスナーは、全体に1つだけ存在します。<br>リスナー位置は、仮想3D環境の中におけるプレーヤー自身の位置になります。3Dポジショナルオーディオの仮想環境では、サウンドは音源位置とサウンドを受信する位置との位置関係に依存して3D処理が行われます。<br><br>リスナーに対しては、以下の設定ができます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 位置
+<li> 速度
+<li> 向き
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>リスナー位置</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">リスナーの位置指定は、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetUserPosition">sceP3daSetUserPosition</a>()により直交座標での原点からの位置を指定します。初期状態のリスナーとサウンドソースの位置は、原点(0,0,0)です。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese008.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 8  リスナー位置の初期値</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">対応する関数は以下：<br></div>
+<div style="margin-left:67px;"><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetUserPosition">sceP3daSetUserPosition</a>();<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>リスナーの向き</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">リスナーの向きは、現在位置を基点(0,0,0)とした、リスナー正面方向のベクトル(UserOrientationFront)と、リスナーの頭上方向のベクトル(UserOrientationUp)で指定します。<br>初期状態のリスナー向きは、正面が-Z軸方向、頭上が+Y方向になります（下図）。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 9  リスナー向きの初期状態</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_8">
+<div style="margin-left:40px;"><h4><b>注意</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">内部処理では、角度の要素のみ利用されます。計算誤差を少なくするため、ベクトルの長さは小さすぎない値にしてください。<br></div>
+<div style="margin-left:50px;"><br>対応する関数は、以下になります。<br></div>
+<div style="margin-left:67px;"><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetUserOrientation">sceP3daSetUserOrientation</a>();<br></div>
+<div style="margin-left:50px;"><br>初期値は、以下になります。<br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Front Orientation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: (0,0,-1000)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Up Orientation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: (0,1000,0)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>サウンドソースの設定</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">サウンドソースとは、ユーザーが入力する３Ｄ処理対象となるサウンドデータです。<br>同時に最大4つまでのサウンドソースに対応します。<br><br>サウンドソースに対しては、以下の設定ができます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 絶対位置
+<li> リスナーからの相対位置（直交座標／極座標）
+<li> 指向性（サウンドコーン）
+<li> 速度（ドップラー効果）
+<li> リスナーとの距離に応じた音量の減衰（ロールオフ）
+<li> サウンド処理の開始および停止
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>サウンドソースの選択</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドソースに対する設定を行う際には、どのサウンドソースに対する設定かを指定する必要があります。サウンドソースの設定関数には、サウンドソースを指定する引数があります。<br>libp3daでは、4つのサウンドソースのどれを選ぶかを<b>0～3</b>のID値で指定します。<br>この値は、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()の入力データppsInputsのポインタの配列の順番と同じです。<br>※波形データ形式は、「入出力データ形式」をご参照ください。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese010.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 10  サウンドソースの指定番号</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>絶対位置指定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドソースの位置をリスナーの位置によらず、原点からの絶対座標で指定する方法です。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese011.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 11  絶対座標位置指定</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">絶対座標位置の指定は、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPosition">sceP3daSetPosition</a>()で指定します。絶対座標位置指定したサウンドソースの位置は、リスナーの位置やリスナーの向きの変化に影響されません。従って、リスナーの位置や向きが変わると絶対座標位置指定をしている全てのサウンドソースとの位置関係が変わることになり3D効果も変化します。これは、位置取得関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPosition">sceP3daGetPosition</a>()の取得値は変化しませんが、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPositionRelative">sceP3daGetPositionRelative</a>()の値は、変化することになります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese012.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 12  リスナーの向きの変化に影響されない、つまり3D効果は変化する</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>相対位置指定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">リスナー位置を基準とした相対ベクトルで位置指定を行います。相対位置の指定方法には、直交座標指定と極座標指定があります。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_1"><h4>
+(1)&nbsp;<b>直交座標指定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">リスナーの位置と向きを基準(0,0,0)としたリスナー相対の位置を指定します。対応する関数は、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPositionRelative">sceP3daSetPositionRelative</a>()です。座標指定後にリスナー向きを変化させても相対位置は、変わりませんのでリスナーから聞こえる3D効果は変化しません（下図）。従って位置取得関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPositionRelative">sceP3daGetPositionRelative</a>()の取得値は変化しませんが、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPosition">sceP3daGetPosition</a>()の値は、変化することになります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese013.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 13  リスナーの位置と向きに対して相対</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_2"><h4>
+(2)&nbsp;<b>極座標指定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サウンドソースの位置をリスナーの現在位置と向きを基準として極座標表現で指定します。対応する関数は、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>()です。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese014.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 14  極座標による相対座標位置指定</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Azimuth :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナー正面からの水平方向の角度（方位角）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Elevation :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナー正面からの上下方向の角度（仰角）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Distance :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーとサウンドソース間の距離&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">相対座標位置指定を行った後に、リスナー位置や向きを変えた場合でも、リスナーとの相対位置を保ちます。従ってリスナーから聞こえる3D効果は、変化しません（下図）。<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese015.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 15  リスナーの向きに対しても相対</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>ロールオフ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドソースがリスナーから遠ざかるに従い、リスナーが知覚する音量が小さくなる現象をロールオフと言います。libp3daでは、このロールオフを以下の計算により再現します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_9">
+<div style="margin-left:40px;"><h4><b>ロールオフの計算</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">計算式は以下<br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-Japanese016.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;">各条件による計算式は以下<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> 距離 ＜ <i>minDistance</i> の場合<br>&rarr; <i>Gain</i>=1.0
+<li> <i>minDistance</i> &#8806; 距離 &#8806; <i>maxDistance</i> の場合<br>&rarr; <img src="gif/libp3da-Overview-Japanese017.gif">
+<li> 距離 &#8807; <i>maxDistance </i>(if muteAfterMax==False) の場合<br>&rarr; <img src="gif/libp3da-Overview-Japanese018.gif">
+<li> 距離 &#8807; <i>maxDistance </i>(if muteAfterMax==True) の場合<br>&rarr; <i>Gain</i> = 0.0
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>Gain </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロールオフの計算結果であり、音量に対し乗算される値です。&nbsp;&nbsp;<br>&nbsp;&nbsp;0.0(= -&infin;[dB]) ～ 1.0(= -0.0[dB])&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>Distance </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーとサウンドソース間の直線距離。&nbsp;&nbsp;<br>&nbsp;&nbsp;単位はミリメートルで設定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>minDistance </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;最小距離を設定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;リスナーとサウンドソースの距離に対し、これ以上近づいても音量が&nbsp;&nbsp;<br>&nbsp;&nbsp;大きくならなくなる距離を設定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetRolloffDistances">sceP3daSetRolloffDistances</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>maxDistance </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;最大距離を設定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;リスナーとサウンドソースの距離に対し、これ以上離れても音量が&nbsp;&nbsp;<br>&nbsp;&nbsp;小さくならなくなる(maxDistance の音量を保つ)距離を設定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetRolloffDistances">sceP3daSetRolloffDistances</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>RolloffFactor </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロールオフ係数を設定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;引数は、32bit値で16bit:16bitの固定小数点の値です。&nbsp;&nbsp;<br>&nbsp;&nbsp;0x10000は、1.0を表します。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetRolloffFactor">sceP3daSetRolloffFactor</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>muteAfterMax </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーとサウンドソースの距離が、maxDistanceより離れた時に&nbsp;&nbsp;<br>&nbsp;&nbsp;音量をミュートするか否かを設定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daEnableMuteAfterMax">sceP3daEnableMuteAfterMax</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">例1．<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese019.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 16  <i>minDistance</i> を変えた場合</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">例2．<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese020.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 17  <i>RolloffFactor</i> を変えた場合</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_10">
+<div style="margin-left:40px;"><h4><b>初期値</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ライブラリ初期化直後の値は、以下に設定されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<i>minDistance</i> = 1000 [mm]
+<i>maxDistance</i> = 10000 [mm]
+<i>muteAfterMax</i> = true
+<i>RolloffFactor</i> = 0x10000 (=1.0)
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_4_1">
+<div style="margin-left:63px;"><h4><b>注意：</b><br><br></h4></a></div>
+<div style="margin-left:70px;"><ul>
+<li> トータル音量は、サウンドコーンによる減衰および<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetLevel">sceP3daSetLevel</a>()による設定値と掛け合わされたレベルになります。
+<li> ロールオフの減衰量（アッテネーション）の計算式は、JSR234に準拠しております。<br>JSR234とは、JavaのJ2MEプラットフォーム上のモバイル向けマルチメディア用APIであるMMAPI(JSR-135)の追加仕様として定義された規格です。
+<li> 実際のサウンドエンジンの処理では、リスナーの顔そのものが音をさえぎることにより生じる左右の耳に届く音量レベルの差を考慮した計算を行っていますので、計算式通りの減衰カーブにはなりません。特に音源を定位させる位置がリスナー位置に近い場合は、3D処理による左右のレベル差は大きくなります。
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_4_1_11">
+<div style="margin-left:40px;"><h4><b>具体例</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">例えば、距離10[m]から200[m]の間で、音量を0[dB]から-36[dB]まで変化させる場合。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese021.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 18  具体例</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">200[m]以上離れたらMuteするとした場合、設定は以下のようになります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<i>minDistance</i> = 10[m] = 10000[mm]
+<i>maxDistance</i> = 200[m] = 200000[mm]
+<i>muteAfterMax</i> = TRUE
+
+</font></pre></div>
+<div style="margin-left:67px;"><i>RolloffFactor</i> の値は、上記値を以下の式に代入し<i>RolloffFactor</i>について解きます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-Japanese022.gif">
+</div>
+<div style="margin-left:67px;"><br><i>Gain</i>は、-36[dB] = 0.0158とします。<br><br>計算の結果<i>RolloffFactor</i> = 1.384 &rarr; 0x0001624d (16bit:16bit の固定小数点)<br>となるので関数の呼び出しは、以下のようになります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetRolloffDistances">sceP3daSetRolloffDistances</a>( ssid, 10000, 200000);
+<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daEnableMuteAfterMax">sceP3daEnableMuteAfterMax</a>( ssid, <a href="../sound/libp3da-Reference-Japanese.htm#SCE_P3DA_MUTEAFTERMAX_ENABLE">SCE_P3DA_MUTEAFTERMAX_ENABLE</a>);
+<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetRolloffFactor">sceP3daSetRolloffFactor</a>( ssid,<b> 0x0001624d</b>);
+
+</font></pre></div>
+<div style="margin-left:67px;">※ ssidは、任意のサウンドソース番号<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_5">
+<h3>
+<a href="#Heading3_5"> 5. </a>5 
+<!-- hp1 --><b>サウンドコーン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドソースが発生する音に、指向性を持たせる効果です。図のように円錐状（正確には球状の立体を切り取った形です）の指向性を持たせることができます。<br>サウンドソースが指向性を持っている効果や、障害物によって音がさえぎられる効果などに利用できます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese023.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 19  内部コーン外部コーン</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>内側の円錐(Inner Cone)の内側は、指向性が最も強く最も音量レベルが大きくなります。<br>音源からの距離が同じであれば円錐の中は、同じ音量レベルとなります。<br>（音源からの距離に対しては、ロールオフによる減衰効果が加わります。）<br>外側の円錐(Outer Cone)の外は、Outer Levelで設定したレベルになります。<br>内側の円錐(Inner Cone)の端から外側の円錐の端までは、Outer Levelで設定した音量になるまでデシベル値として直線的に<b>減少</b>します。Outer Levelは、Inner Level = 0[mB]としたときの音量を0～-10000[mB]の範囲で設定します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese024.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 20  音量の減衰とOuter Level</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;OrientationFront :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サウンドソースの指向性の方向。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetOrientation">sceP3daSetOrientation</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Inner Angle :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サウンドソースの持つ円錐状の指向性の円錐の角度。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetConeAngles">sceP3daSetConeAngles</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Outer Angle :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Inner Angleで設定する内側の音量レベルからOuter Levelに&nbsp;&nbsp;<br>&nbsp;&nbsp;到達するまでの円錐の角度。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetConeAngles">sceP3daSetConeAngles</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Outer Level :&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Outer Angleの外側の音量レベル。&nbsp;&nbsp;<br>&nbsp;&nbsp;対応する関数：<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetConeOuterLevel">sceP3daSetConeOuterLevel</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Inner AngleおよびOuter Angle両方の角度を360度に設定すると、無指向性になりOuter Levelの値が無視されます。Inner AngleおよびOuter Angle両方の角度を0度に設定しても無指向性になります、この場合は、Outer Levelの値が基準になります。<br>原理上Outer Levelの値を0に設定することでも無指向性になります。<br>これは、初期化時の状態と同じです。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese025.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 21  無指向性(omnidirection)</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_5_12">
+<div style="margin-left:40px;"><h4><b>初期値</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ライブラリ初期化直後の値は、以下に設定されています。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Inner Angle = 360 degrees
+Outer Angle = 360 degrees
+rearLevel = 0 [mB]
+
+</font></pre></div>
+<div style="margin-left:67px;">またrearLevelは、-10000 [mB]以下の値でミュートになります。<br>※ mB : millibell（ミリベル） = 1/100 decibell (ex. -10000[mB] = -100[dB])<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_6">
+<h3>
+<a href="#Heading3_5"> 5. </a>6 
+<!-- hp1 --><b>サウンドソースの向き</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドソースの向きは、サウンドコーンの向きと同じです。サウンドソース（サウンドコーン）の向きは、リスナーの向きと違い正面方向のベクトルのみで指定します。サウンドソースの向きは、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetOrientation">sceP3daSetOrientation</a>()で指定します。サウンドソースの向きは、現在のサウンドソース位置を基準とした直交座標の各軸方向での合成ベクトルで指定します。<br><br>サウンドソースを相対座標位置指定している場合、リスナーの位置や向きを変化させるとサウンドソースの位置は、リスナーとの相対位置が変わらないように変化しますが、サウンドコーンの向きは、変化しないので注意が必要です（下図）。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese026.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 22  リスナーの移動と向きを変更</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">サウンドソースの位置を絶対座標位置指定していた場合は、サウンドソースの位置や向きはリスナーの位置や向きの変化に影響されません（下図）。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese027.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 23  絶対座標位置指定</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetOrientation">sceP3daGetOrientation</a>()で取得する値は、サウンドソースが相対位置指定か絶対位置指定かにかかわらず、ベクトルに変化がないため指定したときの値と同じ値が返ることになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_7">
+<h3>
+<a href="#Heading3_5"> 5. </a>7 
+<!-- hp1 --><b>トータル音量</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">関数利用者が設定したパラメータによる各サウンドソースのトータル音量は、サウンドコーンによる効果とロールオフによる効果と<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetLevel">sceP3daSetLevel</a>() によるパラメータとが掛け合わされた結果になります。従ってどこか1箇所のレベルがミュートレベル（-10000[mB]以下）になると、そのサウンドソースは発音されません。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese028.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 24  トータル音量</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">実際に聞こえる音量は、さらに3D処理（「Core Process」の部分）による左右チャンネルのレベル差などの効果が加わります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_8">
+<h3>
+<a href="#Heading3_5"> 5. </a>8 
+<!-- hp1 --><b>ピッチコントロール</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">物体の移動速度により、リスナー位置においてサウンドの周波数が変化して聞こえる効果（ドップラー効果）を再現するための<b>サポート機能</b>を持ちます。libp3daでは、サウンド波形データに対して直接ピッチシフト処理は行いません。ベロシティ値やドップラー係数よりピッチの変化値である<b>ピッチ係数</b>の算出までを行います。波形データに対して実際にピッチ変換を行う処理は、libp3da処理の外で行う必要があります。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_8_13">
+<div style="margin-left:40px;"><h4><b>相対速度に対するピッチ値</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ピッチの変化量は、サウンドソースとリスナーの速度ベクトルの差（直線距離でどれだけ近づいているか、離れているか）と、ドップラー係数により決定されます。近づいていればピッチは上がり、遠ざかっていればピッチは下がります。速度ベクトルは、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetUserVelocity">sceP3daSetUserVelocity</a>()および<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetVelocity">sceP3daSetVelocity</a>()で設定します。ドップラー係数は、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetDopplerFactor">sceP3daSetDopplerFactor</a>()で設定します。<br>下図においてPosition1では、リスナー方向に対して<i>vls</i>の速度で近づいているためピッチが上がり、Position2においては、リスナーとの距離は変化しないのでピッチは変わりません。Position3では、リスナー方向に対して速度<i>vls</i>で遠ざかっているためピッチは低くなります。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese029.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 25  速度ベクトルとピッチ</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>p </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーからサウンドソース方向への位置ベクトル。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>v </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サウンドソースの速度ベクトル。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vls </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーからサウンドソース方向へのサウンドソースの速度。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">ピッチシフトは、以下の公式によって定義されます。<br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-Japanese030.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fl </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーピッチ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fs </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サウンドソースのピッチ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>c </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;音速 (libp3daでは342500[mm/second]とします)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uls </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーからサウンドソース方向へのリスナーの速度&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>vls </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リスナーからサウンドソース方向へのサウンドソースの速度&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">例えば、静止したリスナーに音速の半分の速度で近づいてくるサウンドソースがあった場合。<br>サウンドソースの周波数が、1000[Hz]であるならば、<br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-Japanese031.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;">となりサウンドソースのピッチ（周波数）は、ちょうど2倍でリスナーに知覚されます。<br><br><i>uls</i>, <i>vls</i>は、ユーザーとリスナーの速度ベクトルより算出します。<br>ユーザーの速度ベクトルは、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetVelocity">sceP3daSetVelocity</a>()で指定します。<br>リスナーの速度ベクトルは、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetUserVelocity">sceP3daSetUserVelocity</a>()で指定します。<br>それぞれの関数で指定する速度ベクトルは、現在位置からの各直行座標方向の相対ベクトル量です。<br>libp3daでは、この2つの速度ベクトルの差分よりリスナーと各サウンドソースの相対速度を求めピッチ値を計算します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_8_1">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">速度ベクトルの設定は、ドップラー効果のためのピッチを計算するためだけに利用されます。<br>従って、速度ベクトルの設定値により設定したサウンドソースの座標位置が変更されることはありません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_8_1_14">
+<div style="margin-left:40px;"><h4><b>ドップラー係数について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ドップラー係数は、ドップラー効果の係り具合を調整する係数で、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetDopplerFactor">sceP3daSetDopplerFactor</a>()により0～10.0の値を16bit:16bitの固定小数点の値で指定します。したがって0～1.0～10.0は、0x00000000～0x00010000～0x000A0000で設定します。ドップラー係数の値は、上記ドップラー効果による計算結果による値の原音からのピッチ変化との差分に掛け合わされる値です。計算式で表すと、以下のようになります。<br><br></div>
+<div style="margin-left:80px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libp3da-Overview-Japanese032.gif">
+</div>
+<div style="margin-left:80px;"><br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>DoppFactor </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドップラー係数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ScaleFactor </i>:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピッチ係数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">上記計算によるピッチ係数は、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()で取得することができます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_8_2">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">ピッチ係数は、最大0x00040000(=4.0)です。処理の都合上、サウンドソースからリスナーに向かう速度が音速を超えた場合、シミュレーションは行われません。このときピッチ係数は、0x00000001が返ります。逆にリスナーからサウンドソースに向かう速度が音速を超えてもピッチ係数は、0x00040000(=4.0)が返ります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_8_2_15">
+<div style="margin-left:40px;"><h4><b>速度ベクトルの向き</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetVelocity">sceP3daSetVelocity</a>()で設定する速度ベクトルは、サウンドソースのサウンドコーンの向きと同様、サウンドソースからの速度ベクトルを絶対座標軸による合成ベクトルで表現します。<br>サウンドソースが相対位置指定であったとして、リスナーの位置や向きが変化しても速度ベクトルの向きは変化しません。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese033.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 26  サウンドソースが相対位置指定でリスナー向きを変える</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>処理の流れ</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>初期化から終了まで</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_1_16">
+<div style="margin-left:40px;"><h4><b>PCMを出力するまでの流れ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libp3daの処理の流れは、<b>libsas</b>や<b>libwave</b>など他のライブラリの利用スタイルに合わせたシンプルな構成で利用できます。<br>波形処理の前には、libp3daに入力する波形データの準備、波形処理の後には、libp3daの出力波形データを発音する処理を入れることで連続した発音処理が実現できます。<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese034.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 27  libsas処理にlibp3daを追加する</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_6_1_1">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">実際にはlibp3daの入力波形は、libp3daの入力波形フォーマットに合わせて変換する必要がある場合があります。例えば、libp3daの入力に、libsasのステレオモード（2チャネル出力）の出力を利用する際にはモノラル×2に変換、マルチチャネルモード（4チャネル出力）の出力を利用する際にはモノラル×4に変換する必要があります。<br>入力波形フォーマットについては、このドキュメントの「入出力データ形式」の項目をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>スレッドセーフ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3daのAPI関数中<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daInit">sceP3daInit</a>および<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daExit">sceP3daExit</a>は、スレッドセーフではありません。それ以外は、スレッドセーフな関数です。<br>libp3daのAPI関数のスレッドセーフとは、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>をサウンド用スレッドで繰り返し呼び出し波形処理をさせている間でも、パラメータ操作の関数を別スレッドから呼び出す使用方法を想定しており、そのような使用方法で問題なく動作することを保証します。<br><br>以下に呼び出しタイミングの構成例を示します。<br>サンプルプログラムも同様の構成になっています。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese035.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 28  スレッドセーフ</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>ドップラー効果によるピッチ変換の対応方法</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3daでは、ドップラー効果によるピッチ値の計算は行いますが、波形データに対するピッチ変換処理は行いません。ここでは、<b>libsas</b>と組み合わせてドップラー効果によるピッチ変換を行わせる方法について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>処理の構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><b>libsas</b>の出力をlibp3daに入力し、libp3daの各サウンドソースのピッチ値の結果を対応する<b>libsas</b>のボイスピッチに反映させます。<br>この操作は、ライブラリ利用者が行う必要があります。<br>サンプルプログラムdevkit/sample/sound/p3da_revolve/も同じ構成です。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese036.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 29  ピッチ値をlibsasに反映させる</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>対応する関数</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ピッチ値を取得する<b>libp3da</b>の関数 ：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ピッチ値を指定する<b>libsas</b>の関数 ：&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetPitch">sceSasSetPitch</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>処理結果の遅延について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()によるピッチ値は、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()により計算されます。<br>従ってピッチ値の計算は、位置情報と速度ベクトルの設定後に呼び出された<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()により結果が得られるため、位置や速度ベクトル設定後、最大1ブロックサンプル分の時間遅れて反映されたピッチ値が得られます。その後、libsasに対するピッチ指定が行われますので、ピッチ計算結果が反映された波形が得られるのは、次回のサンプルブロック以降になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_4">
+<h3>
+<a href="#Heading3_7"> 7. </a>4 
+<!-- hp1 --><b>ピッチ値の変換</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ただし、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()で取得したピッチ値と効果の範囲は、<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetPitch">sceSasSetPitch</a>()で指定するピッチ値の範囲と異なるため変換が必要になります。<br><br>libsasのピッチ設定関数<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetPitch">sceSasSetPitch</a>()に与えるピッチ値は、12bitの固定小数点による係数です。また<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()で取得されるピッチ値は、16bitの固定小数点による係数です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_17">
+<div style="margin-left:40px;"><h4><b>ピッチ係数と関数が扱う値</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ピッチ係数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()で取得する値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b><a href="../sound/libsas-Reference-Japanese.htm#sceSasSetPitch">sceSasSetPitch</a>()で設定する値</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;× 0.25&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00004000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000400&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;× 0.5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00008000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000800&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;× 1.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00010000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00001000&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;× 2.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00020000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00002000&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;× 4.0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00040000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00004000&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">従って<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daGetPitchScaleFactor">sceP3daGetPitchScaleFactor</a>()で取得した値を1/16にして<a href="../sound/libsas-Reference-Japanese.htm#sceSasSetPitch">sceSasSetPitch</a>()に指定します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_18">
+<div style="margin-left:40px;"><h4><b>注意</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../sound/libsas-Reference-Japanese.htm#sceSasSetPitch">sceSasSetPitch</a>()に指定できる値の最小値は、1なので（0を指定するとエラーです）1/16にされた値が0になった場合は、1にクリップする処理が必要です。<br>具体的な処理内容については、libp3daのサンプルプログラムをご参照ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_19">
+<div style="margin-left:40px;"><h4><b>サンプルプログラム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サンプルプログラムdevkit/sample/sound/p3da_revolve/では、デフォルトでpitch.cというピッチ変換専用プログラムによりlibsasを利用せずピッチ変換を行っています。また、コンパイルの際にマクロUSE_SASを定義すれば、libsasのピッチ変換を利用することができます。このとき、4つの移動音源に対し、独立にピッチ変換を行うため、libsasのマルチチャネルモードを利用します。ステレオモードとマルチチャネルモードについては、別資料「SAS概要」をご参照ください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>サウンドソース処理の開始／停止</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3daでは、サウンドソース毎に処理を開始／停止させることができます。<br>停止しているサウンドソースの出力は、ミュート状態になります。<br>停止しているサウンドソースは、波形処理によるCPU負荷をほとんど消費しません。<br>停止したサウンドソースは、再開することができます。<br>ライブラリ初期化後は、全てのサウンドソースが停止状態です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>対応する関数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドソースの停止と再開は、以下の関数で行います。<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;入力データの停止&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daStop">sceP3daStop</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;入力波形データの準備&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daPlay">sceP3daPlay</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">これらの関数を利用する目的は、以下を想定しています。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 利用していないサウンドソースを停止させ、CPUの処理負荷を低減させるため。
+<li> サウンドソースに割り当てる音色を切り替えるときの一時的なサウンド処理の停止。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>ON/OFF時のノイズ対策</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daStop">sceP3daStop</a>()および<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daPlay">sceP3daPlay</a>()によるサウンドの停止、再開時はフェードインやフェードアウト処理は行ないませんので、発音中にこれらの操作を行うと、プチノイズが発生する可能性があります。これらの操作を行うときは、入力波形レベルが小さい状態で停止や再開をするようにしてください。音量の調整をする場合は、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetLevel">sceP3daSetLevel</a>()が利用できます。<br><br>他の対策方法は、<b>libsas</b>のKeyON/OFF処理を前後に行う方法です。<br>libsasのKeyON/OFF処理では、フェードインおよびフェードアウト処理を行っています。<br>音源にlibsasを利用しているならば、以下の順番で呼び出すことにより、プチノイズの発生を防ぐことができます。<br></div>
+<div style="margin-left:80px;"><a href="../sound/libp3da-Reference-Japanese.htm#sceP3daPlay">sceP3daPlay</a>() &rarr; KeyON    ……    KeyOFF &rarr; <a href="../sound/libp3da-Reference-Japanese.htm#sceP3daStop">sceP3daStop</a>()<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>計算誤差について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libp3daの3Dジオメトリ計算は、16bitの計算精度で処理されています。<br>計算誤差により距離や角度の計算結果には、多少の誤差が生じます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>誤差の認識</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">誤差によるサウンドへの出力結果は、聴感上知覚しやすい場合としにくい場合があります。<br>計算誤差による3D効果の擬似的なサウンドポジションのズレ、音量の微妙な変化、ピッチのズレなどは、聞き分けることはできないでしょう。<br>ただし、出力音声の急激な変化が起こるポイントでは、その誤差はより明確に認識できるでしょう。<br>たとえば、リスナーとサウンドソースの距離が最大距離に達したら、音量がミュートされるように設定していた場合、実際に設定した合成ベクトルの長さには、多少の誤差が生じるためミュートされる位置が数ミリメートルから数十ミリメートルほどズレます。<br>また、サウンドコーンの内側と外側のレベル差が急に変化する設定などにおいて（インナーとアウターの角度をほぼ同じにしてアウターレベルを極端に小さくした場合）音量の変化点の誤差は確認されやすくなります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>計算精度による誤差</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ジオメトリ計算は、16bitの計算精度で処理されていますが、16bitの範囲を超える値についても16bit値の範囲にスケーリングして計算されているため、16bit値以上の値では、計算誤差が大きくなります。内部計算の範囲が16bit以内であれば、1％より充分小さな誤差で済みます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_3">
+<h3>
+<a href="#Heading3_9"> 9. </a>3 
+<!-- hp1 --><b>ポジション設定のモードによる誤差</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サウンドソースの位置設定の方法によっても誤差の大きさは変わります。<br>位置設定の方法とは、<br></div>
+<div style="margin-left:67px;">直交座標による絶対位置指定(<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPosition">sceP3daSetPosition</a>())もしくは、<br>直交座標による相対位置指定(<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPositionRelative">sceP3daSetPositionRelative</a>())もしくは、<br>極座標による相対位置指定(<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daSetPositionPolarRelative">sceP3daSetPositionPolarRelative</a>())<br></div>
+<div style="margin-left:50px;">です。<br><br>「極座標による相対位置指定」では、内部の処理形式に最も近いため誤差も最も少なくなります。<br>次に「直交座標による相対位置指定」、その次に「直交座標による絶対位置指定」という順番で変換処理による誤差が大きくなる傾向があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_4">
+<h3>
+<a href="#Heading3_9"> 9. </a>4 
+<!-- hp1 --><b>対処方法について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">通常の利用方法では、誤差が大きな問題になるような状況は少ないと思われますが、誤差をなるべく小さくする必要がある場合は、上記で説明したように、設定する値やポジション設定の方法に配慮してご利用ください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>その他注意点</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_1">
+<h3>
+<a href="#Heading3_10"> 10. </a>1 
+<!-- hp1 --><b>3Dポジショナルオーディオ処理を必要としないサウンドソースについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3daの処理を通すと、必ず3Dポジショナルオーディオの効果がかかります。もし3Dポジショナルオーディオの効果が必要ないサウンドをlibp3daの音と同時に再生したい場合は、libp3da処理後の音とミキシングした方がCPU負荷は軽くなります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_2">
+<h3>
+<a href="#Heading3_10"> 10. </a>2 
+<!-- hp1 --><b>エフェクト処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3da処理後の波形にサウンドエフェクト（残響効果など）を通すと、サウンドの位相成分などが変わってしまうため定位感が失われてしまい、目的とする3Dポジショナルオーディオの効果が得られなくなります。libp3daと他のサウンドエフェクトを組み合わせて利用される際には、注意をしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_3">
+<h3>
+<a href="#Heading3_10"> 10. </a>3 
+<!-- hp1 --><b>粒度設定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libp3daのサウンド処理単位は、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daInit">sceP3daInit</a>()で指定したサンプルサイズになります。他のサウンド処理と組み合わせて利用する場合には、このサンプルサイズを調整してください。<br>また処理単位が細かくなるとCPU負荷が重くなります。サンプルサイズの違い以上にCPU負荷に影響があることがあります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_4">
+<h3>
+<a href="#Heading3_10"> 10. </a>4 
+<!-- hp1 --><b>３Ｄ効果の粒度</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">パラメータ関数による設定の変更が出力波形に反映されるタイミングは、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()処理の中になります。たとえば初期化時にブロックサンプルの値を2048サンプルに設定した場合は、関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daCore">sceP3daCore</a>()も2048サンプル時間毎（約46[ms]毎）に呼ばれることになるので、3D効果の変化、音量の変化、ピッチの変化などは2048サンプル時間毎に効果が変化します。逆に言うと2048サンプル時間の間は、変化が起きないことになります。従ってブロックサンプル時間にくらべ、あまり細かい時間間隔でパラメータの変更を行うことは無意味です。<br>また、3D効果の時間変化が粗いと感じるようであれば、粒度設定を見直す必要があるかもしれません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_5">
+<h3>
+<a href="#Heading3_10"> 10. </a>5 
+<!-- hp1 --><b>サウンドソース数の指定タイミング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">初期化関数<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daInit">sceP3daInit</a>()で指定したサウンドソース数およびブロックサンプルサイズは、<a href="../sound/libp3da-Reference-Japanese.htm#sceP3daExit">sceP3daExit</a>()で終了するまで変更することはできません。再度、初期化したときに新たな値を設定することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_6">
+<h3>
+<a href="#Heading3_10"> 10. </a>6 
+<!-- hp1 --><b>現実世界のシミュレーションについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">位置や速度の指定において、現実世界での位置や速度と同じ値を指定することが難しい場合があります。たとえば、ジェット機などのドップラー効果とロールオフ効果を表現するために距離数万メートルで時速600キロメートルで、といった指定をしようとすると桁があふれてしまうことになります。位置座標と速度ベクトルの設定値を計算処理のbit長の範囲内に収めるためには、位置データや速度ベクトルのスケールを落として指定してください。その代わり、ロールオフ係数やピッチ係数設定を組み合わせることにより期待する効果が得られるよう調整をしてください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>その他の利用方法</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">3Dポジショナルオーディオの効果を利用した他の使い方として、擬似サラウンドを紹介します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_1">
+<h3>
+<a href="#Heading3_11"> 11. </a>1 
+<!-- hp1 --><b>擬似サラウンド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">擬似サラウンドとは、libp3daの使い方の特殊な例です。<br>設定としてlibp3daの4つのサウンドソースを4つのサラウンド用スピーカーとして擬似的に配置します。4つのサウンドソースの入力波形には、4チャンネルサラウンド用にミックスダウンした波形データを入力します。この方法により、4チャンネル擬似サラウンドが実現可能です。ミックスダウンで重ねる波形の数に制限が無いため、4チャンネルを超える音源に対応することができます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/libp3da-Overview-Japanese037.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 30  擬似スピーカーの配置</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">擬似サラウンドを行う場合、以下のようなメリットとデメリットがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_11_1_1"><h4>
+(1)&nbsp;<b>メリット</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> 音源数の制限がない。<br>libsasを音源とする場合、32ボイス全てをサラウンド定位できます。
+<li> サラウンド用オーサリングされたデータへの対応が楽。
+<li> 擬似スピーカー位置の変更が楽。
+<li> リスニングポイントの変更が楽。
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_11_1_2"><h4>
+(2)&nbsp;<b>デメリット</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> 平面定位である（上下の定位は無い）。
+<li> libp3daの各サウンドソースの定位に比べ定位感が薄い。
+<li> libp3daのピッチ計算に対応しない。
+<li> 処理負荷が常に最大（4chの処理をし続ける必要あり）。
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

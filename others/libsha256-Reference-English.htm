@@ -1,0 +1,429 @@
+<html lang="en">
+<head>
+<title>libsha256-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsha256 Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceSha256Context"></a>
+<table width="100%"><td width="70%"><font size=6>SceSha256Context<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SHA-256 digest value calculation context information<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+typedef struct SceSha256Context {
+	unsigned int <i>h</i>[8];
+	unsigned int <i>pad</i>;
+	unsigned short <i>usRemains</i>;
+	unsigned short <i>usComputed</i>;
+	unsigned long long <i>ulTotalLen</i>;
+	unsigned char <i>buf</i>[SCE_SHA256_BLOCK_SIZE];
+} <b>SceSha256Context</b>;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>h</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Work area&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pad</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Padding for adjusting alignment&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usRemains</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size (less than 64 bytes) of remaining data&nbsp;&nbsp;<br>&nbsp;&nbsp;which was temporarily copied into the&nbsp;&nbsp;<br>&nbsp;&nbsp;SceSha256Context structure&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>usComputed</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Digest value calculation completed flag&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ulTotalLen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Total data size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Temporary copy of data (less than 64 bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure is used as a work area when segmenting SHA-256 digest value calculations. The <a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>() function, <a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>() function, and <a href="../others/libsha256-Reference-English.htm#sceSha256BlockResult">sceSha256BlockResult</a>() function use it as a work area, so applications must not access the members of this structure directly.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>(), <a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>(), <a href="../others/libsha256-Reference-English.htm#sceSha256BlockResult">sceSha256BlockResult</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256Digest"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256Digest<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Calculate SHA-256 digest<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256Digest</b> (
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies a pointer to the plaintext data for which to calculate the &nbsp;&nbsp;<br>&nbsp;&nbsp;digest value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the data size (in bytes) of the plaintext data for which to &nbsp;&nbsp;<br>&nbsp;&nbsp;calculate the digest value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns the computed digest value (32 bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative number is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Successful completion&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function calculates a SHA-256 digest value. <br>It is used when the plaintext data on which to calculate the digest value has been completely expanded in memory. <br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256BlockInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256BlockInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Initialize digest value calculation work area<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256BlockInit </b>(
+	<a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> *<i>pContext</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the address of the digest value calculation work area&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative number is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Successful completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext </i>address is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes the work area which is used for SHA-256 digest value calculation. <br>Use it prior to calling the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>() function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a>, <a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>(), <a href="../others/libsha256-Reference-English.htm#sceSha256BlockResult">sceSha256BlockResult</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256BlockUpdate"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256BlockUpdate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Perform SHA-256 digest value calculation<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256BlockUpdate</b> (
+	<a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> *<i>pContext</i>,
+	const void *<i>plain</i>,
+	unsigned int <i>len</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the address of the digest value calculation work area&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>plain</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies a pointer to the plaintext data for which to calculate the &nbsp;&nbsp;<br>&nbsp;&nbsp;digest value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the data size (in bytes) of the plaintext data for which to &nbsp;&nbsp;<br>&nbsp;&nbsp;calculate the digest value&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative number is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Successful completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_BUSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Digest value calculation was already &nbsp;&nbsp;<br>&nbsp;&nbsp;completed on <i>pContext</i>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext </i>or <i>plain</i> address is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function updates the work area in the <a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> structure using the plaintext specified by <i>plain</i> and <i>len</i>. The sceSha256BlockUpdate() function can be called any number of times in between the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>() function and the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockResult">sceSha256BlockResult</a>() function; by calling the sceSha256BlockUpdate() function in a repetitive manner, digest values can be calculated even for large amounts of data which cannot fit in memory all at once.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a>, <a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>(), <a href="../others/libsha256-Reference-English.htm#sceSha256BlockResult">sceSha256BlockResult</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSha256BlockResult"></a>
+<table width="100%"><td width="70%"><font size=6>sceSha256BlockResult<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get calculated SHA-256 digest<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libsha256.h&gt;
+int <b>sceSha256BlockResult</b> (
+	<a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> *<i>pContext</i>,
+	unsigned char *<i>digest</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the address of the digest value calculation work area&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>digest</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Returns the computed digest value (32 bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If an error occurs, a negative number is returned.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Result</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Success&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ERROR_INVALID_POINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>pContext</i> or <i>digest</i> address is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function obtains the calculated digest value from the <a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> structure. Since SHA-256 is an algorithm which calculates digest values in 64-byte units, remaining bytes which did not fill 64 bytes by using the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>() function may be temporarily copied into the <a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> structure. If data remains which has been temporarily copied into the <a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> structure, the final digest value will be determined by calling the sceSha256BlockResult() function. Be sure to call the sceSha256BlockResult() function to obtain the digest value. <br>The digest value in the <a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> structure will remain valid until the next time that the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>() function is called.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a>, <a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>(), <a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>()<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

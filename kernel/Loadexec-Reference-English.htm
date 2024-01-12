@@ -1,0 +1,310 @@
+<html lang="en">
+<head>
+<title>Loadexec-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Restarting the PSP&trade; and Starting Applications(loadexec) Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceKernelLoadExecParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceKernelLoadExecParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>sceKernelLoadExec option structure<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>typedef struct <b>SceKernelLoadExecParam</b> {
+	SceSize <i>size;</i>
+	SceSize <i>args</i>;
+	const void *<i>argp;</i>
+	const char *<i>key</i>;
+} SceKernelLoadExecParam;
+
+</font></pre></div>
+
+<!-- Members -->
+<div style="margin-left:10px;"><b>Members</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies sizeof(SceKernelLoadExecParam)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>args</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the size of the arguments to be passed to the program that is started by the <a href="../kernel/Loadexec-Reference-English.htm#sceKernelLoadExec">sceKernelLoadExec</a> API.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies a pointer to the arguments specified above. Arguments that are passed by using a byte string are converted to a more general <i>argc</i> and <i>argv</i> format by the standard crt. Those conversion rules are as follows.&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;#define MAXARG 20&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;char *argv[MAXARG], *ap;&nbsp;&nbsp;<br>&nbsp;&nbsp;int argc;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;for( argc = 0, ap = argp; argc &lt; MAXARG &amp;&amp; &nbsp;&nbsp;<br>&nbsp;&nbsp;ap-argp &lt; args; argc++){&nbsp;&nbsp;<br>&nbsp;&nbsp;argv[argc] = ap;&nbsp;&nbsp;<br>&nbsp;&nbsp;    ap += strlen(ap)+1;&nbsp;&nbsp;<br>&nbsp;&nbsp;}&nbsp;&nbsp;<br>&nbsp;&nbsp;argv[argc] = (void*)0;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;In other words, processing is performed in which the areas assigned by <i>args</i> and <i>argp</i> are considered to be a NULL-terminated string list.&nbsp;&nbsp;<br>&nbsp;&nbsp;Note that the areas specified by <i>args</i> and <i>argp</i> are relocated by the system when the system is restarted. Also, since memory is initialized when the system is restarted, a pointer cannot be passed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>key</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Currently not available&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure holds options for controlling the behavior of loadexec.<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadExec"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadExec<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Restart the PSP&trade; and load program module from file path<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+int <b>sceKernelLoadExec</b>(
+	const char *<i>fileName</i>,
+	const <a href="../kernel/Loadexec-Reference-English.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a> *<i>param</i>
+); 
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Mutithread safe <br><br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename of program that is executed after the PSP&trade; is restarted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>param</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to a <a href="../kernel/Loadexec-Reference-English.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a> structure for specifying behavior when the PSP&trade; is restarted. If not needed set this argument to NULL.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a><br><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a><br><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE">SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE</a><br><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME">SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME</a><br><br>The above error codes are from the kernel for the API call, and no value is returned for normal operation since the PSP&trade; is restarted and the specified program is started up. However, if an error occurs while the PSP&trade; is being restarted and consequently the program could not be started up, the application in FLASH memory will display the error code after the PSP&trade; is restarted. Although all error codes can be displayed, the following are typical examples of what may be displayed.<br><br><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br>SCE_KERNEL_ERROR_ILLEGAL_PERM<br>SCE_KERNEL_ERROR_ILLEGAL_OBJECT<br><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE">SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE</a><br>SCE_KERNEL_ERROR_UNSUPPORTED_PRX_TYPE<br>SCE_KERNEL_ERROR_NO_MEMORY<br><br>SCE_ERROR_ERRNO_EIO<br>SCE_ERROR_ERRNO_ENOENT<br>SCE_ERROR_ERRNO_ENOMEDIUM<br><br>SCE_UMD_NOT_DEVICE_READY<br>SCE_UMD_NO_MEDIUM<br>SCE_UMD_UNKNOWN_MEDIUM<br>SCE_UMD_HARDWARE_FAILURE<br>SCE_UMD_POWER_OFF<br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function restarts the PSP&trade; and starts up the application specified by the filename. Control does not return from this function during normal execution. The specified program must be a user mode program on disc or on host0.<br>In addition, UMD&trade; replacement must be in the prohibited state at the time when this function is called. If UMD&trade; replacement is in the allowed state, <a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a> will be returned. For details concerning UMD&trade; replacement, refer to the &quot;UMD&trade; Overview&quot; document.<br><a href="../kernel/Loadexec-Reference-English.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a> can be used to pass parameters to the program that is started up. See the description of <a href="../kernel/Loadexec-Reference-English.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a>.<br>To start up a program on the UMD&trade;, set the argument <i>filename</i>, which relates to the filename of the application which is executed after restart, as follows. <br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> "disc0:/PSP_GAME/SYSDIR/BOOT.BIN"
+</ul></div>
+<div style="margin-left:50px;">Note that if EBOOT.BIN is specified here, start-up will not be performed properly. In addition, when starting up from system software or when powering up with a UMD&trade; inserted, The value passed in <i>argp</i> will be the following.<br></div>
+<div style="margin-left:60px;"><ul>
+<li> "disc0:/PSP_GAME/SYSDIR/EBOOT.BIN\0\0" 
+</ul></div>
+<div style="margin-left:50px;"><br>To start up a game from the application in the FLASH memory of the PSP&trade; when playing via a wireless LAN, pass the path, MAC address, and IBSS. For example, when "wlan0\008:00:46:xx:xx:xx \0 Akasaka1\0\0" is passed for argp and argp is converted to argc/argv format, an array of three NULL-terminated strings is passed as follows.<br></div>
+<div style="margin-left:60px;"><ul>
+<li> "wlan0"
+<li> "08:00:46:xx:xx:xx"
+<li> "Akasaka1"
+</ul></div>
+<div style="margin-left:50px;">The actual ibss here is independently defined as a "group name" in the IBSS sub-part.<br>On the other hand, when playing via a UMD&trade;, "disc0:/PSP_GAME/SYSDIR/EBOOT.BIN\0\0" is passed.<br><br>Note that when this function is called, screen display will be interrupted and the screen will go black. The screen will remain completely dark until the PSP&trade; is restarted and the application starts up. However, you can switch to the next program while maintaining the current frame buffer being displayed.<br>To implement the latter, see the description of <a href="../peripheral/Display-Reference-English.htm#sceDisplaySetHoldMode">sceDisplaySetHoldMode</a>() in the "Display Service."<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelExitGame"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelExitGame<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Exit game, restart the PSP&trade;, and start application<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+
+int <b>sceKernelExitGame</b> (
+	void
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function exits the game, restarts the PSP&trade;, and starts up the application in flash memory.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelRegisterExitCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelRegisterExitCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Register exit callback<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+
+int <b>sceKernelRegisterExitCallback</b> (
+	SceUID <i>uid</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Callback identifier&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Loadexec-Reference-English.htm#SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a><br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function registers the callback function that is called when Exit Game is selected from the PS button (HOME button). The callback function should perform exit processing such as saving data, etc. and as a last step it should call <a href="../kernel/Loadexec-Reference-English.htm#sceKernelExitGame">sceKernelExitGame</a>(). <br>Call this function in as short a time as the <i>main</i> function allows.<br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="List of Error Codes"></a>
+<table width="100%"><td width="70%"><font size=6>List of Error Codes<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Error Codes]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>loadexec Error Codes <br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ERROR">SCE_KERNEL_ERROR_ERROR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Some kind of error&nbsp;&nbsp;<br>&nbsp;&nbsp;occurred&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_CONTEXT">SCE_KERNEL_ERROR_ILLEGAL_CONTEXT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020064&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Was called from interrupt&nbsp;&nbsp;<br>&nbsp;&nbsp;handler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_ADDR">SCE_KERNEL_ERROR_ILLEGAL_ADDR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x800200d3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address is illegal&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE">SCE_KERNEL_ERROR_PROHIBIT_LOADEXEC_DEVICE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80020147&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device for which loadexec&nbsp;&nbsp;<br>&nbsp;&nbsp;is prohibited&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME">SCE_KERNEL_ERROR_ILLEGAL_LOADEXEC_FILENAME</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8002014c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Target file is invalid&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+<title>Downloadable_Game-Notes</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Downloadable Game Package</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Notes on Creating PSP&trade; Downloadable Games
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Introduction</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This document explains points that can be particularly problematic when developing downloadable games in the context of PSP&trade; development. It also explains the limitations and special test methods that exist only for downloadable games.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Reference Materials</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSP&trade; Kernel<br>Asynchronous I/O access functions
+<li> PSP&trade; Downloadable Game Package Creation Guide
+<li> PlayStation&reg;Network SMT Simple Authoring Service Users Guide
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Notes on Development</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes differences in operation between downloadable games and UMD&trade; games that could potentially be problematic.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Differences in Access Timing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A PSP&trade; downloadable game emulates accesses to a UMD&trade;. It also verifies the decryption signature and performs decompression processing when reading data. Therefore, the read speed and latency of emulated UMD&trade; accesses will be different compared to actual UMD&trade; accesses. In particular, seeking may take less time with the emulated UMD&trade;, and when data is located in sectors near the outer circumference of the UMD&trade;, the read speed may be slower for a PSP&trade; downloadable game than for an actual UMD&trade;.<br>However, strict access timing is not guaranteed from the outset. Game applications should be created to run properly despite read speed or latency variations.<br>This is a requirement for both UMD&trade; games and PSP&trade; downloadable games. In particular, for a game application that performs online gaming, programming and testing must factor in the possibility that the read speed may differ significantly from that of an opponent's environment.<br>Also, be careful to prevent timing differences from causing problems when the load time for a UMD&trade; is expected to take a long time, and separate processing is running in the background.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Differences in Thread Behavior Related to Disc I/O</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since the configuration of threads in system software will differ between a UMD&trade; game and a PSP&trade; downloadable game, problems absent in the UMD&trade; game may manifest themselves in the PSP&trade; downloadable game, potentially causing the game application to malfunction.<br>For example, using sceIoPollAsync() alone to wait for completion of an asynchronous I/O request in a PSP&trade; downloadable game may cause a deadlock to occur as described in the PSP&trade; runtime library document, "PSP&trade; Kernel." However, in a UMD&trade; game, with the current PSP&trade; runtime library, the priority of the work thread will increase, as well as I/O accesses to the UMD&trade;, allowing the game to run without any deadlock occurring. <br>However, deadlock cannot be prevented using the same method used for PSP&trade; downloadable games. Note that this problem is not limited to this example and may occur when a program continuously polls without releasing the execution right. The solution in this case is to wait for completion of the asynchronous I/O request while releasing the thread's execution right.<br>Also, processing within the driver may temporarily change the priority of the thread that reads files from disc0.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Data Stored in Buffers During Disc I/O</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A PSP&trade; downloadable game is installed as an encrypted file on the user's Memory Stick&trade;. When a game application reads a file from disc0, encrypted data is temporarily written to the buffer that is passed via the API. The data is fully decrypted by the time reading is complete. Note that when reading is performed asynchronously, if data in the buffer is accessed without waiting for reading to complete because of some bug, the data that is read will still be encrypted, which will cause abnormal operation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Accessing the Memory Stick&trade;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A PSP&trade; downloadable game accesses the Memory Stick&trade; in the same way as a game application executed from a UMD&trade;. The Memory Stick&trade; may even be accessed at the same time as the emulated UMD&trade;.<br>However, when the Memory Stick&trade; and emulated UMD&trade; are accessed at the same time, the time required for each access will be greater than when only one is accessed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Notifications Related to UMD&trade; Insertion and Removal</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If the Memory Stick&trade; is removed while the PSP&trade; downloadable game is running, an imposed game termination confirmation screen is displayed. This screen is similar to that displayed when a UMD&trade; is ejected while a UMD&trade; game is running. A callback, such as SCE_UMD_MEDIA_OUT or SCE_UMD_READABLE, or an event, such as <a href="../peripheral/UMD-Reference-English.htm#sceUmdWaitDriveStat">sceUmdWaitDriveStat</a>(), also occurs when the Memory Stick&trade; is inserted / removed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>State Transition Timing in UMD&trade; and PSP&trade; Downloadable Games</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In a PSP&trade; downloadable game, the order and timing of states reported to a callback function registered with <a href="../peripheral/UMD-Reference-English.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>() may differ from the order and timing of states when the same game application is run from a UMD&trade;.<br>In particular, transitions from states other than SCE_UMD_READY or SCE_UMD_READABLE to these states will be faster with a PSP&trade; downloadable game than a UMD&trade;. As a result, these states may also be reported before a callback occurs (such as SCE_POWER_CALLBACKARG_RESUME_COMP) by the power service.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Restrictions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter explains restrictions specific to downloadable games.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Access to the UMD&trade;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The UMD&trade; cannot be accessed while a PSP&trade; downloadable game is running.<br>Also, if a UMD&trade; is ejected while a PSP&trade; downloadable game is running, no callback or event will occur (it is ignored).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Support for Multi-Disc Titles</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Multi-disc titles are not supported by PSP&trade; downloadable games.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Testing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">By using the Memory Stick&trade; with the development tool, the operation of an application under development can be verified if that application is installed on the Memory Stick&trade; as a downloadable game.<br>To perform such testing, developers can use the authoring service (SAS) provided by SCE for PSP&trade; developers, to obtain a file that can be launched from the Memory Stick&trade; on the PSP&trade; development tool.<br>For information about files that need to be prepared when using the authoring service or for information on how to use files that were obtained by authoring, refer to the "PSP&trade; Downloadable Game Package Creation Guide." For information on using the authoring service, refer to the "PlayStation&reg;Network SMT Simple Authoring Service Users Guide."<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

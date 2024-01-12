@@ -1,0 +1,540 @@
+<html lang="jp">
+<head>
+<title>Utility_RssReader-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+RSSリーダーユーティリティ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ユーティリティについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ユーティリティの概要などについては、「ユーティリティサービスoverviewドキュメント」を参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>RSSチャンネル概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;システムソフトウェア上のRSSチャンネル機能は、RSS(Really Simple Syndication) 2.0のフォーマットを使用して、比較的簡便にWebサイトに更新されたコンテンツをユーザーに配信する手段を提供します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ゲーム、RSSリーダーユーティリティ、RSSチャンネル登録ユーティリティ、配信サーバーの関係概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RSSリーダーユーティリティ、RSSチャンネル登録ユーティリティ、ゲーム、および配信サーバーの関係を、図 1を参照しながら概説します。RSSチャンネル登録ユーティリティ、及びPSP&reg;システムソフトウェア（RSSチャンネル機能）は、RSSリーダーユーティリティの利用とは直接は関わりません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>[game] : チャンネルの登録</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ゲームプログラムは、RSSチャンネル登録ユーティリティを用いて、Memory Stick&trade;内の登録チャンネルデータに、サーバーから配信されるRSSへのURLを、タイトルや、サムネイルイメージなどと共に登録します。<br>ゲームプログラムのこの操作は、PSP&reg;システムソフトウェア（RSSチャンネル機能）を利用する際には必要ですが、ゲームの中でのみRSSを介したコンテンツの流通を行うのであれば必須ではありません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>[game] : RSSの読み込みをRSSリーダーユーティリティに要求</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ゲームプログラムは、サーバーから配信されるRSSへのURLをRSSリーダーユーティリティに渡し、RSSの読み込みを要求します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>[utility] : RSSの読み込み</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ゲームプログラムから渡されたサーバーから配信されるRSSへのURLにアクセスして、RSSリーダーユーティリティ内のメモリにRSSを読み込みます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>[game] : RSS内の情報取得を要求</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ゲームプログラムは、読み込み済みのRSS内の情報（チャンネルやアイテムの&lt;title&gt; , &lt;description&gt;タグ内の情報など）の取得をRSSリーダーユーティリティに要求し、取得します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>[game] : コンテンツのダウンロードを要求</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ゲームプログラムは、読み込み済みのRSSに参照されているコンテンツのダウンロードをRSSリーダーユーティリティに要求し、ダウンロードします。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>[utility] : コンテンツのURLを参照</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">RSSリーダーユーティリティは、読み込み済みのRSSから、ゲームプログラムからダウンロード要求されたコンテンツのURLを参照します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_7"><h4>
+(7)&nbsp;<b>[utility] : コンテンツをダウンロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">RSSリーダーユーティリティは、(6)で参照したURLからコンテンツをダウンロードします。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_8"><h4>
+(8)&nbsp;<b>[game] : コンテンツの利用</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">(7)で保存されたコンテンツは、ゲーム内で利用したり、PSP&reg;システムソフトウェアで視聴することができます。<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/Utility_RssReader-Overview-Japanese001.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  ゲーム、RSSリーダーユーティリティ、RSSチャンネル登録ユーティリティ、配信サーバー、システムソフトウェアの関係概略図</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>RSSチャンネルで配信可能なコンテンツの種類</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">配信可能なコンテンツの種類としては、下記の2種類があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>音声ファイル・動画ファイル・画像ファイル</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ポッドキャストとしてゲームと無関係に利用することもできますが、ゲームコンテンツのプロモーション用に利用することもできます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>セーブデータファイル</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">マップデータ、キャラクターデータなど、ゲーム内で使用するデータを日々更新することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>RSSチャンネルを用いたコンテンツデータ配信の利点・欠点</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RSSチャンネルを利用したコンテンツの配信には、ユーザー、コンテンツ提供者のそれぞれについて、下記のような利点及び欠点があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_1"><h4>
+(1)&nbsp;<b>ユーザー</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_1_1">
+<div style="margin-left:63px;"><h4><b>利点</b><br><br></h4></a></div>
+<div style="margin-left:70px;"><ul>
+<li> インターネットブラウザを使用せずに少ない手順で最新のコンテンツの有無を確認できる。
+<li> インターネットブラウザを使用せずに少ない手順で最新のコンテンツを保存できる。
+<li> タイマ機能を使うと、特に何もしなくても無線LAN経由で自動的に最新のコンテンツが保存できる。
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_1_2">
+<div style="margin-left:63px;"><h4><b>欠点</b><br><br></h4></a></div>
+<div style="margin-left:70px;"><ul>
+<li> コンテンツの内容を把握できる情報が、限られた文字列とサムネイルイメージだけである。
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_2"><h4>
+(2)&nbsp;<b>コンテンツ提供者</b><br></h4>
+</a></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_2_1">
+<div style="margin-left:63px;"><h4><b>利点</b><br><br></h4></a></div>
+<div style="margin-left:70px;"><ul>
+<li> ユーザーがコンテンツ確認を行う機会が増え、新しいコンテンツの存在を知ってもらう機会が増える。
+<li> Webページの開発にかかる時間を削減できる。
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_3_2_2">
+<div style="margin-left:63px;"><h4><b>欠点</b><br><br></h4></a></div>
+<div style="margin-left:70px;"><ul>
+<li> ユーザーは直接目的物を取得できるので、ユーザーが求めるコンテンツ以外のコンテンツをユーザーの目に触れさせる機会が減る。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>関連ドキュメント</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RSSチャンネルに関連して、目的に応じて下記のドキュメントをご参照ください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>PSP&trade; (PlayStation&reg;Portable) RSSチャンネル向けコンテンツ作成ガイドライン</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">音声ファイル・動画ファイル・画像ファイルを配信するためのサーバーを構成するために必要な情報が記述されています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>PSP&trade; (PlayStation&reg;Portable) RSSチャンネル向けコンテンツ作成ガイドライン（セーブデータダウンロード編）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">セーブデータファイルを配信するためのサーバーを構成するために必要な情報が記述されています。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>RSSリーダーユーティリティ概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">RSSリーダーユーティリティは、以下の点に特徴があります。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ユーザインタフェースは伴いません。
+<li> RSSリーダーユーティリティの起動タイプを指定する呼出しのAPIとして、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderInitStart">sceUtilityRssReaderInitStart</a>()と<a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderContStart">sceUtilityRssReaderContStart</a>()の二種類があります。
+<li> RSSリーダーユーティリティの内部状態には、SCE_UTILITY_COMMON_STATUS_NONE, SCE_UTILITY_COMMON_STATUS_INITIALIZE, SCE_UTILITY_COMMON_STATUS_RUNNING, SCE_UTILITY_COMMON_STATUS_FINISHEDの他に、SCE_UTILITY_COMMON_STATUS_WAITINGがあります。
+<li> SCE_UTILITY_RSS_READER_TYPE_FINISH以外の起動タイプでユーティリティを起動(<a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderInitStart">sceUtilityRssReaderInitStart</a>())すると、ユーティリティの状態はSCE_UTILITY_COMMON_STATUS_RUNNING状態からSCE_UTILITY_COMMON_STATUS_WAITING状態へと遷移します。
+<li> ユーティリティの状態がSCE_UTILITY_COMMON_STATUS_WAITINGであるとき、次の起動タイプを指定してユーティリティを呼び出す(<a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderContStart">sceUtilityRssReaderContStart</a>())と、前回までの起動タイプの結果を反映した結果を得ることができます。
+<li> ユーティリティの状態がSCE_UTILITY_COMMON_STATUS_WAITING状態であるとき、SCE_UTILITY_COMMON_STATUS_FINISHEDに遷移するためには、明示的にSCE_UTILITY_RSS_READER_TYPE_FINISHという起動タイプで呼び出す(<a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderContStart">sceUtilityRssReaderContStart</a>())必要があります。
+<li> ユーティリティの状態がSCE_UTILITY_COMMON_STATUS_WAITING状態であるとき、前回の呼出し(<a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderInitStart">sceUtilityRssReaderInitStart</a>()または<a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderContStart">sceUtilityRssReaderContStart</a>())の起動タイプの処理をユーティリティの内部スレッドが継続していることがあります。（前回の起動タイプがSCE_UTILITY_RSS_READER_TYPE_RETRIEVEと、SCE_UTILITY_RSS_READER_TYPE_DOWNLOADの場合）
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>内部状態</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RSSリーダーユーティリティの内部状態には、ユーティリティの状態として次の状態があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_UTILITY_COMMON_STATUS_NONE
+<li> SCE_UTILITY_COMMON_STATUS_INITIALIZE
+<li> SCE_UTILITY_COMMON_STATUS_RUNNING
+<li> SCE_UTILITY_COMMON_STATUS_FINISHED
+<li> SCE_UTILITY_COMMON_STATUS_WAITING
+</ul></div>
+<div style="margin-left:50px;">SCE_UTILITY_COMMON_STATUS_WAITING状態には、さらにその内部状態として、次の4つの状態があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> RSS未読み込み、待機中
+<li> RSS読み込み中
+<li> RSS読み込み済み、待機中
+<li> ダウンロード中
+</ul></div>
+<div style="margin-left:50px;">内部状態と状態遷移を示した図を図 2に示します。状態遷移の詳細については後述します。図においては、"sceUtilityRssReader", "SCE_UTILITY_COMMON_STATUS_", "SCE_UTILITY_RSS_READER_TYPE_"といった接頭語は省略して記載されています。<br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/Utility_RssReader-Overview-Japanese002.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 RSSリーダーユーティリティの内部状態と状態遷移図</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>呼出し方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RSSリーダーユーティリティの呼び出しは、ユーティリティの内部状態によって使用するAPIが異なります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_1">
+<div style="margin-left:40px;"><h4><b>SCE_UTILITY_COMMON_STATUS_NONE状態からの呼出し</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderInitStart">sceUtilityRssReaderInitStart</a>()関数を用いて呼び出します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>SCE_UTILITY_COMMON_STATUS_WAITING状態からの呼出し</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderContStart">sceUtilityRssReaderContStart</a>()関数を用いて呼び出します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>呼出タイプ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RSSリーダーユーティリティの呼び出しには、以下のタイプがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_3">
+<div style="margin-left:40px;"><h4><b>RSSの読み込み</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">RSSのURLを指定して呼び出すことで、ユーティリティの内部メモリにRSSの情報を、非同期処理で読み込みます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_4">
+<div style="margin-left:40px;"><h4><b>RSSの読み込みキャンセル</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">実行中のRSSの読み込みをキャンセルします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_5">
+<div style="margin-left:40px;"><h4><b>読み込み済みのRSSの情報取得</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ユーティリティの内部メモリに読み込んだRSSの情報を取得します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_6">
+<div style="margin-left:40px;"><h4><b>読み込み済みのRSSのコンテンツダウンロード</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ユーティリティの内部メモリに読み込んだRSSから参照されているコンテンツファイルを、非同期処理でダウンロードします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_7">
+<div style="margin-left:40px;"><h4><b>読み込み済みのRSSのコンテンツダウンロードキャンセル</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">実行中のコンテンツファイルのダウンロードをキャンセルします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_8">
+<div style="margin-left:40px;"><h4><b>終了</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">SCE_UTILITY_COMMON_STATUS_WAITING状態にあるRSSリーダーユーティリティをSCE_UTILITY_COMMON_STATUS_FINISHED状態へ遷移させます。<br><br></div>
+<div style="margin-left:50px;">上記6つの呼び出し方法は、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderParam">SceUtilityRssReaderParam</a>の<i>type</i>メンバで設定することができます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>呼び出し方法</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>タイプ名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;RSSの読み込み&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UTILITY_RSS_READER_TYPE_RETRIEVE&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;RSSの読み込みキャンセル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UTILITY_RSS_READER_TYPE_RETRIEVE_CANCEL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;読み込み済みのRSSの&nbsp;&nbsp;<br>&nbsp;&nbsp;情報取得&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UTILITY_RSS_READER_TYPE_GET_INFO&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;読み込み済みのRSSの&nbsp;&nbsp;<br>&nbsp;&nbsp;コンテンツダウンロード&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UTILITY_RSS_READER_TYPE_DOWNLOAD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;読み込み済みのRSSの&nbsp;&nbsp;<br>&nbsp;&nbsp;コンテンツダウンロード&nbsp;&nbsp;<br>&nbsp;&nbsp;キャンセル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UTILITY_RSS_READER_TYPE_DOWNLOAD_CANCEL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;終了&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UTILITY_RSS_READER_TYPE_FINISH&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>状態遷移</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">内部状態と状態遷移を示した図 2を参照しながら説明します。図においては、"sceUtilityRssReader", "SCE_UTILITY_COMMON_STATUS_", "SCE_UTILITY_RSS_READER_TYPE_"といった接頭語は省略して記載されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>SCE_UTILITY_COMMON_STATUS_NONE状態からの状態遷移</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderInitStart">sceUtilityRssReaderInitStart</a>()関数を用いて呼び出したときに、状態が遷移します。<br>機能上有効な呼び出しタイプは次のタイプです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_UTILITY_RSS_READER_TYPE_RETRIEVE
+</ul></div>
+<div style="margin-left:67px;">上記以外は、エラーが返却されるか、機能上無効な呼び出しタイプです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_1"><h4>
+(1)&nbsp;<b>SCE_UTILITY_RSS_READER_TYPE_RETRIEVEのタイプで呼び出したとき</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">SCE_UTILITY_COMMON_STATUS_INITIALIZE状態、SCE_UTILITY_COMMON_STATUS_RUNNING状態を経て、SCE_UTILITY_COMMON_STATUS_WAITING状態に遷移します。<br>呼び出しが成功すれば、呼び出し時に渡した<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderRetrieveArgs">SceUtilityRssReaderRetrieveArgs</a>構造体のメンバ変数である<i>retrieving</i>がtrueとなった、RSS読み込み中状態となります。<br>呼び出しが失敗すれば、呼び出し時に渡した<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderRetrieveArgs">SceUtilityRssReaderRetrieveArgs</a>構造体のメンバ変数である<i>retrieving</i>はfalseのままの、RSS未読み込み待機中状態となります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_2"><h4>
+(2)&nbsp;<b>SCE_UTILITY_RSS_READER_TYPE_RETRIEVE_CANCEL, SCE_UTILITY_RSS_READER_TYPE_GET_INFO, SCE_UTILITY_RSS_READER_TYPE_DOWNLOAD, SCE_UTILITY_RSS_READER_TYPE_DOWNLOAD_CANCELのタイプで呼び出したとき</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">SCE_UTILITY_COMMON_STATUS_INITIALIZE状態、SCE_UTILITY_COMMON_STATUS_RUNNING状態を経て、SCE_UTILITY_COMMON_STATUS_WAITING状態に遷移します。その際、<a href="../utility/Utility-Reference-Japanese.htm#SceUtilityParamBase">SceUtilityParamBase</a>の<i>result</i>メンバにエラーが返却されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_3"><h4>
+(3)&nbsp;<b>SCE_UTILITY_RSS_READER_TYPE_FINISHのタイプで呼び出したとき</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">SCE_UTILITY_COMMON_STATUS_INITIALIZE状態、SCE_UTILITY_COMMON_STATUS_RUNNING状態を経て、SCE_UTILITY_COMMON_STATUS_FINISHED状態に遷移します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>SCE_UTILITY_COMMON_STATUS_WAITING状態からの状態遷移</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../utility/Utility_RssReader-Reference-Japanese.htm#sceUtilityRssReaderContStart">sceUtilityRssReaderContStart</a>()関数を用いて呼び出したとき、及び、RSSの読み込み完了、ダウンロード完了によって状態が遷移します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_1"><h4>
+(1)&nbsp;<b>RSS未読み込み、待機中</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">有効な呼出しタイプは次のタイプです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_UTILITY_RSS_READER_TYPE_RETRIEVE
+<li> SCE_UTILITY_RSS_READER_TYPE_FINISH
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_1_1">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_RETRIEVEのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">SCE_UTILITY_COMMON_STATUS_WAITING状態からは遷移はしません。呼び出しが成功すると、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderRetrieveArgs">SceUtilityRssReaderRetrieveArgs</a>構造体のメンバ変数である<i>retrieving</i>がtrueへと変化するとともにユーティリティの内部スレッドが起動し、ネットワークを介してRSSを内部メモリに読み込み始めます。呼び出しが失敗すると<i>retrieving</i>はfalseのままです。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_1_2">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_FINISHのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">SCE_UTILITY_COMMON_STATUS_FINISHED状態へと遷移します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_2"><h4>
+(2)&nbsp;<b>RSS読み込み中</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">有効な呼び出しタイプは次のタイプです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_UTILITY_RSS_READER_TYPE_RETRIEVE_CANCEL
+<li> SCE_UTILITY_RSS_READER_TYPE_FINISH
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_2_1">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_RETRIEVE_CANCELのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">SCE_UTILITY_COMMON_STATUS_WAITING状態からは遷移はしません。呼び出しが完了すると、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderRetrieveArgs">SceUtilityRssReaderRetrieveArgs</a>構造体のメンバ変数である<i>retrieving</i>がfalseへと変化し、RSSを内部メモリに読み込んでいたユーティリティの内部スレッドが停止します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_2_2">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_FINISHのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">RSSを内部メモリに読み込んでいたユーティリティの内部スレッドを停止してSCE_UTILITY_COMMON_STATUS_FINISHED状態へと遷移します。<br></div>
+<br>
+<div style="margin-left:67px;">RSSの読み込みが完了すると、<i>retrieving</i>はfalseとなり、RSS未読み込み、待機中となります。このとき、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderRetrieveArgs">SceUtilityRssReaderRetrieveArgs</a>構造体メンバ<i>result</i>に結果を表すエラー値がセットされます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_3"><h4>
+(3)&nbsp;<b>RSS読み込み済み、待機中</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">有効な呼び出しタイプは次のタイプです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_UTILITY_RSS_READER_TYPE_RETRIEVE
+<li> SCE_UTILITY_RSS_READER_TYPE_GET_INFO
+<li> SCE_UTILITY_RSS_READER_TYPE_DOWNLOAD
+<li> SCE_UTILITY_RSS_READER_TYPE_FINISH
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_3_1">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_RETRIEVEのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">SCE_UTILITY_COMMON_STATUS_WAITING状態からは遷移はしません。呼び出しが成功すると、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderRetrieveArgs">SceUtilityRssReaderRetrieveArgs</a>構造体のメンバ変数である<i>retrieving</i>がtrueへと変化するとともにユーティリティの内部スレッドが起動し、ネットワークを介してRSSを内部メモリに読み込み始めます。呼び出しが失敗すると<i>retrieving</i>はfalseのままです。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_3_2">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_GET_INFOのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">SCE_UTILITY_COMMON_STATUS_WAITING状態からは遷移はしません。内部スレッドも動作しません。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_3_3">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_DOWNLOADのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">SCE_UTILITY_COMMON_STATUS_WAITING状態からは遷移はしません。呼び出しが成功すると、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderDownloadArgs">SceUtilityRssReaderDownloadArgs</a>構造体のメンバ変数である<i>downloading</i>がtrueへと変化するとともにユーティリティの内部スレッドが起動し、ネットワークを介して読み込み済みのRSSに参照されているコンテンツファイルのダウンロードを開始します。呼び出しが失敗すると、<i>downloading</i>はfalseのままです。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_3_4">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_FINISHのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">RSSを内部メモリに読み込んでいたユーティリティの内部スレッドを停止してSCE_UTILITY_COMMON_STATUS_FINISHED状態へと遷移します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_4"><h4>
+(4)&nbsp;<b>ダウンロード中</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">有効な呼び出しタイプは次のタイプです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> SCE_UTILITY_RSS_READER_TYPE_DOWNLOAD_CANCEL
+<li> SCE_UTILITY_RSS_READER_TYPE_FINISH
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_4_1">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_DOWNLOAD_CANCELのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">SCE_UTILITY_COMMON_STATUS_WAITING状態からは遷移はしません。呼び出しが完了すると、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderDownloadArgs">SceUtilityRssReaderDownloadArgs</a>構造体のメンバ変数である<i>downloading</i>がfalseへと変化し、コンテンツファイルをダウンロードしていたユーティリティの内部スレッドが停止します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_4_2">
+<div style="margin-left:63px;"><h4><b>SCE_UTILITY_RSS_READER_TYPE_FINISHのタイプで呼び出したとき</b><br><br></h4></a></div>
+<div style="margin-left:80px;">コンテンツファイルをダウンロードしていたユーティリティの内部スレッドを停止してSCE_UTILITY_COMMON_STATUS_FINISHED状態へと遷移します。<br>ダウンロードが完了すると、<i>downloading</i>はfalseとなり、RSS読み込み済み、待機中となります。このとき、<a href="../utility/Utility_RssReader-Reference-Japanese.htm#SceUtilityRssReaderDownloadArgs">SceUtilityRssReaderDownloadArgs</a>構造体メンバ<i>result</i>に結果を表すエラー値がセットされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RSSリーダーユーティリティを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;utility_rss_reader.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;utility_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

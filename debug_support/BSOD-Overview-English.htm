@@ -1,0 +1,630 @@
+<html lang="en">
+<head>
+<title>BSOD-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+BSOD Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Module Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">BSOD is a module which, when erroneous processing occurs in a program on the DTP-H1500, if possible halts the program in that state and allows the conditions in which the error occurred to be observed. It enables the values of registers and of the program counter, the state of threads, and the state of the synchronization primitives such as semaphores and event flags, to be observed as they were at the time when the crash occurred. <br><br>BSOD is incorporated in the DTP-H1500 as a default module. No specific procedure is necessary in order to utilize BSOD.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following header file is used to interpret the crash dump file which is created by BSOD.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;crashdump.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>BSOD Occurrence Conditions </b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The following conditions will cause a BSOD to occur.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>When a CPU exception occurs due to the execution of incorrect code</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">On the ALLEGREX CPU:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Address error exception (load/fetch)
+<li> Address error exception (store)
+<li> Instruction bus error exception (fetch)
+<li> Data bus error exception (load)
+<li> Breakpoint exception
+<li> Undefined command exception
+<li> Coprocessor unusable exception
+<li> Overflow exception
+<li> FPU exception
+</ul></div>
+<div style="margin-left:50px;">When one of the above exceptions occurs, a BSOD results. For information regarding the conditions under which these respective exceptions occur, refer to the ALLEGREX manual. <br><br>In addition, if the Graphics Engine manager detects a clearly erroneous display list, a breakpoint exception may be invoked. In such cases, some sort of log message will be displayed on the kernel printf display screen. This message can be used to determine the cause of the error.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>When an NMI exception occurs due to incorrect processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the ALLEGREX CPU or a bus master other than the CPU (e.g. the DMAC, VFPU, or Graphics Engine) attempts to perform a memory access on an invalid address, a bus error occurs and an NMI exception is reported to the ALLEGREX CPU. When one of the above exceptions occurs, the result is a BSOD. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>When a memory block overflow is detected</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the memory block overflow check is enabled by a system software setting, a BSOD will occur if a memory block overflow is detected. If this debugging function is enabled, an extra 256 bytes are required per memory block as an early warning for detecting damage.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>When a thread's stack has overflowed</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Threads have a user stack and a kernel stack, and a BSOD results if either of these has overflowed. <br>If a wait function with an associated callback, such as <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitSemaCB">sceKernelWaitSemaCB</a>() or <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDelayThreadCB">sceKernelDelayThreadCB</a>(), is called from within a callback function which has been registered by the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>() function, multiple nested calls are made to callback functions, which may in turn cause a stack overflow.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>When an access is made while a weak import has not been resolved</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A module for resolving the import must be loaded and started before a program that was built using a weak import stub can be accessed. If the weak import has not been resolved when a function is called, a BSOD will occur.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>When the host0: filesystem is accessed</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The master version of a program is prohibited from accessing the host0: filesystem. On the DTP-H1500, if an attempt is made to access the host0: filesystem, a BSOD results.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>When the tty0: device is accessed</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The master version of a program is prohibited from accessing the tty0: device. On the DTP-H1500, if an attempt is made to access the tty0: device, a BSOD results.<br><br>Normal printf(), sceKernelPrintf(), etc. will not cause a BSOD. While it would be unfortunate for the display of printf(), sceKernelPrintf(), and so on to be left in master version binaries, it is possible to use printf(), sceKernelPrintf(), and so on in the debugging versions which are run on the DTP-H1500.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Key Operations on the BSOD Screen</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">On the BSOD screen, the display can be switched using the following key operations.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b> [L] [R] Buttons</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">These buttons switch the information which is displayed. The information which can be displayed is as follows.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>Register display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the GPR registers, $PC, $Status, bus error occurrence address, opcodes in the vicinity of the exception occurrence address, etc. Equivalent to the dstdb's dr command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>Thread list display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing threads. In many cases the thread in the Run state can be considered to be the direct cause of a crash, but this display is used to check the state of other threads. Equivalent to the dstdb's show thr command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>Module list display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing modules. This is used to determine which module has the failing address where the crash occurred. Equivalent to the dstdb's minfo command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>Semaphore display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing semaphores. Equivalent to the dstdb's show sem command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>Event flag display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing event flags. Equivalent to the dstdb's show evf command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_6"><h4>
+(6)&nbsp;<b>Mutex display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing mutexes. Equivalent to the dstdb's show mtx command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_7"><h4>
+(7)&nbsp;<b>Lightweight mutex display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing lightweight mutexes. Equivalent to the dstdb's show lwmtx command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_8"><h4>
+(8)&nbsp;<b>Message box display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing message boxes. Equivalent to the dstdb's show mbx command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_9"><h4>
+(9)&nbsp;<b>Message pipe display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing message pipes. Equivalent to the dstdb's show mpp command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_10"><h4>
+(10)&nbsp;<b>Variable-length memory pool (VPL) display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing variable-length memory pools. Equivalent to the dstdb's show vpl command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_11"><h4>
+(11)&nbsp;<b>Fixed-length memory pool display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing fixed-length memory pools. Equivalent to the dstdb's show fpl command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_12"><h4>
+(12)&nbsp;<b>Callback display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing callbacks. Equivalent to the dstdb's show cb command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_13"><h4>
+(13)&nbsp;<b>Thread event handler display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing thread event handlers. Equivalent to the dstdb's show thevh command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_14"><h4>
+(14)&nbsp;<b>TLS memory pool display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing TLS memory pools. Equivalent to the dstdb's show tlspl command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_15"><h4>
+(15)&nbsp;<b>Alarm handler display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing alarm handlers. Equivalent to the dstdb's show alarm command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_16"><h4>
+(16)&nbsp;<b>Virtual timer display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the list of existing virtual timers. Equivalent to the dstdb's show vtimer command.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_17"><h4>
+(17)&nbsp;<b>Kernel printf display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the kernel printf display log. Equivalent to the data which is outputted to dspcons's STTYK channel. <br>If a user program is to perform output to this screen, use the sceKernelPrintf() function. The contents of normal printf() are not recorded.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_18"><h4>
+(18)&nbsp;<b>GE register display</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Displays the GE registers. Equivalent to the dstdb's dr -ge command<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b> [&uarr;] [&darr;] Keys</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">These keys scroll the display contents one line at a time.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>[Triangle] [X] Buttons</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">These buttons scroll the display contents one half-screen at a time.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>[SELECT] Button</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This button causes a transition to the crash dump output menu.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>[PS(HOME)] Button</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">While this button is pressed, the screen for when BSOD occurred is displayed.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Crash Dump Output</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">From the BSOD screen, by pressing the [SELECT] button and then the [<img src="gif/BSOD-Overview-English001.gif">] button, the state when a crash occurred can be saved onto a Memory Stick&trade; as a crash dump log file. There must be at least around 27MiB of free space available on the Memory Stick&trade;. </div>
+<div style="margin-left:50px;"><br>When a crash dump is output, two files - pspcrash_yyyymmdd_hhmmss.log and pspcore_yyyymmdd_hhmmss.elf - are created in the root directory of the Memory Stick&trade; (yyyymmdd_hhmmss indicates the date and time the crash dump was created). Note that new files are created with different filenames each time, so be careful that the Memory Stick&trade; does not run out of free space.<br>The pspcrash.log file is the result of outputting the BSOD screen in a plaintext file format, and the pspcore.elf file is the result of outputting the BSOD screen in a ET_CORE-type ELF file format. <br><br>The following constraints exist with regard to crash dump output.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Crash dump output will not necessarily be successful</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In preparation for the possibility that crash dump output will fail, recording the BSOD screens with a digital camera is recommended.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>When a crash dump is output, the display returns to the PSP&trade; system software screen</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After outputting a crash dump, it is not possible to return to the BSOD screen again.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Constraints on the memory spaces which are saved as a core dump</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The memory spaces which are saved in a crash dump file are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 0x08800000 to 0x09FFFFFF	(user memory 24MiB)
+<li> 0x04000000 to 0x041FFFFF	(GE eDRAM 2MiB)
+<li> 0x00010000 to 0x00013FFF	(Scratchpad memory 16KiB)
+</ul></div>
+<div style="margin-left:50px;"><br>If 64MB memory mode was being used, the last 24MiB of user memory is not recorded. <br>If volatile memory was being used, the 4MiB contents of volatile memory is not recorded. <br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Using a Crash Dump for Debugging</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">By loading a crash dump file into dstdb, the state at the time when the BSOD occurred can be verified in the debugger.<br><br>Start dstdb and specify the crash dump file using the -c option.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>% dstdb -c pspcore.elf
+dstdb (Version 2.24.0 Sat Sep 17 22:57:58 JST 2005)
+node=SC dbgp=STDBGP filep=SDRFP0 loadp=SLOADP
+*** DBGP Version 5.00
+(type `help' for getting help, or `help help' for getting help of help)
+dstdb 0S0&gt; 
+</font></pre></div>
+<div style="margin-left:50px;"><br>dstdb will act as though it has connected with the target, but in actuality, rather than connecting with the target, it displays a variety of information based on the results of interpreting the crash dump file on the host PC.<br>The dr command, minfo command, show command, etc. can be used.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb 0S0&gt; dr
+at=00000000  v0-1=000048a8,08029144  a0-3=00000001,0824aa58,00000096,0824ab6f
+ t0-7=00000582,08029150,00000001,00000007 ,08013120,08012ee0,08049478,080128c4
+ s0-7=0824aa58,08247da0,08248138,00000000 ,00000001,08230000,deadbeef,deadbeef
+ t8=00000001 t9=00000000   k0=00000000 k1=00000000   gp=08250f50 sp=082e9750
+ fp=082ec7e0 ra=081eb778   lo=00000000 hi=00000000   PC=081eb778 bada=04000000
+ syscall_ra=-------- syscall_epc=-------- syscall_sp=--------
+ $cr=0x0000011c    [ CE0 IPS0 Bus error (load/store) ]
+ $fcr31=0x00001e04 [ Cause[I] Enables[VZO] Flags[I] RN ]
+  0x081eb770: 0x0e075f75  jal     0x081d7dd4
+  0x081eb774| 0x03a02021  move    $a0,$sp
+-&gt;0x081eb778: 0x8c000000  lw      $v0,0($v0)
+  0x081eb77c: 0x8fbf1000  lw      $ra,0x100($sp)
+  0x081eb780: 0x03e00008  jr      $ra
+  0x081eb784| 0x27bd1010  addiu   $sp,$sp,0x110
+  0x081eb788: 0x3c020820  lui     $v0,0x0820
+dstdb 0S0&gt; 
+
+</font></pre></div>
+<div style="margin-left:50px;"><br>If symbols are loaded using the sload command, it may be possible to display a backtrace using the bt command or the show thr -t command.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Crash Dump File Format</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The pspcore.elf crash dump file is an ELF-format core dump file. An overview of this file is as follows.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>ELF File Header</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>e_ident     = 'ELF', ELFCLASS32, ELFDATA2LSB, EV_CURRENT
+e_type      = ET_CORE
+e_machine   = EM_MIPS
+e_version   = EV_CURRENT
+e_flags     = 0x10A23000
+e_entry     = 0
+e_ehsize    = sizeof(Elf32_Ehdr)
+e_phoff     = Location in file of program header table 
+e_phentsize = sizeof(Elf32_Phdr)
+e_phnum     = 4
+e_shoff     = 0
+e_shentsize = 0
+e_shnum     = 0
+e_shstrndx  = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>ELF Program Header (1)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_LOAD
+p_flags   = PF_R+PF_W+PF_X
+p_offset  = Location in file
+p_vaddr   = 0x08800000
+p_paddr   = 0x08800000
+p_filesz  = 0x01800000
+p_memsz   = 0x01800000
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>ELF Program Header (2)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_LOAD
+p_flags   = PF_R+PF_W+PF_X
+p_offset  = Location in file
+p_vaddr   = 0x04000000
+p_paddr   = 0x04000000
+p_filesz  = 0x00200000
+p_memsz   = 0x00200000
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>ELF Program Header (3)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_LOAD
+p_flags   = PF_R+PF_W+PF_X
+p_offset  = Location in file
+p_vaddr   = 0x00010000
+p_paddr   = 0x00010000
+p_filesz  = 0x00004000
+p_memsz   = 0x00004000
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>ELF Program Header (4)</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>p_type    = PT_NOTE
+p_flags   = 0
+p_offset  = Location in file
+p_vaddr   = 0x00000000
+p_paddr   = 0x00000000
+p_filesz  = Size in file
+p_memsz   = 0
+p_align   = 0
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_6">
+<h3>
+<a href="#Heading3_6"> 6. </a>6 
+<!-- hp1 --><b>ELF Note Segment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Each Elf32_Nhdr in the PT_NOTE segment will be the three bytes &quot;PSP&quot;. The type and structure are defined in devkit/include/crashdump.h.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_1"><h4>
+(1)&nbsp;<b>SCE_CRASHDUMP_LOGTEXT (0x0000100)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the kernel printf log at the time when the BSOD occurred. This note is not structured. Text strings are directly included.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_2"><h4>
+(2)&nbsp;<b>SCE_CRASHDUMP_REGISTER (0x0000101)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds CPU register information when the BSOD occurred. The structure of this note is defined by the SceCrashDumpRegister structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_3"><h4>
+(3)&nbsp;<b>SCE_CRASHDUMP_MEMBLK (0x00000105)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds user partition memory block information when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpMemblk structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_4"><h4>
+(4)&nbsp;<b>SCE_CRASHDUMP_HEAP (0x00000106)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds user partition heap information when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpHeap structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_5"><h4>
+(5)&nbsp;<b>SCE_CRASHDUMP_LOWHEAP (0x00000107)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds user partition low heap information when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpLowHeap structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_6"><h4>
+(6)&nbsp;<b>SCE_CRASHDUMP_MODULE (0x00000108)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the module list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpModule structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_7"><h4>
+(7)&nbsp;<b>SCE_CRASHDUMP_INTHANDLER (0x00000109)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the interrupt handler list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpIntHandler structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_8"><h4>
+(8)&nbsp;<b>SCE_CRASHDUMP_THREAD (0x00000111)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the thread list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpThread structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_9"><h4>
+(9)&nbsp;<b>SCE_CRASHDUMP_SEMAPHORE (0x00000112)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the semaphore list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpSema structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_10"><h4>
+(10)&nbsp;<b>SCE_CRASHDUMP_EVENTFLAG (0x00000113)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the event flag list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpEventFlag structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_11"><h4>
+(11)&nbsp;<b>SCE_CRASHDUMP_MBOX (0x00000114)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the message box list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpMbx structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_12"><h4>
+(12)&nbsp;<b>SCE_CRASHDUMP_VPL (0x00000115)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the variable-length memory pool list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpVpl structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_13"><h4>
+(13)&nbsp;<b>SCE_CRASHDUMP_FPL (0x00000116)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the fixed-length memory list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpFpl structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_14"><h4>
+(14)&nbsp;<b>SCE_CRASHDUMP_MPIPE (0x00000117)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the semaphore pipe list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpMpp structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_15"><h4>
+(15)&nbsp;<b>SCE_CRASHDUMP_CALLBACK (0x00000118)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the callback list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpCallback structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_16"><h4>
+(16)&nbsp;<b>SCE_CRASHDUMP_THREADEVENTHANDLER (0x00000119)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the thread event handler list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpThreadEventHandler structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_17"><h4>
+(17)&nbsp;<b>SCE_CRASHDUMP_ALARM (0x0000011A)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the alarm information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpAlarm structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_18"><h4>
+(18)&nbsp;<b>SCE_CRASHDUMP_VTIMER (0x0000011B)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the virtual timer list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpVTimer structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_19"><h4>
+(19)&nbsp;<b>SCE_CRASHDUMP_MUTEX (0x0000011C)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the mutex list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpMutex structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_20"><h4>
+(20)&nbsp;<b>SCE_CRASHDUMP_LWMUTEX (0x0000011D)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the lightweight mutex list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpLwMutex structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_6_6_21"><h4>
+(21)&nbsp;<b>SCE_CRASHDUMP_TLSPL (0x0000011E)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Holds the TLS memory pool list information at the time when the BSOD occurred. The structure of this note is defined by the variable-length SceCrashDumpTlspl structure.<br><br><br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

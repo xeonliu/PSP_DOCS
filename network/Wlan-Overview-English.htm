@@ -1,0 +1,301 @@
+<html lang="en">
+<head>
+<title>Wlan-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+WLAN Driver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Driver Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; WLAN driver module (hereafter, WLAN driver), enables PSP&trade; software to access  the PSP&trade; console's built-in IEEE 802.11b wireless LAN module (hereafter, WLAN module). The WLAN driver provides IEEE 802.11b-compliant wireless LAN functions via the network protocol stack. It also provides status and other information about the WLAN module directly, without having to use the network protocol stack.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;wlan.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;wlan_stub.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Driver Initialization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The WLAN driver is initialized implicitly; it does not require explicit initialization. The driver provides low-level functions for directly communicating with an IEEE 802.11b wireless LAN. By comparison, the PSP&trade; network protocol stack module (hereafter, PSPNET) provides higher-level functions for communicating over the network.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Functions Provided by the Driver</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Normally, the WLAN driver is used via PSPNET. However, the WLAN driver itself provides the following low-level functions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Get MAC address 
+<li> Get state of PSP&trade; console's WLAN switch
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Getting the MAC Address </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The <a href="../network/Wlan-Reference-English.htm#sceWlanGetEtherAddr">sceWlanGetEtherAddr</a>() function can be used to get the MAC address that is stored in the WLAN module. This function does not depend on the power state of the WLAN module.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+struct <a href="../network/Wlan-Reference-English.htm#SceWlanEtherAddr">SceWlanEtherAddr</a> addr;
+int ret = 0;
+
+ret = <a href="../network/Wlan-Reference-English.htm#sceWlanGetEtherAddr">sceWlanGetEtherAddr</a>(&amp;addr);
+if(ret &lt; 0){
+	/* Error handling */
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Getting the State of the Wireless LAN Switch</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The <a href="../network/Wlan-Reference-English.htm#sceWlanGetSwitchState">sceWlanGetSwitchState</a>() function can be used to get the state of the PSP&trade; console's wireless LAN switch.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int ret;
+
+ret = <a href="../network/Wlan-Reference-English.htm#sceWlanGetSwitchState">sceWlanGetSwitchState</a>()
+if(ret == <a href="../network/Wlan-Reference-English.htm#SCE_WLAN_SWITCH_STATE_ON">SCE_WLAN_SWITCH_STATE_ON</a>){
+	/* Processing when WLAN switch is on */
+}
+else {
+	/* Processing when WLAN switch is off */
+}
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Explanation of Operations</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>WLAN Driver Thread</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The WLAN driver runs with two threads: SceWlanMac and SceWlanHal. The two threads run with a priority of 39. The SceWlanHal thread only exists when the wireless LAN switch is ON.<br>In addition, a special-purpose thread called SceWlanChipInit is created for loading firmware. This thread runs with a priority of 120.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>When the Wireless LAN Switch is ON</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the wireless LAN switch is ON, regardless of the usage state of any communications function, a SceWlanChipInit thread is created to load firmware and then the firmware for the WLAN module is loaded.<br>Any network-connection processes that start while the firmware is loading (immediately after the wireless LAN switch is turned ON) raises the priority of the SceWlanChipInit thread, to39.<br>Once firmware loading has completed, the SceWlanChipInit thread is terminated and deleted. After that, the SceWlanHal thread is activated and transitions to a wait state.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>When the Wireless LAN Switch is OFF</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the wireless LAN switch is set to OFF, a notification to that effect is reported to the PSPNET library if any communications functions are in use. After that, the SceWlanHal thread is terminated. If firmware loading is cancelled while loading is still in process, the SceWlanChipInit thread is terminated and deleted.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Wired Communication Feature Using Ether over DECI2p</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ether over DECI2p feature uses the DECI2p protocol to simulate part of an infrastructure connection over a wireless LAN. This enables a network connection to be implemented through DECI2p communication with the host along with the host's bridge feature. Note that since this feature uses DECI2p, it can only be used on a DTP-T1000.<br>The following figure shows a block diagram of the organization of the modules.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Wlan-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Ether over DECI2p Module Organization</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Set up the Linux PC that will be used as the host. The superuser should configure the bridge as shown in the following example.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_1">
+<div style="margin-left:40px;"><h4><b>Linux kernel configuration</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">modprobe tun<br>modprobe bridge<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_2">
+<div style="margin-left:40px;"><h4><b>Wired interface configuration</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ifconfig eth0 0.0.0.0<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_3">
+<div style="margin-left:40px;"><h4><b>Bridge configuration</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">brctl addbr br0<br>brctl addif br0 eth0<br>ifconfig br0 up XXX.XXX.XXX.XXX netmask XXX.XXX.XXX.XXX<br>route add default gateway XXX.XXX.XXX.XXX<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_4">
+<div style="margin-left:40px;"><h4><b>Tunnel interface configuration</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">dsptun -d XXX.XXX.XXX.XXX<br>brctl addif br0 tap0<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_5">
+<div style="margin-left:40px;"><h4><b>PSP&trade; system configuration</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The Ether over DECI2p feature can be enabled by setting bit 15 of the boot parameter. For information on how to set the boot parameter, refer to the "dstdb Command Reference."<br>When the system is booted with this option set, the existence of an access point with "WLAN_DECI2P" as the SSID is simulated. Use the network configuration utility to create the connection configuration for this access point.<br>The following give the details of the configuration that should be created.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_1">
+<div style="margin-left:63px;"><h4><b>SSID</b><br><br></h4></a></div>
+<div style="margin-left:80px;">WLAN_DECI2P<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_2">
+<div style="margin-left:63px;"><h4><b>Wireless LAN security configuration</b><br><br></h4></a></div>
+<div style="margin-left:80px;">None<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_3">
+<div style="margin-left:63px;"><h4><b>Authentication configuration</b><br><br></h4></a></div>
+<div style="margin-left:80px;">None<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_2_4">
+<div style="margin-left:63px;"><h4><b>Address configuration (IP address configuration, DNS configuration, proxy server)</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Set appropriate addresses that match the configuration of the host to which a connection will be made.<br></div>
+<div style="margin-left:50px;"><br>Except when the connection is established by specifying a configuration that was created as shown above, the connection will be similar to a normal WLAN connection. When a WLAN connection is established, the connection to the network will be started via DECI2p.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Notes Concerning Usage</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Note that since this feature uses DECI2p, factors such as the CPU load will be different from when the WLAN is used on an actual device.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Connection Processing When the Wireless LAN Switch is ON</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As described in the Explanation of Operations chapter, a firmware load is executed when the wireless LAN switch is ON. However, until firmware loading has completed, the PSPNET library cannot initiate a connection. Because of the high processing load present when a connection is being made, the SceWlanChipInit thread would not have enough processing capacity available, resulting in a continuous state of being unable to connect.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Prohibited Use of the Wireless LAN Feature</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the system is running with a PLL clock frequency of 266 MHz or 333 MHz, the wireless LAN cannot be used. If the system is running at one of these frequencies and an attempt is made to call a function that uses the wireless LAN, an <a href="../network/PSPNET_Error-Reference-English.htm#SCE_ERROR_NET_WLAN_INHIBITED">SCE_ERROR_NET_WLAN_INHIBITED</a> error will be returned.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

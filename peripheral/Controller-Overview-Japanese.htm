@@ -1,0 +1,311 @@
+<html lang="jp">
+<head>
+<title>Controller-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+コントローラサービス
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コントローラサービスは、PSP&reg;のデジタルボタン、アナログパッドからの入力を読み取るためのサービスです。<br><br>主な機能は以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> コントローラ(デジタルボタン/アナログパッド)のデータ取得
+<li> デジタルボタンのラッチによる処理落ち時の取りこぼし対策
+<li> ボタン連射状態のエミュレーション
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コントローラサービスを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ctrl_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ctrlsvc.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順（VSYNC周期で正しく呼び出せる場合）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プログラムが理想的に、VSYNC周期で<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数を呼び出すことでアプリケーションはコントローラサービス内にキューイングされていたデータを正しく取得することができます。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コントローラサービスはデフォルトのモジュールとして動作します。明示的な初期化は必要ありません。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>コントローラモードの設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlSetSamplingMode">sceCtrlSetSamplingMode</a>()関数で、コントローラサービスがサンプリングを行うモードの設定を行います。モードには、デジタルボタンのみの読み出しを行う<b>デジタルボタン専用モード（SCE_CTRL_MODE_DIGITALONLY）</b>と、デジタルボタンに加えてアナログパッドの読み出しも行う<b>デジタルボタン/アナログパッド両用モード（SCE_CTRL_MODE_DIGITALANALOG）</b>の2種類があります。デフォルトは、デジタルボタン専用モードになっています。<br>アナログパッドを使用しない場合には、デジタルボタン専用モードを使用すると、デジタルボタン/アナログパッド両用モードに比べてわずかですが省電力化できます。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>コントローラサービスからのデータ取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数を呼び出すことで、コントローラ状態情報をブロッキングで取得することができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a> ct;
+int res;
+
+res = <a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(&amp;ct, 1);
+
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Readしたコントローラ状態情報の内容取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数で取得したコントローラ状態情報は、<a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a>構造体に保存されます。<a href="../peripheral/Controller-Reference-Japanese.htm#基本ボタン状態定数">基本ボタン状態定数</a>を利用して、どのボタンが操作されたのかを取得できます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int IsCircleButtonPressed(void)
+{
+    <a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a> ct;
+    int res;
+
+    res = <a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(&amp;ct, 1);
+    if (res &lt; 0) {
+        return (res);
+    }
+
+    if ((ct.Buttons &amp; <a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_CIRCLE">SCE_CTRL_CIRCLE</a>)!=0) {
+        //J ○ボタンが押されていたとき
+        return (1);
+    } else {
+        //J ○ボタンが押されていなかった
+        return (0);
+    }
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>2周期以上のVSYNC間隔で呼び出すことがある場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーションで処理落ちなどが発生し、本来アプリケーションが想定しているVSYNC周期で呼び出すはずの<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数が、2周期以上呼び出せないこともあります。<br>この可能性がある場合は、以下のような手順で行います。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コントローラサービスはデフォルトのモジュールとして動作します。明示的な初期化は必要ありません。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>コントローラモードの設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlSetSamplingMode">sceCtrlSetSamplingMode</a>()関数で、コントローラサービスがサンプリングを行うモードの設定を行います。モードには、デジタルボタンのみの読み出しを行う<b>デジタルボタン専用モード（SCE_CTRL_MODE_DIGITALONLY）</b>と、デジタルボタンに加えてアナログパッドの読み出しも行う<b>デジタルボタン/アナログパッド両用モード（SCE_CTRL_MODE_DIGITALANALOG）</b>の2種類があります。デフォルトは、デジタルボタン専用モードになっています。<br>アナログパッドを使用しない場合には、デジタルボタン専用モードを使用すると、デジタルボタン/アナログパッド両用モードに比べてごくわずかですが省電力化できます。<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>コントローラサービスからのデータ取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数を呼び出す時に、引数で複数のバッファを指定します。<br>例えば、最大で6周期分のデータを取得したい場合は、取得バッファ数に6を指定します。これにより、コントローラサービス内部にバッファリングされている新しいデータから遡って最大で6つのコントローラ状態情報を引き取ることができます。<br>実際に取得したデータ数は、<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数の返り値により知ることができます。この個数が複数だった場合に「処理落ちしていた」ことになります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a> ct[6];
+int res;
+
+res = <a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(ct, 6);
+
+</font></pre></div>
+<div style="margin-left:67px;"><br>過去の履歴を含めて参照することでキー入力の反応が悪くなるのを防ぐ事ができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int IsCircleButtonPressed(void)
+{
+    <a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a> ct[6];
+    unsigned int btn;
+    int res;
+    int i;
+
+    res = <a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>(&amp;ct, 6);
+    if (res &lt; 0) {
+        return (res);
+    }
+
+    btn = 0;
+    for (i=0; i&lt;res; i++) {
+        btn |= ct[i].Buttons;
+    }
+    if ((btn &amp; <a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_CIRCLE">SCE_CTRL_CIRCLE</a>)!=0) {
+        //J ○ボタンが押されていたとき
+        return (1);
+    } else {
+        //J ○ボタンが押されていなかった
+        return (0);
+    }
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>コントローラサービス内では最大64バッファ（周期分）の情報までを保持しています。つまり<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数で指定できる最大バッファ数も64個までになります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Controller-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>VSYNC周期でコントローラ状態情報を取得できない場合（ラッチ情報）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームの思考ルーチン等の処理負荷の重い処理や、PRXモジュールの組み換え時など、コントローラサービスへのデータ要求が連続して行えなくなることがあります。その間のコントローラ状態情報は得られませんが、基本ボタンの状態変化を得るだけならば、ラッチ情報で取得することができます。ラッチ情報は<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadLatch">sceCtrlReadLatch</a>()で読み出されてクリアされるまで累積し続けます。コントローラサービス内でバッファリングされる64周期よりも長くキー入力ができなかった場合でも、ラッチ情報には記録が残ります。<br>ラッチ情報はコントローラサービスがコントローラの入力をサンプリングするたびに、ボタンのプレス（押し下げ）／リリース（解放）を累積フラグの形でラッチ情報として記録します。これは、<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadLatch">sceCtrlReadLatch</a>()関数を呼び出すことで、ビットマスク値として取り出され初期化されます。ラッチ情報の詳細については、<a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlLatch">SceCtrlLatch</a>を参考にしてください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int IsCircleButtonPressed(void)
+{
+    <a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlLatch">SceCtrlLatch</a> latch;
+    int res;
+    int i;
+
+    res = <a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadLatch">sceCtrlReadLatch</a>(&amp;latch);
+    if (res &lt; 0) {
+        return (res);
+    }
+
+    if ((latch.uiPress &amp; <a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_CIRCLE">SCE_CTRL_CIRCLE</a>)!=0) {
+        //J ○ボタンが押された形跡があった
+        return (1);
+    } else {
+        //J ○ボタンが押された形跡がなかった
+        return (0);
+    }
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br>ただし、ラッチ情報はシステムグローバルなリソースのため、複数のスレッドから同時に利用できません。他スレッドが使用中にラッチ情報を取得したい時は、secCtrlPeekLatch()を使用してスヌープしてください。<br>また、デジタルボタンのラッチロジックはコントローラサービス内部でソフトウェアによって実現しているものです。割り込み禁止期間が非常に長い時間続いた場合には、このラッチロジックも正しく動作しなくなってしまいます。割り込み禁止期間は、極力短くしてください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>バッファのポーリング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数、<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferNegative">sceCtrlReadBufferNegative</a>()関数を呼び出すと、前回呼び出してからまだ読まれていないコントローラ状態情報をコントローラサービス内のバッファから読み込みます。また、このバッファはシステムグローバルなリソースであるため、複数のスレッドから同時に<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数、<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferNegative">sceCtrlReadBufferNegative</a>()関数を呼ぶと矛盾が起こります。<br><a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlReadBufferPositive">sceCtrlReadBufferPositive</a>()関数は1つのスレッドだけから呼び出し、その他のスレッドでコントローラ状態情報が必要な場合は<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlPeekBufferPositive">sceCtrlPeekBufferPositive</a>()関数を使用してください。<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlPeekBufferPositive">sceCtrlPeekBufferPositive</a>()関数を使用することで、バッファを初期化せずにスヌープすることができます。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Controller-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br>ただし、<a href="../peripheral/Controller-Reference-Japanese.htm#sceCtrlPeekBufferPositive">sceCtrlPeekBufferPositive</a>()関数では呼び出した瞬間のバッファの内容を参照しているため、VBLANK周期ごとにコントローラのサンプリングを行っていた場合でも、割り込み負荷の変動により安定した周期でデータを取得できない可能性があることにご注意ください。上記の図でスレッドBのPeekは、コントローラ状態情報2を取得するか、コントローラ状態情報3を取得するかはわからないということになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>アナログパッドの値範囲について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アナログパッドは横方向と縦方向の2軸で、それぞれ0x00～0xFFの値範囲を取ります。横方向に対しては左端のとき0x00、右端のとき0xFF、縦方向については上端のとき0x00、下端のとき0xFFを出力します。いずれの方向も中心の値は0x80です。ただし最大で±0x40程度の誤差が発生する事がありますので、ニュートラル状態の検出のためには±0x40程度の不感帯を設ける(0x40～0xC0の範囲の値の場合を無視)必要があります。<br><br>可動範囲いっぱいに移動させたとき、横方向と縦方向のそれぞれで0x00, 0xFFのフルスケールの値が出力できることは保証されます。ただし、横方向と縦方向が同時にフルスケール出力可能であることの保証はされません。これは、たとえばアナログパッドを右下いっぱいに移動させたとき、XとYの値が両方同時に0xFF, 0xFF出力されることを保証するものではないことを意味します。アナログパッドを上から見たとき、可動域が正方形を描くようなことを期待した作りにはしないようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>POWER/HOLDスイッチについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">POWER/HOLDスイッチをHOLD状態にすると、実際の状態に関係なくデジタルボタンがすべてリリース状態であると、コントローラサービスは認識します。HOLD状態が解除されるまで、デジタルボタンのプレス状態を取得することはできません。<br>ただし、HOLD状態であっても、コントローラのサンプリングは行われています。このときにサンプリングされた<a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a>構造体では、<i>Buttons</i>メンバの<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a>ビットが設定されています。<br>これに対して、HOLD状態であってもアナログパッドの操作情報は変化し続けています。<a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a>構造体の<i>Lx</i>, <i>Ly</i>メンバの値が中央値に固定されたり、最後のアナログ量を保持し続けたりすることはありません。HOLD状態で行われたアナログパッド操作をどのように解釈するかは、アプリケーションにゆだねられます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>INTERCEPTED状態について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSボタン(HOMEボタン)のプレス状態はアプリケーションからは不可視ですが、PSボタン(HOMEボタン)によってポップアップされるPSP&reg;システムソフトウェア提供のポップアップメニューの動作中には、アプリケーションのコントローラ入力が奪われることがあります。<br>このとき<a href="../peripheral/Controller-Reference-Japanese.htm#SceCtrlData">SceCtrlData</a>構造体の<i>Buttons</i>メンバでは<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a>ビットが設定されています。アプリケーションは<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a>ビットを参照することでコントローラからの入力が奪われていることを検出する事ができます。ただし、アナログパッドについては、<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a>が設定されていても値が返り続けます。<br></div>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a>ビットは、PSP&reg;システムソフトウェア提供のポップアップメニューが表示されている状態と直接対応しているわけではありません。PSP&reg;システムソフトウェア提供のポップアップメニューは、アプリケーション動作中にPSボタン(HOMEボタン)がプレスされることによってポップアップしますが、アプリケーションからコントローラ入力を奪うのはそのときにプレス状態だったボタンがいったん全てリリースされたタイミングまで遅延します。<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_INTERCEPTED">SCE_CTRL_INTERCEPTED</a>ビットが設定されるのは、実際にコントローラ入力が奪われ始めた以降になります。<br>そのため、アプリケーション動作中から押し続けられていたボタンがいったん全部リリースされないうちに再びPSボタン(HOMEボタン)が入力された場合、コントローラ入力が奪われることなくPSP&reg;システムソフトウェア提供のポップアップメニューが閉じられます。<br>PSP&reg;システムソフトウェア提供のポップアップメニューの動作は将来にわたって固定されたものではないため、アプリケーションにPSP&reg;システムソフトウェア提供のポップアップメニューを意識した仕様(意味もなくポップアップメニューをON/OFFさせないと先に進めないようにするなど)は盛り込まないことをお勧めします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>PlayStation&reg;3用のワイヤレスコントローラ接続について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP-N1000シリーズでは、Bluetooth<sup>&reg;</sup>経由でPlayStation&reg;3用のワイヤレスコントローラ(SIXAXIS)またはワイヤレスコントローラ(DUALSHOCK 3)を接続することができます。このとき、ワイヤレスコントローラからの入力は、PSP&reg;本体のボタン入力情報とマージされコントローラサービスのAPIによって取得されます。入力がPSP&reg;本体のボタンによって行われたか、ワイヤレスコントローラによって行われたか判別することはできません。<br><br>コントローラサービスによって取得できるボタンは、PSP&reg;本体にあるボタンのみです。ワイヤレスコントローラのL3,R3ボタン、右アナログスティック、感圧ボタン、6軸センサー、振動機能は使用することはできません。<br></div>
+<br>
+<div style="margin-left:50px;">PSP-N1000シリーズ本体のPOWER/HOLDスイッチがHOLD状態でワイヤレスコントローラからの入力があった場合、<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a>は一時的に解除された状態がエミュレーションされます。アプリケーションから見ると<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a>が高速にロック/ロック解除されたかのように観察されることになります。例えばボタン押し下げが続いたときのリピート処理などを実装する場合は、<a href="../peripheral/Controller-Reference-Japanese.htm#SCE_CTRL_HOLD">SCE_CTRL_HOLD</a>ビットに反応してしまうことがないように注意してください。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

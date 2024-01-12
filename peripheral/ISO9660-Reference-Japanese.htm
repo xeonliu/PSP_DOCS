@@ -1,0 +1,1757 @@
+<html lang="jp">
+<head>
+<title>ISO9660-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ISO9660ファイルシステムドライバ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceIoStat"></a>
+<table width="100%"><td width="70%"><font size=6>SceIoStat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_stat.h&gt;
+typedef struct {
+	SceMode <i>st_mode</i>;
+	Unsigned int <i>st_attr</i>;
+	SceOff <i>st_size</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#ScePspDateTime">ScePspDateTime</a> <i>st_ctime</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#ScePspDateTime">ScePspDateTime</a><i> st_atime</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#ScePspDateTime">ScePspDateTime</a> <i>st_mtime</i>;
+	unsigned int <i>st_private</i>[6];
+}<b>SceIoStat</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル種類およびアクセス権限&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_attr</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル属性(未使用)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルサイズ(byte)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_ctime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル作成時間&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_atime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルアクセス時間&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_mtime</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル変更時間&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>st_private</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プライベートデータ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルのステータス情報を格納する構造体です。<br><br><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()関数および<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoGetstat">sceIoGetstat</a>()関数で取得することが可能です。<br>ISO9660ファイルシステムでは、<i>st_private</i>[0]メンバに、該当ファイルおよびディレクトリの先頭LBAが設定されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoDread">sceIoDread</a>(), <a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoGetstat">sceIoGetstat</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceIoDirent"></a>
+<table width="100%"><td width="70%"><font size=6>SceIoDirent<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリ情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr_dirent.h&gt;
+typedef struct {
+	struct <a href="../peripheral/ISO9660-Reference-Japanese.htm#SceIoStat">SceIoStat</a> <i>d_stat</i>;
+	char <i>d_name</i>[256];
+	void *<i>d_private</i>;
+	int <i>dummy</i>;
+} <b>SceIoDirent</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>d_stat</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル情報（<a href="../peripheral/ISO9660-Reference-Japanese.htm#SceIoStat">SceIoStat</a>構造体）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>d_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリおよびファイル名（フルパス名）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>d_private</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プライベートデータのポインタ(未使用)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dummy</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ダミー変数(未使用)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディレクトリエントリの情報を格納する構造体です。<br><br><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()関数で取得することが可能です。<br>ISO9660ファイルシステムでは、<i>d_stat.st_private</i>[0]メンバに、該当ファイルおよびディレクトリの先頭LBAが設定されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceUmdDiscInfo"></a>
+<table width="100%"><td width="70%"><font size=6>SceUmdDiscInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディスク情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;umddisc.h&gt;
+typedef struct {
+	unsigned int <i>uiSize</i>;
+	unsigned int <i>uiMediaType</i>;
+}<b>SceUmdDiscInfo</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(SceUmdDiscInfo)&nbsp;&nbsp;<br>&nbsp;&nbsp;（構造体サイズ）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>uiMediaType</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&reg;メディアタイプ情報&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">UMD&reg;メディアのディスク情報を格納する構造体です。<br><br><i>uiSize</i>メンバには、sizeof(SceUmdDiscInfo)の値を設定してください。<br><i>uiMediaType</i>メンバは、UMD&reg;メディアタイプ情報が設定されます。<br><br>UMD&reg;メディアタイプ情報は、下の表のようになります。なお、UMD&reg;には複数のUMD&reg;メディアタイプ情報が含まれていることがあり、その場合は論理和で返されます。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_FMT_GAME&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームタイトル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_FMT_AUDIO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;音楽タイトル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_FMT_VIDEO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ムービータイトル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_FMT_CLEANER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;クリーナー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_FMT_UNKNOWN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不明&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/UMD-Reference-Japanese.htm#sceUmdGetDiscInfo">sceUmdGetDiscInfo</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceUmdSeekParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceUmdSeekParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>シーク設定情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;umddevctl.h&gt;
+typedef struct {
+	SceOff <i>sk_off</i>;
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> <i>sk_reserved;</i>
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a><i> sk_whence;</i>
+}<b>SceUmdSeekParam</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sk_off</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルオフセット(byte)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sk_reserved</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パディング(未使用)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sk_whence</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;移動方法&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルのシーク情報を格納する構造体です。<br><br><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a> *()関数のSCE_ISOFS_SEEK_FILEコマンドの設定パラメータとして使用します。<br>ISO9660ファイルシステムに対する<i>sk_off</i>メンバに設定される値は、バイト単位とします。<br><i>sk_whence</i>メンバは、下の表のようになります。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SEEK_SET&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>sk_off</i>はファイルの先頭からの距離&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SEEK_CUR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>sk_off</i>は現在のオフセットからの相対距離&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SEEK_END&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>sk_off</i>はファイルの末尾からの距離&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>, <a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoIoctl">sceIoIoctl</a>, <a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoLseek">sceIoLseek</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルオープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceUID <b>sceIoOpen</b> (
+	const char *<i>filename</i>, 
+	int <i>flag</i>, 
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フルパス名を示すポインタ&nbsp;&nbsp;<br>&nbsp;&nbsp;パス名最大長：32bytes（NULLを含む）&nbsp;&nbsp;<br>&nbsp;&nbsp;ファイル名最大長：256bytes（NULLを含む）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みのみ指定可能&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未使用&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、ファイルディスクリプタ値が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルおよび仮想ファイルをオープン処理をする関数です。<br><br>現在、引数<i>filename</i>へのパス指定は、絶対パス指定しかできません。<br>ファイル名として使用可能な文字は、以下の文字種になります。<br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> 大小英数文字
+<li> アンダーバー
+<li> ドット
+<li> セミコロン
+</ul></div>
+<div style="margin-left:50px;"><br>同時オープン可能ファイル数は、32ファイルまでとなっています。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoClose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoClose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルのクローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceUID <b>sceIoClose</b> (
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功したの場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルのクローズ処理を行います。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRead"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRead<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルデータの読み込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceSSize <b>sceIoRead</b> (
+	SceUID<i> fd</i>, 
+	void <i>*buf,</i> 
+	SceSize<i> nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みバッファ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むサイズ(バイト単位)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、読み込んだバイト数を返します。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルからデータを読み出す関数です。<br><br><i>buf</i>で設定されるバッファアドレスは、ワード（４bytes）アラインメントである必要があります。<br>返り値が<i>nbyte</i>より小さい正の整数の場合、そのサイズ分だけデータを読み込んだことになりファイルデータの終端に達したことになります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseek"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseek<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルI/Oオフセットの移動<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceOff <b>sceIoLseek</b> (
+	SceUID<i> fd</i>, 
+	SceOff <i>offset</i>, 
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>offset</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;基準点からのバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>whence</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;基準点&nbsp;&nbsp;<br>&nbsp;&nbsp;＊詳細はIO/File Mgrドキュメント参照&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、新たなファイルオフセットの値を返します。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定ファイルのオフセットを移動させる関数です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDopen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDopen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリのオープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceUID <b>sceIoDopen</b>(
+	const char <i>*dirname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリ名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、ディスクリプタ値が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定ディレクトリ名をオープン処理します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDclose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDclose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリのクローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceUID <b>sceIoDclose</b>(
+	SceUID<i> fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープン済みディレクトリをクローズ処理します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDread"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDread<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリ情報の読み込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+int <b>sceIoDread</b> (
+	SceUID <i>fd</i>, 
+	struct <a href="../peripheral/ISO9660-Reference-Japanese.htm#SceIoDirent">SceIoDirent</a> <i>*buf</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリエントリ構造体へのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、正の整数が返ります。<br>読み込むエントリがない場合は、０が返ります。<br>エラーの場合、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定したディレクトリエントリ情報を最初から1つずつ取得する関数です。<br><br>構造体<a href="../peripheral/ISO9660-Reference-Japanese.htm#SceIoDirent">SceIoDirent</a>の<i>d_private</i>[0]メンバには、該当ファイルのLBAが設定されます。該当ディレクトリの親ディレクトリ、カレントディレクトリのエントリは取得されません。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルおよびディレクトリのステータス取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+int <b>sceIoGetstat</b>(
+	const char <i>*name</i>, 
+	struct <a href="../peripheral/ISO9660-Reference-Japanese.htm#SceIoStat">SceIoStat</a> <i>*buf</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルステート構造体へのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイル、ディレクトリのステータスを取得するための関数です。<br><br>構造体<a href="../peripheral/ISO9660-Reference-Japanese.htm#SceIoStat">SceIoStat</a>の<i>st_private</i>[0]メンバには、該当ファイル、ディレクトリの先頭LBAが取得されます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpenAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpenAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期ファイルオープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceUID <b>sceIoOpenAsync</b> (
+	const char *<i>filename</i>, 
+	int <i>flag</i>, 
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フルパス名を示すポインタ&nbsp;&nbsp;<br>&nbsp;&nbsp;パス名最大長：32bytes（NULLを含む）&nbsp;&nbsp;<br>&nbsp;&nbsp;ファイル名最大長：256bytes（NULLを含む）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みのみ指定可能&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未使用&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、デバイスディスクリプタ値が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルを非同期オープン処理をする関数です。<br><br>現在、引数<i>filename</i>へのパス指定は、絶対パス指定しかできません。<br>ファイル名として使用可能な文字は、以下の文字種になります。<br></div>
+<div style="margin-left:60px;"><ul>
+<li> 大小英数文字
+<li> アンダーバー
+<li> ドット
+<li> セミコロン
+</ul></div>
+<div style="margin-left:50px;"><br>同時オープン可能ファイル数は、32ファイルとなっています。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoCloseAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoCloseAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期ファイルクローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceUID <b>sceIoCloseAsync</b> (
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルの非同期クローズ処理をする関数です。<br><br>クローズ処理の結果は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()関数、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()関数および、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()関数で確認することができます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoReadAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoReadAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期データの読み込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceSSize <b>sceIoReadAsync</b> (
+	SceUID <i>fd</i>, 
+	void *<i>buf</i>, 
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みバッファ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みサイズ(バイト単位)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルからデータを非同期で読み出す関数です。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;"><i>buf</i>で設定されるバッファアドレスは、ワード（4bytes）アラインメントである必要があります。<br>読み込んだデータサイズは、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()関数、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()関数および、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()関数で確認することができます。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseekAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseekAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期ファイルI/Oオフセットの移動<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+SceOff <b>sceIoLseekAsync</b> (
+	SceUID<i> fd</i>, 
+	SceOff <i>offset</i>, 
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>offset</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;基準点からのバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>whence</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;基準点&nbsp;&nbsp;<br>&nbsp;&nbsp;＊詳細はIO/File Mgrドキュメント参照&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定ファイルのオフセット移動を非同期処理でおこなう関数です。<br><br>シーク処理の結果は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()関数、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()関数および、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()関数で確認することができます。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoSetAsyncCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoSetAsyncCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期処理通知用コールバックの設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+int <b>sceIoSetAsyncCallback</b>(
+	SceUID <i>fd</i>, 
+	SceUID<i> cbid,</i>
+	int <i>arg</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバックＩＤ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバック関数に渡す引数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルI/Oの非同期処理が完了した際に通知を行う、スレッドマネージャのコールバックIDを設定する関数です。<br><br>コールバックは、あらかじめ<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>()関数によって生成しておく必要があります。<br>非同期I/O処理が完了すると、指定したコールバックIDに対して<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelNotifyCallback">sceKernelNotifyCallback</a>()関数による通知が行われます。この後、コールバックを設定したスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>()関数により通知の有無をチェックするか、SceXXXXCB()系関数のようなコールバック呼び出し付きの待ちAPIを実行することで、コールバック生成時に設定したコールバック関数が呼び出されます。<br>非同期I/O処理を完結させるためには、呼び出されたコールバック関数の中で<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()関数、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()関数などを実行してファイルI/O処理の実行結果を引き取る必要があります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoPollAsync"></a><a name="sceIoWaitAsync"></a><a name="sceIoWaitAsyncCB"></a>
+<a name="sceIoPollAsync / sceIoWaitAsync / sceIoWaitAsyncCB"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoPollAsync / sceIoWaitAsync / sceIoWaitAsyncCB<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期処理のステータス取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+int <b>sceIoPollAsync</b>(
+	SceUID <i>fd</i>, 
+	SceIores *<i>iores</i>
+);
+int <b>sceIoWaitAsync</b>(
+	SceUID <i>fd</i>, 
+	SceIores *<i>iores</i>
+);
+int <b>sceIoWaitAsyncCB</b>(
+	SceUID <i>fd</i>, 
+	SceIores *<i>iores</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>iores</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ステータス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">非同期処理中の場合は、1を返します。<br>非同期処理の終了の場合は、0を返します。<br>エラーの場合は負の値を戻します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">非同期I/O処理のステータスを取得する関数です。<br><br>sceIoWaitAsync()関数は、非同期I/O処理が完了するまで待ち、その結果を引数<i>result</i>でポインタを渡す変数に格納してから返り値に0を返します。<br><br>sceIoWaitAsyncCB()関数は、sceIoWaitAsync()関数の動作中にコールバック通知の有無をチェックを行います。<br><br>sceIoPollAsync()関数は sceIoWaitAsync()関数から、非同期I/O処理が完了していない場合に待ち状態に入らず、すぐに処理を戻します。非同期I/O処理が完了していなかった場合は返り値に1を返します。この場合は、引数<i>result</i>でポインタを渡した変数の値は変化しません。<br><br>非同期I/O関数を実行した場合は、上記の関数で処理状態を確認してください。<br>各関数が０を戻したとき、引数<i>iores</i>には、非同期I/O関数に対応する同期I/O関数の戻り値が設定されています。<br><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoOpenAsync">sceIoOpenAsync</a>()であれば、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()の戻り値であるファイルディスクリプタ、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoReadAsync">sceIoReadAsync</a>()であれば、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoRead">sceIoRead</a>()の戻り値である読み込みサイズが設定されています。<br>詳細は、各非同期I/O関数に対応する同期関数の説明を参照してください。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoIoctl"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoIoctl<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>通常I/O処理以外でのデータ取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+int <b>sceIoIoctl</b>(
+	SceUID <i>fd</i>, 
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドコード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドパラメータ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドパラメータサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データバッファ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データバッファサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>もしくは、正の値が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">通常、I/O処理から外れたデータの取得および設定を行う場合に使用するファイルシステムコントロール関数です。<br><br>以下のコマンドが利用可能です。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コマンド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PVD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PVDの取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PTBL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パステーブルの取得。バッファサイズは、PVD&nbsp;&nbsp;<br>&nbsp;&nbsp;の132～135bytes目から、LSBで取得可能。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FILEPOINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルオフセットの取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_LBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルの先頭LBAを取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FSIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルサイズの取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_SECTOR_SIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;セクタサイズの取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_SEEK_FILE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シーク処理。詳細後述。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_UNCACHED_READ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;強制ディスクアクセス読み込み。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル先読みリクエスト。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_ACQ_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;状態取得可能な先読みリクエスト。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_WAIT_STAT_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;先読みのFINISH状態待ち。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_POLL_STAT_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;先読みの状態取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_CANCEL_STAT_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;先読みのFINISH状態待ちをキャンセルする。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">各コマンドのオプションは、以下の通りです。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コマンド</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータサイズ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>バッファ</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>方向/サイズ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PVD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;out&nbsp;&nbsp;<br>&nbsp;&nbsp;2048bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PTBL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;out&nbsp;&nbsp;<br>&nbsp;&nbsp;読み込みサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FILEPOINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;out&nbsp;&nbsp;<br>&nbsp;&nbsp;4bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_LBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;out&nbsp;&nbsp;<br>&nbsp;&nbsp;4bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FSIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;out&nbsp;&nbsp;<br>&nbsp;&nbsp;8bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_SECTOR_SIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;out&nbsp;&nbsp;<br>&nbsp;&nbsp;4bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_SEEK_FILE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/ISO9660-Reference-Japanese.htm#SceUmdSeekParam">SceUmdSeekParam</a>*&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof&nbsp;&nbsp;<br>&nbsp;&nbsp;(<a href="../peripheral/ISO9660-Reference-Japanese.htm#SceUmdSeekParam">SceUmdSeekParam</a> *)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Null&nbsp;&nbsp;<br>&nbsp;&nbsp;0byte&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_UNCACHED_READ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;(bytes)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(SceSize)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;out&nbsp;&nbsp;<br>&nbsp;&nbsp;読み込みサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;(bytes)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(<a href="../kernel/Types-Reference-Japanese.htm#SceUInt32">SceUInt32</a>)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Null&nbsp;&nbsp;<br>&nbsp;&nbsp;0bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_ACQ_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みサイズ&nbsp;&nbsp;<br>&nbsp;&nbsp;(bytes)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(<a href="../kernel/Types-Reference-Japanese.htm#SceUInt32">SceUInt32</a>)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Null&nbsp;&nbsp;<br>&nbsp;&nbsp;0bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_WAIT_STAT_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Null&nbsp;&nbsp;<br>&nbsp;&nbsp;0bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_POLL_STAT_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Null&nbsp;&nbsp;<br>&nbsp;&nbsp;0bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_CANCEL_STAT_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_GET_PVDについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">プライマリボリュームディスクリプタを取得します。2048bytes以上のバッファを設定してください。プライマリボリュームディスクリプタの詳細は<br><u>http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pd</u>f<br>を参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_GET_PTBLについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">パステーブルを取得します。パステーブルの詳細は、<br><u>http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pd</u>f<br>を参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_GET_FILEPOINTERについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">指定ファイルの現在のオフセットを取得します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_4">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_GET_LBAについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">指定ファイルの先頭LBAを取得します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_GET_FSIZEについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">指定ファイルのファイルサイズを取得します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_6">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_GET_SECTOR_SIZEについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">指定ファイルが保存されているデバイスのセクタサイズを取得します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_7">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_SEEK_FILEについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;"><a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoLseek">sceIoLseek</a>()関数が行うファイルオフセットの移動とともに、光ヘッドなどの物理的なシーク制御も行います。<br>コマンドパラメータには、必要なシークパラメータを設定してください。<br>ファイルオフセットは、バイト単位で設定されますが、光ヘッドの制御をともなう物理的なシークは、以下のようなLBAへシークします。<br><br><b>シーク位置(LBA) = ファイルが配置されている先頭のLBA + (ファイルオフセット/ セクタサイズ)</b><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_8">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_UNCACHED_READについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">UMD&reg;/DVDのキャッシュ機能を利用せず、必ずディスクからデータを読み込むようにします。キャッシュ利用時に比べると、読み込み速度が低下しますので、使用する際は注意してください。また、このコマンド時成功時は、かならずディスクからデータを読み込むため、ドライブの電源状態は、アクティブに遷移します。<br>戻り値は、成功時は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoRead">sceIoRead</a>*() 同様、０以上の読み込みサイズ（bytes）を戻します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_9">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_READ_AHEAD、SCE_ISOFS_ACQ_READ_AHEADについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">指定ファイルをumdcacheに先読みするようにリクエストします。<br>128KB未満のファイルは、ファイルの先頭LBAから64セクタ分がキャッシュされます。<br>6.4MB以上のサイズが指定された場合、キャッシュされません。<br>先読み開始位置(LBA)は、<br><br><b>先読み開始位置(LBA) = ファイルが配置されている先頭のLBA + (ファイルオフセット/ セクタサイズ)</b><br><br>となります。<br>SCE_ISOFS_ACQ_READ_AHEADコマンドは、リクエストしたファイルディスクリプタの先読み状態を、SCE_ISOFS_WAIT_STAT_READ_AHEAD, SCE_ISOFS_POLL_STAT_READ_AHEADコマンドから取得可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_10">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_WAIT_STAT_READ_AHEADについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">指定された先読みが、FINISH状態になるまで、コマンドを実行したスレッドをWAIT状態にします。<br>SCE_ISOFS_READ_AHEADコマンドをや先読みリクエストを行っていないファイルディスクリプタで、このコマンドを実行した場合、エラーやスレッドのWAIT状態とはならず、先読みはFINISH状態とみなされ、ただちに処理が戻ってきます。<br>SCE_ISOFS_CANCEL_STAT_READ_AHEADでWAIT状態がキャンセルされた場合、SCE_KERNEL_ERROR_WAIT_CANCELエラーが戻ります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_11">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_POLL_STAT_READ_AHEADについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">指定された先読みの状態を取得します。<br>SCE_ISOFS_READ_AHEADコマンドをや先読みリクエストを行っていないファイルディスクリプタで、このコマンドを実行した場合、エラーとはならず、先読みはFINISH状態とみなされ、ただちに処理が戻ってきます。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;先読み処理は終了済&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x20&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;先読み処理を実行中&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;先読み処理を待機中&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_12">
+<div style="margin-left:40px;"><h4><b>SCE_ISOFS_CANCEL_STAT_READ_AHEADについて</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">SCE_ISOFS_WAIT_STAT_READ_AHEADコマンドで、先読みがFINISH状態になるまで、WAIT状態になっているスレッドを起床させます。<br>このコマンドは、先読み自体のキャンセルは行いません。<br><br>キャッシュの詳細は、「UMD&reg;キャッシュ概要」を確認してください。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoIoctlAsync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoIoctlAsync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非同期処理の通常I/O処理以外でのデータ取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;iofilemgr.h&gt;
+int <b>sceIoIoctlAsync</b>(
+	SceUID <i>fd</i>, 
+	int <i>cmd</i>,
+	const void *<i>argp</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドコード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>argp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドパラメータ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドパラメータサイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データバッファ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;データバッファサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>もしくは正の値が返ります。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">通常、I/O処理から外れたデータの取得、および設定を行う場合に使用するファイルシステムコントロール関数を非同期におこなう関数です。<br><br>処理結果は、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsync">sceIoWaitAsync</a>()関数、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()関数および、<a href="../peripheral/ISO9660-Reference-Japanese.htm#sceIoPollAsync">sceIoPollAsync</a>()関数で確認することができます。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ISOFSのエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EPERM">SCE_ERROR_ERRNO_EPERM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;実行許可がない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOENT">SCE_ERROR_ERRNO_ENOENT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010002&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルがない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EIO">SCE_ERROR_ERRNO_EIO</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010005&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入出力エラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_E2BIG">SCE_ERROR_ERRNO_E2BIG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010007&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数リストが長い&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EBADF">SCE_ERROR_ERRNO_EBADF</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010009&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスクリプタが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOMEM">SCE_ERROR_ERRNO_ENOMEM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001000C&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必要なメモリが確保できない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EACCESS">SCE_ERROR_ERRNO_EACCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001000D&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アクセス権限がない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EFAULT">SCE_ERROR_ERRNO_EFAULT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001000E&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドレスが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EBUSY">SCE_ERROR_ERRNO_EBUSY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010010&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リソースを使用中&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EEXIST">SCE_ERROR_ERRNO_EEXIST</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010011&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルがある&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENODEV">SCE_ERROR_ERRNO_ENODEV</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010013&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスが存在しない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOTDIR">SCE_ERROR_ERRNO_ENOTDIR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010014&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリではない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EISDIR">SCE_ERROR_ERRNO_EISDIR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010015&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリである&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EINVAL">SCE_ERROR_ERRNO_EINVAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010016&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が無効&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EMFILE">SCE_ERROR_ERRNO_EMFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010018&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オープン済みのファイルが多すぎる&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EFBIG">SCE_ERROR_ERRNO_EFBIG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001001B&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルが大きすぎる&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EROFS">SCE_ERROR_ERRNO_EROFS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001001E&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込みのみのファイルシステム&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENAMETOOLONG">SCE_ERROR_ERRNO_ENAMETOOLONG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001005B&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名が長すぎる&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOBUFS">SCE_ERROR_ERRNO_ENOBUFS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80010069&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バッファがない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ETIMEDOUT">SCE_ERROR_ERRNO_ETIMEDOUT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001006E&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;タイムアウトした&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EMEDIUMTYPE">SCE_ERROR_ERRNO_EMEDIUMTYPE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001007C&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なメディア&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOTSUP">SCE_ERROR_ERRNO_ENOTSUP</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001B000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サポートされていない機能&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_NOMAIN_ADDR">SCE_ERROR_ERRNO_NOMAIN_ADDR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001B001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MAINメモリ以外のアドレスを指定&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EUNIT">SCE_ERROR_ERRNO_EUNIT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001B002&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユニット番号が不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EFSIZE">SCE_ERROR_ERRNO_EFSIZE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001B003&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルサイズが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EFLAG">SCE_ERROR_ERRNO_EFLAG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8001B004&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定フラグが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_UMD_HARDWARE_FAILURE">SCE_UMD_HARDWARE_FAILURE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xC0210005&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライブに問題が発生した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_UMD_NO_MEDIUM">SCE_UMD_NO_MEDIUM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80210003&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアがない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_UMD_NOT_DEVICE_READY">SCE_UMD_NOT_DEVICE_READY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80210001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスがレディ状態ではない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_UMD_UNKNOWN_MEDIUM">SCE_UMD_UNKNOWN_MEDIUM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xC0210004&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不明なメディア&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_UMD_ERROR_REPLACED">SCE_UMD_ERROR_REPLACED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80210007&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;入れ替え禁止状態でメディアが&nbsp;&nbsp;<br>&nbsp;&nbsp;入れ替えられた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_UMD_READAHEAD_BUSY">SCE_UMD_READAHEAD_BUSY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80210011&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;先読みリクエスト実行中&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

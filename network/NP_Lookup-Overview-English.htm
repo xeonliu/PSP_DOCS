@@ -1,0 +1,276 @@
+<html lang="en">
+<head>
+<title>NP_Lookup-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NP Lookup Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Use and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP lookup library is used to get information about PlayStation&reg;Network (NP) users from the server. The library enables you to find the NP ID of a player, or get profile information such as the player's online name, avatar URL, or list of frequently used languages, by specifying the player's online ID string. An additional service is available called title small storage, which provides storage for at most 64KB of non-program data that can be saved on the server for each title.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP lookup library is a group of functions that are implemented as part of the np_service library, which can be used by loading the NP service module (SCE_UTILITY_MODULE_NP_SERVICE).<br>The header files are specific to the NP lookup library.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np/np_lookup.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_service_stub.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_service_stub_weak.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Initialization Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">There is no standalone initialization processing specific to the NP lookup library. When the NP service library is initialized, the NP lookup library is also initialized.<br>Specifically, the NP module and NP service module must be loaded, and sign-in processing must be performed. For details, refer to the "PlayStation&reg;Network Overview" document.<br>When sign-in is complete and the NP service module is loaded, the NP lookup library can be used.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Communication Processing</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>Create transaction context</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Create a transaction context to use for aborting and deleting a transaction. At the same time, specify the NP Communication ID (<a href="../network/NP_Common-Reference-English.htm#SceNpCommunicationId">SceNpCommunicationId</a>) for identifying the application. Create a transaction context for each transaction and delete it after the transaction ends.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1">
+<div style="margin-left:63px;"><h4><b>Note</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Although the only communication API that currently handles data based on the NP Communication ID is <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>(), always specify a proper NP Communication ID.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int ret, transId;
+<a href="../network/NP_Common-Reference-English.htm#SceNpId">SceNpId</a> npId;
+<a href="../network/NP_Common-Reference-English.htm#SceNpOnlineId">SceNpOnlineId</a> onlineId;
+const <a href="../network/NP_Common-Reference-English.htm#SceNpCommunicationId">SceNpCommunicationId</a> commId;
+// Assume that a proper value is stored in commId
+
+ret = <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(&amp;commId);
+if (ret &lt; 0) {
+	// Error handling
+}
+transId = ret;
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1_2">
+<div style="margin-left:40px;"><h4><b>Execute transactions</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Call any of the following functions depending on the information to be obtained.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Find NP ID:  <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupNpId">sceNpLookupNpId</a>()
+<li> Get profile information:  <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupUserProfile">sceNpLookupUserProfile</a>()
+<li> Get title small storage:  <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>()
+</ul></div>
+<div style="margin-left:67px;">These functions block until information can be obtained from the server.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Transaction
+strncpy(onlineId.data, &quot;user_foo&quot;, SCE_NET_NP_ONLINEID_MAX_LENGTH + 1);
+ret = <a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupNpId">sceNpLookupNpId</a> (
+	transId,	// Transaction context ID
+	&amp;onlineId,	// Online ID of user to look up. Uppercase and lowercase 
+			// differences are ignored.
+	&amp;npId,	// NP ID of target user is stored
+	NULL);
+if (ret &lt; 0) {
+	// Error handling
+}
+....
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1_3">
+<div style="margin-left:40px;"><h4><b>Destroy transaction context</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When the transaction is finished, destroy the transaction context.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// Destroy transaction context
+<a href="../network/NP_Lookup-Reference-English.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(transId);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Terminating the NP service library also terminates the NP lookup library. After destroying all transaction contexts, call <a href="../network/NP_Service-Reference-English.htm#sceNpServiceTerm">sceNpServiceTerm</a>().<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Server Configuration</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Obtaining an NP Communication ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP lookup library requires an NP Communication ID for managing titles in use.<br>To obtain an NP Communication ID, submit an NP Communication ID request by selecting "Request PlayStation&reg;Network communication service" from the PlayStation&reg;Network title registration page on the PSP&trade; Developer Network website. If you wish to use the title small storage service, you must also submit a request for configuring the title small storage server at the same time.<br>Because NP lookup library functions other than the title small storage service do not require a special server configuration, they can be freely used after the NP Communication ID has been issued.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Title Small Storage Service Configuration</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The title small storage service supports the distribution of data that is to change after the title goes on sale such as the distribution of time-limited events, adjustment of the game balance, notices, and so on. Using this service enables the server operator's workload (server monitoring, domain name maintenance, SSL certificate updating, and so on) to be reduced compared with establishing a title-specific server.<br>The data that can be distributed via the title small storage service has the following restrictions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Basically one file of at most 64KB
+<li> Non-executable file
+<li> Data that will not require QA by planning approval after the title goes on sale
+</ul></div>
+<div style="margin-left:50px;">Because data can be freely updated using scp without approval by QA, title small storage generally cannot be used for data whose contents require QA after the title goes on sale. In the planning stage, check the data content with the SCE public relations department.<br><br>Three kinds of servers (development server, QA server, and production server) are provided for the title small storage service. The only means provided for placing files on each server is scp. An scp account and the required authentication files can be generated using the PlayStation&reg;Network Server Management Tools (known as SMT). For details refer to the "PlayStation&reg;Network SMT Title Small Storage Service Users Guide" document.<br>The development procedure is as follows. First, upload the file to the development server to verify that it operates as intended. When application development is complete, upload the file to the QA server to submit the master to QA. Because no system is provided for communicating with QA, deliver the file specifications, schedule for changing the file, etc. through the SCE public relations department.<br>After QA approval, upload a data file for general users to the production server.<br>To prevent accidents, the account for using scp to transfer files to the development server or QA server is separate from the account used to transfer files to the production server.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Server Load and Transaction Frequency</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Note the following points when determining the application specifications when implementing the application. This is so that the NP server does not become overloaded. Be particularly careful as the application scale increases. Contact SCE if you are having trouble making a decision.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>Do not re-obtain information that has already been obtained.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The NP library and NP matching2 utility can be used to obtain information about the login user himself and information about room members, respectively. Make sure that you only use the NP lookup library after first verifying whether or not the NP lookup library must be used to obtain that information.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>Prevent continuous reloads</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the reload feature is implemented, avoid a user interface that allows the user to repeatedly reload. For example, do not make specifications that will continue to reload if the button is continuously pressed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_3"><h4>
+(3)&nbsp;<b>Do not obtain information until it is needed</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To the extent possible, obtain information that is displayed when a user operation is received after the user has performed the operation. Avoid constructions that obtain information in advance which is not displayed until an option menu is opened or the screen is scrolled.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_4"><h4>
+(4)&nbsp;<b>Directly obtain information about a destination that is communicating using P2P</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To the extent possible, obtain information about a destination that is communicating using P2P directly from the destination. Although the NP lookup library may be used to obtain information about a destination before communicating with it using P2P, you should first verify whether the NP matching2 utility can be used to obtain that information.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_5"><h4>
+(5)&nbsp;<b>Try to reduce the number of transactions executed at one time</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">There is no quantitative limit to the number of transactions. However, if a construction is used in which user operations are blocked until a large number of transactions end, an extremely long waiting time could result and operations might not be smooth, depending on the network status.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Title Small Storage Service</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>Delay due to caching</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The Content Delivery Network (CDN) is used for the title small storage service. As a result, content updating may be delayed by the end server that the user is accessing. Although the delay time depends on the lifetime of the cache maintained by the end server, an update could be delayed by as much as one hour (approximately).<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>Verify the validity of the version and file</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The title small storage service does not provide a systematic concept of versions. Also, although the server is authenticated based on its SSL server certificate, no file corruption check is performed. Therefore, we recommend that you independently establish version and parity values for file formats.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>Data security</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Although the server is authenticated by the client in the title small storage service, the client is not authenticated by the server. As a result, data content placed on the server can be obtained from a PC. When you have data such as private keys that users should not see, never place it on the server.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

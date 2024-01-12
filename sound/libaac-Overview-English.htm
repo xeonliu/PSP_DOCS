@@ -1,0 +1,384 @@
+<html lang="en">
+<head>
+<title>libaac-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libaac Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functions and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The AAC library (libaac) is used for controlling the AAC decoder that runs on the Media Engine. The library can decode AAC-compressed audio data (AAC data) and generate linear PCM.<br>libaac provides the following functions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Decode AAC data and generate linear PCM
+<li> Perform streaming playback of AAC data
+<li> Perform loop playback of AAC data
+<li> Cue the playback position of AAC data
+</ul></div>
+<div style="margin-left:50px;"><br>The AAC data formats that can be played are as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Sampling frequencies of 24000, 32000, 44100, and 48000Hz
+<li> Supported codec is MPEG4 AAC-LC (without SBR)
+<li> Headerless (raw_data_frame() only) AAC data
+<li> Only stereo or monaural
+</ul></div>
+<div style="margin-left:50px;"><br>libaac can only output PCM data as stereo with a bit depth of 16 bits. Even if the input AAC data is monaural, stereo data will still be output but with the same data sent to both left and right channels. Note that libaac does not provide any function for outputting the decoded PCM data. This is done by using libaac together with vaudio. Always use vaudio because libwave and simple audio can only handle 44100Hz PCM data. For information about how to send PCM data to the audio output, refer to the &quot;Sound Overview&quot; document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libaac.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libaac.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libaac_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libaac_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The module utility must be used to load the libaac module itself. For details, refer to the "Utility Services" documentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following is a libaac sample program. Refer to it as necessary for guidance.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/sound/aacplay/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample shows the basic method of using libaac. An AAC file with an ADIF header that contains background music is played based on the graphics sample program devkit/sample/graphic/stars. This program is useful as a reference for loop playback, stopping playback, and pausing playback. It also shows how to parse the ADIF header and obtain information required for decoding.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Explanation of Operation</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Processing Flow Through Decoding of AAC Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The required procedure up through the decoding of AAC data is shown below.<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Allocate computational resources required for libaac</li>
+<li VALUE=2> Allocate input/output buffers</li>
+<li VALUE=3> Set parameters required for decoding and get an AAC handle</li>
+<li VALUE=4> Read AAC data into the input buffer</li>
+<li VALUE=5> Decode AAC data and output the result to the output buffer</li>
+</ol></div>
+<div style="margin-left:50px;"><br>First, before using libaac, allocate the required computational resources for the library. These computational resources can be used to execute multiple instances of decoding in parallel. The computational resources required for an individual instance of decoding are referred to as <b>decoding resources</b>. When the number of decoding instances to be executed in parallel is assigned, the required computational resources are allocated as a fixed-length memory pool by the library.<br>Next, get a decoding resource management ID, which is called an <b>AAC handle</b>. There is a one-to-one correspondence between an AAC handle and a set of decoding resources. Decoding resources are initialized by setting various parameters required for decoding along with initial values when the AAC handle is obtained. There are two main sets of initial values required for initialization. One is the set of initial values related to the input/output buffers, and the other is the sampling frequency required for decoding. After initialization has completed, AAC data can be decoded via the AAC handle. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>On-Memory Playback and Streaming Playback</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If the input buffer is sufficiently larger than the amount of AAC data, no additional AAC data needs to be read into the input buffer after performing step (4), above. This playback method is called <b>on-memory playback</b>. On the other hand, when the size of AAC data exceeds the size of the input buffer, it is necessary to perform additional processing to read more data successively into the input buffer. This playback method is called <b>streaming playback</b>.<br>The procedure required for streaming playback is shown below.<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Allocate computational resources required for libaac</li>
+<li VALUE=2> Allocate the input buffer</li>
+<li VALUE=3> Set parameters required for decoding and get an AAC handle</li>
+<li VALUE=4> Read AAC data into the input buffer</li>
+<li VALUE=5> Decode AAC data and output the result to the output buffer</li>
+<li VALUE=6> Send decoded PCM data to the audio output</li>
+<li VALUE=7> Check whether additional input data needs to be read</li>
+<li VALUE=8> If additional data is required, go to step (9); otherwise, jump to step (5)</li>
+<li VALUE=9> Get seek position within the AAC file where the additional data is located and get destination address and size</li>
+<li VALUE=10> Read additional AAC data into the input buffer</li>
+<li VALUE=11> Report the added AAC data size to libaac</li>
+<li VALUE=12> Go to step (5)</li>
+</ol></div>
+<div style="margin-left:50px;"><br>Streaming playback can be executed by repeatedly performing the above procedure.<br>When the AAC file is played to the end, playback will stop if the remaining loop playback count has become 0. For information on the setting of the loop playback count, see Chapter 3,"Loop Playback." While playback is stopped, the processing indicated in step (6) is skipped, and silent PCM data is output. Also, during this time, there is no notification from libaac requesting additional data as indicated in step (8).<br>Streaming can be started again from the beginning of the file by sending a restart signal while playback is stopped. If the remaining loop playback count is at least 1 or an infinite count (negative number) has been set, then even if the AAC file has been played to the end, the playback position is automatically returned to the beginning of the file and steps (5) through (12) are repeated.<br>After initialization processing, always repeat steps (5) through (12) according to the above libaac behavior. This not only simplifies playback control, but also guarantees normal streaming playback. The above streaming playback procedure is summarized as a schematic diagram in Figure 1 for reference. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Loop Playback</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaac provides a loop playback function. The loop starting and ending positions are boundaries between the beginning of the raw_data_frame() of the AAC data and the AAC data as shown in Figure 1. Other positions cannot be set for the start and end of the loop. The loop playback count can be set at any time after initialization is finished. The loop playback count is managed independently for each AAC handle. It can take any value from 1 up to the maximum value permitted for a signed integer. A loop can be played indefinitely (an infinite number of times) by setting a negative number for the loop playback count.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libaac-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Streaming Playback</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Using the Library</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Preparing the AAC Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">AAC data is created by encoding PCM data (wav file). SCE does not provide a tool for encoding PCM data into AAC data. libaac also has certain restrictions regarding the format of AAC data that can be decoded. For details, see Chapter 4, "AAC Data that can be Decoded."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Getting Information Required for Decoding</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaac cannot parse ADIF or ADTS headers, nor can it parse the system-layer of MPEG4 data. Therefore, headers must be parsed and the required information must be obtained before libaac initialization processing. To see how to do this for ADIF headers, refer to the devkit/sample/sound/aacplay/ sample program. This method is not supported for ADTS since the header information is different for each access unit.<br>Information about the header position is set in the members of <a href="../sound/libaac-Reference-English.htm#SceAacInitArg">SceAacInitArg</a>. This structure is provided to <a href="../sound/libaac-Reference-English.htm#sceAacInit">sceAacInit</a>() to set the initial values. The boundary position between the file starting tag and the AAC data is set for <i>aacHeadPos</i>. The boundary position between the file ending tag and the AAC data is set for <i>aacTailPos</i>.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Initialization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call the module utility <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>() function to load the avcodec and libaac modules.<br>Next, perform libaac initialization. The following procedure shows how to implement the steps described in Chapter 2, "On-Memory Playback and Streaming Playback."<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Call <a href="../sound/libaac-Reference-English.htm#sceAacInitResource">sceAacInitResource</a>() to allocate computational resources required for libaac</li>
+<li VALUE=2> Allocate input/output buffers that satisfy the memory alignment and size constraints</li>
+<li VALUE=3> Assign required information for input/output buffers and decoding to the argument of <a href="../sound/libaac-Reference-English.htm#sceAacInit">sceAacInit</a>(), then call the function to get an AAC handle</li>
+<li VALUE=4> Use the AAC handle that was obtained to read AAC data into the input buffer</li>
+</ol></div>
+<div style="margin-left:50px;"><br>In step (2), there are constraints related to input/output buffer memory alignment and size because AAC data is decoded on the Media Engine. For details, see Chapter 4, "Memory Alignment and Size of Input/Output Buffers."<br>In step (3), set the starting addresses and sizes of the input/output buffers and the boundary position between the beginning of raw_data_frame() in the AAC file and the AAC data and the sampling frequency in the members of the <a href="../sound/libaac-Reference-English.htm#SceAacInitArg">SceAacInitArg</a> structure, which contain the initial values. Call <a href="../sound/libaac-Reference-English.htm#sceAacInit">sceAacInit</a>() and pass it the <a href="../sound/libaac-Reference-English.htm#SceAacInitArg">SceAacInitArg</a> structure which will set the initial values and return an initialized AAC handle.<br>Currently, the number of AAC handles that can be used simultaneously is limited, and if an AAC handle cannot be obtained, an error will be returned. In this case, call <a href="../sound/libaac-Reference-English.htm#sceAacExit">sceAacExit</a>() to return any AAC handle that is not being used to libaac. For information about the limit on the number of AAC handles, see Chapter 4, "Number of AAC Handles That Can be Used Simultaneously."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Decoding</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Next, decode the AAC data that was read into the input buffer. The following procedure shows how to implement the steps described in Chapter 2, "On-Memory Playback and Streaming Playback" in a program.<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Call <a href="../sound/libaac-Reference-English.htm#sceAacDecode">sceAacDecode</a>() to decode the AAC data</li>
+<li VALUE=2> Send PCM data that was decoded to the audio output using vaudio</li>
+</ol></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">Execute <a href="../sound/libaac-Reference-English.htm#sceAacDecode">sceAacDecode</a>() to write decoded PCM data to the output buffer. The following information can be obtained through the arguments and return value of <a href="../sound/libaac-Reference-English.htm#sceAacDecode">sceAacDecode</a>().<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Source address of PCM data in the output buffer for reading
+<li> Size of PCM data in the output buffer
+</ul></div>
+<div style="margin-left:50px;"><br>In step (2), use these values to perform audio output. The output data that was generated in step (1) is valid until the next time <a href="../sound/libaac-Reference-English.htm#sceAacDecode">sceAacDecode</a>() is executed. Also, 0 is returned the first time <a href="../sound/libaac-Reference-English.htm#sceAacDecode">sceAacDecode</a>() is executed during decoding, and PCM data is obtained the second and subsequent times.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Streaming Playback</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Next, control streaming playback. The following procedure shows how to implement the steps described in Chapter 2, "On-Memory Playback and Streaming Playback" in a program.<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Call <a href="../sound/libaac-Reference-English.htm#sceAacCheckStreamDataNeeded">sceAacCheckStreamDataNeeded</a>() to check whether additional input data needs to be read.</li>
+<li VALUE=2> If additional data is required, go to step (3); otherwise, go to step (1) under "Decoding."</li>
+<li VALUE=3> Call <a href="../sound/libaac-Reference-English.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>() to get the information needed to add input data</li>
+<li VALUE=4> Read additional AAC data into the input buffer based on the information that was obtained in step (3)</li>
+<li VALUE=5> Call <a href="../sound/libaac-Reference-English.htm#sceAacNotifyAddStreamData">sceAacNotifyAddStreamData</a>() to report the size of the added AAC data to libaac</li>
+<li VALUE=6> Go to step (1) under "Decoding."</li>
+</ol></div>
+<div style="margin-left:50px;"><br>In step (3), the following information can be obtained through the arguments of <a href="../sound/libaac-Reference-English.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>().<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Seek position in the AAC data where additional data will be read
+<li> Address where additional data will be written to the input buffer
+<li> Size of additional data to be written to the input buffer
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Loop Playback</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Call <a href="../sound/libaac-Reference-English.htm#sceAacSetLoopNum">sceAacSetLoopNum</a>() to set the loop playback count. For general information about the loop playback count, see Chapter 2, "Loop Playback." To cue the playback position during AAC playback or to restart playback after it is stopped because the loop playback count was exhausted, use <a href="../sound/libaac-Reference-English.htm#sceAacResetPlayPosition">sceAacResetPlayPosition</a>(). However, <a href="../sound/libaac-Reference-English.htm#sceAacResetPlayPosition">sceAacResetPlayPosition</a>() must be executed after step (1) under "Decoding" and before step (1) under "Streaming Playback." If this condition is not satisfied, <a href="../sound/libaac-Reference-English.htm#sceAacDecode">sceAacDecode</a>() will be executed before data has been replenished in the input buffer. Since silence will be output if this happens, make sure that the execution timing is correct.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Termination</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the application has finished playing back AAC data, call<b> </b><a href="../sound/libaac-Reference-English.htm#sceAacTermResource">sceAacTermResource</a>() to perform libaac termination processing. This function will unconditionally return the AAC handle that was obtained during initialization to libaac, and all computational resources that were allocated for libaac will be released.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>AAC Data that can be Decoded</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaac supports the following specifications for AAC data. AAC data with specifications other than those listed below cannot be played.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Supported sampling frequencies are 24000, 32000, 44100, and 48000Hz
+<li> Supported codec is MPEG4 AAC-LC (without SBR)
+<li> Supports headerless (raw_data_frame() only) AAC data
+<li> Supports only stereo or monaural
+</ul></div>
+<div style="margin-left:50px;"><br>If an attempt is made to play an unsupported AAC file, initialization processing will fail and an error will be returned. Since libwave or simple audio can only handle 44100Hz PCM data, always use vaudio for PCM data output.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Memory Alignment and Size of Input/Output Buffers</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the Media Engine performs decoding, a cache is created in both the Media Engine and the System Controller that contains the same data. To guarantee cache coherency, the input and output buffers must have <b>64-byte alignment</b>. In addition, the required size of the input and output buffers are as follows as a function of the frame size to be decoded.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Input (AAC) buffer size<br><b>At least 8192 bytes and a multiple of 64 bytes</b>
+<li> Output (PCM) buffer size <br><b>8192 bytes</b> (1024 samples x 2 bytes x 2 channels x 2 buffers)
+</ul></div>
+<div style="margin-left:50px;"><br>Be sure to observe the above memory alignment and buffer size constraints when allocating input and output buffers.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Number of AAC Handles That Can be Used Simultaneously</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The number of AAC handles that can be used simultaneously is set by an argument of <a href="../sound/libaac-Reference-English.htm#sceAacInitResource">sceAacInitResource</a>(). The library manages AAC handles via a fixed-length memory pool.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>PCM Data That Can be Output</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The only PCM data format that can be output is stereo with a bit depth of 16 bits. Output of monaural PCM data is not supported. When monaural AAC data is decoded, stereo PCM data will be output with the same data output by the left and right channels.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Playback of AAC Data on a UMD&trade;/DVD</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When an AAC file is read from a UMD&trade;/DVD into the input buffer using sceIoRead(), the second argument <i>*buf</i>, which indicates the write destination address, must be 4-byte aligned. The AAC data write destination address can be obtained from <i>aacDstPtr</i>, which is the second argument of <a href="../sound/libaac-Reference-English.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>(). When this function is called, if the input/output buffers are allocated according to the conditions in "Memory Alignment and Size," an address that is always 4-byte aligned will be returned for <i>*aacDstPtr</i>. Always get the write destination address of AAC data in the input buffer by calling <a href="../sound/libaac-Reference-English.htm#sceAacGetInfoToAddStreamData">sceAacGetInfoToAddStreamData</a>().<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>Simultaneous Use of libsas and libaac</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The AAC decoder, which is the core of libaac, runs on the Media Engine. Similarly, SAS (Software Audio Synthesizer), which is the core of libsas, also runs on the Media Engine. Therefore, when both are used simultaneously, they may compete for computational resources on the Media Engine, and in the worst case, audio that is output from SAS may become intermittent. In particular, if the AAC data is corrupted and decoding needs to be repeated over multiple frames until it is successful, the operational load may become temporarily high. Therefore, be sure to check operation carefully, especially those places where AAC data may be corrupted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>Stack Size of Threads That Use libaac</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To reduce the stack size of threads that use libaac, use <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelGetThreadStackFreeSize">sceKernelGetThreadStackFreeSize</a>() to check the required stack size, which is defined in thread.h.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>Termination Processing for Threads That Use libaac</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libaac, which uses CPU functions on the Media Engine, uses semaphores to manage computational resources of the Media Engine. Therefore, if <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateThread">sceKernelTerminateThread</a>() and <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelTerminateDeleteThread">sceKernelTerminateDeleteThread</a>() are used to forcibly delete a thread that is using a libaac function while another libaac function is being executed, then, depending on the timing, the thread may end up getting deleted while the Media Engine's computational resources will remain allocated. As a result, there is a risk that other libraries besides libaac that use the Media Engine's CPU, will no longer function properly. To stop a thread, design the program according to the following thread management technique.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> From the side that issues the request for stopping the thread;<br>Use an event flag to report the stop request to the thread.<br>Then, call <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelWaitThreadEnd">sceKernelWaitThreadEnd</a>() to wait until the thread has ended. 
+<li> On the side that receives the stop request:<br>Routinely monitor event flags to check for a stop request.<br>If a stop request is detected, verify that libaac is not running, and then use <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelExitThread">sceKernelExitThread</a>() to stop the thread itself.
+</ul></div>
+<div style="margin-left:50px;"><br>For an example implementation of thread termination, refer to the libaac sample program.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

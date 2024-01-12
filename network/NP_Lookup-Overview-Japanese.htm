@@ -1,0 +1,275 @@
+<html lang="jp">
+<head>
+<title>NP_Lookup-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NPルックアップ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>用途と特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPルックアップライブラリは、PlayStation&reg;Network（通称NP）のユーザに関する情報をサーバーから取得するためのライブラリです。オンラインID文字列を指定してNP IDを検索したり、NP IDを指定してオンラインネーム、アバターURL、よく使う言語といったプロファイル情報を取得することができます。また、タイトル毎にサーバーに設定できる最大64KBの非プログラムデータの置き場を提供する、タイトルスモールストレージと呼ぶサービスを使用することもできます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPルックアップライブラリはnp_serviceライブラリの一部として実装された機能群で、NPサービスモジュール(SCE_UTILITY_MODULE_NP_SERVICE)をロードすることで使用することが出来ます。<br>ヘッダファイルのみがNPルックアップライブラリ専用のものとなります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np/np_lookup.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_service_stub.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;np_service_stub_weak.a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用方法</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>初期化処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPルックアップライブラリ単体の初期化処理というものは存在しません。NPサービスライブラリの初期化処理がNPルックアップライブラリの初期化を兼任することとなります。<br>具体的にはNPモジュール、NPサービスモジュールのロード、サインイン処理が必要となりますが、詳細については「PlayStation&reg;Network 概要」ドキュメントをご参照ください。<br>サインイン後、NPサービスモジュールがロードされた状態でNPルックアップライブラリが使用可能となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>通信処理</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>トランザクションコンテキストの作成</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">トランザクションの中断および削除に使用するトランザクションコンテキストを作成します。このとき引数として、アプリケーションを特定するNPコミュニケーションID（<a href="../network/NP_Common-Reference-Japanese.htm#SceNpCommunicationId">SceNpCommunicationId</a>）を指定します。トランザクションコンテキストはトランザクション毎に作成し、トランザクション終了後に削除してください。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_2_1">
+<div style="margin-left:63px;"><h4><b>注意</b><br><br></h4></a></div>
+<div style="margin-left:80px;">現時点では<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>()以外の通信APIではTNPコミュニケーションIDに基づくデータは取り扱っていませんが、正しいNPコミュニケーションIDを必ず指定してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int ret, transId;
+<a href="../network/NP_Common-Reference-Japanese.htm#SceNpId">SceNpId</a> npId;
+<a href="../network/NP_Common-Reference-Japanese.htm#SceNpOnlineId">SceNpOnlineId</a> onlineId;
+const <a href="../network/NP_Common-Reference-Japanese.htm#SceNpCommunicationId">SceNpCommunicationId</a> commId;
+// commIdには適切な値が格納されているものとする
+
+ret = <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(&amp;commId);
+if (ret &lt; 0) {
+	// エラー処理
+}
+transId = ret;
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1_2">
+<div style="margin-left:40px;"><h4><b>トランザクション</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">取得したい情報に応じてそれぞれ次の関数を呼び出してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> NP IDの検索：<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupNpId">sceNpLookupNpId</a>()
+<li> プロファイル情報取得：<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupUserProfile">sceNpLookupUserProfile</a>()
+<li> タイトルスモールストレージの取得：<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>()
+</ul></div>
+<div style="margin-left:67px;">これらの関数は、サーバーから情報を取得できるまでブロックします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// トランザクション
+strncpy(onlineId.data, &quot;user_foo&quot;, SCE_NET_NP_ONLINEID_MAX_LENGTH + 1);
+ret = <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupNpId">sceNpLookupNpId</a> (
+	transId,	// トランザクションコンテキストID
+	&amp;onlineId,	// 検索するユーザのオンラインID。大文字小文字の違いは無視される
+	&amp;npId,	// 対象のユーザのNP IDが格納される
+	NULL);
+if (ret &lt; 0) {
+	// エラー処理
+}
+....
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1_3">
+<div style="margin-left:40px;"><h4><b>トランザクションコンテキストの破棄</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">トランザクションが終了したら、トランザクションコンテキストを破棄してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// トランザクションコンテキスト破棄
+<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(transId);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPサービスライブラリの終了が、NPルックアップライブラリの終了を兼任することとなります。<br>全てのトランザクションコンテキストを破棄してから、<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceTerm">sceNpServiceTerm</a>()を呼んでください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>サーバー設定</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>NPコミュニケーションIDの取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPルックアップライブラリは、利用タイトルの管理のためNPコミュニケーションIDを必要とします。<br>NPコミュニケーションIDを取得するには、PSP&reg; Developer NetworkウェブサイトのPlayStation&reg;Networkタイトル登録ページで「PlayStation&reg;Networkコミュニケーションサービスのリクエスト」を選択し、NPコミュニケーションID取得のリクエストを行います。タイトルスモールストレージサービスを使用する場合は、タイトルスモールストレージサーバー設定のリクエストも併せて行います。<br>タイトルスモールストレージサービス以外のNPルックアップライブラリの機能は特別なサーバー設定を必要としないため、NPコミュニケーションIDの発行が終われば自由に使用できます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>タイトルスモールストレージサービスの設定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">タイトルスモールストレージサービスは、期限イベントの配信、ゲームバランスの調整、お知らせなどのタイトル発売後に変更したいデータの配信を支援するサービスとなります。このサービスを利用することで、タイトル専用のサーバーを立てるのに比べてサーバー運用（サーバー監視、ドメイン名の維持、SSL証明書の更新など）の負担を軽減することができます。配信するデータには以下の制限事項があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 基本的には最大64KBのファイル1つ
+<li> 非実行ファイル
+<li> 企画承認でタイトル発売後にQAの必要がないとされたデータ
+</ul></div>
+<div style="margin-left:50px;">タイトルスモールストレージはQAによる承認なしにscpで自由にデータを変更できるため、原則的にはタイトル発売後のQAを必要とする内容のデータには使用できません。企画の段階でデータの内容を弊社パブリッシャーリレーション部までご連絡ください。<br><br>タイトルスモールストレージサービスには、開発用サーバー、QA用サーバー、本番用サーバーの3種類が用意されます。それぞれのサーバーにファイルを設置する手段はscpのみが提供されます。<br>scpのアカウントおよび必要な認証ファイルは、PlayStation&reg;Network Server Management Tools（略称SMT）で生成することができます。詳細は、「PlayStation&reg;Network SMT タイトルスモールストレージサービス ユーザガイド」ドキュメントを参照してください。<br><br>開発の手順としては、まず開発用サーバーにファイルをアップロードし意図する動作が正しく行えるかを確認してください。アプリケーションの開発が完了したらQA用サーバーにファイルをアップロードし、QAへマスターを提出してください。QAに伝える手段はシステムとしては提供されないため、ファイルの仕様およびファイルが変更されるスケジュールなどを弊社パブリッシャーリレーション部経由で伝えてください。<br>QAの承認後は、一般ユーザ用のデータファイルを本番用サーバーにアップロードしてください。<br>事故防止の為、開発用サーバー・QA用サーバーにscpするアカウントと、本番用サーバーにscpするアカウントは別のアカウントとなっています。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>サーバー負荷とトランザクションの実行頻度についての注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPサーバーの負荷をむやみに増やさないよう、アプリケーションの仕様策定および実装にあたって次の点に注意してください。特に規模の大きなアプリケーションほど注意が必要です。判断に迷ったときはご相談ください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>既に取得している情報を再取得しない</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ログインユーザ自身の情報、ルームメンバの情報については、それぞれNPライブラリ、NPマッチング2ユーティリティで取得することができます。NPルックアップライブラリを使って取得する必要のある情報かどうかを確認してから使用するようにしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>連続リロードを防止する</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">リロードの機能を実装する場合、ユーザがリロードを連打できるようなユーザインタフェースは避けてください。たとえばボタンを押し続けるとリロードされ続けるような仕様にはしないでください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_3"><h4>
+(3)&nbsp;<b>必要になるまで情報を取得しない</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ユーザの操作を受けて表示する情報は、なるべくユーザの操作が行われてから取得するようにしてください。オプションメニューを開くまで表示されない情報やスクロールしないと表示されない情報をあらかじめ取得しておくようなつくりは避けてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_4"><h4>
+(4)&nbsp;<b>P2Pで通信中の相手の情報は直接取得する</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">P2Pで通信中の相手の情報は、可能な限り相手から直接取得してください。P2Pで通信する前に相手の情報をNPルックアップライブラリで取得することは差し支えありませんが、その場合でもNPマッチング2ユーティリティで取得できる情報でないかを確認してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_5"><h4>
+(5)&nbsp;<b>1度に実行するトランザクション数を抑える</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">トランザクション数について定量的な制限はありません。ただし、多数のトランザクションが終わるまでユーザ操作がブロックされるようなつくりになっていると、ネットワークの状態によっては非常に長い待ち時間が発生しスムーズに操作できなくなるおそれがありますので注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>タイトルスモールストレージサービスについての注意</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>キャッシュによる遅延</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">タイトルスモールストレージサービスにはCDN(Contents Delivery Network)が使用されます。そのためユーザのアクセスする末端のサーバーによってはコンテンツの更新が遅れる可能性があります。遅れる時間は末端のサーバーの保持するキャッシュの有効期限に依存しますが、最大1時間程度遅れる可能性があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>バージョン、ファイルの正当性の検証</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">タイトルスモールストレージサービスはシステムとしてバージョンの概念を提供しません。またSSLサーバー証明書に基づくサーバーの認証は行われますが、ファイルの破損チェックは行われません。そのためファイルフォーマットに独自にバージョンおよびパリティなどの値を設けることを推奨します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>データのセキュリティ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">タイトルスモールストレージサービスではクライアントによるサーバー認証は行われますが、サーバーによるクライアント認証は行われません。そのためサーバーに設置したデータの内容はPCなどから取得される可能性があります。秘密鍵などユーザに見せてはならないデータを設置しないようにしてください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

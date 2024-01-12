@@ -1,0 +1,805 @@
+<html lang="jp">
+<head>
+<title>NP-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PlayStation&reg;Network 概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>このドキュメントについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">このドキュメントでは、PSP&reg;におけるPlayStation&reg;Network（通称NP）の機能について概説します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>提供する機能</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1">
+<div style="margin-left:40px;"><h4><b>アカウントサービス</b><br><br></h4></div></a>
+
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> サインイン
+<li> ユーザプロファイル取得
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_2">
+<div style="margin-left:40px;"><h4><b>コミュニケーションサービス</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> マッチング2
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_3">
+<div style="margin-left:40px;"><h4><b>コマースサービス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">コマースサービスは、オンライン配信のための機能を提供するサービスです。オンラインショップ「PlayStation&reg;Store」で、Memory Stick&trade;にインストールして起動できるゲームや、ゲーム内で利用できる追加アイテム、またゲームサーバーへのアクセス権や月額課金のようなチケットを、無償・有償で配信することができます。ゲーム内から直接PlayStation&reg;Storeを呼び出したり、プロダクトのカタログを取得する機能も提供します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>モジュール関連図</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPモジュールは通信を担当するモジュールと、ユーザ情報を管理するモジュールとに分かれます。NPモジュールの関連図は、以下のとおりです。<br>各モジュールに記載されているSCE_UTILITY_MODULE_XXXは、/usr/local/psp/devkit/include/utility/utility_module.hのモジュール名を指します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_4">
+<div style="margin-left:40px;"><h4><b>NPモジュール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NPサインイン時に取得したユーザ情報の管理を行うnpライブラリと、サービスID指定のチケットを取得するためのnp_authライブラリを含みます。NPサインインしてから、ネットワークを切断するまで常駐させておく必要があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_5">
+<div style="margin-left:40px;"><h4><b>NPサービスモジュール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NPサインインやチケットの更新、ユーザプロファイルの取得を行うnp_serviceライブラリを含みます。必要な処理を行うときにタイトルから任意にロード／アンロードできる非常駐のモジュールです。常にHTTPモジュール以下のネットワークモジュール群（SCE_UTILITY_MODULE_NET_XXX）を必要とします。<br>サインイン後は、ネットワークモジュール群をアンロードすることができますが、チケット取得のAPIはネットワークモジュール群を必要としますので、チケット取得APIの使用に応じてネットワークモジュール群をロードしてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_6">
+<div style="margin-left:40px;"><h4><b>NP Matching2モジュール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NPサーバーを使って、ユーザのマッチングを行うライブラリです。必要な処理を行うときにタイトルから任意にロード／アンロードできる非常駐のモジュールです。常にNPモジュールとNPサービスモジュール、UPnPモジュール以下のネットワークモジュール群（SCE_UTILITY_MODULE_NET_XXX）を必要とします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_7">
+<div style="margin-left:40px;"><h4><b>NPコマース2モジュール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">タイトル向けのコマースサービスを提供するNP IN-GAMEコマース2ライブラリを含みます。必要な処理を行うときにタイトルから任意にロード／アンロードできる非常駐のモジュールです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>開発環境の準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PlayStation&reg;Networkを利用するアプリケーションを開発するためには、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> NPアカウントの作成
+<li> ネットワーク環境の確認
+</ul></div>
+<div style="margin-left:50px;">が必要です。以下のドキュメントを参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 「開発用NPユーザガイド」<br>（PSP&reg; Developer Networkウェブサイト上で公開されています）
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>NPの機能について</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>アカウントサービス</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_8">
+<div style="margin-left:40px;"><h4><b>サインインとサインアウトについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NPで提供されるサービスを利用するためには、サインインを完了させて、以後の認証に必要なチケットを取得する必要があります。サインインを実行するためにはNPモジュールとNPサービスモジュールをロードして、サインインユーティリティを起動します。取得したチケットはNPモジュールで保持されます。サインイン完了後、NPサービスモジュールはアンロードすることができます。<br>サインアウトは、各ライブラリの終了処理に内包されているので、明示的に行う必要はありません。<br><br>NPサインインに関する処理を以下に示します。<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>チケットの種類</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;では、タイトルに関連する2種類のNPチケットが存在します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_9">
+<div style="margin-left:40px;"><h4><b>サインインチケット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サインインチケットは、サインイン時にNPサインインユーティリティが取得するチケットで、サインイン中はNPモジュールから取得することができます。<br>サインインチケットは、以降のNPサービス（NP Matching2など）の認証処理に使用されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_10">
+<div style="margin-left:40px;"><h4><b>サービスIDに対するチケット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">事前に登録したサービスIDを指定して、そのサービスIDに関連するチケットを、NP Authライブラリを使ってNPサーバーから取得することができます。NPサーバーは、ユーザの情報と指定されたサービスIDに対してユーザが持っている権利情報をチケットとして返信します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>チケットの有効期限</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サインインが完了すると、サインインユーティリティからサインインチケットの有効期限（現在、24時間に設定されています）が返されます。（[Debug Settings]&rarr;[Np Debug]にOnを指定すると有効期限が5分に設定されます）チケットの有効期限が切れると、NPの各機能を利用することができなくなります。チケットの有効期限が切れた場合、NPの機能を利用するためには再度サインインユーティリティを呼び出してサインインを行ってください。<br>チケットの有効期限切れによるエラーを防ぎたい場合、チケットの有効期限が切れる前にNPサービスモジュールのチケット更新用APIを使ってサインインチケットを更新する必要があります。<br>サービスIDに対するチケットの有効期限については、現在は24時間に設定されています（2009/12以前にチケットサービスのリクエストを行ったタイトルについては10分の設定となっています）。ゲームサービスを提供する外部サーバーでは、サービスIDに対するチケットの有効期限チェックとそれに伴う処理を必ず行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>マッチング2</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティは、オンライン対戦やチャット等、ネットワーク機能を実装するアプリケーションを支援するライブラリです。<br><br>NPマッチング2ユーティリティは、以下の機能を提供します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ルーム検索機能
+<li> ルームの動的な作成機能
+<li> ルーム内でのチャット機能<br>バルガリティフィルタ（不適切な言葉を隠蔽するフィルタ）を適用可能
+<li> ルーム内のユーザ間でのデータの送受信機能
+<li> ルームの入室制限機能
+<li> チーム対戦のサポート機能
+<li> NP IDによるユーザ検索機能
+<li> ルームメンバ間のP2Pコネクション確立機能
+</ul></div>
+<div style="margin-left:50px;"><br>詳細については、「NPマッチング2概要」および「NPマッチング2システム概要」ドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>NP IN-GAMEコマース2</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP IN-GAMEコマース2ライブラリは、タイトル向けのコマースサービスを提供します。<br>詳細については、「NP IN-GAMEコマース2概要」および「NP IN-GAMEコマース2リファレンス」ドキュメントを参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>NPに関連するID</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PlayStation&reg;Networkに関連する各種IDについて以下に記します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>NPコミュニケーションID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PlayStation&reg;Networkが提供するマッチング、ランキング、トロフィーなどを用いる際に利用されるIDです。「XXXXYYYYY_ZZ」という形式を持ちます（XXXXはアルファベット、YYYYY, ZZは数字）。PlayStation&reg;Networkコミュニケーションサービスにおいて、対象となるタイトルアプリケーションを特定する識別子として使われます。NPコミュニケーションIDはSCEにより割り当てられます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_11">
+<div style="margin-left:40px;"><h4><b>NPコミュニケーションIDの取得</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NPコミュニケーションIDはPSP&reg; Developer Networkウェブサイトから申請します。<br>トップページから以下のようにアクセスします。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> メニューから「PlayStation&reg;Network」&rarr;「タイトル登録」を選ぶ</li>
+<li VALUE=2> PlayStation&reg;Networkタイトルの登録ページで「NPコミュニケーションIDのリクエスト」を選ぶ</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>NPタイトルID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPにおけるタイトルIDです。「XXXXYYYYY_00」という形式を持ちます。XXXXYYYYYの部分は通常のディスク品番と同じになります（XXXXはアルファベット、YYYYYは数字）。光ディスクベース、光ディスクベースでないHDD起動タイトルとも、品番はSCEによって割り当てられます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>サービスID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サービスIDは、PSP&reg; Developer Networkへの登録申請によってサーバーに登録され、発行されるIDになります。サービスIDは、以下のような場合に登録申請が必要になります。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ダウンローダブルゲームあるいは追加ゲームデータをリージョナルストアからダウンロード配信する場合や、サービスエンタイトルメントの販売を行う場合
+<li> NP IN-GAMEコマース2ライブラリを用いて、タイトルストアからダウンロード配信する場合や、サービスエンタイトルメントの販売を行う場合
+<li> NPでないサーバー上で、NPの認証機能を使ったアクセス制御を行う場合（NP TCMライブラリを使う）
+</ul></div>
+<div style="margin-left:50px;">サービスIDは、NPタイトルIDにSCEによってプレフィクスがつけられたもので表現されます。PlayStation&reg;Networkアカウントサービス、コマースサービスにおいて、対象となるタイトルアプリケーションを特定する識別子になります。あるタイトルアプリケーションに帰属するプロダクトやSKUは、サービスIDの下に置かれます。<br></div>
+<div style="margin-left:67px;">例）IV0002-NPXS00004_00<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_12">
+<div style="margin-left:40px;"><h4><b>サービスIDの登録</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サービスIDの登録申請はPSP&reg; Developer Networkウェブサイトより行ってください。<br>トップページから以下のようにアクセスします。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> メニューから「PlayStation&reg;Network」&rarr;「タイトル登録」を選ぶ</li>
+<li VALUE=2> PlayStation&reg;Networkタイトルの登録ページで「サービスIDのリクエスト」を選ぶ</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>コンテントID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NP DRMユーティリティでパッケージされたダウンロード可能なコンテンツを示します。コンテントIDは、サービスIDに16桁のラベルをハイフンで組み合わせた形で表現されます。ラベルは、SCEではなくコンテンツ提供者自身が割り当てます。割り当てた値はmake_package_npdrmに渡される設定ファイルにて指定し、Drop PointおよびNetwork Platform Management Tool (NPMT)を通じてシステムに入力されます。<br>ラベル部に指定可能な文字は、アルファベット大文字と数字のみ（A-Z, 0-9）です。<br></div>
+<div style="margin-left:67px;">例）IV0002-NPXS00004_00-0000111122223333（"0000111122223333"の部分がラベル部）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>エンタイトルメントID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サーバー側で管理される権利情報であるサービスエンタイトルメントを示します。エンタイトルメントIDは、サービスIDに6桁のラベルをハイフンで組み合わせた形で表現されます。ラベルは、SCEではなくコンテンツ提供者自身が割り当てます。ラベルとして割り当てた値はNPMTを通してシステムに入力されます。NPMTは値の重複チェックを行います。<br>ラベル部に指定可能な文字は、アルファベット大文字と数字のみ（A-Z, 0-9）です。<br>エンタイトルメントIDは、NPマネージャユーティリティのAPIにおいてアカウントの権利情報を検索するために用いられます。<br></div>
+<div style="margin-left:67px;">例）IV0002-NPXS00004_00-SVC001（"SVC001"の部分がラベル部）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>プロダクトID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">プロダクトは各サービスIDに所属するデジタルデータやサービスを示します。例えば、追加データや月額課金サービス等です。プロダクトIDは、サービスIDに16桁のラベルをハイフンで組み合わせた形で表現されます。ラベルは、SCEではなくコンテンツ提供者自身が割り当てます。ラベルとして割り当てた値はNPMTを通してシステムに入力されます。NPMTは値の重複チェックを行います。<br>ラベル部に指定可能な文字は、アルファベット大文字と数字のみ（A-Z, 0-9）です。<br>プロダクトIDは、コマースAPIを通じてあるプロダクトを検索するために用いられます。<br></div>
+<div style="margin-left:67px;">例）IV0002-NPXS00004_00-0000111122223333（"0000111122223333"の部分がラベル部）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>SKU ID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">SKUは各プロダクトに価格をつけて販売するための単位です。SKU IDはプロダクトIDに4桁の値をハイフンで組み合わせた形で表現されます。うち1桁はSCEによって予約され、3桁に対してコンテンツ提供者はラベルを定義することができます。1つのSKUには、あるSCEリージョンに帰属する国のストアでの価格を設定することができます。<br>SCEにより予約された1桁は、リージョン毎に以下のように決められています。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>リージョン</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ラベル部の最初の一文字</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;U&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEJ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;J&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCEE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;E&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE－Asia&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;H&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">ラベル部に指定可能な文字は、アルファベット大文字と数字のみ（A-Z, 0-9）です。<br>SKU IDは、コマースAPIにおいてプロダクトIDの検索後にアプリケーションによって作成されるカートの構造体の中に、購入プロダクト毎に与えられます。<br>（注）本リリースでは、SKUは常に固定の値に設定されます。<br></div>
+<div style="margin-left:67px;">例）IV0002-NPXS00004_00-0000111122223333-U001（"U001"の部分がラベル部）<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>カテゴリID</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">複数のプロダクトやカテゴリそれ自体を木構造（「カタログ」と言います）として格納する際のIDです。リージョナルストアやタイトルストアはこのカタログをベースに分類され、画面表示あるいはコマースAPIを用いてブラウズされます。<br>カテゴリIDはプロダクトIDと同じく、サービスIDに16桁のラベルをハイフンで組み合わせた形で表現されます。ただし例外としてタイトルトップカテゴリIDにはラベルはなく、サービスIDと同じ形で表現されます。タイトルトップカテゴリIDはシステムであらかじめ定義されています。タイトルトップカテゴリ以外のカテゴリについては、ラベルはSCEではなくコンテンツ提供者自身が割り当てます。ラベルとして割り当てた値はNPMTを通してシステムに入力されます。NPMTは値の重複チェックを行います。<br>ラベル部に指定可能な文字は、アルファベット大文字と数字のみ（A-Z, 0-9）です。<br></div>
+<div style="margin-left:67px;">例）IV0002-NPXS00004_00（タイトルトップカテゴリ）<br>例）IV0002-NPXS00004_00-CATG000011112222（通常のカテゴリ。"CATG000011112222"の部分がラベル部）<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>サインイン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPモジュールとNPサービスモジュールのロードおよびアンロードは、モジュールユーティリティを用いて行います。NPモジュールは、サインインする直前からネットワークから切断するまで常駐させてください。<br><br>モジュールユーティリティの詳細については、ユーティリティドキュメントを参照してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>モジュールロード処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サインインするために必要なモジュールセットをロードします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// NPモジュールセットのロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NP);
+if (ret &lt; 0) {
+	//エラー処理
+}
+
+// NPサービスモジュールセットのロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NP_SERVICE);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>初期化処理</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>// npライブラリの初期化
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpInit">sceNpInit</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+#define NP_AUTH_POOLSIZE	(4 * 1024)
+#define NP_AUTH_CALLBACK_STACKSIZE	1024
+#define NP_AUTH_PRIORITY	42
+
+// np_auth ライブラリの初期化
+ret = <a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthInit">sceNpAuthInit</a>(
+	NP_AUTH_POOLSIZE,
+	NP_AUTH_CALLBACK_STACKSIZE + SCE_NP_AUTH_INTERNAL_THREAD_LEAST_STACK_SIZE
+	NP_AUTH_PRIORITY
+	);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+// np_serviceライブラリの初期化
+#define NP_SERVICE_POOLSIZE	(10 * 1024)
+#define NP_SERVICE_PRIORITY	42
+
+ret = <a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>(
+	NP_SERVICE_POOLSIZE,
+	SCE_NP_MANAGER_INTERNAL_THREAD_LEAST_STACK_SIZE,
+	NP_SERVICE_PRIORITY
+	);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_3"><h4>
+(3)&nbsp;<b>サインイン処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サインインIDやパスワードをアプリケーションが管理する必要はありません。サインイン処理は、サインインユーティリティの中で閉じられ、サインインできたかどうかだけがアプリケーションに知らされます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../utility/Utility-Reference-Japanese.htm#SceUtilityNpSigninParam">SceUtilityNpSigninParam</a> npsignin_param;
+memset(&amp;npsignin_param, 0x00, sizeof(<a href="../utility/Utility-Reference-Japanese.htm#SceUtilityNpSigninParam">SceUtilityNpSigninParam</a>));
+npsignin_param.base.size = sizeof(<a href="../utility/Utility-Reference-Japanese.htm#SceUtilityNpSigninParam">SceUtilityNpSigninParam</a>);
+npsignin_param.base.ctrl_assign =
+	SCE_UTILITY_CTRL_ASSIGN_CIRCLE_IS_ENTER;
+npsignin_param.base.main_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY + 1;
+npsignin_param.base.sub_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY + 3;
+npsignin_param.base.font_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY + 2;
+npsignin_param.base.sound_thread_priority =
+	SCE_KERNEL_USER_HIGHEST_PRIORITY;
+
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityNpSigninInitStart">sceUtilityNpSigninInitStart</a>(&amp;npsignin_param);
+
+</font></pre></div>
+<div style="margin-left:67px;">サインインユーティリティの起動イメージは、次のようになります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-Japanese003.jpg">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP-Overview-Japanese004.jpg">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_4"><h4>
+(4)&nbsp;<b>NP機能の使用</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サインインチケットの期限が切れるまで、NPの機能を使うことができます。NP機能の詳細については、各ドキュメントを参照してください。チケットの有効期限切れによるエラーが発生した場合、サインインユーティリティを呼び出してサインインしなおしてください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_5"><h4>
+(5)&nbsp;<b>サインインチケットの更新処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サインインチケットが期限切れになる前に更新することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../network/NP_Service-Reference-Japanese.htm#SceNpManagerSigninUpdateParam">SceNpManagerSigninUpdateParam</a> param;
+
+memset(&amp;param, 0x00, sizeof(param));
+param.size = sizeof(param);
+ret = <a href="../network/NP_Service-Reference-Japanese.htm#sceNpManagerSigninUpdateInitStart">sceNpManagerSigninUpdateInitStart</a>(&amp;param);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+// チケット更新処理を待機
+while (<a href="../network/NP_Service-Reference-Japanese.htm#sceNpManagerSigninUpdateGetStatus">sceNpManagerSigninUpdateGetStatus</a>() !=
+	 SCE_NP_MANAGER_SIGNIN_UPDATE_STATUS_FINISHED) {
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(100 * 1000);
+}
+
+// 状態がSCE_NP_MANAGER_SIGNIN_UPDATE_STATUS_FINISHEDで
+// あれば<a href="../network/NP_Service-Reference-Japanese.htm#sceNpManagerSigninUpdateShutdownStart">sceNpManagerSigninUpdateShutdownStart</a>()は必ず成功します。
+// チケット更新処理がエラー終了した場合でも、終了処理は行ってください。
+if (param.result &lt; 0) {
+	<a href="../network/NP_Service-Reference-Japanese.htm#sceNpManagerSigninUpdateShutdownStart">sceNpManagerSigninUpdateShutdownStart</a>();
+	// エラー処理
+}
+
+// param.resultが0だった場合、サインインチケット更新が成功
+// したことを表します。
+<a href="../network/NP_Service-Reference-Japanese.htm#sceNpManagerSigninUpdateShutdownStart">sceNpManagerSigninUpdateShutdownStart</a>();
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_6"><h4>
+(6)&nbsp;<b>サインインチケットの更新処理の中断</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">サインインチケット更新処理を中断させたい場合、<a href="../network/NP_Service-Reference-Japanese.htm#sceNpManagerSigninUpdateAbort">sceNpManagerSigninUpdateAbort</a>()を呼び出してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Service-Reference-Japanese.htm#sceNpManagerSigninUpdateAbort">sceNpManagerSigninUpdateAbort</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_7"><h4>
+(7)&nbsp;<b>終了処理</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceTerm">sceNpServiceTerm</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+// np_auth ライブラリの終了
+ret = <a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthTerm">sceNpAuthTerm</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+// np ライブラリの終了
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpTerm">sceNpTerm</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_8"><h4>
+(8)&nbsp;<b>モジュールアンロード処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">モジュールセットをアンロードします。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// NPサービスモジュールセットのアンロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NP_SERVICE);
+if (ret &lt; 0) {
+	//エラー処理
+}
+
+// NPモジュールセットのアンロード
+ret = <a href="../utility/Utility-Reference-Japanese.htm#sceUtilityUnloadModule">sceUtilityUnloadModule</a>(SCE_UTILITY_MODULE_NP);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ユーザ情報の取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ユーザ情報の取得には、npライブラリを使用します。npライブラリのAPIは、サインイン処理が完了した後に使用できるようになります。ただし、使用時にネットワークモジュールは必要としませんので、必要でなければ、ネットワークモジュールはアンロードしておくことができます。<br>NPモジュールのロードや初期化、アンロードと終了処理については「サインイン」を参照してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>NP IDの取得</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-Japanese.htm#SceNpId">SceNpId</a> npId
+
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpGetNpId">sceNpGetNpId</a>(&amp;npId);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>オンラインIDの取得</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-Japanese.htm#SceNpOnlineId">SceNpOnlineId</a> onlineId
+
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpGetOnlineId">sceNpGetOnlineId</a>(&amp;onlineId);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>ユーザプロファイルの取得</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-Japanese.htm#SceNpUserInfo">SceNpUserInfo</a> userProf;
+
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpGetUserProfile">sceNpGetUserProfile</a>(&amp;userProf);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+/*
+ * userProf.userId =&gt; NP ID
+ * userProf.name   =&gt; オンラインネーム
+ * userProf.icon   =&gt; アバターURL
+*/
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_4"><h4>
+(4)&nbsp;<b>よく使用する言語の取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/NP_Common-Reference-Japanese.htm#SceNpMyLanguages">SceNpMyLanguages</a>のメンバ、language1、language2、language3には、それぞれutility/utility_common.hに定義された表示メッセージのロケール(SCE_UTILITY_LANG_xxx)が入ります。値が設定されていない場合、負の値が設定されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../network/NP_Common-Reference-Japanese.htm#SceNpMyLanguages">SceNpMyLanguages</a> myLang;
+
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpGetMyLanguages">sceNpGetMyLanguages</a>(&amp;myLang);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_5"><h4>
+(5)&nbsp;<b>リージョン情報の取得</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../network/NP_Common-Reference-Japanese.htm#SceNpCountryCode">SceNpCountryCode</a> countryCode;
+int languageCode;
+
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpGetAccountRegion">sceNpGetAccountRegion</a>(&amp;countryCode, &amp;languageCode);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_6"><h4>
+(6)&nbsp;<b>年齢制限に関するパレンタルコントロール情報の取得</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>int isRestricted, age;
+
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpGetContentRatingFlag">sceNpGetContentRatingFlag</a>(&amp;isRestricted, &amp;age);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_7"><h4>
+(7)&nbsp;<b>チャット制限に関するパレンタルコントロール情報の取得</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>int isRestricted;
+ret = <a href="../network/NP-Reference-Japanese.htm#sceNpGetChatRestrictionFlag">sceNpGetChatRestrictionFlag</a>(&amp;isRestricted);
+if (ret &lt; 0) {
+	//エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>サービスID指定のチケット取得</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_1"><h4>
+(1)&nbsp;<b>np_authの使用準備</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">チケットを取得するには、np_authライブラリを使用します。np_authライブラリは、SCE_UTILITY_MODULE_NPに含まれます。np_authライブラリを使用するためには、SCE_UTILITY_MODULE_NPのロード、およびnpライブラリとnp_authライブラリの初期化、NPサインインを完了させておく必要があります。詳細は「サインイン」を参照してください。<br>なお、np_authライブラリのAPIは、実行時にHTTP、SSL、inet、net_commonモジュールを必要としますので、必ずこれらのモジュールをロードおよび初期化しておく必要があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_2"><h4>
+(2)&nbsp;<b>チケット取得コールバックの定義</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">チケットデータ本体の取得は、コールバック関数の中で行います。チケット取得リクエストが成功した場合、コールバック関数の中で<a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>()を呼び出してチケットデータを取得してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+static unsigned char *ticket=NULL;	//チケットを収めるバッファ
+static int ticket_len = 0;		//チケットサイズ
+static int auth_result=0;		//コールバックのresult
+
+int
+authCallback(SceNpAuthRequestId id, int result, void *arg)
+{
+	int ret = 0;
+	(void)arg;
+
+	//エラーが発生した場合、resultは負の値になります。
+	if (result &lt; 0) {
+		auth_result = result;
+		return 0;
+	}
+	
+	//チケットを取得します。
+	ticket_len = result;
+	ticket = (unsigned char *)malloc(result);
+	if (ticket == NULL) {
+		auth_result = -1;
+		return 0;
+	}
+	auth_result = <a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthGetTicket">sceNpAuthGetTicket</a>(id, ticket, result);
+
+	return 0;
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_3"><h4>
+(3)&nbsp;<b>チケット取得リクエスト送信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">チケット取得リクエストの結果は、コールバックに伝えられます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define AUTH_SERVICE_ID &quot;XXX-XXX-XXXXX&quot;
+
+<a href="../network/NP_Auth-Reference-Japanese.htm#SceNpAuthRequestParameter">SceNpAuthRequestParameter</a> param;
+SceNpAuthRequestId id;
+
+memset(&amp;param, 0x00, sizeof(param));
+
+param.size = sizeof(param);
+param.version.major = 2;
+param.version.minor = 1;
+param.serviceId = AUTH_SERVICE_ID;
+param.ticketCb = authCallback;
+param.cbArg = NULL;
+
+ret = <a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthCreateStartRequest">sceNpAuthCreateStartRequest</a>(&amp;param);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_4"><h4>
+(4)&nbsp;<b>チケット取得リクエストの中断</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">チケット取得リクエストを中断した場合、その結果発生したネットワークエラーがコールバックに伝えられます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthAbortRequest">sceNpAuthAbortRequest</a>(id);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_5"><h4>
+(5)&nbsp;<b>チケット取得リクエストの終了処理</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../network/NP_Auth-Reference-Japanese.htm#sceNpAuthDestroyRequest">sceNpAuthDestroyRequest</a>(id);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>マッチング2</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ライブラリの使用概要は、「NPマッチング2概要」のドキュメントを参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>使用リソース</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_13">
+<div style="margin-left:40px;"><h4><b>sceNpAuthInit()～sceNpAuthTerm()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">np_authライブラリ使用中は、SceNpAuthスレッドが1つ存在します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_14">
+<div style="margin-left:40px;"><h4><b>sceNpServiceInit()～sceNpServiceTerm()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">np_serviceライブラリ使用中は、SceNpManagerスレッドが1つ存在します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_15">
+<div style="margin-left:40px;"><h4><b>sceNpMatching2Init()～sceNpMatching2Term()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">np_matching2ライブラリ使用中は、内部スレッドが3つ（SceNpMatching2、SceNpSignalingMain、SceNpSignalingEcho）存在します。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

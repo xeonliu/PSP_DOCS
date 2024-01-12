@@ -1,0 +1,454 @@
+<html lang="en">
+<head>
+<title>Cache-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ALLEGREX CPU Cache Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Cache Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The ALLEGREX CPU has a 16KiB D (data) cache and a 16KiB I (instruction) cache. The PSP&trade; system chip does not have a snooping function, so when a non-CPU bus master performs a memory access, coherency is not guaranteed by the hardware between the cache and memory. Under certain conditions, an explicit D-cache writeback operation may be required.<br><br>For details regarding the ALLEGREX CPU cache, refer to the &quot;ALLEGREX User's Manual.&quot;<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following header file is needed to call the cache manipulation APIs provided by the kernel.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;kernelutils.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libkernel.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Data Cache (D-Cache)</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The data cache is high-speed memory located between main memory and the CPU that buffers the exchange of data for load and store instructions. By buffering some of this data, the data cache reduces the number of time-consuming reads and writes to main memory, and instead allows data to be read and written quickly. When a cache miss occurs or, in other words, when the desired data is not in the cache, an access to main memory is automatically performed.<br>The data cache operates transparently and the programmer does not need to be particularly aware of it to obtain its benefits. However, if the programmer writes code that causes time-consuming memory accesses to be performed unintentionally, performance may be significantly affected. Program speed can be increased by being aware of the data cache and writing code so that cache misses occur as infrequently as possible.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ALLEGREX CPU Data Cache Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The ALLEGREX CPU data cache has the following features.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>2-way set associative configuration</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The 16KiB D-cache consists of 64-byte cache blocks arranged in a 2-way set associative configuration with 8KiB per way. This means that for a given virtual address, the 64 bytes of a cache block can exist at only one location in the cache, but since the cache is 2-way set associative, that block could be in one of two locations within the cache.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Writeback method</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A write to memory via the D-cache is not immediately reflected in memory. Data that is overwritten accumulates in the D-cache until the relevant block of the D-cache is implicitly written back when the block is replaced, or explicitly written back by a CPU CACHE instruction. A modified cache block that has not been written back to memory is referred to as being in a dirty state.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>No snoop function</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When a non-CPU bus master (GE, DMAC, or VFPU) attempts to read or write an address corresponding to a cache block that is in a dirty state, a mismatch occurs between the data in the cache and the data in memory because the non-CPU bus master cannot access the D-cache. In addition, if the data at the relevant address is cached in the D-cache, even if it is not in a dirty state, if a non-CPU bus master overwrites memory, the data that was overwritten cannot be referenced from the CPU.<br>To prevent this kind of incoherency, the D-cache must be explicitly written back or invalidated for a non-CPU bus master to work properly.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Refill/writeback by burst transfer</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The ALLEGREX CPU uses burst transfers to the bus to refill a cache block from memory and to write back a cache block to memory. Since main memory, eDRAM, and scratchpad memory are all connected via a 128-bit bus, a 64-byte cache block is burst transferred in 4 cycles on the bus.<br>However, the ALLEGREX CPU pipeline does not support non-blocking loads and does not have a hit-under-miss capability. Therefore, when a D-cache transfer occurs, the CPU pipeline stalls. On the other hand, a writeback from the D-cache is non-blocking. When a D-cache line is replaced, the written back data is copied to a dedicated writeback buffer, and the block for which the cache miss occurred is refilled first. Since the writeback is non-blocking in both cases, the CPU pipeline can be stalled until the D-cache writeback has completed by executing the sync instruction.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Precautions Related to the Data Cache and VFPU, GE, or DMAC</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Memory accesses from a non-ALLEGREX CPU bus master, VFPU, GE, or DMAC are performed independently of memory accesses from the ALLEGREX CPU. The PSP&trade; system chip does not have a hardware function (cache snooping) for guaranteeing coherency between the contents of main memory viewed via the D-cache from the ALLEGREX CPU and the contents viewed from the VFPU, GE, or DMAC. As a result, when a DMA transfer is performed to a non-ALLEGREX CPU bus master, it is necessary to note whether the data to be transferred resides in the D-cache or memory. The following procedure is required to perform the DMA transfer correctly.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>ALLEGREX CPU &rarr; memory &rarr; GE , DMAC:</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> The CPU writes the data to a buffer variable (the data is written to the D-cache)
+<li> Write back the D-cache (the data is written from the D-cache to memory)
+<li> Execute a sync instruction (the write from the D-cache is completed)
+<li> Perform the DMA transfer
+<li> The GE or DMAC reads the data from memory
+<li> Wait for the DMA transfer to end
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>GE , DMAC , VFPU &rarr; memory &rarr; ALLEGREX CPU:</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> Invalidate (if necessary, write back) the D-cache corresponding to the buffer variable
+<li> Execute a sync instruction (the write from the D-cache is completed)
+<li> Perform the DMA transfer
+<li> The GE or DMA writes the data to memory
+<li> Wait for the DMA transfer to end
+<li> Read the buffer variable (the data is loaded into the D-cache)
+</ul></div>
+<div style="margin-left:50px;"><br>Since a D-cache writeback may end up getting performed as a side effect when a line is replaced, the expected operation may be able to be performed even if the GE, DMAC, etc. does not explicitly perform a D-cache writeback. However, if the relevant memory is accessed from the ALLEGREX CPU while the GE, DMAC, VFPU, etc. is performing a DMA transfer, data may end up getting loaded into the D-cache again, and coherency will be lost. Do not use this kind of timing-dependent programming because it will surely fail in some future version.<br><br>The following functions can be used to write dirty data in the D-cache back to memory: <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackAll">sceKernelDcacheWritebackAll</a>(), <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackRange">sceKernelDcacheWritebackRange</a>(), <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>(), and <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>()<br>The following functions can be used to invalidate the D-cache:<br><a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>(), <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>(), or <a href="../kernel/Cache-Reference-English.htm#sceKernelDcacheInvalidateRange">sceKernelDcacheInvalidateRange</a>().<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Precautions Related to the Data Cache and Alignment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The D-cache line size is 64 bytes, and a refill from memory, writeback to memory, and invalidate are all performed with 64-byte alignment for each block.<br>A point requiring particular care is that when the size of the data to be written back is not a multiple of 64 bytes or the start point and end point are not 64-byte aligned, the area before and after the data will be refilled, written back, or invalidated together with the desired data. If this area is used by a variable that is being managed separately, a mismatch will occur because an unexpected invalidate, etc. will be performed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Specifying Alignment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To specify the alignment of a variable, add the aligned attribute to the variable definition. For example, to specify 16-byte alignment, specify the following.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>For a static/global variable with an initial value (data section)</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>unsigned char data[] __attribute__ ((aligned(16))) = { 'a', 'b', 'c' };
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>For a static/global variable with no initial value (bss section)</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>unsigned char data[1*1024*1024] __attribute__ ((aligned(16)));
+</font></pre></div>
+<div style="margin-left:50px;"><br>An alignment specification for an auto variable is invalid.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Reducing Data Cache Misses</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The basic technique for reducing D-cache misses is to not load up the cache with unnecessary data. To accomplish this, place data that will be accessed consecutively at nearby addresses. This can be done by collecting together data that is referenced with close timing in a structure, as much as possible.<br><br>When defining tables, etc., be aware of how cache lines are mapped into the 2-way set associative cache so that you do not generate accesses to addresses that are in the same cache line.<br><br>When it is known in advance that the program will write to an entire 64-byte cache block, the Create Dirty Exclusive function of the CACHE instruction can be used to omit the refill from memory.<br>The <a href="../kernel/Cache-Reference-English.htm#sceKernelMemset">sceKernelMemset</a>() and <a href="../kernel/Cache-Reference-English.htm#sceKernelMemcpy">sceKernelMemcpy</a>() functions use the Create Dirty Exclusive function for high-speed operations if a cache-enabled address is specified for the pointer argument that is the write destination. As a result, they usually have better performance than the standard libc functions memset() and memcpy().<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Data Cache Miss Measurement Method</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The profiler can be used to quantitatively measure D-cache misses. The following is an example program.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../debug_support/Profiler-Reference-English.htm#SceProfilerRegs">SceProfilerRegs</a> *pRegs;
+pRegs = <a href="../debug_support/Profiler-Reference-English.htm#sceKernelReferGlobalProfiler">sceKernelReferGlobalProfiler</a>();
+
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>(pRegs);
+	(intermediate code omitted)
+
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerStart">sceKernelProfilerStart</a>(pRegs);
+ (routine for which cache misses are to be measured)
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerStop">sceKernelProfilerStop</a>(pRegs);
+
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerGetDcacheMissCount">sceKernelProfilerGetDcacheMissCount</a>(pRegs);	// D-cache miss count
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerGetDcacheWritebackCount">sceKernelProfilerGetDcacheWritebackCount</a>(pRegs);// D-cache writeback count
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerGetDcacheHitRatio">sceKernelProfilerGetDcacheHitRatio</a>(pRegs);	// D-cache hit ratio
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Non-Cache Accesses and the VFPU Write Buffer</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The ALLEGREX CPU also supports non-cache accesses that bypass the cache and access memory directly. The VFPU also has a dedicated VFPU write buffer that can write a VFPU register directly to memory without going through the CPU. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ALLEGREX CPU Non-Cache Access Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPU non-cache accesses have the following features.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>Mapping from virtual addresses to physical addresses by direct segment mapping</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The ALLEGREX CPU can make a non-cache access by accessing addresses in the kuseg1 segment. The addresses corresponding to the various segments in user mode are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Segment</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Virtual Addresses</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Access</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kuseg0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000000-0x3fffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cache&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kuseg1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x40000000-0x7fffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Non-cache&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kseg0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80000000-0x9fffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kseg1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xa0000000-0xbfffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ksseg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xc0000000-0xdfffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address error&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kseg3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xe0000000-0xffffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address error&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>16-stage non-cache write buffer</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Writes to non-cache addresses are performed via a 32-bit 16-stage write buffer. Since a write to the bus from the write buffer is non-blocking, when a write is performed via the write buffer, the CPU pipeline can issue a store instruction without stalling as long as there is free space in the write buffer. The sync instruction can be used to wait for the non-cache write buffer to be flushed.<br>If a non-cache read is performed when there is data in the non-cache write buffer, the non-cache read is performed after the non-cache write buffer is flushed. The ALLEGREX CPU pipeline does not support non-blocking loads, so the CPU pipeline will stall during this interval.<br>Burst transfers are not performed for writes to the bus from the non-cache write buffer. As a result, to write an entire consecutive 64 bytes, use the Create Dirty Exclusive function of the CACHE instruction to allocate a line in the D-cache beforehand. This will lighten the bus load when the write is performed via the D-cache.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>16-stage VFPU write buffer</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the special sv.q, wb instruction is used to write to a non-cache memory address from the VFPU, the write will be performed via the 128-bit 16-stage VFPU write buffer. Writes to the bus from the VFPU write buffer are non-blocking, so use of the VFPU write buffer enables the CPU and VFPU pipelines to continue issuing instructions without stalling, as long as there is enough space in the VFPU write buffer. A vsync2 instruction can be issued to wait for the VFPU write buffer to be flushed. Note that the vsync alone cannot stall the subsequent CPU instruction. <br>The VFPU write buffer can write to the bus using a burst transfer of indefinite length. When writing to consecutive addresses, the burst transfer is performed at high speed by writing the data in ascending order of addresses.<br>If an ordinary sv.q instruction is used with a non-cache address, the 128-bit data will be divided into 4 parts of 32 bits each and these will be written by the ALLEGREX CPU via the non-cache write buffer. This will end up being slower than using the sv.q, wb instruction.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Precaution When Intermixing Cache and Non-Cache Accesses</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The size of a D-cache block is 64 bytes, and each block is 64-byte aligned when the data is exchanged with main memory. If two variables reside in the same block and one is accessed with a cache access and the other accessed with a non-cache access, an incoherency may occur since these variables will be written back to memory at the same time. Consider the following example.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int a, b, c;
+(omitted)
+	int *ub = (int*)((uintptr_t)&amp;b | 0x4000000);
+	a = 1;
+	*ub = 2;
+	c = 3;
+</font></pre></div>
+<div style="margin-left:50px;"><br>If variables a, b, and c are in the same block, then when a is accessed, b and c are placed in the same cache line. When *ub is written to, the contents in the cache are not changed, and the b in memory is overwritten. When c is written to next, the c in the cache is overwritten and the state shown in the following figure will occur.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Cache-Overview-English001.gif">
+</div>
+<div style="margin-left:50px;"><br><br>If the cache is written back in this state, the value that was written to *ub ends up being overwritten with a garbage value in the cache. Later, if the value of b is read, the garbage value in the cache is read and the write to *ub will end up being ignored.<br>To prevent this kind of incoherency, specify attributes as follows when defining the variables so that cache- and non-cache-access variables are divided at 64-byte boundaries.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int a __attribute__((aligned(64)));
+int b __attribute__((aligned(64)));
+int c __attribute__((aligned(64)));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Precaution With Non-Cache Write Buffer Latency</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A store that is a non-cache access is always performed via the non-cache write buffer. Since the write data accumulates in the non-cache write buffer while the bus is busy, there could be a long delay between the time when the ALLEGREX CPU executes the store instruction and when the data is actually stored in memory.<br>Use a sync instruction to guarantee that data that was written via a non-cache access has been stored in memory. With psp-gcc, a sync instruction can be issued inline by using the __builtin_allegrex_sync() function.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Precaution Related to the VFPU Write Buffer</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since the VFPU write buffer has known bugs, vsync2 instructions may have to be inserted in specific code sequences. For details, refer to "Hardware Restrictions" document.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Instruction Cache (I-Cache)</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Instruction Cache Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The instruction cache is 16KiB of buffer memory that is used when program code is read from memory. Program code is a type of read data. If a loop or the code of a frequently called function is placed in the instruction cache, it can be executed relatively quickly.<br>Just like the data cache, the instruction cache is used automatically and can be effective on its own. However, program speed can be increased by making sure that instruction cache misses do not occur.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ALLEGREX CPU Instruction Cache Features</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>2-way set associative configuration</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The 16KiB I-cache consists of 64-byte cache blocks arranged in a 2-way set associative configuration with 8KiB per way. This means that for a given virtual address, the 64 bytes of a cache block can exist at only one location in the cache, but since the cache is 2-way set associative, that block could be in one of two locations within the cache.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>No snoop function</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When a store instruction is performed by the CPU using either a cache or non-cache access, or a write is performed by a non-CPU bus master (GE, DMAC, or VFPU), coherency is not guaranteed with the I-cache. To overlay programs, explicit D-cache writebacks and I-cache invalidates are required.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>Refill by burst transfer</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To refill a cache block from memory, the ALLEGREX CPU uses burst transfers to the bus. Since main memory, eDRAM, and scratchpad memory are all connected via a 128-bit bus, a 64-byte cache block is burst transferred in 4 cycles on the bus. If an I-cache miss occurs, the CPU pipeline will stall.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Reducing Instruction Cache Misses</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">There is no clear method for reducing I-cache misses that is as effective as the method for reducing D-cache misses. If the size of a loop that is executed frequently can be reduced, and if the functions that are called from inside that loop are placed at nearby addresses so that everything fits in 16KiB, I-cache misses can be prevented from occurring during loop execution.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Cache-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Example Showing a Loop and the Functions it Calls Placed Together</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The following methods can be used to reduce the code size.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Rewrite the program in assembler
+<li> Do not use macros and inline functions indiscriminately
+<li> Try the -Os compiler option 
+</ul></div>
+<div style="margin-left:50px;"><br>Code size can be reduced by replacing macros and inline functions called from multiple locations with normal functions. However, since there is always some overhead associated with a function call, this may also cause an I-cache miss. So, the effectiveness of this technique should be determined on a case-by-case basis. The effectiveness of the -Os compiler option should also be determined on a case-by-case basis because the use of this option may slow down the execution speed of the code rather than reducing the code size.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Precaution Related to Functions That are Called Implicitly by the Complier </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When placing functions together that are called from inside a loop, be careful with library functions and functions that are implicitly called by the compiler.<br>For example, there are functions such as dptofp(), which performs type conversion from double to float, and fptosi(), which performs type conversion from float to int. These may cause extra I-cache misses and entail additional overhead. In many cases, these extra calls can be avoided by carefully defining the types of constants and variables. Use the assembler source and map file to check whether or not these functions are being called in sections of code where speed is required.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Precaution Related to Overlays</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When overlays are used, program code may be read into memory without using the PSP&trade; kernel's module manager. In this case, an explicit D-cache writeback and I-cache invalidate are required.<br>The <a href="../kernel/Cache-Reference-English.htm#sceKernelIcacheInvalidateAll">sceKernelIcacheInvalidateAll</a>() and <a href="../kernel/Cache-Reference-English.htm#sceKernelIcacheInvalidateRange">sceKernelIcacheInvalidateRange</a>() functions can be used to invalidate the I-cache.<br><br>Although the CACHE instruction can be used to invalidate the I-cache directly, avoid using it to self-modify code in small units. Using the CACHE instruction in this manner, or using overlays in general, without using the <a href="../kernel/Cache-Reference-English.htm#sceKernelIcacheInvalidateAll">sceKernelIcacheInvalidateAll</a>() or <a href="../kernel/Cache-Reference-English.htm#sceKernelIcacheInvalidateRange">sceKernelIcacheInvalidateRange</a>() function to explicitly invalidate the I-cache may cause problems for future compatibility.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>Measuring Instruction Cache Misses</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The profiler can be used to quantitatively measure I-cache misses. The following program gives an example.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../debug_support/Profiler-Reference-English.htm#SceProfilerRegs">SceProfilerRegs</a> *pRegs;
+pRegs = <a href="../debug_support/Profiler-Reference-English.htm#sceKernelReferGlobalProfiler">sceKernelReferGlobalProfiler</a>();
+
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>(pRegs);
+	(intermediate code omitted)
+
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerStart">sceKernelProfilerStart</a>(pRegs);
+(routine for which cache misses are to be measured)
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerStop">sceKernelProfilerStop</a>(pRegs);
+
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerGetIcacheMissCount">sceKernelProfilerGetIcacheMissCount</a>(pRegs);	// I-cache miss count
+<a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>(pRegs);	// I-cache hit ratio
+
+</font></pre></div>
+<div style="margin-left:50px;">Note that to evaluate the results of the <a href="../debug_support/Profiler-Reference-English.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>() function, you must carefully consider that the I-cache is refilled in 64-byte (16-word) units and that the entire CPU pipeline stalls while the I-cache is being refilled. In other words, when the result is evaluated in terms of individual instructions, not individual cycles, since an I-cache miss occurs only once every 16 instructions, the I-cache hit ratio is 0.9375 even when no particular optimization is used. To properly evaluate the I-cache hit ratio result, this number should be used as the criterion.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

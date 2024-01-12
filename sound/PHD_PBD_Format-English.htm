@@ -1,0 +1,929 @@
+<html lang="en">
+<head>
+<title>PHD_PBD_Format</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PHD/PBD Formats
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview of PSP&trade; Sound Data </b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>PHD / PBD and PEF Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PHD / PBD is phoneme data used by the high-level sound library (libsndp).<br>PHD, which is also referred to as the header, contains data that links together attributes for each phoneme. PBD, which is also referred to as the body, contains phoneme data that links together individual sections of ADPCM (VAG) waveform data.<br>Together the PHD and PBD form a data structure that can be used to obtain the desired waveform data from the program number and note number, to be produced by the sound source during MIDI playback.<br>PEF, which is effect parameter data, is handled separately from PHD and PBD data.<br>A PHD data file has the extension ".phd", a PDB data file has the extension ".pbd", and a PEF data file has the extension ".pef".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>VAG Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VAG data is waveform data compressed using ADPCM and is the basis for PBD data. It consists of the waveform data and 48 bytes of information about the waveform data such as the sampling frequency.<br>A VAG data file has a ".vag" extension. For details, refer to the VAG File Format document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Basic Types of Sound Data</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PHD / PBD and PEF data consists of the basic types shown below. The byte order is Little Endian.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 32-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;unsigned char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 32-bit integer&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>PHD Data Format</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>PHD Overall Structure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PHD consists of a block structure in which attributes are linked, where an attribute is a single unit.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  PHD Overall Structure</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The "common attribute" must be placed at the beginning of the PHD. The common attribute is used to manage the entire PHD and includes the position of each attribute (offset from the beginning of the PHD) and version information.<br>Besides the common attribute, three types of attributes that are used by libsndp are defined, and attributes having a prescribed header and arbitrary data contents can also be defined.<br>PHD is an extremely flexible format since the block structure enables you to create individual data that can be easily maintained.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Basic Structure of an Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An attribute has the following basic structure.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Identification ID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute size (number of bytes in context)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;data&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Arbitrary&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Context (arbitrary data)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The following identification IDs are reserved.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Identification ID</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Use</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPHD'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Common attribute&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPVA'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For libsndp use (VAG attribute)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPTN'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For libsndp use (tone attribute)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;'PPPG'&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For libsndp use (program attribute)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Note that the attribute size is the number of bytes in the context part excluding the identification ID and attribute size, not the size of the entire attribute.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Common Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The common attribute has the following structure.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Identification ID ('PPHD')&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Version&nbsp;&nbsp;<br>&nbsp;&nbsp;(High-order 16 bytes: Major version)&nbsp;&nbsp;<br>&nbsp;&nbsp;(Low-order 16 bytes: Minor version)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset to attribute 1&nbsp;&nbsp;<br>&nbsp;&nbsp;(Number of bytes from beginning of PHD)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset to attribute 2&nbsp;&nbsp;<br>&nbsp;&nbsp;(Number of bytes from beginning of PHD)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Continuation of offsets to subsequent attributes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">In PHD data that is to be used by libsndp, the attr_offset[0] to attr_offset[2] fields are reserved as position information for the program attribute, tone attribute, and VAG attribute, respectively.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>libsndp PHD Data</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>libsndp PHD Data Structure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PHD data that is to be used by libsndp has a common attribute, program attribute, tone attribute, and VAG attribute as shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 PHD Structure Used by libsndp</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Common Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Identification ID ('PPHD')&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute size (56)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Version (0x00010000)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset to program attribute&nbsp;&nbsp;<br>&nbsp;&nbsp;(Number of bytes from beginning of PHD)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset to tone attribute&nbsp;&nbsp;<br>&nbsp;&nbsp;(Number of bytes from beginning of PHD)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attr_offset[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset to VAG attribute&nbsp;&nbsp;<br>&nbsp;&nbsp;(Number of bytes from beginning of PHD)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2[9]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Arbitrary data)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>VAG Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The VAG attribute maintains basic information (VAG parameters) about each of the individual waveform data that are linked and maintained in the PBD. The VAG attribute is a structure that consists of a header followed by an array of VAG parameters as shown below.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  VAG Attribute Structure</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPVA'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute size&nbsp;&nbsp;<br>&nbsp;&nbsp;(Total number of bytes - 8)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParam_size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAG parameter size&nbsp;&nbsp;<br>&nbsp;&nbsp;(sizeof(vagParamCtx))&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_low&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAG parameter starting index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_high&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAG parameter ending index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParam[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;vagParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAG parameter[index_low]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParam[&nbsp;&nbsp;<br>&nbsp;&nbsp;index_high - index_low + 1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;vagParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VAG parameter[index_high]&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">vagParam is an array having the corresponding number of elements from the starting index to the ending index. Each element is a VAG parameter (vagParamCtx structure defined in sdphd.h). If there are unused indices among the indices from the starting index to the ending index, the elements corresponding to those unused indices are padded with 0xffffffff.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>VAG Parameter</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A VAG parameter, which corresponds to a single waveform data within the PBD, has the following structure.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;offset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset of waveform data from the beginning of the PBD&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Sampling frequency&nbsp;&nbsp;<br>&nbsp;&nbsp;(Hz)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Waveform size&nbsp;&nbsp;<br>&nbsp;&nbsp;(bytes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The offset and size fields of a VAG parameter denote waveform data within the PBD as follows.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  Specification of Waveform Data Within the PBD According to the VAG Parameter</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Tone Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The tone attribute consists of parameters such as volume, panpot, and envelope, which are used when producing sound for the waveform data, and parameters such as voice range and bend range that are required for MIDI playback. The tone attribute is a structure that consists of a header followed by an array of tone parameters as shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  Tone Attribute Structure</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPTN'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute size&nbsp;&nbsp;<br>&nbsp;&nbsp;(Total number of bytes -8)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParam_size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Tone parameter size&nbsp;&nbsp;<br>&nbsp;&nbsp;sizeof(toneParamCtx)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_low&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParam starting index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;index_high&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParam ending index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParam[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Tone parameter[index_low]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParam[index_high - &nbsp;&nbsp;<br>&nbsp;&nbsp;index_low + 1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Tone parameter[index_high]&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">toneParam is an array having the corresponding number of elements from the starting index to the ending index. Each element is a tone parameter (toneParamCtx structure defined in sdphd.h). If there are unused indices among the indices from the starting index to the ending index, the elements corresponding to those unused indices are padded with 0xffffffff.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Tone Parameter</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A tone parameter has an index that denotes a single VAG parameter as well as parameters that are used when producing sound.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value Range</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vagParamCtxIndex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Index of VAG parameter used by&nbsp;&nbsp;<br>&nbsp;&nbsp;this tone parameter&nbsp;&nbsp;<br>&nbsp;&nbsp;(for a noise sound source, this is&nbsp;&nbsp;<br>&nbsp;&nbsp; 0xffffffff)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;priority&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Priority&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 (low) to 127 (high)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;group&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Group&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;noiseClock&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Noise clock&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 60&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;note_low&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Lowest sound producing note number&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;note_high&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Highest sound producing note number&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;volume&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Volume&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 4096&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;panpot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Panpot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 (left) to 64 to 127 (right)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sendVolume&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Effect send volume&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 4096&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sendPanpot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Effect send panpot&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 (left) to 64 to 127 (right)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;centerNote&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Note number when sampling&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 127&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;centerDetune&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Detune when sampling&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-99 to 99 (cents)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;detune&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Detune&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;-99 to 99 (cents)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bendRange_lower&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Bend range-&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 24 (number of notes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bendRange_upper&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Bend range+&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 to 24 (number of notes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;portamentTime&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Portament transition time&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;adsr1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ADSR1 (envelope)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;adsr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ADSR2 (envelope)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve4[2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">vagParamCtxIndex is the index of the VAG parameter that is used by this tone parameter. In other words, it indicates the waveform data that is used by this tone parameter. When vagParamCtxIndex is TONE_NOISE (= 0xffffffff), it indicates that this tone parameter uses a noise sound source, and the value set for noiseClock becomes valid.<br>priority is the priority of the produced sound, and sound is produced by giving precedence to tone parameters having a higher value.<br><br>group is a function for performing exclusive sound production for sounds within a given group. When the group value is non-zero, the libsndp voice management system controls sound production so that sound will only be produced for a single tone among the tones that have that group value. For example, if there are two tones such as an open high hat tone and a closed high hat tone, but you only want to produce sound for one or the other, you can set both tones to have the same group value and sound will be produced for these tones exclusively (that is, only one or the other). If group is 0, the group function will be off.<br><br>note_low and note_high indicate the range. In other words, they indicate the lower and upper bounds of the note numbers for which tone sound production for this tone parameter is valid.<br>sendVolume and sendPanpot are the input volume to and the panpot for the digital reverb.<br>centerNote and centerDetune are the note number and detune used when sampling the waveform that is used by this tone parameter. Pitch information that is given to the sound source is calculated from these values and the note number that is specified when sound is produced.<br>detune is used to adjust the musical interval when sound is produced.<br>Note that the detune units are cents, and a semitone is 100 cents.<br>bendRange_lower and bendRange_upper indicate the maximum width of the musical interval change for bend wheel or bend lever operations.<br>portamentTime is reserved for a future version upgrade. Currently, be sure that 0 is set.<br>adsr1 and adsr2 indicate the envelope. For details, refer to the <u>libsas</u> document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Program Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The program attribute is data for associating a MIDI program number with a tone parameter. It is a structure consisting of a header, a table of offsets to program parameters, and program parameters of indefinite size.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6  Program Attribute Structure</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPPG'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;attrSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Attribute size&nbsp;&nbsp;<br>&nbsp;&nbsp;(Total number of bytes -8)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve1[6]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;programParam_offset[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset to program parameter of program number 0&nbsp;&nbsp;<br>&nbsp;&nbsp;(number of bytes from beginning of PHD)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;programParam_offset[127]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Offset to program parameter of program number 127&nbsp;&nbsp;<br>&nbsp;&nbsp;(number of bytes from beginning of PHD)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;programParams&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Program parameters&nbsp;&nbsp;<br>&nbsp;&nbsp;(indefinite size, indefinite number, indefinite order)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">programParam_offset has 128 elements. However, for an unused program number, the value of the element is 0xffffffff.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>Program Parameter</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A program parameter is data indicating the tone parameters that are used by an individual program.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtx_count&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of tone parameters that are&nbsp;&nbsp;<br>&nbsp;&nbsp;used by this program (n)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reserve[3]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(Reserved area)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtxIndex[0]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Tone parameter index&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;toneParamCtxIndex[n-1]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Tone parameter index&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">toneParamCtx_count is the number of tone parameters that are used by the program. The number of tone parameter indices that are used, which follow this entry, is equal to the value specified for this count.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>PBD Data Format</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>PBD Structure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PBD is a file in which only the waveform parts within the VAG are linked together. It has a simple structure as follows.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English007.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7  PBD Structure</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>PEF Data Format</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>PEF Structure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PEF is effect parameter data. PEF, which is handled separately from PHD and PBD data, has the following structure.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PHD_PBD_Format-English008.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8 Effect Structure</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Effect Parameters</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Field</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Contents</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned char[4]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;'PPEF'&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Param_size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PEF parameter size&nbsp;&nbsp;<br>&nbsp;&nbsp;(sizeof(<a href="../sound/libsndp-Reference-English.htm#SceSsEffectParam">SceSsEffectParam</a>))&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data structure version&nbsp;&nbsp;<br>&nbsp;&nbsp;(the high-order 16 bits and low-order 16 bits represent the major and minor versions, respectively)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Parameter&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../sound/libsndp-Reference-English.htm#SceSsEffectParam">SceSsEffectParam</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Parameters&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>PEF Data for libsndp</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Parameter, which is of type <a href="../sound/libsndp-Reference-English.htm#SceSsEffectParam">SceSsEffectParam</a>, is a structure for effect settings.<br>To pass PEF data as an argument of the libsndp function <a href="../sound/libsndp-Reference-English.htm#sceSsSetEffectParam">sceSsSetEffectParam</a>(), extract and pass only the Parameter part from the PEF structure.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

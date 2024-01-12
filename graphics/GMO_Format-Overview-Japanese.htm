@@ -1,0 +1,751 @@
+<html lang="jp">
+<head>
+<title>GMO_Format-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; GMO 3D Converter</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+GMOフォーマット・概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>はじめに</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">基本的な3Dモデルの表示を目的としたファイルフォーマットです。<br>3Dモデルに格納される情報には、以下のようなものがあります。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 階層座標系（行列、TRS）
+<li> 形状データ（ポリゴン、曲面、モーフィング、スキンメッシュ）
+<li> マテリアル（カラー、マッピング情報）
+<li> テクスチャ（ファイル名、ファイルイメージ）
+<li> モーション（階層座標系、マテリアルアニメーション）
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>作成方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">一般的な3Dモデルデータから変換することによって作成します。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese001.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>表示方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイルにはグラフィックスAPIを駆動するためのデータが含まれ、それにしたがってAPIを呼び出すことで3Dモデルを表示できます。<br>その反面、DMAパケットなどのメモリイメージは含まれません。<br>API呼び出しの負荷を軽減するためには、ファイルをロードしたのちディスプレイリストを構築するなどの処理が必要です。<br><br>典型的なデータの流れは、下図のようになります。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>表記について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">このドキュメントでは、データ型を以下のように表記します。バイトオーダーはリトルエンディアンです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき8ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし8ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき16ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし16ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき32ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし32ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32ビット浮動小数点数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>データ構造</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>階層構造</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">3Dフォーマットは以下のように階層的なブロック構造を持ちます。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese003.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ブロックは、モデルデータにおけるひとまとまりのデータを表します。<br>ブロックは、ブロックタイプ、ブロック名および任意の個数の引数を持ちます。<br>直接的なデータ配列として、ブロックデータを含むことができます。<br>下位の階層構造として、コマンド、サブブロックを含むことができます。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese004.gif">
+</div>
+<div style="margin-left:50px;"><br>ブロック名は、外部からこのブロックを参照するために使用します。<br>ある階層における同じタイプのブロック中で一意であることが必要です。<br>引数は、ブロックにおける必須の情報を表すために使用します。<br>おもにデータブロックのフォーマット情報などで使用します。<br><br>記述例：<br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../graphics/GMO_Format-Reference-Japanese.htm#Material">Material</a> "material-0" {		// ブロック
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Diffuse">Diffuse</a> 1.0 1.0 1.0 1.0		// ブロックのコマンド
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Specular">Specular</a> 0.0 0.0 0.0 1.0 0.0	// ブロックのコマンド
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Emission">Emission</a> 0.0 0.0 0.0 1.0	// ブロックのコマンド
+
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Layer">Layer</a> "layer-0" {		// サブブロック
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#SetTexture">SetTexture</a> "texture-0"	// サブブロックのコマンド
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>コマンド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コマンドは、それを含むブロックの要素データを表します。<br>コマンドは、コマンドタイプ、および任意の個数の引数を持ちます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese005.gif">
+</div>
+<div style="margin-left:50px;"><br>引数の個数およびデータ型は、各コマンドごとに規定されています。<br>引数のデータ型には、以下のようなものがあります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>記述例</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき32ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき16ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき8ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし32ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし16ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし8ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;単精度浮動小数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;string&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;"tex.bmp"&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ref&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブロック参照&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;"bone-0"&nbsp;&nbsp;<br>&nbsp;&nbsp;"<a href="../graphics/GMO_Format-Reference-Japanese.htm#Bone">Bone</a>::bone-0"&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;enum&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;列挙定数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VERTEX&nbsp;&nbsp;<br>&nbsp;&nbsp;VERTEX｜NORMAL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;void&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;上記の任意の型&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;------------&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ブロック参照は、他のブロックを指定する場合に使用します。<br>"ブロックタイプ::ブロック名"のようにブロックタイプを指定することもできます。<br><br>列挙定数は、特定のコマンドの引数として使用可能な定数です。<br>"|"で連結することで、論理和を指定することもできます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>テキスト形式</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">テキスト形式は、ファイルの先頭行にファイルヘッダを記述し、それ以降の行にブロックとコマンドを記述する形式になっています。<br><br>記述例：<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>.GMS 1.00
+
+<a href="../graphics/GMO_Format-Reference-Japanese.htm#Model">Model</a> "plate" {
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#BoundingBox">BoundingBox</a> 0.00 0.00 0.00 0.50 0.50 0.00
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Bone">Bone</a> "Frame1_plate" {
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#BoundingBox">BoundingBox</a> 0.00 0.00 0.00 0.50 0.50 0.50
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Translate">Translate</a> 1.00 1.00 1.00
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#RotateYXZ">RotateYXZ</a> 0.00 0.00 0.00
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Scale">Scale</a> 1.00 1.00 1.00
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#DrawPart">DrawPart</a> "Mesh_plate"
+	}
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Part">Part</a> "Mesh_plate" {
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Mesh">Mesh</a> "mesh-0" {
+			<a href="../graphics/GMO_Format-Reference-Japanese.htm#SetMaterial">SetMaterial</a> "material-0"
+			<a href="../graphics/GMO_Format-Reference-Japanese.htm#DrawArrays">DrawArrays</a> "arrays-0" TRIANGLE_STRIP 4 1  0 1 2 3
+		}
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Arrays">Arrays</a> "arrays-0" VERTEX|NORMAL|TEXCOORD 4 1 0 {
+			-0.50 0.50 0.00 0.00 0.00 1.00 0.00 0.00 
+			-0.50 -0.50 0.00 0.00 0.00 1.00 0.00 1.00
+			0.50 0.50 0.00 0.00 0.00 1.00 1.00 0.00 
+			0.50 -0.50 0.00 0.00 0.00 1.00 1.00 1.00
+		}
+	}
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Material">Material</a> "material-0" {
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Diffuse">Diffuse</a> 0.78 0.78 0.78 1.00
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Specular">Specular</a> 0.00 0.00 0.00 1.00 51.21
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Emission">Emission</a> 0.00 0.00 0.00 1.00
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#Layer">Layer</a> "layer-0" {
+			<a href="../graphics/GMO_Format-Reference-Japanese.htm#SetTexture">SetTexture</a> "texture-0"
+		}
+	}
+	<a href="../graphics/GMO_Format-Reference-Japanese.htm#Texture">Texture</a> "texture-0" {
+		<a href="../graphics/GMO_Format-Reference-Japanese.htm#FileName">FileName</a> "plate.bmp"
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>バイナリ形式</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">バイナリ形式の構造はテキスト形式の構造と類似しています。<br>バイナリ形式では、ファイル先頭に16バイトのヘッダを格納し、それに続くチャンクの階層構造にモデルデータを格納します。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese006.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_1">
+<div style="margin-left:40px;"><h4><b>ファイルヘッダ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ファイルヘッダは、以下のようなデータ構造を持ちます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_int signature ;	// ファイル識別子 ( '.GMO' )
+	u_int version ;	// バージョン番号 ( '1.00' )
+	u_int style ;		// データスタイル ( 'PSP' )
+	u_int option ;		// オプション ( 0 )
+} GmoHeader ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>データスタイルはデータ表現が特定のAPIに最適化されていることを表します。<br>'PSP' スタイルではPSP&reg;ライブラリの制約にしたがった形式で格納されます。詳しくは「PSP&reg;ライブラリによる制限」の章、およびPSP&reg;ライブラリのドキュメントを参照してください。<br>データスタイルがゼロのときはテキスト形式と同じです。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_2">
+<div style="margin-left:40px;"><h4><b>チャンク構造</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">チャンクとはひとまとまりのデータのことで、バイナリ形式においてはブロックチャンク、コマンドチャンクの2種類のチャンクが定義され、それぞれがブロックとコマンドに対応しています。<br><br>ブロックチャンクは、以下のようなデータ構造を持ちます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese007.gif">
+</div>
+<div style="margin-left:67px;"><br><br>ブロックチャンクヘッダは、以下のようなデータ構造を持ちます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;		// チャンクタイプ
+	u_short args_offs ;	// ブロック引数のオフセット
+	u_int next_offs ;	// 次のチャンクのオフセット
+	u_int child_offs ;	// 下位チャンクのオフセット
+	u_int data_offs ;	// ブロックデータのオフセット
+} GmoChunk ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>ブロックに含まれる各要素の先頭は、4バイト単位でのアラインメントが必要です。<br>ブロックチャンクヘッダに含まれるサイズ、オフセット等はすべて4の倍数となります。<br>バイナリ形式ではブロックは番号によって参照されるため、ブロック名は省略可能です。<br><br>コマンドチャンクは、以下のようなデータ構造を持ちます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese008.gif">
+</div>
+<div style="margin-left:67px;"><br>コマンドチャンクヘッダは、以下のようなデータ構造を持ちます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;		// チャンクタイプ
+	u_short name ;		// 使用しません（つねに0）
+	u_int next_offs ;	// 次のチャンクのオフセット
+} GmoChunk ;
+
+</font></pre></div>
+<div style="margin-left:67px;">これらのブロックチャンク、コマンドチャンクは入れ子状に格納されます。<br>ブロックチャンクにおける下位階層のチャンクは連続して格納されます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese009.gif">
+</div>
+<div style="margin-left:67px;"><br>連続するチャンクの一つがコマンドチャンクであるかブロックチャンクであるかは、チャンクタイプの最上位ビット（GMO_HALF_CHUNK）で判別できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_3">
+<div style="margin-left:40px;"><h4><b>データ表現</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">バイナリ形式では、データ型は以下のように表現されます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>内容</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>アラインメント</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき32ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき16ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき8ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし32ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし16ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし8ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;単精度浮動小数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;string&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列（ヌル終端）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ref&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブロック参照（32ビット整数）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;enum&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;列挙定数（32ビット整数）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;void&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;上記の任意の型&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;----------------&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">各引数は表に示した単位でのアラインメントが必要です。<br>そのため必要に応じてパディングを行います。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_4">
+<div style="margin-left:40px;"><h4><b>ブロック参照</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">テキスト形式では、ブロック参照はブロック名によって表されますが、バイナリ形式では、ブロック参照はブロック番号によって表されます。<br>ブロック参照は、以下のようなビット構成を持ちます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese010.gif">
+</div>
+<div style="margin-left:67px;"><br>タイプは、参照されるブロックのチャンクタイプを表します。<br>レベルは、いくつ上の階層レベルに存在するかを表します。<br>番号は、同じタイプのブロック中で何番目かを表します。<br>無効な参照の場合、すべてのビットが1となります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>各種ブロック</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ファイルブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイルブロックは、ファイル全体を表す最上位ブロックで、複数のモデルブロックを格納することができます。<br>テキスト形式では記述を省略します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>モデルブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モデルブロックは、一つのモデルデータを表すブロックで、以下のようなブロックを格納することができます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ボーンブロック
+<li> パートブロック
+<li> マテリアルブロック
+<li> テクスチャブロック
+<li> モーションブロック
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>ボーンブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ボーンブロックは、モデルデータの一つの階層座標系を表し、形状データの表示位置、表示方法をコントロールします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_5">
+<div style="margin-left:40px;"><h4><b>階層座標計算</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">親ボーンの座標系をもとに、以下のような手順で計算されます。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> ピボット計算（前処理）
+<li> 行列乗算、または移動＋回転＋スケーリング
+<li> ピボット計算（後処理）
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_6">
+<div style="margin-left:40px;"><h4><b>表示コントロール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">指定したパートブロック（形状データ）を表示することができます。<br>表示スイッチにより表示のオン・オフができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_7">
+<div style="margin-left:40px;"><h4><b>ジオメトリブレンディング</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">形状データがジオメトリブレンディングを行う場合、影響するボーン、およびオフセット行列を指定することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_8">
+<div style="margin-left:40px;"><h4><b>モーフィング</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">形状データがモーフィングを行う場合、各モーフのウェイト値を指定することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>パートブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">パートブロックは、モデルデータの一つの形状データを表します。<br>形状データには面データと頂点データが含まれます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_9">
+<div style="margin-left:40px;"><h4><b>面データブロック</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">形状データのひとまとまりの面データを表します。<br>面データには以下のような情報を指定することができます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 使用するマテリアル
+<li> ブレンディングボーンの選択
+<li> 曲面パラメータ
+<li> 面プリミティブなど
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_10">
+<div style="margin-left:40px;"><h4><b>頂点データブロック</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">形状データのひとまとまりの頂点データを表します。<br>頂点データには以下のような情報を指定することができます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 頂点ベクトル
+<li> 法線ベクトル
+<li> 頂点カラー
+<li> ポイントサイズ
+<li> テクスチャ座標
+<li> 頂点ウェイト
+</ul></div>
+<div style="margin-left:67px;">ジオメトリブレンディングを行う場合、頂点ウェイトが必要です。<br>モーフィングを行う場合、モーフ形状の数だけ頂点データが必要です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>マテリアルブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マテリアルブロックは、モデルデータの一つの描画属性を表し、マテリアルカラーやマッピングなどをコントロールします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_11">
+<div style="margin-left:40px;"><h4><b>描画ステート</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ライティング、フォグのオン・オフなどを指定することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_12">
+<div style="margin-left:40px;"><h4><b>マテリアルカラー</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">マテリアルの基本的なカラーやパラメータを指定することができます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 拡散反射色
+<li> 鏡面反射色
+<li> 自己発光色
+<li> 環境色
+<li> その他のパラメータ
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_13">
+<div style="margin-left:40px;"><h4><b>レイヤーブロック</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">テクスチャマッピングの方法を指定することができます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 使用するテクスチャ
+<li> マッピング方法
+<li> マッピング係数
+</ul></div>
+<div style="margin-left:67px;"><br>マッピングの詳細な描画方法は、表示プログラムにより決定されますが、より詳細なパラメータを指定することもできます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> アルファブレンドモード
+<li> テクスチャ関数
+<li> テクスチャフィルタ
+<li> テクスチャラップアラウンド
+<li> テクスチャクロップ
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>テクスチャブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">テクスチャブロックは、モデルデータの一つのテクスチャを表します。<br>テクスチャの画像ファイル名やイメージを指定することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_14">
+<div style="margin-left:40px;"><h4><b>画像ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">テクスチャを作成するための画像ファイル名を表します。<br>画像ファイルイメージをモデルデータ内部に含まない場合に、画像ファイルを外部からロードするのに使用します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_15">
+<div style="margin-left:40px;"><h4><b>画像ファイルイメージ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">テクスチャを作成するための画像ファイルを格納することもできます。<br>ファイル名とファイルイメージの両方が指定されている場合は、通常はファイルイメージを使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>モーションブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モーションブロックは、モデルデータの一つのモーションを表し、他のブロックのコマンドをアニメーションします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_7_16">
+<div style="margin-left:40px;"><h4><b>再生時刻</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">モーションの再生時刻は、フレームという単位で表されます。<br>再生時刻は、以下のパラメータによってコントロールされます。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> ループ範囲
+<li> 再生速度
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_7_17">
+<div style="margin-left:40px;"><h4><b>アニメーション計算</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">指定したブロックのコマンドを関数データでアニメーションします。<br>アニメーション可能なコマンドは数値を引数とするコマンドのみです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_7_18">
+<div style="margin-left:40px;"><h4><b>関数データブロック</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">モーションの一つの関数データを表します。<br>関数データはキーフレームにより表現されます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>PSP&reg;ライブラリによる制限</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">'PSP' スタイルのバイナリ形式には、以下のような制限があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>モデルブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">モデルの頂点データを整数ベクトルで格納する場合、整数ベクトルを本来の値に変換するためモデルブロックに<a href="../graphics/GMO_Format-Reference-Japanese.htm#VertexOffset">VertexOffset</a>コマンドが出力されます。<a href="../graphics/GMO_Format-Reference-Japanese.htm#VertexOffset">VertexOffset</a>コマンドの頂点要素引数はPSP&reg;ハードウェアの頂点形式で表されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>頂点データブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">頂点データブロックには、PSP&reg;ハードウェアにあわせた形式で頂点データが格納されます。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSP&reg;形式にしたがった格納順序、アラインメント
+<li> 16bit, 8bit整数ベクトル、および16bitカラーが使用可能
+<li> ポイントサイズは出力されない
+<li> テクスチャ座標は１頂点につき最大１個
+<li> 頂点ウェイト値は１頂点につき最大８個
+<li> モーフ頂点数は１頂点につき最大８個
+<li> モーフ頂点形式は基本頂点形式と同じ
+</ul></div>
+<div style="margin-left:50px;"><br>頂点形式引数はPSP&reg;ハードウェアの頂点形式で表され、上位8bitには頂点ストライド（１頂点のバイト数）が格納されます。<br></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-Japanese011.gif">
+</div>
+<div style="margin-left:67px;"><br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>関数データブロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">関数データブロックには、キーフレームの時刻と値を16bit浮動小数点数で格納することができます。このとき関数データのフォーマット引数にSCEGMO_FCURVE_FLOAT16ビットがセットされます。<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>プリミティブコマンド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">非インデックス頂点プリミティブを使用する場合、以下に示すプリミティブコマンドのモード引数にSCEGMO_PRIM_SEQUENTIALビットがセットされます。インデックスは最初のものだけが参照され、その番号から連続する頂点を使って描画を行います。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#DrawArrays">DrawArrays</a>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#DrawParticle">DrawParticle</a>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#DrawBSpline">DrawBSpline</a>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#DrawRectMesh">DrawRectMesh</a>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#DrawRectPatch">DrawRectPatch</a>
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>カラーコマンド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下に示すカラーコマンドはカラー情報を32bitカラーで格納することもできます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#Diffuse">Diffuse</a>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#Specular">Specular</a>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#Emission">Emission</a>
+<li> <a href="../graphics/GMO_Format-Reference-Japanese.htm#Ambient">Ambient</a>
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

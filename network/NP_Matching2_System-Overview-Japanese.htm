@@ -1,0 +1,1924 @@
+<html lang="jp">
+<head>
+<title>NP_Matching2_System-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NPマッチング2システム 概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>このドキュメントについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">このドキュメントでは、オンライン対戦やチャットなどを行うアプリケーションをデザインするための基礎情報として、PlayStation&reg;Networkの提供するマッチングシステム（NPマッチング2システム）について説明します。<br><br>NPマッチング2システムは、サーバー/ワールド/ルームの3階層構造のもとで、以下の機能を提供します。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ルーム検索機能
+<li> ルームの動的な作成機能
+<li> ルーム内でのチャット機能<br>バルガリティフィルタ（不適切な言葉を隠蔽するフィルタ）を適用可能
+<li> ルーム内のユーザ間でのデータの送受信
+<li> ルームの入室制限
+<li> チーム対戦のサポート機能
+<li> NP IDによるユーザ検索
+<li> ルームメンバ間のP2Pコネクション確立機能
+</ul></div>
+<div style="margin-left:50px;"><br>このドキュメントでは上記の機能それぞれの詳細を説明し、また、それらをアプリケーションのデザインに応用するユースケースを示します。また、アプリケーション開発時に必要になる利用申請などの手続きおよびサーバー管理について説明します。<br>具体的なプログラミングについては、「NPマッチング2 概要」「NPマッチング2 リファレンス」ドキュメントを参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1">
+<div style="margin-left:40px;"><h4><b>注意</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">このドキュメントでは説明の便宜上、現時点では提供していない機能についても区別せずに説明している場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2">
+<div style="margin-left:40px;"><h4><b>「PlayStation&reg;Network 概要」</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PlayStation&reg;Networkの全体を概説したドキュメントです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_3">
+<div style="margin-left:40px;"><h4><b>「NPマッチング2 概要」「NPマッチング2 リファレンス」</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーションからNPマッチング2システムを使用するためのライブラリのドキュメントです。具体的なプログラミング方法や実装例はこちらを参照してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>マッチングシステムの構成要素・用語</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">本章では、NPマッチング2システムの各構成要素と用語を説明します。<br>図 1に示すようにNPマッチング2システムでは、マッチングサーバー、ワールド、ルームと呼ばれる構成要素による階層構造をとります。<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese001.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  NPマッチング2システムの構成要素</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ユーザ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2システムを使用しているユーザです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>マッチングサーバー（サーバー）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マッチングサーバー（以降、単にサーバーと呼びます）は、アプリケーションが使用するマッチメイキング機能を提供する、NPマッチング2システムにおける最上位概念です。サーバーは、アプリケーション毎（NPコミュニケーションID毎）に1つ以上割り当てられます。アプリケーション実行時に使用するサーバーを1つ選択し、同時に2つ以上のサーバーを使用することはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ワールド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ワールドは、マッチング空間を表す概念です。NPマッチング2システムでのルーム検索は、ワールドに属するルームに対して実行されます。1つのサーバーに複数のワールドを設置することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>セッション</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームの総称です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>ルーム・ルームメンバ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームは、ユーザが参加し対戦などを行うための空間です。ルームは、ワールドに属します。参加者間コミュニケーションや対戦を行うための機能を持ちます。また、パスワードによる入室制限を行うこともできます。ルームに参加しているユーザをルームメンバと呼びます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>ルームオーナー</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームのオーナーです。ルームメンバのうち1人だけがルームオーナーとなり、ルームオーナーだけが実行可能な機能や役割があります。ルームを作成したユーザが最初のルームオーナーとなり、明示的な権限の移譲あるいはルームオーナーの退室によって別のルームメンバがルームオーナーとなることがあります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>スロット・スロット番号</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームに参加するユーザに割り当てられる領域をスロットと呼びます。ユーザの参加可能な最大数は、ルームが持つスロットの数で決まります。スロットはスロット番号と呼ばれる値で区別されます。スロット番号は、最小値1から昇順に連続した整数値となります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>ルームグループ・グループラベル・グループルーム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームの持つスロットのまとまりをグループと呼びます。グループはルームに参加するユーザを区分するための概念です。グループはアプリケーションが自由に定義できます。グループ毎に設定するグループラベルにより、入室するメンバの振り分けや入室制限を行うことができます。グループはグループIDと呼ばれる値で区別されます。グループ番号は、最小値1から昇順に連続した整数値となります。グループが設定されたルームのことをグループルームと呼びます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_9">
+<h3>
+<a href="#Heading3_2"> 2. </a>9 
+<!-- hp1 --><b>属性</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ユーザ、ルーム、ルームメンバはそれぞれ属性を持ちます。属性にはフラグ型、数値型、バイナリ型があり、あらかじめ内容の定義されたものとアプリケーションが自由に定義し使用可能なものがあります。属性には検索に使用可能なものと、参照・更新のみ可能なものがあります。また、ルームメンバのみが参照・更新可能なものと、ルームに参加していないユーザからも参照可能なものに明確に区別されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>構成例</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">NPマッチング2システムにおけるネットワークアプリケーションでは基本的に、適切なルームに参加し対戦を行うことを想定しています。アプリケーションはその設計に応じて、NPマッチング2システムの各構成要素を適切に構成します。本章では、適切なルームに参加するまでのアプリケーション設計とそれを実現するためのNPマッチング2システム構成の例を示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>構成例1：対戦ルーム検索型</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_4">
+<div style="margin-left:40px;"><h4><b>アプリケーション設計</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">プレーヤーは対戦ルームを作成するか、条件に合うルームを検索して参加します。プレーヤーはサーバー、ワールドの存在を意識しません。<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese002.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  構成例1：対戦ルーム検索型のアプリケーション設計例</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>NPマッチング2システム構成</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サーバー配下にワールドを1つ設置し、そのワールドの属するルームを作成します。このアプリケーション設計ではプレーヤーはルームのみ意識するので、サーバーとワールドの存在はアプリケーションが隠蔽します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3  構成例1：対戦ルーム検索型の構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>構成例2：階層巡回型</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_6">
+<div style="margin-left:40px;"><h4><b>アプリケーション設計</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">次のように、プレーヤーが参加するサーバー、ワールド、セッションを明示的に選択します。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> サーバー一覧からサーバーを選択する。</li>
+<li VALUE=2> 選択したサーバーに属するワールド一覧からワールドを選択する。</li>
+<li VALUE=3> 選択したワールドに属するルームを作成するか、ワールドに属するルームを検索し、参加する。</li>
+</ol></div>
+<div style="margin-left:67px;">比較的大規模なアプリケーションではこのように階層化しマッチング空間を分割したり、図 4のようにサーバー、ワールドに名前を付け世界観を演出します。<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4  構成例2：階層巡回型のアプリケーション設計</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_7">
+<div style="margin-left:40px;"><h4><b>NPマッチング2システム構成</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">大規模アプリケーションではサーバーを複数設置します。サーバー配下にワールドを複数設置します。そして、それぞれのワールドに属するルームを作成します。このアプリケーション設計では、プレーヤーはサーバー、ワールド、ルームからなる階層構造を意識し、明示的に選択します。<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese005.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5  構成例2：階層巡回型の構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>構成要素の詳細</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">本章では、NPマッチング2システムの各構成要素の詳細について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>マッチングサーバー（サーバー）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サーバー1台につき最大2万人まで収容可能です。<br><br>アプリケーションの想定されるユーザ数が上記サーバー収容人数以内の場合は、基本的にアプリケーション毎に1台のサーバーが割り当てられます。想定されるユーザ数が多い場合には、1つのアプリケーションで複数のサーバーを使用することができます。複数のサーバーを使用する場合、各サーバーの設定（サーバー内のワールドの構成）はすべて同じになります。（図 6）<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 6  複数サーバー使用時の各サーバーの設定</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">各サーバーには、アプリケーション毎（NPコミュニケーションID毎）にユニークな2バイトのIDが付与されます。アプリケーションはこのサーバーIDでサーバーを識別します。サーバーIDの値は1から昇順に割り当てられます。<br><br>デフォルトの設定では、各アプリケーション毎（NPコミュニケーションID毎）に1つのサーバーが割り当てられます。2つ以上のサーバーを使用する場合は別途お問い合わせください。<br><br>サーバーの設置数、サーバーIDが一度設定されるとその設定は常に固定され、アプリケーションのマスター提出後に変更することはできません。もし設置サーバー数のキャパシティよりも多くのユーザからアクセスがあった場合、サーバー状態がビジーとなりアクセスできなくなります。また時間の経過とともにユーザ数が少なくなった場合は、状況に応じて不要となった分のサーバーのサーバー状態を使用不可能にします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_8">
+<div style="margin-left:40px;"><h4><b>アプリケーションから取得可能な情報</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーションは、そのアプリケーション用に設置されたサーバーのサーバーID一覧を取得できます。また各サーバーの現在の状態を取得できます。アプリケーションから取得可能なサーバー情報は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>取得内容</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サーバーID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;設置されているサーバーのサーバーID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サーバー状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現在のサーバーの状態&nbsp;&nbsp;<br>&nbsp;&nbsp;・使用可能（AVAILABLE)&nbsp;&nbsp;<br>&nbsp;&nbsp;・使用不可能（UNAVAILABLE）&nbsp;&nbsp;<br>&nbsp;&nbsp;・ビジー（BUSY）&nbsp;&nbsp;<br>&nbsp;&nbsp;・メンテナンス（MAINTENANCE）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ワールド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ワールドは、サーバーに属する概念で、ルームの検索を行う空間の単位です。ルーム検索を行う時はワールドを指定し、そのワールドに属するルームを取得することができます。<br>サーバー1台につき最大64個のワールドを設置できます。各ワールドには、ワールド番号と呼ばれるサーバー内でユニークな番号が付与されます。ワールド番号の値は1から昇順に割り当てられます。また、NPマッチング2ユーティリティを通じてアプリケーションが取得するワールドの識別子は、アプリケーション毎（NPコミュニケーションID毎）にユニークな4バイトのワールドIDと呼ばれるIDです。アプリケーションはこのワールドIDでワールドを識別します。<br>ワールドの設置数、ワールド番号の値はアプリケーションの開発時に申請していただき、申請内容に応じてアプリケーション毎に設定します。申請内容などについては、「開発工程」章を参照してください。<br>ワールドの設置数、ワールド番号を一度設定するとその設定は常に固定され、アプリケーションのマスター提出後に変更することはできません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_9">
+<div style="margin-left:40px;"><h4><b>アプリケーションから取得可能な情報</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーションは、そのアプリケーション用に設置されたワールドのワールドID一覧を取得できます。また各ワールドに紐づくいくつかの情報を取得できます。アプリケーションから取得可能なワールド情報は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>取得内容</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ワールドID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;設置されているワールドのワールドID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ルーム数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ワールドに属するルームの現在の数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ルーム参加者数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ワールドに属するルームの現在のルームメンバの合計数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;エンタイトルメントID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ワールド使用に必要なエンタイトルメントID&nbsp;&nbsp;<br>&nbsp;&nbsp;（※現時点では使用しません）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>ルーム・ルームメンバ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームは、ユーザが参加してコミュニケーションしたり対戦を行うための空間です。<br>ルームは、ワールドに属し、ワールド毎に最大5000個まで作成することができます。ルームは、サーバー、ワールドのように静的に設置されるのではなく、アプリケーションが任意のタイミングで動的に作成します。作成したルームには、ルーム番号と呼ばれる番号が自動的に付与されます。また、NPマッチング2ユーティリティを通じてアプリケーションが取得するルームの識別子は、アプリケーション毎（NPコミュニケーションID毎）にユニークな8バイトのルームIDと呼ばれるIDです。アプリケーションはこのルームIDでルームを識別します。<br>各ルームには最大64人のユーザが参加することができます。ルームの最大参加者数は、ルーム作成時に自由に設定することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_10">
+<div style="margin-left:40px;"><h4><b>アプリケーションから取得可能な情報</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーションは、作成されたルームを検索しルーム一覧を取得できます。検索条件を指定し、取得するルーム一覧を絞ることもできます。またアプリケーションは、各ルームに紐づく様々な情報を取得できます。詳細は、「構成要素の属性・基本情報」「構成要素の取得と検索」章を参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_11">
+<div style="margin-left:40px;"><h4><b>ルームへの参加とルームメンバID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルームは、ルーム作成時に設定した最大参加者数の数だけスロットを持ちます。スロットにはスロット番号が付与されていて、値の範囲は1～最大参加者数です。ルームに参加すると、ルームメンバそれぞれに現在空いているいずれかのスロットが割り当てられます。<br>ルームメンバにはルームメンバIDと呼ばれるルーム内でユニークなIDが付与されます。アプリケーションはこのルームメンバIDでルームメンバを識別します。ルームメンバIDはルームに参加する毎に異なる値が割り当てられます。したがって、一度退室してから再度参加すると、同じユーザであっても異なるルームメンバIDとなります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_12">
+<div style="margin-left:40px;"><h4><b>ルームオーナー</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルームには必ず1人、ルームオーナーという役割を持つルームメンバが存在します。ルーム作成時はルームを作成したユーザがルームオーナーとなります。<br>ルームオーナーは次の操作を実行できます。<br></div>
+</ol>
+<div style="margin-left:70px;"><ul>
+<li> ルーム属性値の設定、変更（一部のルーム属性はルームオーナー以外も設定できます）
+<li> ルームメンバのキックアウト
+<li> ルームオーナー権限の移譲
+</ul></div>
+<div style="margin-left:67px;">また、ルームの状態を正しく維持するために、ルームオーナーとなったクライアントとサーバー間で、データの送受信が発生することがあります。<br>ルームオーナー権限はアプリケーションから明示的に他のルームメンバに移譲することができます。また、ルーム作成時にルーム設定としてルームオーナー自動移譲を有効にしておくと、オーナーがルームから退室した際に他のルームメンバに自動的にルームオーナー権限が移譲されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_13">
+<div style="margin-left:40px;"><h4><b>ルームの消滅</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルームオーナーが退室するとルームは自動的に消滅し、ルームに参加中のルームメンバは強制的に退室させられます。ただし、ルーム設定でルームオーナー自動移譲を有効にしている場合は、退室と同時に別のルームメンバの一人がルームオーナーになり、ルームは消滅することなく存続します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_14">
+<div style="margin-left:40px;"><h4><b>ルームメンバの取得と入退室通知</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーションは、ルームに参加中のルームメンバ一覧を取得できます。<br>ルームへの参加と退室は任意のタイミングで行うことができます。ルームに新たなユーザが参加した時や退室した時には、他のルームメンバに入退室情報が通知されます。ルーム入退室通知時には、対象ユーザのルームメンバIDや、NP ID、オンラインネーム、アバターなど、ユーザを識別する情報も併せて通知されます。ルームの入退室通知は常に必ず行われます。<br>アプリケーション上でルームメンバの管理を行う場合、ルームメンバ一覧を保持し、ルーム入退室通知を受信する度に保持した一覧を更新します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_15">
+<div style="margin-left:40px;"><h4><b>ルームチャットメッセージ・ルームメッセージ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルームサーバーを介してルームメンバ間でメッセージを送受信することができます。特定のルームメンバを宛先とするユニキャスト、複数のルームメンバを宛先とするマルチキャスト、参加中のルームメンバ全員を宛先とするブロードキャストを選択できます。またマルチキャストには、複数の宛先を明示的に指定する以外に、チームIDを指定し、そのチームIDが設定されたルームメンバに送信されるものがあります。チームIDに関しては「構成要素の属性・基本情報」「ユースケース」章を参照してください。<br>NPマッチング2システムでは、ルームメンバ間でテキストチャットを行うためにテキストデータを送信するものをルームチャットメッセージと呼び、任意のバイナリデータを送信するものをルームメッセージと呼びます。<br>ルームチャットメッセージでは、ルームサーバー上でバルガリティフィルタが適用されます。<br>ルームメッセージの送信には、サーバー側でメッセージの流量制限が適用されます。各クライアントが送信するルームメッセージは、256byte/秒以下にしてください。これを超える頻度でルームメッセージを一定時間送信し続けると、リクエストオーバーフローエラーが返されルームメッセージを送信できなくなり、以降30秒間ビジー状態が継続します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_16">
+<div style="margin-left:40px;"><h4><b>ルームパスワード</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルームにはルームパスワードと呼ばれるパスワードを設定することができます。また、ルームに設定したルームパスワードを有効にするか無効にするかを、スロット毎に設定できます。後述のグループルームの場合は、スロット毎ではなくグループ毎に設定できます。ルームパスワードが有効になっているスロット（グループ）には、ルーム入室時にルームパスワードと一致するパスワードを持っているユーザと、以降で説明する入室許可ユーザに設定されているユーザだけが参加できます。<br>この機能を利用することで、特定ユーザのためにルームスロットの一部やグループを予約することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_17">
+<div style="margin-left:40px;"><h4><b>ルームグループ・グループラベル・グループルーム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">NPマッチング2システムのルームにはグループという概念があります。ルーム作成時に、ルームの連続した複数のスロットをグループに分けることができます。ルームグループにはグループIDと呼ばれるIDが付与され、グループIDの値はスロット番号1を含むルームグループのグループIDを1とし、スロット番号が大きくなるに従いグループIDの値が1ずつ加算され、昇順に付与されます（図 7）。ルームグループが設定されたルームのことをグループルームと呼びます。ルーム作成時にルームグループを設定すると、後からルームグループ構成を変更することはできません。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 7  ルームグループとグループID</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">各ルームグループにはグループラベルを設定することができます。グループラベルを設定すると、ルーム参加時にラベルを持っているユーザは、グループラベルが一致するルームグループに優先的に参加します。またルーム参加時に一致するグループラベルを持っていないユーザは、そのルームグループに参加できなくなります。さらに、グループラベルと一致するラベル持つユーザがそのグループに参加した時、グループラベルを別のラベルに再設定することができます。<br>ルームグループの設定とグループラベルの設定により、ルームグループに特定のユーザしか参加できないように入室制限を設けることが可能です。この機能を利用して、特定のユーザのためにルームグループを予約しルームへ招待したり、クランやチーム対戦を行う際に特定のクラン・チームメンバのみ参加可能にしたりすることができます。ルームグループとグループラベルの利用方法については「ユースケース」章を参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_18">
+<div style="margin-left:40px;"><h4><b>入室許可ユーザの設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルームパスワードを設定したルームを作成した場合、ルームパスワードを持っていなくてもルームへの参加を許可するユーザを指定しておくことができます。ルーム作成時に、入室を許可するユーザを指定します。<br>この機能を利用することで、特定ユーザのためにルームスロットの一部を予約し、ルーム作成者のフレンドのみ無条件に参加可能にすることなどができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_19">
+<div style="margin-left:40px;"><h4><b>入室拒否ユーザの設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルームへの参加を拒否するユーザを指定することができます。ルーム作成時に入室拒否ユーザリストを指定すると、指定されたユーザはそのルームへ参加できなくなります。<br>この機能を利用することで、ルーム作成者がブロックリストに設定しているユーザを、ルームに参加させないようにすることなどができます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>構成要素の属性・基本情報</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">NPマッチング2システムの構成要素（ユーザ・ルーム・ルームメンバ）はそれぞれ、属性と呼ばれるいくつかのデータ領域を持ちます。属性はアプリケーションから値の取得・設定を行うことができます。アプリケーションは属性を利用して、アプリケーション間で情報を同期したり、適切なルームの検索を行ったりします。<br><br>属性には、データの型、あらかじめデータ内容が定義されているかアプリケーションが自由に定義して利用するか、アプリケーションから値の更新が可能か自動で更新されるか、検索条件として利用できるか、など様々な特徴があります。<br><br>属性には、フラグ型、整数型、バイナリ型の3種類のデータ型があります。フラグ型の属性には、ルームが満員であるかどうかなど、フラグによって表現される情報が定義されています。整数型、バイナリ型の属性には、アプリケーションが自由に定義して汎用的に利用可能な整数値や可変長データによって表現される情報が定義されています。<br><br>各属性には属性IDと呼ばれるIDが割り当てられています。各属性IDを表す定数が定義されており、アプリケーションはその定数を使用して属性を指定し、属性値を取得したり設定したりします。また、フラグ属性の各フラグ値を表す定数も定義されており、アプリケーションはその定数を使用してフラグ属性値を扱います。<br><br>属性の他に、各構成要素には「基本情報」が付随し、取得・設定することができます。たとえば、ルームの基本情報には、ルームの最大参加人数や現在の参加人数などが含まれます。基本情報は各構成要素を表す構造体のメンバとして定義されています。<br><br>属性IDとフラグ属性値の定数、および各構成要素を表す構造体については、「NPマッチング2 リファレンス」ドキュメントを参照してください。<br><br>以下では、構成要素毎にそれぞれの属性と基本情報について説明します。<br>表中の「設定」の欄は、アプリケーションから属性値や基本情報の値を設定・変更できるかどうかを示しています。「外部参照」は、ルームに参加していない外部のユーザから属性値や基本情報の値を取得可能であるかを示しています。「検索」は、検索条件として使用可能であるかを示しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>ルーム属性・基本情報</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームの属性には、ルームメンバ間のデータ同期のためのルーム内部参照専用属性、ルームに参加していない外部ユーザに参照させるためのルーム外部参照専用属性、ルーム内外共通属性が別途定義されています。<br><br>ルーム外部のユーザに参照させる必要のないデータにはルーム内部参照専用属性を利用するなど、適切に使用することでNPマッチング2システムは高いパフォーマンスを発揮できます。アプリケーションは用途に応じて適切な属性を利用するようにしてください。<br><br>ルーム内外共通属性は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>属性の型</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>属性名</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>説明</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>設定</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>外部&nbsp;<br>&nbsp;参照</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>検索</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 5  valign="top">&nbsp;フラグ型&nbsp;</td>
+<td valign="top">&nbsp;オーナー自動移譲フラグ&nbsp;</td>
+<td valign="top">&nbsp;ルームオーナーが退室した際に、&nbsp;<br>&nbsp;自動的に他のルームメンバに&nbsp;<br>&nbsp;ルームオーナー権限を移譲する&nbsp;<br>&nbsp;かどうか&nbsp;<br>&nbsp;(1:&nbsp;自動移譲,&nbsp;0:&nbsp;手動移譲)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;<br>&nbsp;※1&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;CLOSEDフラグ&nbsp;</td>
+<td valign="top">&nbsp;ルーム参加受付状態。&nbsp;<br>&nbsp;ルームをCLOSEDにすると、&nbsp;<br>&nbsp;ユーザはルームに参加できなくなる。&nbsp;<br>&nbsp;(1:&nbsp;CLOSED,&nbsp;0:&nbsp;OPEN)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;FULLフラグ&nbsp;</td>
+<td valign="top">&nbsp;ルームが満員かどうか。&nbsp;<br>&nbsp;ルームが満員になると自動的に&nbsp;<br>&nbsp;FULLフラグが設定され、ユーザ&nbsp;<br>&nbsp;はルームに参加できなくなる。&nbsp;<br>&nbsp;(1:&nbsp;FULL,&nbsp;0:&nbsp;Not&nbsp;FULL)&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;<br>&nbsp;※2&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;検索対象外フラグ&nbsp;</td>
+<td valign="top">&nbsp;ルームがルーム検索の対象で&nbsp;<br>&nbsp;あるか。&nbsp;<br>&nbsp;検索対象外の場合、ルーム検索を&nbsp;<br>&nbsp;行い検索条件が一致していても、&nbsp;<br>&nbsp;そのルームはマッチしなくなる。&nbsp;<br>&nbsp;(1:&nbsp;検索対象外,&nbsp;0:&nbsp;検索対象)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;NATタイプ入室制限フラグ&nbsp;</td>
+<td valign="top">&nbsp;ユーザのNATタイプにより&nbsp;<br>&nbsp;入室を制限するかどうか。&nbsp;<br>&nbsp;入室を制限する場合、ルーム&nbsp;<br>&nbsp;メンバとP2Pコネクションを&nbsp;<br>&nbsp;確立できないNATタイプの&nbsp;<br>&nbsp;ユーザはルームに参加できなくなる。&nbsp;<br>&nbsp;(1:&nbsp;制限する,&nbsp;0:&nbsp;制限しない)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ルームの基本情報は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>情報名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>外部</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>参照</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>検索</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サーバーID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームが属するサーバーのID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ワールドID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームが属するワールドのID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ルームID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームのID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;総スロット数&nbsp;&nbsp;<br>&nbsp;&nbsp;（最大参加者数）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームの最大参加者数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;現在の参加者数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームの現在の参加者数&nbsp;&nbsp;<br>&nbsp;&nbsp;（ルームメンバ数）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;パスワードスロットマスク&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームパスワードが設定されている&nbsp;&nbsp;<br>&nbsp;&nbsp;スロットを表す情報&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ルームオーナー情報&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームオーナーを表す情報。NP ID、&nbsp;&nbsp;<br>&nbsp;&nbsp;オンラインネーム、アバターURLが&nbsp;&nbsp;<br>&nbsp;&nbsp;含まれる。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバリスト&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームに参加中のルームメンバのリスト&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ルームグループ情報&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームに設定されたルームグループの&nbsp;&nbsp;<br>&nbsp;&nbsp;構成を表す情報&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">※1: ルーム作成時のみ設定可能です。ルーム作成後に変更することはできません。<br>※2: 状況に応じて自動的に値が設定、更新されます。<br>※3: ルームメンバ情報を取得するリクエストをアプリケーションが実行すれば、ルーム外部からルームメンバリストを取得できます。<br><br>ルーム内部参照専用属性は次のとおりです。アプリケーションが自由に定義し、ルームメンバ間でデータの同期を行いたい場合はこれらの属性を利用します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>属性の型</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>属性名</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>説明</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>設定</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>外部&nbsp;<br>&nbsp;参照</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>検索</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;バイナリ型&nbsp;</td>
+<td valign="top">&nbsp;ルーム内部&nbsp;<br>&nbsp;バイナリ属性1&nbsp;<br>&nbsp;※4&nbsp;</td>
+<td valign="top">&nbsp;256byteのデータ領域。アプリケーション&nbsp;<br>&nbsp;が自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム内部&nbsp;<br>&nbsp;バイナリ属性2&nbsp;<br>&nbsp;※4&nbsp;</td>
+<td valign="top">&nbsp;256byteのデータ領域。アプリケーション&nbsp;<br>&nbsp;が自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">※4: 属性値の設定・変更時に、他のルームメンバへ変更発生の旨と新しい属性値を通知することができます。<br><br>ルーム外部参照専用属性は次のとおりです。アプリケーションが自由に定義し、ルーム外部のユーザと情報を同期したい場合はこれらの属性を利用します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>属性の型</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>属性名</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>説明</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>設定</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>外部&nbsp;<br>&nbsp;参照</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>検索</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 8  valign="top">&nbsp;整数型&nbsp;</td>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性1&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性2&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性3&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性4&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性5&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性6&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性7&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索数値属性8&nbsp;</td>
+<td valign="top">&nbsp;32bitの整数値。ルーム検索の検索&nbsp;<br>&nbsp;条件のためにアプリケーションが&nbsp;<br>&nbsp;自由に定義して利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  valign="top">&nbsp;バイナリ型&nbsp;</td>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;バイナリ属性1&nbsp;</td>
+<td valign="top">&nbsp;256byteのデータ領域。&nbsp;<br>&nbsp;アプリケーションが自由に定義して&nbsp;<br>&nbsp;利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;バイナリ属性2&nbsp;</td>
+<td valign="top">&nbsp;256byteのデータ領域。&nbsp;<br>&nbsp;アプリケーションが自由に定義して&nbsp;<br>&nbsp;利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;ルーム外部&nbsp;<br>&nbsp;検索バイナリ属性1&nbsp;</td>
+<td valign="top">&nbsp;64byteのデータ領域。&nbsp;<br>&nbsp;ルーム検索の検索条件のために&nbsp;<br>&nbsp;アプリケーションが自由に定義して&nbsp;<br>&nbsp;利用する。&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>ユーザ属性・基本情報</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームに参加していないユーザも含む、NPマッチング2システムにアクセスしているすべてのユーザが持つ属性をユーザ属性と呼びます。ユーザ属性は、ルームへの参加状態と無関係に任意のタイミングで設定・取得が可能です。ユーザ属性は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>属性の型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>属性名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>外部</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>参照</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>検索</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;バイナリ型&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザバイナリ属性1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;128byteのデータ領域。&nbsp;&nbsp;<br>&nbsp;&nbsp;アプリケーションが自由に定義して&nbsp;&nbsp;<br>&nbsp;&nbsp;利用する。&nbsp;&nbsp;<br>&nbsp;&nbsp;※現時点では提供されていません。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ユーザが持つ基本情報は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>情報名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>外部</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>参照</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>検索</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NP ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザのNP ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;オンラインネーム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザのオンラインネーム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;アバターURL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザのアバターURL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;参加中セッション情報&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザが現在参加中のセッションを表す情報。&nbsp;&nbsp;<br>&nbsp;&nbsp;セッションIDと参加した日時が含まれる。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">※5: NPマッチング2ユーティリティのコンテキスト作成時に使用するかどうかを設定できます。使用する場合は、自動的に設定されます。<br>※6: 参加状況に応じて自動的に値が設定、更新されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>ルームメンバ属性・基本情報</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームメンバそれぞれが持つ属性と基本情報です。ルームに参加している間だけ有効です。ルームメンバ属性には、ルームメンバ内外共通属性の他に、ルーム内部からのみ参照可能なルームメンバ内部参照専用属性があります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">ルームメンバ内外共通属性は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>属性の型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>属性名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>外部</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>参照</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>検索</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;フラグ型&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームオーナー&nbsp;&nbsp;<br>&nbsp;&nbsp;フラグ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームオーナーであるかどうか&nbsp;&nbsp;<br>&nbsp;&nbsp;(1: ルームオーナー 0: 通常のルームメンバ)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">※7: ルーム作成時やルームオーナー移譲時に自動的に設定・変更されます。<br><br>ルームメンバの基本情報は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>属性名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>外部</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>参照</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>検索</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NP ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバのNP ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;オンラインネーム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバのオンラインネーム&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;アバターURL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバのアバターURL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;参加日時&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームに参加した日時&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;チームID&nbsp;&nbsp;<br>&nbsp;&nbsp;※10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チーム対戦時にアプリケーションが定義した&nbsp;&nbsp;<br>&nbsp;&nbsp;チームIDを意味する任意の値を格納するための領域&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NATタイプ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;クライアントのNATタイプ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;※8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">※8: ルーム参加時に自動的に設定されます。<br>※9: NPマッチング2ユーティリティのコンテキスト作成時に使用するかどうかを設定できます。<br>※10: チーム対戦など、ルーム内でルームメンバのチーム分けを行うアプリケーションをサポートする属性です。詳細は「ユースケース」章を参照してください。<br><br>ルームメンバ内部参照専用属性は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>属性の型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>属性名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>外部</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>参照</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>検索</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;バイナリ型&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバ内部&nbsp;&nbsp;<br>&nbsp;&nbsp;バイナリ属性1&nbsp;&nbsp;<br>&nbsp;&nbsp;※11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルームメンバそれぞれが持つ64byteの&nbsp;&nbsp;<br>&nbsp;&nbsp;データ領域。アプリケーションが自由&nbsp;&nbsp;<br>&nbsp;&nbsp;に定義して利用する。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">※11: 属性値の設定・変更時に、他のルームメンバへ変更発生の旨と新しい属性値を通知することができます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>構成要素の取得と検索</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">NPマッチング2システムの各構成要素の一覧を取得したり、検索したりすることができます。本章では、各構成要素の取得あるいは検索を行う機能について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>マッチングサーバー（サーバー）IDの取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サーバーIDリスト取得APIを実行することで、アプリケーションに割り当てられている全サーバーのID一覧を一括取得することができます。<br><br>一括取得できるサーバーID一覧には、その時点においてサーバー障害により使用できないサーバーも含まれます。サーバー状態を知るには別途、サーバー情報取得APIを実行する必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>ワールドの取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ワールドリスト取得APIを実行することで、サーバーに属する全ワールドの一覧を一括取得することができます。取得時にはサーバーIDを指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>ルームの取得・検索</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルーム検索APIを実行することで、ワールドに属するルームの一覧を取得することができます。また検索条件を指定し、検索条件にマッチするルームだけを取得することもできます。検索時にはワールドIDを指定します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_20">
+<div style="margin-left:40px;"><h4><b>ルームリストの並び順</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">取得するルームリストは、ルームが作成された日時が古い順にソートされています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_21">
+<div style="margin-left:40px;"><h4><b>取得範囲指定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">現在存在するルームの中で最も古いルームのインデックスを1とし、取得したいルームリスト中の開始位置のインデックスと、そこから最大いくつのルームを取得するかを指定します。一度に取得できるルームの数は最大20個です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_22">
+<div style="margin-left:40px;"><h4><b>検索条件に指定可能な属性</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ルーム検索を行う際に検索条件の比較対象として指定可能な属性は、「構成要素の属性・基本情報」章「ルームメンバ属性・基本情報」節の表中の検索列を参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_23">
+<div style="margin-left:40px;"><h4><b>検索条件の複数指定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">検索条件に指定可能となっている属性は、すべて同時に指定することができます。検索条件を同時に指定するとAND検索となり、すべての条件を満たすルームのみを取得できます。いずれかの検索条件を満たすルームを取得するOR検索はサポートしていません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_24">
+<div style="margin-left:40px;"><h4><b>比較演算子</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">検索時は検索条件対象属性値と任意の値を比較します。NPマッチング2システムで指定できる比較演算子と適用可能な属性の型は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>比較演算子</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>フラグ型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>整数型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>バイナリ型</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;等しい&nbsp;&nbsp;<br>&nbsp;&nbsp;（ == ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;等しくない&nbsp;&nbsp;<br>&nbsp;&nbsp;（ != ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;より大きい&nbsp;&nbsp;<br>&nbsp;&nbsp;（ &gt; ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;より大きいか等しい&nbsp;&nbsp;<br>&nbsp;&nbsp;（ &gt;= ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;より小さい&nbsp;&nbsp;<br>&nbsp;&nbsp;（ &lt; ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;より小さいか等しい&nbsp;&nbsp;<br>&nbsp;&nbsp;（ &lt;= ）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>ユーザ検索</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2システムでは、NP IDをキーとしてユーザ検索を行うことができます。指定したユーザを検索し、現在そのユーザがNPマッチング2システムを使用中である場合、そのユーザのユーザ属性と現在そのユーザが参加しているセッションの情報を取得できます。セッションの情報には、ワールドID・ルームIDとそのセッションに参加した日時が含まれます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>ルームメンバの取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームメンバリスト取得APIを実行することで、ルームメンバの一覧を一括取得することができます。<br>ルームメンバリストの取得は、現在参加していないルームであってもルーム外部から取得することができます。<br><br>取得するルームメンバリストの並び順を次のうちから選択できます。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> 参加日時順（参加日時の古い方を先頭にソートされます）
+<li> スロット番号順（スロット番号の小さい方を先頭にソートされます）
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>P2P通信</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">NPマッチング2ユーティリティは、ルーム参加時にルームメンバ間で自動的にP2Pコネクションを確立し、P2P通信を行う機能を提供します。また、クライアントのNATタイプとルームメンバのNATタイプを照合し、適切なP2Pコネクションを確立することができないルームをルーム検索結果から除外したり、不適切なNATタイプのユーザをルームに参加できないようにしたりする機能も提供します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>P2P通信の処理手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティにおけるルームメンバ間でのP2P通信の処理手順は、以下の通りです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_1"><h4>
+(1)&nbsp;<b>シグナリングオプションパラメータの設定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ルームメンバ間でP2P通信を行う場合は、ルーム作成時にシグナリングオプションパラメータを設定します。シグナリングオプションパラメータは、P2Pコネクショントポロジを指定するもので、フルメッシュもしくはスターが選択できます。スターを選択した場合は、ハブとなるホストも指定します（デフォルトはルームオーナー）。<br>シグナリングオプションパラメータは、ルーム作成時以外にもルームオーナーが任意のタイミングで変更できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_2"><h4>
+(2)&nbsp;<b>ESTABLISHEDイベント待ち受け</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ルームメンバの入退室に応じて、シグナリングパラメータに基づくP2Pコネクションの確立が自動的に行われます。P2Pコネクションが確立すると、シグナリングコールバック関数にSCE_NP_MATCHING2_SIGNALING_EVENT_Establishedイベントが相手のメンバIDとともに通知されます。<br>P2Pコネクションが確立できなかった場合は、SCE_NP_MATCHING2_SIGNALING_EVENT_Deadイベントが通知されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_3"><h4>
+(3)&nbsp;<b>IPアドレスとポート番号の取得</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">P2Pコネクション確立後、相手のメンバIDとともに<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>()を呼び出し、IPアドレスとポート番号を得ます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_4"><h4>
+(4)&nbsp;<b>BSDソケットAPIを使用したデータの送受信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">P2P通信にはUDPP2PもしくはTCP over UDPP2Pのいずれかのプロトコルを使用します。相手のアドレスとポート番号は前述のAPIにて取得したものを使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>シグナリングオプションパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">シグナリングオプションパラメータは、P2Pコネクショントポロジを指定するものです。NPマッチング2ユーティリティで指定可能なP2Pコネクショントポロジは次のとおりです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_2_1"><h4>
+(1)&nbsp;<b>フルメッシュ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">各ルームメンバが他のすべてのルームメンバとP2Pコネクションを確立します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_2_2"><h4>
+(2)&nbsp;<b>スター</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">トポロジとしてスターを指定する場合には、シグナリングオプションパラメータとしてハブとなるルームメンバも併せて指定します。ハブに指定されたルームメンバは、他のすべてのルームメンバとP2Pコネクションを確立します。ハブに指定されていないルームメンバは、ハブに指定されたルームメンバとのみP2Pコネクションを確立します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 8  P2Pコネクショントポロジ</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>P2Pコネクション確立開始タイミング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティによりルームメンバ間でP2Pコネクションの確立が開始されるタイミングは次のとおりです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_1"><h4>
+(1)&nbsp;<b>ルーム参加完了直後</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">シグナリングオプションパラメータを設定してルーム作成を行った場合には、ルーム作成完了直後に自動的にP2Pコネクション確立処理が開始され、新しいルームメンバが参加してくる度に適切なP2Pコネクションを確立します。<br>ルーム作成時にシグナリングオプションパラメータを設定しなかった場合には、次の(2)の処理が行われるまでP2Pコネクションの確立は開始されません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_2"><h4>
+(2)&nbsp;<b>シグナリングオプションパラメータの設定・変更時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">シグナリングオプションパラメータは、ルーム作成時以外にも任意のタイミングで設定・変更することができます。ルーム作成時にシグナリングオプションパラメータを設定していない場合、シグナリングオプションパラメータが設定された時点でP2Pコネクション確立処理が開始されます。また、ルーム作成時にシグナリングオプションパラメータを設定し、すでに一度P2Pコネクションの確立処理が実行されている場合、再度シグナリングオプションパラメータを設定し直すと、設定されたシグナリングオプションパラメータに合わせて適切なP2Pコネクションを構築し直します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_4">
+<h3>
+<a href="#Heading3_7"> 7. </a>4 
+<!-- hp1 --><b>P2Pコネクション破棄タイミング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">確立済みのP2Pコネクションが破棄されるタイミングは次のとおりです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4_1"><h4>
+(1)&nbsp;<b>ネットワークエラー、その他のエラー発生時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ネットワークエラーやその他のエラーが発生し、P2Pコネクションの維持ができなくなったルームメンバとのP2Pコネクションが破棄されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4_2"><h4>
+(2)&nbsp;<b>ルームメンバのルーム退室時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">退室したルームメンバとのP2Pコネクションが破棄されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4_3"><h4>
+(3)&nbsp;<b>自分自身のルーム退室時</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">P2Pコネクション確立済みのすべてのルームメンバとのP2Pコネクションが破棄されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_5">
+<h3>
+<a href="#Heading3_7"> 7. </a>5 
+<!-- hp1 --><b>NATタイプによる検索フィルタ・入室制限</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティでは、クライアントのNATタイプとルームメンバのNATタイプを照合し、シグナリングオプションパラメータで指定したトポロジで適切にP2Pコネクションを確立することができるルームであるかどうかを判定します。その判定結果により、ルーム検索結果から不適切なルームをフィルタリングしたり、適切なP2Pコネクションを確立することができないNATタイプのユーザのルーム参加を拒否したりできます。<br>ルーム検索結果から不適切なルームをフィルタリングするには、ルーム検索時にオプションとして指定します。適切なP2Pコネクションを確立できないユーザの入室を拒否するには、ルーム作成時にルーム属性として指定します。詳細は、「NPマッチング2 リファレンス」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_6">
+<h3>
+<a href="#Heading3_7"> 7. </a>6 
+<!-- hp1 --><b>コネクション情報</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">確立されたコネクションに関する情報は<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetConnectionInfo">sceNpMatching2SignalingGetConnectionInfo</a>()で取得することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_1"><h4>
+(1)&nbsp;<b>ラウンドトリップタイム（SCE_NP_MATCHING2_SIGNALING_CONN_INFO_Rtt）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コネクションのピアとUDPP2Pのパケットを往復させたときの時間（マイクロ秒）です。10秒おきに行われるキープアライブパケットの交換の際に測定を行います。最近6回分の測定時間の平均を返します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_2"><h4>
+(2)&nbsp;<b>予測帯域幅（SCE_NP_MATCHING2_SIGNALING_CONN_INFO_Bandwidth）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">自ホストからピアまでの経路上の予測される最小帯域幅です（ビット／秒）。Packet Pairと呼ばれる手法を用いて、連続送信した2パケットの到着時間差から算出します。コネクション確立直後に、連続して10回の測定を行い、その後は1分間隔で測定します。最近10回分の中央値（メディアン）を返します。<br>Packet Pairによる予測は、他のトラフィックの影響を受けて実際の帯域幅よりも小さくなることがあります。また取得した帯域幅を常に利用できるというわけではないので、あくまで回線品質の目安として利用してください。<br>なおADSL回線などの帯域が非対称な回線を経由する場合には、自ホストからピアまでとピアから自ホストまでの値が大きく異なることに注意してください。たとえば光ファイバ回線に接続している端末AとADSL回線に接続している端末B間では、B端末にて取得できる値（B&rarr;A）がADSLの上り帯域に律速されるためA端末にて取得できる値（A&rarr;B）より小さな値になります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_3"><h4>
+(3)&nbsp;<b>ピアのNP ID（SCE_NP_MATCHING2_SIGNALING_CONN_INFO_PeerNpId）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コネクションのピア（相手）のNP IDです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_4"><h4>
+(4)&nbsp;<b>ピアのIPアドレスとポート番号（SCE_NP_MATCHING2_SIGNALING_CONN_INFO_PeerAddress）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コネクションのピア（相手）のIPアドレスとポート番号です。<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>()で取得できる<i>peer_addr</i>および<i>peer_port</i>と同じ値が取得できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_5"><h4>
+(5)&nbsp;<b>ピアから見た自分のIPアドレスとポート番号（SCE_NP_MATCHING2_SIGNALING_CONN_INFO_MappedAddress）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コネクションのピア（相手）からみた自分のIPアドレスとポート番号です。端末Aと端末Bのコネクションを考える場合、端末Aにおける「ピアから見た自分のIPアドレスとポート番号」は、端末Bでの「ピアのIPアドレスとポート番号」と同じ値となります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_6"><h4>
+(6)&nbsp;<b>パケットロス率（SCE_NP_MATCHING2_SIGNALING_CONN_INFO_PacketLoss）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コネクションのピアとUDPP2Pのパケットを往復させたときのパケットロス率（パーセント）です。10秒おきに行われるキープアライブパケットの交換の際に測定を行います。最近6回分の測定結果から返します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_7">
+<h3>
+<a href="#Heading3_7"> 7. </a>7 
+<!-- hp1 --><b>ネットワーク情報</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティでは、<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetLocalNetInfo">sceNpMatching2SignalingGetLocalNetInfo</a>()、<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetPeerNetInfo">sceNpMatching2SignalingGetPeerNetInfo</a>()を使って自分自身や通信相手のネットワーク情報を取得することができます。ネットワーク情報は<a href="../network/NP_Matching2-Reference-Japanese.htm#SceNpMatching2SignalingNetInfo">SceNpMatching2SignalingNetInfo</a>構造体として取得できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_1"><h4>
+(1)&nbsp;<b>ローカルIPアドレス</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">インタフェースに割り当てられたIPアドレスです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_2"><h4>
+(2)&nbsp;<b>外部IPアドレス</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">インターネットに対して接続する際に使用するIPアドレスです。NATルータを介して接続している場合は、NATルータがインターネットに接続しているアドレスが外部IPアドレスとなります。直接インターネットに接続している場合は、ローカルIPアドレスと外部IPアドレスは同一となります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_3"><h4>
+(3)&nbsp;<b>NAT特性タイプ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">NATルータの様々な特性を、NPシグナリングユーティリティのNATトラバーサル機能でサポートできるレベルに応じて分類したものです。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>タイプ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;不明&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NAT特性タイプの判別中、もしくは判別に失敗したことを示す&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;タイプ1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ローカルIPアドレスと外部IPアドレスが同一である&nbsp;&nbsp;<br>&nbsp;&nbsp;（直接インターネットに接続している場合が相当）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;タイプ2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ローカルIPアドレスと外部IPアドレスが異なり、且つ以下の条件に当てはまるもの&nbsp;&nbsp;<br>&nbsp;&nbsp;- 外部ポート割り当てが通信相手に依存しない&nbsp;&nbsp;<br>&nbsp;&nbsp;- NPポート状態がオープンである&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;タイプ3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;タイプ1, 2に当てはまらないもの&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_4"><h4>
+(4)&nbsp;<b>UPnP状態</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UPnPによるポートマッピングの状態を示します。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>UPnP状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;不明&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;現在ポートマッピング実行中&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;無効&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ルータのUPnP設定が無効になっているか、UPnPに対応していないか、&nbsp;&nbsp;<br>&nbsp;&nbsp;あるいはポートマッピングに失敗した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;有効&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ポートマッピングに成功した&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_5"><h4>
+(5)&nbsp;<b>NPポート状態</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">自分自身のUDPポート3658（UPnPが有効の場合はUPnPポートマッピングにて設定したポート）がインターネットからアクセス可能かを示します。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>NPポート状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;クローズド&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;インターネットからアクセスできない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;オープン&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;インターネットからアクセスできる&nbsp;&nbsp;<br>&nbsp;&nbsp;NATルータを介して接続している場合でも、UPnPによるポートマッピング&nbsp;&nbsp;<br>&nbsp;&nbsp;により、インターネットからアクセス可能となります。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_6"><h4>
+(6)&nbsp;<b>NPポート番号</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">NPポート状態の対象となるUDPポート番号を示します。デフォルトは3658ですが、UPnPが有効の場合はUPnPポートマッピングにて設定したポート番号が返されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>UDPP2Pプロトコル</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETでは、P2P通信のためのプロトコルとしてUDPP2Pプロトコルが提供されています。UDPP2Pプロトコルは、仮想ポート番号を導入することによりUDPの1つのポート番号を複数のソケットで共有することが可能です。<br>疎通性の向上と均一化を図るために、NPマッチング2ユーティリティのP2P通信機能は、使用するローカルポート番号をあらかじめ決められた1つのポート番号に限定しています。したがって、UDPP2Pプロトコルを使用して、1つのポート番号を複数のソケットで共有し、P2P通信を行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>ソケットタイプ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPP2Pプロトコルを使用する場合は、ソケット生成時にソケットタイプとしてSCE_NET_INET_SOCK_DGRAM_P2Pを指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_3">
+<h3>
+<a href="#Heading3_8"> 8. </a>3 
+<!-- hp1 --><b>ソケットアドレス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPP2Pプロトコルでは1つのUDPポートに複数の仮想ポートが紐づいて存在します。したがって端点のソケットアドレスは、IPアドレス、UDPポート番号、仮想ポート番号の組として表現されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_3_1"><h4>
+(1)&nbsp;<b>SceNetInetSockaddrInP2p構造体</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">UDPP2Pプロトコルで使用するソケットアドレス構造体は<a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a>です。pspnet/netinet/in.hに定義されています。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a> {
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> sin_len;
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> sin_family;
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUShort16">SceUShort16</a> sin_port;
+        struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetInAddr">SceNetInetInAddr</a> sin_addr;
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUShort16">SceUShort16</a> sin_vport;
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> sin_zero[6];
+};
+
+</font></pre></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetSockaddrIn">SceNetInetSockaddrIn</a>構造体に仮想ポート番号を指定するメンバ<i>sin_vport</i>が追加されています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_3_2"><h4>
+(2)&nbsp;<b>UDPローカルポート番号</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">NPシグナリングユーティリティではP2P通信を行うためのUDPローカルポート番号として3658を予約しています。UDPP2Pによる通信を行う場合は、UDPローカルポート番号として必ず3658を指定してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_3_3"><h4>
+(3)&nbsp;<b>仮想ポート</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese009.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 9  仮想ポート</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">仮想ポート番号は16bitで表現され0～65535までの値をとります。仮想ポート番号の割り当ては以下の通りとします。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> 0, 65535<br>使用しない
+<li> 1～32767<br>ユーザ使用
+<li> 32768～65534<br>システム使用
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_4">
+<h3>
+<a href="#Heading3_8"> 8. </a>4 
+<!-- hp1 --><b>パケットフォーマット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPプロトコルのペイロード先頭に8バイトのUDPP2Pプロトコル用タグが付与されます。それ以外はUDPのフォーマットに従います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_5">
+<h3>
+<a href="#Heading3_8"> 8. </a>5 
+<!-- hp1 --><b>ソケットAPI</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPP2PプロトコルのソケットAPIは、BSDソケットAPIが使用できます。可能な操作はUDPソケットを使用する際と同様です。<br>ただし使用するローカルポート番号が決められていますので、必ず<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetBind">sceNetInetBind</a>()を呼び出してソケットにアドレスをバインドしてから使用するようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_6">
+<h3>
+<a href="#Heading3_8"> 8. </a>6 
+<!-- hp1 --><b>データサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPP2Pプロトコルで送信することのできる最大データサイズは9216バイトです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_7">
+<h3>
+<a href="#Heading3_8"> 8. </a>7 
+<!-- hp1 --><b>データの暗号化および署名</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPP2Pプロトコルではデータの暗号化および署名生成・検証に対応しています。鍵はシグナリングのコネクション確立時に交換され、ACTIVE状態の場合に使用することができます。<br>プロトコル暗号化および署名生成・検証を行うためには<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSetsockopt">sceNetInetSetsockopt</a>()にてソケットオプションを指定します（レベルはSCE_NET_INET_SOL_SOCKET）。それぞれのオプションは独立して指定することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_1"><h4>
+(1)&nbsp;<b>SCE_NET_INET_SO_USECRYPTO</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">該当ソケットにて送受信するデータの暗号化および復号化を行います。暗号化の際に1つのパケットにつき8バイトの初期ベクタが付与されます。パケットに対応する鍵が設定されていない場合、受信時に暗号化が行われていないパケットは暗黙に破棄されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_2"><h4>
+(2)&nbsp;<b>SCE_NETI_INET_SO_USESIGNATURE</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">該当ソケットにて送受信するデータに対して署名生成および検証を行います。1つのパケットにつき8バイトの署名が付与されます。パケットに対応する鍵が設定されていない場合、受信時に署名検証に失敗したあるいは署名が付与されていない場合は、パケットは暗黙に破棄されます。<br><br>またパケットごとに暗号化および署名生成の指定をすることもできます。この場合<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSend">sceNetInetSend</a>(), <a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSendto">sceNetInetSendto</a>()もしくは<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSendmsg">sceNetInetSendmsg</a>()にてフラグを指定します。それぞれのフラグは独立して指定することができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_3"><h4>
+(3)&nbsp;<b>SCE_NET_INET_MSG_USECRYPTO</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">送信データの暗号化を行います。動作およびフォーマットはSCE_NET_INET_SO_USECRYPTOを指定したときと同じです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_4"><h4>
+(4)&nbsp;<b>SCE_NET_INET_MSG_USESIGNATURE</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">送信データに署名を付与します。動作およびフォーマットはSCE_NET_INET_SO_USESIGNATUREを指定したときと同じです。<br><br>すでにSCE_NET_INET_SO_USECRYPTO, SCE_NET_INET_SO_USESIGNATUREを設定したソケットに対して上記のフラグを指定した場合、最終的にパケットに対する暗号化および署名付与は、それぞれのオプションの論理和となります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>TCP over UDPP2P</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP over UDPP2Pとは、TCPセグメントをUDPP2Pプロトコルでカプセル化することにより、NPマッチング2ユーティリティにてコネクションを確立した端末間においてTCPによる通信を実現するものです。これにより、従来のUDPP2Pプロトコルでは実現できなかった信頼性のあるコネクション指向の通信が実現できます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>ソケットタイプ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP over UDPP2Pを使用する場合は、ソケット生成時にソケットタイプとしてSCE_NET_INET_SOCK_STREAM_P2Pを指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_3">
+<h3>
+<a href="#Heading3_9"> 9. </a>3 
+<!-- hp1 --><b>ソケットアドレス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP over UDPP2PのTCPポート番号は通常のTCPと同じ空間を用います。ただし、UDPP2Pプロトコルでカプセル化するためにUDPポート番号もあわせて必要となります。したがって端点のソケットアドレスは、IPアドレス、TCPポート番号（Port X）、UDPポート番号（Port Y）の組として表現されます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-Japanese010.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 10  TCP over UDPP2P</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_9_3_1"><h4>
+(1)&nbsp;<b>SceNetInetSockaddrInP2p構造体</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">TCP over UDPP2Pで使用するソケットアドレス構造体は<a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a>です。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a> {
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> sin_len;
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> sin_family;
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUShort16">SceUShort16</a> sin_port;	/* TCP ポート番号 (Port X) */
+        struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetInAddr">SceNetInetInAddr</a> sin_addr;
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUShort16">SceUShort16</a> sin_vport;	/* カプセル化のためのUDPポート番号(Port Y) */
+        <a href="../kernel/Types-Reference-Japanese.htm#SceUChar8">SceUChar8</a> sin_zero[6];
+};
+
+</font></pre></div>
+<div style="margin-left:67px;"><i>sin_vport</i>はカプセル化するために使用する端点のUDPポート番号を表します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_9_3_2"><h4>
+(2)&nbsp;<b>UDPポート番号の指定</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">TCP over UDPP2Pを行う場合、<i>sin_vport</i>で指定するUDPポート番号は以下のように指定してください。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> 接続相手を指定するとき（<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetConnect">sceNetInetConnect</a>()など）は、<i>sin_vport</i>に<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>()で得られたUDPポート番号を指定します。
+<li> 自分自身を指定するとき（<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetBind">sceNetInetBind</a>()など）は、<i>sin_vport</i>に3658を指定します。またアドレスのバインドを行わなかった場合も、デフォルトとして3658が使用されます。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_4">
+<h3>
+<a href="#Heading3_9"> 9. </a>4 
+<!-- hp1 --><b>パケットフォーマット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPプロトコルのペイロード先頭に4バイトのTCP over UDPP2Pタグが付与され、以降のペイロード部分にTCPセグメントがカプセル化されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_5">
+<h3>
+<a href="#Heading3_9"> 9. </a>5 
+<!-- hp1 --><b>ソケットAPI</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP over UDPP2PのソケットAPIは、BSDソケットAPIが使用できます。可能な操作はTCPソケットを使用する際と同様です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_6">
+<h3>
+<a href="#Heading3_9"> 9. </a>6 
+<!-- hp1 --><b>データの暗号化および署名</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP over UDPP2Pにおいてもデータの暗号化および署名生成・検証に対応しています。<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSetsockopt">sceNetInetSetsockopt</a>()にてSCE_NET_INET_SO_USECRYPTO, SCE_NET_INET_SO_USESIGNATUREソケットオプションを指定します（レベルはSCE_NET_INET_SOL_SOCKET）。それぞれのオプションは独立して指定することができます。<br>データを送受信するソケット間では設定するソケットオプションを同じにする必要があります。ソケットオプションが異なるソケット間では通信できません。<br>それぞれのオプションを指定した場合に発生するデータペイロードのオーバーヘッドも、UDPP2Pプロトコルと同様です。<br>なお、データの暗号化および署名生成をパケット毎に指定することはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_7">
+<h3>
+<a href="#Heading3_9"> 9. </a>7 
+<!-- hp1 --><b>コネクションのリセット</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コネクションが破棄された場合、対応するピア間で設立された、もしくは設立途中のTCP over UDPP2Pのコネクションはリセットされます。該当するコネクションを操作中のソケットAPIには-1が返され、<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetGetErrno">sceNetInetGetErrno</a>()にはECONNRESET、<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetGetPspError">sceNetInetGetPspError</a>()にはSCE_ERROR_ERRNO_ECONNRESETが返されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>ユースケース</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">NPマッチング2システムを利用したアプリケーションのユースケースの例をあげ、その実現方法について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_1">
+<h3>
+<a href="#Heading3_10"> 10. </a>1 
+<!-- hp1 --><b>サーバー・ワールドの名前を表示する</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">開発段階であらかじめ設定したサーバーID、ワールド番号と名前を、アプリケーション上で静的にバインディングしておきます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_2">
+<h3>
+<a href="#Heading3_10"> 10. </a>2 
+<!-- hp1 --><b>アプリケーション固有の情報を検索条件にルームを検索する</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_10_2_25">
+<div style="margin-left:40px;"><h4><b>ステージ3で対戦を行いたい場合</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">たとえば、ルーム属性のルーム外部検索数値属性1を、ステージを表す属性であるとアプリケーションが定義します。<br>ステージ3で対戦を行うための対戦ルームを作成する場合、ルーム作成者はルーム属性のルーム外部検索数値属性1に3という値を設定してルームを作成します。<br>ステージ3で対戦を行いたい別のユーザがステージ3の対戦ルームを検索するとき、検索条件として次のものを指定します。<br></div>
+<div style="margin-left:80px;">「ルーム属性のルーム外部検索数値属性1 == 3」<br></div>
+<div style="margin-left:67px;">このルーム検索により、ステージ3で対戦を行う対戦ルームの一覧を取得できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_10_2_26">
+<div style="margin-left:40px;"><h4><b>ルームオーナー名で検索する</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">たとえば、ルーム属性のルーム外部検索バイナリ属性1をルームオーナー名を表す属性であるとアプリケーションが定義します。<br>ルーム作成者はルーム属性のルーム外部検索バイナリ属性1に自分のオンラインIDを設定してルームを作成します。<br>ルーム検索者があるオンラインIDを検索条件に指定して検索することで、特定のユーザがオーナーとなっているルームを取得することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_3">
+<h3>
+<a href="#Heading3_10"> 10. </a>3 
+<!-- hp1 --><b>ルームスロットの一部を予約する（NPマッチング1のプライベートスロット相当機能）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ルームグループを設定せずにルームを作成し、ルームパスワードを設定することで予約します。ルームグループでない通常のルームでは、スロット毎にルームパスワードの有効・無効を設定できます。<br><br>ルームパスワードが有効なスロットには、一致するルームパスワードを持つユーザしか参加できなくなります。招待メッセージなどの手段を用いて、予約スロットへの参加を許可するユーザへルームパスワードを通知します。<br><br>また、ルーム作成時に入室許可ユーザを設定すると、設定したユーザはルームパスワードなしに予約スロットに参加することができるようになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_4">
+<h3>
+<a href="#Heading3_10"> 10. </a>4 
+<!-- hp1 --><b>ブロックリストに登録されたユーザのルーム参加を拒否する</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPライブラリのAPIを用いてブロックリストに登録されているユーザを取得し、ルーム作成時にそのユーザを入室拒否ユーザとして指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_5">
+<h3>
+<a href="#Heading3_10"> 10. </a>5 
+<!-- hp1 --><b>チーム対戦を行う（ルームメンバ基本情報のチームIDを利用する）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">対戦ルームに参加しているルームメンバをいくつかのチームに分割しチーム対戦を行う場合に、ルームメンバ基本情報のチームIDを活用することができます。<br><br>チーム分けはルーム参加後の処理なので、ルームメッセージやP2Pによりアプリケーションがチーム分けに必要な情報を送受信すればよいのですが、ルームメンバ基本情報のチームIDを利用することによる次の作用がアプリケーションにとって利点となることもあるでしょう。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> チームIDはルームメンバを表す構造体のメンバとしてあらかじめ定義されており、チームIDを更新した際、ルームメンバ全員に更新された旨と新たに設定された値が通知される。
+<li> ルームチャットメッセージやルームメッセージを送信する際、宛先としてチームIDを指定すると、指定したチームIDの値が設定されているルームメンバにのみメッセージが送信される。
+<li> NPマッチング2対応のAVチャット2ユーティリティを利用する場合、AVチャットメッセージの送信宛先としてチームIDを指定することができる。
+</ul></div>
+<div style="margin-left:50px;"><br>チームIDは1以上の整数値です。アプリケーションは1以上の整数値に対してそれぞれチームIDとして定義し、ルーム参加時あるいは参加後の任意のタイミングでチームIDを設定します。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>開発工程</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、NPマッチング2システムを利用するアプリケーションの開発工程に関して、利用申請などの事務的な手続きと、動作テストに使用するサーバー管理ツールについて説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_1">
+<h3>
+<a href="#Heading3_11"> 11. </a>1 
+<!-- hp1 --><b>使用申請</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_1_27">
+<div style="margin-left:40px;"><h4><b>PlayStation&reg;Networkコミュニケーションサービスのリクエスト</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSP&reg; Developer NetworkウェブサイトのPlayStation&reg;Networkタイトル登録ページで「PlayStation&reg;Networkコミュニケーションサービスのリクエスト」を選択し、NPコミュニケーションIDの取得、マッチングサーバーの使用申請、および設定（ワールド数）のリクエストを行います。<br>デフォルトでは利用するマッチングサーバー数は1つとなっています。同時利用ユーザが2万人を超えることが想定される場合など、複数のマッチングサーバーを利用する場合は別途ご相談ください。また10個以上のワールドを使用する場合も、別途ご相談ください。<br><br>使用申請についての詳細は、「PlayStation&reg;Network コミュニケーションサービスの概要」ドキュメントを参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_1_28">
+<div style="margin-left:40px;"><h4><b>QA用サーバー登録</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">開発が終了しタイトルのQA段階に入る際に、PlayStation&reg;Networkタイトル登録ページの「PlayStation&reg;Network QAサーバー登録」でQA用サーバーの利用申請を行ってください。申請はマスター提出の1週間前を目処に行ってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_2">
+<h3>
+<a href="#Heading3_11"> 11. </a>2 
+<!-- hp1 --><b>サーバー管理ツール</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">サーバーの各種設定は、PlayStation&reg;Network Server Management Toolsを利用して設定します。具体的な機能は下記のとおりです。操作方法などの詳細は、「PlayStation&reg;Network SMT NPマッチング2ツール ユーザガイド」ドキュメントを参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_29">
+<div style="margin-left:40px;"><h4><b>サーバーのステータス変更</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サーバーの状態を"ビジー"や"メンテナンス"などに変更できます。この機能を利用して、エラー時の挙動を確認しながら、開発を進めてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_30">
+<div style="margin-left:40px;"><h4><b>利用禁止ユーザの登録・閲覧・削除</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サーバーの利用を禁止したいユーザの登録、閲覧および削除が可能です。この機能を利用し、タイトル発売後、禁止ユーザの登録を実際に行った際の挙動を確認してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_31">
+<div style="margin-left:40px;"><h4><b>ルームの確認</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">サーバー内に存在するルームの一覧をWebページにて確認できます。また、各種検索条件を利用し、実際に絞り込み検索を実行することも可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_32">
+<div style="margin-left:40px;"><h4><b>ダミールームの作成</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ダミーのルームを作成可能です。ダミールームへ入室することはできません。複数のルームがサーバー内に存在する状態を作り出して検索速度や検索結果の正当性などを確認するための機能です。<br>マッチングの機能で、ルーム検索は非常に計算コストのかかる処理です。そのため、開発段階で本機能を利用して検索処理の挙動を確認することをお勧めします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_3">
+<h3>
+<a href="#Heading3_11"> 11. </a>3 
+<!-- hp1 --><b>開発ネットワーク環境</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティでは、従来のNPで使用するポート番号の他に、次のポート番号を新たに使用します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> TCP: 3478, 3479, 3480
+</ul></div>
+<div style="margin-left:50px;">開発を行うネットワークでは、上記ポート番号を使用可能に設定してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_12">
+<h2>
+ 12 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_1">
+<h3>
+<a href="#Heading3_12"> 12. </a>1 
+<!-- hp1 --><b>NATトラバーサル機能について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティに実装されているNATトラバーサル機能は、ネットワーク環境（ルータ）のNAT特性および通信相手との組み合わせによって制限を受けます。NATトラバーサル機能が有効かどうかは、通信相手とのNAT特性タイプの組み合わせによって決定されます。自ホストと相手ホストで通信可能なNAT特性の組み合わせは以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>相手ホスト</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;<b>タイプ1</b>&nbsp;</td>
+<td valign="top">&nbsp;<b>タイプ2</b>&nbsp;</td>
+<td valign="top">&nbsp;<b>タイプ3</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  bgcolor="#cccccc" valign="top">&nbsp;<b>&nbsp;<br>&nbsp;自ホスト</b>&nbsp;</td>
+<td valign="top">&nbsp;<b>タイプ1</b>&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<b>タイプ2</b>&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<b>タイプ3</b>&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+<td valign="top">&nbsp;○&nbsp;</td>
+<td valign="top">&nbsp;×&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<div style="margin-left:50px;">なお、○となっている組み合わせにおいても、個々のルータの挙動により疎通できない可能性があります。すべてのルータの組み合わせについて疎通を保証するわけではありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_2">
+<h3>
+<a href="#Heading3_12"> 12. </a>2 
+<!-- hp1 --><b>同時に扱えるP2Pコネクション数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">NPマッチング2ユーティリティにて同時に扱えるP2Pコネクション数は64です。これを超えて新たにP2Pコネクションを設立しようとした場合、SCE_NP_MATCHING2_SIGNALING_ERROR_TOO_MANY_CONNのエラーが返り、P2Pコネクションの設立に失敗します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_3">
+<h3>
+<a href="#Heading3_12"> 12. </a>3 
+<!-- hp1 --><b>UDPP2PおよびTCP over UDPP2Pで使用するUDPローカルポート番号</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_3_33">
+<div style="margin-left:40px;"><h4><b>UPnP使用時</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UPnP対応ルータに接続している場合、NATトラバーサル機能の1つであるUPnPポートマッピングを使用します。使用するポート番号はデフォルトでは3658ですが、既に使用されていた場合には49152-49166のいずれかを使用します。<br>UDPP2Pで使用するUDPローカルポート番号は3658を指定しますが、UPnPポートマッピングで異なるポート番号を使用した場合は、カーネル内でUDPローカルポート番号の書き換えを行います。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_3_34">
+<div style="margin-left:40px;"><h4><b>UPnP未使用時</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">UPnP非対応ルータに接続している場合、使用するポート番号はデフォルトでは3658ですが、接続相手に応じて短命ポート（49167-65535）のいずれかを使用します。<br>UDPP2Pで使用するUDPローカルポート番号は3658を指定しますが、必要に応じてカーネル内でUDPローカルポート番号の書き換えを行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_4">
+<h3>
+<a href="#Heading3_12"> 12. </a>4 
+<!-- hp1 --><b>UDPP2PおよびTCP over UDPP2Pで指定するポート番号</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UDPP2PおよびTCP over UDPP2P使用時に、<a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a>構造体のポート番号<i>sin_port</i>と仮想ポート番号<i>sin_vport</i>に指定する値は以下のとおりです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_4_35">
+<div style="margin-left:40px;"><h4><b>UDPP2P</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ホストでの</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetBind">sceNetInetBind</a>()時</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>クライアントでの</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetBind">sceNetInetBind</a>()時</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSendto">sceNetInetSendto</a>()</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_port</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>()で&nbsp;&nbsp;<br>&nbsp;&nbsp;得られたポート番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_vport</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームポート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームポート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームポート&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_4_36">
+<div style="margin-left:40px;"><h4><b>TCP over UDPP2P</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ホストでの</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetBind">sceNetInetBind</a>()時</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>クライアントでの</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetBind">sceNetInetBind</a>()時</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetConnect">sceNetInetConnect</a>()</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_port</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームポート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームポート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームポート&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_vport</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/NP_Matching2-Reference-Japanese.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>()で&nbsp;&nbsp;<br>&nbsp;&nbsp;得られたポート番号&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

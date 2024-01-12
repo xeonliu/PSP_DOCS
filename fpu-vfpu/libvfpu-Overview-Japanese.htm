@@ -1,0 +1,194 @@
+<html lang="jp">
+<head>
+<title>libvfpu-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libvfpu
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">VFPU演算ライブラリ（libvfpu）は、VFPU命令を用いてベクトル演算・マトリクス演算を行うライブラリです。また、vfpuのベクトルロード・ストア命令を用いたメモリコピーなども提供します。<br>floatの2, 3, 4次元ベクトルを扱う関数として、加減算、乗除算、正規化、内挿、外積、内積などが用意されています。また、floatの2×2, 3×3, 4×4行列を扱う関数として、積、ベクトル積、転置行列、逆行列、平行移動、回転などの一般的な行列演算が用意されています。<br>このほか、スカラー演算、行列操作の関数があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libvfpuを使用するには次のファイルが必要です。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libvfpu.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libvfpu.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">なお、libvfpuのクォータニオン操作系の関数では、libfpuを用いて三角関数の計算をしています。このため、ライブラリとしてlibfpu.aも別途リンクする必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>引数のハンドリング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libvfpuの各関数は、引数の個数や型はそれぞれ処理内容に応じて異なりますが、関数の型は演算結果を返す第1引数（ベクトルまたはマトリクス）をそのまま返すように、一部の例外を除いてほぼ統一されています。<br>4次元ベクトルまたは4×4行列を扱う場合、各関数の引数も基本的に128bit単位となっています。引数のベクトルやマトリクスは128bitアラインメントに合せた状態にして呼び出す必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>libvfpu内部で使用するレジスタの運用ルールについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libvfpuではs000～s233までのレジスタを使用します。s300～s733までのレジスタは使用しません。libvfpuの関数を呼び出してもs300～s733までのレジスタは破壊されないことが保証されます。<br><br>2.7.1までのlibgum_vfpuはs300～s333にカレントマトリクスを常駐させていましたが、libvfpuはs300～s333の範囲を破壊しないのでlibgum_vfpuと共存できます。なお2.8.0以降のlibgum_vfpuはカレントマトリクスの常駐を行いません。<br>psp-gcc 2.0.0以降で-menable-vfpuオプションを指定してVFPUイントリンジックを使用した場合、関数呼び出しABIとしてs000～s333の範囲のレジスタをcaller save、s400～s733の範囲のレジスタをcallee saveとして割り当てます。libvfpuはs400～s733の範囲のレジスタを破壊しないので、psp-gcc 2.0.0以降と共存できます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>VFPUコードの最適化について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libvfpuのほとんどの関数は引数で指定されたポインタを使い、メモリ経由でベクトル/マトリクスデータの入出力を行っています。VFPUには32bitのfloat値を128個保持できるだけのレジスタファイルがありますが、libvfpuの関数では関数呼び出しのためにそれらを有効活用していないことになります。これは、libvfpuがVFPUの使用方法を示すためのサンプル的な役割を担っていることに由来します。<br><br>VFPUを効率よく使うためには、VFPU使用するコードをある程度まとまった単位でインラインに展開して使用する事が推奨されます。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> データをなるべく長い間レジスタにとどめ、メモリへのアクセスを減らす
+<li> VFPU命令とCPU/FPU命令をスケジューリングして、VFPUパイプラインの処理中に同時に実行できる処理を増やす
+</ul></div>
+<div style="margin-left:50px;"><br>VFPUを使用する処理が関数単位でひとつひとつ細かく分かれていると、関数呼び出しオーバーヘッドが無視できなくなります。パフォーマンスの必要なループ内などでは、libvfpuの関数を呼び出すのではなく、コードをコピーして展開することをお勧めします。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>スレッドごとのVFPU使用可否について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;カーネルではVFPUレジスタをスレッドのコンテキストとして扱います。スレッドの切り替え時にVFPUレジスタを退避・復帰するつくりになっています。<br>VFPUのコンテキストは、128bitのレジスタが32本とその他の制御情報から構成され、コンテキストとしてサイズが大きいため、すべてのスレッドでVFPUコンテキストの退避・復帰しようとするとパフォーマンスに影響が出てしまう可能性があります。<br>そこで、PSP&reg;カーネルではスレッドの生成時にVFPUを使用するかどうかを指定する事ができるようにし、レイジーコンテキストスイッチを行っています。VFPUを使用しないことがあらかじめわかっているスレッドにスイッチする場合は、VFPUレジスタをスレッドのコンテキストから省く事ができ、コンテキストスイッチの高速化に寄与します。<br><br>VFPUを使用しないとして生成されたスレッドがVFPU命令を実行したり、VFPUレジスタを操作する命令を実行したりしようとすると、CPUにコプロセッサ使用禁止例外が発生します。libvfpuを使用するスレッドは、必ずVFPUを使用可能として生成されたスレッドである必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>スレッドの生成時にVFPU使用を宣言する場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VFPUを使用することがあらかじめ分かっている場合、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateThread">sceKernelCreateThread</a>()でスレッドを生成するときにSCE_KERNEL_TH_USE_VFPU属性を指定することでVFPU使用を宣言できます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceUID tid;
+
+tid = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateThread">sceKernelCreateThread</a>("threadname", ThreadEntryFunc,
+				SCE_KERNEL_USER_LOWEST_PRIORITY,
+				8192,
+				SCE_KERNEL_TH_USE_VFPU,
+				NULL);
+
+<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelStartThread">sceKernelStartThread</a>(tid, 0, "");
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>スレッドの実行中にVFPU使用を宣言する場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">スレッドの生成時にSCE_KERNEL_TH_USE_VFPU属性つきで生成されていたかどうかわからない場合は、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>()関数によって明示的にSCE_KERNEL_TH_USE_VFPU属性をつけることができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>(0, SCE_KERNEL_TH_USE_VFPU);
+
+</font></pre></div>
+<div style="margin-left:50px;">上記のようにすると、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateThread">sceKernelCreateThread</a>()関数の呼び出し時にSCE_KERNEL_TH_USE_VFPU属性が指定されていなくても、その場でSCE_KERNEL_TH_USE_VFPU属性を有効にし、VFPUを使用可能状態にすることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>スレッドの実行中にVFPU非使用を宣言する場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">前述の通りPSP&reg;カーネルではVFPUレジスタをレイジーコンテキストスイッチします。動作中のスレッド内でVFPUを使用するスレッドの数が減ると、コンテキストスイッチが高速化されます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>(SCE_KERNEL_TH_USE_VFPU, 0);
+</font></pre></div>
+<div style="margin-left:50px;"><br>とすることでSCE_KERNEL_TH_USE_VFPU属性を明示的に無効にすることができます。いちど無効にしたスレッドでも、再度SCE_KERNEL_TH_USE_VFPU属性を有効にすれば再びVFPUを使用可能に戻すことができます。<br>スレッドがDORMANT状態に遷移し、ふたたび<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelStartThread">sceKernelStartThread</a>()関数によってエントリ関数から再実行された場合は、再実行時に<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateThread">sceKernelCreateThread</a>()関数で指定された属性による状態に戻ります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>main()関数を呼び出すスレッドでVFPU使用を宣言する場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">main()関数は、通常はcrt0_elf.o, crt0_prx.o内で生成されたuser_mainスレッドによって呼び出されます。このスレッドを生成するときに使われるスレッド属性は、sce_user_main_thread_attributeというシンボル名でcrt0_elf.o, crt0_prx.oからウィーク参照されています。crt0_elf.o, crt0_prx.oをリンクするとき、アプリケーションがこの名前のグローバル変数を定義することにより、そこで指定されたスレッド属性によってスレッドを生成させる事ができます。以下のように使用します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#if defined(_LANGUAGE_C_PLUS_PLUS)||defined(__cplusplus)||defined(c_plusplus)
+extern "C" {
+#endif
+
+int sce_user_main_thread_attribute = SCE_KERNEL_TH_USE_VFPU;
+
+#if defined(_LANGUAGE_C_PLUS_PLUS)||defined(__cplusplus)||defined(c_plusplus)
+}
+#endif
+
+</font></pre></div>
+<div style="margin-left:50px;">C++の場合main()関数の先頭アドレスに到達されるよりも前にグローバルコンストラクタが実行される場合があります。グローバルコンストラクタ内の処理でVFPUを使用したい場合には、このsce_user_main_thread_attribute変数を定義することによってSCE_KERNEL_TH_USE_VFPU属性付きのスレッドを生成する方法を使用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>モジュールの起動時にエントリ関数を呼び出すスレッドでVFPU使用を宣言する場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PRXファイルをリンクするときpsp-gccのオプションとして-startfilesを指定せず-mno-crt0を指定すると、libcスタートアップオブジェクトであるcrt0_prx.oがリンクされず、SCE_MODULE_STARTマクロで指定された関数が直接PRXモジュールのエントリ関数として呼び出されます。このとき、このエントリ関数内の処理でVFPUを使用する方法としては2種類方法があります。<br><br>1つは<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelChangeCurrentThreadAttr">sceKernelChangeCurrentThreadAttr</a>()関数を使ってSCE_KERNEL_TH_USE_VFPU属性を設定するというものです。これは前述の通りです。<br><br>もう1つの方法は、SCE_MODULE_START_THREAD_PARAMETERマクロを指定して、エントリ関数を呼び出すスレッドのプライオリティ,スタックサイズと共にスレッド属性を指定する方法です。以下のように使用します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SCE_MODULE_START(StartFunction);
+SCE_MODULE_START_THREAD_PARAMETER(64, 8192, SCE_KERNEL_TH_USE_VFPU);
+</font></pre></div>
+<div style="margin-left:50px;"><br>モジュールの起動時に呼び出されるエントリ関数が終了しないと、<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelStartModule">sceKernelStartModule</a>()関数が完了しないため、エントリ関数の内部で長い処理を行うことは推奨されません。エントリ関数内では、スレッドを生成して常駐終了するという処理だけを行うようにするべきです。通常は-startfilesオプションつきでpsp-gccからリンカを起動するときに参照されるcrt0_elf.oまたはcrt0_prx.o内でuser_mainスレッドが生成されて、そのスレッドがmain()関数を呼び出しますので、SCE_MODULE_START_THREAD_PARAMETER()マクロを使用する必要はありません。<br>SCE_MODULE_START_THREAD_PARAMETER()マクロを使用する必要があるのは、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> -startfilesオプションを使用していない
+<li> かつ-mno-crt0オプションを使用している
+<li> SCE_MODULE_STARTマクロでエントリ関数を指定している
+<li> エントリ関数内で直接VFPUを使用している
+</ul></div>
+<div style="margin-left:50px;">という条件にすべて該当する場合のみです。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2011 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

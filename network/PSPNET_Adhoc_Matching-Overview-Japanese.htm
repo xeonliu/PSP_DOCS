@@ -1,0 +1,756 @@
+<html lang="jp">
+<head>
+<title>PSPNET_Adhoc_Matching-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+pspnet_adhoc_matching
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の概要と特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリ（pspnet_adhoc_matching）は、アドホックモードにおいて対戦グループの構成（マッチング）に関するサービスを提供するライブラリです。ライブラリが提供する主なサービスは以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 対戦待ち受けの通知／対戦待ち受け端末の発見
+<li> 対戦交渉
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> 対戦要求の通知
+<li> 対戦要求に対する受け入れ／拒否の通知
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> 対戦グループ管理
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> 対戦合意した相手の生存確認
+<li> 対戦合意解消の通知
+</ul></div>
+</ul>
+<div style="margin-left:50px;">ライブラリにはアドホックモード通信プロトコルを利用したマッチングプロトコルが実装されており、アプリケーションは、API呼び出しおよびライブラリからのイベントハンドラの呼び出しを通じて、これらのサービスを利用します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 ライブラリ構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_adhoc_matching.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc_matching_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc_matching_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>モジュールのロード処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリのモジュールは、PSPNETアドホックモジュールセットに含まれています。モジュールセットのロード方法については、「PSPNET概要ドキュメント」および「ユーティリティ概要ドキュメント」をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>初期化処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリを使用するためには、アドホックモード通信プロトコルで通信できる状態になったのち、ライブラリの初期化関数を呼び出します。<br>アドホックモード通信プロトコルの使用に関する初期化処理およびネットワーク接続処理については、「PSP&reg;ネットワークライブラリ概要ドキュメント」を参照してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// ここまでにアドホックモードで必要なライブラリの初期化および
+// ネットワーク接続は完了しているものとする
+
+// ライブラリの初期化
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingInit">sceNetAdhocMatchingInit</a>(MATCHING_POOLSIZE);
+if (ret &lt; 0) {
+	// 初期化失敗
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingInit">sceNetAdhocMatchingInit</a>() failed. ret = 0x%08x\n", ret);
+	goto bad;
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>マッチングの開始手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マッチングを開始するには、コンテキストを作成し開始関数を呼び出します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// mode で動作モードを指定してコンテキストを作成する
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>(
+		mode, MATCHING_MAXNUM, MATCHING_PORT, MATCHING_RXBUFLEN,
+		HELLO_INTERVAL, KEEPALIVE_INTERVAL, KEEPALIVE_COUNT, REXMT_INTERVAL,
+		handler);
+if (ret &lt; 0) {
+	// コンテキスト作成失敗
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>() failed. ret = 0x%08x\n", ret);
+	goto bad;
+}
+// ctx_id にコンテキストIDを保存する
+ctx_id = ret;
+
+// マッチング開始
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>(ctx_id,
+		MATCHING_EVENT_TPL,
+		SCE_NET_PSPNET_ADHOC_MATCHING_LEAST_STACK_SIZE
+			+ MATCHING_EVENT_HANDLER_STACK_SIZE,
+		MATCHING_INPUT_TPL, 0, hellooptlen, helloopt);
+if (ret &lt; 0) {
+	// マッチング開始失敗
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>() failed. ret = 0x%08x\n", ret);
+	goto bad;
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>対戦相手の選択／受け入れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">HelloイベントやRequestイベントに応じて対戦相手の選択／受け入れを行う場合は、<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>()を呼び出します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// addrで示される相手の選択／受け入れ
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>(ctx_id, &amp;addr, optlen, opt);
+if (ret &lt; 0) {
+	// 失敗
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>() failed. ret = 0x%08x\n", ret);
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>対戦相手の選択解除／拒否</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Requestイベントに対する拒否や一旦選択した対戦相手との合意解消を行う場合は、<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTarget">sceNetAdhocMatchingCancelTarget</a>()もしくは<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>()を呼び出します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// addrで示される相手の選択解除／拒否
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>(ctx_id, &amp;addr, optlen, opt);
+if (ret &lt; 0) {
+	// 失敗
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>() failed. ret = 0x%08x\n", ret);
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>メンバリストの取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マッチング実行中は<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>()で対戦グループのメンバリストを取得できます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// メンバリストの取得に必要なバッファサイズをbuflenに取得する
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>(id, &amp;buflen, NULL);
+if (ret &lt; 0) {
+	// 失敗
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>() failed. ret = %d\n", ret);
+	return;
+}
+
+mm = (struct <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SceNetAdhocMatchingMember">SceNetAdhocMatchingMember</a> *)malloc(buflen);
+if (mm == NULL) {
+	// メモリ確保に失敗
+	printf(&quot;malloc() failed.\n&quot;);
+	return;
+}
+
+// メンバリストを取得
+ret = <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>(id, &amp;buflen, (void *)mm);
+if (ret &lt; 0) {
+	printf("<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingGetMembers">sceNetAdhocMatchingGetMembers</a>() failed. ret = %d\n", ret);
+	free((void *)mm);
+	return;
+}
+
+// メンバリストの表示
+printf("MEMBER==&gt;");
+// リストを順に手繰る
+for ( ; mm != NULL; mm = mm-&gt;next) {
+	<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(&amp;mm-&gt;addr, etherstr);
+	printf(" [%s]", etherstr);
+}
+printf("\n");
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>マッチングの終了</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マッチングの終了関数を呼び出し、コンテキストを削除します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// マッチング終了
+<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStop">sceNetAdhocMatchingStop</a>(ctx_id);
+// コンテキストを削除
+<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingDelete">sceNetAdhocMatchingDelete</a>(ctx_id);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>イベントハンドラ関数サンプル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マッチングライブラリでは、イベントハンドラ関数の呼び出しを通じて、各種イベントを通知します。以下、イベントハンドラで処理すべき内容についてのサンプルです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_1"><h4>
+(1)&nbsp;<b>イベントを表示するだけのサンプル</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static char *eventtypestr[] = {
+	"NONE",
+	"HELLO",
+	"REQUEST",
+	"LEAVE",
+	"DENY",
+	"CANCEL",
+	"ACCEPT",
+	"ESTABLISHED",
+	"TIMEOUT",
+	"ERROR",
+	&quot;BYE&quot;
+};
+
+static void
+handler_default(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	char etherstr[18];
+
+	<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetEtherNtostr">sceNetEtherNtostr</a>(peer, etherstr);
+	printf("%s from %s", eventtypestr[ev], etherstr);
+
+	for (i = 0; i &lt; optlen; i++) {
+		printf("%02x", *((char *)opt+i));
+	}
+	printf("\n");
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_2"><h4>
+(2)&nbsp;<b>マルチプレーヤーモード（親）サンプル</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+handler_parent(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	int ret;
+
+	switch (ev) {
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>:
+		// ユーザに対戦要求を受け入れるかどうかをたずねる
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>:
+		// ユーザに対戦要求が取り消されたことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>:
+		// ユーザに対戦相手との合意は解消したことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>:
+		// ユーザに対戦相手と合意したことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>:
+		// ユーザに対戦相手からの応答がなくなったことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>:
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>:
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>:
+		// これらのイベントは発生しない
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>:
+		// 通信状態エラー発生（エラー処理をする）
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>:
+		// 対戦相手はマッチングライブラリを終了した
+		break;
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_3"><h4>
+(3)&nbsp;<b>マルチプレーヤーモード（子）サンプル</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+handler_child(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	int ret;
+
+	switch (ev) {
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>:
+		// ユーザに対戦相手の存在を通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>:
+		// ユーザに対戦相手との合意は解消したことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>:
+		// ユーザに対戦要求は拒否されたことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>:
+		// ユーザに対戦要求は受け入れられたことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>:
+		// ユーザに対戦相手と合意したことを通知する
+		break;	
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>:
+		// ユーザに対戦相手からの応答がなくなったことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>:
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>:
+		// これらのイベントは発生しない
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>:
+		// 通信状態エラー発生（エラー処理をする）
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>:
+		// 対戦相手はマッチングライブラリを終了した
+		break;
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_8_4"><h4>
+(4)&nbsp;<b>Peer-to-Peerモードサンプル</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>static void
+handler_p2p(
+	int id,
+	int ev,
+	struct <a href="../network/PSPNET_Core-Reference-Japanese.htm#SceNetEtherAddr">SceNetEtherAddr</a> *peer,
+	int optlen,
+	void *opt
+	)
+{
+	int ret;
+
+	switch (ev) {
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>:
+		// ユーザに対戦相手の存在を通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>:
+		// ユーザに対戦要求を受け入れるかどうかをたずねる
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>:
+		// ユーザに対戦相手との合意は解消したことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>:
+		// ユーザに対戦要求が拒否されたことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>:
+		// ユーザに対戦要求が取り消されたことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>:
+		// ユーザに対戦要求が受け入れられたことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>:
+		// ユーザに対戦相手と合意したことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>:
+		// ユーザに対戦相手からの応答がなくなったことを通知する
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>:
+		// 通信状態エラー発生（エラー処理をする）
+		break;
+	case <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>:
+		// 対戦相手はマッチングライブラリを終了した
+		break;
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>動作解説</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>グループモデル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">対戦グループの構成にあたって、アドホックマッチングライブラリでは2つのグループモデルを規定しています。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>Peer-to-Peer（2人対戦）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">対称型で接続される2人対戦ゲームのモデル。プレーヤー間に親子の関係を必要としません。各端末は、自分以外の任意の1つの端末と対戦グループを構成します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 Peer-to-Peerグループモデル</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>マルチプレーヤー</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">スター型で接続される2人以上の対戦ゲームのモデル。プレーヤー間に明示的な親子の関係を持ちます。親端末は1台以上の子端末と対戦グループを構成します。親端末が2台以上いるような対戦グループを構成したり、子端末同士のみの対戦グループを構成することはありません。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 マルチプレーヤーグループモデル</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">本ライブラリではコンテキスト作成時に、構成する対戦グループのグループモデルを動作モードとして指定します。マルチプレーヤーの場合は、自分自身が親端末か子端末かも同時に指定します。アドホックマッチングライブラリでは、同じグループモデルの端末同士が対戦グループを構成することとし、グループモデルは予め決定されているものとします。すなわち異なるグループモデルの端末同士で対戦グループを構成することはできません。<br>なおこれらはあくまで対戦グループの構成モデルを規定したもので、実際の通信対戦中の通信経路を規定したものではありません。すなわちマルチプレーヤーモデルにおいて、各プレーヤーが任意のプレーヤー（複数も可）と任意の通信することを制限するものではありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>マッチングプロトコル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリでは、端末間でマッチングに関する情報を交換するためのマッチングプロトコルを規定しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_1">
+<div style="margin-left:40px;"><h4><b>プロトコル動作概要</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">対戦グループの構成に至るまでの動作概要は以下の通りです。<br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> 対戦待ち受けの通知<br>Peer-to-Peer及びマルチプレーヤー（親端末）を指定した端末は、自分が対戦待ち受け状態にあることを示すため、Helloメッセージの送信を開始します。Helloメッセージは一定時間毎にブロードキャストされます。</li>
+<li VALUE=2> 対戦要求の通知<br>Peer-to-Peer及びマルチプレーヤー（子端末）を指定した端末は、Helloメッセージの受信によって、対戦を待ち受けているターゲット（対戦相手）を発見します。ここからユーザの選択により、ターゲット（対戦相手）に対して対戦要求となるJoinRequestメッセージを送信します。</li>
+<li VALUE=3> 対戦要求に対する返答<br>対戦を待ち受けている端末は、JoinRequestメッセージの受信によって対戦を要求するターゲット（対戦相手）を発見します。ユーザがターゲット（対戦相手）の受け入れを選択した場合はJoinReplyメッセージを送信します。拒否を選択した場合はLeaveメッセージを送信します。</li>
+<li VALUE=4> 対戦合意／対戦拒否<br>対戦要求を送信した端末は、JoinReplyメッセージの受信により対戦要求が受け入れられ対戦合意に至ったことがわかります。あるいはLeaveメッセージの受信により、対戦要求が拒否されたことがわかります。</li>
+<li VALUE=5> キープアライブの送受信<br>ターゲット（対戦相手）と対戦合意した場合、その後一定時間毎にKeepAliveメッセージを交換して、相手が存在することを確認します。</li>
+<li VALUE=6> マッチングプロトコルの終了<br>対戦グループの構成が確定したらマッチングプロトコルを終了します。このときマッチングライブラリ終了の通知であるByeメッセージがブロードキャストされます。</li>
+</ol></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>タイマ／カウンタ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">マッチングプロトコルに関するタイマ／カウンタは以下の通りです。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Helloインターバルタイマ<br>Helloメッセージの送信間隔を規定するタイマです。
+<li> キープアライブインターバルタイマ<br>KeepAliveメッセージの送信間隔を規定するタイマです。
+<li> キープアライブカウンタ<br>対戦合意したターゲット（対戦相手）の生存を監視するためのカウンタです。キープアライブインターバルタイマ起動毎に１ずつ減らされます。KeepAliveメッセージの交換が成功すると初期値（0以外）にリセットされます。0になるとタイムアウトをアプリケーションに通知します。
+<li> 再送タイマ<br>JoinRequestメッセージ、JoinReplyメッセージ、またはデータ送信の再送間隔を規定するタイマです。
+<li> 再送カウンタ<br>JoinRequestメッセージ、JoinReplyメッセージ、またはデータ送信のターゲットの生存を監視するためのカウンタです。再送タイマ起動毎に１ずつ減らされます。生存確認が成功すると初期値（０以外）にリセットされます。０になるとタイムアウトをアプリケーションに通知します。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>イベントモデル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリは、アプリケーションが前述のプロトコル詳細を直接意識することなく対戦グループを構成できる設計になっています。このため、アプリケーションとアドホックマッチングライブラリ間のやりとりは、すべてイベントの形で定義されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_3">
+<div style="margin-left:40px;"><h4><b>アプリケーション&rarr;アドホックマッチングライブラリ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーションからアドホックマッチングライブラリへのイベントの通知は、APIの呼び出しという形で実現されます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Startイベント<br>マッチングを開始します。<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>()の呼び出しに相当します。
+<li> Stopイベント<br>マッチングを終了します。<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStop">sceNetAdhocMatchingStop</a>()の呼び出しに相当します。
+<li> Selectイベント<br>ターゲット（対戦相手）に対して対戦要求を通知します。または受信した対戦要求に対して受け入れを通知します。<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>()の呼び出しに相当します。
+<li> Cancelイベント<br>受信した対戦要求に対して拒否を通知します。またはターゲット（対戦相手）との対戦合意の解消を通知します。<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTarget">sceNetAdhocMatchingCancelTarget</a>()もしくは<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>()の呼び出しに相当します。
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_4">
+<div style="margin-left:40px;"><h4><b>アドホックマッチングライブラリ&rarr;アプリケーション</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アドホックマッチングライブラリからアプリケーションへのイベントの通知は、アドホックマッチングライブラリからのイベントハンドラ関数の呼び出しという形で実現されます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Helloイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_HELLO">SCE_NET_ADHOC_MATCHING_EVENT_HELLO</a>）<br>Helloメッセージを受信したときに通知されます。
+<li> Requestイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_REQUEST">SCE_NET_ADHOC_MATCHING_EVENT_REQUEST</a>）<br>対戦要求を受信したときに通知されます。
+<li> Acceptイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT">SCE_NET_ADHOC_MATCHING_EVENT_ACCEPT</a>）<br>対戦要求が受け入れられたときに通知されます。
+<li> Denyイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_DENY">SCE_NET_ADHOC_MATCHING_EVENT_DENY</a>）<br>対戦要求が拒否されたときに通知されます。
+<li> Cancelイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_CANCEL">SCE_NET_ADHOC_MATCHING_EVENT_CANCEL</a>）<br>対戦要求がキャンセルされたときに通知されます。
+<li> Establishedイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED">SCE_NET_ADHOC_MATCHING_EVENT_ESTABLISHED</a>）<br>対戦合意したときに通知されます。
+<li> Leaveイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_LEAVE">SCE_NET_ADHOC_MATCHING_EVENT_LEAVE</a>）<br>対戦合意が解消された（Leaveを受信した）ときに通知されます。
+<li> Timeoutイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT">SCE_NET_ADHOC_MATCHING_EVENT_TIMEOUT</a>）<br>再送カウンタもしくはキープアライブカウンタが0になったときに通知されます。
+<li> Errorイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_ERROR">SCE_NET_ADHOC_MATCHING_EVENT_ERROR</a>）<br>マッチングプロトコルに何らかのエラーが発生したときに通知されます。
+<li> Byeイベント（<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#SCE_NET_ADHOC_MATCHING_EVENT_BYE">SCE_NET_ADHOC_MATCHING_EVENT_BYE</a>）<br>Byeメッセージを受信したときに通知されます。
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_5">
+<div style="margin-left:40px;"><h4><b>状態遷移図</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ある2端末間での状態遷移とイベントの関係を表すと図 4のようになります。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Matching-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4 マッチングプロトコル状態遷移図</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>オプションデータ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリでは、オプションデータを設定することにより、端末間で付加的なメッセージを交換することができます。オプションデータによるメッセージが付加されるのは以下の通りです。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_1"><h4>
+(1)&nbsp;<b>Helloメッセージ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>()の引数に設定したオプションデータが付加されます。<br>Helloメッセージに付加されたオプションデータは、Helloイベントとともに相手に通知されます。<br>オプションデータは<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSetHelloOpt">sceNetAdhocMatchingSetHelloOpt</a>()で動的に変更できます。また<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingGetHelloOpt">sceNetAdhocMatchingGetHelloOpt</a>()で現在設定されているオプションデータが取得できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_2"><h4>
+(2)&nbsp;<b>JoinRequestメッセージ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>()の引数に指定したオプションデータが付加されます。<br>JoinRequestメッセージに付加されたオプションデータは、JoinRequestイベントとともに相手に通知されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_3"><h4>
+(3)&nbsp;<b>JoinReplyメッセージ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>()の引数に指定したオプションデータが付加されます。<br>JoinReplyメッセージに付加されたオプションデータは、Acceptイベントとともに相手に通知されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_4"><h4>
+(4)&nbsp;<b>Leaveメッセージ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>()の引数に指定したオプションデータが追加されます。Leaveメッセージに付加されたオプションデータは、Cancel、Deny、Leaveのいずれかのイベントとともに相手に通知されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>データ送受信</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリでは、ESTABLISHED状態にある端末間で任意データの送受信を行うことができます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_1"><h4>
+(1)&nbsp;<b>データ送信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSendData">sceNetAdhocMatchingSendData</a>()にて指定した相手に対してデータを送信します。相手から確認応答が来るまで、再送タイマで指定した間隔で再送カウンタ分再送します。確認応答の受信はData Ackのイベントにて通知されます。確認応答が受信できなかった場合（タイムアウト）は、Data Timeoutイベントにて通知されます。<br>Data AckもしくはData Timeoutのイベント通知まで、新たにデータを送信することはできません。もしそれまでに新たにデータを送信する場合は、<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingAbortSendData">sceNetAdhocMatchingAbortSendData</a>()にて現在のデータ送信を取り消してから行ないます。<br>相手がESTALISHED状態でなくなった（Leaveイベント、Timeoutイベント、もしくはErrorイベントが通知された）場合、Data AckもしくはData Timeoutイベントは発生しません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_2"><h4>
+(2)&nbsp;<b>データ受信</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">データを受信した際はDataイベントとともにデータが通知されます。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>スタックサイズについて</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_1"><h4>
+(1)&nbsp;<b>API呼び出しに必要なスタックサイズ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アドホックマッチングライブラリのAPI呼び出しに必要なサイズは、3072バイト（SCE_NET_PSPNET_ADHOC_MATCHING_LEAST_STACK_SIZE）です。スタックサイズが不足の場合は<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a>のエラーが返ります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_1_2"><h4>
+(2)&nbsp;<b>イベントハンドラスレッドのスタックサイズ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">イベントハンドラスレッドのスタックサイズは、<b>イベントハンドラスレッドが内部で使用するスタックサイズの3072バイト（SCE_NET_PSPNET_ADHOC_MATCHING_LEAST_STACK_SIZE）とイベントハンドラ関数で使用するスタックサイズの合計値</b>に設定してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ライブラリ初期化時に指定するプールサイズについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックマッチングライブラリで使用する内部メモリは、pspnet初期化時に確保されるメモリプールからではなく、アドホックマッチングライブラリ初期化時に確保する独立したメモリプールから割り当てられます。必要なメモリプールサイズは、使用するコンテキスト数や各コンテキストで扱うメンバ数、取り扱うオプションデータサイズなどに依存します。<br><br>コンテキスト毎に必要な最大メモリサイズは次の通りです。なおオプションデータを全く使わない場合でも、最大オプションデータサイズを100バイト程度として計算してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>()で指定するrxbuflenサイズ（取り扱う最大オプションデータサイズ×2程度）
+<li> <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>()で指定するhellooplenサイズ
+<li> <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingSelectTarget">sceNetAdhocMatchingSelectTarget</a>()で指定するoptlenサイズ
+<li> <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCancelTargetWithOpt">sceNetAdhocMatchingCancelTargetWithOpt</a>()で指定するoptlenサイズ
+<li> メッセージ送信時のテンポラリバッファ（取り扱う最大オプションデータサイズ×2程度）
+<li> メッセージ受信時のテンポラリバッファ（取り扱う最大オプションデータサイズ×2程度）
+<li> コンテキスト管理領域（200バイト程度）
+<li> メンバリスト管理領域（300バイト程度）
+</ul></div>
+<div style="margin-left:50px;"><br>各コンテキストで扱うメンバ毎に必要なメモリサイズは次の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> メンバ管理領域（100バイト程度）
+</ul></div>
+<div style="margin-left:50px;"><br>したがって、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 使用するコンテキスト：1
+<li> 取り扱う最大オプションデータサイズ：1000バイト
+<li> hellooptlen：1000バイト
+<li> optlen：1000バイト
+<li> メンバ数：4
+</ul></div>
+<div style="margin-left:50px;">とした場合、合計で最大9900バイト程度となります。<br>ただしこの数値はメモリのフラグメント化がない場合ですので、実際にはこれよりも大きなプールサイズを指定する必要があります。<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingGetPoolMaxAlloc">sceNetAdhocMatchingGetPoolMaxAlloc</a>()にて内部メモリの最大使用サイズが取得できますので、これを参考にしながらプールサイズを決定してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Helloメッセージの送信条件について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Peer-to-Peerモードおよびマルチプレーヤーモードの親は、指定された間隔でHelloメッセージが送信されますが、対戦合意したマッチンググループのメンバ数が<a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingCreate">sceNetAdhocMatchingCreate</a>()で指定した最大メンバ数に達した場合には、自動的に送信を停止します。対戦合意が解消され、メンバ数が最大メンバ数以下になると、自動的に送信を再開します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>接続人数が最大メンバ数に達した場合の処理について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Peer-to-Peerモードおよびマルチプレーヤーモードの親が、既に最大メンバ数の相手と対戦合意状態にある（定員に達している）場合、この端末に対して新たにJoinRequestメッセージを送信してもRequestイベントは発生しません。ライブラリ内部で自動的にLeaveメッセージを返送しJoinRequestメッセージを送信した端末に対してDenyイベントを通知します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>SCE_ERROR_NET_ADHOC_INVALID_ADDRについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックネットワークに接続していない状態で以下のAPIを呼び出すと<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_ADHOC_INVALID_ADDR">SCE_ERROR_NET_ADHOC_INVALID_ADDR</a>が返ります。接続後に呼び出すようにしてください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/PSPNET_Adhoc_Matching-Reference-Japanese.htm#sceNetAdhocMatchingStart">sceNetAdhocMatchingStart</a>()
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

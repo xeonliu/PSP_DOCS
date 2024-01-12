@@ -1,0 +1,827 @@
+<html lang="jp">
+<head>
+<title>VFPU_Intrinsics-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+psp-gcc VFPUイントリンジック
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">psp-gcc VFPUイントリンジックは、gccのビルトインタイプとしてV4SFモード型およびV16SFモード型を使用できるようにする機能です。V4SFモード型,V16SFモード型は、いずれもVFPUのマトリクスレジスタを使用し、GPR,FPRと同様にコンパイラによって自動的なレジスタアロケーションが行われます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">V4SF,V16SFモード型に対する主な処理を行うために、<br></div>
+<div style="margin-left:40px;"><ul>
+<li> floatのベクトル型としてV4SFモード型,V16SFモード型のサポート
+<li> V4SFモード型に対する四則演算の算術オペレータ
+<li> V4SFモード型同士の比較演算オペレータ
+<li> V16SFモード型に対する代入オペレータ
+<li> VFPU命令に対応する__builtin_vfpu_?????()ビルトイン関数
+<li> __builtin_vfpu_?????()ビルトイン関数をラップするvfpu_intrincis.h
+<li> V4SF,V16SFモード型をインラインアセンブラで参照する"C"記述子
+</ul></div>
+<div style="margin-left:50px;">が提供されます。<br><br>VFPUイントリンジックを用いることで、VFPU命令がCPU命令,FPU命令と同列にスケジューリングされるため、インラインアセンブリで記述した場合より最適化されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>制約</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コンパイラからVFPUイントリンジックを使用するにあたり、直接アセンブラを用いた場合、インラインアセンブリを用いた場合と比べて以下の制約があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> レジスタのアロケーション単位は32bitのレジスタ4個単位が最低となります(psp-gcc 1.xの場合)
+<li> 2x2マトリクス、3x3マトリクスを対象としたマトリクス演算はサポートされません
+<li> ライトバッファを使用するためのsv.q,wb, vflush, vsync, vnop命令等はサポートされません
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>psp-gcc 1.xと2.xでの差異</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">psp-gcc 1.xでのVFPUイントリンジックとpsp-gcc 2.xでのイントリンジックでは、以下のような違いがあります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> psp-gcc 1.9.xまでは、インラインアセンブラでVFPUレジスタを意味するレジスタ拘束子は"j"でしたが、psp-gcc 2.xでは"C"となります。これはgcc-3.4.x以降でレジスタ拘束子"j"が別の意味に用いられるようになったためです。なおpsp-gcc 1.10.xでは&quot;j&quot;と&quot;C&quot;の両方を使用する事ができますが、なるべく&quot;C&quot;を使用することを推奨します。
+<li> レジスタのアロケーション単位はpsp-gcc 1.xの場合32bitのレジスタ4個単位、psp-gcc 2.xの場合32bitのレジスタ1個単位となります。
+<li> V4SFモード,V16SFモード型の引数および戻り値について関数の呼び出し規約は、psp-gcc 1.xの場合メモリ渡し、2.xの場合VFPUレジスタ渡しになります。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>psp-gccオプションおよび定義済みマクロ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">VFPUイントリンジックのサポートのためにpsp-gccに追加されたオプション,定義済みマクロについて解説します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>オプション</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_1">
+<div style="margin-left:40px;"><h4><b>-menable-vfpu=</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUレジスタをpsp-gccのアロケーション管理下に置くために使用します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>-menable-vfpu=m0-m7
+</font></pre></div>
+<div style="margin-left:67px;"><br>この例ではm000(e000)からm700(e700)まで、8x4x4個のマトリクスレジスタを有効にすることができます。指定できる範囲は必ず4x4のマトリクスレジスタ単位になります。<br><br>psp-gcc 2.xでは、VFPUレジスタm000(e000)からm300(e300)までの範囲を関数呼び出し時のV4SF,V16SFモード型引数または戻り値を格納するレジスタとして使用するため、-menable-vfpuオプションでこの範囲のレジスタが含まれている必要があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_2">
+<div style="margin-left:40px;"><h4><b>-mfast-vfpu-math / -mno-fast-vfpu-math</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPU命令を使用した最適化レベルを制御するために、-mfast-vfpu-math / -mno-fast-vfpu-mathオプションを使用します。-mfast-vfpu-mathオプションを使用すると、vdiv.?命令のかわりにvrcp.?命令が使用されるなどの最適化が有効になります。<br>この最適化には速度に対して演算精度のトレードオフがあるため、デフォルトの状態はvrcp.?命令を使用しない-mno-fast-vfpu-mathです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_3">
+<div style="margin-left:40px;"><h4><b>-minline-float-load / -mno-inline-float-load (psp-gcc 1.15.3以降またはpsp-gcc 2.2.0以降のみ)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">float型を扱うFPRレジスタおよびVFPUレジスタに対する定数ロードを、lwc1命令やlv.s命令をなるべく使わず、インラインで生成した値で設定するようにします。FPUレジスタに対しては、GPRのALU命令+mtc1命令、VFPUレジスタに対してはvzero.?, vone.?, vcst.?, vfim.s命令などをそれぞれ使用します。この最適化は、速度に対して命令サイズのトレードオフが僅かにあるため、デフォルトの状態はlwc1, lv.sを使用する-mno-inline-float-loadです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_4">
+<div style="margin-left:40px;"><h4><b>-mvfpu-enable-vmmov / -mno-vfpu-enable-vmmov (psp-gcc 1.10.0以降の1.x.x系列のみ)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPU命令を使用した最適化レベルを制御するために、-mvfpu-enable-vmmov / -mno-vfpu-enable-vmmovオプションを使用します。-mvfpu-enable-vmmovオプションを使用すると、V16SF型レジスタ同士の移動にvmmov.q命令が使用されるなどの最適化が有効になります。<br>psp-gcc 2.x以降ではデフォルトで-mvfpu-enable-vvmovが有効の状態で使用されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>定義済みマクロ</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_5">
+<div style="margin-left:40px;"><h4><b>__vfpu_enabled__</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">-menable-vfpuオプションを使用すると、__vfpu_enabled__マクロが定義済みマクロとして追加されます。プリプロセッサの条件として__vfpu_enabled__を参照する事ができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#ifdef __vfpu_enabled__
+	...
+#endif
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>V4SFモード型(4次元ベクトル)の対応</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">32bit floatの4次元ベクトル型としてVFPUマトリクスレジスタを使用したV4SFモード型が定義されます。<br><br>V4SFモード型を使用するためには、gccの__attribute__((mode(V4SF)))または__attribute__((vector_size(16)))という修飾子を指定します。vfpu_intrinsics.hでは、V4SFモード型を使用するために<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>というtypedef型を提供します。<br><br>psp-gcc 1.xの場合<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> __attribute__((mode(V4SF)));
+
+</font></pre></div>
+<div style="margin-left:50px;">psp-gcc 2.xの場合<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> __attribute__((vector_size(16)));
+
+</font></pre></div>
+<div style="margin-left:50px;">VFPUでは、ほとんどの命令について.s, .p, .t, .qサフィックスによって区別されるように次元別の演算が行えますが、VFPUイントリンジックではスカラー,2次元ベクトル,3次元ベクトルの単位でレジスタアロケーションを行うことはできません。4次元ベクトル(128ビット)が最小単位となります。<br><br>V4SFモード型に対する基本演算は、すべて.q形式の命令としてコンパイルされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>V4SFモード型の基本演算</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">V4SFモード型に対しては、4次元ベクトルとして四則演算などの算術演算子が使用可能です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> va, vb, vc;
+
+va = vb + vc;			// vadd.q
+va = vb - vc;			// vsub.q
+va = vb * vc;			// vmul.q
+va = vb / vc;			// vdiv.q	(-mno-fast-vfpu-math時)
+				// vrcp.q + vmul.q (-mfast-vfpu-math時)
+
+</font></pre></div>
+<div style="margin-left:50px;">算術演算子を使った記述を行うことによって、後述するビルトイン関数やインラインアセンブラを使った記述よりも、効率よくgccが最適化を働かせることができるようになります。たとえば、下の2つの方程式に対してgccが同じアセンブリを出力することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+va = ( va * vb + va * vc );
+va = va * ( vb + vc );
+</font></pre></div>
+<div style="margin-left:50px;"><br>C++の場合、gcc拡張の演算子として最小値、最大値を得る&lt;?, &gt;?演算子が使用することで、vmin.q / vmax.q命令が生成されますが、このgcc拡張の演算子は将来のバージョンで削除されることが決まっていますので<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vmax_q">vfpu_vmax_q</a>(), <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vmin_q">vfpu_vmin_q</a>()を使用することをお勧めします。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = va &lt;? vb;			// vmin.q
+va = va &gt;? vb; 		// vmax.q
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>V4SFモード型へfloat型のブロードキャスト演算</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">演算子によっては、拡張機能でV4SFモード型に対してfloat値のブロードキャスト演算を行なわせることができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> va, vb;
+float fa;
+
+va = vb + <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vadd.q
+va = vb - <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vsub.q
+va = vb * <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vmul.q または vmscl.q
+va = vb / <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(fa);		// vpfxt + vdiv.q
+					// vrcp.s + vmscl.q  (-mfast-vfpu-math時)
+
+</font></pre></div>
+<div style="margin-left:50px;">この例ではfloatのスカラー値を4要素にブロードキャストして、V4SFモード型のベクトルに対してブロードキャスト演算を行います。このとき、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+va = vb + fa;
+
+</font></pre></div>
+<div style="margin-left:50px;">とは記述できないことに注意してください。float型からV4SFモード型へのキャストは明示的に行う必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>V4SFモード型同士の比較演算子</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">V4SFモード型に対して、比較演算子&gt;, &lt;, &gt;=, &lt;=, ==, !=を使用する事ができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> va, vb;
+
+if (va &lt; vb) {
+	…
+} else {
+	…
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">V4SFモード型が標準的にサポートする&gt;, &lt;, &gt;=, &lt;=, ==, !=演算子では不足な場合には、後述するビルトイン関数よりvfpu_vcmp_??_q()を使用して解決することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>V4SFモード型への代入</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">V4SFモード型変数へは以下のよう初期化することが出来ます:<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> v = {1.0f, 2.0f, 0.5f, 0.0f};	/* メモリからロード     */
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(0.0f);		/* vzero.q が使用される */
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(1.0f);		/* vone.q が使用される  */
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(3.8f);		/* vfim.q が使用される */
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>V16SFモード型(4x4マトリクス)の対応</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">32bit floatの4x4マトリクス型としてVFPUマトリクスレジスタを使用したV16SFモード型が定義されます。V16SFモード型を使用するためには、gccの__attribute__((mode(V16SF)))または__attribute__((vector_size(64)))という修飾子を指定します。vfpu_intrinsics.hでは、V16SFモード型を使用するために<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a>というtypedef型を提供します。<br><br>psp-gcc 1.xの場合<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> __attribute__((mode(V16SF)));
+</font></pre></div>
+<div style="margin-left:50px;"><br>psp-gcc 2.xの場合<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef float <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> __attribute__((vector_size(64)));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>V16SFモード型の基本演算</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">V16SFモード型に対しては、4x4マトリクス同士の乗算が*演算子によって提供されています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> va, vb, vc;
+
+va = vb * vc; 
+</font></pre></div>
+<div style="margin-left:50px;"><br>その他+, -, /などの演算子は使用する事ができません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>V16SFモード型への代入</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">V4SFモード型と同じように、V16SFモード型を{}、または1.0f、0.0fで初期化することができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a>(0.0f);	/* vmzero.qが使用されます */
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a>(1.0f);	/* vmidt.qが使用されます  */
+</font></pre></div>
+<div style="margin-left:50px;"><br>V4SFモード型を1.0fで初期化すると、{1.0f, 1.0f, 1.0f, 1.0f}と等価になるのに対し、V16SFモード型は単位マトリクスになることに注意してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>V4SF,V16SFモード型引数の関数呼び出し規約</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">V4SFモード型およびV16SFモード型の引数をもつ関数の関数呼び出し規約は、psp-gcc 1.xとpsp-gcc 2.xで異なります。このため、V4SFモード型,V16SFモード型を引数としてもつ関数ではpsp-gcc 1.xでコンパイルされたバイナリと、psp-gcc 2.xでコンパイルされたバイナリでABI互換がないことに注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>psp-gcc 1.xでの関数呼び出し規約</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">psp-gcc 1.xではV4SFモード型, V16SFモード型の引数または戻り値を持つ関数呼び出しは、参照渡しになります。64ビットを超える構造体は参照渡しになるという、MIPS 32bit EABIの標準に沿った形になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>psp-gcc 2.xでの関数呼び出し規約</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">psp-gcc 2.xでは、V4SFモード型およびV16SFモード型の引数または戻り値をVFPUレジスタに格納します。使用されるレジスタは、以下の通りです。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> V4SFモード型引数 c000～c330
+<li> V16SFモード型引数 e000～e300
+<li> V4SFモード型戻り値 c000
+<li> V16SFモード型戻り値 e000
+<li> callee save register c000～c330
+<li> caller save register c400～c730
+</ul></div>
+<div style="margin-left:50px;"><br>V4SFモード型引数の個数が16個を超えた場合、またはV16SFモード型引数の個数が4個を超えた場合、標準的なEABIと同様にスタック渡しになります。V4SFモード型とV16SFモード型の引数が混在した場合、V16SFモード型の引数をレジスタに格納するためにレジスタ番号割り当てのスキップが起きる事があります。<br>V4SFモード型またはV16SFモード型の戻り値をもつ関数は、戻り値をc000またはe000レジスタに格納します。<br><br>可変長引数関数でV4SFモード型およびV16SFモード型の引数を扱った場合の動作は未定義です。使用してはいけません。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>VFPUビルトイン関数</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ビルトイン関数には、VFPU命令に対応した演算を行うビルトイン関数と、V4SFモード型またはV16SFモード型内のフィールド単位へのアクセスを行うサブレジスタアクセス関数があります。<br><br>4次元ベクトルの四則演算+, -, *, /についてはV4SFモード型に対する算術オペレータとしてサポートされていますが、スカラー型、2次元ベクトル、3次元ベクトルを対象とする場合は__builtin_vfpu_vadd_s(), __builtin_vfpu_vadd_p(), __builtin_vfpu_vadd_t()などビルトイン関数を使用する必要があります。<br><br>psp-gccは__builtin_vfpu_????()という関数名でビルトイン関数を提供しますが、vfpu_intrinsics.hはそのほとんどをvfpu_????()という関数名にラップします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>パーシャル書き込み関数とクロバー関数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ビルトイン関数の中には、V4SFモード型変数にアサインされた32bitのレジスタ4個のうち、ベクトル内の要素ごとに部分的な書き込みを場合ために、_partial付きの関数が用意されている物があります。<br><br>たとえば、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vone_q">vfpu_vone_q</a>(0);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vzero_p_partial">vfpu_vzero_p_partial</a>(va, <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VD_XY">VFPU_VD_XY</a>);	// パーシャル関数
+</font></pre></div>
+<div style="margin-left:50px;">とすると、最終的なvaの内容は{0.0f, 0.0f, 1.0f, 1.0f}となります。<br>最初の<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vone_q">vfpu_vone_q</a>()ではvone.qで{1.0f, 1.0f, 1.0f, 1.0f}を生成され、続く<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vzero_p_partial">vfpu_vzero_p_partial</a>()の第1引数としてvaを指定したことにより、vzero.p命令を実行する4次元ベクトルを指定したことになります。この場合vzero.p命令はX,Yフィールドについてのみ演算結果を書き換えるため、Z,Wフィールドには、以前の値が残ります。これがパーシャル書き込みの動作です。<br><br>これに対してパーシャル書き込みを用いない(クロバー動作)でvzero.p命令を発行する場合は、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vzero_p">vfpu_vzero_p</a>(<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VD_XY">VFPU_VD_XY</a>);			// クロバー関数
+</font></pre></div>
+<div style="margin-left:50px;">というビルトイン関数の呼び出し方が対応し、最終的なvaの内容は{0.0f, 0.0f, ????, ????}となります。Z,Wフィールドの内容は不定です。<br>この場合、V4SFモード型変数vaのX,Yフィールドはvzero.p命令のデスティネーションとして作用しますが、Z,Wフィールドについてはgccが割り当てたレジスタにもともと入っていたゴミのままとなるため、演算が不定値となります。パーシャル書き込み動作を行わないビルトイン関数の動作は、実行に先立って引数として入力レジスタを必要としていない場合、最適化によってVFPU命令の発行そのものが削除できる場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>ビルトイン関数のフラグ引数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VFPU命令に対応したビルトイン関数では、フラグ引数として64ビットの値をとります。このフラグでは、プレフィクスを使用したり、V4SFレジスタ内で使用するフィールドを選択したりすることができます。フラグを指定するための定数値はvfpu_intrinsics.hに定義されています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_6">
+<div style="margin-left:40px;"><h4><b>デフォルト動作</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">プレフィクス等を使用しない場合にはフラグ引数に0を指定します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vadd_q">vfpu_vadd_q</a>( vs, vt, 0);		// vd = vs + vtと同じ
+</font></pre></div>
+<div style="margin-left:67px;"><br>ただし、後述するマトリクス転置指定のフラグについては、0を指定するとm000形式(row majorマトリクス)になってしまう点にご注意ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_7">
+<div style="margin-left:40px;"><h4><b>プレフィクス指定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">フラグ引数でプレフィクスを指定する事ができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vadd_q">vfpu_vadd_q</a>( vs, vt,
+			VFPU_PFX_VD_Q( VFPU_PFX_THRU, VFPU_PFX_THRU,
+					VFPU_PFX_CLAMP0, VFPU_PFX_CLAMP1 ) |
+			VFPU_PFX_VS_Q( VFPU_PFX_X, VFPU_PFX_MINUS_W,
+					VFPU_PFX_QUARTER, VFPU_PFX_ABS_Y ) |
+			VFPU_PFX_VT_Q( VFPU_PFX_THIRD, VFPU_PFX_MINUS_X,
+					VFPU_PFX_X, VFPU_PFX_MINUS_ABS_X ) );
+</font></pre></div>
+<div style="margin-left:67px;">とすると、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vadd.q	c020[x,y,0:1,-1:1], c030[x,-w,1/4,|y|], c010[1/3,-x,x,-|x|]
+</font></pre></div>
+<div style="margin-left:67px;">のようなアセンブリが出力されることになります。<br><br>なお、デスティネーションプレフィクスのマスク指定は、パーシャル書き込み関数の場合にのみ使用で来ます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_8">
+<div style="margin-left:40px;"><h4><b>フィールド選択</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V4SFレジスタを部分的に使用する、スカラー,2次元,3次元のオペレーションに対しては、フィールドを選択するフラグを指定します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vadd_t">vfpu_vadd_t</a>( vs, vt, <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VD_YZW">VFPU_VD_YZW</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VS_XYZ">VFPU_VS_XYZ</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VT_YZW">VFPU_VT_YZW</a>);
+</font></pre></div>
+<div style="margin-left:67px;">とすると、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vadd.t	c021, c030, c011
+</font></pre></div>
+<div style="margin-left:67px;">のいうようなアセンブリが出力されることになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_2_9">
+<div style="margin-left:40px;"><h4><b>マトリクス転置</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V16SFレジスタを使用するとき、マトリクスレジスタをm000形式(row major matrix)で扱うかe000形式(column major matrix)で扱うかをフラグによって指定します。<br><br>たとえば、vtfm4.q命令をe000形式(column major matrix)によって扱う場合には<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vd = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vtfm4_q">vfpu_vtfm4_q</a>( vs, vt, VFPU_VS_E );
+</font></pre></div>
+<div style="margin-left:67px;">とすることで、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vtfm4.q		c000, e100, c200
+</font></pre></div>
+<div style="margin-left:67px;">というような	アセンブリが出力されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>サブレジスタアクセス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マトリクス内のベクトルや、ベクトル内のスカラーを取り出したり置き換えたりするために、サブレジスタアクセスを行うビルトイン関数がvfpu_intrinsics.hで提供されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_10">
+<div style="margin-left:40px;"><h4><b>ベクトルからスカラー取り出し</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V4SFモード型変数で指定されるベクトルの中から、任意のフィールドを取り出してfloat型を返すビルトイン関数は以下の通りです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>	 va;
+float	 x, y, z, w;
+
+x = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_float_from_v4x">vfpu_extract_float_from_v4x</a>( va );
+y = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_float_from_v4y">vfpu_extract_float_from_v4y</a>( va );
+z = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_float_from_v4z">vfpu_extract_float_from_v4z</a>( va );
+w = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_float_from_v4w">vfpu_extract_float_from_v4w</a>( va );
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_11">
+<div style="margin-left:40px;"><h4><b>ベクトルへスカラーの挿入</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V4SFモード型変数で指定されるベクトルの中へ、float型変数で指定されるスカラーを任意のフィールドとして挿入するビルトイン関数は以下の通りです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>	 va;
+float	 x, y, z, w;
+
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_float_into_v4x">vfpu_insert_float_into_v4x</a>(va, x);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_float_into_v4y">vfpu_insert_float_into_v4y</a>(va, y);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_float_into_v4z">vfpu_insert_float_into_v4z</a>(va, z);
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_float_into_v4w">vfpu_insert_float_into_v4w</a>(va, w);
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_12">
+<div style="margin-left:40px;"><h4><b>ベクトルの4要素を設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ベクトルを構成するスカラー4要素が全て用意されている場合には、float型変数4個よりV4SFモード型変数を構成させることができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>	 va;
+float	 x, y, z, w;
+
+va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_assign_float_to_v4xyzw">vfpu_assign_float_to_v4xyzw</a>(va, x, y, z, w);
+
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_13">
+<div style="margin-left:40px;"><h4><b>マトリクスからベクトル取り出し</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V16SFモード型変数で指定されるマトリクスの中から、任意の列ベクトルを取り出してV4SFモード型を返すビルトイン関数は以下の通りです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>	  x, y, z, w;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+x = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_v4_from_m4x">vfpu_extract_v4_from_m4x</a>(m);
+y = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_v4_from_m4y">vfpu_extract_v4_from_m4y</a>(m);
+z = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_v4_from_m4z">vfpu_extract_v4_from_m4z</a>(m);
+w = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_extract_v4_from_m4w">vfpu_extract_v4_from_m4w</a>(m);
+</font></pre></div>
+<div style="margin-left:67px;"><br>ここでは、マトリクスがE000形式(カラム優先Column majorマトリクス)であることが期待されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_14">
+<div style="margin-left:40px;"><h4><b>マトリクスへベクトルの挿入</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V16SFモード型変数で指定されるマトリクスの中へ、V4SFモード型変数で指定されるベクトルを任意の列ベクトルとして挿入するビルトイン関数は以下の通りです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>	 x, y, z, w;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4x">vfpu_insert_v4_into_m4x</a>(m, x);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4y">vfpu_insert_v4_into_m4y</a>(m, y);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4z">vfpu_insert_v4_into_m4z</a>(m, z);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4w">vfpu_insert_v4_into_m4w</a>(m, w);
+
+</font></pre></div>
+<div style="margin-left:67px;">ここでは、マトリクスがE000形式(カラム優先Column majorマトリクス)であることが期待されます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_15">
+<div style="margin-left:40px;"><h4><b>マトリクスの4要素を設定</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">マトリクスを構成するベクトル4要素が全て用意されている場合には、V4SFモード型変数4個よりV16SFモード型変数を構成させることができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>	 x, y, z, w;
+
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_assign_v4_to_m4xyzw">vfpu_assign_v4_to_m4xyzw</a>(x, y, z, w);
+</font></pre></div>
+<div style="margin-left:67px;"><br>ここでは、マトリクスがE000形式(カラム優先Column majorマトリクス)であることが期待されます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>インラインアセンブラ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">gccのインラインアセンブリ内でV4SFモード型、V16SFモード型変数を参照/出力するための文法について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>V4SFモード型変数の参照</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_16">
+<div style="margin-left:40px;"><h4><b>オペランド拘束子</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V4SFモード型の変数をインラインアセンブリ内で参照する場合、オペランド拘束子として"C"を使用します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>inline const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> Sin4f( const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> _Value )
+{
+	<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> retval;
+	__asm__ ("
+		"vsin.q	%0, %1	\n"
+		: "=C"(retval)
+		: "C"(_Value)
+	);
+	return retval;
+}
+
+</font></pre></div>
+<div style="margin-left:67px;">gccはこのときV4SFモード型変数をVFPUレジスタにc000形式でアロケートします。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_1_17">
+<div style="margin-left:40px;"><h4><b>サブエレメントへのアクセス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V4SFモード型変数のサブエレメントアクセス（読み込みまたは書き込み）を行うためには、%x0, %y0, %z0, %w0, %Y0, %Z0シンタクスを使用します。<br><br>スカラー型としてサブエレメントにアクセスしたい場合には%x, %y0, %z0, %w0シンタクスを使用します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+inline const float dot(const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> _Value1, const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> _Value2) const
+{
+	float retval;
+	<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> tmp;
+
+	__asm__ (
+		"vdot.q	 %x1, %2, %3	\n"
+		"sv.s	 %x1, %0		\n"
+		: "=m"(retval), "=C"(tmp)	/* tmp float reg in vfpu */
+		: "C"(_Value1), "C"(_Value2)
+	);
+	return retval;
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>この例では、vdot.q命令の結果を%1として参照される変数tmpのXフィールドに格納しています。<br><br>2次元ベクトルとしてサブエレメントにアクセスする場合には%0または%Z0シンタクスを使用します。%0を指定するとx,y成分、%Z0を指定するとz,w成分からなる2次元ベクトルがそれぞれ相当されます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>	__asm__ (
+		"vi2s.p	 %x0, %Z1	\n"
+		: "=C"(dst)
+		: "C"(src)
+	);
+</font></pre></div>
+<div style="margin-left:67px;"><br>この例では、vi2s.p命令の入力としてsrcのz,w成分からなる2次元べクトルを指定しています。<br><br>同様に、3次元ベクトルとしてサブエレメントにする場合には%0または%Y0シンタクスを使用します。%0を指定するとx,y,z成分、%Z0を指定するとy,z,w成分からなる3次元ベクトルがそれぞれ相当されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>V16SFモード型変数の参照</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2_18">
+<div style="margin-left:40px;"><h4><b>オペランド拘束子</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">V16SFモード型をインラインアセンブラで使う場合も、V4SFモード型と同じく"C"拘束子を使用します。<br>インラインアセンブリ内で、"C"で指定されたオペランドをV16SFモード型のマトリクスとして参照する場合、行列レジスタを参照するシンタクスは%eまたは%mのいずれかです。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>	 vd, vt;
+<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+__asm__ (
+	"vtfm4.q	%0, %e1, %2\n"
+	: "=&amp;C"(vd)
+	: "C"(m), "C"(vt)
+);
+</font></pre></div>
+<div style="margin-left:67px;"><br>出力レジスタの指定には"=&amp;C"とアンパサンド修飾子を補います。これはマトリクスを対象とした命令では、ほとんどの場合vdとvs / vtが同じレジスタにアサインできないため、独立したレジスタがアロケートされるよう出力レジスタの早期破壊を指示する修飾子です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_2_19">
+<div style="margin-left:40px;"><h4><b>サブエレメントへのアクセス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">マトリクスレジスタ内のベクトルまたはスカラーを指定するシンタクスには、%c0, %r0, %s0と、ダミーの%:、レジスタ番号の下2桁を組みあわて使用します。<br><br>%c0 / %r0 / %s0のいずれかによって、マトリクスレジスタ内のサブレジスタの形式を指定します。ここで指定する数値は"C"拘束子で支持されたマトリクスオペランドを指示します。<br>c000 / r000 / s000形式のいずれも、レジスタ番号は3桁の数値で表されますが、%c0 / %r0 / %s0シンタクスによって出力されるのはマトリクス番号のみです。残りの2桁の数値はダミーのパンクションである%:の後に記述します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+__asm__ (
+	"vmzero.q	%e0	\n"			// e?00をゼロマトリクスに
+	"vone.q	%r0%:00	\n"			// r?00 = [1,1,1,1]
+	"vcst.t	%c0%:31, VFPU_CONST_PI\n"	// c?31 = [PI,PI,PI]
+	"vzero.s	%s0%:00	\n"			// s?00 = 0
+	: "=C"(m)
+);
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>Tips</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>インライン関数は値渡しにする</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">インライン関数の引数としてV4SFモード型,V16SFモード型を渡す場合、なるべく値渡し(by value)にします。インライン関数の場合、引数が値渡しになることでスタックにテンポラリ変数を確保しないようにする最適化が有効になる場合があります。インライン関数でない場合にはconstによる参照が適切です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>エイリアシングを避けunion経由で型変換を行う</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">互換性のないポインタ型に対するキャストは、最適化によって発生したエイリアシングで意図されたとおりのコンパイルが行えない場合があります。unionを使用すると、最適化を妨げずに安全な変換を行う事ができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_3">
+<h3>
+<a href="#Heading3_8"> 8. </a>3 
+<!-- hp1 --><b>可能な限りconstを指定する</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">vfpu builtinをラップする場合、出来る限り<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>や<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a>にconstを使用して下さい。vfpu_intrinsics.hにあるようなflag_typesのtypedefを使って下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_4">
+<h3>
+<a href="#Heading3_8"> 8. </a>4 
+<!-- hp1 --><b>インラインアセンブリにはなるべくvolatileを使用しない</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">インラインアセンブリを記述する時、入力ブロック,出力ブロックを確実に記述していればvolatileは不要です。volatileを指定すると、gccは命令並び替えの最適化が十分に働かなくなる事があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_5">
+<h3>
+<a href="#Heading3_8"> 8. </a>5 
+<!-- hp1 --><b>インラインアセンブリのオペランドに名前をつける</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">gcc 3.1以降では、インラインアセンブリのオペランドを名前つきで参照する事ができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>__asm__ (
+	"vdot.q	%x[temp], %[value1], %[value2]	\n"
+	"sv.s		%x[temp], %[retval]		\n"
+	: [retval]"=m"(retval), [temp]"=C"(tmp)
+	: [value1]"C"(_Value1), [value2]"C"(_Value2)
+);
+
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_6">
+<h3>
+<a href="#Heading3_8"> 8. </a>6 
+<!-- hp1 --><b>なるべくインラインアセンブリを使用しない</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">最適化を有効に働かせるためには、なるべくインラインアセンブリを使用しないことをお勧めします。VFPＵビルトイン関数やV4SFモード型の基本演算を使用すると、gccが最適な演算順に並び替えをしやすくなります。イントリンジックを使用するとサイクル数が考慮されますが、インラインアセンブリの場合には考慮されません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_7">
+<h3>
+<a href="#Heading3_8"> 8. </a>7 
+<!-- hp1 --><b>ビルトイン関数を直接呼び出さず、定義されたラッパ関数を使用する</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ビルトイン関数の仕様変更に柔軟に対応できるよう、gccのVFPUビルトイン関数__builtin_vfpu_???()を直接呼び出すのではなく、vfpu_intrinsics.hのvfpu_???()関数のようにラッパ関数経由で呼び出すのが推奨されます。ラッパ関数はいずれもインラインで展開されるため、最適化により関数呼び出しのコストはかかりません。ビルトイン関数の一部の引数はコンパイル時に決定されている必要があるため、最適化なしの-O0状態でコンパイルすることは出来ません。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>既知の問題</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_20">
+<div style="margin-left:40px;"><h4><b>C++のシンボル名マングリングが行われるとき、V4SFモード型とV16SFモード型が同一視されてしまう。</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">これは仕様です。V4SFモード型とV16SFモード型はどちらもfloatのベクトル型であり、次元数のみが違います。gccはベクトル型のシンボルマングリングのとき、ベクトルの次元数をシンボルに含めないため、同じ関数名で引数の型がV4SFモード型とVF16モード型の差しかない場合にシンボル名が同一になってしまいます。<br>たとえば、<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> mul(const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> a, const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> b)
+{
+	return a * b;
+}
+
+const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> mul(const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> a, const <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> b)
+{
+	return a * b;
+}
+
+</font></pre></div>
+<div style="margin-left:67px;">この2つの関数はどちらも_Z3mulU8__vectorfS_というシンボル名にマングリングされてしまうため、共存できません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_21">
+<div style="margin-left:40px;"><h4><b>C++のtype_infoで、V4SFモード型とV16SFモード型が同一視されてしまう</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">これは仕様です。type_infoが共通となるため、V4SFモード型またはV16SFモード型をthrowすると、どちらか先にcatchされた方のブロックが実行されてしまいます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>try {
+	<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> v = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(0.0f);
+	throw v;
+} catch (<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> e) {
+	std::cout &lt;&lt; "V16SF is caught Why!?";
+} catch (<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> e) {
+	std::cout &lt;&lt; "V4SF is caught";
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_22">
+<div style="margin-left:40px;"><h4><b>ビルトイン関数をラップする場合には必ずインライン関数化する必要がある</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUビルトイン関数__built_vfpu_????()をラップする関数を作る場合、ラッパ関数のプロトタイプ宣言には必ず__attribute__((always_inline))属性を付けなければなりません。<br>VFPUのビルトイン関数は、gcc内部のRTLで<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_flag_type">vfpu_flag_type</a>がCONST_INTとなることを期待しています。ラッパ関数がインライン展開されなかった場合、<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_flag_type">vfpu_flag_type</a>がメモリオペランドになってしまう可能性があり、その場合コンパイルできなくなります。これを防ぐために、-O1以上の最適化オプションを指定し、ラッパ関数のプロトタイプ宣言に__attribute__((always_inline))属性を付加することで、必ずラッパ関数がインライン展開されるようになります。<br>最適化オプションなし(-O0)の状態では、一部の<a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_flag_type">vfpu_flag_type</a>がCONST_INTにならず、ビルトイン関数でコンパイラ内部エラーが発生することがあります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_23">
+<div style="margin-left:40px;"><h4><b>__builtin_vfpu_vcmp_?()関数を?:シンタクスの条件として使用できない (psp-gcc 1.xの場合)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUビルトイン関数__builtin_vfpu_vcmp_?()関数はbool値を返しますが、このbool値を直接?:構文の条件として使用する事ができません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>bool b;
+b = ( __builtin_vfpu_vcmp_s( VFPU_GT, va, vb , <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VS_X">VFPU_VS_X</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VT_W">VFPU_VT_W</a> ) ? true : false;
+</font></pre></div>
+<div style="margin-left:67px;"><br>のように使用すると、Internal Compiler Errorが発生してコンパイルできません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>bool b;
+if (__builtin_vfpu_vcmp_s( VFPU_GT, va, vb , <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VS_X">VFPU_VS_X</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VT_W">VFPU_VT_W</a> )) {
+	b = true;
+} else {
+	b = false;
+}
+
+</font></pre></div>
+<div style="margin-left:67px;">として使用することは可能です。この問題を防ぐために、VFPUビルトイン関数__builtin_vfpu_vcmp_?()関数を直接使用することはせず、vfpu_intrinsics.hで定義されたラッパ関数vfpu_cmp_??_?()関数を使用してください。ラッパ関数を使用すれば、<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>bool b;
+b = vfpu_cmp_gt_s( va, vb , <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VS_X">VFPU_VS_X</a> | <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#VFPU_VT_W">VFPU_VT_W</a> ) ? true : false;
+
+</font></pre></div>
+<div style="margin-left:67px;">と記述する事ができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_24">
+<div style="margin-left:40px;"><h4><b>__builtin_vfpu_vidt_?()関数の結果はレジスタアロケーション具合によって不定となる</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUビルトイン関数__builtin_vfpu_vidt_?()関数はvidt.?命令を生成しますが、vidt.?命令は指定されたオペランドが、マトリクス内のどの部分を構成するレジスタに相当するかによって動作の結果が異なります。<br>VFPUイントリンジックではgccによるレジスタアロケーションが行われるため、最終的にvidt.?命令が生成される時に使用されるレジスタ番号を推定するのは困難です。<br><br>この問題を防ぐために、VFPUビルトイン関数__builtin_vfpu_vidt_?()関数を使用するのではなく、vfpu_intrinsics.hで定義されたラッパ関数vfpu_idt_?()関数を使用してください。ラッパ関数ではvidt.?命令を使用せず、vpfxs + vmov.?命令によって単位ベクトルを生成します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_25">
+<div style="margin-left:40px;"><h4><b>定数値1.0を最適化にうまく活用しきれていない</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">たとえば<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>va = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(1.f) - <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a>(1.0f) / vb
+</font></pre></div>
+<div style="margin-left:67px;">のような方程式の場合、gccがvrcp + vocpを生成するのが期待されますが、現在はそのようになりません。このような場合、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> tmp;
+tmp = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vrcp_q">vfpu_vrcp_q</a>(vb);
+va  = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_vocp_q">vfpu_vocp_q</a>(tmp);
+</font></pre></div>
+<div style="margin-left:67px;">のようにビルトイン関数を併用してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_26">
+<div style="margin-left:40px;"><h4><b>条件転送命令vcmov.?を使用する方法がありません</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_27">
+<div style="margin-left:40px;"><h4><b>-Waggregate-returnオプションを付けているとV4SFモード型, V16SFモード型の戻り値に対して警告が出ることがあります(psp-gcc 1.xの場合)</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_28">
+<div style="margin-left:40px;"><h4><b>サブレジスタ挿入で変数が未初期化であるという警告が出る</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ベクトルへのスカラー挿入、マトリクスへのベクトル挿入は、パーシャル書き込み動作として行われます。このため最終的に全てのサブレジスタに対して挿入を行うような場合でも、最初の挿入動作で発生する、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>`vector float ????' might be used uninitialized in this function
+</font></pre></div>
+<div style="margin-left:67px;">という警告メッセージを消すことができません。<br><br>psp-gcc 1.xの場合、この警告はダミーのインラインアセンブリを用いることで消すことができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+
+__asm__ ( "" : "=C"(m) );
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4x">vfpu_insert_v4_into_m4x</a>(m, x);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4y">vfpu_insert_v4_into_m4y</a>(m, y);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4z">vfpu_insert_v4_into_m4z</a>(m, z);
+m = <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_insert_v4_into_m4w">vfpu_insert_v4_into_m4w</a>(m, w);
+</font></pre></div>
+<div style="margin-left:67px;"><br>psp-gcc 2.xの場合、インラインアセンブリによってもこの警告を消すことはできますが、インラインアセンブリを使用するよりunionを使った方が最適化されやすくがなることがあります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>union {
+   <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_m4x4">vfpu_m4x4</a> m;
+   <a href="../fpu-vfpu/VFPU_Intrinsics-Reference-Japanese.htm#vfpu_v4">vfpu_v4</a> v[4];
+} u;
+
+u.v[0] = x;
+u.v[1] = y;
+u.v[2] = z;
+u.v[3] = w;
+m = u.m;
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

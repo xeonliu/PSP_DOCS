@@ -1,0 +1,1236 @@
+<html lang="jp">
+<head>
+<title>libgiq_Picture-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgiq_picture
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgiq_pictureはlibgim_pictureの軽量版です。libgim_pictureとほぼ同じAPIを提供し、より少ないCPU負荷でGIMファイルを表示することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgiq_pictureを使用するために必要なファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;giq/giq_picture.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgiq_picture.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:40px;"><ul>
+<li> 標準のコンテキストで描画する場合は、libguおよびlibgumが必要です。
+<li> 内部関数を使用する場合は、giq/giq_protected.hをインクルードしてください。
+<li> ソースコードは、devkit/src/giq_picture/ にあります。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/graphics/picture_giq</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">libgim_pictureとlibgiq_pictureで画像データを表示するサンプルです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>参考資料</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GIM_Format-Overview<br>GIM-Converter<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">次に示すのは、libgiq_pictureを使用するプログラム例の主要部分です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;giq/giq_picture.h&gt;
+
+// 初期化
+・・・
+
+// ピクチャデータをロード
+SceGiqPicture *picture = <a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureCreate">sceGiqPictureCreate</a>() ;
+<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureLoadFile">sceGiqPictureLoadFile</a>( picture, data, size, 0 ) ;
+SceGiqPicture *copy =<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureDuplicate">sceGiqPictureDuplicate</a>( picture, SCEGIQ_DUPLICATE_AUTOMATIC ) ;
+
+for ( ; ; ) {
+	//  ディスプレイリストを開始
+	<a href="../graphics/libgu-Reference-Japanese.htm#sceGuStart">sceGuStart</a>( SCEGU_LIST_CACHED, pkt, pkt_size ) ;
+
+	//  ピクチャデータを表示
+	<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureAnimate">sceGiqPictureAnimate</a>( copy, 1.0f / 60.0f ) ;
+	<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureActivate">sceGiqPictureActivate</a>( copy ) ;
+	<a href="../graphics/libgum-Reference-Japanese.htm#sceGumDrawArray">sceGumDrawArray</a>( prim, format, 4, 0, verts ) ;
+	. . .
+	//  ディスプレイリストを終了
+	<a href="../graphics/libgu-Reference-Japanese.htm#sceGuFinish">sceGuFinish</a>() ;
+	<a href="../graphics/libgu-Reference-Japanese.htm#sceGuSendList">sceGuSendList</a>( SCEGU_QUEUE_TAIL, pkt, 0, 0, 0 ) ;
+}
+
+//  ピクチャデータを削除
+<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureDelete">sceGiqPictureDelete</a>( picture ) ;
+<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureDelete">sceGiqPictureDelete</a>( copy ) ;
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">必要に応じて、コールバック関数を登録します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 通常のメモリを確保 / 解放する関数
+<li> DMA転送用のメモリを確保 / 解放する関数
+<li> 高速なeDRAM上のメモリを確保 / 解放する関数
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>ピクチャデータをロード</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureCreate">sceGiqPictureCreate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: ピクチャ構造体を作成します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureLoadFile">sceGiqPictureLoadFile</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: ピクチャ構造体にデータを読み込みます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureDuplicate">sceGiqPictureDuplicate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: ピクチャ構造体のコピーを作成します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>ディスプレイリストを開始</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>ピクチャデータを表示</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureAnimate">sceGiqPictureAnimate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: アニメーションの時間を進めます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureActivate">sceGiqPictureActivate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: テクスチャ設定のディスプレイリストを作成します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-Japanese.htm#sceGumDrawArray">sceGumDrawArray</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: ポリゴン描画のディスプレイリストを作成します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>ディスプレイリストを終了</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>ピクチャデータを削除</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureDelete">sceGiqPictureDelete</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: ピクチャ構造体を解放します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>追加的な処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">必要に応じて、以下のような処理を追加してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>各種パラメータの設定</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureSetEnableBits">sceGiqPictureSetEnableBits</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: イネーブルビットを設定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureSetImageCrop">sceGiqPictureSetImageCrop</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: イメージクロップを設定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;・・・&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>キャッシュのロード</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureLoadCache">sceGiqPictureLoadCache</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 高速メモリを確保します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureUnloadCache">sceGiqPictureUnloadCache</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: 高速メモリを解放します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>制限事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>注意点</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> メモリブロックをまとめて確保するメモリクラスタは、暗黙に生成されます。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>内部データ</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> データ構造は以下のように変更されました。
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> 高速化用のImage / Paletteブロックは、リンクリストに登録されます。
+<li> アニメーションに関する情報は、Sequenceブロックに格納されます。
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> 描画データは以下のように変更されました。
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> テクスチャ設定パケットは、可能ならば暗黙に生成され、使用されます。
+<li> イメージのピクセルデータは、128バイトアラインメントで格納されます。
+</ul></div>
+</ul>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>拡張された機能</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>メモリマネージャ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">メモリのアラインメントや解放遅延などの機能をメモリマネージャに実装しました。これらの処理をメモリマネージャに実行させることも、従来どおりユーザーが用意するメモリ管理関数に実行させることも可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>メモリミューテックス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">マルチスレッドによるアクセスからメモリマネージャを保護することが可能になりました。<br>スレッドセーフ性については第5章を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>ピクチャ複製</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">従来は未対応であった、ピクセルデータを複製することが可能になりました。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>スレッドセーフ性</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>スレッドセーフ性</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgiq_pictureは、複数のピクチャが内部データを共有するように設計されているため、マルチスレッド処理には適していません。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgiq_Picture-Overview-Japanese001.gif">
+</div>
+<div style="margin-left:50px;"><br><br>もし、ピクチャの複製を行わず内部データを共有しない状態であっても、メモリマネージャがグローバル変数に格納されているため、何らかのアクセス保護が必要です。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgiq_Picture-Overview-Japanese002.gif">
+</div>
+<div style="margin-left:50px;"><br><br>マルチスレッド処理を行うためには、以下のような条件を満たす必要があります。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> サブスレッドでアクセスするピクチャは他のピクチャと内部データを共有しない
+<li> メモリマネージャをミューテックスなどで保護する
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>ファイルロード処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">たとえば、ファイルロード処理をサブスレッドで実行することは、ロード直後のピクチャが他のピクチャと内部データを共有しないことから、比較的実現が容易であると考えられます。<br><br>サブスレッドの処理は、たとえば以下のようになります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> メインスレッドと非同期でファイルロード処理を行う
+<li> メインスレッドと同期してファイルロード完了を通知する
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgiq_Picture-Overview-Japanese003.gif">
+</div>
+<div style="margin-left:50px;"><br><br>サブスレッドのプログラムは、たとえば以下のようになります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+void *data = 0 ;
+size_t size = 0 ;
+LoadFile( "dog.gim", &amp;data, &amp;size ) ;
+
+SceGiqPicture *picture = <a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureCreate">sceGiqPictureCreate</a>() ;
+<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureLoadFile">sceGiqPictureLoadFile</a>( picture, data, size, 0 ) ;
+<a href="../graphics/libgiq_Picture-Reference-Japanese.htm#sceGiqPictureLoadCache">sceGiqPictureLoadCache</a>( picture ) ;
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>関数一覧</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">libgim_pictureに対応する関数は以下のようになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>グローバル</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>備考</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryManager&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryManager2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryManager3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryMutex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureOpenMemoryCluster&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureOpenMemoryCluster2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureOpenMemoryCluster3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCloseMemoryCluster&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCloseMemoryCluster2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCloseMemoryCluster3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureTouchMemory&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCleanMemory&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryInfo&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCheckFileHeader&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetChunkCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetRootChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCountChildChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureFindChildChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureAddMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSizeEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSize2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSize2Ex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSizes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非対応&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Pictureオブジェクト</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCreate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;引数が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureDelete&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureDuplicate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadFile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadGim&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadTm2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadTga&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadBmp&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoad&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;互換用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureUnload&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadCache&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadCacheEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureUnloadCache&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureUnloadCacheEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureAnimate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureAnimateEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureActivate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureActivateEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Pictureパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImageCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImageCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetBlend&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetBlend&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFunc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFunc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFilter&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFilter&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetWrap&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetWrap&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPalette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetActiveImage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetActivePalette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImagePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPalettePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImagePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPalettePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureReallocImage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureReallocImageEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureReallocPalette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImagePlaneCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImagePlane&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImagePlane&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPaletteOffset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPaletteOffset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureHasAnimation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetSequenceCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetSequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;返り値が変更&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetCurrentSequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetCurrentSequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>Imageパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetNext&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetUsage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetFormat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetOrder&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBPP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetWidth&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetHeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPitch&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufWidth&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufHeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetTexWidth&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetTexHeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPitchAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufWidthAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufHeightAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPlaneMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetLevelCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetFrameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetLevelType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetFrameType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetUserData&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetUserDataSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>Sequenceパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetConstantCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFunctionCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetConstant&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFunction&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

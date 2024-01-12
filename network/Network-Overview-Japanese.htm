@@ -1,0 +1,676 @@
+<html lang="jp">
+<head>
+<title>Network-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ネットワーク概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>PSPNETの構成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSPNETでは、用途に応じてインフラストラクチャモードとアドホックモードを使い分け、各モードに対して使用するネットワークプロトコルを規定します。<br><br>インフラストラクチャモードでは、インターネットを介した通信やLAN上のPSP&reg;以外の端末との通信に利用するものとし、ネットワークプロトコルとしてTCP/IPプロトコルを使用します。<br>一方、通信対戦などのPSP&reg;同士の通信は、アドホックモードを利用し、ネットワークプロトコルとしてPSP&reg;独自の専用プロトコル（アドホックモード通信プロトコル）を使用します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>モード</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>プロトコル</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PSP&reg;同士の通信</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PSP&reg;以外との通信</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;インフラストラクチャ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;TCP/IP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;アドホック&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;専用&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;×&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">当面、TCP/IPプロトコルの使用はインフラストラクチャモードのみとなっています。<br>インフラストラクチャモードでTCP/IPプロトコルを用いてPSP&reg;同士で通信することも可能です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>モジュール構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETでは、TCP/IPプロトコルとアドホックモード専用プロトコルという2つの独立したプロトコルを使用するため、共通の基盤機能をpspnetモジュールとして、各プロトコル機能をそれぞれ独立したモジュールとして提供します。またインフラストラクチャモード、およびアドホックモードそれぞれにネットワーク接続モジュールを提供します。<br>TCP/IPネットワーク接続には、加えてユーティリティと呼ばれるGUI付き接続ライブラリと、開発時に使用できるGUIなしのダミーダイアログライブラリが用意されます。TCP/IPネットワーク設定は不揮発性の記憶領域に格納されており、接続時に設定を読み出して接続動作を行います。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 モジュール構成図（プロトコルスタック）</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 モジュール構成図（TCP/IPネットワーク接続）</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 モジュール構成図（アドホックネットワーク接続）</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>共通モジュール</b><br><br></h4></div></a>
+
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_1">
+<div style="margin-left:63px;"><h4><b>ifhandle</b><br><br></h4></a></div>
+<div style="margin-left:80px;">pspnetとインタフェースドライバを接続するモジュールです。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_2">
+<div style="margin-left:63px;"><h4><b>pspnet</b><br><br></h4></a></div>
+<div style="margin-left:80px;">pspnetの基盤機能を提供します。<br>（インタフェース管理、バッファ管理、ユーティリティ関数など）<br>TCP/IP、アドホックモード専用プロトコルどちらを使用する場合にも必要となります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2_2">
+<div style="margin-left:40px;"><h4><b>TCP/IPプロトコルモジュール</b><br><br></h4></div></a>
+
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_3">
+<div style="margin-left:63px;"><h4><b>pspnet_inet</b><br><br></h4></a></div>
+<div style="margin-left:80px;">TCP/IPの基本モジュール。<br>TCP/IPプロトコルおよびBSDソケットAPIを提供します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_4">
+<div style="margin-left:63px;"><h4><b>pspnet_apctl</b><br><br></h4></a></div>
+<div style="margin-left:80px;">インフラストラクチャモードでのアクセスポイント接続機能、およびIPアドレス取得機能を提供します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_5">
+<div style="margin-left:63px;"><h4><b>pspnet_ap_dialog_dummy</b><br><br></h4></a></div>
+<div style="margin-left:80px;">開発時に、ユーティリティの代わりに用いるGUIなしのネットワーク接続ライブラリです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_5_3">
+<div style="margin-left:40px;"><h4><b>アドホックモード通信プロトコルモジュール</b><br><br></h4></div></a>
+
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_6">
+<div style="margin-left:63px;"><h4><b>pspnet_adhoc</b><br><br></h4></a></div>
+<div style="margin-left:80px;">アドホックモード専用プロトコルの基本モジュール。<br>アドホックソケットAPIを提供します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_7">
+<div style="margin-left:63px;"><h4><b>pspnet_adhoc_auth</b><br><br></h4></a></div>
+<div style="margin-left:80px;">アドホックモードの機器認証機能を提供します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_8">
+<div style="margin-left:63px;"><h4><b>memab</b><br><br></h4></a></div>
+<div style="margin-left:80px;">アドホックモードの機器認証機能を提供します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_1_1_9">
+<div style="margin-left:63px;"><h4><b>pspnet_adhocctl</b><br><br></h4></a></div>
+<div style="margin-left:80px;">アドホックモードの接続機能を提供します。<br></div>
+<div style="margin-left:50px;"><br>ユーティリティライブラリについては、「ユーティリティライブラリの概要ドキュメントおよびリファレンスドキュメント」を参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>IEEE 802.11概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>動作モード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">IEEE 802.11では、インフラストラクチャモードとアドホックモードという2つの独立した動作モードがあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>インフラストラクチャモード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">アクセスポイントと呼ばれる特別な無線端末が存在し、すべての通信はアクセスポイントを介して行われます。無線端末はアクセスポイントの通信範囲にいないと、通信を行うことが出来ません。現在一般的にホットスポットや無線ルータで使用されているのは、このモードになります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>アドホックモード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">無線端末同士が直接無線通信を行うモードです。アクセスポイントが不要で、近隣の無線端末同士で通信できる利点がありますが、その反面インフラストラクチャモードでアクセスポイントに任せていた処理を無線端末間で分担する必要があります。<br><br></div>
+<div style="margin-left:50px;">これらのモードは排他的に動作するため、同時に使用することはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>BSS (Basic Service Set)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">IEEE 802.11では、無線端末同士が通信するためには各無線端末が同一の通信グループに参加することが必要になります。この通信グループをBSS (Basic Service Set)と呼びます。BSSは同一の空間に複数存在することが可能で、BSSIDと呼ばれる48ビットのIDによって識別されます。<br><br>インフラストラクチャモードのBSS構成を図 4に、アドホックモードのBSS構成を図 5に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4 インフラストラクチャモードの構成</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5 アドホックモードの構成</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">BSSはBSSIDの他に以下のパラメータを持ちます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <b>SSID (Service Set ID)</b><br>0 ～ 32バイトの識別子で、多くの場合は文字列が割り当てられます。各BSSはそれぞれ任意のSSIDを持ちます。SSIDは、無線端末が目的のBSSを発見し参加するための識別子として用いられます。
+<li> <b>チャンネル</b><br>BSSが使用する周波数帯を示す数値です。PSP&reg;で使用するIEEE802.11では、仕様上1～14の数値が規定されていますが、国によってさらに使用範囲を制限している場合があります。
+</ul></div>
+<div style="margin-left:50px;"><br>複数のBSSが混在する空間でのSSIDによる識別の様子を図 6に示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 6 SSIDによるBSS識別</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>通信の手順</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">無線端末が通信を行なうためにはBSSに参加（ジョイン）しなければなりません。BSSに参加する手順は以下の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> インフラストラクチャモード<br>ネットワーク接続ユーティリティを利用して、接続するSSIDを選択します。
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> アドホックモード<br>アドホック接続ライブラリを使用して、指定されたアドホックIDとグループ名でBSSに参加します。<br>BSSに参加した無線端末は、同一のBSSに参加している無線端末と通信できます。各無線端末はイーサネットデバイスと同様に、48ビットのMACアドレスで識別されます。<br>また<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>()を使用することで、同一アドホックIDで構成された近隣のBSSをスキャンすることが可能です。
+</ul></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>TCP/IPプロトコル概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSPNETでは、TCP/IPプロトコルとして以下の機能を提供します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> TCP/IPプロトコル
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> IPv4
+<li> ICMP
+<li> UDP
+<li> TCP
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> BSDソケットAPI
+<li> ネットワーク接続（IPアドレス設定）機能
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> DHCP
+<li> PPPoE
+<li> 手動設定
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> ユーティリティ関数
+</ul>
+</ul></div>
+<div style="margin-left:67px;">IPv6はサポートしていません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>BSDソケットAPI</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_inetで提供するBSDソケットAPIは、関数名が変更されています。機能に違いはありません。pspnet_inetのAPIリストを、一般的なBSDソケットAPIとの対応とともに以下に示します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>pspnet_inet API</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>BSDソケットAPI</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetAccept">sceNetInetAccept</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;accept()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetBind">sceNetInetBind</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;bind()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetConnect">sceNetInetConnect</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;connect()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetGetpeername">sceNetInetGetpeername</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;getpeername()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetGetsockname">sceNetInetGetsockname</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;getsockname()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetGetsockopt">sceNetInetGetsockopt</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;getsockopt()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetListen">sceNetInetListen</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;listen()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetRecv">sceNetInetRecv</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;recv()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetRecvfrom">sceNetInetRecvfrom</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;recvfrom()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetRecvmsg">sceNetInetRecvmsg</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;recvmsg()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSend">sceNetInetSend</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;send()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSendto">sceNetInetSendto</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sendto()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSendmsg">sceNetInetSendmsg</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sendmsg()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSetsockopt">sceNetInetSetsockopt</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;setsockopt()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetShutdown">sceNetInetShutdown</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;shutdown()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSocket">sceNetInetSocket</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;socket()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetClose">sceNetInetClose</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;close()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetPoll">sceNetInetPoll</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;poll()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSelect">sceNetInetSelect</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;select()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInetAddr">sceNetInetInetAddr</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_addr()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInetAton">sceNetInetInetAton</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_aton()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInetNtop">sceNetInetInetNtop</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_ntop()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetInetPton">sceNetInetInetPton</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;inet_pton()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">pspnet_inetのソケットAPIは基本的にブロッキングAPIです。pspnet_inetではブロックを解除（アボート）する関数を提供しています。アボート関数は、ソケットIDを指定してアボートする関数<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetSocketAbort">sceNetInetSocketAbort</a>()とスレッドIDを指定してアボートする関数<a href="../network/PSPNET_Core-Reference-Japanese.htm#sceNetThreadAbort">sceNetThreadAbort</a>()があります。<br>pspnet_inetのソケットAPIでは他のライブラリAPIと異なり、BSDソケットAPI同様にエラー時には返り値として負数を返し、エラーコードは変数errnoに相当する<a href="../network/PSPNET_Inet-Reference-Japanese.htm#sceNetInetGetErrno">sceNetInetGetErrno</a>()を呼び出すことで参照します。<br>pspnet_inetのソケットAPIの使い方については、BSDソケットAPIに関する一般的な資料をご覧ください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>アドホックモード通信プロトコル概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>SSIDの構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">IEEE 802.11におけるアドホックモードネットワークはIBSS (Independent Basic Service Set)と呼ばれるBSSで構成されます。無線端末同士が通信をするためには、それぞれの無線端末が同じIBSSに参加する必要があります。<br>PSPNETでは、基本的にタイトルアプリケーション毎に個別のIBSSを構成するため、タイトルアプリケーション毎に個別のSSIDを割り当てます。そのため各IBSSに用いるSSIDを以下のように規定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>		PSP_＜<i>アドホックID</i>＞_L_＜<i>グループ名</i>＞
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_4">
+<div style="margin-left:40px;"><h4><b>アドホックID（10文字）</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">原則的にタイトル毎に一意に割り当てられるID（文字列）です。ライブラリ初期化時に設定します。<br>アドホックIDは属性を表す1文字と9文字の文字列の計10文字で構成されます。タイトルアプリケーションで使用する場合は、タイトル品番の使用を表す属性SCE_NET_ADHOCCTL_ADHOCTYPE_PRODUCT_IDと、文字列として品番（アルファベット4文字＋数字5文字）をそのまま指定します。具体的な手順については、「アドホックネットワーク接続ライブラリのリファレンスドキュメント」を参照してください。<br>なお、異なるタイトルアプリケーション間での通信などタイトル品番以外の指定を希望される場合は、弊社までご連絡ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_5">
+<div style="margin-left:40px;"><h4><b>グループ名（0～8文字）</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">タイトルアプリケーションがアドホックネットワーク接続時に指定するパラメータ（文字列）です。同じグループ名を設定したPSP&reg;同士のみが同じIBSSに参加することになります。<br>グループ名の使い方はタイトルアプリケーションの自由としています。例えば、ゲームのステージや参加者のレベルに応じた固定的な文字列を設定することで、特定のユーザのみが接続するIBSSを作ることができます（図 7）。また、あるIBSSに接続した参加者間で一意なランダム文字列を設定することで、独立したIBSSを作ることができます（図 8）。<br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese007.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 7 グループ名の使用例（1）</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese008.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 8 グループ名の使用例（2）</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>使用チャンネル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETがアドホックモードで使用するチャンネルは、PSP&reg;システムソフトウェアによるアドホックモードのチャンネル番号設定に応じて決定します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 「自動」の場合<br><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()および<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()の場合、11chを使用します。<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()の場合、引数に指定されたスキャン情報のチャンネル番号を使用します。
+<li> 「1ch」「6ch」「11ch」の場合<br>指定されたチャンネル番号を使用します。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>通信状態の移行</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNETのアドホックモードでの通信状態としては、以下の2つとなります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 未接続状態<br>どのIBSSにも参加していない状態。
+<li> IBSS接続中<br>IBSSに参加している状態。
+</ul></div>
+<div style="margin-left:50px;">これらの状態の遷移の様子を図 9に示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 9 アドホックモードの通信状態</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_1"><h4>
+(1)&nbsp;<b>IBSSへの接続</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">接続方法には、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()を利用するケースと、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()と<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()とを組み合わせて利用するケースとの2種類あります。<br>IBSS接続後、各PSP&reg;は同じIBSSに存在する他のPSP&reg;を自動的に発見し、PSP&reg;間で機器認証を行います。IBSS内での通信は、基本的に機器認証が成功したPSP&reg;同士でのみ行われます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_3_1_1">
+<div style="margin-left:63px;"><h4><b>sceNetAdhocctlConnect()を利用する</b><br><br></h4></a></div>
+<div style="margin-left:80px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()を用いることで、タイトルアプリケーションがIBSSの作成・参加を意識することなくIBSSへ接続できます。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> メリット<br>全ての端末で同一のコードを利用できる。<br>ユーザ同士の事前の決め（どちらが先に待機するか等）が必要無い。
+<li> デメリット<br>接続完了までに若干時間がかかる。<br>タイミングによって端末同士が異なるIBSSへ接続してしまう可能性がある。
+</ul></div>
+<div style="margin-left:67px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlConnect">sceNetAdhocctlConnect</a>()内部の処理の概要を図 10に示します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese010.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 10 sceNetAdhocctlConnect()内部フロー</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_3_1_2">
+<div style="margin-left:63px;"><h4><b>sceNetAdhocctlCreate()とsceNetAdhocctlJoin()を利用する</b><br><br></h4></a></div>
+<div style="margin-left:80px;"><a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlCreate">sceNetAdhocctlCreate</a>()と<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()を用いてタイトルアプリケーションが明示的に、IBSSの作成と参加を行います。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> メリット<br>接続完了までの時間を短くできる。<br>端末同士が確実に同一IBSSへ接続することができる。
+<li> デメリット<br>ユーザ同士による事前の決め（どちらが先に待機するか等）が必要。<br>作成者と参加者で別のコードが必要。
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:80px;">なお<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlJoin">sceNetAdhocctlJoin</a>()を呼ぶ場合は、事前に<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlScan">sceNetAdhocctlScan</a>()の処理を行う必要があります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_2"><h4>
+(2)&nbsp;<b>IBSSからの切断</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">IBSSからは任意のタイミングで未接続状態に戻ることができます。未接続状態へ戻るには、<a href="../network/PSPNET_Adhocctl-Reference-Japanese.htm#sceNetAdhocctlDisconnect">sceNetAdhocctlDisconnect</a>()を呼び出します。このとき機器認証の状態はクリアされます。IBSSへ参加する場合は、再度機器認証が行われます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_3"><h4>
+(3)&nbsp;<b>エラーの発生</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">IBSS接続中に以下の状況が発生すると、エラーが通知され未接続状態となります。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ワイヤレスLANスイッチのオフ
+<li> サスペンド（スリープ）状態への移行
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>アドホックモード通信プロトコル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックモードでの通信はIBSS内で閉じた通信となるため、アドホックモード通信プロトコルはイーサネットフレーム上に実装されており、専用に予約されたイーサネットタイプを使用します。通信プロトコルとして、PDP (PSPNET Datagram Protocol)とPTP (PSPNET Transport Protocol)の2つを提供します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network-Overview-Japanese011.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 11 アドホック通信プロトコルの構成</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_1"><h4>
+(1)&nbsp;<b>PDP</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コネクションレスの信頼性のないデータグラムトランスポートプロトコルです。UDPの代わりとして使います。宛先アドレスとしてユニキャストアドレスとブロードキャストアドレスが指定できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_4_2"><h4>
+(2)&nbsp;<b>PTP</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コネクション指向で信頼性のある全二重ストリームトランスポートプロトコルです。TCPの代わりとして使用します。宛先アドレスとしてユニキャストアドレスが使用できます。<br>［TCPとの主な相違点]<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> コネクション確立の方向が決められています。アクティブオープンしたコネクションはパッシブオープンしているコネクションとしかコネクションを確立することができません。なおコネクション確立後のデータ転送方向に制限はありません。
+<li> パケットの再送間隔とタイムアウトはアプリケーションが指定します。再送間隔は固定でバックオフしません。
+<li> ハーフクローズの状態はありません。どちらか一方がコネクション切断した時点で、相手のコネクションも切断されます。
+</ul></div>
+<div style="margin-left:67px;"><br>アドホックモード通信プロトコルで使用するアドレスは、48ビットのMACアドレスです。各PSP&reg;が持つ無線LANデバイスのMACアドレスが、そのPSP&reg;を指定するアドレス（ユニキャストアドレス）となります。またIBSS内の全てのPSP&reg;を指定するブロードキャストアドレス（48ビット全てが1）も使用できます。IBSS内の特定のグループのみを指定するマルチキャストアドレスは使用できません。<br><br>またアドホックモード通信プロトコルの通信端点はアドレスとポート番号の組で識別されます。ポート番号は16ビットの整数で表現され、PTP、PDPで独立に割り当てられています。ポート番号の割り当ては以下の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ポート番号</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>摘要（PTP、PDP共通）</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x0000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未使用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x0001 - 0x7FFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザ使用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x8000 - 0xFFFE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システム使用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0xFFFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未使用&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>ソケットAPI</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アドホックモード通信プロトコルのAPIも、TCP/IPプロトコル同様のソケットAPIを提供します。ソケットは一意なIDで識別され、ソケット生成時にプロトコルおよびアドレスとポート番号の組に結び付けられます。コネクションの設立、切断、データの送受信などの操作はソケットIDにて指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>ネーミングサービス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ではシステム設定にてニックネームを設定できます。PSPNETではアドホックモードの機器認証時にニックネームの交換を行うため、同じIBSSに参加する全てのPSP&reg;のMACアドレスとニックネームの対応表を保持しています。これをもとにMACアドレスとニックネームの相互変換や一覧取得などのユーティリティ関数を提供します。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

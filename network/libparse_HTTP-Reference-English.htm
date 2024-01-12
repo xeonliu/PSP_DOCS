@@ -1,0 +1,282 @@
+<html lang="en">
+<head>
+<title>libparse_HTTP-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libparse_http Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceParseHttpStatusLine"></a>
+<table width="100%"><td width="70%"><font size=6>sceParseHttpStatusLine<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Parse an HTTP status line<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceParseHttpStatusLine</b> (
+	const <a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> <i>*status_line</i>,
+	SceSize <i>line_len</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> *<i>http_major_ver</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> *<i>http_minor_ver</i>,
+	<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> *<i>response_code,</i>
+<i>	</i>const <a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> **<i>reason_phrase</i>,
+	SceSize *<i>phrase_len</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe <br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>status_line</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the status line string to parse. &nbsp;&nbsp;<br>&nbsp;&nbsp;Strings need not be null-terminated, but must contain a CRLF.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>line_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Length of the status line string, including the CRLF.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>http_major_ver</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory storing the HTTP major version. &nbsp;&nbsp;<br>&nbsp;&nbsp;For example, in the case of HTTP/0.9, a 0 would be stored, and in the case of HTTP/1.1, a 1 would be stored.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>http_minor_ver</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory storing the HTTP minor version. &nbsp;&nbsp;<br>&nbsp;&nbsp;For example, in the case of HTTP/0.9, a 9 would be stored, and in the case of HTTP/1.1, a 1 would be stored.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>response_code</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory storing the HTTP response code. &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>reason_phrase</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory storing the first character of the reason phrase in the string specified by the status line.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>phrase_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory storing the length (not including the CRLF) of the response phrase string.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If the function completes normally, a positive value (the length of the status line, including the linefeed code) is returned.<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80432025&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_RESPONSE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The format of the specified status line is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804321FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>http_major_ver, http_minor_ver, response_code, reason_phrase </i>and<i> phrase_len </i>were set to NULL.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function parses the status line string specified by <i>status_line</i> and <i>line_len</i>, stores the HTTP major version in <i>http_major_ver</i>, the HTTP minor version in <i>http_minor_ver</i>, and the value of the response code in <i>response_code</i>, and stores a pointer to the first character of the reason phrase in the string specified by <i>status_line</i> in <i>reason_phrase</i>, and the length of the reason phrase string in <i>phrase_len</i>. Please note that, since a malloc is not performed in parse_http, the address specified by <i>reason_phrase</i> is an address within the string specified by <i>status_line</i>, and this string is not null-terminated. In addition, if <i>line_len</i> is larger than the length at which the CRLF is reached, the characters beyond the CRLF will be ignored.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> ret, http_major_ver, http_minor_ver, response_code;
+SceSize phrase_len;
+<a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> *header = &quot;HTTP/1.0 200 OK\r\n&quot;, *tmp_buf;
+ret = sceParseHttpStatusLine(header, strlen(header), &amp;http_major_ver,
+	&amp;http_minor_ver,&amp;response_code, &amp;reason_phrase, &amp;phrase_len);
+if (ret &lt; 0){
+	ERR_STOP;
+}
+tmp_buf = malloc(phrase_len + 1);
+if (tmp_buf == NULL){
+	ERR_STOP;
+}
+memcpy(tmp_buf, reason_phrase, phrase_len);
+tmp_buf[phrase_len] = '\0';
+printf("HTTP version  = %d.%d\n", http_major_ver, http_minor_ver);
+printf("response code = %d\n", response_code);
+printf("reason_phrase = %s\n", tmp_buf);
+free(tmp_buf);
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceParseHttpResponseHeader"></a>
+<table width="100%"><td width="70%"><font size=6>sceParseHttpResponseHeader<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Parse an HTTP header<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceParseHttpResponseHeader</b>(
+	const <a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> <i>*header</i>,
+	SceSize <i>header_len</i>,
+	const <a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> *<i>field_name</i>,
+	const <a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> **<i>field_value</i>,
+	SceSize *<i>value_len</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe <br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>header</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start address of HTTP header string&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>header_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Length of HTTP header string&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>field_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start address of string representing the name of the header field to be retrieved.&nbsp;&nbsp;<br>&nbsp;&nbsp;For example, specify &quot;Date&quot; to retrieve the <i>Date</i> field.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>field_value</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory storing a pointer to the first character &nbsp;&nbsp;<br>&nbsp;&nbsp;of the field value corresponding to the header field specified by <i>field_name</i>.  &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>value_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory storing the length of the field value string.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return value -->
+<div style="margin-left:10px;"><b>Return value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If this function completes normally, a positive value (the length from <i>header</i> to the first linefeed code after the <i>field_value</i> string) is returned. <br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80432025&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_RESPONSE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The format of the specified HTTP header is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804321FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>field_name, field_value</i> and<i> value_len</i> were set to NULL.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80432060&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_NOT_FOUND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified header field does not exist&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function searches for the header field specified by <i>field_name</i> in the HTTP header specified by <i>header</i> and <i>header_len</i> and, if this header field exists, stores the starting address of the string which represents the field's value in <i>field_value</i>, and stores the length of this string in <i>value_len</i>. If the header field does not exist, SCE_PARSE_HTTP_NOT_FOUND is returned. If there are multiple corresponding header fields, only the first value is stored. Please note that since a malloc is not performed in parse_http, the address specified by <i>field_value</i> is an address within the string specified by <i>header</i>, and this string is not null-terminated. <br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> ret;
+<a href="../kernel/Types-Reference-English.htm#SceChar8">SceChar8</a> *header =&quot;HTTP Response Header&quot;, field_name = &quot;Date&quot;, field_value, *tmp_buf
+SceSize counter = 0, header_size = strlen(header), value_len;
+while (counter &lt; header_size){
+	ret = sceParseHttpResponseHeader(header + counter, header_size - counter, 
+		field_name, &amp;field_value, &amp;value_len);
+	if (ret &lt; 0){
+		ERR_STOP;
+	}
+	tmp_buf = malloc(value_len + 1);
+	if (tmp_buf == NULL){
+		ERR_STOP;
+	}
+	memcpy(tmp_buf, field_value, value_len);
+	tmp_buf[value_len] = '\0';
+	printf("[%s:] %s\n",argv[i], tmp_buf);
+	free(tmp_buf);
+	counter += ret;
+}
+
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

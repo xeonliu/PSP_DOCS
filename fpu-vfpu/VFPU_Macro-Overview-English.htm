@@ -1,0 +1,370 @@
+<html lang="en">
+<head>
+<title>VFPU_Macro-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+psp-as VFPU Assembler Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>VFPU Instructions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Representation Formats</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Registers and immediate values have the following representation formats.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td rowspan= 6  valign="top">&nbsp;Matrix&nbsp;register&nbsp;</td>
+<td valign="top">&nbsp;$n&nbsp;</td>
+<td valign="top">&nbsp;Direct&nbsp;representation&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Smif&nbsp;</td>
+<td valign="top">&nbsp;Scalar&nbsp;representation&nbsp;<br>&nbsp;(m&nbsp;represents&nbsp;the&nbsp;matrix&nbsp;number,&nbsp;i&nbsp;<br>&nbsp;represents&nbsp;the&nbsp;index&nbsp;number,&nbsp;and&nbsp;f&nbsp;<br>&nbsp;indicates&nbsp;the&nbsp;field&nbsp;select&nbsp;number)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Cmif&nbsp;</td>
+<td valign="top">&nbsp;Column&nbsp;vector&nbsp;representation&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Rmfi&nbsp;</td>
+<td valign="top">&nbsp;Row&nbsp;vector&nbsp;representation&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Mmif&nbsp;</td>
+<td valign="top">&nbsp;Row&nbsp;matrix&nbsp;representation&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Emfi&nbsp;</td>
+<td valign="top">&nbsp;Column&nbsp;matrix&nbsp;representation&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Control&nbsp;register&nbsp;</td>
+<td valign="top">&nbsp;$n&nbsp;</td>
+<td valign="top">&nbsp;Direct&nbsp;representation&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;Immediate&nbsp;value&nbsp;<br>&nbsp;(integer)&nbsp;</td>
+<td valign="top">&nbsp;dddd&nbsp;</td>
+<td valign="top">&nbsp;Decimal&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;0oooo&nbsp;</td>
+<td valign="top">&nbsp;Octal&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;0xhhhh&nbsp;</td>
+<td valign="top">&nbsp;Hexadecimal&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;+&nbsp;-&nbsp;*&nbsp;/&nbsp;&lt;&lt;&nbsp;&gt;&gt;&nbsp;(&nbsp;)&nbsp;</td>
+<td valign="top">&nbsp;Operators&nbsp;can&nbsp;be&nbsp;used&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;Immediate&nbsp;value&nbsp;<br>&nbsp;(half-precision&nbsp;<br>&nbsp;floating-point&nbsp;<br>&nbsp;number)&nbsp;</td>
+<td valign="top">&nbsp;aa.cc&nbsp;</td>
+<td valign="top">&nbsp;Decimal&nbsp;number&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;aa.cc[+-]Edd&nbsp;</td>
+<td valign="top">&nbsp;Decimal&nbsp;number&nbsp;with&nbsp;exponent&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;0xaaaa&nbsp;</td>
+<td valign="top">&nbsp;Half-precision&nbsp;floating-point&nbsp;number&nbsp;format&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Inf,&nbsp;NaN&nbsp;</td>
+<td valign="top">&nbsp;Special&nbsp;numerical&nbsp;value&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>VFPU Instruction Check Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following checks are performed for the specified registers or immediate values.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_1"><h4>
+(1)&nbsp;<b>Register number of matrix register ( $n, Smif, Cmif, Rmfi, Mmif, or Emfi )</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1_1">
+<div style="margin-left:40px;"><h4><b>Error</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> The register number for a $n specification does not satisfy 0 &lt;= n &lt; 128. <br>Example: $130
+<li> The matrix number does not satisfy 0 &lt;= mtx &lt; 8. <br>Example: S900
+<li> The index number does not satisfy 0 &lt;= idx &lt; 4. <br>Example: S050
+<li> The field select number does not satisfy 0 &lt;= fsl &lt; 4. <br>Example: S005
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1_2">
+<div style="margin-left:40px;"><h4><b>Warning</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> An inappropriate register type was specified for the instruction. <br>Example: vsin.p	S000,S100
+<li> An inappropriate index number was specified for the register type. <br>Example: vmmov.p	M110,M000<br> vmmov.t	M120,M000
+<li> An inappropriate field select number was specified for the register type. <br>Example: vmmov.p	M101,M000<br> vmmov.t	M102,M000
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1_3">
+<div style="margin-left:40px;"><h4><b>Control Register ( $n )</b><br><b>Error</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> The register number does not satisfy 128 &lt;= n &lt; 256. <br>Example: $0
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_1_4">
+<div style="margin-left:40px;"><h4><b>Warning</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> An undefined register number was specified. <br>Example: $144
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_2"><h4>
+(2)&nbsp;<b>Matrix register conflict</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_2_5">
+<div style="margin-left:40px;"><h4><b>Error</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> When the register areas used by (vs, vt) and vd overlap, and the expected operation result may not be obtained. <br>Example: vmmul.q	M000,M000,M100 ... Error
+<li>   vtfm3.t	C000,M000,C100 ... Error<br>  vtfm3.t	C030,M000,R003 ... Good<br>However, the warning is suppressed as long as a repeat instruction other than vmmul, vtfm2, vtfm3, or vtfm4 writes back to the same area in the same direction. <br>Example: vmscl.q	M000,M000,S100 ... Good<br> vmscl.q	E000,M000,S100 ... Error
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_3"><h4>
+(3)&nbsp;<b>Prefix that cannot be used</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_3_6">
+<div style="margin-left:40px;"><h4><b>Error</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> When a prefix instruction is specified after the operand and an attempt is made to use a prefix that cannot be used with that instruction.<br>Example: vmmul.q	M000,M000,M100[X,Y,Z,1]	... Error
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_4"><h4>
+(4)&nbsp;<b>Immediate value (integer)</b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_4_7">
+<div style="margin-left:40px;"><h4><b>Warning</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> When a value that exceeded the valid bit length was specified. <br>The value is masked by using the valid bit length.
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_5"><h4>
+(5)&nbsp;<b>Immediate value (half-precision floating-point number) </b><br></h4>
+</a></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_2_5_8">
+<div style="margin-left:40px;"><h4><b>Warning</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> When a result that was converted to half-precision caused an underflow. <br>The value becomes zero.
+<li> When a result that was converted to half-precision caused an overflow. <br>The value becomes infinitely large.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Modification using VFPU Prefix Instructions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The VFPU prefix instructions vpfxs, vpfxt, and vpfxd can be used as standalone instructions, but they can also be placed after the vs, vt, and vd operands in the following manner.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vadd.q		c000[0:1,-1:1,Z,W], c010[X,|Y|,W,W], c020[0,1/2,-Y,Z]
+</font></pre></div>
+<div style="margin-left:50px;">This is equivalent to the following:<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>vpfxd		0,1,,
+vpfxs		X,|Y|,W,W
+vpfxt		0,1/2,-Y,Z
+vadd.q		c000, c010, c020
+</font></pre></div>
+<div style="margin-left:50px;"><br>When operand postposition expressions are used, the following checks become valid.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Check whether or not the prefix instruction has been placed in the branch delay slot
+<li> Check whether or not, based on the instruction, the prefix can be used
+</ul></div>
+<div style="margin-left:50px;"><br>When prefix instructions are used by themselves, these checks are not performed, so there is a risk that a prefix whose use is prohibited could be used. It is recommended that operand postposition expressions be used as much as possible.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>VFPU Assembler Options</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following VFPU assembler options can be used.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_4_1"><h4>
+(1)&nbsp;<b>-vmmul-trans / -no-vmmul-trans</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the -vmmul-trans option is specified, then for the VFPU's vmmul instruction, the register number corresponding to the vs operand is provided in a transposed format. In order for the VFPU hardware to interpret the vs operand in a transposed format, the assembler will transpose the operand automatically when it assembles the vmmul instruction. <br><br>The -vmmul-trans option is set by default. Switching to the -no-vmmul-trans state is not recommended.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_4_2"><h4>
+(2)&nbsp;<b>-vtfm-trans / -no-vtfm-trans</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the -vtfm-trans option is specified, then for the VFPU's vtfm and vhtfm instructions, the register number corresponding to the vs operand is provided in a transposed format. With the VFPU hardware, a column major matrix is specified in e000 format, and a row major matrix is specified m000 format; to intentionally reverse these definitions, specify the -vtfm-trans option. <br><br>The -vtfm-trans option is not set by default. Switching to the -vtfm-trans state is not recommended.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>VFPU Macro Instructions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following VFPU macro instructions can be used.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_1"><h4>
+(1)&nbsp;<b>Load immediate value</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lvi.s">lvi.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lvi.p">lvi.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lvi.t">lvi.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lvi.q">lvi.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lvhi.s">lvhi.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lvhi.p">lvhi.p</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_2"><h4>
+(2)&nbsp;<b>Extended Load/store </b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#ulv.s">ulv.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lv.p">lv.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lv.t">lv.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#ulv.q">ulv.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#usv.s">usv.s</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#sv.p">sv.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#sv.t">sv.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#usv.q">usv.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lv.s">lv.s</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lv.p">lv.p</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lv.t">lv.t</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#lv.q">lv.q</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#ulv.q">ulv.q</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#sv.s">sv.s</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#sv.p">sv.p</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#sv.t">sv.t</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#sv.q">sv.q</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#usv.q">usv.q</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#svl.q">svl.q</a> (address extended)
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#svr.q">svr.q</a> (address extended)
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_3"><h4>
+(3)&nbsp;<b>vdiv macro instructions</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vdiv.p">vdiv.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vdiv.t">vdiv.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vdiv.q">vdiv.q</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_4"><h4>
+(4)&nbsp;<b>vmmul macro instructions</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vcmmul.p">vcmmul.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vcmmul.t">vcmmul.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vcmmul.q">vcmmul.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrmmul.p">vrmmul.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrmmul.t">vrmmul.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxmmul.q">vxmmul.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxmmul.p">vxmmul.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxmmul.t">vxmmul.t</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_5"><h4>
+(5)&nbsp;<b>vrmmul.q vtfm macro instructions</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vctfm2.p">vctfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vctfm3.t">vctfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vctfm4.q">vctfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrtfm2.p">vrtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrtfm3.t">vrtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrtfm4.q">vrtfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxtfm2.p">vxtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxtfm3.t">vxtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxtfm4.q">vxtfm4.q</a>
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_5_6"><h4>
+(6)&nbsp;<b>vhtfm macro instructions</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vchtfm2.p">vchtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vchtfm3.t">vchtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vchtfm4.q">vchtfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrhtfm2.p">vrhtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrhtfm3.t">vrhtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vrhtfm4.q">vrhtfm4.q</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxhtfm2.p">vxhtfm2.p</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxhtfm3.t">vxhtfm3.t</a>
+<li> <a href="../fpu-vfpu/VFPU_Macro-Reference-English.htm#vxhtfm4.q">vxhtfm4.q</a><br>
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

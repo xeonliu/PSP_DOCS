@@ -1,0 +1,137 @@
+<html lang="jp">
+<head>
+<title>libqpcode-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libqpcode
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libqpcodeは、Quoted-Printableエンコード／デコードを行うためのライブラリです。主にlibhttpによって使用されますが、libqpcode単体でも使用することが出来ます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libqpcodeを使用するファイルは次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">devkit/sample/net/libhttp/qpcode/<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libqpcodeの使用には特に初期化は必要ありません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Quoted-Printable形式へのエンコード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">以下のような手順でバイト列をQuoted-Printableエンコード出来ます。libqpcode内部ではメモリを確保しないため、アプリケーションで出力用メモリを確保しておく必要があることにご注意ください。必要なメモリサイズは<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>()関数の出力先の引数にNULLをセットすることで取得可能です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	plain[SOURCE_LEN];
+u_char	*qp;
+SceSize	malloc_size;
+
+<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>(NULL, plain, SOURCE_LEN, &amp;malloc_size, 0);	//サイズ取得
+qp = (u_char*)malloc(malloc_size);
+<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>(qp, plain, SOURCE_LEN ,NULL, malloc_size);	//エンコード
+
+</font></pre></div>
+<div style="margin-left:67px;">以上のように<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>()関数を使用することで、Quoted-Printableエンコードが行われます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Quoted-Printable形式からのデコード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">以下のような手順でQuoted-Printableでエンコードされたバイト列をデコードできます。ただし、入力バイト列は終端のRFC822改行(CRとLFの連続)を含めて長さが78かそれ以下で無ければなりません。libqpcode内部ではメモリを確保しないため、アプリケーションで出力用メモリを確保しておく必要があることにご注意ください。必要なメモリサイズは<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>()関数の出力先の引数にNULLをセットすることで取得可能です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	qp[SOURCE_LEN];
+u_char	*plain;
+SceSize	malloc_size;
+
+<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>(NULL, qp, SOURCE_LEN, &amp;malloc_size, 0);
+plain = (u_char*) malloc(malloc_size);
+<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>(plain, qp, SOURCE_LEN, NULL, malloc_size);
+</font></pre></div>
+<div style="margin-left:67px;"><br>以上のように<a href="../network/libqpcode-Reference-Japanese.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>()関数を使用することで、Quoted-Printableデコードが行われます。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2004 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

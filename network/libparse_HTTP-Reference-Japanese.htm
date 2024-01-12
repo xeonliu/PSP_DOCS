@@ -1,0 +1,279 @@
+<html lang="jp">
+<head>
+<title>libparse_HTTP-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libparse_http
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceParseHttpStatusLine"></a>
+<table width="100%"><td width="70%"><font size=6>sceParseHttpStatusLine<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTP Status-Lineの解析<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceParseHttpStatusLine</b> (
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> <i>*status_line</i>,
+	SceSize <i>line_len</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> *<i>http_major_ver</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> *<i>http_minor_ver</i>,
+	<a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> *<i>response_code,</i>
+<i>	</i>const <a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> **<i>reason_phrase</i>,
+	SceSize *<i>phrase_len</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>status_line</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;解析するStatus-Line文字列へのポインタ。&nbsp;&nbsp;<br>&nbsp;&nbsp;文字列はNULLターミネートされている必要はありませんが&nbsp;&nbsp;<br>&nbsp;&nbsp;CRLFが含まれている必要があります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>line_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CRLFを含んだstatus-lineの文字列の長さ。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>http_major_ver</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPのメジャーバージョンを格納するメモリへのポインタ。&nbsp;&nbsp;<br>&nbsp;&nbsp;例えばHTTP/0.9の時は0、HTTP/1.1の時は1が格納されます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>http_minor_ver</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPのマイナーバージョンを格納するメモリへのポインタ。&nbsp;&nbsp;<br>&nbsp;&nbsp;例えばHTTP/0.9の時は9、HTTP/1.1の時は1が格納されます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>response_code</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPレスポンスコードの値を格納するメモリへのポインタ。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>reason_phrase</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>status_line</i>で設定した文字列の中のリーズンフレーズの&nbsp;&nbsp;<br>&nbsp;&nbsp;先頭文字へのポインタを格納するメモリへのポインタ。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>phrase_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レスポンスフレーズの文字列の長さ（CRLFを含めない）を&nbsp;&nbsp;<br>&nbsp;&nbsp;格納するためのメモリへのポインタ。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、正の値（改行コードを含むステータスラインの長さ)を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80432025&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_RESPONSE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたステータスライン&nbsp;&nbsp;<br>&nbsp;&nbsp;のフォーマットが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804321FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>http_major_ver</i>,&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>http_minor_ver</i>,&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>response_code</i>,&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>reason_phrase</i>,<i> phrase_len</i>に&nbsp;&nbsp;<br>&nbsp;&nbsp;NULLがセットされた&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>status_line、line_len</i>で指定されたステータスライン文字列を解析し、<i>http_major_ver</i>にHTTPのメジャーバージョン、<i>http_minort_ver</i>にHTTPのマイナーバージョン、<i>response_code</i>にレスポンスコードの値を格納し、<i>reason_phrase</i>に<i>status_line</i>で指定された文字列の中のリーズンフレーズの先頭文字へのポインタ、<i>phrease_len</i>にリーズンフレーズの文字列の長さを格納します。parse_http内部ではmallocを行わないため、<i>reason_phrase</i>に設定されたアドレスは<i>status_line</i>で指定された文字列の中のアドレスを指し、その文字列はNULLターミネートは行われていないことにご注意ください。また<i>line_len</i>にCRLFまでの長さよりも大きな値を設定した場合は、CRLF以降の文字列は無視されます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> ret, http_major_ver, http_minor_ver, response_code;
+SceSize phrase_len;
+<a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> *header = &quot;HTTP/1.0 200 OK\r\n&quot;, *tmp_buf;
+ret = sceParseHttpStatusLine(header, strlen(header), &amp;http_major_ver,
+	&amp;http_minor_ver,&amp;response_code, &amp;reason_phrase, &amp;phrase_len);
+if (ret &lt; 0){
+	ERR_STOP;
+}
+tmp_buf = malloc(phrase_len + 1);
+if (tmp_buf == NULL){
+	ERR_STOP;
+}
+memcpy(tmp_buf, reason_phrase, phrase_len);
+tmp_buf[phrase_len] = '\0';
+printf("HTTP version  = %d.%d\n", http_major_ver, http_minor_ver);
+printf("response code = %d\n", response_code);
+printf("reason_phrase = %s\n", tmp_buf);
+free(tmp_buf);
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceParseHttpResponseHeader"></a>
+<table width="100%"><td width="70%"><font size=6>sceParseHttpResponseHeader<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>HTTPヘッダの解析<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceParseHttpResponseHeader</b>(
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> <i>*header</i>,
+	SceSize <i>header_len</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> *<i>field_name</i>,
+	const <a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> **<i>field_value</i>,
+	SceSize *<i>value_len</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能(割り込み禁止/許可状態に依存しない)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>header</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPヘッダ文字列の先頭アドレス。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>header_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HTTPヘッダ文字列の長さ。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>field_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得するヘッダフィールドの名前の文字列の先頭アドレス。&nbsp;&nbsp;<br>&nbsp;&nbsp;例えばDateフィールドを取得したい場合は"Date"と設定してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>field_value</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>field_name</i>で設定したヘッダフィールドに対応する&nbsp;&nbsp;<br>&nbsp;&nbsp;フィールドバリューの先頭文字のポインタを格納するための&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリへのポインタ。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>value_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フィールドバリューの文字列の長さを格納するためのメモリへのポインタ。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合、正の値（発見した<i>field_value</i>文字列の直後の改行コードまでの<i>header</i>からの長さ)を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>意味</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80432025&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_RESPONSE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたHTTPヘッダの&nbsp;&nbsp;<br>&nbsp;&nbsp;フォーマットが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804321FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>field_name</i>,<i> field_value</i>,&nbsp;&nbsp;<br>&nbsp;&nbsp;<i>value_len</i>に&nbsp;&nbsp;<br>&nbsp;&nbsp;NULLがセットされた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80432060&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PARSE_HTTP_NOT_FOUND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたヘッダフィールド&nbsp;&nbsp;<br>&nbsp;&nbsp;が存在しない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><i>header</i>と<i>header_len</i>とで指定されたHTTPヘッダの中から<i>field_name</i>で指定されたヘッダフィールドを検索し、ヘッダフィールドが存在した場合はその値を示す文字列の先頭アドレスを<i>field_value</i>に、その文字列の長さを<i>value_len</i>に格納します。ヘッダフィールドが存在しなかった場合はSCE_PARSE_HTTP_NOT_FOUNDが返ります。対応するヘッダフィールドが複数存在する場合は最初の値のみが格納されます。なお、parse_http内部ではmallocを行わないため、<i>field_value</i>に設定されたアドレスは<i>header</i>で指定された文字列の中のアドレスを指し、その文字列はNULLターミネートは行われていないことにご注意ください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../kernel/Types-Reference-Japanese.htm#SceInt32">SceInt32</a> ret;
+<a href="../kernel/Types-Reference-Japanese.htm#SceChar8">SceChar8</a> *header ="HTTP Response Header", field_name = "Date", field_value, *tmp_buf
+SceSize counter = 0, header_size = strlen(header), value_len;
+while (counter &lt; header_size){
+	ret = sceParseHttpResponseHeader(header + counter, header_size - counter, 
+		field_name, &amp;field_value, &amp;value_len);
+	if (ret &lt; 0){
+		ERR_STOP;
+	}
+	tmp_buf = malloc(value_len + 1);
+	if (tmp_buf == NULL){
+		ERR_STOP;
+	}
+	memcpy(tmp_buf, field_value, value_len);
+	tmp_buf[value_len] = '\0';
+	printf("[%s:] %s\n",argv[i], tmp_buf);
+	free(tmp_buf);
+	counter += ret;
+}
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

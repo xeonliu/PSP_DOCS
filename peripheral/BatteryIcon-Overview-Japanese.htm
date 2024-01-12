@@ -1,0 +1,189 @@
+<html lang="jp">
+<head>
+<title>BatteryIcon-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+バッテリアイコン表示ガイド
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>バッテリアイコン表示の概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;におけるバッテリアイコンの描画流れを下図に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/BatteryIcon-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 描画の流れ</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">弊社より提供するテクスチャデータを使用して、インポーズドライバより描画に必要な情報を取得して、ユーザプログラム側で描画します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>情報の取得</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">バッテリアイコンの表示状態を知るためには、必ず次の関数を使用してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(int *status, int *indicator);
+</font></pre></div>
+<div style="margin-left:50px;"><br>関数の詳細は「インポーズドライバ」リファレンスドキュメントをご覧ください。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_2_1">
+<div style="margin-left:63px;"><h4><b>例)</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;impose.h&gt;
+
+int DrawBattery(void)
+{
+	int		status,indicator;
+
+	//J バッテリアイコンの状態を取得する
+	<a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(&amp;status,&amp;indicator);
+
+		:
+		:
+		:
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>テクスチャデータ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">テクスチャデータは次のように32 x 18 [pixel]のアイコンが縦に4つ並べられて格納されています。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/BatteryIcon-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2テクスチャイメージ</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">上から<br></div>
+<div style="margin-left:40px;"><ul>
+<li> インジケータが3つのとき
+<li> インジケータが2つのとき
+<li> インジケータが1つのとき
+<li> インジケータがないとき
+</ul></div>
+<div style="margin-left:50px;">となっています。<br><br>テクスチャデータにはアルファ情報も含まれています。<br>変換する際には必ずアルファ情報も一緒に変換してください。<br><br>テクスチャデータは<br>/devkit/sample/guideline/batteryicon/<br>にある<br>batteryicon.tgaまたは、batteryicon.hをご使用ください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>表示位置について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">指定したテクスチャファイルを次の座標に描画します。<br><br>X座標　449 [pixel]<br>Y座標　5 [pixel]<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/BatteryIcon-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 画面イメージ</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>非表示状態について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;本体がACアダプタで通電されていて、バッテリを外した状態のとき、バッテリアイコンは表示されません。<br><br>その場合、<a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>()の第一引数の戻り値にSCE_IMPOSE_BATTICON_NONEビットが立ちます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_5_1">
+<div style="margin-left:63px;"><h4><b>例)</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>	int		status,indicator;
+
+	<a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(&amp;status,&amp;indicator);
+
+	//J 非表示
+	if(status &amp; SCE_IMPOSE_BATTICON_NONE)
+		return;
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>点滅表示状態について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">バッテリが充電中の場合、バッテリアイコンは点滅表示になります。<br><br>その場合、<a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>()の第一引数の戻り値にSCE_IMPOSE_BATTICON_BLINKビットが立ちます。<br><br>1秒間で 0.6秒表示 0.4秒非表示 となるように描画してください。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_6_1">
+<div style="margin-left:63px;"><h4><b>例)</b><br><br></h4></a></div>
+        <div style="margin-left:80px;"><pre><font size=3>	static int	batticon_counter;
+	int		status,indicator;
+
+	batticon_counter=((batticon_counter+1)&amp;0xffff);
+	<a href="../peripheral/Impose-Reference-Japanese.htm#sceImposeGetBatteryIconStatus">sceImposeGetBatteryIconStatus</a>(&amp;status,&amp;indicator);
+
+	//J 点滅表示
+	if(status &amp; SCE_IMPOSE_BATTICON_BLINK) {
+		if((batticon_counter%60)&gt;=36)
+			return;		//J 非表示なので処理を抜ける
+	}
+
+	//J 表示する
+	(描画ルーチン)
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

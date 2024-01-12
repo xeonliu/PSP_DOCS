@@ -1,0 +1,1897 @@
+<html lang="jp">
+<head>
+<title>Profiler-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+プロファイラ操作ユーティリティ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceProfilerRegs"></a>
+<table width="100%"><td width="70%"><font size=6>SceProfilerRegs<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>グローバルモード時のプロファイラレジスタアドレス取得<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+typedef struct SceProfilerRegs {
+	volatile unsigned int <i>en</i>;		/* +0x00 Profiler(Count) Enable */
+	volatile unsigned int <i>n_ck</i>;		/* +0x04 System Clock Cycle */
+	volatile unsigned int <i>n_gck </i>	/* +0x08 CPU Clock(Geared) Cycle */
+	volatile unsigned int <i>n_stalli</i>;	/* +0x0C Internal Stall */
+	volatile unsigned int <i>n_stallm</i>;	/* +0x10 Memory Stall */
+	volatile unsigned int <i>n_slipc</i>;	/* +0x14 COPz Busy Stall */
+	volatile unsigned int <i>n_stallc</i>;	/* +0x18 VFPU Busy Stall */
+	volatile unsigned int <i>n_sleep</i>;	/* +0x1C Sleep Stall */
+	volatile unsigned int <i>n_bus</i>;	/* +0x20 Bus Busy Cycle */
+	volatile unsigned int <i>n_uld</i>; 	/* +0x24 Uncached Load */
+	volatile unsigned int <i>n_ust</i>; 	/* +0x28 Uncached Store */
+	volatile unsigned int <i>n_cld</i>; 	/* +0x2C Cached Load */
+	volatile unsigned int <i>n_cst</i>; 	/* +0x30 Cached Store */
+	volatile unsigned int <i>n_imiss</i>;	/* +0x34 I-Cache Miss */
+	volatile unsigned int <i>n_dmiss</i>;	/* +0x38 D-Cache Miss */
+	volatile unsigned int <i>n_wbk</i>;	/* +0x3C D-Cache WriteBack */
+	volatile unsigned int <i>n_cop0</i>;	/* +0x40 CoProcessor 0 */
+	volatile unsigned int <i>n_fpu</i>; 	/* +0x44 CoProcessor 1 (FPU) */
+	volatile unsigned int <i>n_vfpu</i>;	/* +0x48 CoProcessor 2 (VFPU) */
+} <b>SceProfilerRegs</b>;
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferGlobalProfiler">sceKernelReferGlobalProfiler</a>()関数または<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferThreadProfiler">sceKernelReferThreadProfiler</a>()関数によって得られるプロファイラのレジスタを表現する構造体型です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferGlobalProfiler">sceKernelReferGlobalProfiler</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferThreadProfiler">sceKernelReferThreadProfiler</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelReferGlobalProfiler"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelReferGlobalProfiler<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[プロファイラ操作]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>グローバルモード時のプロファイラレジスタアドレス取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+<a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<b>sceKernelReferGlobalProfiler</b> (
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ALLEGREXプロファイラレジスタへのポインタを返します。<br>ただしプロファイラが無効状態のとき、またはグローバルモードではないとき、NULLを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ブートパラメータによってプロファイラがグローバルモードで初期化されているとき、sceKernelReferGlobalProfiler()関数によってプロファイラのレジスタアドレスを取得します。<br><br>PSP&reg;開発TOOLリセット時のブートパラメータのbit 23を1、bit 22を0にした状態でカーネルを起動させることでプロファイラがグローバルモードで動作します。グローバルモードでない場合、sceKernelReferGlobalProfiler()関数はNULLを返します。PSP&reg;本体ではプロファイラを有効にできないため、sceKernelReferGlobalProfiler()関数は常にNULLを返します。<br><br>グローバルモードでは、カーネルはプロファイラは各カウンタの値を一切操作しません。プロファイラを使用して計測を行うプログラム自身がカウンタ値の管理を行う必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferThreadProfiler">sceKernelReferThreadProfiler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelReferThreadProfiler"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelReferThreadProfiler<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[プロファイラ操作]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>スレッドモード時のプロファイラレジスタアドレス取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+<a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<b>sceKernelReferThreadProfiler</b> (
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ALLEGREXプロファイラレジスタへのポインタを返します。<br>ただしプロファイラが無効状態のとき、またはスレッドモードではないとき、NULLを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ブートパラメータによってプロファイラがスレッドモードで初期化されているとき、sceKernelReferThreadProfiler()関数によってプロファイラのレジスタアドレスを取得します。<br><br>PSP&reg;開発TOOLリセット時のブートパラメータのbit 23を1、bit 22を１にした状態でカーネルを起動させることでプロファイラがスレッドモードで動作します。スレッドモードでない場合、sceKernelReferThreadProfiler()関数はNULLを返します。PSP&reg;本体ではプロファイラを有効にできないため、sceKernelReferThreadProfiler()関数は常にNULLを返します。<br>スレッドモードでは、カーネルはプロファイラの動作状態およびカウンタ値をスレッドのコンテキストとして扱います。スレッドのコンテキストスイッチが発生したときプロファイラのレジスタもコンテキストスイッチされるため、各スレッドが同時に独立したカウンタを持っているかのように仮想化されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferGlobalProfiler">sceKernelReferGlobalProfiler</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerReset"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerReset<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[プロファイラ操作]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>プロファイラの全カウンタ値をゼロリセット<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ int <b>sceKernelProfilerReset </b>(
+	<a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">sceKernelProfilerReset()関数が呼び出される直前の動作状態を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラは停止状態だった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラは動作状態だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラの動作を停止し、全カウンタ値をリセットします。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStart">sceKernelProfilerStart</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerStart"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerStart<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[プロファイラ操作]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>プロファイラの動作を開始<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ int <b>sceKernelProfilerStart </b>(
+	<a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">sceKernelProfilerStart()関数が呼び出される直前の動作状態を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラは停止状態だった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラは動作状態だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラの動作を開始します。<br>sceKernelProfilerStart()関数によってプロファイラの動作を開始する前に、あらかじめ<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>()関数でカウンタをゼロクリアします。<br>sceKernelProfilerStart()関数は、計測する処理を実行する直前に呼び出してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStop">sceKernelProfilerStop</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerStop"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerStop<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[プロファイラ操作]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>プロファイラの動作を停止<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ int <b>sceKernelProfilerStop </b>(
+	<a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">sceKernelProfilerStop()関数が呼び出される直前の動作状態を返します。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラは停止状態だった&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラは動作状態だった&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラの動作を停止します。<br>sceKernelProfilerStop()関数は、計測する処理を実行する直後に呼び出してください。プロファイラが動作中のままだと、複数のカウンタから結果を引き取る間にカウンタの値が変化してしまう可能性があります。プロファイラの動作を停止しても、カウンタの値は保存されます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStart">sceKernelProfilerStart</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetSystemClockCycle"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetSystemClockCycle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>システムクロックのサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetSystemClockCycle </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">システムクロックサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中のCPUクロックが進んだ時間をサイクル数として取得します。<br><br>PSP&reg;システムチップにおけるシステムクロックサイクルはPLLによって生成されたクロックで、74MHz, 166MHz, 222MHz, 266MHz, 333MHzのいずれかに変更されることがあります。起動時のデフォルトは222MHzで、現在のPLL出力クロック周波数は<a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetPllClockFrequencyFloat">scePowerGetPllClockFrequencyFloat</a>()関数によって取得する事ができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetPllClockFrequencyFloat">scePowerGetPllClockFrequencyFloat</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetCpuClockCycle"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetCpuClockCycle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CPUクロックのサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetCpuClockCycle </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CPUクロックサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にCPUクロックが進んだ回数をサイクル数として取得します。<br><br>CPUクロックはシステムクロックをベースに生成されるクロックで、1～333MHzの範囲で変化することができます。起動時のデフォルトは222MHzで、現在のCPU出力クロック周波数の設定値は<a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetCpuClockFrequencyFloat">scePowerGetCpuClockFrequencyFloat</a>()関数によって取得する事ができます。<br>ただし、非キャッシュのロード/ストア命令を実行したり、キャッシュのリフィル/ライトバックによってCPUがバスにアクセスする必要が発生した場合、CPUはシステムクロックによる動作に自動的に切り替わります。sceKernelProfilerGetCpuClockCycle()関数で得られるCPUクロックサイクルによるカウンタ値はこの影響を受けるため、1秒ぶんのカウント値変化は<a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetCpuClockFrequencyFloat">scePowerGetCpuClockFrequencyFloat</a>()関数で得られる設定周波数よりも高い周波数になることがあります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetCpuClockFrequencyFloat">scePowerGetCpuClockFrequencyFloat</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCpuAverageFreq">sceKernelProfilerGetCpuAverageFreq</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetInternalStall"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetInternalStall<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CPU内部要因によるストールサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetInternalStall </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CPU内部要因によるストールサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にCPU内部要因によってパイプラインがストールしていたサイクル数を取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetMemoryStall"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetMemoryStall<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メモリアクセス要因によるストールサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetMemoryStall </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">メモリアクセス要因によるストールサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にメモリアクセス要因によってパイプラインがストールしていたサイクル数を取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetBusBusyCycle">sceKernelProfilerGetBusBusyCycle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetFpuStall"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetFpuStall<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>FPUビジー信号によるストールサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetFpuStall </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">FPUビジー信号によるストールサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にFPUビジー信号によってパイプラインがスリップしていたサイクル数を取得します。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1">
+<div style="margin-left:40px;"><h4><b>注意事項</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">VFPUブランチ命令(bvt, bvtl, bvf, bvfl)命令で直前のvcmp命令の結果を待つVFPUブランチインターロックが発生した場合もRFステージによるスリップとなるため、同じカウンタに集計されます。sceKernelProfilerGetFpuStall()関数ではFPUビジー信号によるインターロックのサイクル数と、VFPUブランチインターロックによるサイクル数を区別することはできません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetFpuCount">sceKernelProfilerGetFpuCount</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetVfpuStall"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetVfpuStall<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>VFPUビジー信号によるストールサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetVfpuStall </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">VFPUビジー信号によるストールサイクル数のカウンタ値<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にVFPUビジー信号によってパイプラインがストールしていたサイクル数を取得します。<br></div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2">
+<div style="margin-left:40px;"><h4><b>注意事項</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">VFPUリピート命令を使用したあと次のVFPU命令が実行されるよりも前にIキャッシュミスヒットによってパイプライン全体のストールが発生した場合、後のVFPU命令がインターロックすることがあります。Iキャッシュミスヒットによるペナルティの方が支配的であるため性能にあたえる影響はごくごく軽微ですが、チューニングのためにカウンタの値を細かく参照する場合には、Iキャッシュミスヒットに注意してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetVfpuCount">sceKernelProfilerGetVfpuCount</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetSleepStall"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetSleepStall<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>SLEEP命令によるストールサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetSleepStall </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SLEEP命令実行によるストールサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にSLEEP命令実行によってパイプラインがストールしていたサイクル数を取得します。<br><br>PSP&reg;カーネルではSLEEP命令は最低優先度のアイドルスレッドによって発行されます。その他のスレッドではSLEEP命令を実行してはいけません。<br>したがって、プロファイラをグローバルモードに指定していた場合は、sceKernelProfilerGetSleepStall()関数の戻り値がアイドルスレッドの実行サイクル数の近似値としてみなす事ができます。<br>また、プロファイラをスレッドモードに指定していた場合は、アイドルスレッド以外のスレッドがSLEEP命令を実行することがないことから、sceKernelProfilerGetSleepStall()関数の戻り値は0になります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCpuAverageLoad">sceKernelProfilerGetCpuAverageLoad</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetBusBusyCycle"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetBusBusyCycle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>バスアクセス時のバスビジーサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetBusBusyCycle </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">バスアクセス時のビジーによって遅延したサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にバスビジー信号によってバスアクセス時が遅延したサイクル数を取得します。ALLEGREXのバスアクセスはCPUパイプラインとは独立してノンブロッキングで行われいます。sceKernelProfilerGetBusBusyCycle()関数が返すカウント値は、CPUパイプラインがストールしたサイクル数を示しているわけではないことにご注意ください。メモリアクセス要因でパイプラインがストールしたサイクル数は<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetMemoryStall">sceKernelProfilerGetMemoryStall</a>()関数で取得する事ができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetMemoryStall">sceKernelProfilerGetMemoryStall</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetUncacheLoadCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetUncacheLoadCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非キャッシュのロード命令実行回数<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetUncacheLoadCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">非キャッシュアドレスのロード命令を実行した回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中に非キャッシュアドレス(kuseg1, kseg1)をターゲットとしたロード命令(LB, LBU, LH, LHU, LW, LWL, LWR, LL, LWC1, LV.S, LV.Q)の実行回数を数えるカウンタの値を取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetUncacheStoreCount">sceKernelProfilerGetUncacheStoreCount</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCacheLoadCount">sceKernelProfilerGetCacheLoadCount</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetUncacheStoreCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetUncacheStoreCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>非キャッシュのストア命令実行回数<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetUncacheStoreCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">非キャッシュアドレスのストア命令を実行した回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中に非キャッシュアドレス(kuseg1, kseg1)をターゲットとしたストア命令(SB, SH, SW, SWL, SWR, SC, SWC1, SV.S, SV.Q, SVL.Q, SVR.Q, SV.Q, WB)の実行回数を数えるカウンタの値を取得します。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3">
+<div style="margin-left:40px;"><h4><b>注意事項</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">プロファイラ自信のレジスタは、kuseg1セグメントの範囲のメモリアドレスからアクセスされるメモリマップトI/Oとして存在しています。プロファイラの動作やカウント値を操作する<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStart">sceKernelProfilerStart</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStop">sceKernelProfilerStop</a>()関数を実行すると、ALLEGREX CPUは非キャッシュアドレスに対するストア命令として操作を行うため、非キャッシュストア命令の実行回数が変化します。プロファイラのカウント値を取得する場合は、取得操作を行っている間にカウント値が変化しないように<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStop">sceKernelProfilerStop</a>()関数でプロファイラの動作を停止しておくことで、sceKernelProfilerGetUncacheStoreCount()関数の誤差を1に留める事ができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetUncacheLoadCount">sceKernelProfilerGetUncacheLoadCount</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCacheStoreCount">sceKernelProfilerGetCacheStoreCount</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetCacheLoadCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetCacheLoadCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>キャッシュ経由のロード命令実行回数<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetCacheLoadCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">キャッシュアドレスのロード命令を実行した回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にキャッシュアドレス(kuseg0, kseg0)をターゲットとしたロード命令(LB, LBU, LH, LHU, LW, LWL, LWR, LL, LWC1, LV.S, LV.Q)の実行回数を数えるカウンタの値を取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCacheStoreCount">sceKernelProfilerGetCacheStoreCount</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetUncacheLoadCount">sceKernelProfilerGetUncacheLoadCount</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetCacheStoreCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetCacheStoreCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>キャッシュ経由のストア命令実行回数<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetCacheStoreCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">キャッシュアドレスのストア命令を実行した回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にキャッシュアドレス(kuseg0, kseg0)をターゲットとしたストア命令(SB, SH, SW, SWL, SWR, SC, SWC1, SV.S, SV.Q, SVL.Q, SVR.Q, SV.Q, WB)の実行回数を数えるカウンタの値を取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCacheLoadCount">sceKernelProfilerGetCacheLoadCount</a>(),<br><a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetUncacheStoreCount">sceKernelProfilerGetUncacheStoreCount</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetDcacheWritebackCount">sceKernelProfilerGetDcacheWritebackCount</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetIcacheMissCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetIcacheMissCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Iキャッシュミス発生回数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetIcacheMissCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Iキャッシュミス発生回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中に発生したIキャッシュミスの回数を数えるカウンタ値を取得します。<br><br>Iキャッシュのヒット率は<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>()関数によって取得する事ができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetDcacheMissCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetDcacheMissCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Dキャッシュミス発生回数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetDcacheMissCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Dキャッシュミス発生回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中に発生したDキャッシュミスの回数を数えるカウンタ値を取得します。<br><br>Dキャッシュのヒット率は<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetDcacheHitRatio">sceKernelProfilerGetDcacheHitRatio</a>()関数によって取得する事ができます。<br>ここで取得される値は、キャッシュアドレス(kuseg0, kseg0)からアクセスした場合に発生したDキャッシュミス回数です。非キャッシュアドレス(kuseg1, kseg1)からのアクセスはDキャッシュに関与しないため、Dキャッシュのミスヒットとしてカウントされません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetDcacheHitRatio">sceKernelProfilerGetDcacheHitRatio</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetDcacheWritebackCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetDcacheWritebackCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Dキャッシュライトバック発生回数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetDcacheWritebackCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Dキャッシュライトバック発生回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中に発生したDキャッシュライトバック回数を数えるカウンタ値を取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCacheStoreCount">sceKernelProfilerGetCacheStoreCount</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetCop0Count"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetCop0Count<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>COP0命令の実行回数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetCop0Count </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">COP0命令実行回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にCOP0命令を実行した回数を数えるカウンタ値を取得します。<br>COP0命令の多くは特権命令でユーザーモードからは実行できませんが、一部のCACHE命令はユーザーモードでも発行できるため、COP0命令としてカウントされます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetFpuCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetFpuCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>FPU命令の実行回数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetFpuCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">FPU命令実行回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にFPU命令を実行した回数を数えるカウンタ値を取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetVfpuCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetVfpuCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[カウンタ値取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>VFPU命令の実行回数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetVfpuCount </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">VFPU命令実行回数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中にVFPU命令を実行した回数を数えるカウンタ値を取得します。<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4">
+<div style="margin-left:40px;"><h4><b>注意事項</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">sv.q, wb命令を使用すると、VFPUライトバッファに関するエラッタ回避のため、アセンブラが自動的にvnop命令を挿入する事があります。アセンブラが自動的に挿入したvnop命令もVFPU命令としてカウントに含まれますので、sv.q, wb命令の使用時にはプロファイル結果の評価の仕方に注意してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetStallCycle"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetStallCycle<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[統計値計算]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CPUパイプラインストールのサイクル数取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetStallCycle </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CPUパイプラインストールのサイクル数のカウンタ値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中の動作結果から、CPUパイプラインがストールしていた時間をサイクル数として取得します。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetExecInstructions"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetExecInstructions<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[統計値計算]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>命令実行数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ unsigned int <b>sceKernelProfilerGetExecInstructions </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CPUが実行した命令の個数<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中の動作結果から、CPUが実行した命令個数を取得します。<br>ただし、プログラムカウンタがキャッシュアドレス(kuseg0, kseg0)内を実行している状態で計測された結果である必要があります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCPI">sceKernelProfilerGetCPI</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetCPI"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetCPI<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[統計値計算]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CPI(Cycles Per Instruction)値の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ float <b>sceKernelProfilerGetCPI </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i>pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">CPI概算値<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中の動作結果から、CPUパイプラインの実効性能を示す数値であるCPI(Cycles Per Instruction)値を計算します。<br><br>CPI値はCPUが1命令を実行するのにかかったサイクル数の平均値で、シングルパイプラインのALLEGREXでは1.0のとき理論上の最高のパフォーマンスが発揮されている状態です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetExecInstructions">sceKernelProfilerGetExecInstructions</a>(), <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetIcacheHitRatio"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetIcacheHitRatio<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[統計値計算]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Iキャッシュヒット率の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ float <b>sceKernelProfilerGetIcacheHitRatio </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Iキャッシュヒット率<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中の動作結果から、Iキャッシュのヒット率を計算します。<br>ただし、プログラムカウンタがキャッシュアドレス(kuseg0, kseg0)内を実行している状態で計測された結果である必要があります。<br>Iキャッシュが発生したとき、CPUはその命令を含む64バイトのキャッシュラインをリフィルします。64バイトには16個の命令オペコードが含まれているため、ジャンプ/ブランチ等が発生しなかった場合、最初の1命令でIキャッシュミスヒットしたあと、続く15個の命令はIキャッシュにヒットします。このときヒット率は15/16 = 0.9375となります。Iキャッシュヒット率を評価する場合は、この値が基準となることを考慮してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheMissCount">sceKernelProfilerGetIcacheMissCount</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetDcacheHitRatio"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetDcacheHitRatio<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[統計値計算]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Dキャッシュヒット率の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ float <b>sceKernelProfilerGetDcacheHitRatio </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Dキャッシュヒット率<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中の動作結果から、Dキャッシュのヒット率を計算します。<br>ここで計算される値は、キャッシュアドレス(kuseg0, kseg0)からアクセスした場合のDキャッシュヒット率です。非キャッシュアドレス(kuseg1, kseg1)からのアクセスはDキャッシュに関与しないため、Dキャッシュのヒット率には反映されません。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetDcacheMissCount">sceKernelProfilerGetDcacheMissCount</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetCpuAverageFreq"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetCpuAverageFreq<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[統計値計算]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CPU平均クロック周波数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ float <b>sceKernelProfilerGetCpuAverageFreq </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">平均CPUクロック周波数<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中の動作結果から、CPUの平均動作クロック周波数を取得します。<br><br>バスにアクセスしていない状態でのCPU動作クロックは<a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetCpuClockFrequency">scePowerSetCpuClockFrequency</a>()関数で設定した周波数ですが、バスアクセス中はバスクロックに同期したクロックで動作するために、動作クロック周波数がシステムクロックに変化します。sceKernelProfilerGetCpuAverageFreq()関数で得られる平均動作クロック周波数はこの影響を受けるため、<a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetCpuClockFrequencyFloat">scePowerGetCpuClockFrequencyFloat</a>()関数で得られる設定周波数よりも高い周波数が観測されることがあります。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetCpuClockFrequencyFloat">scePowerGetCpuClockFrequencyFloat</a>(),<br><a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetCpuClockCycle">sceKernelProfilerGetCpuClockCycle</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelProfilerGetCpuAverageLoad"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelProfilerGetCpuAverageLoad<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[統計値計算]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>CPU平均負荷の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+static __inline__ float <b>sceKernelProfilerGetCpuAverageLoad </b>(
+	const <a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *<i> pRegs</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>スレッドから呼び出し可能（割り込み禁止、許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pRegs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プロファイラのレジスタアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">平均CPU負荷<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">プロファイラ動作中の動作結果から、CPUの平均負荷クロック周波数を取得します。1.0のとき最大負荷、0.0のとき無負荷状態です。<br></div>
+<br>
+<div style="margin-left:50px;">PSP&reg;カーネルでは、他の全てのスレッドがWAIT状態になったときのみ動作する最低優先度のアイドルスレッドがSLEEP命令を実行します。SLEEP命令が実行されるとCPUは割り込みが発生するまでパイプラインが停止するため、この時間を使用してCPU負荷を計算します。<br></div>
+<br>
+<div style="margin-left:50px;">アイドルスレッドの実行時間は、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelReferSystemStatus">sceKernelReferSystemStatus</a>()関数によって得られる<a href="../kernel/Thread_Manager-Reference-Japanese.htm#SceKernelSystemStatus">SceKernelSystemStatus</a>構造体の<i>idleClocks</i>でμ秒単位で得る事ができます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a>, <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetSleepStall">sceKernelProfilerGetSleepStall</a>(), <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelReferSystemStatus">sceKernelReferSystemStatus</a>(),<br><a href="../kernel/Thread_Manager-Reference-Japanese.htm#SceKernelSystemStatus">SceKernelSystemStatus</a><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

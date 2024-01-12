@@ -1,0 +1,298 @@
+<html lang="en">
+<head>
+<title>libgameupdate-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Game Update Library Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The game update library (libgameupdate) provides functions for checking if a patch exists for the associated application.<br>The actual patch is downloaded and installed by system software.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libgameupdate.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgameupdate.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgameupdate_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The game update library is provided as a PRX module. To use it, you must statically link libgameupdate_stub_weak.a and then use the module utility APIs to load and unload the module.<br>For details about loading and unloading modules, refer to the "Utility Services Reference" document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/net/libgameupdate</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample program shows the basic method of using the game update library. The program can be launched from the debugger, but in that case, no inquiry will be sent to the update server. If you wish to perform actual checking, create a UMD&trade; image using the UMD&trade; Image Generator, and then write that image to a DVD-R or other media before running the program.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Loading the Required Library Modules</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The game update library depends on the following modules and module sets.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET common module set
+<li> PSPNET infrastructure mode module set
+<li> libparse_uri module
+<li> libparse_http module
+<li> HTTP module set
+<li> SSL module set
+</ul></div>
+<div style="margin-left:50px;">Use the module utility to load the modules and module sets shown above.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Loading the Game Update Library Module</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After loading the required modules, load the game update library module.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../utility/Utility-Reference-English.htm#sceUtilityLoadModule">sceUtilityLoadModule</a>(SCE_UTILITY_MODULE_NET_GAMEUPDATE);
+if (ret &lt; 0) {
+    // Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Preparations for Using the Required Libraries</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Before initializing the game update library, initialize the required libraries. An example of the processing flow is shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Initialize the pspnet library
+ret = <a href="../network/PSPNET_Core-Reference-English.htm#sceNetInit">sceNetInit</a>(PSPNET_POOLSIZE, CALLOUT_TPL, 0, NETINTR_TPL, 0);
+if(ret &lt; 0){
+    // Error handling
+}
+
+// Initialize the pspnet_inet library
+ret = <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetInit">sceNetInetInit</a>();
+if(ret &lt; 0){
+    // Error handling
+}
+
+// Initialize the pspnet_resolver library
+ret = <a href="../network/PSPNET_Resolver-Reference-English.htm#sceNetResolverInit">sceNetResolverInit</a>();
+if(ret &lt; 0){
+    // Error handling
+}
+
+// Initialize the pspnet_apctl library
+ret = <a href="../network/PSPNET_Apctl-Reference-English.htm#sceNetApctlInit">sceNetApctlInit</a>(SCE_APCTL_STACKSIZE, SCE_APCTL_PRIO);
+if(ret &lt; 0){
+    // Error handling
+}
+
+// Initialize libssl
+ret = <a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a>(LIBSSL_POOLSIZE);
+if(ret &lt; 0){
+    // Error handling
+}
+
+// Initialize libhttp
+ret = <a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>(LIBHTTP_POOLSIZE);
+if(ret &lt; 0){
+    // Error handling
+}
+
+// Initialize HTTPS
+ret = <a href="../network/HTTPS-Reference-English.htm#sceHttpsInit">sceHttpsInit</a>(0, NULL, NULL, NULL);
+if(ret &lt; 0){
+    // Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Initialization Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After initializing the required libraries, initialize the game update library.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Initialize libgameupdate
+ret = <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateInit">sceGameUpdateInit</a>(NULL);
+if(ret &lt; 0){
+    // Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Patch Confirmation Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You must be connected to a TCP/IP network when executing patch confirmation processing. Connect to the network by calling the network configuration utility for infrastructure mode.<br>Once the connection is established, call <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>() to execute patch confirmation processing. In the <i>result</i> argument, specify the <a href="../network/libgameupdate-Reference-English.htm#SceGameUpdateResult">SceGameUpdateResult</a> structure for obtaining the result.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int ret;
+<a href="../network/libgameupdate-Reference-English.htm#SceGameUpdateResult">SceGameUpdateResult</a> result;
+
+memset(&amp;result, 0, sizeof(result));
+result.size = sizeof(result);
+
+ret = <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>(&amp;result);
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;"><a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>() is a blocking function that performs the following processing in the calling thread.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Connect to the patch server
+<li> Obtain and analyze the patch version file
+</ul></div>
+<div style="margin-left:50px;">If <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>() completes successfully (returns 0), the result is returned in the <i>status</i> member of the <a href="../network/libgameupdate-Reference-English.htm#SceGameUpdateResult">SceGameUpdateResult</a> structure specified in the <i>result</i> argument.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_NO_UPDATE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No new patch was found&nbsp;&nbsp;<br>&nbsp;&nbsp;(application is up-to-date)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_UPDATE_FOUND&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A new patch was found&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_SYSTEM_UPDATE_NEEDED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A system software update is needed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_GAMEUPDATE_RESULT_STATUS_MAINTENANCE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Maintenance is in progress&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">When the status is SCE_GAMEUPDATE_RESULT_STATUS_UPDATE_FOUND, the patch application version is passed in "XX.YY" form in the <i>app_ver</i> member. For example, if the application version is 1.01, it will be passed as "01.01."<br>Note that when a new patch exists which also requires new system software, SCE_GAMEUPDATE_RESULT_STATUS_SYSTEM_UPDATE_NEEDED is returned as the status.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Interruption Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">You can use <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateAbort">sceGameUpdateAbort</a>() to forcibly interrupt <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>() processing.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateAbort">sceGameUpdateAbort</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;"><a href="../network/libgameupdate-Reference-English.htm#SCE_GAMEUPDATE_ERROR_ABORTED">SCE_GAMEUPDATE_ERROR_ABORTED</a> is returned by <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>() when it is forcibly interrupted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>Termination Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Use <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateTerm">sceGameUpdateTerm</a>() to terminate the game update library.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateTerm">sceGameUpdateTerm</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">If this function is called while <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>() is executing, interruption processing will be performed. At this time, <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateTerm">sceGameUpdateTerm</a>() will block until interruption processing finishes.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Debugger Mode Restrictions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The game update library will not work properly when used on a TOOL that was started with "debugger mode" as the startup parameter. In this case, <a href="../network/libgameupdate-Reference-English.htm#sceGameUpdateRun">sceGameUpdateRun</a>() will not send inquiries to the patch server, and SCE_GAMEUPDATE_RESULT_STATUS_NO_UPDATE will be returned for the result status.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

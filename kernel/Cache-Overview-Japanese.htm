@@ -1,0 +1,453 @@
+<html lang="jp">
+<head>
+<title>Cache-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ALLEGREX CPUキャッシュ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>キャッシュ概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPUは、16KiBずつのD(データ)キャッシュおよびI(インストラクション)キャッシュを持ちます。PSP&reg;システムチップでは、CPU以外のバスマスタがメモリアクセスを行う場合に、キャッシュの内容とメモリの内容を一致させるスヌーピングなど、ハードウェアによるコヒーレンシ保証は行われません。このため、ある条件では、明示的なDキャッシュのライトバック操作などが必要になることがあります。<br><br>ALLEGREX CPUのキャッシュについての詳細は、「ALLEGREX User's Manual」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">カーネルが提供するキャッシュ操作APIを呼び出すためには、以下のヘッダファイルを使用します。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;kernelutils.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libkernel.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>データキャッシュ(Dキャッシュ)</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">データキャッシュは、メモリとCPUとのロード / ストア命令によるデータのやり取りをバッファリングする高速メモリです。ごく簡単に言えば、メモリの読み書きには時間がかかるため、一部のデータをキャッシュに溜めておき、キャッシュの読み書きでだけで処理が行える場合は、メインメモリにアクセスしないしくみです。キャッシュミス、つまり求めるデータがキャッシュにない場合に、自動的にメインメモリへのアクセスが行われます。<br>プログラマが特に意識せずにコーディングしても、適当にデータキャッシュが利用されることになり、手軽に、多くの場合はそれなりに効果が得られます。しかし、逆に時間のかかるメモリアクセスが意図しないときに行われるということになると、プログラムの性能に大きく影響する場合もあります。意識してキャッシュミスがなるべく起こらないようにコーディングすることで、プログラムを高速化できる場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ALLEGREX CPUデータキャッシュの特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPUのデータキャッシュには、以下のような特徴があります<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>2ウェイセットアソシアティブ方式</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">16KiBのDキャッシュは、64バイト単位のキャッシュブロックで、8KiBずつの2ウェイセットアソシアティブ方式で構成されます。キャッシュブロックは、それぞれ仮想アドレスのある64バイトを1ヶ所だけキャッシュすることができ、Dキャッシュ内では、8KiB単位のセットが2ヶ所ずつキャッシュできることを意味します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>ライトバック方式</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Dキャッシュを経由するメモリへの書き込みは、即座にはメモリに反映されません。Dキャッシュの当該ブロックが、リプレースによって暗黙のうちにライトバックされるか、CPUのCACHE命令によって明示的にライトバックされるまで、書き換えられたデータは、Dキャッシュ内に留まります。この状態をダーティ状態と呼びます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>スヌープ機能なし</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">CPUから読み書きされたデータが、Dキャッシュ内に留まっているダーティ状態のキャッシュブロックに対応するアドレスを、CPU以外のバスマスタ(GE,DMAC,VFPU)が読み書きしようとした場合、CPU以外のバスマスタは、Dキャッシュにアクセスできないため、キャッシュ内のデータとメモリ上のデータで不整合を起こすことになります。ダーティ状態でなくても、当該アドレスがDキャッシュ内にキャッシュされている状態では、CPU以外のバスマスタがメモリを書き換えてもCPUからは、書き換えられたデータを参照する事ができません。<br>このような不整合を防ぐため、CPU以外のバスマスタを動作させる場合には、明示的にDキャッシュのライトバックまたはインバリデートが必要になります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>バースト転送によるリフィル/ライトバック</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">キャッシュブロックをメモリからリフィルするとき、および、メモリへライトバックするとき、ALLEGREX CPUは、バスに対してバースト転送を使用します。メインメモリ,eDRAM,スクラッチパッドは、いずれも128ビットバスに接続されているため、64バイトのキャッシュブロックをバス上の4サイクルでバースト転送します。<br>ただし、ALLEGREX CPUのパイプラインは、ノンブロッキングロードおよびヒットアンダーミスをサポートしていません。このため、Dキャッシュリフィルが発生した場合は、CPUパイプラインがストールします。一方、Dキャッシュからのライトバックは、ノンブロッキングで行われます。Dキャッシュのラインリプレースが発生した場合、ライトバックされるデータは、専用のライトバックバッファにコピーされ、キャッシュミスしたブロックのリフィルを先に発生させます。いずれの場合もライトバックは、ノンブロッキングで行われるため、sync命令を実行することでDキャッシュのライトバックが完了するまで、CPUパイプラインをストールさせることができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>データキャッシュとVFPU,GE,DMACに関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPU以外のバスマスタ、VFPU, GE , DMACによるメモリアクセスは、ALLEGREX CPUからのメモリアクセスとは独立して行われます。PSP&reg;システムチップには、ALLEGREX CPUからDキャッシュを通して見たメインメモリの内容と、VFPU, GE , DMACなどから見た内容で、コヒーレンシを保証させるためのハードウェア機能 (キャッシュスヌーピング) がありません。このため、ALLEGREX CPU以外のバスマスタに、DMA転送を行わせる際には、転送対象のデータがDキャッシュとメモリどちらに載っているかに注意する必要があります。<br>正しくDMA転送を行うためには次の手順が必要です。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>ALLEGREX CPU &rarr; メモリ &rarr; GE , DMAC：</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> CPUがデータをバッファ変数に書き込む(Dキャッシュに書きこまれる)
+<li> Dキャッシュをライトバック (Dキャッシュからメモリへ書き出しが行われる)
+<li> sync命令を発行する(Dキャッシュからの書き出しが完了する)
+<li> DMA転送を行う
+<li> GEやDMACがメモリからデータを読み出す
+<li> DMA転送が終わるのを待つ
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>GE, DMAC, VFPU &rarr;メモリ &rarr; ALLEGREX CPU：</b><br></h4>
+</a></div>
+<div style="margin-left:40px;"><ul>
+<li> バッファ変数に該当するDキャッシュを(必要ならライトバックして)無効化する
+<li> sync命令を発行する(Dキャッシュからの書き出しが完了する)
+<li> DMA転送を行う
+<li> GEやDMAがメモリに対してデータを書き込む
+<li> DMA転送が終わるのを待つ
+<li> バッファ変数を読みこむ(Dキャッシュにロードされる)
+</ul></div>
+<div style="margin-left:50px;"><br>ラインリプレースによる副作用で、Dキャッシュのライトバックが行われてしまうことがあるため、Dキャッシュのライトバックを明示的に行わないままGE,DMACなどを動作させても、期待した動作が行える事があります。また、GE,DMAC,VFPUなどがDMA転送を行っている間、該当するメモリをALLEGREX CPUからアクセスすると、再びDキャッシュに乗ってしまい、コヒーレント状態が失われます。そのようなプログラミングは、タイミング依存であり、将来のバージョンで正しく動作しなくなりますので、行わないようにして下さい。<br><br>Dキャッシュ内のダーティデータを、メモリに書き出す関数としては、<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackAll">sceKernelDcacheWritebackAll</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackRange">sceKernelDcacheWritebackRange</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>()のいずれかを使用することができます。<br>Dキャッシュを無効化する関数としては、<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateAll">sceKernelDcacheWritebackInvalidateAll</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheWritebackInvalidateRange">sceKernelDcacheWritebackInvalidateRange</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelDcacheInvalidateRange">sceKernelDcacheInvalidateRange</a>()を使用することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>データキャッシュとアラインメントに関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Dキャッシュのラインサイズは、64バイトであり、メモリからのリフィル、メモリへのライトバック、インバリデートも全て64バイトアラインメントのブロックごとに行われます。<br>特に注意が必要なのは、ライトバックするデータのサイズが、64バイトの倍数になっていなかったり、開始および終端が64バイトのアラインメントに合っていなかったりした場合に、そのデータの前後の領域も一緒にリフィル/ライトバック/インバリデートされるということです。この前後の領域が別に管理されている変数で使われていると、予期しないインバリデート等が行われるために不都合が起きますので注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>アラインメントの指定方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">変数のアラインメントを指定するには、変数の定義にaligned属性を加えます。たとえば、16バイトアラインメントを指定したい場合は、次のように記述します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_1"><h4>
+(1)&nbsp;<b>初期値のあるstatic / global変数の場合（dataセクション）</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>unsigned char data[] __attribute__ ((aligned(16))) = { 'a', 'b', 'c' };
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_4_2"><h4>
+(2)&nbsp;<b>初期値のないstatic / global変数の場合（bssセクション）</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>unsigned char data[1*1024*1024] __attribute__ ((aligned(16)));
+</font></pre></div>
+<div style="margin-left:50px;"><br>auto変数に対してのアラインメント指定は、無効になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>データキャッシュミスを減らす方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Dキャッシュミスを減らすための基本的な手法は、不必要なデータをキャッシュに乗せないようにすることです。そのためには、近いタイミングで参照されるデータは、なるべく構造体にまとめるなど、近いアドレスのデータが連続的にアクセスされるようデータを配置するようにします。<br><br>テーブルなどを定義する場合は、2ウェイセットアソシアティブキャッシュのキャッシュラインを意識して、同じキャッシュラインに位置するアドレスへのアクセスが発生しないようにします。<br><br>プログラムが64バイトのキャッシュブロック全体に対して書き込みを行うことが分かっている場合には、CACHE命令のCreate Dirty Exclusive機能を使用してメモリからのリフィルを省略することができます。<br><a href="../kernel/Cache-Reference-Japanese.htm#sceKernelMemset">sceKernelMemset</a>()および<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelMemcpy">sceKernelMemcpy</a>()関数では、書き込み先を示すポインタ引数にキャッシュ有効アドレスを与えると、Create Dirty Exclusive機能を使用して、高速なメモリ操作を行うようになっています。このため、標準libc関数memset(), memcpy()よりも通常は高速に動作します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>データキャッシュミスの測定方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Dキャッシュミスを定量的に測定するために、プロファイラを利用することができます。プログラムとしては、例えば次のようにしてください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *pRegs;
+pRegs = <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferGlobalProfiler">sceKernelReferGlobalProfiler</a>();
+
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>(pRegs);
+	（途中省略）
+
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStart">sceKernelProfilerStart</a>(pRegs);
+（キャッシュミスを測定する対象のルーチン）
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStop">sceKernelProfilerStop</a>(pRegs);
+
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetDcacheMissCount">sceKernelProfilerGetDcacheMissCount</a>(pRegs);	// Dキャッシュミス回数
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetDcacheWritebackCount">sceKernelProfilerGetDcacheWritebackCount</a>(pRegs);// Dキャッシュライトバック回数
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetDcacheHitRatio">sceKernelProfilerGetDcacheHitRatio</a>(pRegs);	// Dキャッシュヒット率
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>非キャッシュアクセスおよびVFPUライトバッファ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ALLEGREX CPUでは、メモリへのアクセスにキャッシュを使用しない非キャッシュアクセスも用意されています。またVFPUには、CPUを経由せずVFPUレジスタから直接メモリへ書き出しを行う専用のVFPUライトバッファが用意されています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ALLEGREX CPU非キャッシュアクセスの特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPUの非キャッシュアクセスには、以下のような特徴があります<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>ダイレクトセグメントマッピングによる仮想アドレスから物理アドレスへのマッピング</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ALLEGREX CPUでは、kuseg1セグメントのアドレスを使用することで、非キャッシュアクセスを使用する事ができます。ユーザモードからのアクセスは、以下のようになります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>セグメント</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>仮想アドレス</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>アクセス</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kuseg0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x00000000～0x3fffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;キャッシュ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kuseg1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x40000000～0x7fffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非キャッシュ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kseg0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80000000～0x9fffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドレスエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kseg1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xa0000000～0xbfffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドレスエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ksseg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xc0000000～0xdfffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドレスエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kseg3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0xe0000000～0xffffffff&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドレスエラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>16段の非キャッシュライトバッファ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">非キャッシュアドレスへの書き込みは、32ビット16段のライトバッファを経由して行われます。ライトバッファからバスへの書き込みは、ノンブロッキング動作するため、ライトバッファ経由の書き込みが行われる場合、ライトバッファに空きがある限りCPUパイプラインは、ストールせずストア命令を発行する事ができます。非キャッシュライトバッファの吐き出しは、sync命令を発行することで待つ事ができます。<br>非キャッシュライトバッファにデータが滞留している状態で、非キャッシュリードが行われた場合、非キャッシュライトバッファの吐き出しが完了してから非キャッシュリードが行われます。ALLEGREX CPUパイプラインは、ノンブロッキングロードをサポートしていないため、この間CPUパイプラインは、ストールします。<br>非キャッシュライトバッファからバスへの書き込みには、バースト転送はされません。このため、連続する64バイト全体に対して書き込みを行う場合は、CACHE命令のCreate Dirty Exclusive機能を使ってDキャッシュにラインを確保して、Dキャッシュ経由で行った方がバス負荷は軽くなります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>16段のVFPUライトバッファ</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">VFPUから非キャッシュアドレスのメモリへ書き出しを行う場合、専用のsv.q, wb命令を使用すると、128ビット16段のVFPUライトバッファを経由して行われます。VFPUライトバッファからのバスへの書き込みは、ノンブロッキング動作するため、VFPUライトバッファ経由の書き込みが行われる場合、VFPUライトバッファに空きがある限りCPUおよびVFPUパイプラインは、ストールせず命令を発行する事ができます。VFPUライトバッファの吐き出しは、vsync2命令を発行することで待つ事ができます。vsync命令だけでは、後続するCPU命令をストールさせる事ができないのに注意が必要です。<br>VFPUライトバッファからのバスへの書き込みには、不定長バースト転送が使用される事があります。連続したアドレスに対して書き込みを行う場合は、アドレス昇順になる順番で書き込む事で高速にバースト転送が行われる事があります。<br>通常のsv.q命令を非キャッシュアドレスで使用すると、128ビットのデータを32ビットずつ4回に分割して、ALLEGREX CPU側の非キャッシュライトバッファ経由で書き出すことになるため、sv.q,wb命令よりも低速になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>キャッシュ / 非キャッシュアクセスの混在に関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Dキャッシュブロックのサイズは、64バイトであり、メインメモリとのやりとりは、64バイトアラインメントのブロック毎に行われます。同じブロックにキャッシュアクセスを行う変数と、非キャッシュアクセスを行う変数とが隣接していると、これらが同時に書き戻されるために不都合が起こる場合があります。例えば次のプログラム例で<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int a, b, c;
+（省略）
+	int *ub = (int*)((uintptr_t)&amp;b | 0x4000000);
+	a = 1;
+	*ub = 2;
+	c = 3;
+</font></pre></div>
+<div style="margin-left:50px;"><br>もし変数a / b / cが同じブロックにあると、aにアクセスした時点で、bもcも同じキャッシュラインに載ります。*ubに書き込むと、キャッシュの内容は変更されず、メモリ上のbが書き換えられます。次にcに書き込むと、キャッシュ上のcが書き換えられて、下図のような状態になります。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Cache-Overview-Japanese001.gif">
+</div>
+<div style="margin-left:50px;"><br><br>この状態でキャッシュを書き戻すと、*ubへ書き込んだ値は、キャッシュ上のゴミ値で上書きされてしまいます。また、bの値を読み出すとキャッシュ上のゴミ値が読み出され、やはり*ubへの書き込みは無視されることになります。<br>このような不都合を避けるには、次のように属性を指定して変数を定義し、キャッシュ / 非キャッシュアクセスの変数が64バイトバウンダリで分れるようにする方法があります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int a __attribute__((aligned(64)));
+int b __attribute__((aligned(64)));
+int c __attribute__((aligned(64)));
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>非キャッシュライトバッファのレイテンシに関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">非キャッシュアクセスでのストアは、かならず非キャッシュライトバッファを経由しておこなわれます。書き込んだデータは、バスがビジーのあいだ非キャッシュライトバッファに溜められるため、ALLEGREX CPUがストア命令を実行したタイミングとメモリにデータが伝えられるタイミングとは、大きくずれることがあります。<br>非キャッシュアクセスで書き込んだデータが、メモリに伝えられたことを保証するためには、sync命令を使用します。psp-gccでは、__builtin_allegrex_sync()関数を使用することで、インラインでsync命令を発行する事ができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>VFPUライトバッファに関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">VFPUライトバッファについては、エラッタがあるため、特定のコードシーケンスでvsync2命令の挿入が必要になる事があります。詳しくは、「Hardware-Restriction」ドキュメントを参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>命令キャッシュ(Iキャッシュ)</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>命令キャッシュの特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">命令キャッシュは、プログラムコードをメモリから読み出す際に使われるバッファメモリで、16KiBの容量があります。プログラムコードは、読み出す一方のデータであり、プログラムのループ部分や頻繁に呼び出される関数のコードが命令キャッシュに載っていると、比較的高速に実行することができます。<br>データキャッシュと同様、ほぼ自動的に利用されて効果を発揮しますが、やはり命令キャッシュミスを起こさないようにすることがプログラムの高速化につながる場合があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ALLEGREX CPU命令キャッシュの特徴</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_1"><h4>
+(1)&nbsp;<b>2ウェイセットアソシアティブ方式</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">16KiBのIキャッシュは、64バイト単位のキャッシュブロックで、8KiBずつの2ウェイセットアソシアティブ方式で構成されます。キャッシュブロックは、それぞれ仮想アドレスのある64バイトを1ヶ所だけキャッシュすることができ、Iキャッシュ内では、8KiB単位のセットが2ヶ所ずつキャッシュできることを意味します。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_2"><h4>
+(2)&nbsp;<b>スヌープ機能なし</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Iキャッシュの内容は、CPUが行うキャッシュアクセスまたは非キャッシュアクセスによるストア命令や、CPU以外のバスマスタ(GE,DMAC,VFPU)による書き込みによってコヒーレンシ保証されません。プログラムのオーバーレイなど行う場合には、明示的なDキャッシュのライトバックおよびIキャッシュのインバリデートが必要になります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_2_3"><h4>
+(3)&nbsp;<b>バースト転送によるリフィル</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">キャッシュブロックをメモリからリフィルするとき、ALLEGREX CPUはバスに対してバースト転送を使用します。メインメモリ,eDRAM,スクラッチパッドは、いずれも128ビットバスに接続されているため、64バイトのキャッシュブロックをバス上の4サイクルでバースト転送します。Iキャッシュミスヒットが発生した場合、CPUパイプラインはストールします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>命令キャッシュミスを減らす方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Iキャッシュミスを減らすためには、Dキャッシュミスに対するほど効果のはっきりした方策がありません。頻繁に実行されるループとそのループから呼び出される関数に対して、コードサイズを小さくすることと近いアドレスに配置されるようにすること、このふたつによって16KiB以下に納めることができればループの実行中は、Iキャッシュミスを起こさないようにできます。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Cache-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  ループとループから呼び出される関数を小さくまとめる</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">コードサイズを小さくするためには、次のような方法があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> プログラムをアセンブラで書き直す
+<li> マクロやインライン関数をむやみに多用しない
+<li> コンパイルオプション-Osを試してみる
+</ul></div>
+<div style="margin-left:50px;"><br>複数箇所から呼び出されるマクロやインライン関数は、通常の関数に置き換えることでコードサイズを節減することができます。ただし、関数呼び出しにはオーバーヘッドが伴いますし、Iキャッシュミスの原因にもなるので、置き換えて効果があるかどうかはケースバイケースです。コンパイルオプション-Osも、コードサイズが小さくなる代わりにコード自体の実行速度が遅くなる傾向がありますから、効果はやはりケースバイケースです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>コンパイラが暗黙に呼び出す関数に関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ループから呼び出される関数を小さくまとめる際には、ライブラリ関数はもちろん、コンパイラが暗黙に呼び出す関数に注意が必要です。<br>たとえば、doubleからfloatへの型変換を行うdptofp()や、floatからintへの型変換を行うfptosi()などがあります。これらは余計なIキャッシュミスを起こす可能性もありますし、またそれ自体がオーバーヘッドにもなります。多くの場合、定数・変数の型を適切に定義するなどプログラムの記述方法を工夫することで改善できますので、速度が要求される部分でこれらの呼び出しが行われていないかどうか、アセンブラソースやマップファイルなどで確認してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>オーバーレイに関する注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">オーバーレイなど、PSP&reg;カーネルのモジュールマネージャによらずプログラムコードをメモリに読み込んだ場合は、明示的なDキャッシュのライトバックおよびIキャッシュのインバリデートが必要になります。<br>Iキャッシュのインバリデートには、<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelIcacheInvalidateAll">sceKernelIcacheInvalidateAll</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelIcacheInvalidateRange">sceKernelIcacheInvalidateRange</a>()関数を使用する事ができます。<br><br>直接CACHE命令を使用することでもIキャッシュを無効化する事ができますが、命令を小さな単位で自己書き換えする目的のためにCACHE命令を使用することは避けてください。高速に自己書き換えコードを使用する目的でCACHE命令を直接使用したり、明示的にIキャッシュをインバリデートする<a href="../kernel/Cache-Reference-Japanese.htm#sceKernelIcacheInvalidateAll">sceKernelIcacheInvalidateAll</a>(), <a href="../kernel/Cache-Reference-Japanese.htm#sceKernelIcacheInvalidateRange">sceKernelIcacheInvalidateRange</a>()関数を使用せずに自己書き換えやオーバーレイを使用していると、将来の互換性確保に懸念を及ぼす可能性があるためです。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>命令キャッシュミスの測定方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Iキャッシュミスを定量的に測定するために、プロファイラを利用することができます。プログラムとしてはたとえば次のようにしてください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../debug_support/Profiler-Reference-Japanese.htm#SceProfilerRegs">SceProfilerRegs</a> *pRegs;
+pRegs = <a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelReferGlobalProfiler">sceKernelReferGlobalProfiler</a>();
+
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerReset">sceKernelProfilerReset</a>(pRegs);
+	（途中省略）
+
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStart">sceKernelProfilerStart</a>(pRegs);
+（キャッシュミスを測定する対象のルーチン）
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerStop">sceKernelProfilerStop</a>(pRegs);
+
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheMissCount">sceKernelProfilerGetIcacheMissCount</a>(pRegs);	// Iキャッシュミス回数
+<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>(pRegs);	// Iキャッシュヒット率
+</font></pre></div>
+<div style="margin-left:50px;"><br>なお、<a href="../debug_support/Profiler-Reference-Japanese.htm#sceKernelProfilerGetIcacheHitRatio">sceKernelProfilerGetIcacheHitRatio</a>()関数の結果を評価するとき、Iキャッシュのリフィルが64バイト(16ワード)単位で行われ、Iキャッシュリフィル中にCPUパイプライン全体がストールしていることを考慮にいれる必要があります。つまり、サイクル単位ではなく命令単位で評価した場合、Iキャッシュミスヒットは、16命令に1回しか発生しないため、とくに最適化されていなくても0.9375の確率でIキャッシュはヒットします。Iキャッシュヒット率の結果を評価する場合は、この値が基準となることに注意してください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,1015 @@
+<html lang="jp">
+<head>
+<title>libgxp_Packet-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgxp_packet
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileSetHeapFunc"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileSetHeapFunc<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メモリ管理関数の設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>void <b>sceGxpFileSetHeapFunc</b>(
+	int <i>heap</i>,
+	void *(<i>*alloc_func</i>)( size_t ),
+	void (<i>*free_func</i>)( void * ) 
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>heap</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープタイプ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_HEAP_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープ１&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_HEAP_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープ２&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_HEAP_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープ３&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>alloc_func</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ確保関数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>free_func</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリ解放関数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ライブラリで使用するメモリ管理関数を設定します。<br><br>メモリ管理関数は３組まで設定することができ、使用時に選択することができます。<br>通常、各ヒープは以下のような用途で使用されます。<br></div>
+</ul>
+<div style="margin-left:60px;"><ul>
+<li> 一般的なデータ
+<li> GEに転送されるDDR上のデータ
+<li> GEに転送されるeDRAM上のデータ 
+</ul></div>
+<div style="margin-left:50px;"><br>メモリ管理関数によって確保されるメモリは64バイト単位のアラインメントが必要です。<br>省略時はmemalign(), free()によりメモリが確保、解放されます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGxpFileSetHeapFunc( SCEGXP_HEAP_1, malloc, free ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileCreateFromFile">sceGxpFileCreateFromFile</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDelete">sceGxpFileDelete</a>()<br><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDuplicateSection">sceGxpFileDuplicateSection</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDeleteSection">sceGxpFileDeleteSection</a>()<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileSetBindFunc"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileSetBindFunc<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>オブジェクト結合関数の設定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>void <b>sceGxpFileSetBindFunc</b>(
+	SceGxpObject *(*<i>get_func</i>)(
+		int <i>format</i>, int <i>type</i>, const char *<i>name</i> 
+	),
+	void (*<i>set_func</i>)(
+		nt <i>format</i>, int <i>type</i>, const char *<i>name</i>, SceGxpObject *<i>object</i>
+	)
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>get_func</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクト取得関数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>set_func</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクト登録関数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ライブラリで使用するオブジェクト結合関数を設定します。<br><br><i>get_func</i>オブジェクトを問い合わせるコールバックです。引数に渡されたフォーマット、タイプ、名前に該当するオブジェクトのポインタを返してください。セットアップ関数は外部のオブジェクトを参照しているオブジェクトを見つけるとこのコールバックを呼び出し、そのオブジェクトとコールバックが返すオブジェクトのパケットを結合します。<br><br><i>set_func</i>はオブジェクトを通知するコールバックです。セットアップ関数は外部のオブジェクトから参照可能なオブジェクトを見つけるとこのコールバックを呼び出し、アプリケーションにそのオブジェクトを通知します。<br><br>省略時はこれらのコールバックは呼び出されません。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGxpFileSetBindFunc( get_object, 0 ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileCreateFromFile">sceGxpFileCreateFromFile</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetup">sceGxpFileSetup</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileBindObjects">sceGxpFileBindObjects</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<div style="margin-left:50px;"><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileCreateFromFile"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileCreateFromFile<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル構造体の生成<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>SceGxpFile *<b>sceGxpFileCreateFromFile</b>(
+	const char *<i>filename</i> 
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイル構造体（失敗したときは0）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたファイルをロードし、ファイル構造体を生成します。<br>メモリは<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetHeapFunc">sceGxpFileSetHeapFunc</a>()で設定された関数により確保されます。<br>ファイル構造体の使用を終了する時は<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDelete">sceGxpFileDelete</a>()を呼び出してください。<br>この関数は内部で<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetup">sceGxpFileSetup</a>()を呼び出します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>SceGxpFile *file = sceGxpFileCreateFromFile ( "model.gmp" ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDelete">sceGxpFileDelete</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetHeapFunc">sceGxpFileSetHeapFunc</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileDelete"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileDelete<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル構造体の削除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>void <b>sceGxpFileDelete</b>( 
+	SceGxpFile <i>*file</i> 
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル構造体&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイル構造体を削除します。複製されたセクションがある場合はそれらも削除します。<br>メモリは<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetHeapFunc">sceGxpFileSetHeapFunc</a>()で設定された関数により解放されます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGxpFileDelete( file ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileCreateFromFile">sceGxpFileCreateFromFile</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetHeapFunc">sceGxpFileSetHeapFunc</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileDuplicateSection"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileDuplicateSection<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>セクションの複製<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>bool <b>sceGxpFileDuplicateSection</b>
+	SceGxpFile <i>*file</i>,
+	int <i>type</i>,
+	int<i> heap</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル構造体&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;セクションタイプ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_OBJECT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクトセクション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_PACKET&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パケットセクション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_VERTEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;頂点セクション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_PIXEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピクセルセクション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>heap</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープタイプ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_HEAP_1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープ１&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_HEAP_2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープ２&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_HEAP_3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ヒープ３&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">セクション構成が変化したらtrue<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたセクションを、指定されたヒープを使用して複製します。<br>現在のセクションはそれが複製されたものである場合は削除されます。<br>メモリは<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetHeapFunc">sceGxpFileSetHeapFunc</a>()で設定された関数により確保されます。<br>セクション構成が変化した場合は <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileRelocate">sceGxpFileRelocate</a>() を実行してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>SceGxpFile old = *file ;
+sceGxpFileDuplicateSection( file, SCEGXP_SECTION_VERTEX, SCEGXP_HEAP_3 ) ;
+sceGxpFileDuplicateSection( file, SCEGXP_SECTION_PIXEL, SCEGXP_HEAP_3 ) ;
+<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileRelocate">sceGxpFileRelocate</a>( file, &amp;old ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDeleteSection">sceGxpFileDeleteSection</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileRelocate">sceGxpFileRelocate</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileDeleteSection"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileDeleteSection<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>セクションの削除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>bool <b>sceGxpFileDeleteSection</b>( 
+	SceGxpFile <i>*file</i>,
+	int <i>type</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル構造体&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;セクションタイプ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_OBJECT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクトセクション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_PACKET&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パケットセクション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_VERTEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;頂点セクション&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEGXP_SECTION_PIXEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピクセルセクション&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">セクション構成が変化したらtrue<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたセクションを削除し、初期状態のセクションに復元します。<br>メモリは<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetHeapFunc">sceGxpFileSetHeapFunc</a>()で設定された関数により解放されます。<br>セクション構成が変化した場合は<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileRelocate">sceGxpFileRelocate</a>()を実行してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>SceGxpFile old = *file ;
+sceGxpFileDeleteSection( file, SCEGXP_SECTION_VERTEX ) ;
+sceGxpFileDeleteSection( file, SCEGXP_SECTION_PIXEL ) ;
+<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileRelocate">sceGxpFileRelocate</a>( file, &amp;old ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDuplicateSection">sceGxpFileDuplicateSection</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileRelocate">sceGxpFileRelocate</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileSetup"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileSetup<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>初期化<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>bool <b>sceGxpFileSetup</b>(
+	SceGxpFile *<i>file</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル構造体&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功したときはtrue、失敗したときはfalse<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイル構造体を初期化します。<br>ファイル構造体の使用を終了する時は<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDelete">sceGxpFileDelete</a>()を呼び出してください。<br>この関数は内部で<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileRelocate">sceGxpFileRelocate</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileBindObjects">sceGxpFileBindObjects</a>()を呼び出します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGxpFileSetup( file ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDelete">sceGxpFileDelete</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileRelocate"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileRelocate<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>再配置<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>bool <b>sceGxpFileRelocate</b>(
+	SceGxpFile *<i>file</i>,
+	const SceGxpFile *<i>old</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新しいファイル構造体&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>old</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;古いファイル構造体&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功したときはtrue、失敗したときはfalse<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイル構造体を再配置します。２つのファイル構造体のセクション構成を比較し、ファイル構造体に含まれるポインタとパケットを補正します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>SceGxpFile old = *file ;
+<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDuplicateSection">sceGxpFileDuplicateSection</a>( file, SCEGXP_SECTION_VERTEX, SCEGXP_HEAP_3 ) ;
+<a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDuplicateSection">sceGxpFileDuplicateSection</a>( file, SCEGXP_SECTION_PIXEL, SCEGXP_HEAP_3 ) ;
+sceGxpFileRelocate( file, &amp;old ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDuplicateSection">sceGxpFileDuplicateSection</a>(), <a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileDeleteSection">sceGxpFileDeleteSection</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileBindObjects"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileBindObjects<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>オブジェクトの結合<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>bool <b>sceGxpFileBindObjects</b>(
+	SceGxpFile *<i>file </i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル構造体&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功したときはtrue、失敗したときはfalse<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイル構造体に含まれるオブジェクトを外部のオブジェクトに結合します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>sceGxpFileBindObjects( file ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpFileSetBindFunc">sceGxpFileSetBindFunc</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpFileGetRootObject"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpFileGetRootObject<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ルートオブジェクトを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>SceGxpObject *<b>sceGxpFileGetRootObject</b>(
+	const SceGxpFile *<i>file</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル構造体&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ルートオブジェクト<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ルートオブジェクトを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>SceGxpObject *object = sceGxpFileGetRootObject( file ) ;
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpObjectGetPacketCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpObjectGetPacketCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>パケット数を取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceGxpObjectGetPacketCount</b>(
+	const SceGxpObject *<i>object</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>object</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクト構造体&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">パケット数<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">パケット数を取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int count = sceGxpObjectGetPacketCount( object ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpObjectGetPacket">sceGxpObjectGetPacket</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpObjectGetPacket"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpObjectGetPacket<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>パケットを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>SceGxpPacket *<b>sceGxpObjectGetPacket</b>(
+	const SceGxpObject *<i>object,</i>
+<i>	</i>int<i> idx ;</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>object</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクト構造体&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>idx</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パケット番号&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">パケット構造体<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">パケット構造体を取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>SceGxpPacket *packet = sceGxpObjectGetPacket( object, 0 ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgxp_Packet-Reference-Japanese.htm#sceGxpObjectGetPacketCount">sceGxpObjectGetPacketCount</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGxpPacketGetPtr"></a>
+<table width="100%"><td width="70%"><font size=6>sceGxpPacketGetPtr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>パケットのポインタを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>unsigned int *<b>sceGxpPacketGetPtr</b>(
+	const SceGxpPacket *<i>packet</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>packet</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パケット構造体&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">パケットへのポインタ<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">パケットへのポインタを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>unsigned int *ptr = sceGxpPacketGetPtr( packet ) ;
+
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2006 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

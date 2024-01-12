@@ -1,0 +1,515 @@
+<html lang="jp">
+<head>
+<title>Network_Infrastructure_Mode-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ネットワークインフラストラクチャモード処理概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">タイトルでインフラストラクチャモードを使用する場合は、使用目的、サポートする機能によって必要な処理が異なり、使用するユーティリティの組み合わせも異なります。<br><br>本ドキュメントでは、タイトルでインフラストラクチャモードを使用する場合に関係するサービスについて解説し、その後、タイトルでの実際のケースを列挙し、それぞれに必要な処理内容、順序を説明します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>ホットスポットサービス</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">街の中やお店などで提供される無線LAN接続サービスには、接続時にIDとパスワードによって認証を行ない、認証成功後に初めてインターネットとの通信が可能になるものがあります。このようなサービスを本ドキュメントでは、ホットスポットサービスと表現します。<br>PSP&reg;では、ホットスポットサービスでのIDとパスワードによる認証は、インターネットブラウザ上で行なうケースと、あらかじめIDとパスワードを設定した接続を使うことでインターネットブラウザ無しで行なうケース（ただし特定のホットスポットサービスのみ）の二種類があります。後者のケースでは、ネットワーク設定ユーティリティだけで認証を行ないます。<br>以下では、この二種類のケースを順に説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>インターネットブラウザで認証するケース</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_1">
+<div style="margin-left:40px;"><h4><b>ホットスポットサービスへの接続の流れ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">インターネットブラウザユーティリティを使ってホットスポットサービスに接続する場合、タイトルの流れとしては、タイトルのネットワーク使用目的によって２通り考えられます。<br>１つ目は、タイトルのネットワーク使用目的がブラウザの場合です。この場合は最初からインターネットブラウザユーティリティを起動するだけで対応可能です。ネットワーク接続が必要になった場合は、内部で適宜ネットワーク設定ユーティリティが呼ばれ、接続動作が行なわれます。このフローを図 1に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 タイトルの目的がブラウザの場合</b><br>
+</div>
+<br>
+<div style="margin-left:67px;"><br>２つ目は、タイトルのネットワーク使用目的がタイトル独自の通信の場合です。この場合は、ネットワーク設定ユーティリティによって接続完了後、ホットスポット接続のためにインターネットブラウザユーティリティを起動することになります。<br>ネットワーク設定には設定項目に"ブラウザ起動&quot;（browser_available）という項目があり、ネットワーク設定ユーティリティでの接続が完了して終了した際、該当のネットワーク設定の"ブラウザ起動"の設定値がタイトルに返されます。設定値として"起動する"が選択されていればホットスポットサービスへの接続と判断し、タイトルはインターネットブラウザユーティリティを起動します。このフローを図 2に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 タイトルの目的がタイトル独自の通信の場合</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_2">
+<div style="margin-left:40px;"><h4><b>ホットスポットサービス接続時のブラウザ動作</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">インターネットブラウザによるホットスポットサービス認証では、インターネットブラウザユーティリティで何らかのURLにアクセスした際、強制的に認証ページにリダイレクトされることで進行します。認証に成功後は、リダイレクトが解除されて任意のURLにアクセス可能になります。ですので、ホットスポットサービスから接続した場合は、タイトルがURLを指定していたとしてもそれ以外のページも表示されますのでご注意ください。また、ホットスポットで認証が成功したあと、元の目的のURLには自動でリダイレクトされるとは限りません。この場合はホームアイコンを押すなどのユーザのアクションがあって初めて目的のURLにアクセスすることになります。<br><br>ホットスポットサービス認証のためにインターネットブラウザユーティリティを起動する場合は、最初にリダイレクトされるためのアクセスURLが必要です。インターネットブラウザユーティリティでは、この目的で"ネットワーク接続確認ページのオープン"機能を用意しています。この機能を使うと、インターネットブラウザユーティリティ起動時にSCEIが準備したネットワーク接続確認ページにアクセスします。<br>ネットワーク接続確認ページにはインターネットへの接続が完了した旨の記述があり、このページに接続できればインターネット通信は可能とユーザに知らせることができます。ホームアイコンにこのページを割り当てることも可能ですので、認証成功後、ホットスポットサービスのページを表示している状態からホームアイコンを選択することで、インターネット接続の完了を知らせることができます。<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-Japanese003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 ホットスポットサービスでのブラウザ動作</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ネットワーク設定ユーティリティで認証するケース（特定のホットスポットサービスのみ）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">一部のホットスポットサービスでは、特殊な通信によってID・パスワードをやりとりすることで、インターネットブラウザを使わずに認証することが可能です。この場合、ホットスポット認証はネットワーク設定ユーティリティ内部で行なわれます。<br>ネットワーク設定には設定項目に"ワイヤレスホットスポット対応"（wifisvc_available）という項目があり、この項目が"対応する"に指定された場合、<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ネットワーク接続設定を作成する際、"ワイヤレスホットスポット"というメニューが使用可能になり、ID・パスワードを入力して設定を作成することができる。
+<li> ネットワーク接続設定を選択する際、"ワイヤレスホットスポット"対応の設定を選択可能になる。
+</ul></div>
+<div style="margin-left:50px;">という挙動になり、ユーザが"ワイヤレスホットスポット"対応の設定を選択して接続すれば、該当のホットスポットサービスに接続できます。<br>ただし、ホットスポットサービス認証にはHTTPS通信を使いますので、ネットワーク設定ユーティリティを開始する前にHTTPS使用準備をしておく必要があります。<br>このフローを示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-Japanese004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4 タイトルの目的がタイトル独自の通信の場合</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>ネットワーク設定ユーティリティの"ワイヤレスホットスポット"にてサポートするホットスポットサービスは、本体リージョンによって異なります。タイトルは、発売予定のリージョンに対応する"ワイヤレスホットスポット"が存在しない場合は、ネットワーク設定ユーティリティの"ワイヤレスホットスポット対応"を"対応する"に設定しても無意味になりますので注意してください。<br>以下、本体リージョンと"ワイヤレスホットスポット"でサポートするホットスポットサービスのリストです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>本体リージョン</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>管轄</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ホットスポットサービス</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>SSID</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;北米&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;T-Mobile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;tmobile-share&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">"ワイヤレスホットスポット"に対応するタイトルは、上記のSSIDを使って各ホットスポットサービスへの接続試験を行なうことができます。具体的には、インターネットに接続されたアクセスポイントを用意し、そのアクセスポイントに上記のSSIDを設定しておけば、擬似的にそのホットスポットサービスとして振舞います。これを設置した環境であれば、"ワイヤレスホットスポット"設定の接続が可能になります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>タイトルのホットスポットサービス対応</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ホットスポットサービスに接続するにあたり、インターネットブラウザユーティリティを使うケースも、ネットワーク設定ユーティリティを使うケースも、タイトル側でユーザメモリ空間を空ける必要があるため、タイトルのホットスポットサービス対応は、必須ではありません。<br>ホットスポットサービス認証に対応するかどうかはタイトルが選択することになります。<br>タイトルがホットスポットサービスに対応するかどうかは、ネットワーク設定ユーティリティ起動時にパラメータとして指定する必要があります。パラメータは、"ブラウザ起動"と"ワイヤレスホットスポット対応"の二種類があります。"ブラウザ起動"に"対応しない"を指定した場合は、ネットワーク設定ユーティリティ上で"ブラウザ起動する"に指定されている接続を選択できないようになります。また、"ワイヤレスホットスポット対応"に"対応しない"を指定した場合は、ワイヤレスホットスポット向けに作成された接続を選択できないようになります。<br>このフローを図 5に示します。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-Japanese005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5 タイトル独自の通信でホットスポット対応しない場合</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>タイトルの処理フロー</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">タイトルでインフラストラクチャモードを使用する場合、ケースは以下の3つに分類されます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1"><h4>
+(1)&nbsp;<b>インターネットブラウザでホットスポットサービス認証するケース</b><br></h4>
+</a></div>
+</ul>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1> インターネットブラウザユーティリティを使って特定のURLを表示する</li>
+<li VALUE=2> タイトル独自の通信を行なう(ホットスポットサービス認証対応)</li>
+</ol></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2"><h4>
+(2)&nbsp;<b>ネットワーク設定ユーティリティでホットスポットサービス認証するケース</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3"><h4>
+(3)&nbsp;<b>タイトル独自の通信を行なう(ホットスポットサービス認証非対応)</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>以下、上記のそれぞれのケースについて、タイトルが行なう処理のフローを説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>インターネットブラウザでホットスポットサービス認証するケース</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>インターネットブラウザユーティリティを使って特定のURLを表示する</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">インターネットブラウザユーティリティを使って特定のURLを表示する場合は、以下の流れになります。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>ネットワークモジュールのロードを行ないます。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ロードするモジュールセットは次の通りです。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET共通モジュールセット
+<li> PSPNETインフラストラクチャモードモジュールセット
+<li> libparse_uriモジュールセット
+<li> libparse_httpモジュールセット
+<li> HTTPモジュールセット
+<li> SSLモジュールセット
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>各ネットワークモジュールの初期化を行ないます。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>インターネットブラウザユーティリティを起動します。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">起動時に指定するパラメータは、次の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 初期URLに目的のURLを設定
+<li> ホームアイコンに目的のURLを設定
+<li> ユーザインタフェースレベルを"UI制限あり"に設定
+<li> 自動切断設定を"自動切断する"に設定
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>インターネットブラウザユーティリティが終了します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>各ネットワークモジュールを終了します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_6"><h4>
+(6)&nbsp;<b>各ネットワークモジュールをアンロードします。</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>インフラストラクチャモード使用時には、まずネットワーク設定ユーティリティを使ってネットワークに接続する必要がありますが、このケースではインターネットブラウザユーティリティ内でネットワーク設定ユーティリティを起動するため、タイトルが意識する必要はありません。<br><br>なお、このケースのサンプルがランタイムライブラリの以下の場所に置いてありますので、ご参照ください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/usr/local/psp/devkit/sample/utility/inet/browser/
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>タイトル独自の通信を行なう(ホットスポットサービス認証対応)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">タイトル独自の通信を行なうタイトルでインターネットブラウザによるホットスポットサービス認証に対応する場合は、以下の流れになります。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_1"><h4>
+(1)&nbsp;<b>ネットワークモジュールのロードを行ないます。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ロードするモジュールセットは、次の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET共通モジュールセット
+<li> PSPNETインフラストラクチャモードモジュールセット
+<li> libparse_uriモジュールセット
+<li> libparse_httpモジュールセット
+<li> HTTPモジュールセット
+<li> SSLモジュールセット
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_2"><h4>
+(2)&nbsp;<b>各ネットワークモジュールの初期化を行ないます。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_3"><h4>
+(3)&nbsp;<b>ネットワーク設定ユーティリティを起動します。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">起動時に指定するパラメータは、次の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 起動タイプに"インフラストラクチャモード接続および設定"もしくは"インフラストラクチャモード再接続"を設定
+<li> ブラウザ起動対応状況に"ブラウザ起動に対応している"を設定
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_4"><h4>
+(4)&nbsp;<b>接続に成功し、ネットワーク設定ユーティリティが終了します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_5"><h4>
+(5)&nbsp;<b>接続が完了した設定のブラウザ起動設定値が"起動する"だった場合は、以下の処理を行ないます。</b><br></h4>
+</a></div>
+</ul>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1> インターネットブラウザユーティリティを起動します。起動時に指定するパラメータは、次の通りです。<br>・動作設定に"ネットワーク接続確認ページのオープン"を設定<br>・ユーザインタフェースレベルを"UI制限あり"に設定<br>・自動切断設定を"自動切断しない"に設定</li>
+<li VALUE=2> インターネットブラウザユーティリティが終了します。この時点で、インターネットへのアクセスが可能であると判断します。</li>
+</ol></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_6"><h4>
+(6)&nbsp;<b>タイトル独自の通信を行ないます。この間、ネットワーク切断エラーの監視を常に行ないます。エラーが起こったらメッセージダイアログユーティリティでエラー理由を表示します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_7"><h4>
+(7)&nbsp;<b>タイトル独自の通信が終了したら、各ネットワークモジュールを終了します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_8"><h4>
+(8)&nbsp;<b>各ネットワークモジュールをアンロードします。</b><br></h4>
+</a></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">なお、このケースのサンプルがランタイムライブラリの以下の場所に置いてありますので、ご参照ください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/usr/local/psp/devkit/sample/utility/inet/game_net/hotspot_support/
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>ネットワーク設定ユーティリティでホットスポットサービス認証するケース</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">タイトル独自の通信を行なうタイトルでネットワーク設定ユーティリティによるホットスポットサービス認証に対応する場合は、以下の流れになります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_1"><h4>
+(1)&nbsp;<b>ネットワークモジュールのロードを行ないます。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ロードするモジュールセットは、次の通りです。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET共通モジュールセット
+<li> PSPNETインフラストラクチャモードモジュールセット
+<li> libparse_uriモジュールセット
+<li> libparse_httpモジュールセット
+<li> HTTPモジュールセット
+<li> SSLモジュールセット
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_2"><h4>
+(2)&nbsp;<b>各ネットワークモジュールの初期化を行ないます。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_3"><h4>
+(3)&nbsp;<b>ネットワーク設定ユーティリティを起動します。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">起動時に指定するパラメータは、次の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 起動タイプに"インフラストラクチャモード接続および設定"もしくは"インフラストラクチャモード再接続"を設定
+<li> ワイヤレスホットスポット対応状況に"ワイヤレスホットスポットに対応している"を設定
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_4"><h4>
+(4)&nbsp;<b>接続に成功し、ネットワーク設定ユーティリティが終了します。この時点で、インターネットへのアクセスが可能であると判断します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_5"><h4>
+(5)&nbsp;<b>タイトル独自の通信を行ないます。この間、ネットワーク切断エラーの監視を常に行ないます。エラーが起こったらメッセージダイアログユーティリティでエラー理由を表示します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_6"><h4>
+(6)&nbsp;<b>タイトル独自の通信が終了したら、各ネットワークモジュールを終了します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_7"><h4>
+(7)&nbsp;<b>各ネットワークモジュールをアンロードします。</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>なお、このケースのサンプルがランタイムライブラリの以下の場所に置いてありますので、ご参照ください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+/usr/local/psp/devkit/sample/utility/inet/game_net/wifisvc_hotspot_support/
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>タイトル独自の通信を行なう(ホットスポットサービス認証非対応)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">タイトル独自の通信を行なうタイトルでホットスポットサービス認証非対応の場合は、以下の流れになります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_1"><h4>
+(1)&nbsp;<b>ネットワークモジュールのロードを行ないます。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">ロードするモジュールセットは、次の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET共通モジュールセット
+<li> PSPNETインフラストラクチャモードモジュールセット
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_2"><h4>
+(2)&nbsp;<b>各ネットワークモジュールの初期化を行ないます。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_3"><h4>
+(3)&nbsp;<b>ネットワーク設定ユーティリティを起動します。</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">起動時に指定するパラメータは、次の通りです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 起動タイプに"インフラストラクチャモード接続および設定"もしくは"インフラストラクチャモード再接続"を設定
+<li> ブラウザ起動対応状況に"ブラウザ起動に対応していない"を設定
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_4"><h4>
+(4)&nbsp;<b>接続に成功し、ネットワーク設定ユーティリティが終了します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_5"><h4>
+(5)&nbsp;<b>タイトル独自の通信を行ないます。この間、ネットワーク切断エラーの監視を常に行ないます。エラーが起こったらメッセージダイアログユーティリティでエラー理由を表示します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_6"><h4>
+(6)&nbsp;<b>タイトル独自の通信が終了したら、各ネットワークモジュールを終了します。</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_7"><h4>
+(7)&nbsp;<b>各ネットワークモジュールをアンロードします。</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>なお、このケースのサンプルがランタイムライブラリの以下の場所に置いてありますので、ご参照ください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+/usr/local/psp/devkit/sample/utility/inet/game_net/hotspot_unsupport/
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>ホットスポットサービス認証のテスト方法</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ホットスポットサービス認証に対応するタイトルでは、開発時に実際にホットスポットサービス認証を確認する必要があります。<br>以下では、ホットスポットサービス認証の種類ごとに、テスト方法を説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>インターネットブラウザユーティリティで認証するケース</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">前述したように、インターネットブラウザユーティリティを使ってホットスポットサービス認証を行なう場合は、HTTPSを用いた通常のwebページを使うことになります。よって、開発時にはHTTPSを使った一般的なサイトを問題なく閲覧できることを確認しておく必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ネットワーク設定ユーティリティで認証するケース</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ネットワーク設定ユーティリティでホットスポット認証する場合は、対応するホットスポットサービスが限定されています。<br>ただし、これらのホットスポットサービスで実際に確認することは困難なため、擬似的に環境を用意する必要があります。以下、手順を示します。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> タイトルの発売リージョンでサポートされる"ワイヤレスホットスポット"のホットスポットサービスを特定し、それらのSSIDを確認する。ホットスポットサービスとそれに対応するSSIDのリストは2章で説明済みです。</li>
+<li VALUE=2> インターネットに接続したアクセスポイントを用意し、そのアクセスポイントに1で調べたSSIDを設定する。</li>
+<li VALUE=3> タイトルにて、2で設定したSSIDに対応するホットスポットサービスの"ワイヤレスホットスポット"設定を作成し、その設定で接続を行なう。</li>
+<li VALUE=4> ネットワーク設定ユーティリティは、2で用意したアクセスポイントを目的のホットスポットサービスと認識して認証を行ない、成功します。</li>
+</ol></div>
+<div style="margin-left:50px;"><br>この方法で、ホットスポットサービスごとに"ワイヤレスホットスポット"認証をテストすることができます。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

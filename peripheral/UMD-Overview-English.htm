@@ -1,0 +1,1262 @@
+<html lang="en">
+<head>
+<title>UMD-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+UMD&trade; Access Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Document Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This document presents an overview of the procedure used to access the UMD&trade; which is built in to the PSP&trade;. It also describes the access procedure for the UMD&trade;/DVD which is built in to the development tool. <br>The UMD&trade;/DVD can be accessed by individual file, individual sector, and through LBA virtual files. An ISO9660 filesystem driver and a UMD&trade; block device driver are used for implementing these access methods. <br>An explanation of these access methods, as well as information related to UMD&trade; drive states, is included in this document. <br><br>Note that the information contained in this document alone is not comprehensive. <br>Please refer to the documents below as well.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ISO9660 Filesystem Driver Reference
+<li> UMD&trade; Block Device Driver Reference
+<li> UMD&trade; Image Generator Reference, etc.
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>UMD&trade; Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Major Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&trade;/DVD optical discs can only be accessed using the I/O functions of the PSP&trade;, such as <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>() and <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoRead">sceIoRead</a>(). <br>UMD&trade;/DVD reads can be performed by file (by byte) and by sector. Seeks can be performed by byte and by sector. <br>Currently, UMD&trade; power management, processing during suspend/resume, etc. cannot be performed from PSP&trade; game titles. For details, see the chapter entitled &quot;UMD&trade; Drive Power States.&quot;<br><br>In addition, UMD&trade; user data is 2048 byte/sector. <br>Each sector is assigned a logical block address (LBA) starting from 0 up to the last sector, in the direction of playback.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Basic Specifications</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>Physical Layer</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Capacity (user data area)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;60mmF one side, two layers 1.8GB*&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Encryption method&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AES 128-bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Transfer rate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;11Mbps&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Playback direction&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Opposite&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">*Conversion values: 1MB = 1000x1000 bytes; 1GB = 1000x1000x1000 bytes<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_2">
+<div style="margin-left:40px;"><h4><b>Logical Layer</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Filesystem&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ISO9660 Level 2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Image borders&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;480 x 272&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Video codec&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MPEG4 AVC Main Profile Level: 2.1 &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Audio codec&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade; 2ch&nbsp;&nbsp;<br>&nbsp;&nbsp;PCM 2ch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Audio Fs&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;44.1kHz (game)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Audio&nbsp;&nbsp;<br>&nbsp;&nbsp;max. bit rate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade; 256kbps PCM &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_3">
+<div style="margin-left:40px;"><h4><b>Other</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Has cartridge<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">There are two ways to access the UMD&trade;: by file and by sector. In addition, for access by sector, two access methods are provided: access as device file and access as virtual file.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Procedure for Access by File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">By using the ISO9660 file access driver, the UMD&trade;/DVD can be accessed by file. The procedure for this is described in simple terms below. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>UMD&trade;/DVD Insertion Wait Processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In order to read data, a disc must be inserted, and the UMD&trade; drive must be in the READABLE state. The method described here for performing this processing is to call <a href="../peripheral/UMD-Reference-English.htm#sceUmdCheckMedium">sceUmdCheckMedium</a>() to wait for the drive state to change to READABLE, and then perform activation. <br>However, this processing does not need to be performed when the wait processing in (3) below is performed.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (!<a href="../peripheral/UMD-Reference-English.htm#sceUmdCheckMedium">sceUmdCheckMedium</a>()) { 
+	 
+ 	 /* Wait for media insertion */
+	 <a href="../peripheral/UMD-Reference-English.htm#sceUmdWaitDriveStatCB">sceUmdWaitDriveStatCB</a>(<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_MEDIA_IN">SCE_UMD_MEDIA_IN</a>);
+ } 
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>Start-Up Processing (Activation Processing)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call the <a href="../peripheral/UMD-Reference-English.htm#sceUmdActivate">sceUmdActivate</a>() function. (In order to use this function, mediaman_stub.a must be linked in.) If the function is successful, the UMD&trade;/DVD device will be placed in an activated state. In the <i>mode</i> argument, specify only <a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_MODE_POWERON">SCE_UMD_MODE_POWERON</a>. In the <i>aliasname</i> argument, any device alias name (including a unit number at the end) can be specified. However, normally, the <a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a> (disc0:) definition which is defined in mediaman.h should be used. <br>When a disc is inserted, internal processing will be performed by the sceIoAssign() function, and the disc will be mounted as a UMD&trade;/DVD device. For this device, the block device is &quot;UMD0:&quot; and the filesystem is &quot;isofs0:&quot;.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* Activation processing (non-blocking) */
+ ret = <a href="../peripheral/UMD-Reference-English.htm#sceUmdActivate">sceUmdActivate</a>(<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_MODE_POWERON">SCE_UMD_MODE_POWERON</a>, <a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a>);
+ 
+ if (ret &lt; 0) { 
+		
+	DPRINT("ERROR: <a href="../peripheral/UMD-Reference-English.htm#sceUmdActivate">sceUmdActivate</a>(%x)\n", ret);
+   	<a href="../peripheral/UMD-Reference-English.htm#sceUmdUnRegisterUMDCallBack">sceUmdUnRegisterUMDCallBack</a>(gDVDUMDSampleCallBackId);
+   	<a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDeleteCallback">sceKernelDeleteCallback</a>(gDVDUMDSampleCallBackId); 
+	return ret;
+ }
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>Readable State Wait</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After activation, the <a href="../peripheral/UMD-Reference-English.htm#sceUmdWaitDriveStatCB">sceUmdWaitDriveStatCB</a>() function is used to wait for the transition from the NOT_READY state to the READABLE state. <br>Be sure to perform this processing even when performing the processing in (2) above. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* Readable event wait */
+ <a href="../peripheral/UMD-Reference-English.htm#sceUmdWaitDriveStat">sceUmdWaitDriveStat</a>(<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a>);
+
+ if ((ret = SampleStart(<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a>)) != 0) { 
+		 
+	 DPRINT("*** ERROR STOP ***[%x]\n", ret); 
+ } 
+ else { 
+	 DPRINT("*** TEST COMPLETE ***\n"); 
+ } 
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>I/O Open Processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To access a file on a UMD&trade;/DVD, use the device alias name in effect when the device was placed in the activated state. <br>The example below is one in which a file is accessed with a device alias name of &quot;disc0:&quot; and a file path of &quot;/PSP_GAME/sence_a.dat&quot;. <br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>("disc0:/PSP_GAME/sence_a.dat", ….);
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>Access Processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After opening, perform normal I/O processing using functions such as <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoRead">sceIoRead</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_6"><h4>
+(6)&nbsp;<b>Termination Processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">At the appropriate time, cancel the callback registration and deactivate the device. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* Callback registration cancellation */
+ <a href="../peripheral/UMD-Reference-English.htm#sceUmdUnRegisterUMDCallBack">sceUmdUnRegisterUMDCallBack</a>(gDVDUMDSampleCallBackId);
+ <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDeleteCallback">sceKernelDeleteCallback</a>(gDVDUMDSampleCallBackId); 
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Creation and Registration of Callback Functions</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">To obtain the UMD&trade; drive state using a callback, create and register a callback function to wait for a transition event. <br>When using this method, perform creation and registration as soon as possible after start-up. If, there is a state transition before the registration has been completed, such as when the UMD&trade; drive has been removed, then callback processing will of course not be performed. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/* Callback creation */
+ gDVDUMDSampleCallBackId = <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>("DVDUMD_SAMPLE", UMDCallBackFunc, NULL); 
+
+ if (gDVDUMDSampleCallBackId &lt; 0) { 
+	 
+	 DPRINT("ERROR: <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(%x)\n", gDVDUMDSampleCallBackId);
+	 return gDVDUMDSampleCallBackId;
+ }
+
+ /* Callback registration */
+ ret = <a href="../peripheral/UMD-Reference-English.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>(gDVDUMDSampleCallBackId);
+
+ if (ret &lt; 0) { 
+	 
+	 DPRINT("ERROR: <a href="../peripheral/UMD-Reference-English.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>(%x)\n", ret);
+	 return ret;
+ }
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Procedure for Access by Sector</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">By using the UMD&trade; block device driver, UMD&trade;/DVD access can be performed by sector. This is basically the same as access by file, but follow the procedure below without performing start-up processing (activation). <br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_1"><h4>
+(1)&nbsp;<b>Opening as a Device File</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Using the <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function, open a physical device name as a device file. <br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>("UMD<i><b>XXXX</i></b>:", ….);
+
+</font></pre></div>
+<div style="margin-left:67px;">Specify the unit number in <i><b>XXXX</i></b>. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_2"><h4>
+(2)&nbsp;<b>Access Processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Data access is performed by sector (2048bytes/sector). When opening as a device file, reading starts from sector 0x0 (LBA 0x0). To read starting from another sector, seek to the desired sector and then start reading data. <br>In addition, the sizes specified in <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoRead">sceIoRead</a>() and <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoLseek">sceIoLseek</a>() will also be in sector units. The read buffer must be at least the specified read sector size x 2048bytes. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Procedure for Access as a Virtual File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">&quot;Virtual file&quot; refers to data in an LBA on a UMD&trade;, with the LBA being treated as a filename. Aside from the fact that there are limits on the specified file path, virtual files can be handled in the same manner as normal files. In addition, accesses can be performed more quickly than with normal files, considering that it no longer becomes necessary to search for a file in a directory.<br><br>The basic procedure is the same as that for normal access by file, but the LBA must be obtained prior to performing the open. In addition, the manner in which the file path is specified using the <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function is different. <br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_1"><h4>
+(1)&nbsp;<b>LBA Retrieval</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">First, retrieve the LBA. Four methods are available to retrieve the LBA. Use the one that is most appropriate. <br></div>
+<div style="margin-left:40px;"><ul>
+<li> Directly specify the LBA from the layout and File List file of the UMD&trade; Generator
+</ul></div>
+<div style="margin-left:80px;">The LBA where a file is located can be determined from the UMD&trade; Generator's layout.  <br>However, with this method, it is necessary to verify the layout from the UMD&trade; Generator, use this LBA in the code, compile, and then once again verify the layout using the UMD&trade; Generator, and verify that the implemented location and the data location are not out of alignment. <br></div>
+<div style="margin-left:40px;"><ul>
+<li> Get the LBA from a SceIoStat structure
+</ul></div>
+<div style="margin-left:80px;">Get an SceIoStat structure of files and directories from the sceIoGetstat() function and the sceIoDread() function. <br>Get the LBA of the relevant file/directory entry from st_private[0]. <br></div>
+<div style="margin-left:40px;"><ul>
+<li> Get the LBA using the SCE_ISOFS_GET_LBA Command
+</ul></div>
+<div style="margin-left:80px;">Using the SCE_ISOFS_GET_LBA command of the <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>() function, the starting LBA of the specified file can be retrieved. <br></div>
+<div style="margin-left:40px;"><ul>
+<li> Get the LBA from the Primary Volume Descriptor / Path Table
+</ul></div>
+<div style="margin-left:80px;">Using the <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>() function, it is possible to retrieve the primary volume descriptor and the path table, and to then retrieve the LBA from these. <br>For details regarding the primary volume descriptor and the path table, see <u>http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pd</u>f<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_2"><h4>
+(2)&nbsp;<b>Opening as a Virtual File</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Open a file as a virtual file using the <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function. <br>The format of the file path is as follows. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>&quot;device name&quot; + &quot;unit number&quot; + &quot;:&quot;  + "/sce_lbn0x<i><b>XXXX</i></b>_size0x<i><b>NNNN</i></b>" 
+</font></pre></div>
+<div style="margin-left:67px;"><br>Specify the LBA in <i><b>XXXX</i></b>, and the access data size (bytes) in <i><b>NNNN</i></b>. Be sure to place &quot;/&quot; at the beginning of the filename. The values for the LBA and the access data size are treated as hexadecimal values, so be sure to include the hexadecimal prefix &quot;0x&quot;. <br>The access data size is in bytes. <br>Normally, use <a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a> for the alias name (device name + unit number). <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>(<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a> + "/sce_lbn0x<i><b>XXXX</i></b>_size0x<i><b>NNNN </i></b>", ….);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Procedure for Replacing a UMD&trade; Disc During Play</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In cases in which a UMD&trade; disc must be replaced during a game, such as for multi-disc games, use the procedure described below to perform the disc replacement. Also refer to the sample program in devkit/sample/dvdUMD/replace.<br>If the replacement of the UMD&trade; disc is permitted using the <a href="../peripheral/UMD-Reference-English.htm#sceUmdReplacePermit">sceUmdReplacePermit</a>() function, then when the drive is in the READABLE state, there is no way to return to the replacement prohibited state except by executing the <a href="../peripheral/UMD-Reference-English.htm#sceUmdReplaceProhibit">sceUmdReplaceProhibit</a>() function. For this reason, in order to implement processing which stops UMD&trade; disc replacement, have the user insert the original UMD&trade; disc, transition to the READABLE state, and then use a method such as executing the <a href="../peripheral/UMD-Reference-English.htm#sceUmdReplaceProhibit">sceUmdReplaceProhibit</a>() function.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_1"><h4>
+(1)&nbsp;<b>Disable Impose Popup</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To prevent the display of the Impose popup, which is normally displayed when the cover of the UMD&trade; drive is opened, set the argument of the <a href="../peripheral/Impose-Reference-English.htm#sceImposeSetUMDPopup">sceImposeSetUMDPopup</a>() function to SCE_IMPOSE_POPUP_DISABLE. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_2"><h4>
+(2)&nbsp;<b>Permit UMD&trade; Disc Replacement</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In order to permit the replacement of a UMD&trade; disc, execute the <a href="../peripheral/UMD-Reference-English.htm#sceUmdReplacePermit">sceUmdReplacePermit</a>() function. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_3"><h4>
+(3)&nbsp;<b>UMD&trade; Disc Replacement Wait</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Wait until the user replaces the UMD&trade; disc and the READABLE state is entered. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_4"><h4>
+(4)&nbsp;<b>UMD&trade; Disc Replacement Prohibition</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In order to prohibit the replacement of a UMD&trade; disc, execute the <a href="../peripheral/UMD-Reference-English.htm#sceUmdReplaceProhibit">sceUmdReplaceProhibit</a>() function. This function succeeds only in the READABLE state. For this reason, wait to execute the function until the drive is in the READABLE state. <br>After replacement has been prohibited, if by chance a UMD&trade; is inserted which is different from that which was in the drive at that time, then the UMD&trade; drive state will transition to the NOT READY state. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_5"><h4>
+(5)&nbsp;<b>Enable Impose Popup</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To allow the display of the Impose popup when the cover of the UMD&trade; drive is opened, set the argument of the <a href="../peripheral/Impose-Reference-English.htm#sceImposeSetUMDPopup">sceImposeSetUMDPopup</a>() function to SCE_IMPOSE_POPUP_ENABLE. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_6"><h4>
+(6)&nbsp;<b>UMD&trade; Disc Checking</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Check whether or not the UMD&trade; which has been inserted is the intended UMD&trade;. In the state which permits the replacement of a UMD&trade; disc, it is possible for the UMD&trade; to be replaced during the check. Perform UMD&trade; disc checking while in the replacement prohibited state. <br>If the UMD&trade; is different from that which was intended, notify the user of this, and respond by starting the procedure again from the beginning, for instance.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Procedure for Debugging With the Development Tool using DVD-R</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In the development of titles utilizing a UMD&trade;, the UMD&trade; can be debugged by using the DVD drive included with the tool to read the UMD&trade; image written to DVD-R. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_1"><h4>
+(1)&nbsp;<b>Creation of UMD&trade; Image</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A UMD&trade; image, which is a group of image files comprised of multiple files, can be created using the UMD&trade; Image Generator. <br>For detailed UMD&trade; image creation methods, see the &quot;UMD&trade; Image Generator&quot; document. <br>Here, the discussion assumes that the user has succeeded in using the UMD&trade; Image Generator to write a UMD&trade; image for debugging. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_2"><h4>
+(2)&nbsp;<b>Creation of UMD&trade; Image Discs</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Using any DVD-R writing software, write the UMD&trade; image to the root directory of a disc. <br>The DVD-R on which a UMD&trade; image has been written has the following directory structure. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Root Directory
+	|----- USER_L0.IMG
+	|----- CONT_L0.IMG
+	|----- MDI.IMG
+	|----- UMD_AUTH.DAT
+</font></pre></div>
+<div style="margin-left:67px;">(*The files under the root directory differ slightly depending on the UMD&trade; image created.) <br><br>A DVD-R disc which contains a UMD&trade; image in the root directory is called a UMD&trade; image disc. <br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_6_3"><h4>
+(3)&nbsp;<b>Reading of UMD&trade; Image Discs on Development Tool</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To use a created UMD&trade; image disc with the development tool, the development tool's DRIVE SELECT must be set to the DVD side. <br>If DRIVE SELECT is set to the UMD&trade; side, reboot the development tool and set it to DVD. <br><br>Insert the UMD&trade; image disc into the development tool's DVD drive, and perform debugging on it. <br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>UMD&trade; Drive States</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Types of UMD&trade; Drive States</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&trade; drive states indicate the ability and inability to access the UMD&trade;. This of course includes the UMD&trade; disc inserted state. <br>The respective states are shown in the table below. They correspond to macro names in mediaman.h. <br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_4">
+<div style="margin-left:40px;"><h4><b>UMD&trade; Drive States</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_MEDIA_OUT">SCE_UMD_MEDIA_OUT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Media has been removed. &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_MEDIA_IN">SCE_UMD_MEDIA_IN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Medium has been inserted.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_MEDIA_CHG">SCE_UMD_MEDIA_CHG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Media which is different from the previous media has been inserted. &nbsp;&nbsp;<br>&nbsp;&nbsp;(Callback notification unsupported.) &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_READY">SCE_UMD_READY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The drive is in the ready state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_NOT_READY">SCE_UMD_NOT_READY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The drive is not in the ready state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The drive is in the readable state.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_5">
+<div style="margin-left:40px;"><h4><b>MEDIA IN State</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is the state in which a UMD&trade; has been inserted in the drive. If the drive power is off and a UMD&trade; has been inserted, only this state will be reported. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_6">
+<div style="margin-left:40px;"><h4><b>MEDIA OUT State</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is the state in which a UMD&trade; has not been inserted in the drive. If the drive power is off and either there is no UMD&trade; or the cover is open, only this state will be reported. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_7">
+<div style="margin-left:40px;"><h4><b>MEDIA CHG State</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If the state prior to the UMD&trade; being removed was READABLE or READY, and if the newly inserted disc is different from the previously inserted disc, this state will be set. <br>Note: The specifications for this state alone are such that callback notification is not performed by an edge trigger; the state is obtained using <a href="../peripheral/UMD-Reference-English.htm#sceUmdGetDriveStat">sceUmdGetDriveStat</a>(). <br>Note: This state applies to discs which were created by the UMD&trade; Generator 0.93 or later. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_8">
+<div style="margin-left:40px;"><h4><b>NOT READY State</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This state is reported when the UMD&trade; drive power supply is turned off (currently, it cannot be turned off from a title), when the drive is deactivated in a READABLE or READY state, or when the disc is invalid or the disc cannot be correctly recognized for some reason from MEDIA IN state.<br>If another UMD&trade; is inserted when UMD&trade; replacement is prohibited, the NOT READY state is entered, and the return value of <a href="../peripheral/UMD-Reference-English.htm#sceUmdGetErrorStat">sceUmdGetErrorStat</a>() becomes SCE_UMD_ERROR_REPLACED.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_9">
+<div style="margin-left:40px;"><h4><b>READY State</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This state is reported if, in the NOT READY state or MEDIA OUT state, a disc is inserted and cannot be properly recognized. <br>In this state, sector-by-sector access is possible via the block device.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_10">
+<div style="margin-left:40px;"><h4><b>READABLE State</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This state is reported if initialization of the filesystem, etc. was performed normally, and the drive is in the readable state. In this state, access by file and access by sector are both possible.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>UMD&trade; Drive State Transitions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The transitions between the respective UMD&trade; drive states are as follows. <br></div>
+
+<div align=center>
+<p>
+<img src="gif/UMD-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1: UMD&trade; Drive State Transition Diagram (Power = UMD&trade; Drive Power)</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>UMD&trade; Drive State Retrieval Methods</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Many of the UMD&trade; drive states are reported upon an edge trigger. <br>The presence or absence of UMD&trade; media at start-up time can be checked using the <a href="../peripheral/UMD-Reference-English.htm#sceUmdCheckMedium">sceUmdCheckMedium</a>() function. <br>There are two other ways to retrieve the UMD&trade; drive state. These are to use a callback via the <a href="../peripheral/UMD-Reference-English.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>() function, or to retrieve the state via the <a href="../peripheral/UMD-Reference-English.htm#sceUmdGetDriveStat">sceUmdGetDriveStat</a>() function. <br><br>If the callback ID of a state notification callback function created using the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>() function is registered using the <a href="../peripheral/UMD-Reference-English.htm#sceUmdRegisterUMDCallBack">sceUmdRegisterUMDCallBack</a>() function, then state transitions will be reported to that callback function. However, the actual calling of the callback function will not take place immediately after the state transition, but rather when the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>() function or one of the sce<i>XXXXX</i>CB() functions is called. <br>For details concerning the <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>() function and the sce<i>XXXXX</i>CB() function, refer to the thread manager reference and the reference which includes the sce<i>XXXXX</i>CB() functions. <br><br>In addition, using the <a href="../peripheral/UMD-Reference-English.htm#sceUmdGetDriveStat">sceUmdGetDriveStat</a>() function, the UMD&trade; drive state can be obtained via the return value. If the UMD&trade; drive state includes multiple status values, the logical sum (OR) of these will be reported. <br><br>Depending on the timing, regardless of whether or not they have been reported, it is possible for multiple state transitions to have occurred before the callback was called. In such instances, by referring to the &quot;UMD&trade; Drive State Transition Diagram&quot; and the like, it may be possible to infer this based on the reported state and the reported repetition count. <br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Operations When UMD&trade; Media Is Replaced</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>If UMD&trade; Media Has Been Inserted</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">Applications (game titles) can be created such that, if the same media which was previously inserted is inserted again, the state prior to removal is resumed even if closing the file descriptor and other such processing is not performed. <br>If a media is inserted which is different from that which was previously inserted (i.e., if the state has become <a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_MEDIA_CHG">SCE_UMD_MEDIA_CHG</a>), the application must close the file descriptors which were in the open state. The timing with which the file descriptors are closed is arbitrary. <br>If a file read is performed on the new disc using a descriptor for a file which was opened on the previous disc, then <a href="../peripheral/UMD-Reference-English.htm#SCE_ERROR_ERRNO_EBADF"><a href="../peripheral/UMD_Block-Reference-English.htm#SCE_ERROR_ERRNO_EBADF">SCE_ERROR_ERRNO_EBADF</a></a> will normally be returned. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>If UMD&trade; Media Has Been Removed</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">If the media is removed while data is being read, an error will not immediately be returned. <br>During a read, a specific amount of data will usually be placed in the cache in the form of a look-ahead. For this reason, reading will proceed normally as long as cache hits take place. <br>If the requested data cannot be provided by the cache, an SCE_UMD_NO_MEDIUM error is returned. <br>If other errors should occur, it will be for reasons other than this. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>If UMD&trade; Media Has Been Replaced During Play</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Starting with Runtime Library 2.00, the replacement of discs during games is prohibited. To replace discs it is necessary to go through a specific procedure. <br><br>If a disc is inserted which is different than that which was used when the game was started, the NOT READY state is entered, and it will not be possible to access the disc. When a different disc is inserted, SCE_UMD_ERROR_REPLACED is returned upon executing <a href="../peripheral/UMD-Reference-English.htm#sceUmdGetErrorStat">sceUmdGetErrorStat</a>(), so it is possible to differentiate this from the NOT READY state resulting from other causes. <br>When the same disc as that used when the game started is inserted, it is recognized normally, the READABLE state is entered, and it the disc can be accessed.<br><br>In addition, for games which use a Runtime Library prior to 2.00, disc replacement is allowed, as was normally the case.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>ISO9660 Filesystem Driver</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This driver is necessary in order to access data on a UMD&trade; by file. <br>The ISO9660 filesystem provided by the PSP&trade; is based on ISO9660 Level 2, with specific extensions included for the UMD&trade;. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>ISO9660 Level 2 with UMD&trade; Extensions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As extensions for the UMD&trade;, the following changes were made to the ISO9660 Level 2 specification. <br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> In terms of the file identifier format, the '.' and ';' delimiter characters have been eliminated, and file version numbers are not included.
+<li> The characters which can be used are upper-/lower-case* alphanumeric characters, underline (_), period (.), and semicolon (;).
+</ul></div>
+<div style="margin-left:50px;"><br>* Note that lower-case alphabetic characters can also be used. <br><br>Based on the above, the ISO9660 filesystem specifications provided by the PSP&trade; are as follows. <br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Item</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Specifications for ISO9660 Level 2 with</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>UMD&trade; Extensions</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Usable characters&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Upper-/lower-case alphanumeric characters, period, semicolon&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Max. size of file identifiers&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;31 characters&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Max. size of directory identifiers&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;31 characters&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Max. directory levels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8 levels&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;File arrangement&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Sequential&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;File identifier format&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Device Names</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Currently, the block device names which can be specified for mounting by the ISO9660 file system driver are as follows. <br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Block Device Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Device</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;umd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD-ROM&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>Filenames</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When using standard I/O functions with the ISO9660 file system provided by the PSP&trade;, filenames are specified in the following format.<br><br></div>
+<div style="margin-left:67px;">&quot;device alias name&quot; + &quot;unit number&quot; + &quot;:&quot; + &quot;file path name&quot;<br><br></div>
+<div style="margin-left:50px;">The following would be used to specify the file A.dat on the directory path /PSP_GAME/USRDIR/<a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a>/, for unit number 0 of device alias name &quot;disc&quot; mounted via activation. (<a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_ALIAS_NAME">SCE_UMD_ALIAS_NAME</a> is normally used as the device alias name.) <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>disc0:/PSP_GAME/USRDIR/<a href="../graphics/GSO_Format-Reference-English.htm#Scene">Scene</a>/A.dat
+</font></pre></div>
+<div style="margin-left:50px;"><br>With the standard I/O functions of the PSP&trade;, the maximum string length is 1023bytes, but since the maximum file path length for the ISO9660 file system is 255bytes, the file path name must be no longer than 255bytes. <br><br>Note also that as a result of the UMD&trade; extensions to ISO9660, filenames are case-sensitive. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>Cache Function</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The UMD&trade; includes a basic cache function. <br>Based on the ISO9660 specification, metadata about directory records and the like are placed on the inner perimeter of a disc. For this reason, when accessing data by file, if the data has been placed on the outer perimeter of the disc, then in the worst case scenario it is conceivable that a seek in order to read the directory records will be performed on the inner perimeter of the disc and then a seek in order to read the data will be performed on the outer perimeter of the disc. <br>In order to eliminate cases such as this, the UMD&trade; is designed such that directory records which have been accessed will always be cached, and superfluous seeks will not occur. <br>Ordinary data is also cached in a fixed-size ring buffer. <br>In addition, the cache is cleared and overwritten according to the timing below. <br></div>
+<div style="margin-left:40px;"><ul>
+<li> Metadata (directory records, etc.)<br>If the cover has been opened (with media present)<br>If the cache capacity has been exceeded
+<li> Ordinary data<br>If the cover has been closed (with media present)<br>If the cache capacity has been exceeded
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_6">
+<h3>
+<a href="#Heading3_6"> 6. </a>6 
+<!-- hp1 --><b>API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With the ISO9660 filesystem driver provided by the PSP&trade;, the following functions are available via the standard I/O functions. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_11">
+<div style="margin-left:40px;"><h4><b>File Access</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Open file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoClose">sceIoClose</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Close file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoRead">sceIoRead</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoLseek">sceIoLseek</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Seek file offset&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpenAsync">sceIoOpenAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously open file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoCloseAsync">sceIoCloseAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously close file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoReadAsync">sceIoReadAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously read file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_12">
+<div style="margin-left:40px;"><h4><b>Directory Access</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDopen()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Open directory entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDclose()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Close directory entry&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDread()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read directory entry&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_13">
+<div style="margin-left:40px;"><h4><b>Other Processing</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Other file access functions&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronous processing version of other file&nbsp;&nbsp;<br>&nbsp;&nbsp;access functions&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoGetstat()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get file status&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a> ()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoPollAsync">sceIoPollAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously get status&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoSetAsyncCallback">sceIoSetAsyncCallback</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously set notification callback&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">The <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>()/<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>() functionality list is as follows. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_6_14">
+<div style="margin-left:40px;"><h4><b>sceIoIoctl()/sceIoIoctlAsync() Functionality List</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Command Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FILEPOINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get file offset location&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PVD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get primary volume descriptor&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PTBL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get path table&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_SECTOR_SIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get sector size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_LBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get LBA&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_FSIZE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get file size&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_SEEK_FILE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Perform seek&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_UNCACHED_READ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Perform forced disc access read&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Request file read ahead&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>UMD&trade; Block Device Driver</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This driver is necessary in order to access data on a UMD&trade; as device files. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>Data Access Methods</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">On the PSP&trade;, by using the UMD&trade; block device driver, data on a UMD&trade; can be opened as a block device file. When the open is performed, the file offset to LBA 0 on the UMD&trade; is set, and accesses will begin from there. <br>The structure of the block device filename is as follows. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>&quot;block device name&quot; + &quot;unit number&quot; + ':' 
+</font></pre></div>
+<div style="margin-left:50px;"><br>Currently, the block device names which can be specified for access by the UMD&trade; block device driver are as follows. <br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Block Device Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Device</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;umd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD-ROM&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>Access Units</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Data accesses with respect to a UMD&trade; block device - reads, seeks, etc. - are all performed by sector. The result, in the case of a read, is that the specified buffer size x 2048bytes' worth of data will be read. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_4">
+<h3>
+<a href="#Heading3_7"> 7. </a>4 
+<!-- hp1 --><b>API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With the UMD&trade; block device driver provided by the PSP&trade;, the following functions are available via the standard I/O functions. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_15">
+<div style="margin-left:40px;"><h4><b>Device Access</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Open device&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoClose">sceIoClose</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Close device&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoRead">sceIoRead</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read device data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoLseek">sceIoLseek</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Seek device offset&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpenAsync">sceIoOpenAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously open device&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoCloseAsync">sceIoCloseAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously close device&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoReadAsync">sceIoReadAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously read device&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_16">
+<div style="margin-left:40px;"><h4><b>Other Processing</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Other device access functions&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device control functions&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronous processing version of other device access functions&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoSetAsyncCallback">sceIoSetAsyncCallback</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously set notification callback&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoWaitAsync">sceIoWaitAsync</a> ()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoWaitAsyncCB">sceIoWaitAsyncCB</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoPollAsync">sceIoPollAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Asynchronously get status&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">The <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>() function list is as follows. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_17">
+<div style="margin-left:40px;"><h4><b>sceIoDevctl() Function List</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Command Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_GET_MEDIATYPE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get media type&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_GET_LASTLBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get last LBA&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_SEEK_DISC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Seek disc&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_READ_AHEAD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Request data read ahead&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">The <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>()/<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>() function list is as follows. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_7_4_18">
+<div style="margin-left:40px;"><h4><b>sceIoIoctl()/sceIoIoctlAsync() Function List</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Command Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_GET_FILEPOINTER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get device offset&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_SEEK_FILE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Perform seek&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_UNCACHED_READ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Perform forced disc access read&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>UMD&trade; Drive Power States</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The UMD&trade; drive has four power states: Active, Idle, Sleep, and Power Off. <br>Currently, power management is performed by the kernel and the device driver, and cannot be performed from PSP&trade; game titles. <br>The power state in the UMD&trade; drive transitions to active as a result of the following operations.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> When there is a read which involves disc access (no transition to Active when there is a cache hit)
+<li> When the following commands have succeeded<br>For <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>(): SCE_ISOFS_SEEK_FILE, SCE_UMD_SEEK_FILE,<br>SCE_ISOFS_UNCACHED_READ, SCE_ISOFS_READ_AHEAD, SCE_UMD_UNCACHED_READ<br>For <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>(): SCE_UMD_SEEK_DISC, SCE_UMD_READ_AHEAD
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>Disc Access Operations</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>About Read Operations</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_19">
+<div style="margin-left:40px;"><h4><b>Thread Dispatch Timing in Device Drivers</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">For UMD&trade;/DVD reads, read requests such as the <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoRead">sceIoRead</a>() function which are executed from a game title will run at the priority of the threads which perform them. <br>Primarily with the timing shown below, the device driver will cause threads from game titles to wait, and will release CPU resources. <br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> During the time until the device driver issues a read request for the drive, and the state in which that request can be received is returned.
+<li> While the drive is performing a DMA data transfer.
+<li> During the period until a read request completion from the drive is reported to the device driver.
+</ul></div>
+<div style="margin-left:50px;"><br>Note that during a UMD&trade;/DVD read operation, if a thread whose priority is higher than that of the read thread does not release resources, then the read processing itself may not return even if the DMA transfer has completed. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_20">
+<div style="margin-left:40px;"><h4><b>About Read Operations</b><br><br></h4></div></a>
+
+<div style="margin-left:40px;"><ul>
+<li> If CPU resources are required for a read operation
+</ul></div>
+<div style="margin-left:80px;">On the PSP&trade;, data transfers from the drive is performed by sector. <br>Due to the fact that, for reads within files from the filesystem, data requests may not necessarily be by sector, adjustments appropriate for the data size are made within the device driver. <br>If the read data size is not a multiple of 2048 bytes, or if the read data location does not start at the beginning of a sector, an internal memory copy occurs, and CPU resources will be used. <br>The following are sample cases in which the CPU resources are used as a result of a data read.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Case 1: If the read size is not a sector multiple<br>If 6000 bytes of file A (LBA 0x100, size 6000 bytes) are to be read starting from file offset 0.<br>A memory copy of 6000 - (2 x 2048) = 1004bytes occurs, and that memory copy's worth of CPU resources are used.
+</ul></div>
+<div style="margin-left:50px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-English002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Case 2: If the read location is the beginning of a sector<br>If 5936 bytes of file B (LBA 0x100, size 6000 bytes) are to be read starting from a file offset of 64 bytes.<br>A memory copy of (6000 - (2 x 2048)) + (2048 - 64) = 3888bytes occurs, and the CPU resources for that memory copy are used.
+</ul></div>
+<div style="margin-left:50px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-English003.gif">
+</div>
+<div style="margin-left:50px;"><br><br>Consequently, in the above cases, memory copies of up to 4094 bytes may occur within the device driver.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>Regarding the Seek Operation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Seeking on the UMD&trade; is one of the most battery power consuming operations. Battery power consumption is directly related to the length of the stroke involved, and thus accesses which take into account the data layout not only serve to optimize data access speed, but also contribute to the battery life of the PSP&trade;.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-English004.gif">
+</div>
+<div style="margin-left:50px;"><br>For single-layer discs, LBAs are assigned starting from the inner perimeter and extending toward the outer perimeter. <br>When seeking from LBA 0x0 to the last LBA, the optical head is moved toward the outer perimeter.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-English005.gif">
+</div>
+<div style="margin-left:50px;"><br>For a dual-layer disc (opposite), the LBAs for the first layer are assigned from the inner perimeter to the outer perimeter, in the same manner as for single-layer discs. However, for the second layer, they are assigned from the outer perimeter toward the inner perimeter. For this reason, seeking from LBA 0x0 to the last LBA on the first layer is the operation with the longest stroke. <br>Conversely, for seeks from LBA 0x0 to the last LBA on the second layer, the optical head control stroke is shortened (moving in the direction of the red arrow in the diagram above).As for the cost of moving between layers, to the extent that seeks to the last LBA on a single-layer disc are performed, battery consumption and seek time costs will not be incurred. <br>(*) Note that in some cases, the overhead involved in moving between layers is not equivalent to the cost incurred for a full stroke seek.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_3">
+<h3>
+<a href="#Heading3_9"> 9. </a>3 
+<!-- hp1 --><b>Functions Involving Disc Access</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In terms of UMD&trade;/DVD access functions listed in the ISO9660-Reference and UMD&trade;-Reference, there are functions which actually involve disc access and functions which conclude with processing within the device driver. <br>Since processing which involves UMD&trade;/DVD access are low speed, CPU resources can be used more efficiently by utilizing asynchronous functions and carrying out the processing for other functions while UMD&trade;/DVD access is being performed. <br>Functions in which processing concludes within the device driver represent processing which is performed on memory, so even processing which is performed by synchronous functions is relatively light, and does not have any effect on performance. <br>Conversely, if this sort of processing is performed by asynchronous functions, the overhead of this asynchronous processing alone may have an adverse effect on efficiency. <br>Currently, the functions which involve UMD&trade;/DVD access are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function Name</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpenAsync">sceIoOpenAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Open file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoGetstat()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Get status&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoRead">sceIoRead</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoReadAsync">sceIoReadAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDopen()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Open directory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sceIoDread()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read directory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoDevctl">sceIoDevctl</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_UMD_SEEK_DISC command&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctl">sceIoIoctl</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/UMD_Block-Reference-English.htm#sceIoIoctlAsync">sceIoIoctlAsync</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_ISOFS_GET_PVD, &nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_ISOFS_GET_PTBL,&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_ISOFS_SEEK_FILE,&nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_UMD_SEEK_FILE, &nbsp;&nbsp;<br>&nbsp;&nbsp;SCE_ISOFS_UNCACHED_READ, &nbsp;&nbsp;<br>&nbsp;&nbsp;and SCE_UMD_UNCACHED_READ commands&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_4">
+<h3>
+<a href="#Heading3_9"> 9. </a>4 
+<!-- hp1 --><b>Regarding Retry Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If the device driver returns an error during a UMD&trade;/DVD access, check that the operation is correct, and then perform a retry with respect to the function that returned the error. For example, if the cover of the PSP&trade; has been opened, sleep mode processing has been executed, etc., then an error may occur. At that point, retry processing will be necessary in order to properly perform restoration operations after the appropriate media has been inserted and the cover closed, perform resume operations after returning from the sleep state, etc. <br>Normally, the functions on which retry must be performed are the above functions which involve UMD&trade;/DVD access.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_1">
+<h3>
+<a href="#Heading3_10"> 10. </a>1 
+<!-- hp1 --><b>Precautions in Game Title Programming</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_10_1_21">
+<div style="margin-left:40px;"><h4><b>On the PSP&trade;, UMD&trade; latency cannot be guaranteed. </b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">In terms of UMD&trade; latency, no guarantees can be provided. <br>Do not write code which depends upon a specific latency. <br>On the PSP&trade;, as one means of reducing power consumption, if drive accesses have not occurred, then the drive power state steadily transitions to low power mode. <br>If code has been written which assumes that the drive will only be in the Active state, then if for instance a game is left unused and the drive state transitions to Idle and a power state under this, then the next time that the game is resumed, the latency of the UMD&trade; will have changed, and as a result the timing of the sound, graphics, etc. will become misaligned. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_2">
+<h3>
+<a href="#Heading3_10"> 10. </a>2 
+<!-- hp1 --><b>Differences Between UMD&trade; and DVD on the Development Tool</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">At the level of game title programming, there is no need to be aware of the UMD&trade;/DVD access methods for the development tool, as these operate using the same I/O processing. <br>However, the location at which data is placed on a DVD used by the development tool will differ from the location at which data is placed on an actual UMD&trade;. <br><br></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-English006.gif">
+</div>
+<div style="margin-left:67px;"><br>On the development tool, the ability to directly access LBAs on a DVD is not provided. <br>For example, even if LBA 0x100 has been specified from the <a href="../peripheral/UMD_Block-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function or from the virtual file functionality, this will access LBA 0x100 not on the DVD but rather on the UMD&trade; data image. <br>Note that even if an LBA which can be retrieved using the sceIoGetsat() function and the sceIoDread() function is retrieved from a DVD, it is the LBA on the UMD&trade; image that is being passed. <br><br>In addition, the start-up timing and access timing of a development tool DVD will not necessarily match those of a UMD&trade; on a PSP&trade; system. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_3">
+<h3>
+<a href="#Heading3_10"> 10. </a>3 
+<!-- hp1 --><b>Layout of the USER_L1.IMG Image on the DVD</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a two-layer image is created on the DVD, in order to match the data layout on the UMD&trade;, the LBA of the USER_L1.IMG image must be placed at the following location.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+LBA of USER_L1.IMG image = LBA of USER_L0.IMG + number of sectors of USER_L0.IMG image
+
+</font></pre></div>
+<div style="margin-left:50px;">Normally, when an image is burned by software that conforms to the ISO9660 specification, files in a directory will be arranged in ASCII order, so the data will be located as described above without having to be particularly aware of it.<br>However, some software enables the layout to be freely changed. When this kind of software is used to place USER_L1.IMG so that it is not located at the position described above, the following message is issued on startup.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/UMD-Overview-English007.gif">
+</div>
+<div style="margin-left:50px;"><br><br>When this message is output, if a data access is performed that spans layer 1 and layer 2, it will not be possible to correctly read the data from the second layer.<br><br>Note that no problem occurs when data is accessed that is only on layer 1 or only on layer 2.<br><br>Be careful with this when accessing the UMD&trade; layer 2 image on the DVD.<br></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>Programming Tips</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_1">
+<h3>
+<a href="#Heading3_11"> 11. </a>1 
+<!-- hp1 --><b>Callback Function Calls and the UMD&trade; Lid Open State</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the lid of the PSP&trade;' is opened, a title program either performs retry processing until the appropriate UMD&trade; is inserted or uses functions such as <a href="../peripheral/UMD-Reference-English.htm#sceUmdWaitDriveStat">sceUmdWaitDriveStat</a>*() to place the read thread in a WAIT state until the drive state becomes <a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a>.<br>However, if either inappropriate retry processing is performed by the read thread, or the method of entering the WAIT state is inappropriate when the callback is generated, a problem will occur if the PS button (HOME button) is pressed or the POWER switch is used to place the device in sleep mode while the lid is open.<br>Inappropriate processing in this case means that during the retry, functions such as <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelDelayThreadCB">sceKernelDelayThreadCB</a>(), <a href="../kernel/Thread_Manager-Reference-English.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>(), or another function with a callback check (CB suffix), is not executed by processing such as polling, or that <a href="../peripheral/UMD-Reference-English.htm#sceUmdWaitDriveStatCB">sceUmdWaitDriveStatCB</a>() is not used to wait for the <a href="../peripheral/UMD-Reference-English.htm#SCE_UMD_READABLE">SCE_UMD_READABLE</a> state. Since a callback notification cannot be checked if this type of processing is not performed, the system software return or transition to sleep will be delayed until the lid is closed.<br>Try to perform a callback check even when the lid is opened.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_2">
+<h3>
+<a href="#Heading3_11"> 11. </a>2 
+<!-- hp1 --><b>Simultaneous Asynchronous Reading by Multiple Read Threads</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">There are often times when you would like to read data asynchronously from the disc. However, it is much more efficient to do this by reading everything all at once, as much as possible, instead of using multiple read threads and having each thread make multiple requests with small read sizes.<br>Read requests to disc are performed by queuing. Queuing is performed, in increasing time order starting from the earliest request. As a result, if multiple read threads frequently issue requests having small read sizes, or if Open and Read requests are issued alternately to normal files, the head is expected to move frequently and cache hits are unlikely to occur. Asynchronous reading of normal files from multiple read threads can be accomplished without causing wasted head movements to the inner tracks on the disc by either issuing the Open requests together, or by using a virtual file. <br>Care should be taken when asynchronous reading is performed simultaneously by multiple read threads that are mixed together.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,1726 @@
+<html lang="jp">
+<head>
+<title>FATMS-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+FAT Filesystem For Memory Stick&trade;
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceFatMsDirent"></a>
+<table width="100%"><td width="70%"><font size=6>SceFatMsDirent<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル名情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+
+#define SCE_FATMS_DIRENT_SFN_LEN	13
+#define SCE_FATMS_DIRENT_LFN_LEN	1024
+
+typedef struct {
+	SceSize <i>size</i>;
+	char<i> shortFileName</i>[SCE_FATMS_DIRENT_SFN_LEN];
+	char <i>__padding__</i>[3];
+	char <i>longFileName</i>[SCE_FATMS_DIRENT_LFN_LEN];
+} <b>SceFatMsDirent</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;構造体サイズ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>shortFileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ショートファイル名(13bytes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>__padding__</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未使用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>longFileName</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ロングファイル名(1024bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()で読み取るファイル名を格納する構造体です。<br><br><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()をコールする際に構造体SceIoDirentの<i>d_private</i>メンバにSceFatMsDirent構造体のメモリエリアポインタを代入して下さい。SceFatMsDirent構造体の<i>size</i>には、sizeof(SceFatMsDirent)を代入してください。<br>構造体SceIoDirentの詳細については、「IO/Fileマネージャリファレンス」をご覧ください。<br><br>ロングファイル名とは、11文字（8文字＋"."＋3文字。ピリオドを含んで12文字）を超えているファイル名です。または、11文字以内であっても、ファイル名に小文字が使用されている場合もロングファイル名に含みます。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="Sce_getdev_command_t"></a>
+<table width="100%"><td width="70%"><font size=6>Sce_getdev_command_t<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デバイス容量取得設定情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+typedef struct Sce_getdev_command_t{
+	<a href="../peripheral/FATMS-Reference-Japanese.htm#SceDevInf">SceDevInf</a> *<i>dev_inf</i>;
+}<b>Sce_getdev_command_t</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dev_inf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス容量情報へのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()の<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a>でデバイス容量を取得する際に使用する構造体です。<br><br><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()の<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a>をコールする際に、<i>dev_inf</i>メンバにユーザで確保した構造体<a href="../peripheral/FATMS-Reference-Japanese.htm#SceDevInf">SceDevInf</a>のメモリエリアポインタを代入して下さい。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()<br><a href="../peripheral/FATMS-Reference-Japanese.htm#SceDevInf">SceDevInf</a><br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceDevInf"></a>
+<table width="100%"><td width="70%"><font size=6>SceDevInf<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デバイス容量情報<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+typedef struct SceDevInf {
+	SceFatMSULong <i>cls</i>;
+	SceFatMSULong <i>ecl</i>;
+	SceFatMSULong <i>ebc</i>;
+	int <i>bps</i>;
+	int <i>spc</i>;
+} <b>SceDevInf</b>;
+＊SceFatMSULongはunsigned longです。
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cls</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;総クラスタ数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ecl</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;未使用クラスタ数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ebc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;*Internal Use*&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bps</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;セクタあたりのバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>spc</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;クラスタあたりのセクタ数&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()の<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a>で読み取るデバイス容量を格納する構造体です。<br><br><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()の<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_PR_GETDEV">SCE_PR_GETDEV</a>をコールする際に、構造体<a href="../peripheral/FATMS-Reference-Japanese.htm#Sce_getdev_command_t">Sce_getdev_command_t</a>の<i>dev_inf</i>メンバに、ユーザで確保したSceDevInf構造体のメモリエリアポインタを代入して下さい。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a>()<br><a href="../peripheral/FATMS-Reference-Japanese.htm#Sce_getdev_command_t">Sce_getdev_command_t</a><br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoOpen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoOpen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルオープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceIoOpen</b> (
+	const char *<i>filename</i>,
+	int <i>flag</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象のファイル名をフルパスで指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルをオープンするモードを指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、「IO/Fileマネージャリファレンス」のsceIoOpen()関数を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>でSCE_O_CREATを指定した場合に、作成するファイルの<i>mode</i>を&nbsp;&nbsp;<br>&nbsp;&nbsp;指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、ファイルディスクリプタ値が返ります。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">既存のファイルをオープン、あるいはファイルを新規作成してオープンする関数です。<br>新たに作成されたファイルの属性は、アーカイブです。属性の変更は、<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoChstat">sceIoChstat</a>()関数で変更できます。<br>本APIでは、既にオープンしているファイルでも、更にオープンすることが可能です。しかし、ファイル登録テーブルをそれぞれ別々に持つため、同一ファイルへ同時に書き込みするなどのアクセスを行うと、データの不整合が起こる場合があります。従って、同一ファイルに同時に書き込みを行うアクセス等は、行わないようにしてください。<br>（詳細は、「IO/Fileマネージャドキュメント」を参照してください）<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoClose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoClose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルのクローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoClose</b> (
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルをオープンしたときに得られるファイルディスクリプタ値&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>が返ります。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数でオープンしているファイルをクローズする関数です。<br>（詳細は、「IO/Fileマネージャドキュメント」を参照してください）<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRead"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRead<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>データの読み込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceSSize <b>sceIoRead</b> (
+	SceUID <i>fd</i>,
+	void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルをオープンしたときに得られるファイルディスクリプタ値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むバッファアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むサイズ(bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、0byte以上の読み込んだバイト数を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数でオープンしているファイルから、データを読み出す関数です。<br><br>返り値が<i>nbyte</i>より小さい正の整数の場合、そのサイズ分だけデータを読み込んだことになります。負の値だった場合は、ファイルデータの終端に達したか、データの読み込みに失敗したことになります。<br>バッファポインタとして渡される引数<i>buf</i>のアドレスチェックをしていませんので、無効な領域へのアドレスを指定した場合の動作保障はできません。<br>また、引数<i>buf</i>のアドレスが64バイトアラインされていない場合は、システムの制約上読み込み速度が低下する場合があります。<br>（詳細は、「IO/Fileマネージャドキュメント」を参照してください）<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoWrite"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoWrite<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>データの書き込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceSSize <b>sceIoWrite</b> (
+	SceUID <i>fd</i>,
+	const void *<i>buf</i>,
+	SceSize <i>nbyte</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルをオープンしたときに得られるファイルディスクリプタ値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書き込むデータの格納領域へのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>nbyte</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;書き込むサイズ(bytes)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、0byte以上の書き込んだバイト数を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoOpen">sceIoOpen</a>()関数でオープンしているファイルへ、データの書き込みを行う関数です。<br><br>返り値が引数<i>nbyte</i>より小さい正の整数の場合、そのサイズ分だけデータを書き込んだことになります。<br>バッファポインタとして渡される引数<i>buf</i>のアドレスチェックをしていませんので、無効な領域へのアドレスを指定した場合の動作保障はできません。<br>また、引数<i>buf</i>のアドレスが64バイトアラインされていない場合は、システムの制約上書き込み速度が低下する場合があります。<br>（詳細は、「IO/Fileマネージャドキュメント」を参照してください）<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoLseek"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoLseek<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルI/Oポインタの移動<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceOff <b>sceIoLseek</b> (
+	SceUID <i>fd</i>,
+	SceOff <i>offset</i>,
+	int <i>whence</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルをオープンしたときに得られるファイルディスクリプタ値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>offset</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;基準点からのバイト数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>whence</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;基準点&nbsp;&nbsp;<br>&nbsp;&nbsp;＊詳細は「IO/Fileマネージャドキュメント」参照&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、0byte以上の読み込んだバイト数を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルデータのI/Oポインタを移動する関数です。<br><br>64バイトアラインされていないポイントを指定した場合システムの制約上読み出しや書き込みの速度が遅くなる場合があります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDopen"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDopen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリのオープン<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceIoDopen</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象のディレクトリ名をフルパスで指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、ファイルディスクリプタ値を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">引数<i>dirname</i>に指定したパスのディレクトリをオープンする関数です。<br>（詳細は、「IO/Fileマネージャドキュメント」を参照してください）<br><br>オープンしたディレクトリは、<a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDread">sceIoDread</a>()関数によってディレクトリ情報を読み出すことができます。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDclose"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDclose<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリのクローズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoDclose</b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ値&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オープンしているディレクトリをクローズする関数です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDread"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDread<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリ情報の読み込み<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoDread</b> (
+	SceUID <i>fd</i>,
+	struct SceIoDirent *<i>buf</i>
+);
+</font></pre></div>
+<br>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br></div>
+<br>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルディスクリプタ値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリ情報の格納アドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、0より大きい整数を返します。<br>読むべきエントリがない場合は、0を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定したディレクトリエントリの最初のものから1つずつ返す関数です。<br></div>
+<br>
+<div style="margin-left:50px;">構造体SceIoDirentの<i>d_private</i>メンバには、<a href="../peripheral/FATMS-Reference-Japanese.htm#SceFatMsDirent">SceFatMsDirent</a>構造体のバッファのアドレスを設定してください。また<a href="../peripheral/FATMS-Reference-Japanese.htm#SceFatMsDirent">SceFatMsDirent</a>構造体の<i>size</i>には、sizeof(<a href="../peripheral/FATMS-Reference-Japanese.htm#SceFatMsDirent">SceFatMsDirent</a>)を設定してください。<br><a href="../peripheral/FATMS-Reference-Japanese.htm#SceFatMsDirent">SceFatMsDirent</a>構造体を使用しない場合、<i>d_private</i>メンバにはNULLを設定してください。SceIoDirentについては、「IO/Fileマネージャリファレンス」を参照してください。<br><br>検索したファイルがロングファイル名を持つ場合、<a href="../peripheral/FATMS-Reference-Japanese.htm#SceFatMsDirent">SceFatMsDirent</a>構造体の<i>longFileName</i>メンバにはロングファイル名が、<i>shortFileName</i>メンバにはショートファイル名が格納されます。ロングファイル名を持たないファイルの場合、<i>longFileName</i>メンバ、<i>shortFileName</i>メンバともにショートファイル名が格納されます。<br>ロングファイル名とは、11文字（8文字＋"."＋3文字。ピリオドを含んで12文字）を超えているファイル名です。または、11文字以内であっても、ファイル名に小文字が使用されている場合もロングファイル名に含みます。<br><br><i>longFileName</i>メンバに格納されるロングファイル名の文字コードはUTF-8(BOMなし)ですが、<i>shortFileName</i>メンバに格納されるショートファイル名の文字コードは、Memory Stick&trade;上に保存した際の環境に依存します。非ASCII文字を含むようなファイル名を扱う場合には、ロングファイル名(SceIoDirent構造体の<i>d_name</i>メンバ、あるいは<a href="../peripheral/FATMS-Reference-Japanese.htm#SceFatMsDirent">SceFatMsDirent</a>構造体の<i>longFileName</i>メンバ)のご利用をお勧めします。<br><br>SceIoDirent構造体の<i>d_name</i>メンバには<a href="../peripheral/FATMS-Reference-Japanese.htm#SceFatMsDirent">SceFatMsDirent</a>構造体の<i>longFileName</i>メンバと同じものが入ります。ただし<i>longFileName</i>メンバが存在しない場合は、<i>shortFileName</i>メンバと同じものがUTF-8(BOMなし)に変換されて入ります。またロングファイル名が<i>d_name</i>メンバよりも大きい場合も、<i>shortFileName</i>メンバと同じものがUTF-8(BOMなし)に変換されて入ります。<br><br>SceIoStat構造体の<i>st_attr</i>メンバには、下記のファイル属性が入ります。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATRO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み出し専用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATHD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;隠しファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATVL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ボリュームラベル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATDR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サブディレクトリ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アーカイブ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ファイル変更時刻に関しては、SceIoStat構造体の<i>st_mtime</i>メンバのみ有効です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRemove"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRemove<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルの削除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoRemove</b> (
+	const char *<i>filename</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;削除するファイル名をフルパスで指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定したファイルの削除を行う関数です。<br><br>オープンしている状態のファイル、読み出しのみ、ボリュームラベル、サブディレクトリのいずれかの属性を持ったファイルは削除できません。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRename"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRename<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル名、ディレクトリ名の変更<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoRename</b> (
+	const char *<i>oldname</i>,
+	const char *<i>newname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oldname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象のファイル名（ディレクトリ名）をフルパスで指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>newname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;新しいファイル名（ディレクトリ名）を指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定したファイル、またはディレクトリの名前を変更する関数です。<br><br>この関数では、ファイルやディレクトリの移動はできません。従って、引数<i>newname</i>には、パスなしのファイル名のみを指定してください。<br>引数<i>oldname</i>で指定したファイルがオープンしている状態か、ファイルの属性が読み出しのみの場合は変更できません。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoMkdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoMkdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリの作成<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoMkdir</b>(
+	const char *<i>dirname</i>,
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;作成するディレクトリ名をフルパスで指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディレクトリを作成する関数です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoRmdir"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoRmdir<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ディレクトリの削除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoRmdir</b>(
+	const char *<i>dirname</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>dirname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;削除するディレクトリ名をフルパスで指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ディレクトリを削除する関数です。<br><br>引数<i>dirname</i>で指定されたディレクトリ内にファイルやディレクトリがある場合は、このディレクトリの削除は行わずにエラーを返します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoGetstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoGetstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルおよびディレクトリのステータス取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoGetstat</b>(
+	const char *<i>name</i>,
+	struct SceIoStat *<i>buf</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象のファイル名（ディレクトリ名）をフルパスで指定します。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;&nbsp;<br>&nbsp;&nbsp;参照してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル情報領域の格納アドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルやディレクトリのステータスを取得する関数です。<br><br>SceIoStat構造体の<i>st_attr</i>メンバには、下記のファイル属性が入ります。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATRO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み出し専用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATHD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;隠しファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATVL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ボリュームラベル&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATDR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;サブディレクトリ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_EATAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アーカイブ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoChstat"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoChstat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイル、ディレクトリの属性変更<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoChstat</b>(
+	const char *<i>name</i>,
+	const struct SceIoStat *<i>buf</i>,
+	unsigned int <i>cbit</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>name</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;対象のファイル名（ディレクトリ名）をフルパスで指定します。&nbsp;<br>&nbsp;詳細は、概要ドキュメントの注意事項「ファイル、フルパスの指定に関して」を&nbsp;<br>&nbsp;参照してください。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>buf</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;ステータス情報の格納アドレス&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>cbit</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;変更するフィールドの指定ビット&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;　　SCE_CST_MODE&nbsp;<br>&nbsp;　　SCE_CST_ATTR&nbsp;<br>&nbsp;　　SCE_CST_CT&nbsp;<br>&nbsp;　　SCE_CST_MT&nbsp;</td>
+<td valign="top">&nbsp;0x0001&nbsp;<br>&nbsp;0x0002&nbsp;<br>&nbsp;0x0008&nbsp;<br>&nbsp;0x0020&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルの属性を変更する関数です。<br><br>指定したファイルがオープン状態の場合、属性の変更はできません。<br>引数<i>cbit</i>にSCE_CST_ATTRフラグがセットされている場合は、SceIoStat構造体の<i>st_attr</i>メンバの値がそのまま反映されます。<br>引数<i>cbit</i>にSCE_CST_MODEフラグのみがセットされていた場合、SceIoStat構造体の<i>st_mode</i>メンバから判断します。<br><i>st_mode</i>メンバのwriteフラグが全て0の場合は、SCE_EATRO(read only)、それ以外は属性なしになります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoDevctl"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoDevctl<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デバイスコントロールAPI<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoDevctl</b>(
+	const char * <i>aliasname</i>,
+	int <i>cmd</i>,
+	const void *<i>arg</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aliasname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アサインを行ったエイリアス名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コマンドコード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パラメータブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パラメータブロックのbyte数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックへのポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;戻りデータ格納ブロックのサイズ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">デバイス容量を取得する関数です。<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceIoSync"></a>
+<table width="100%"><td width="70%"><font size=6>sceIoSync<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルシステムとデバイスの同期を行う<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceIoSync</b>(
+	const char * <i>devicename,</i>
+	int <i>flag</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>devicename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイス名("ms0:")&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ファイルシステムの内部状態とMemory Stick&trade;上のバッファをMemory Stick&trade;のFLASHメモリに書き出す処理を行います。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsRegisterNotifyCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsRegisterNotifyCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>コールバックの登録<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceFatmsRegisterNotifyCallback</b>(
+	SceUID <i>cb_id</i>
+);
+</font></pre></div>
+<br>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br></div>
+<br>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cb_id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバックID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_ERROR_ERRNO_EINVAL">SCE_ERROR_ERRNO_EINVAL</a>が返ります。<br></div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">FAT ForMS状態遷移時に呼ばれるコールバックの登録を行う関数です。<br></div>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>()関数で取得した、コールバックIDを本関数に設定してください。<br>本関数に登録したコールバックは、FAT ForMSの状態遷移時に、即座に呼ばれるわけではなく、<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCheckCallback">sceKernelCheckCallback</a>()、およびsce<i>XXXXXX</i>CB()関数実行時に、コールバックされます。<br></div>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>()で登録するコールバックのプロトタイプは、<br></div>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int callback(int count, int arg, void *param);
+
+</font></pre></div>
+<div style="margin-left:50px;">となっています。<br>FAT ForMSの状態遷移時に呼ばれるコールバックでは、第二引数<i>arg</i>からどの状態になったのかを判断するための値が設定されます。<br>値は、以下のようになります。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_NOTIFY_ASSIGNED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FAT ForMSがアサインされた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_NOTIFY_UNASSIGNED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FAT ForMSがアンアサインされた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;負の値&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アサインに失敗しました&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">コールバックの詳細については、スレッドマネージャのコールバック関数の説明を参照してください。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsUnRegisterNotifyCallback"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsUnRegisterNotifyCallback<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>コールバックの登録解除<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+SceUID <b>sceFatmsUnRegisterNotifyCallback</b>(
+	SceUID <i>cb_id</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cb_id</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コールバックID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_ERROR_ERRNO_EINVAL">SCE_ERROR_ERRNO_EINVAL</a>が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">FAT ForMSの状態遷移時に、呼ばれるコールバックの登録解除を行う関数です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsIsAssigned"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsIsAssigned<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>アサインされているかの問い合わせ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceFatmsIsAssigned</b>(
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、以下の値が返ります。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アサインされていません&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アサインされています&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>を参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">FAT ForMSがアサインされているかどうかを問い合わせる関数です。<br><br>アサインされている場合、"ms0:"でアクセス可能です。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceFatmsGetMediumWPSwitchStat"></a>
+<table width="100%"><td width="70%"><font size=6>sceFatmsGetMediumWPSwitchStat<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メディアのWrite Protectスイッチの状態を得る<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b>sceFatmsGetMediumWPSwitchStat</b>(
+	void
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラからの呼び出し不可<br>スレッドから呼び出し可能（割り込み許可状態で呼ぶこと）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、以下の値が返ります。<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_MEDIUM_WP_SWITCH_OFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write ProtectスイッチはOFFです&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_FATMS_MEDIUM_WP_SWITCH_ON&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Write ProtectスイッチはONです&nbsp;&nbsp;<br>&nbsp;&nbsp;（書き込みできません）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;エラー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラーの場合は、負の値が返ります。（<a href="../peripheral/FATMS-Reference-Japanese.htm#エラーコード一覧">エラーコード一覧</a>及び、msstor_error.hを参照してください）<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">メディアのWrite Protectスイッチの状態を取得する関数です。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_PR_GETDEV"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_PR_GETDEV<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Devctlコマンド]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>デバイス容量の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;fatms.h&gt;
+int <b><a href="../peripheral/FATMS-Reference-Japanese.htm#sceIoDevctl">sceIoDevctl</a></b>(
+	const char * <i>aliasname</i>,
+	int <i>cmd</i>,
+	void *<i>arg</i>,
+	SceSize <i>arglen</i>,
+	void *<i>bufp</i>,
+	SceSize <i>buflen</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">スレッドから呼び出し可能（要割り込み許可）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aliasname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アサインを行ったエイリアス名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cmd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_PR_GETDEV&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arg</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザで確保した<a href="../peripheral/FATMS-Reference-Japanese.htm#Sce_getdev_command_t">Sce_getdev_command_t</a>のポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>arglen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sizeof(<a href="../peripheral/FATMS-Reference-Japanese.htm#Sce_getdev_command_t">Sce_getdev_command_t</a>)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>bufp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buflen</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功した場合は、<a href="../peripheral/FATMS-Reference-Japanese.htm#SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>を返します。<br>エラーの場合は、負の値が返ります。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">デバイス容量を取得する関数です。<br><br>コールする際にユーザで確保した<a href="../peripheral/FATMS-Reference-Japanese.htm#SceDevInf">SceDevInf</a>構造体のポインタを構造体<a href="../peripheral/FATMS-Reference-Japanese.htm#Sce_getdev_command_t">Sce_getdev_command_t</a>の<i>dev_inf</i>メンバにセットしてください。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="エラーコード一覧"></a>
+<table width="100%"><td width="70%"><font size=6>エラーコード一覧<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[エラーコード]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>FAT ForMSのエラーコード<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_KERNEL_ERROR_OK">SCE_KERNEL_ERROR_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;正常終了&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOENT">SCE_ERROR_ERRNO_ENOENT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;該当するファイル、&nbsp;&nbsp;<br>&nbsp;&nbsp;またはディレクトリが見つからない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EBADF">SCE_ERROR_ERRNO_EBADF</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル番号が不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOMEM">SCE_ERROR_ERRNO_ENOMEM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必要なメモリが確保できない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EACCESS">SCE_ERROR_ERRNO_EACCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルのアクセス許可がない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EEXIST">SCE_ERROR_ERRNO_EEXIST</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;同じ名前のファイル、またはディレクトリが存在する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENODEV">SCE_ERROR_ERRNO_ENODEV</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory Stick&trade;が抜かれた、&nbsp;&nbsp;<br>&nbsp;&nbsp;またはドライバがdeleteされた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOTDIR">SCE_ERROR_ERRNO_ENOTDIR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディレクトリではない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EINVAL">SCE_ERROR_ERRNO_EINVAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;無効な引数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EMFILE">SCE_ERROR_ERRNO_EMFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オープンしているファイルが多すぎる&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_ENOSPC">SCE_ERROR_ERRNO_ENOSPC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスに領域がない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_ERRNO_EMEDIUMTYPE">SCE_ERROR_ERRNO_EMEDIUMTYPE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不正なメディア&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_DFUNC">SCE_ERROR_DFUNC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ドライバ内のエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;その他&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;「IO/Fileマネージャリファレンス」参照&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">エラーコードはpsperror.h,kerror.hに定義されています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1">
+<div style="margin-left:40px;"><h4><b>ブロックデバイスからのエラーコード</b><br><br></h4></div></a>
+
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>結果</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_CRC">SCE_MSCM_ERR_CRC</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアとのアクセスでCRCエラーが発生&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_TOE">SCE_MSCM_ERR_TOE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアとのアクセスでタイムアウトエラーが発生&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_TIMEOUT">SCE_MSCM_ERR_TIMEOUT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアとのアクセス以外の要因でタイムアウト&nbsp;&nbsp;<br>&nbsp;&nbsp;エラーが発生&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_CMDNK">SCE_MSCM_ERR_CMDNK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアとのアクセスで不正なコマンドエラーが&nbsp;&nbsp;<br>&nbsp;&nbsp;発生&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSCM_ERR_FLASH">SCE_MSCM_ERR_FLASH</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フラッシュエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_WARN">SCE_MSSTOR_WARN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアの状態が不正である可能性がある&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR">SCE_MSSTOR_ERR</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Abnormalエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_FATAL">SCE_MSSTOR_FATAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;致命的なエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_EEXIST">SCE_MSSTOR_EEXIST</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;既に存在する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_EACCESS">SCE_MSSTOR_EACCESS</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アクセスエラー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_EINVAL">SCE_MSSTOR_EINVAL</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パラメータやモードが不正&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ETIMEDOUT">SCE_MSSTOR_ETIMEDOUT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;タイムアウトエラーが発生&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_WRITEPROTECTED">SCE_MSSTOR_ERR_WRITEPROTECTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メディアが書き込み禁止状態&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_READONLY">SCE_MSSTOR_ERR_READONLY</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リードオンリーである&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_NOBLOCK">SCE_MSSTOR_ERR_NOBLOCK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブロックを確保できない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_MSSTOR_ERR_INVALID_PARAM">SCE_MSSTOR_ERR_INVALID_PARAM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パラメータが不正&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">ブロックデバイスドライバからのエラーコードはmsstor_error.h,mscm_error.hに定義されています。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,1927 @@
+<html lang="en">
+<head>
+<title>NP_Matching2_System-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NP Matching 2 System Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>About This Document</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This document explains the matching system (NP matching 2 system) of the PlayStation&reg;Network. The information provided in this document serves as the basic information necessary for designing applications that make use of online play and chats.<br><br>The NP matching 2 system is composed of 3 levels - the server, world and room. It provides the following functions.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Room search
+<li> Dynamic room creation
+<li> In-room chat<br>A vulgarity filter (filter to conceal inappropriate language) can be enabled for this function.
+<li> Data exchange between users in a room
+<li> Room entrance restriction
+<li> Support for team play
+<li> User search using the NP ID
+<li> P2P connection establishment between room members
+</ul></div>
+<div style="margin-left:50px;"><br>This document provides a detailed explanation of each of the above functions. The use of these functions in the design of applications is shown through use cases. In addition, registration procedures required when developing an application, as well as server management, are also explained.<br>For details on the actual programming, refer to the documents "NP Matching 2 Overview" and "NP Matching 2 Reference."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1">
+<div style="margin-left:40px;"><h4><b>Note</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">As a matter of convenience, this document may refer to functions that are not available yet, together with functions that already are, without clearly distinguishing the two.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Reference Materials</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_2">
+<div style="margin-left:40px;"><h4><b>"PlayStation&reg;Network Overview"</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This document provides an overview of the PlayStation&reg;Network.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_3">
+<div style="margin-left:40px;"><h4><b>"NP Matching 2 Overview" and "NP Matching 2 Reference"</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">These documents provide information on the library to be used for utilizing the NP matching 2 system from an application. For actual programming procedures and implementation examples, refer to these documents.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Components and Terms of the Matching System</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter explains the components and terms of the NP matching 2 system.<br>As indicated in Figure 1, the NP matching 2 system is composed of three levels - the matching server level, the world level and the room level.<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English001.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Components of the NP Matching 2 System</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>User</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A user refers to the user of the NP matching 2 system.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Matching Server (Server)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The matching server (server hereafter) comprises the highest level of the NP matching 2 system. It provides match making functions to be used by the applications. One or more servers can be allocated to each application (to each NP Communication ID). One server must be selected to be used for the execution of the application; two or more servers cannot be used at the same time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>World</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A world represents a match making space. A room search in the NP matching system is executed for the rooms that belong to a world. Multiple worlds can be set under one server.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Session</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A session is a collective term for rooms.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Room and Room Member</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A room is a space that a user can join, and, for example, play a game against another player. A room belongs to a world. A room provides functions to enable communication between its members, and to enable player-vs.-player game play. Entrance to a room can be restricted by a password. A user in a room is referred to as a room member.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_6">
+<h3>
+<a href="#Heading3_2"> 2. </a>6 
+<!-- hp1 --><b>Room Owner</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A room owner owns a room. There can only be one room owner among the room members. There are functions and roles that only the room owner can execute and perform. The user who creates a room becomes that room's first room owner. Another member can become a room owner by being explicitly granted with the ownership of the room from the room owner. A member can also become a room owner when the former room owner leaves the room.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_7">
+<h3>
+<a href="#Heading3_2"> 2. </a>7 
+<!-- hp1 --><b>Slot and Slot Number</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A slot refers to the area allocated to a user who joins a room. The maximum number of users who can join a room is determined by the number of slots available. Slots are distinguished by slot numbers. Slot numbers are integers in consecutive ascending order, beginning with 1.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_8">
+<h3>
+<a href="#Heading3_2"> 2. </a>8 
+<!-- hp1 --><b>Room Group, Group Label and Group Room</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Slots of a room are collectively referred to as a group. A group is useful for distinguishing users in a room. A group can be freely defined by the application. With the group label that is set per group, it is possible to assign slots to members joining a room or to restrict them. Groups are distinguished by their group IDs. Group IDs are integers in consecutive ascending order, beginning with 1. A room with groups set up is referred to as a group room.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_9">
+<h3>
+<a href="#Heading3_2"> 2. </a>9 
+<!-- hp1 --><b>Attribute</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Attributes are set for each user, room and room member. There are flag-type attributes, numeric-type attributes, and binary-type attributes. Some are predefined, while others can be freely defined by the application. Some attributes can be used for a search, while others can only be referenced or updated. There are also attributes that can only be referenced or updated by a room member, and these are clearly distinguished from the attributes that can be referenced by outside users.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Configuration</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The basic assumption made for network applications of the NP matching 2 system is that players will join appropriate rooms to perform player-vs.-player game play. Depending on its own design, the application should appropriately configure the components of the NP matching 2 system. This chapter exemplifies the process of designing an application - up to the point when the appropriate room is joined. This chapter also provides examples of how the NP matching 2 system can be configured to realize such designs.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Configuration Example 1: Searching for a Room to Play against an Opponent</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_4">
+<div style="margin-left:40px;"><h4><b>Application Design</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A player creates a room for player-vs.-player game play, or searches for a room that fits this condition and joins it. The player does not take note of the existence of servers or of worlds.<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English002.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Configuration Example 1: Design of an Application that Uses the Room Search Function</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>Configuration of the NP Matching 2 System</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Set up one world under the server, and create a room belonging to this world. In the above application design, players only acknowledge rooms. The application should thus conceal the existence of the server and the world.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Configuration Example 1: Configuration When Using the Room Search Function</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Configuration Example 2: Using All the Levels</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_6">
+<div style="margin-left:40px;"><h4><b>Application Design</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The player explicitly selects the server, world, and session to join, as follows.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> The player selects the server from a list of servers.</li>
+<li VALUE=2> The player selects the world from a list of worlds belonging to the selected server.</li>
+<li VALUE=3> The player creates a room that belongs to the selected world, or selects and joins a room by searaching among the rooms that belong to the selected world</li>
+</ol></div>
+<div style="margin-left:67px;">In relatively large applications, as exemplified above, the levels should be distinguished and utilized to separate each matchmaking space. Also, as indicated in Figure 4, the servers and worlds can be named to enhance the tone or themes of the game.<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  Configuration Example 2: Design of an Application that Uses All the Levels</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_7">
+<div style="margin-left:40px;"><h4><b>Configuration of the NP Matching 2 System</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">In large-scale applications, set multiple servers. Set multiple worlds under each server. In addition, create rooms belonging to each world. In this application design, the player acknowledges the hierarchical structure comprising the server, worlds and rooms, and explicitly makes selections among them.<br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English005.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  Configuration Example 3: Configuration When Using All the Levels</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Details of the Components</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter explains the components of the NP matching 2 system in detail.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Matching Server (Server)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">One server can support up to 10,000 users.<br><br>If the estimated number of users for an application is within the above server capacity, it is sufficient to have one server allocated to the application. If the estimated number of users exceeds the server capacity, multiple servers can be used by one application. In this case, the servers must all have the same settings (configuration of the worlds under each server must be the same) (see Figure 6).<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6  Server Setting for Multiple Servers</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Each server has a unique 2-byte ID attached to it per application (per NP Communication ID). The application distinguishes servers using this server ID. Server IDs are integers in consecutive ascending order beginning with 1.<br><br>With the default setting, one server is assigned to each application (each NP Communication ID). To use two or more servers, please inquire separately.<br><br>Once the number of servers and their server IDs are set, they will always remain fixed. Note that after the application's master disc is submitted, it will not be possible to change these parameters. If the number of user accesses exceeds the server capacity, the server will become busy and no more accesses will be possible. If the number of users decreases over time, the freed up server capacity will not be usable.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_8">
+<div style="margin-left:40px;"><h4><b>Information that Can Be Obtained by the Application</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The application can obtain a list of server IDs, for the servers set for it. It can also obtain the current state of each server. Server information that the application can obtain is as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Content</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Server ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of a set server&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Server state&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Current state of the servers&nbsp;&nbsp;<br>&nbsp;&nbsp;- Available&nbsp;&nbsp;<br>&nbsp;&nbsp;- Unavailable&nbsp;&nbsp;<br>&nbsp;&nbsp;- Busy&nbsp;&nbsp;<br>&nbsp;&nbsp;- Maintenance&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>World</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A world belongs to a server. It is a unit of space for searching rooms. To search for a room, specify a world and obtain the rooms belonging to that world.<br>Up to 64 worlds can be set for one server. Each world has a unique number in the server, called the world number. World numbers are assigned in ascending order beginning with 1. In addition to world numbers, there is also the world ID, which can be obtained by the application via the NP matching 2 utility. This world ID is a 4-byte ID that is unique to each application (NP Communication ID). The application distinguishes worlds using this world ID.<br>Register the number of worlds to set and their world numbers upon developing the application. Make world settings per application according to the contents of this registration. For more details on the registration contents, refer to the chapter "Development Process". <br>Once the number of worlds and their world numbers are set, they will always remain fixed. Note that after the application's master disc submittal, it will not be possible to make changes to them.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_9">
+<div style="margin-left:40px;"><h4><b>Information that Can Be Obtained by the Application</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The application can obtain a list of world IDs, for the worlds set for it. Other information associated with each world can be obtained as well. World information that the application can obtain is as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Content</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;World ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of a set world&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Number of rooms&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of rooms currently belonging to the world&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Number of members in the rooms&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Total number of members currently in all the rooms belonging to &nbsp;&nbsp;<br>&nbsp;&nbsp;the world&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Entitlement ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Entitlement ID required for using the world&nbsp;&nbsp;<br>&nbsp;&nbsp;(*not currently used)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Room and Room Member</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A room is a space that a user can join to communicate with other room members, and to perform player-vs.-player game play.<br>A room belongs to a world. Up to 2500 rooms can be created per world. Rooms are not statically created like servers and worlds. An application can dynamically create a room at any time. A created room will automatically be given a room number. In addition to this room number, there is a room ID, which can be obtained by the application via the NP matching 2 utility. This 8-byte ID is unique to each application (NP Communication ID). An application distinguishes rooms using this room ID.<br>Up to 64 users can join one room. The maximum number of members for each room can be set freely within this value when the room is created.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_10">
+<div style="margin-left:40px;"><h4><b>Information that Can Be Obtained by the Application</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The application can search for a created room and obtain a list of rooms. It can also specify search conditions to narrow the rooms to be obtained on the list. Moreover, information associated with each room can be obtained as well. For details, refer to the chapters "Attributes and Basic Information of the Components" and "Obtaining and Searching Components."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_11">
+<div style="margin-left:40px;"><h4><b>Joining a Room and the Room Member ID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The number of slots in a room is determined by the value for the maximum number of members set for that room. Each slot will have a slot number assigned to it, from 1, to the maximum number of members set. When a player joins a room, one of the open slots will be allocated to that player.<br>A room member will have a unique ID called the room member ID attached to him/her. The application distinguishes room members using this room member ID. A different room member ID will be allocated every time a player joins a room. Thus, if a player leaves a room and reenters it, the player will be given a new (different) room member ID.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_12">
+<div style="margin-left:40px;"><h4><b>Room Owner</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A room always has one room member with the role of being the room owner. When a room is created, the user who created the room becomes that room's first room owner.<br>The room owner can perform the following operations.<br></div>
+</ol>
+<div style="margin-left:70px;"><ul>
+<li> Set and modify room attribute values (some room attributes can also be set by other members of the room)
+<li> Kick out a room member
+<li> Transfer room ownership to another room member
+</ul></div>
+<div style="margin-left:67px;">Note that in order to correctly maintain the state of the room, data may be exchanged between the client - the room owner - and the server.<br>Room ownership can be explicitly passed onto another room member from the application. If the automatic transfer of room ownership has been enabled upon the creation of that room in its room settings, room ownership will be automatically passed onto another room member when the room owner leaves the room.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_13">
+<div style="margin-left:40px;"><h4><b>Room Deletion</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When the room owner leaves the room, the room will be deleted automatically and its members will be forced to leave the room. The exception to this, as mentioned above, is when the automatic transfers of room ownership has been enabled in the room's settings. In this case, when the room owner leaves the room, room ownership will be passed onto another room member. This room member will then become the new room owner, and the room will remain in existence.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_14">
+<div style="margin-left:40px;"><h4><b>Obtaining a List of Room Members and Being Notified of a Member Joining or Leaving</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The application can obtain a list of members in a room.<br>A player can join or leave a room at any time. Other members can be notified when a new member joins a room, or when a member leaves. Upon such a notification, information to identify the applicable user, including his/her room member ID, NP ID, Online Name, Avatar, etc., will be notified as well. Notifications of members joining or leaving will always be made.<br>When managing room members on the application, obtain and save the list of room members, and update this list whenever a notification is received about a member joining or leaving the room.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_15">
+<div style="margin-left:40px;"><h4><b>Room Chat Message and Room Message</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Messages can be exchanged between room members via the room server. A selection can be made from unicast - targeting a particular room member, multicast - targeting multiple room members, and broadcast - targeting all room members. In addition to explicitly specifying multiple targets, in multicast, it is possible to specify the team ID and to have the message sent to all room members with the specified team ID. For details on the team ID, refer to the chapters "Attributes and Basic Information of the Components" and "Use Cases."<br>In the NP matching 2 system, text data that is exchanged between the room members is referred to as a room chat message, and any binary data exchanged between the room members is referred to as a room message.<br>A vulgarity filter will be applied to room chat messages, on the room server.<br>Message flow limits are applied by the server to room message transmissions. Make sure that room messages sent by each client do not exceed 256 bytes/sec. If room messages continue to be sent with a frequency that exceeds this limit, a request overflow error will be returned, room messages will no longer be able to be sent, and a subsequent 30-second busy state will continue.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_16">
+<div style="margin-left:40px;"><h4><b>Room Password</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A password, called the room password, can be set for a room. This password can be enabled or disabled per slot. For the later-described group room, this setting can be made per group instead of per slot. For slots (or groups) with the room password enabled, only users with the password matching the room password, or users who have been granted permission to join the room without a password (described in more detail in a subsequent section), will be able to join the room.<br>By using this function, some room slots or groups can be reserved for certain users.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_17">
+<div style="margin-left:40px;"><h4><b>Group Room, Group Label, and Room Group</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A room of the NP matching 2 system can have groups. When a room is created, multiple consecutive slots can be grouped together. A group ID is attached to each room group. The room group containing slot 1 is assigned with the group ID 1. In the order of increasing slot numbers, the room groups are subsequently given group IDs increasing in value by 1 (see Figure 7). A room with room groups set in it is referred to as a group room. Note that when room groups are set upon the creation of the room, it will not be possible to change this room group configuration later on.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7  Room Groups and Group IDs</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">A group label can be set for each room group. When a group label is set, a user with the matching label will be given priority to join that room group. On the other hand, a user without the group label will be unable to join. When a user with the matching label joins the room group, he/she can reset the group label to a different one.<br>By setting a room group and a group label, restrictions can be placed to ensure that only certain users are able to join a particular room group. Use this function to reserve a room group for a certain user and to invite him/her to that room, or to only permit certain clan or team members to join when performing clan-vs.-clan or team-vs.-team game play. For more information on the usage of the room groups and group label, refer to the chapter "Use Cases."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_18">
+<div style="margin-left:40px;"><h4><b>Grant Users Permission to Join Room without a Password</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When creating a room with a room password, it is possible to specify users to whom permission to join this room without a password is to be granted. Note that this specification must be made when the room is created.<br>Use this function to reserve some room slots for certain users, or to only allow the friends of the room creator to have unconditional access to the room.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_19">
+<div style="margin-left:40px;"><h4><b>Prohibit Users from Joining Room</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">It is possible to specify users who will be prohibited from joining a room. This list of users must be specified when the room is created. The specified users will then be unable to join that room.<br>Use this function, for example, to prevent users on the block list of the room creator, from joining the room.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Attributes and Basic Information of the Components</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The components (user, room, and room member) of the NP matching 2 system each hold various data areas that are called attributes. Values of the attributes can be obtained from, and set by, the application. The application can use these values to synchronize information within the application, or to perform room searches appropriately.<br><br>Attributes have various characteristics. These include the datatype of the attribute, whether the data contents are predefined or if the application can freely define and use them, whether the value can be updated from the application or if the value will be updated automatically, and whether or not the attribute can be used as a search condition.<br><br>There are three datatypes - the flag-type, integer-type, and binary-type, for attributes. A flag-type attribute has information defined for it that can be represented as a flag, such as, whether a room is full or not. An integer-type attribute and a binary-type attribute hold information defined by the application; they are represented by an integer value and variable-length data, respectively, and can be used for various purposes.<br><br>Each attribute has an attribute ID allocated to it. A constant is defined to represent each attribute ID. The application uses this constant to specify the attribute when obtaining or setting its value. In addition, the constants representing the flag values of the flag-type attributes are defined, and they are used by the application when handling the flag-type attributes.<br><br>In addition to the attributes, each component has "basic information" attached to it, which can be obtained or set. For example, a room's basic information includes the maximum number of members set for that room, and the number of members currently in the room. Basic information is defined as members of the data structure representing each component.<br><br>For attribute IDs, constants of flag-type attribute values, and structures representing each component, refer to the document "NP Matching 2 Reference".<br><br>The attributes and basic information of each component are explained as follows.<br>The "Setting" column in the tables below represents whether the value of the attribute or the basic information can be set or changed by the application. "External Reference" represents whether the value can be obtained by users who have not joined the applicable room. "Search" represents whether the item can be used as a search condition.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Room Attributes and Basic Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For room attributes, there are attributes that can only be referenced internally (by members in the room) - for synchronizing data between room members; attributes that can only be referenced externally (by non-members outside the room); and common attributes that can be referenced by users both in and outside the room.<br><br>You can enhance performance of the NP matching 2 system by appropriately using the three kinds of attributes described above. For example, use an attribute that can only be referenced internally when handling data which does not have to be referenced by users outside the room. Make sure the application uses the respective attributes for purposes that befit each of their characteristics.<br><br>Common room attributes that can be referenced by users both in and outside the room are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Attribute&nbsp;Type</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Attribute</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Description</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Setting</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>External&nbsp;Reference</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Search</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 5  valign="top">&nbsp;Flag-type&nbsp;</td>
+<td valign="top">&nbsp;Automatic&nbsp;room&nbsp;&nbsp;<br>&nbsp;ownership&nbsp;grant&nbsp;&nbsp;<br>&nbsp;flag&nbsp;</td>
+<td valign="top">&nbsp;Indicates&nbsp;whether&nbsp;the&nbsp;&nbsp;<br>&nbsp;room&nbsp;ownership&nbsp;will&nbsp;be&nbsp;&nbsp;<br>&nbsp;automatically&nbsp;granted&nbsp;to&nbsp;&nbsp;<br>&nbsp;another&nbsp;room&nbsp;member&nbsp;&nbsp;<br>&nbsp;when&nbsp;the&nbsp;room&nbsp;owner&nbsp;&nbsp;<br>&nbsp;leaves&nbsp;the&nbsp;room.&nbsp;<br>&nbsp;(1:&nbsp;automatic&nbsp;granting,&nbsp;&nbsp;<br>&nbsp;0:manual&nbsp;granting)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;*1&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;CLOSED&nbsp;flag&nbsp;</td>
+<td valign="top">&nbsp;Indicates&nbsp;whether&nbsp;the&nbsp;&nbsp;<br>&nbsp;room&nbsp;is&nbsp;accepting&nbsp;&nbsp;<br>&nbsp;members&nbsp;to&nbsp;join&nbsp;it.&nbsp;&nbsp;<br>&nbsp;When&nbsp;the&nbsp;room&nbsp;&nbsp;<br>&nbsp;is&nbsp;CLOSED,&nbsp;users&nbsp;will&nbsp;&nbsp;<br>&nbsp;be&nbsp;unable&nbsp;to&nbsp;join&nbsp;the&nbsp;&nbsp;<br>&nbsp;room.&nbsp;<br>&nbsp;(1:&nbsp;CLOSED,&nbsp;0:&nbsp;OPEN)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;FULL&nbsp;flag&nbsp;</td>
+<td valign="top">&nbsp;Indicates&nbsp;whether&nbsp;the&nbsp;&nbsp;<br>&nbsp;room&nbsp;is&nbsp;full.&nbsp;When&nbsp;the&nbsp;&nbsp;<br>&nbsp;room&nbsp;becomes&nbsp;full,&nbsp;this&nbsp;&nbsp;<br>&nbsp;flag&nbsp;will&nbsp;be&nbsp;automatically&nbsp;&nbsp;<br>&nbsp;set&nbsp;and&nbsp;users&nbsp;will&nbsp;be&nbsp;&nbsp;<br>&nbsp;unable&nbsp;to&nbsp;join&nbsp;the&nbsp;room.&nbsp;<br>&nbsp;(1:&nbsp;FULL,&nbsp;0:&nbsp;Not&nbsp;FULL)&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;*2&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Search&nbsp;not&nbsp;&nbsp;<br>&nbsp;applicable&nbsp;flag&nbsp;</td>
+<td valign="top">&nbsp;Indicates&nbsp;whether&nbsp;the&nbsp;&nbsp;<br>&nbsp;room&nbsp;is&nbsp;applicable&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;If&nbsp;it&nbsp;is&nbsp;not&nbsp;&nbsp;<br>&nbsp;applicable&nbsp;for&nbsp;a&nbsp;room&nbsp;&nbsp;<br>&nbsp;search,&nbsp;even&nbsp;when&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;is&nbsp;performed&nbsp;and&nbsp;&nbsp;<br>&nbsp;the&nbsp;search&nbsp;conditions&nbsp;&nbsp;<br>&nbsp;match&nbsp;the&nbsp;conditions&nbsp;of&nbsp;&nbsp;<br>&nbsp;this&nbsp;room,&nbsp;it&nbsp;will&nbsp;not&nbsp;be&nbsp;&nbsp;<br>&nbsp;considered&nbsp;a&nbsp;match.&nbsp;<br>&nbsp;(1:&nbsp;not&nbsp;applicable,&nbsp;0:&nbsp;&nbsp;<br>&nbsp;applicable)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;NAT&nbsp;type&nbsp;room&nbsp;&nbsp;<br>&nbsp;entry&nbsp;limitation&nbsp;&nbsp;<br>&nbsp;flag&nbsp;</td>
+<td valign="top">&nbsp;Indicates&nbsp;whether&nbsp;or&nbsp;not&nbsp;&nbsp;<br>&nbsp;room&nbsp;entry&nbsp;is&nbsp;limited&nbsp;by&nbsp;&nbsp;<br>&nbsp;the&nbsp;user's&nbsp;NAT&nbsp;type.&nbsp;If&nbsp;&nbsp;<br>&nbsp;room&nbsp;entry&nbsp;is&nbsp;limited,&nbsp;a&nbsp;&nbsp;<br>&nbsp;user&nbsp;with&nbsp;a&nbsp;NAT&nbsp;type&nbsp;&nbsp;<br>&nbsp;that&nbsp;cannot&nbsp;establish&nbsp;a&nbsp;&nbsp;<br>&nbsp;P2P&nbsp;connection&nbsp;with&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;member&nbsp;can&nbsp;no&nbsp;&nbsp;<br>&nbsp;longer&nbsp;join&nbsp;the&nbsp;room.&nbsp;<br>&nbsp;(1:&nbsp;limited,&nbsp;0:&nbsp;no&nbsp;limit)&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Basic information of rooms is as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Information</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>External Reference</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Search</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Server ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of the server to which the &nbsp;&nbsp;<br>&nbsp;&nbsp;room belongs.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;World ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of the world to which the &nbsp;&nbsp;<br>&nbsp;&nbsp;room belongs.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Room ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ID of the room.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Total number of slots &nbsp;&nbsp;<br>&nbsp;&nbsp;(maximum number of &nbsp;&nbsp;<br>&nbsp;&nbsp;members)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Maximum number of members&nbsp;&nbsp;<br>&nbsp;&nbsp;set for the room&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Number of current &nbsp;&nbsp;<br>&nbsp;&nbsp;members&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of members currently &nbsp;&nbsp;<br>&nbsp;&nbsp;in the room (number of room&nbsp;&nbsp;<br>&nbsp;&nbsp;members).&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Password slot mask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Information representing the &nbsp;&nbsp;<br>&nbsp;&nbsp;slot for which the room &nbsp;&nbsp;<br>&nbsp;&nbsp;password is set.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Room owner &nbsp;&nbsp;<br>&nbsp;&nbsp;information&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Information representing the &nbsp;&nbsp;<br>&nbsp;&nbsp;room owner. It contains the &nbsp;&nbsp;<br>&nbsp;&nbsp;NP ID, online name, and &nbsp;&nbsp;<br>&nbsp;&nbsp;avatar URL.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Room member list&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;List of room members who &nbsp;&nbsp;<br>&nbsp;&nbsp;have joined the room.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Room group &nbsp;&nbsp;<br>&nbsp;&nbsp;information&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Information about the room &nbsp;&nbsp;<br>&nbsp;&nbsp;group that was set for the &nbsp;&nbsp;<br>&nbsp;&nbsp;room.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">*1: Can only be set when the room is created - the value cannot be changed after the room is created.<br>*2: Value set and updated automatically according to each state.<br>*3: If the application executes a request for obtaining room member information, a room member list can be obtained from outside the room.<br><br>Room attributes that can only be referenced internally are as follows. Use these attributes if you want to freely define them in the application, and to synchronize data among the members in the room.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Attribute&nbsp;Type</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Attribute</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Description</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Setting</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>External&nbsp;Reference</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Search</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;Binary-type&nbsp;</td>
+<td valign="top">&nbsp;Internal&nbsp;room&nbsp;<br>&nbsp;binary&nbsp;attribute&nbsp;1&nbsp;<br>&nbsp;*4&nbsp;</td>
+<td valign="top">&nbsp;Data&nbsp;area&nbsp;of&nbsp;256&nbsp;bytes.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;&nbsp;<br>&nbsp;freely&nbsp;define&nbsp;and&nbsp;use&nbsp;it.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;Internal&nbsp;room&nbsp;&nbsp;<br>&nbsp;binary&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;2&nbsp;<br>&nbsp;*4&nbsp;</td>
+<td valign="top">&nbsp;Data&nbsp;area&nbsp;of&nbsp;256&nbsp;bytes.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;&nbsp;<br>&nbsp;freely&nbsp;define&nbsp;and&nbsp;use&nbsp;it.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">*4: When this attribute value is set or changed, a message indicating that the change occurred and the new attribute value can be reported to other room members.<br><br>The room attributes that can be referenced externally are as follows. Use these attributes if you want to define them freely in the application, and to synchronize information with users outside the room.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Attribute&nbsp;Type</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Attribute</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Description</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Setting</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>External&nbsp;Reference</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Search</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 8  valign="top">&nbsp;Integer-type&nbsp;</td>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;1&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;2&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;3&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;4&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;5&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;6&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;7&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;integer&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;8&nbsp;</td>
+<td valign="top">&nbsp;Integer&nbsp;value&nbsp;of&nbsp;32&nbsp;bits.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  valign="top">&nbsp;Binary-type&nbsp;</td>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;binary&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;1&nbsp;</td>
+<td valign="top">&nbsp;Data&nbsp;area&nbsp;of&nbsp;256&nbsp;bytes.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;binary&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;2&nbsp;</td>
+<td valign="top">&nbsp;Data&nbsp;area&nbsp;of&nbsp;256&nbsp;bytes.&nbsp;&nbsp;<br>&nbsp;The&nbsp;application&nbsp;can&nbsp;freely&nbsp;&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;No&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;External&nbsp;room&nbsp;&nbsp;<br>&nbsp;search&nbsp;binary&nbsp;&nbsp;<br>&nbsp;attribute&nbsp;1&nbsp;</td>
+<td valign="top">&nbsp;Data&nbsp;area&nbsp;of&nbsp;64&nbsp;bytes.&nbsp;The&nbsp;&nbsp;<br>&nbsp;application&nbsp;can&nbsp;freely&nbsp;&nbsp;<br>&nbsp;define&nbsp;and&nbsp;use&nbsp;it&nbsp;as&nbsp;a&nbsp;&nbsp;<br>&nbsp;search&nbsp;condition&nbsp;for&nbsp;a&nbsp;&nbsp;<br>&nbsp;room&nbsp;search.&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+<td valign="top">&nbsp;Yes&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>User Attribute and Basic Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A user attribute refers to an attribute that all users of the NP matching 2 system, even those who are not joined into a room, have. This user attribute can be set or obtained at any time, regardless of whether the user has joined a room. A user attribute is as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Attribute Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Attribute</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>External Reference</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Search</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Binary-type&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User binary attribute 1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data area of 128 bytes. &nbsp;&nbsp;<br>&nbsp;&nbsp;The application can &nbsp;&nbsp;<br>&nbsp;&nbsp;freely define and use it.&nbsp;&nbsp;<br>&nbsp;&nbsp;*Not currently provided.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The following table shows basic information kept for a user.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Information </b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>External Reference</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Search</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NP ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User's NP ID.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Online name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User's online name.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Avatar URL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User's avatar URL.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*5&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Joined session information&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Information representing the session &nbsp;&nbsp;<br>&nbsp;&nbsp;that the user has currently joined. It &nbsp;&nbsp;<br>&nbsp;&nbsp;contains the session ID and the date and&nbsp;&nbsp;<br>&nbsp;&nbsp;time the user joined.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*6&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">*5: You can specify whether this information will be used when creating the context in the NP matching 2 utility. If it is to be used, this setting is made automatically.<br>*6: This value is automatically set or updated according to the joined state.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Room Member Attributes and Basic Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Each room member holds room member attributes and basic information. These are only valid while the member remains in the room. Room member attributes include common room member attributes, and room attributes that can only be referenced internally.<br><br>Common room member attributes held by each room member are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Attribute Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Attribute</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>External Reference</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Search</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Flag-type&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Room owner &nbsp;&nbsp;<br>&nbsp;&nbsp;flag&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Indicates whether the member&nbsp;&nbsp;<br>&nbsp;&nbsp;is a room owner.&nbsp;&nbsp;<br>&nbsp;&nbsp;(1: room owner, 0: normal &nbsp;&nbsp;<br>&nbsp;&nbsp;room member)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*7&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">*7: Automatically set or modified upon room creation or the transfer of room ownership.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">Basic information held by each room member is as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Information</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>External Reference</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Search</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Room member ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Room member's ID.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NP ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Room member's NP ID.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Online name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Room member's online name.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Avatar URL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Room member's avatar URL.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Joined date/time&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Date and time that the room member &nbsp;&nbsp;<br>&nbsp;&nbsp;joined the room.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Team ID&nbsp;&nbsp;<br>&nbsp;&nbsp;*10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Area to store any value representing&nbsp;&nbsp;<br>&nbsp;&nbsp;the team ID that was defined by the &nbsp;&nbsp;<br>&nbsp;&nbsp;application at the time of &nbsp;&nbsp;<br>&nbsp;&nbsp;team-vs.-team game play&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;NAT type&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Represents the client's NAT type.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;<br>&nbsp;&nbsp;*8&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">*8: Automatically set when the member joins the room.<br>*9: You can specify whether this information will be used when creating the context in the NP matching 2 utility. <br>*10: This attribute supports an application that separates room members into teams for team-vs.-team play. For details, refer to the chapter "Use Cases."<br><br>The attribute that can only be referenced internally, and held by each room member, is as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Attribute Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Attribute</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>External Reference</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Setting</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Binary-type&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Internal room &nbsp;&nbsp;<br>&nbsp;&nbsp;member binary &nbsp;&nbsp;<br>&nbsp;&nbsp;attribute 1 *11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data area of 64 bytes held &nbsp;&nbsp;<br>&nbsp;&nbsp;by each room member. The &nbsp;&nbsp;<br>&nbsp;&nbsp;application can freely &nbsp;&nbsp;<br>&nbsp;&nbsp;define and use it.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">*11: Upon setting or changing the attribute value, the change and the new attribute value can be notified to the other room members.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Obtaining and Searching Components</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A list of each of the components of the NP matching 2 system can be obtained, and a search can be performed by component. This chapter explains the functions for obtaining each of the components, as well as the functions for performing a search.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Obtaining a List of Matching Server (Server) IDs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Execute the API for obtaining the list of server IDs to obtain a list of server IDs for all the servers allocated to the application.<br><br>This list will include servers that cannot be currently used because of server problems. To know the state of a server, you need to separately call the API for obtaining information on a specific server.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Obtaining a List of Worlds</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Execute the API for obtaining a list of worlds to obtain a list of all the worlds belonging to the specified server. Specify the server ID to obtain the worlds belonging to that server.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Obtaining a List of Rooms and Performing a Room Search</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Execute the API for performing a room search to obtain a list of rooms belonging to the specified world. It is also possible to specify search conditions to obtain a list of rooms that match these conditions. Specify the world ID to obtain the rooms belonging to it.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_20">
+<div style="margin-left:40px;"><h4><b>Room List Order</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The rooms on the obtained list will be ordered by the date when each room was created, with the room that was created first being first on the list.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_21">
+<div style="margin-left:40px;"><h4><b>Specifying the Scope</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Of the rooms that currently exist, the index of the oldest room is assigned the number 1. Thus, the scope of rooms that you want to cover can be specified: specify the index number of the room that you want as the first item on your list, and then specify how many items you want on your list. Up to 20 rooms can be obtained at one time.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_22">
+<div style="margin-left:40px;"><h4><b>Attributes that Can Be Specified as Search Conditions</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">For attributes that can be specified and compared as a search condition for a room search, refer to the "Search" column in the tables under the section "Room Attributes and Basic Information" of the chapter "Attributes and Basic Information of the Components."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_23">
+<div style="margin-left:40px;"><h4><b>Specifying Multiple Search Conditions</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The attributes that can be specified as a search condition can be specified together. When search conditions are specified together, an AND search is performed. Only rooms that meet all the specified search conditions will be returned. Note that an OR search is not supported.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_6_3_24">
+<div style="margin-left:40px;"><h4><b>Comparison Operator</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The attribute value specified as the search condition is compared with arbitrary values in the search. The comparison operators, and applicable attribute types that can be specified in the NP matching 2 system, are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Comparison Operator</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Flag-type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Integer-type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Binary-type</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Equal&nbsp;&nbsp;<br>&nbsp;&nbsp;(==)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Not equal&nbsp;&nbsp;<br>&nbsp;&nbsp;(!=)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Greater than&nbsp;&nbsp;<br>&nbsp;&nbsp;(&gt;)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Greater than or equal to&nbsp;&nbsp;<br>&nbsp;&nbsp;(&gt;=)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Less than&nbsp;&nbsp;<br>&nbsp;&nbsp;(&lt;)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Less than or equal to&nbsp;&nbsp;<br>&nbsp;&nbsp;(&lt;=)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>User Search</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In the NP matching 2 system, the NP ID can be used as a key to perform a user search. The user with the specified NP ID can be searched for. If the user is currently using the NP matching 2 system, his/her user attributes and information on his/her currently joined-in session can be obtained. Session information includes the world ID, room ID, and the date the user joined that session.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>Obtaining a List of Room Members</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Execute the API for obtaining a list of room members to obtain a list of room members.<br>Note that this list can be obtained externally for a room that you are not currently joined into.<br><br>You can also select the ordering method by which the items on your list are to be listed.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> By the date the members joined the room (oldest first)
+<li> By the slot numbers (smallest first)
+</ul></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>P2P Communication</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The NP matching 2 utility provides a function that automatically establishes P2P connections and performs P2P communication between room members when a member joins a room. It also provides a function for comparing the NAT type of a client and the NAT type of a room member and excluding rooms for which an appropriate P2P connection cannot be made from the room search results preventing members from joining that room.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>P2P Communication Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The procedure for performing P2P communication between room members in the NP matching 2 utility is as follows.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_1"><h4>
+(1)&nbsp;<b>Set signaling option parameter</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To perform P2P communication between room members, set the signaling option parameter when creating a room. The signaling option parameter specifies the P2P connection topology, and either full mesh or star can be selected. If star is selected, also specify the host that will be the hub (the default is the room owner). The room owner can also change the signaling option parameter at times other than when creating a room.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_2"><h4>
+(2)&nbsp;<b>Wait to receive an ESTABLISHED event</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A P2P connection is automatically established based on the signaling parameter when a room member joins or leaves the room. When the P2P connection is established, the SCE_NP_MATCHING2_SIGNALING_EVENT_Established event is reported together with the peer's member ID to the signaling callback function.<br>When the P2P connection cannot be established, the SCE_NP_MATCHING2_SIGNALING_EVENT_Dead event is reported.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_3"><h4>
+(3)&nbsp;<b>Get IP address and port number</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After the P2P connection is established, call <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>() together with the peer's member ID to obtain the IP address and port number.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_1_4"><h4>
+(4)&nbsp;<b>Send and receive data using BSD socket APIs</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Either the UDPP2P or TCP over UDPP2P protocol is used for P2P communication. For the peer's address and port number, use the values that were obtained by the API mentioned above.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>Signaling Option Parameter</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The signaling option parameter specifies the P2P connection topology. The P2P connection topologies that can be specified in the NP matching 2 utility are as follows.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_2_1"><h4>
+(1)&nbsp;<b>Full Mesh</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Every room member establishes a P2P connection with every other room member.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_2_2"><h4>
+(2)&nbsp;<b>Star</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When star topology is specified, a room member who will be the hub is also specified at the same time as the signaling option parameter. The room member who is specified as the hub establishes a P2P connection with every other room member. All other non-hub room members establish a P2P connection only with the room member who was specified as the hub.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8  P2P Connection Topology</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>Timing for Starting the Establishment of a P2P Connection</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The timing when the NP matching 2 utility starts to establish a P2P connection between room members is as follows.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_1"><h4>
+(1)&nbsp;<b>Immediately After Joining a Room</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the signaling option parameter is set when a room is created, processing for automatically establishing P2P connections is started immediately after the room is created, and a connection is made whenever a new member joins the room.<br><br>If the signaling option parameter is not set when a room is created, processing for establishing a P2P connection is not started until the following operation (2) is performed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_3_2"><h4>
+(2)&nbsp;<b>When the Signaling Option Parameter is Set or Changed</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The signaling option parameter can be set or changed at any time, not just when the room is created. If the signaling option parameter is not set when a room is created, processing for establishing P2P connections is started when the signaling option is set. If the signaling option parameter is set when a room is created and is then set again after processing for establishing P2P connections has already been executed, appropriate P2P connections are rebuilt to match the newly set signaling option parameter.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_4">
+<h3>
+<a href="#Heading3_7"> 7. </a>4 
+<!-- hp1 --><b>Timing for Destroying a P2P Connection</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An established P2P connection is destroyed at the following times.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4_1"><h4>
+(1)&nbsp;<b>When a network error or other error occurs</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A P2P connection with a room member is destroyed when a network error or other error occurs and the connection cannot be maintained.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4_2"><h4>
+(2)&nbsp;<b>When a room member leaves the room</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A P2P connection with a room member is destroyed when that room member leaves the room.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_4_3"><h4>
+(3)&nbsp;<b>When a room member leaves his/her own room</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">P2P connections between a given room member and all other room members are destroyed when that room member leaves his/her own room.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_5">
+<h3>
+<a href="#Heading3_7"> 7. </a>5 
+<!-- hp1 --><b>Search Filter and Room Entry Limitation According to NAT Type</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP matching 2 utility compares the NAT type of a client and the NAT type of a room member and decides whether or not a room allows appropriate P2P connections to be made according to the policy specified by the signaling option parameter. Inappropriate rooms can be filtered from the room search results and users with NAT types that cannot establish appropriate P2P connections can be denied the ability to join a room according to that decision result.<br><br>To filter inappropriate rooms from room search results, specify an option when searching rooms. To deny room entry to users who cannot establish appropriate P2P connections, specify a room attribute when creating the room. For details, refer to the "NP Matching 2 Reference."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_6">
+<h3>
+<a href="#Heading3_7"> 7. </a>6 
+<!-- hp1 --><b>Connection Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Information about an established connection can be obtained by using <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetConnectionInfo">sceNpMatching2SignalingGetConnectionInfo</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_1"><h4>
+(1)&nbsp;<b>Roundtrip time (SCE_NP_MATCHING2_SIGNALING_CONN_INFO_Rtt) </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the time (in microseconds) required for a UDPP2P packet to make a roundtrip between connected peers. It is measured every 10 seconds when keep alive packets are exchanged. The average of the last six measurements is returned.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_2"><h4>
+(2)&nbsp;<b>Estimated bandwidth (SCE_NP_MATCHING2_SIGNALING_CONN_INFO_Bandwidth) </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the minimum bandwidth (in bits/second) that is estimated on the path from the local host to the peer. A technique known as "Packet Pair" is used to calculate the minimum bandwidth from the difference in arrival times between two packets that were sent consecutively. Immediately after the connection is established, measurements are performed 10 times consecutively and then at 1-minute intervals. The median value of the last 10 measurements is returned.<br>An estimate based on the Packet Pair technique may be less than the actual bandwidth because it is affected by other traffic. Also, since the bandwidth that is obtained is not necessarily available, this value should only be used as a rough estimate of circuit quality.<br>Note that when the bandwidth travels through an asymmetric circuit such as an ADSL circuit, the value from the local host to the peer and the value from the peer to the local host may differ significantly. For example, between peer A, which is connected to an optical fiber circuit, and peer B, which is connected to an ADSL circuit, the value that can be obtained at peer B (B(A) will be less than the value that can be obtained at peer A (A(B), because the former is rate-limited by the ADSL upstream bandwidth.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_3"><h4>
+(3)&nbsp;<b>Peer NP ID (SCE_NP_MATCHING2_SIGNALING_CONN_INFO_PeerNpId) </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the NP ID of the connected peer.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_4"><h4>
+(4)&nbsp;<b>Peer IP address and port number (SCE_NP_MATCHING2_SIGNALING_CONN_INFO_PeerAddress) </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the IP address and port number of the connected peer (destination). These are the same values as <i>peer_addr</i> and <i>peer_port</i>, which can be obtained using <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_5"><h4>
+(5)&nbsp;<b>Local IP address and port number as seen from a peer (SCE_NP_MATCHING2_SIGNALING_CONN_INFO_MappedAddress) </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the local IP address and port number as seen from the connected peer (destination). For a connection between peers A and B, the local IP address and port number as seen at peer A are the same as the peer IP address and port number seen at peer B.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_6_6"><h4>
+(6)&nbsp;<b>Packet loss rate (SCE_NP_MATCHING2_SIGNALING_CONN_INFO_PacketLoss) </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the packet loss rate (percent) when UDPP2P packets make a roundtrip between connected peers. It is measured every 10 seconds when keep alive packets are exchanged. The average of the last six measurements is returned.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_7">
+<h3>
+<a href="#Heading3_7"> 7. </a>7 
+<!-- hp1 --><b>Network Information</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP matching 2 utility provides <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetLocalNetInfo">sceNpMatching2SignalingGetLocalNetInfo</a>() and <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetPeerNetInfo">sceNpMatching2SignalingGetPeerNetInfo</a>() to obtain local network and peer network information. Network information can be obtained from the <a href="../network/NP_Matching2-Reference-English.htm#SceNpMatching2SignalingNetInfo">SceNpMatching2SignalingNetInfo</a> structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_1"><h4>
+(1)&nbsp;<b>Local IP address</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the IP address that was assigned to the interface.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_2"><h4>
+(2)&nbsp;<b>External IP address</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the IP address used for an Internet connection. When the connection passes through a NAT router, the address connecting the NAT router to the Internet is the external IP address. When the Internet connection is direct, the local and external IP addresses are the same.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_3"><h4>
+(3)&nbsp;<b>NAT characteristic type</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This classifies various NAT router characteristics according to the level that can be supported by the NAT traversal feature of the NP signaling utility.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Unknown&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;This indicates that the NAT characteristic type is being determined or that determination failed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Type 1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Local and external IP addresses are the same&nbsp;&nbsp;<br>&nbsp;&nbsp;(With a direct internet connection)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Type 2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Local and external IP addresses differ, and the following are true&nbsp;&nbsp;<br>&nbsp;&nbsp;- External port assignment does not depend on communication destination&nbsp;&nbsp;<br>&nbsp;&nbsp;- NP port status is open&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Type 3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Other than types 1 or 2 &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_4"><h4>
+(4)&nbsp;<b>UPnP status</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This indicates the UPnP port mapping status.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>UPnP Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Unknown&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Port mapping is currently being performed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Disabled&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The UPnP router setting is disabled, UPnP is not supported, or port mapping failed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Enabled&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ports were successfully mapped&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_5"><h4>
+(5)&nbsp;<b>NP port status</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This indicates whether local UDP port 3658 (port set by UPnP port mapping when UPnP is enabled) is accessible from the Internet.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>NP Port Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Closed&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cannot be accessed from the Internet&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Open&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Accessible from the Internet.&nbsp;&nbsp;<br>&nbsp;&nbsp;Even when the connection passes through a NAT router, this port can be accessed from the Internet via UPnP port mapping .&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_7_7_6"><h4>
+(6)&nbsp;<b>NP port number</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This indicates the UDP port number to which the NP port status applies. Although the default port number is 3658, when UPnP is enabled, the port number set by UPnP port mapping is returned.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>UDPP2P Protocol</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>Characteristics</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSPNET provides the UDPP2P protocol as a protocol for P2P communication. The UDPP2P protocol introduces virtual port numbers to enable a UDP port number to be shared between multiple sockets.<br>To achieve uniformity in the design, the P2P communication feature of the NP matching 2 utility limits the local port number that is used to one pre-determined port number. Therefore, the UDPP2P protocol is used to perform P2P communication by sharing one port number between multiple sockets.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>Socket Type</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use the UDPP2P protocol, specify SCE_NET_INET_SOCK_DGRAM_P2P as the socket type when creating the socket.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_3">
+<h3>
+<a href="#Heading3_8"> 8. </a>3 
+<!-- hp1 --><b>Socket Address</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">There are multiple virtual ports for the UDPP2P protocol, and they are linked with one UDP port. Therefore, the socket address of an endpoint is expressed as a triplet consisting of the IP address, UDP port number, and virtual port number.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_3_1"><h4>
+(1)&nbsp;<b>SceNetInetSockaddrInP2p structure</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The socket address structure that is used with the UDPP2P protocol is <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a>. It is defined in pspnet/netinet/in.h.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a> {
+        <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> sin_len;
+        <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> sin_family;
+        <a href="../kernel/Types-Reference-English.htm#SceUShort16">SceUShort16</a> sin_port;
+        struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetInAddr">SceNetInetInAddr</a> sin_addr;
+        <a href="../kernel/Types-Reference-English.htm#SceUShort16">SceUShort16</a> sin_vport;
+        <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> sin_zero[6];
+};
+
+</font></pre></div>
+<div style="margin-left:67px;">The member sin_vport for specifying the virtual port number has been added to the <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetSockaddrIn">SceNetInetSockaddrIn</a> structure.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_3_2"><h4>
+(2)&nbsp;<b>UDP local port number</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The NP signaling utility has reserved 3658 as the UDP local port number for performing P2P communications. To communicate using UDPP2P, be sure to specify 3658 as the UDP local port number.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_3_3"><h4>
+(3)&nbsp;<b>Virtual ports</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English009.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 9  Virtual Ports</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">A virtual port number, which is represented as 16 bits, has a value from 0 to 65535. Virtual port numbers are assigned as follows.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> 0, 65535<br>Not used
+<li> 1 to 32767<br>Used by users
+<li> 32768 to 65534<br>Used by the system
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_4">
+<h3>
+<a href="#Heading3_8"> 8. </a>4 
+<!-- hp1 --><b>Packet Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An 8-byte UDPP2P protocol tag is assigned at the beginning of the UDP protocol payload. Otherwise, the packet format is based on the UDP format.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_5">
+<h3>
+<a href="#Heading3_8"> 8. </a>5 
+<!-- hp1 --><b>Socket APIs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">BSD socket APIs can be used for UDPP2P protocol socket APIs. The operations that can be performed are similar to those that can be performed when using a UDP socket.<br>However, because the local port number used has been decided, be sure to call <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetBind">sceNetInetBind</a>() to bind the address to the socket before using it.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_6">
+<h3>
+<a href="#Heading3_8"> 8. </a>6 
+<!-- hp1 --><b>Data Size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The maximum data size that can be sent using the UDPP2P protocol is 9216 bytes.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_7">
+<h3>
+<a href="#Heading3_8"> 8. </a>7 
+<!-- hp1 --><b>Data Encryption and Signatures</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The UDPP2P protocol supports data encryption and signature generation and verification. Keys are exchanged when a signaling connection is established, and they can be used in ACTIVE state.<br>To execute protocol encryption and signature generation and verification, specify the appropriate socket option in <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSetsockopt">sceNetInetSetsockopt</a>() (the level is SCE_NET_INET_SOL_SOCKET). Each option can be specified independently.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_1"><h4>
+(1)&nbsp;<b>SCE_NET_INET_SO_USECRYPTO</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Data that is sent or received using the relevant socket is encrypted and decrypted. When it is encrypted, an 8-byte initial vector is attached to one packet. If no key corresponding to the packet has been set, the packet, which was not encrypted when it was received, is implicitly discarded.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_2"><h4>
+(2)&nbsp;<b>SCE_NETI_INET_SO_USESIGNATURE</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A signature is generated and verified for data that is sent or received using the relevant socket. An 8-byte signature is attached to one packet. If no key corresponding to the packet has been set, or if the signature verification fails when the packet is received, or if no signature has been attached, the packet is implicitly discarded.<br><br>Encryption and signature generation can also be specified for each packet. In this case, a flag is specified in <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSend">sceNetInetSend</a>(), <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSendto">sceNetInetSendto</a>(), or <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSendmsg">sceNetInetSendmsg</a>(). Each flag can be specified independently.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_3"><h4>
+(3)&nbsp;<b>SCE_NET_INET_MSG_USECRYPTO</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Send data is encrypted. The operation and format are the same as when SCE_NET_INET_SO_USECRYPTO is specified.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_8_7_4"><h4>
+(4)&nbsp;<b>SCE_NET_INET_MSG_USESIGNATURE</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">A signature is attached to the send data. The operation and format are the same as when SCE_NET_INET_SO_USESIGNATURE is specified.<br><br>When the above flags are specified for a socket for which SCE_NET_INET_SO_USECRYPTO or SCE_NET_INET_SO_USESIGNATURE was already set, the encryption and attachment of a signature to the packet are ultimately determined by the logical OR of the respective options.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>TCP over UDPP2P</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>Characteristics</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP over UDPP2P encapsulates TCP segments using the UDPP2P protocol. This implements TCP communication between peers that have established a connection using the NP matching 2 utility. This enables reliable, connection-oriented communication, which could not be achieved with the conventional UDPP2P protocol.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>Socket Type</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To use TCP over UDPP2P, specify SCE_NET_INET_SOCK_STREAM_P2P as the socket type when creating the socket.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_3">
+<h3>
+<a href="#Heading3_9"> 9. </a>3 
+<!-- hp1 --><b>Socket Address</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The TCP port numbers of TCP over UDPP2P use the same space as regular TCP. However, a UDP port number is also needed to encapsulate TCP segments using the UDPP2P protocol. Therefore, the socket address of an endpoint is represented by a triplet consisting of an IP address, TCP port number (Port X), and UDP port number (Port Y).<br></div>
+
+<div align=center>
+<p>
+<img src="gif/NP_Matching2_System-Overview-English010.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 10  TCP over UDPP2P</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_9_3_1"><h4>
+(1)&nbsp;<b>SceNetInetSockaddrInP2p structure</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The socket address structure used by TCP over UDPP2P is <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a>.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a> {
+        <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> sin_len;
+        <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> sin_family;
+        <a href="../kernel/Types-Reference-English.htm#SceUShort16">SceUShort16</a> sin_port;	/* TCP port number  (Port X)  */
+        struct <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetInAddr">SceNetInetInAddr</a> sin_addr;
+        <a href="../kernel/Types-Reference-English.htm#SceUShort16">SceUShort16</a> sin_vport;	/* UDP port number for encapsulation (Port Y)  */
+        <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> sin_zero[6];
+};
+
+</font></pre></div>
+<div style="margin-left:67px;">sin_vport represents the UDP port number of the endpoint, which is used for encapsulation.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_9_3_2"><h4>
+(2)&nbsp;<b>UDP port number specification</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To perform TCP over UDPP2P communication, specify the UDP port number specified by sin_vport as follows.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> When specifying the connection destination (<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetConnect">sceNetInetConnect</a>(), etc.), specify the UDP port number that was obtained by <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>() for sin_vport.
+<li> When specifying the local port (<a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetBind">sceNetInetBind</a>(), etc.), specify 3658 for sin_vport. Port number 3658 is also used as the default when the address is not bound. 
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_4">
+<h3>
+<a href="#Heading3_9"> 9. </a>4 
+<!-- hp1 --><b>Packet Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A 4-byte TCP over UDPP2P tag is assigned at the beginning of the UDP protocol payload, and TCP segments are encapsulated in the subsequent payload part.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_5">
+<h3>
+<a href="#Heading3_9"> 9. </a>5 
+<!-- hp1 --><b>Socket APIs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">BSD socket APIs can be used with TCP over UDPP2P. The operations that can be performed are similar to those that can be performed when using a TCP socket.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_6">
+<h3>
+<a href="#Heading3_9"> 9. </a>6 
+<!-- hp1 --><b>Data Encryption and Signatures</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">TCP over UDPP2P also supports data encryption and signature generation and verification. Specify the SCE_NET_INET_SO_USECRYPTO or SCE_NET_INET_SO_USESIGNATURE socket option in <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSetsockopt">sceNetInetSetsockopt</a>() (the level is SCE_NET_INET_SOL_SOCKET). Each option can be specified independently.<br>The same socket options must be set at the sockets that are sending and receiving data. Communication cannot be performed between sockets with different socket options.<br>The data payload overhead that occurs when each option is specified is also similar as when the UDPP2P protocol is used.<br>Note that data encryption and signature generation cannot be specified for each packet.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_7">
+<h3>
+<a href="#Heading3_9"> 9. </a>7 
+<!-- hp1 --><b>Connection Reset</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a connection is destroyed, the TCP over UDPP2P connection that was established or is being established between corresponding peers is reset. The value -1 is returned to the socket API that is performing an operation on the relevant connection, ECONNRESET is returned to <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetGetErrno">sceNetInetGetErrno</a>(), and SCE_ERROR_ERRNO_ECONNRESET is returned to <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetGetPspError">sceNetInetGetPspError</a>().<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>Use Cases</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Use cases of an application that uses the NP matching 2 system will be provided as examples to explain how they can be realized.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_1">
+<h3>
+<a href="#Heading3_10"> 10. </a>1 
+<!-- hp1 --><b>Displaying the Server and World Names</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Statically bind the server IDs, world numbers and names, which have been set when developing the application, onto the application.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_2">
+<h3>
+<a href="#Heading3_10"> 10. </a>2 
+<!-- hp1 --><b>Performing Searches Using Information that is Unique to the Application as the Search Conditions</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_10_2_25">
+<div style="margin-left:40px;"><h4><b>When Player-vs.-player Game Play is Desired in Stage 3</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">For example, the application defines the external room search numeric attribute 1 of the room attributes as the attribute that represents stages.<br>Then, when the room creator creates a room for player-vs.-player game play to be performed in stage 3, he/she sets 3 as the value for the external room search numeric attribute 1 of the room attributes.<br>When another user searches for a room in which player-vs.-player game play can be performed in stage 3, the following is specified as the search condition.<br></div>
+<div style="margin-left:80px;">"External room search numeric attribute 1 of the room attributes == 3"<br></div>
+<div style="margin-left:67px;">This room search will obtain a list of rooms in which player-vs.-player game play can be performed in stage 3.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_10_2_26">
+<div style="margin-left:40px;"><h4><b>Performing a Room Owner Search</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The application defines the external room search binary attribute 1 of the room attributes as the attribute for representing the room owner.<br>Room creators will then create rooms with their own Online IDs set as the external room search binary attribute 1 of the room attributes.<br>If the user performing the search specifies the Online ID as the search condition, he/she will be able to obtain the room for which the user with the specified Online ID is the room owner.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_3">
+<h3>
+<a href="#Heading3_10"> 10. </a>3 
+<!-- hp1 --><b>Reserving Some Room Slots (Function Equivalent to the Private Slots of the NP Matching 1)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Room slots can be reserved by setting a room password if no room group was created when the room itself was created. In a normal room, which is not a group room, the room password can be enabled or disabled per slot.<br><br>For slots with the room password enabled, only users with the matching room password will be able to join. Use the invitation message, for example, to notify a user of the room password by which he/she will be able to enter a reserved slot in the room.<br><br>If users who have been granted permission to enter the room without a password have been set when the room was created, those users will still be able to join the reserved slots without a password.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_4">
+<h3>
+<a href="#Heading3_10"> 10. </a>4 
+<!-- hp1 --><b>Prohibiting Users on the Block List from Joining a Room</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Use the API of the NP library to obtain the users registered on the block list and specify them when creating a room to prohibit them from joining it.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_5">
+<h3>
+<a href="#Heading3_10"> 10. </a>5 
+<!-- hp1 --><b>Performing Team-vs.-team Game Play (Using the Team ID of the Basic Room Member Information)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When dividing the members in a room into teams and performing team-vs.-team game play, the team ID of the basic room member information can be used.<br><br>Dividing members into teams is a process that is performed after the room is created. The application can exchange information necessary for the grouping using room messages and/or P2P communication. However, using the team ID of the basic room member information will enable the following operations.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Because a team ID is already defined as a member of the structure for representing room members, when it is updated, the change and the new value can be notified to all the other room members. 
+<li> When sending a room chat message or room message, when the team ID is specified for the destination, the message will only be sent to the room members with the specified team ID.
+<li> When using an AV chat 2 utility that supports NP matching 2, the team ID can be specified for the destination of an AV chat message as well.
+</ul></div>
+<div style="margin-left:50px;"><br>The team ID is an integer of 1 or more. The application must define the team ID as an integer of 1 or more, and set the team ID for a member when he/she joins the room, or any time after that.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>Development Process</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter explains the development of applications that use the NP matching 2 system - including the necessary procedure of registering its use, as well as how to use the server management tool for testing operation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_1">
+<h3>
+<a href="#Heading3_11"> 11. </a>1 
+<!-- hp1 --><b>Applying for Use</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_1_27">
+<div style="margin-left:40px;"><h4><b>PlayStation&reg;Network communication service request</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Select "PlayStation&reg;Network communication service request" on the PlayStation&reg;Network title registration page of the PSP&trade; Developer Network website, obtain an NP Communication ID, apply to use the matching server, and issue a configuration (number of worlds) request.<br>By default, the number of matching servers to be used is 1. When multiple matching servers are to be used, such as when it is assumed that there will be more than 10,000 simultaneous users, please check with SCE. Also, check with SCE when 10 or more worlds are to be used.<br><br>For details about applying for use, refer to the "PlayStation&reg;Network Communication Service Overview" document.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_1_28">
+<div style="margin-left:40px;"><h4><b>QA server registration</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When development is finished and you enter the QA stage, apply to use the QA server by selecting "PlayStation&reg;Network QA server registration" on the PlayStation&reg;Network title registration page. Plan to apply one week before submitting the master.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_2">
+<h3>
+<a href="#Heading3_11"> 11. </a>2 
+<!-- hp1 --><b>Server Management Tools</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">The PlayStation&reg;Network Server Management Tools are used to configure various types of server settings. Specific features are described below. For details about how to use these tools, refer to the "PlayStation&reg;Network SMT NP Matching 2 Tools Users Guide."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_29">
+<div style="margin-left:40px;"><h4><b>Change server status</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The server status can be changed to "busy," "maintenance," etc. Use this feature when an error occurs, to continue development while verifying behavior.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_30">
+<div style="margin-left:40px;"><h4><b>Register, examine, or delete prohibited users</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Users to be prohibited from using the server can be registered, examined, or deleted. Use this feature to verify behavior when prohibited users are actually registered after the title goes on sale.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_31">
+<div style="margin-left:40px;"><h4><b>Verify room</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A list of rooms that exist on the server can be verified from a web page. Also, various types of search conditions can be used to perform filtered searches.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_11_2_32">
+<div style="margin-left:40px;"><h4><b>Create dummy room</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">It is possible to create a dummy room, which cannot be entered. This feature enables multiple rooms to exist on the server in order to verify the search speed or validity of search results.<br>Room search processing using the matching feature has an extremely high computational cost. Therefore, it is recommended that the dummy room feature be used to verify search processing during the development stage.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_11_3">
+<h3>
+<a href="#Heading3_11"> 11. </a>3 
+<!-- hp1 --><b>Development Network Environment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NP matching 2 utility uses the following additional port numbers, in addition to the ports used by NP.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> TCP: 3478, 3479, 3480
+</ul></div>
+<div style="margin-left:50px;">Be sure to enable the above port numbers on the development network.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_12">
+<h2>
+ 12 <!-- hp --><b>Notes</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_1">
+<h3>
+<a href="#Heading3_12"> 12. </a>1 
+<!-- hp1 --><b>NAT Traversal Feature </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The NAT traversal feature implemented by the NP matching 2 utility is restricted by the NAT characteristics of the network environment (router) together with the peer with whom communication is taking place. Enablement of the NAT traversal feature is determined by a combination of the peer and the NAT characteristic type. The combinations of NAT characteristics that enable communication between the local host and peer host are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Peer&nbsp;Host</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;<b>Type&nbsp;1</b>&nbsp;</td>
+<td valign="top">&nbsp;<b>Type&nbsp;2</b>&nbsp;</td>
+<td valign="top">&nbsp;<b>Type&nbsp;3</b>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  bgcolor="#cccccc" valign="top">&nbsp;<b>Local&nbsp;Host</b>&nbsp;</td>
+<td valign="top">&nbsp;<b>Type&nbsp;1</b>&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English011.gif">&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English012.gif">&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English013.gif">&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<b>Type&nbsp;2</b>&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English014.gif">&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English015.gif">&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English016.gif">&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<b>Type&nbsp;3</b>&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English017.gif">&nbsp;</td>
+<td valign="top">&nbsp;<img src="gif/NP_Matching2_System-Overview-English018.gif">&nbsp;</td>
+<td valign="top">&nbsp;X&nbsp;</td>
+</tr></table>
+</div>
+<br>
+<div style="margin-left:50px;">Note that even for a combination marked with a <img src="gif/NP_Matching2_System-Overview-English019.gif">, the hosts still may not be able to communicate due to the behavior of the individual routers. Communication is not necessarily guaranteed for all router combinations.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_2">
+<h3>
+<a href="#Heading3_12"> 12. </a>2 
+<!-- hp1 --><b>Number of P2P Connections That Can be Handled Simultaneously</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The maximum number of P2P connections that can be handled simultaneously by the NP matching 2 utility is 64. If an attempt is made to establish more than 64 P2P connections, the SCE_NP_MATCHING2_SIGNALING_ERROR_TOO_MANY_CONN error will be returned, and the P2P connection will fail to be established.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_3">
+<h3>
+<a href="#Heading3_12"> 12. </a>3 
+<!-- hp1 --><b>UDP Local Port Numbers Used for UDPP2P and TCP over UDPP2P</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_3_33">
+<div style="margin-left:40px;"><h4><b>When UPnP is used</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When connected to a router that supports UPnP, use UPnP port mapping, which is one of the NAT traversal features. The default port number used is 3658, but if it is already in use, use any port between 49152 and 49166.<br>Although 3658 is specified as the UDP local port number used by UDPP2P, if a different port number was used by UPnP port mapping, overwrite the local port number within the kernel.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_3_34">
+<div style="margin-left:40px;"><h4><b>When UPnP is not used</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When connected to a router that does not support UPnP, the default port number used is 3658, but any of the short-lived ports (49167 to 65535) may be used according to the connection destination.<br>Although 3658 is specified as the UDP local port number used for UDPP2P, the UDP local port number can be overwritten within the kernel as necessary.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_12_4">
+<h3>
+<a href="#Heading3_12"> 12. </a>4 
+<!-- hp1 --><b>Port Numbers Specified in UDPP2P and TCP over UDPP2P </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When UDPP2P and TCP over UDPP2P are used, the following values are specified as the port number <i>sin_port</i> and virtual port number <i>sin_vport</i> in the <a href="../network/PSPNET_Inet-Reference-English.htm#SceNetInetSockaddrInP2p">SceNetInetSockaddrInP2p</a> structure.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_4_35">
+<div style="margin-left:40px;"><h4><b>UDPP2P</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>For <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetBind">sceNetInetBind</a>() at the Host</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>For <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetBind">sceNetInetBind</a>() at the Client</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetSendto">sceNetInetSendto</a>()</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_port</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Port number obtained by <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_vport</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game port &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game port&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game port&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_12_4_36">
+<div style="margin-left:40px;"><h4><b>TCP over UDPP2P</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>For <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetBind">sceNetInetBind</a>() at the Host</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>For <a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetBind">sceNetInetBind</a>() at the Client</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b><a href="../network/PSPNET_Inet-Reference-English.htm#sceNetInetConnect">sceNetInetConnect</a>()</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_port</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game port&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game port&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Game port&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sin_vport</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_PORT&nbsp;&nbsp;<br>&nbsp;&nbsp;(3658)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Port number obtained by <a href="../network/NP_Matching2-Reference-English.htm#sceNpMatching2SignalingGetConnectionStatus">sceNpMatching2SignalingGetConnectionStatus</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;"><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<html lang="en">
+<head>
+<title>libparse_URI-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libparse_uri Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_uri is a library which provides functionality for parsing and building URIs as defined in RFC2396, and for performing escape/unescape processing on strings which cannot be used in URIs. Although libhttp is mainly used internally, it can be used independently as well.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libparse_uri.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_uri_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">devkit/sample/net/libhttp/parse_uri/<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Load the libparse_uri module using the module utility API.<br>No particular initialization is necessary in order to use libparse_uri.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>String Escape Processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The characters which can be used in URIs are letters, numerals, some symbols ("-", "_", ".", "!", "~", "*", "'", "(", ")"), and reserved characters (";", "/", "?", ":", "@", "&amp;", "=", "+" , "$", ",").<br>In order to use characters other than these, or to use reserved characters in other than certain set locations, string escape processing is required. For further details, please refer to Appendix A of Request for Comments (RFC) 2396.<br><br>Escape processing can be performed on strings using a procedure such as the following. However, please note that since memory is not allocated within libparse_uri, the application must allocate memory for the output.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceSize	malloc_size;
+u_char	*plain =&quot;@=+/&quot;;
+u_char	*escape;
+
+<a href="../network/libparse_URI-Reference-English.htm#sceUriEscape">sceUriEscape</a>(NULL, &amp;malloc_size, 0, plain);
+escape = (u_char*)malloc (malloc_size); 
+<a href="../network/libparse_URI-Reference-English.htm#sceUriEscape">sceUriEscape</a>(escape, NULL, malloc_size, plain);
+</font></pre></div>
+<div style="margin-left:67px;"><br>By using the <a href="../network/libparse_URI-Reference-English.htm#sceUriEscape">sceUriEscape</a>() function in the above manner, string escape processing is performed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>String Unescape Processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Escaped strings can be decoded using a procedure such as the following. However, please note that since memory is not allocated within libparse_uri, the application must allocate memory for the output.<br></div>
+<div style="margin-left:50px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceSize	malloc_size;
+u_char	*escape = &quot;%40%3d%2b%2f&quot;;
+u_char	*plain;
+
+<a href="../network/libparse_URI-Reference-English.htm#sceUriUnescape">sceUriUnescape</a>(NULL, &amp;malloc_size, 0, escape );
+plain = (u_char*)malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-English.htm#sceUriUnescape">sceUriUnescape</a> (plain, NULL, malloc_size, escape);
+
+</font></pre></div>
+<div style="margin-left:67px;">By using the <a href="../network/libparse_URI-Reference-English.htm#sceUriUnescape">sceUriUnescape</a>() function in the above manner, string unescape processing is performed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>URI Parsing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">URIs with schemes having the structure shown below can be parsed.<br><br>&lt;scheme&gt;://&lt;username&gt;:&lt;password&gt;@&lt;hostname&gt;:&lt;port&gt;/&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;<br>&lt;scheme&gt;:&lt;username&gt;@&lt;hostname&gt;<br><br>Technically, the latter of these is invalid in RFC 2396, but is parseable in order to achieve compatibility with expressions such as &lt;mailto:foo@foo.com&gt;. Parsing of URIs without a scheme (i.e., relative URIs) is not supported.<br><br>URI strings can be parsed using a procedure such as the following. However, please note that since memory is not allocated within libparse_uri, the application must allocate memory.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+u_char	*uri = &quot;http://foo.com:443?hoge=1#test&quot;;
+void	*pool;
+SceSize	malloc_size;
+<a href="../network/libparse_URI-Reference-English.htm#SceUriElement">SceUriElement</a>	element;
+
+<a href="../network/libparse_URI-Reference-English.htm#sceUriParse">sceUriParse</a>(NULL, uri, NULL, &amp;malloc _size, 0);
+pool = malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-English.htm#sceUriParse">sceUriParse</a>(&amp;element, uri, pool, NULL, malloc_size);
+
+printf(&quot;scheme = %s\n&quot;, element.scheme);		//&quot;http&quot;
+printf(&quot;hostname = %s\n&quot;, element.hostname);	//&quot;foo.com&quot;
+printf(&quot;port = %d\n&quot;, element.port);		//443
+printf(&quot;path= %s\n&quot;, element.path);		//&quot;&quot;
+printf(&quot;query = %s\n&quot;, element.query);		//&quot;?hoge=1&quot;
+printf(&quot;fragment = %s\n&quot;, element.fragment);	//&quot;#test&quot;
+</font></pre></div>
+<div style="margin-left:67px;"><br>By using the <a href="../network/libparse_URI-Reference-English.htm#sceUriParse">sceUriParse</a>() function in the above manner, URI parsing is performed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>URI Building</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">URI strings are created from elements specified in <a href="../network/libparse_URI-Reference-English.htm#SceUriElement">SceUriElement</a>. URIs are created according to the following rules. The opaque flag is determined based solely on the existence of two consecutive slashes immediately following the scheme.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> If the <i>opaque</i> flag is SCE_TRUE<br>&lt;scheme&gt;:&lt;username&gt;:&lt;password&gt;@&lt;hostname&gt;?&lt;port&gt;/&lt;path&gt;&lt;query&gt;#&lt;fragment&gt;
+<li> If the <i>opaque</i> flag is SCE_FALSE<br>&lt;scheme&gt;://&lt;username&gt;:&lt;password&gt;@&lt;hostname&gt;:&lt;port&gt;/&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;
+</ul></div>
+<div style="margin-left:67px;"><br>URI strings can be created using a procedure such as the following. However, please note that since memory is not allocated within libparse_uri, the application must allocate memory for the output.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	*uri;
+SceSize	malloc_size;
+<a href="../network/libparse_URI-Reference-English.htm#SceUriElement">SceUriElement</a>	element;
+memset(element, 0, sizeof(<a href="../network/libparse_URI-Reference-English.htm#SceUriElement">SceUriElement</a>));
+
+element.scheme = &quot;http&quot;;
+element.hostname = &quot;foo.com&quot;;
+element.port = 80;
+element.username = &quot;aa&quot;;
+element.password = &quot;bb&quot;;
+element.path = &quot;/cgi-bin/test.cgi&quot;;
+
+<a href="../network/libparse_URI-Reference-English.htm#sceUriBuild">sceUriBuild</a>(NULL, &amp;malloc_size, 0, &amp;element, SCE_URI_BUILD_WITH_ALL);
+uri = (u_char*)malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-English.htm#sceUriBuild">sceUriBuild</a>(uri, NULL, malloc_size, &amp;element, SCE_URI_BUILD_WITH_ALL);
+printf(&quot;Build URI = %s\n&quot;, uri);// &quot;http://aa:bb@foo.com/cgi-bin/test/cgi&quot;
+</font></pre></div>
+<div style="margin-left:67px;"><br>Elements of URIs can be specified in a manner such as the following. However, no checks are performed as to whether the created string is a valid URI.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	*uri;
+SceSize	malloc_size;
+<a href="../network/libparse_URI-Reference-English.htm#SceUriElement">SceUriElement</a>	element;
+memset(element, 0, sizeof(<a href="../network/libparse_URI-Reference-English.htm#SceUriElement">SceUriElement</a>));
+
+element.scheme = &quot;http&quot;;
+element.hostname = &quot;foo.com&quot;;
+element.port = 80;
+element.username = &quot;aa&quot;;
+element.password = &quot;bb&quot;;
+element.path = &quot;/cgi-bin/test.cgi&quot;;
+element.opaque = SCE_TRUE;
+
+<a href="../network/libparse_URI-Reference-English.htm#sceUriBuild">sceUriBuild</a>(NULL, &amp;malloc_size, 0, &amp;element,
+	SCE_URI_BUILD_WITH_USERNAME |
+	SCE_URI_BUILD_WITH_PASSWORD);
+uri = (u_char*)malloc(malloc_size);
+<a href="../network/libparse_URI-Reference-English.htm#sceUriBuild">sceUriBuild</a>(uri, NULL, malloc_size, &amp;element, 
+	SCE_URI_BUILD_WITH_USERNAME |
+	SCE_URI_BUILD_WITH_PASSWORD);
+printf(&quot;Build URI = %s\n&quot;, uri);// &quot;aa:bb&quot;
+</font></pre></div>
+<div style="margin-left:67px;"><br>By using the <a href="../network/libparse_URI-Reference-English.htm#sceUriBuild">sceUriBuild</a>() function in the above manner, URI strings can be created.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Required Stack Size When Calling the API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The required stack size when calling the libparse_uri API is 1024 bytes (SCE_PARSE_URI_LEAST_STACK_SIZE). If the stack size is not big enough, an <a href="../network/PSPNET_Error-Reference-English.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a> error will be returned.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

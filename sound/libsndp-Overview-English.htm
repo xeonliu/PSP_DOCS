@@ -1,0 +1,230 @@
+<html lang="en">
+<head>
+<title>libsndp-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsndp Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Specifications</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsndp is a library that enables sound data created with the PSP&trade; sound artist tools to be used by a title application. libsndp also provides a voice management system and SMF (Standard MIDI File) sequencer functions.<br>libsndp is built on top of libsas and operates the SAS with one unit of granularity.<br>Although one unit of granularity is normally 256 samples, (when initialized with <a href="../sound/libsndp-Reference-English.htm#sceSsInit">sceSsInit</a>()), one unit of granularity can also be specified (when initialized with <a href="../sound/libsndp-Reference-English.htm#sceSsInitWithGrain">sceSsInitWithGrain</a>()).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Processing Flow Summary</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following figure shows the overall libsndp processing flow.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libsndp-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Overall libsndp Processing Flow</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>libsndp invokes <a href="../sound/libsndp-Reference-English.htm#sceSsSynthesis">sceSsSynthesis</a>() to perform batch processing for commands it receives. <a href="../sound/libsndp-Reference-English.htm#sceSsSynthesis">sceSsSynthesis</a>() performs the desired operations and outputs the final waveform to an output buffer.<br>Since the unit of processing is the number of one unit of granularity samples, the contexts of the commands that libsndp receives are all lined up at the beginning of the output waveform.<br>Processing performed by the SMF sequencer is absorbed by <a href="../sound/libsndp-Reference-English.htm#sceSsSynthesis">sceSsSynthesis</a>() within an interval corresponding to a single unit of granularity. The results generated during that interval are also all lined up, at the beginning of the output waveform.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are used by libsndp.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsndp.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsndp.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;phd data header&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;sdphd.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Library Configuration</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsndp has the configuration shown below.<br>libsndp has functions for getting parameters from a PHD and functions for using libsas APIs to perform various operations.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/libsndp-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 libsndp Configuration</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_5">
+<h3>
+<a href="#Heading3_1"> 1. </a>5 
+<!-- hp1 --><b>Reference Materials</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For details about the sound data formats (PHD/PBD) used by libsndp, refer to the document entitled, "PHD/PBD Formats."<br>For details about SMF, refer to a commercially available standard reference manual.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Functions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Voice Management System</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To make the best use of a limited number of voices, libsndp has a system for automatically assigning the most suitable voice.<br>Although voices are basically assigned when they are not producing sound, if all voices are being used, the basic operation is to assign a voice from among the voices which are in the most suitable state for being assigned, based on the priorities that were set in the PHD.<br><br>Voice state is one criteria used to determine assignment. Voice states are ordered by assigned priority from highest to lowest.<br>The voice state can be referenced by the <a href="../sound/libsndp-Reference-English.htm#sceSsVoiceGetStatus">sceSsVoiceGetStatus</a>() libsndp function.<br>For details about each voice state, refer to the function reference.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>State</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Priority</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SNDP_VOICESTATUS_IDLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;High&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SNDP_VOICESTATUS_RELEASE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SNDP_VOICESTATUS_SUSTAIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SNDP_VOICESTATUS_BUSY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&darr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_SNDP_VOICESTATUS_NOTEON&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Low &nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Priorities are handled according to the following algorithm. If the priorities of all voices that are in a given candidate state are higher than the priority of the new sound to be generated, the next sequential state is examined. If the priorities of all voices end up being higher than the priority of the new sound to be generated, then the new sound will not be generated.<br><br>The group value of a PHD tone parameter provides a means of generating sound exclusively, among sounds within the same group. When sound is generated for a tone parameter that has a non-zero group value, the production of sound for any tone with that same group value is stopped, and production of the new sound is started. If the group value is 0, the group feature will be off.<br><br>The voice state changes when commands are executed because of commands that start and stop voice generation. Note that if <a href="../sound/libsndp-Reference-English.htm#sceSsSynthesis">sceSsSynthesis</a>() causes voice generation to be stopped, any affected voices will transition to IDLE state.<br>If sound generation is started, sustain = on is set, and sound generation is stopped for a given voice, the voice will transition to sustain state during the stop command. If the voice is already in sustain state, when sound generation is stopped, the voice will transition to RELEASE state.<br>However, when the operations performed for a voice consist of generating sound and stopping sound production (without setting sustain state), when <a href="../sound/libsndp-Reference-English.htm#sceSsSynthesis">sceSsSynthesis</a>() is executed, no sound will be produced.<br><br>The voice state in effect immediately before <a href="../sound/libsndp-Reference-English.htm#sceSsSynthesis">sceSsSynthesis</a>() is executed, is valid for all commands issued for that voice.<br>The voice management system maintains a state that is most appropriate for operating the SAS. This includes maintaining the state of commands issued for a voice and maintaining the conditions in which voices are assigned.<br>However, this is not necessarily the case when sound is produced by directly specifying a voice.<br><br>Note that when a voice is removed from libsndp management by <a href="../sound/libsndp-Reference-English.htm#sceSsVoiceSetReserveMode">sceSsVoiceSetReserveMode</a>(), the voice state will change to SCE_SNDP_VOICESTATUS_RESERVED and the voice will no longer be available to be assigned.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Sound Generation and Operations</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To generate sound, libsndp uses a key-on ID that must be set to identify the sound source.<br><br>The key-on ID is used to clearly identify a given sound source. This is important when you want to use note on to generate separate sounds all having the same tone parameters as an original sound.<br><br>For example, if three objects A, B, and C produce sound using the same tone parameters and you want to change the orientation of only sound A, you can assign different key-on IDs to A, B, and C, identify the sound producing voices from the key-on IDs, and perform separate operations for those voices.<br><br>Note that key-on IDs from 0x80000000 to 0xFFFFFFFF are reserved by libsndp.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>SMF (Standard MIDI File) Sequencer</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsndp provides internal SMF (Standard MIDI File) sequencer functions.<br><br>The SMF sequencer can conduct multiple performances simultaneously. However, note that if a large number of MIDI events are included during the same unit of granularity, processing will be delayed. For that reason, deleting events that are ignored by the SMF sequencer and shifting a large number of events by a suitable interval within the same unit of granularity are recommended.<br><br>Since libsndp uses an interval of one unit of granularity for controlling the SAS, a tempo of 60 BPM is approximately 172. If an SMF contains extremely short notes that are played at a fast tempo, the sound will be quantized.<br><br>Note that if a control change or pitch bend causes the final value of the pitch or volume to change suddenly at the end of the granularity interval, noise will be generated.<br><br>The SMF sequencer recognizes only supported MIDI events. Unsupported MIDI events are ignored.<br><br>The following events are supported.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Note off (8nH)
+<li> Note on (9nH) 
+<li> Control change (BnH) <br>Channel volume (formerly main volume) (07H) <br>Panpot (0AH) <br>Expression controller (0BH) <br>Hold (damper pedal, sustain) (40H) <br>Data entry (MSB) (06H) <br>NRPN (MSB) (63H) 
+<li> Program change (CnH) 
+<li> Pitch bend change (EnH) 
+</ul></div>
+<div style="margin-left:50px;"><br>Note that the following functions can be used by NRPN.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>NRPN</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;B0H, 63H, 00H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set loop start&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;B0H, 06H, nnH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set loop count (if nn = 00h, loop continuously) &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;B0H, 63H, 01H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set loop end&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The loop count must be set between the loop start setting and loop end setting. Although multiple loops can be set, nested structures are not supported.<br>If there are multiple loop start settings before the loop end setting, only the last loop start setting will be valid.<br>Also, if loop end is set without setting a loop count, no looping will be performed.<br><br>To clearly indicate the initial sound to be produced, you must make sure that a program change is included before the first note on event.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

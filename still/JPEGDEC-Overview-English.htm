@@ -1,0 +1,226 @@
+<html lang="en">
+<head>
+<title>JPEGDEC-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+JPEG Decoder Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Overview and Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The JPEG Decoder library provides functions for decoding JPEG data. YCbCr is used as the color space format, and when specific values are used for color space sampling, functions are provided for converting the data to RGBA. Color conversion methods are also provided for use when speed is to be optimized (such as for video that uses Motion JPEG, etc.) and when picture quality is to be optimized (such as for still images or texture data), and the appropriate method can be selected.<br>Although the library does not provide functions for converting color spaces other than YCbCr to a color space for screen display, it does support the implementation of processing for stages prior to color conversion.<br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>Features</b><br><br></h4></div></a>
+
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Supports some files of the baseline profile
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> Color space dimensionality: 1 to 4, DCT precision: 8 bits, sequential scan
+<li> The space sampling of the first color dimension must be 1:1, and the space samplings of the second and subsequent color dimensions (if they exist) must all be the same.
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> Supports high-speed color conversion functions using dedicated hardware (255-level YCbCr, conversion from YUV420 color space sampling to RGBA) 
+<li> Supports other color conversion functions (255-level YCbCr, conversion from YUV422, YUV420 or YUV444 color space sampling to RGBA) 
+<li> Can also directly output RGBA data only, when YCbCr decoding results are not needed
+</ul>
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the JPEG decoder library.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scejpeg_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scejpeg_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;scejpeg.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">A utility function for loading AV-related modules must be used to load the JPEG decoder module itself. For details, refer to the Utility Overview.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Refer to the following USB Camera sample programs, which use the JPEG Decoder library to decode data from the USB Camera in their main routines.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_1"><h4>
+(1)&nbsp;<b>devkit/sample/usb/accessory/usbcam/simplestill/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This sample displays a JPEG image obtained from the USB Camera and saves it as a still image.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_3_2"><h4>
+(2)&nbsp;<b>devkit/sample/usb/accessory/usbcam/simplemovie/</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This sample plays JPEG images and PCM data that were obtained from the USB Camera.<br></div>
+<div style="margin-left:50px;"><br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Overview of Usage Procedures</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Loading of Required Module</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Use the module utility to load avcodec. For details, refer to the utility documentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Usage Procedure for Motion JPEG (when size is 720x480 or less)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following procedure should be used to perform decoding when optimizing for speed, such as when Motion JPEG is used.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Use <a href="../still/JPEGDEC-Reference-English.htm#sceJpegInitMJpeg">sceJpegInitMJpeg</a>() to initialize the library.</li>
+<li VALUE=2> Use <a href="../still/JPEGDEC-Reference-English.htm#sceJpegCreateMJpeg">sceJpegCreateMJpeg</a>() to specify the (maximum) size of the frame buffer for storing the decoded results.</li>
+<li VALUE=3> Use <a href="../still/JPEGDEC-Reference-English.htm#sceJpegDecodeMJpeg">sceJpegDecodeMJpeg</a> to perform decoding.</li>
+<li VALUE=4> Display frame buffer contents as needed.</li>
+<li VALUE=5> Repeat steps (3) and (4) an appropriate number of times.</li>
+<li VALUE=6> Perform library termination processing (<a href="../still/JPEGDEC-Reference-English.htm#sceJpegDeleteMJpeg">sceJpegDeleteMJpeg</a>(), <a href="../still/JPEGDEC-Reference-English.htm#sceJpegFinishMJpeg">sceJpegFinishMJpeg</a>())</li>
+</ol></div>
+<div style="margin-left:50px;">Note that this procedure can only be used to decode JPEG images whose size does not exceed 720x480 pixels and which use the same color space as when the color space sampling is YUV420 (dimensionality is 3 and dimensionalities of second and third color space samplings are 2x2). If these conditions are not satisfied, an error will be returned. Note that 255-level YCbCr is used for color conversion. These restrictions are due to constraints in the dedicated hardware that performs color conversion.<br>If the size of the JPEG image that is to be decoded in step (3) is greater than the size that is specified in step (1), an error will be returned.<br>In addition to using the Motion JPEG data obtained from decoding the YCbCr data for image recognition or effects, if the data is also to be displayed on-screen, the YCbCr data, which is intermediate data, is required. However, in this case, the above method is not appropriate for this purpose. Instead, in step (2), <a href="../still/JPEGDEC-Reference-English.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>() should be used to obtain the pre-color converted (YCbCr) data. At the same time, the application needs to provide an area for storing the decoded YCbCr result. If the size of the decoded YCbCr image data obtained by this function does not exceed 720x480, it can be converted to RGBA by using <a href="../still/JPEGDEC-Reference-English.htm#sceJpegMJpegCsc">sceJpegMJpegCsc</a>(). Note that the restriction on the frame buffer size that was set with the <a href="../still/JPEGDEC-Reference-English.htm#sceJpegCreateMJpeg">sceJpegCreateMJpeg</a>() function is ignored by the <a href="../still/JPEGDEC-Reference-English.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>() function (however, the size of the separate output buffer must be specified).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Usage Procedure for Large Image Files or Files Using a Color Space Other Than YUV420</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although the library can currently decode JPEG data for images larger than 720x480, or using a color space other than YUV420, it cannot perform color conversion quickly for this kind of data due to memory size and hardware constraints. To display this kind of data, after the user application allocates memory, use the <a href="../still/JPEGDEC-Reference-English.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>() function to obtain pre-color converted data, and then use the <a href="../still/JPEGDEC-Reference-English.htm#sceJpegCsc">sceJpegCsc</a>() function to convert it to RGB format for display.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Decoded Result Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The decoded and color converted result obtained from <a href="../still/JPEGDEC-Reference-English.htm#sceJpegDecodeMJpeg">sceJpegDecodeMJpeg</a>() and the color converted result obtained from <a href="../still/JPEGDEC-Reference-English.htm#sceJpegMJpegCsc">sceJpegMJpegCsc</a>() are stored in RGBA (32-bit) format as images that were raster scanned from top left to bottom right. The ( value is always 0. If the size of the original JPEG image does not fill the vertical and horizontal size specified for the frame buffer, the area for the part that is greater than the size of the JPEG image is not changed.<br>The Y, Cb, and Cr components of the decoded result obtained from <a href="../still/JPEGDEC-Reference-English.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>() are each stored in separate frame buffer areas as images that were raster scanned from top left to bottom right. The number of bits per pixel is 8 for each component (Y, Cb, and Cr). The frame buffer size for each color dimension is the pixel size of the original JPEG image rounded up to a multiple of 16 (in this case, pixel size is counted in terms of MCU units). Since the color space sampling for Motion JPEG is fixed at 4:2:0, the ratio of frame buffer sizes for the Y component and for the non-Y color spaces is 4:1. Also, the frame buffers for each dimension are arranged exactly in Y, Cb, Cr order with no gaps in between.<br>As an example, when a 320x240 JPEG file is decoded using YCbCr, the Y frame buffer will be the 76800 (= 320x240) bytes starting from the buffer address specified for the decoded output, the Cb frame buffer will be the 19200 (= 160x120) bytes starting after the end of the Y frame buffer, and finally the Cr frame buffer will be the 19200 bytes starting after the end of the Cb frame buffer.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Simultaneous Use With Movies</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although the PSP&trade; can handle AVC format movies, certain constraints apply to functions that can be used in the JPEG decoding library while AVC is in use (from the time when the libmpeg library initialization function is called until it is terminated). This is because of competition for resources between the two libraries.<br>To decode and display JPEG data while AVC is in use, be sure the application provides a YCbCr format frame buffer, calls the <a href="../still/JPEGDEC-Reference-English.htm#sceJpegDecodeMJpegYCbCr">sceJpegDecodeMJpegYCbCr</a>() function to perform decoding, and uses the <a href="../still/JPEGDEC-Reference-English.htm#sceJpegMJpegCsc">sceJpegMJpegCsc</a>() function to perform color conversion.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Data Without a DHT Segment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Depending on the type of Motion JPEG data, the JPEG data may not contain a Huffman code definition segment (DHT segment), and in this case, the JPEG standard recommended Huffman code will normally be used. To decode this kind of data, specify <a href="../still/JPEGDEC-Reference-English.htm#SCE_JPEG_MJPEG_WITHOUT_DHT">SCE_JPEG_MJPEG_WITHOUT_DHT</a> for the <i>omitDht</i> argument when calling the Motion JPEG decoding function. When this argument is specified and the data contains no DHT segment, the recommended table will be used. If the data contains a DHT segment, the contents of that table will be used. Note that when <a href="../still/JPEGDEC-Reference-English.htm#SCE_JPEG_MJPEG_WITHOUT_DHT">SCE_JPEG_MJPEG_WITHOUT_DHT</a> is specified, the time required for JPEG decoding will increase slightly. Therefore, do not set this parameter recklessly.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>I/O Data Alignment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although the alignment of a pointer to the input data of a decoding API can be freely set, performance can be improved if the data is aligned on a 64-byte boundary whenever possible. However, performance will not be improved if the data is specifically copied for alignment.<br><br>A pointer to the output buffer of a decoding and color conversion function must have 64-byte alignment. If it does not, an error will be returned.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Handling Image Sizes That are Not Integer Multiples of the MCU Size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When JPEG data which has a vertical and horizontal image size that is not exactly a multiple of the MCU size is decoded, data will be expanded to a multiple of the MCU size when it is output. In other words, when a 360x270 pixel JPEG image is decoded using YUV420 format (MCU size is 16x16 pixels), the YCbCr data that is obtained will be 368x272 pixels. When this data is color converted to RGBA, the size will also be 368x272 pixels. Therefore, a frame buffer of that size is required. Display this data making sure that the application deletes unnecessary parts as needed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Bugs in the Color Conversion Hardware</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a Motion JPEG function is used to decode JPEG data for which the width of the image is in the ranges of 97 to 112, 225 to 240, 363 to 368, …, 128n + 97 to 128n + 112 pixels (n is a non-negative integer), the buffer size in the horizontal direction must be allocated so that it is 16 pixels greater than the actual size (this is required for both the decoded result and the color conversion result). After the function is called, the values stored in the extra allocated area are undefined, so be sure to delete this part as necessary so that the data can be properly displayed.<br>This is due to errata for the dedicated hardware that performs the color conversion.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

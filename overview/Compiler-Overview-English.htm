@@ -1,0 +1,686 @@
+<html lang="en">
+<head>
+<title>Compiler-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&trade; Compiler Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This document describes the tools that are used to develop programs that will run on top of the PSP&trade; kernel.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>PSP&trade; Toolchain</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; toolchain uses a version of GCC that has been optimized for the PSP&trade;. <br>psp-gcc 1.x is based on GCC 3.3.x and psp-gcc 2.x is based on GCC 4.0.x.<br>The PSP&trade; toolchain includes the following core tools.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-ar&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Archiver&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-as&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Assembler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;C compiler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-g++&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;C++ compiler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-ld&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Linker&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-nm&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Outputs a list of symbols in an object&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Displays the size of each section in an object&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-objcopy&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Converts the format of an object file &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-objdump&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Displays information about an object file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-ranlib&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generates index information for an archive&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-prx-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Deletes symbol information from a PSP&trade; relocatable execution format (.prx) object.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-gnu-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Deletes symbol information from an elf-format relocatable object.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspfixup&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Converts an elf-format relocatable object to the PSP&trade; relocatable execution format (.prx).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psplibgen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generates &quot;stub&quot; information required for linking objects.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;prxinfo&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Displays information about PSP&trade; relocatable execution format (.prx) objects.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The recommended environments for running the PSP&trade; toolchain are CentOS 4.7 (x86) and Microsoft Windows Vista, both of which have been verified. Another Linux distribution which has been verified is CentOS 5.4. If you run the PSP&trade; toolchain on Microsoft Windows, you must run it under cygwin.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Program Development Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Compilation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In a traditional compile/link process, the address of the program is determined at the very end. However, to create programs in PSP&trade; relocatable execution format (.prx), the linker's partial link function is first used to collect all the object files together into a single object file, then the psp-fixup utility is executed to convert that file into a .prx file as shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Compiler-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Compiling a PSP&trade; Relocatable Program</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Typical commands used to compile a PSP&trade; relocatable program are shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gcc -c xxx1.c
+$ psp-gcc -c xxx2.c
+$ psp-ld -r -dc -o xyz.o xxx1.o xxx2.o -lyyy
+$ psp-fixup -o xyz.prx xyz.o
+
+</font></pre></div>
+<div style="margin-left:50px;">This can be simplified to:<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gcc -c xxx1.c
+$ psp-gcc -c xxx2.c
+$ psp-gcc -o xyz.prx xxx1.o xxx2.o -lyyy
+
+</font></pre></div>
+<div style="margin-left:50px;">and further reduced to a single command:<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gcc -o xyz.prx xxx1.c xxx2.c -lyyy
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>PSP&trade; Compiler</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The PSP&trade; compiler (psp-gcc) is a version of GCC optimized for the PSP&trade;. <br>psp-gcc 1.x is based on GCC 3.3.x and psp-gcc 2.x is based on GCC 4.0.x.<br>The features of the PSP&trade; compiler are given below.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Data Size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; compiler supports the following sizes of basic types in C.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Data Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Size (Bytes)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;double&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pointer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Register Usage</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">The PSP&trade; compiler generates code according to the MIPS ABI specification. The table below shows how the registers are used when performing function calls. Eight registers are used for passing arguments.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Register</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Use</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0 register (always holds 0)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Temporary use by the assembler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R2&nbsp;&nbsp;<br>&nbsp;&nbsp; - R3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return values from the function&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R4&nbsp;&nbsp;<br>&nbsp;&nbsp; - R11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Arguments passed to the function&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R12&nbsp;&nbsp;<br>&nbsp;&nbsp; - R15&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsaved registers (registers which are not saved/restored&nbsp;&nbsp;<br>&nbsp;&nbsp;before/after a function call)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R16&nbsp;&nbsp;<br>&nbsp;&nbsp; - R23&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Saved registers (registers which are saved/restored before/after a&nbsp;&nbsp;<br>&nbsp;&nbsp;function call)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R24&nbsp;&nbsp;<br>&nbsp;&nbsp; - R25&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Used by the compiler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R26&nbsp;&nbsp;<br>&nbsp;&nbsp; - R27&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Kernel-only registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R28&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GP (Global Pointer)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R29&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stack pointer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R30&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Frame pointer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R31&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return address register&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Predefined Options</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">The following options are defined whenever the compiler is executed.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-EL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generate little-endian code&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-G 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generate code that does not use the GP (Global Pointer)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mabi=eabi&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Use the integrated ABI&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-D__SCE__&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Define the symbol __SCE__&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-D__psp__&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Define the symbol __psp__&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-D__psp_gcc_=0x??????&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Define the symbol __psp__ for the version of psp-gcc&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mips2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generate code for the MIPS2 ISA&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-msingle-float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generate single-precision floating-point code&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-gdwarf-2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generate debugging information for DWARF2&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">For psp-gcc 2.x.x, the following option is also defined by default.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-fshort-wchar&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set the size of wchar_t to 16 bits&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Typical GCC Options Used During PSP&trade; Development</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following core gcc options may be useful when compiling a PSP&trade; program.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display filenames of objects and libraries that are read&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display details of the compilation process&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-nostdlib&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Suppress linking of standard libraries&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-print-libgcc-file-name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display full pathname of libgcc.a that is referenced by gcc&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-print-file-name=<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Find <i>file</i> along the gcc search path and display its full&nbsp;&nbsp;<br>&nbsp;&nbsp;pathname&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mstats&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display information such as the stack size of each&nbsp;&nbsp;<br>&nbsp;&nbsp;function during compilation (MIPS-specific option)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display names of header files that were included&nbsp;&nbsp;<br>&nbsp;&nbsp;during compilation&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>psp-gcc-Specific Options</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">psp-gcc supports several options in addition to those provided by GCC.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_1">
+<div style="margin-left:40px;"><h4><b>-mulsw / -mno-ulsw</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">-mulsw enables the compiler to generate code using unaligned load and store instructions (LWL, LWR, SWL, and SWR). -mulsw is the default setting.<br>If -mno-ulsw is specified, unaligned load and store instructions will not be generated. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_2">
+<div style="margin-left:40px;"><h4><b>-mext / -mno-ext</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">-mext enables the compiler to perform optimizations using the ALLEGREX CPU EXT and INS instructions. -mext is the default setting.<br>If -mno-ext is specified, these optimizations are not performed. <br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_3">
+<div style="margin-left:40px;"><h4><b>-mmad / -mno-mmad</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">-mmad enables the compiler to perform optimizations using the ALLEGREX CPU multiply and add instructions (MADD, MADDU, MSUB, and MSUBU). -mmad is the default setting.<br>If -mno-mmad is specified, these optimizations are not performed. <br><br></div>
+<div style="margin-left:50px;">psp-gcc 2.x provides	 the following additional options.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_4">
+<div style="margin-left:40px;"><h4><b>-minline-float-load/ -mno-inline-float-load</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When -minline-float-load is specified, the compiler attempts to perform an optimization whenever a real constant is to be loaded in an FPU or VFPU register, by loading a GPR with an immediate value and performing an inter-register transfer instead of generating a load instruction (LWC1 or LV.S) <br>If -mno-inline-float-load is specified, the optimization will not be performed. Note that enabling this optimization may cause an increase in code size. -mno-inline-float-load is the default setting.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_5">
+<div style="margin-left:40px;"><h4><b>-mfloat-varargs / -mno-float-varargs</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">-mfloat-varargs enables the compiler to generate strict ABI-compliant code when a function with a variable-length argument can receive the argument using an FPR.<br>If -mno-float-varargs is specified, the argument will not be received correctly using the FPR. -mno-float-varargs is the default setting,<br>In the MIPS EABI, FPRs are only used for variable-length arguments when a structure with a float member is passed as the argument within a structure having a size of 32 bits.<br><br></div>
+<div style="margin-left:50px;">psp-gcc provides the following additional option to enable VFPU intrinsics.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_6">
+<div style="margin-left:40px;"><h4><b>-menable-vfpu=m0-m7</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Places the VFPU registers under psp-gcc register allocation management so that VFPU intrinsics can be used. For details, refer to the psp-gcc VFPU Intrinsics Manual.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Subroutine Calls</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Individual parameter registers are allocated as follows (integer/floating-point).<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Parameter</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Register</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;general-purpose&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r4 - r11&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;floating point&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;f12 - f19&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Register specifications<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Parameter</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Register</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fixed 0 value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;volatile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r1 - r15, r24, r25&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;non-volatile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r16 - r23, r30&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kernel reserved&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r26, r27&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;gp (SDA base)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r28&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;stack pointer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r29&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;frame pointer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r30 (if needed)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;return address&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r31&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">(Stack alignment: 16 bytes)<br>(Homing area: none)<br><br></div>
+<div style="margin-left:50px;">If a structure is 32 bits or smaller, it is passed as a value, otherwise it is passed as a pointer. <br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Stack Frame</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Compiler-Overview-English002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Parameter Allocation for Registers</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Assume that the parameters of function calls are arranged from left (initial parameter) to right. <br>In this algorithm, FR contains the number of the next available floating-point register; GR contains the number of the next available general-purpose register; STARG is the address of the next available stack parameter.<br>The algorithm for allocating parameters to registers is as follows:<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_7">
+<div style="margin-left:40px;"><h4><b>INITIALIZE:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Set GR=r4 and FR=f12, and set STARG to point to &quot;Parameter Word 1&quot;<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_8">
+<div style="margin-left:40px;"><h4><b>SCAN:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">If there are no parameters, end the algorithm.<br>Else, select one of the following, depending on the next parameter type.<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> FLOAT:<br>If FR &gt; f19, go to STACK.<br>Else, load the parameter value into floating-point register FR, and increment FR to the next floating-point register (or register-pair in 32-bit mode).<br>Next, go to SCAN.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> SIMPLE ARG:<br>SIMPLE ARG is one of the following.
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> An integer having a simple type stored in a general-purpose register.
+<li> A pointer to an object of any type.
+<li> A structure or union small enough to be stored in a register (32 bits or less).
+<li> A large structure or union that is handled as a pointer to an object or copy of an object (see below if a copy is made).
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:80px;">If GR &gt; r11, go to STACK.<br>Else, load the parameter value into general-purpose register GR and increment GR to the next general-purpose register.<br>For values smaller than the register size, sign extend or zero extend the parameter, depending on whether the value is signed or not.<br>Next, go to SCAN.<br></div>
+<div style="margin-left:50px;"><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> DOUBLE and LONG LONG:<br>If GR &gt; r10, go to STACK.<br>Else, if GR is an odd number, increment GR to the next register.<br>Load the 64-bit LONG LONG value into the register-pair GR and GR+1.<br>Increment GR by 2, and go to SCAN.
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_9">
+<div style="margin-left:40px;"><h4><b>STACK:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Parameters that are not processed as above are passed via the calling stack frame according to the parameter language. As defined above, SIMPLE ARGs are assumed to be equal in size and alignment to that of a general-purpose register. If a SIMPLE ARG is smaller than the general-purpose register, it is sign extended or zero extended to the width of the general-purpose register.<br>float arguments are assumed to be equal in size and alignment to that of a floating-point register.<br>double and long long arguments are assumed to be 64-bits in size and alignment.<br>Always round up STARG to a multiple of the parameter's alignment requirements, and copy the argument in byte increments as STARG, STARG+1…STARG+size-1.<br>Set STARG to STARG+size and go to SCAN.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Passing Structures</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As described above, special code is executed to pass structures and unions, depending on their values (in this section, both structures and unions are referred to as structures). Structures that are small enough to be stored in a register, when that is either a single register or a register-sized stack-frame slot, are passed as values. Larger structs are processed by passing the address of the structure. If you want to pass a large structure as a value, create a copy of the structure.<br><br>Copies of large structures are created as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ANSI mode</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>K&amp;R mode</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Normal param&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;As needed,&nbsp;&nbsp;<br>&nbsp;&nbsp;Callee copies&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Caller copies&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Varargs (…) param&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Caller copies&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Caller copies&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Passing a large structure parameter in ANSI mode (passed normally, not with varargs) produces the same result as passing a copy of the structure. It is the callee's responsibility to preserve the meaning depending on the value that is passed.<br>This can be achieved by having the callee create a copy of the structure. However, the callee may also determine that there is no need to make a copy to produce the same result, in which case the callee may be able to avoid making a copy.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Varargs Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For structure parameters larger than a register, apart from the caller knowing that it needs to make a copy, there is no need to do anything special other than what is described above when handling varargs parameters.<br><br>Varargs macros set up a register storage area divided into two parts (one part for a general-purpose register, one for a floating-point register) and maintain pointers to these two areas and stack-parameter areas. The register-storage area is in-between the caller's stack-frame area and the callee's stack-frame area.<br><br>With a software floating-point implementation, only the general-purpose registers need to be saved. Because the saved area sits between two stack-frames, the saved register parameters are adjacent to the parameters that are passed on the stack. This can help simplify the varargs macros. Only one pointer is needed, and it can be incremented from the register-storage area to the caller's stack-frame.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Function Return Values</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Register</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2 - r3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;f0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;double&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2 - r3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;struct/union&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;see below&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Structures or unions contained in two general-purpose registers are returned as r2 (or r2-r3 if needed). These structures/unions are aligned within the register by the processor's endian-ness. That is, with big-endian processors, the first byte of the structure is returned as the most significant byte of r2; with a little-endian processor, the first byte is returned as the least-significant.<br>Large structures and unions, where the first argument is &quot;hidden,&quot; are processed by the caller passing a pointer to the space allocated to receive the return value.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>double</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">doubles are processed by floating-point implementations in software, and should be passed and returned as long long. This signifies that double is passed by an odd/even register pair. Similarly, a double is returned in r2-r3.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

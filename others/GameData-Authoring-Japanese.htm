@@ -1,0 +1,197 @@
+<html lang="jp">
+<head>
+<title>GameData-Authoring</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+iofilemgr_dnas形式ゲームデータオーサリングガイド
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>はじめに</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">このドキュメントは、弊社提供のiofilemgr_dnas形式の暗号化ファイル作成とアクセスの方法について説明するものです。ゲームデータインストールユーティリティでUMD&reg;からMemory Stick&trade;にインストールして、読み出し専用の暗号化ファイルとして使用することができます。<br><br>ゲームデータインストールユーティリティでインストールできるゲームデータファイルの形式はiofilemgr_dnas形式には限定されませんが、暗号化と電子署名による改竄検出が必須です。<br>またインストールされるデータの種別（内容）にも制限があります。Memory Stick&trade;へのゲームデータインストールの詳細については、下記のドキュメントを参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ゲームデータインストールユーティリティ
+</ul></div>
+<div style="margin-left:50px;"><br>オーサリングサービスの詳細については、下記のドキュメントを参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PlayStation&reg;Network SMT シンプルオーサリングサービスユーザガイド
+</ul></div>
+<div style="margin-left:50px;"><br>インストールされたiofilemgr_dnas形式暗号化ファイルにアクセスするための関数リファレンスは、下記のドキュメントを参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> iofilemgr_dnas形式ゲームデータ用API
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>オーサリングに必要なファイルの作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、iofilemgr_dnas形式の暗号化ファイルを作成するために必要な、以下のファイルについて説明します。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSP&reg;用コンテンツ情報ファイル（ICON0.PNGほか）
+<li> セキュリティID指定ファイル（SECURE_INSTALL_IDS.CSV）
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>PSP&reg;用コンテンツ情報ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;用コンテンツ情報ファイルは、Memory Stick&trade;にインストールされたゲームデータをPSP&reg;システムソフトウェアの画面に表示するために使用されるアイコン画像などのファイルです。以下の5つのうち、静止画アイコンファイルは必ず作成してください。他のコンテンツ情報ファイルは、オプションです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 静止画アイコンファイル：ICON0.PNG
+<li> 動画アイコンファイル：ICON1.PMF
+<li> コンテンツ説明画像ファイル：PIC0.PNG
+<li> コンテンツ情報背景画像ファイル：PIC1.PNG
+<li> BGMファイル：SND0.AT3
+</ul></div>
+<div style="margin-left:50px;">各ファイルのフォーマットや作成方法などの詳細に関しては、別ドキュメント「ゲームデータインストールユーティリティ」概要の「コンテンツ情報ファイル」の項目を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>セキュリティID指定ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">iofilemgr_dnas形式でゲームデータを暗号化するためには、各ファイルに対して暗号化の鍵となるセキュリティIDを指定する必要があります。ゲームデータを複数のファイルから構成する場合、各ファイルに異なるセキュリティIDを設定することで、ユーザがファイルをリネームして差し替えた場合などに容易にエラーとして検出することができます。<br>セキュリティID指定ファイルでは、ファイル名と、そのファイルに適用するセキュリティID（プレフィクス"0x"に続けて16進ダンプ形式で16バイト分の32文字）のペアをCSV形式で記述します。セキュリティIDの値は自由に決めることができますが、不正なファイルアクセスを防止する秘密鍵の役目もあるので、質のよい乱数で生成するなど推測されにくい値を指定してください。記述例を下記に示します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>FILE1.DAT, 0x291bf0d31b1c7b986ac012718157233b
+FILE2.DAT, 0x71fd9eb933274a50131294ea65ecacf0
+FILE3.DAT, 0x978ddcf24c3f15cfa7710646de344fe4
+…
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>パッケージングと動作テスト</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、用意したファイルをまとめる手順と、それを用いてオーサリングする手順について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ZIPアーカイブの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">準備したファイルを以下に示すディレクトリ構成にまとめてください。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/GameData-Authoring-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  オーサリング用のディレクトリ構成</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">パッケージのルートディレクトリの直下に、「PSP_INSDIR」という名前のサブディレクトリを作成して、暗号化するゲームデータを配置します。<br>同様に、「PSP_CONT」という名前のサブディレクトリを作成して、PSP&reg;用コンテンツ情報ファイル群を配置します。最後に、ルートディレクトリの直下にSECURE_INSTALL_IDS.CSVという名前で、セキュリティID指定ファイルを配置してください。<br><br>このようなディレクトリ全体をZIP形式でアーカイブしてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_1">
+<div style="margin-left:40px;"><h4><b>Linuxコマンドの実行例</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>% zip -ry GAMEDATAINSTALL_SAMPLE.ZIP .
+
+</font></pre></div>
+<div style="margin-left:67px;">devkit/sample/fileio/iofilemgr_dnas/authoring_sample/ にこのZIPアーカイブのサンプルがありますので、参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>オーサリング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">弊社が提供するシンプルオーサリングサービスを用いて、作成したZIPアーカイブでオーサリングを行ってください。シンプルオーサリングサービスの利用方法の詳細は、「PlayStation&reg;Network SMT シンプルオーサリングサービスユーザガイド」ドキュメントを参照してください。<br>オーサリングの結果はZIPアーカイブしたファイルで、展開すると暗号化されたゲームデータファイルが得られます。<br>アップロードしたファイルに問題がある場合、下記のエラーコードが通知されます。下記以外のエラーが通知される場合、エラーコードと共に弊社にご連絡ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_2">
+<div style="margin-left:40px;"><h4><b>iofilemgr_dnas形式ゲームデータ オーサリングエラー一覧</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コード</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>原因／対処方法</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;60&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SECURE_INSTALL_IDS.CSVの読み込みに失敗しました。不正な記述が含まれています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;61&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;指定されたセキュリティIDが不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;62&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SECURE_INSTALL_IDS.CSVが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>動作テスト</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">オーサリングで得られた暗号化ファイルは、最終的にはUMD&reg;のdisc0:/PSP_GAME/INSDIR/に配置して、ゲームデータインストールユーティリティでMemory Stick&trade;のms0:/PSP/SAVEDATA/の下にインストールしてから使用する必要がありますが、開発初期の単体テスト段階では単にMemory Stick&trade;の任意のパスに暗号化ファイルをコピーすれば、動作テストが可能です。<br>暗号化ファイルのオープンには<a href="../others/GameData-Reference-Japanese.htm#sceIoOpenDNAS">sceIoOpenDNAS</a>()を使用します。通常のsceIoOpen()と比べると<i>secureInstallId</i>という引数が追加されているので、オーサリングでファイルごとに指定したセキュリティIDを16バイトのchar型配列（16進ダンプの文字列ではありません）で設定してください。<br>オープンに成功すると返り値としてfdが得られるので、以降は通常のファイルと同じようにsceIoRead()やsceIoLseek()でファイルアクセスすれば、読み出し時に自動的に署名検証と復号が行われます。アクセス終了したら必ずsceIoClose()でファイルを閉じてください。<br>devkit/sample/fileio/iofilemgr_dnas/file_read/ 以下にサンプルプログラムがあるので、参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>その他の注意点</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>暗号化ファイルのサイズと読み出し可能なデータサイズの相違について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">iofilemgr_dnas暗号化ファイルのサイズは、通常のファイルと同様にsceIoGetstat()を用いて求めることができますが、この方法では暗号化エンベロープも含んだファイル全体の情報を取得するため、有効なデータサイズより大きな値が得られることに注意が必要です。<br>実際に復号して読み出せるデータサイズは、暗号化する前の元データのサイズと同じです。sceIoRead()では、復号した元データのサイズまで読み出した時点でファイルの終端（EOF）になります。<br>実際にファイルを読むより前に読み出し可能なデータサイズを知りたい場合は、<a href="../others/GameData-Reference-Japanese.htm#sceIoOpenDNAS">sceIoOpenDNAS</a>()で得たファイルディスクリプタでsceIoLseek()を用いて、ファイル末尾までシークしたときの値を参照してください。iofilemgr_dnas暗号化ファイルに対するsceIoLseek()の実行は、読み出しの開始位置を設定するだけなので、実質的な処理負荷（データの復号や、物理的なヘッダの移動など）は発生しません。<br>なお、パッケージに表示する「インストールに必要なMemory Stick&trade;の空き容量」の計算は、暗号化エンベロープも含むファイルサイズを基準に計算してください。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

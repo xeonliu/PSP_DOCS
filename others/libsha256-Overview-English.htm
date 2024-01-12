@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>libsha256-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libsha256 Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libsha256 is a library used to generate digest values in the SHA-256 format defined by FIPS 180-2. It can be used, for example, in order to detect data corruption, or to prevent data tampering by applying HMAC (Keyed Hashing for Message Authentication).<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required in order to use libsha256.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsha256.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Static link library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsha256.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsha256_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsha256_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRX module file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libsha256.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>SHA-256 Digest Value Calculation (comprehensive)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><br>No particular initialization is required in order to use libsha256.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char digest[SCE_SHA256_DIGEST_SIZE];
+
+<a href="../others/libsha256-Reference-English.htm#sceSha256Digest">sceSha256Digest</a>(plaintext, length, digest);
+</font></pre></div>
+<div style="margin-left:67px;"><br>In the above manner, the <a href="../others/libsha256-Reference-English.htm#sceSha256Digest">sceSha256Digest</a>() function can be used at any time to perform digest value calculation.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>SHA-256 Digest Value Calculation (divided)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When calculating digest values for large amounts of data, hash calculations can be broken into parts.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> sha;
+u_char digest[SCE_SHA256_DIGEST_SIZE];
+
+<a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>(&amp;sha);
+<a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>(&amp;sha, plain1, len1);
+<a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>(&amp;sha, plain2, len2);
+<a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>(&amp;sha, plain3, len3);
+	:		Repeat any number of times
+<a href="../others/libsha256-Reference-English.htm#sceSha256BlockResult">sceSha256BlockResult</a>(&amp;sha, digest);
+</font></pre></div>
+<div style="margin-left:67px;"><br>Initialize the <a href="../others/libsha256-Reference-English.htm#SceSha256Context">SceSha256Context</a> structure using the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockInit">sceSha256BlockInit</a>() function, call the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockUpdate">sceSha256BlockUpdate</a>() function any number of times, and then finally obtain the digest value using the <a href="../others/libsha256-Reference-English.htm#sceSha256BlockResult">sceSha256BlockResult</a>() function.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

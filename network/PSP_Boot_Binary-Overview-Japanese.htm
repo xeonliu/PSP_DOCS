@@ -1,0 +1,294 @@
+<html lang="jp">
+<head>
+<title>PSP_Boot_Binary-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+外部起動用バイナリについて
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>PSP&reg;外部起動バイナリ概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;外部起動バイナリとは、ゲームシェアリングの機能を利用してPSP&reg;に送られ、実行される起動用プログラムのことを指します。<br>PSP&reg;外部起動バイナリは、あらかじめ所定の方法を利用して暗号化を行った上でパッケージングを行う必要があります。このドキュメントでは、PSP&reg;外部起動バイナリの作成方法を説明します。<br><br>正しく処理が行われた起動バイナリは、PSP&reg;間でアドホックモード通信を利用したゲームシェアリングで利用することができます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>外部起動バイナリのオーサリングについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">外部起動バイナリは、以下のようなプロセスを経てオーサリング処理が施されます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSP_Boot_Binary-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  起動プログラムのオーサリングフロー</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">オーサリング処理の手続きは、開発の段階ごとにふたつの種類が存在します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>開発フェーズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">開発フェーズでオーサリング処理された起動バイナリは、開発用Toolでのみ利用が可能です。<br>ライセンシ様は弊社に対してオーサリング処理のための申請を行うことで、公開されたサーバーを利用して起動ファイルのオーサリング処理を行うことができます。<br>オーサリングの方法としては、ウェブベースのものが用意されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>リリースフェーズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">リリースフェーズでオーサリング処理された起動バイナリは、通常のPSP&reg;及び開発ツールでの利用が可能です。<br>リリースフェーズ用のオーサリング処理をご希望の場合は、弊社までご連絡ください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>外部起動バイナリのパッケージングについて</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">外部起動用起動バイナリを作成するためには、次の手順でパッケージングを行ってください。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSP_Boot_Binary-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  パッケージングフロー</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>パッケージングにはpsp_boot_packagerツールを用います。このツールはLinux上で動作するコマンドです。<br><br>使用方法：<br></div>
+<div style="margin-left:67px;">外部起動用バイナリの生成：<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>psp_boot_packager c [PARAM.SFO] [boot program] [output file]
+
+</font></pre></div>
+<div style="margin-left:50px;">各ファイルについて以下の表にまとめます<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PARAM.SFO&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;外部起動用バイナリの内容を定義したシステムファイル。&nbsp;&nbsp;<br>&nbsp;&nbsp;タイトル名、年齢制限などが含まれます。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;boot program&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;起動プログラムファイル。（上図の"Authorized main program"）&nbsp;&nbsp;<br>&nbsp;&nbsp;このファイルはオーサリング処理を施された実行ファイルです。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;output file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;生成される外部起動用バイナリ。&nbsp;&nbsp;<br>&nbsp;&nbsp;結果を出力するファイル名を指定してください。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">システムファイルのテンプレートには、ゲームシェアリング用のものが用意されています。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> WLANGame_SystemFile_Config.sfc<br>ゲームシェアリング用のシステムファイルテンプレート
+</ul></div>
+<div style="margin-left:50px;"><br>システムファイルの各項目の詳細は次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>キー</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>種別</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値の説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定例</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TITLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームタイトル名&nbsp;&nbsp;<br>&nbsp;&nbsp;文字コード：UTF8&nbsp;&nbsp;<br>&nbsp;&nbsp;長さ：128bytesまで(NULL含む)&nbsp;&nbsp;<br>&nbsp;&nbsp;改行などはできません。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;大草原の戦士&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PARENTAL_LEVEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パレンタルロックレベル&nbsp;&nbsp;<br>&nbsp;&nbsp;設定値：0～11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;品番&nbsp;&nbsp;<br>&nbsp;&nbsp;使用可能文字：A～Z 0～9&nbsp;&nbsp;<br>&nbsp;&nbsp;長さ：13bytesまで(NULL含む)&nbsp;&nbsp;<br>&nbsp;&nbsp;必ずUMD&reg;のシステムファイルと&nbsp;&nbsp;<br>&nbsp;&nbsp;同じ設定してください。&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>※ハイフン"－"は入りません。</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ABCD01234&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_VERSION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プログラムバージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;以下のフォーマットで番号を自由に&nbsp;&nbsp;<br>&nbsp;&nbsp;設定できます。&nbsp;&nbsp;<br>&nbsp;&nbsp;フォーマット：X.XX（X…0～9）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.00&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;REGION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;（SystemFileEditorのデフォルト値&nbsp;&nbsp;<br>&nbsp;&nbsp;から変更する必要はありません。）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32768&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BOOTABLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブートするかしないか&nbsp;&nbsp;<br>&nbsp;&nbsp;（SystemFileEditorのデフォルト値&nbsp;&nbsp;<br>&nbsp;&nbsp;から変更する必要はありません。）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PSP_SYSTEM_VER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;実行に必要なPSP&reg;システムソフト&nbsp;&nbsp;<br>&nbsp;&nbsp;ウェアのバージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;（SystemFileEditorのデフォルト値&nbsp;&nbsp;<br>&nbsp;&nbsp;から変更する必要はありません。）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.50&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CATEGORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイルカテゴリ&nbsp;&nbsp;<br>&nbsp;&nbsp;（SystemFileEditorのデフォルト値&nbsp;&nbsp;<br>&nbsp;&nbsp;から変更する必要はありません。）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WG&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SHARING_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;起動バイナリが同一の場合、運用上&nbsp;&nbsp;<br>&nbsp;&nbsp;区別するためのIDです。0以上の&nbsp;&nbsp;<br>&nbsp;&nbsp;数値を設定してください。&nbsp;&nbsp;<br>&nbsp;&nbsp;DISC_IDが同じで複数のバージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;が発生する場合は、自由な値を設定&nbsp;&nbsp;<br>&nbsp;&nbsp;して区別するようにしてください。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>PSP&reg;システムソフトウェアバージョン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">起動バイナリを実行するPSP&reg;のシステムソフトウェアのバージョンが、起動バイナリが利用するランタイムライブラリのバージョンよりも古かった場合、この起動バイナリを実行することはできません。<br>この場合、受信側のPSP&reg;システムソフトウェアをアップデートする必要があります。<br><br>組み合わせ例：<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>起動成否</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Hardware Tool用パッケージ</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>リリースバージョン</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>PSP&reg;システムソフトウェア</b>&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>バージョン</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.00&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.50&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.00&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.00&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;○&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.50&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.50&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;×&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.50&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.00&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>外部起動バイナリのサイズ制限</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">外部起動バイナリ（図 2のbootable binary）のサイズは8MiB(8 × 1024 × 1024)に制限されています。このサイズのチェックは、ゲームシェアリングのバイナリ送信APIで行われています。<br>ただし、オーサリング処理では生成されるバイナリのサイズ制限をチェックしていません。システムファイルと合わせてパッケージングする際に、このサイズ制限を越えないようご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>モジュールのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;外部起動バイナリは、UMD&reg;に置かれるモジュールをロードすることができません。その代わりに、メモリに置かれたモジュールをロードするためのAPI、<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>()を利用することができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>&lt;modulemgr_gamesharing.h&gt;
+int <a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>(SceSize size, 
+					void *base, 
+					int flags, 
+					const <a href="../kernel/Module_Manager-Reference-Japanese.htm#SceKernelLMOption">SceKernelLMOption</a> *pOpt
+					);
+</font></pre></div>
+<div style="margin-left:50px;"><br><a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>()を利用するために必要なファイルは次の通りです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;modulemgr_gamesharing.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;modulemgr_user_stub_03.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ただし、ロードできるモジュールはdevkit/moduleおよびdevkit/kmoduleにあるものに限ります。また、<a href="../kernel/Module_Manager-Reference-Japanese.htm#sceKernelLoadModuleBufferUsbWlan">sceKernelLoadModuleBufferUsbWlan</a>()は、外部起動バイナリとして作られたプログラムからのみ、使用することができます。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

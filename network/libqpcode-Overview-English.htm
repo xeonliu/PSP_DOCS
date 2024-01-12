@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+<title>libqpcode-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libqpcode Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libqpcode is a library for performing quoted-printable encoding/decoding. Although it is mainly used by the libhttp library, the qpcode library can also be used independently.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files use qpcode.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode.prx&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libqpcode_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">devkit/sample/net/libhttp/qpcode/<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">No specific initialization is required to use libqpcode.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Encoding to quoted-printable format</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following procedure can be used to perform quoted-printable encoding of a byte sequence. Note that the application must allocate memory for output in advance since libqpcode does not allocate memory internally. The required memory size can be obtained by specifying NULL for the output destination argument of the <a href="../network/libqpcode-Reference-English.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	plain[SOURCE_LEN];
+u_char	*qp;
+SceSize	malloc_size;
+
+<a href="../network/libqpcode-Reference-English.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>(NULL, plain, SOURCE_LEN, &amp;malloc_size, 0);	//Obtain size
+qp = (u_char*)malloc(malloc_size);
+<a href="../network/libqpcode-Reference-English.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>(qp, plain, SOURCE_LEN ,NULL, malloc_size);	//Encode
+</font></pre></div>
+<div style="margin-left:67px;"><br>Quoted-Printable encoding is performed by using the <a href="../network/libqpcode-Reference-English.htm#sceQPrintableEncoder">sceQPrintableEncoder</a>() function as shown above.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Decoding from quoted-printable format</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following procedure can be used to decode a byte sequence that was encoded in quoted-printable format. However, the length of the input byte sequence including the terminating RFC822 newline code (consecutive CR and LF) must not exceed 78. Note that the application must allocate memory for output in advance since libqpcode does not allocate memory internally. The required memory size can be obtained by specifying NULL for the output destination argument of the <a href="../network/libqpcode-Reference-English.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>u_char	qp[SOURCE_LEN];
+u_char	*plain;
+SceSize	malloc_size;
+
+<a href="../network/libqpcode-Reference-English.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>(NULL, qp, SOURCE_LEN, &amp;malloc_size, 0);
+plain = (u_char*) malloc(malloc_size);
+<a href="../network/libqpcode-Reference-English.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>(plain, qp, SOURCE_LEN, NULL, malloc_size);
+</font></pre></div>
+<div style="margin-left:67px;"><br>Quoted-printable decoding is performed by using the <a href="../network/libqpcode-Reference-English.htm#sceQPrintableLineDecoder">sceQPrintableLineDecoder</a>() function as shown above.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2004 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

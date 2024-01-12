@@ -1,0 +1,247 @@
+<html lang="en">
+<head>
+<title>HeadphoneRemote-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Headphone Remote Control Driver Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Headphone Remote Control driver processes button inputs from a remote control (PSP-120, PSP-S120) that is connected to the headphone/mic jack of the PSP&trade;. On the PSP-2000 and PSP-3000 series systems, the driver also processes infrared button inputs from the cradle (PSP-S360, PSP-S410).<br><br>Its main functions are as follows:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Get button data from the headphone remote control.
+<li> Get button data from the infrared remote control
+<li> Deal with lost data from processing delays caused by button latching.
+<li> Detect the presence or absence of headphones, the remote control, and the mic.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the Headphone Remote Control driver.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;hpremote_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;hpremotedrv.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Using the Driver</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The Headphone Remote Control driver runs as a default module, so no explicit initialization is required.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Get data from the headphone remote control</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Unlike the controller, the headphone remote control only performs communication when there is a button operation. Because the system cannot acquire button data periodically through polling, the headphone driver latches the button data.<br><br>Latch information accumulates until it is read and cleared by <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmReadLatch">sceHprmReadLatch</a>(). Latch information is preserved even if the application does not call <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmReadLatch">sceHprmReadLatch</a>() periodically. <br>Every time the controller service samples the controller's input, latch information is recorded in the form of flags that accumulate button presses and releases. Calling the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmReadLatch">sceHprmReadLatch</a>() function fetches the data as bit-mask values, then initializes it. For further details on latch operation, see the description of <a href="../peripheral/HeadphoneRemote-Reference-English.htm#SceHprmLatch">SceHprmLatch</a>.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+int IsPlayButtonPressed(void)
+{
+    <a href="../peripheral/HeadphoneRemote-Reference-English.htm#SceHprmLatch">SceHprmLatch</a> latch;
+    int res;
+    int i;
+
+    res = <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmReadLatch">sceHprmReadLatch</a>(&amp;latch);
+    if (res &lt; 0) {
+    return (res);
+    }
+
+    if ((latch.uiPress &amp; <a href="../peripheral/HeadphoneRemote-Reference-English.htm#SCE_HPRM_KEY_PLAY_PAUSE">SCE_HPRM_KEY_PLAY_PAUSE</a>)!=0) {
+        // &gt;|| button pressed
+        return (1);
+    } else {
+        // &gt;|| button not pressed
+        return (0);
+    }
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>Note that latch information is a system-global resource, so it cannot be used from multiple threads simultaneously. To obtain latch information while it is being used by another thread, call secHprmlPeekLatch() to snoop the information. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Detecting Headphones, Remote Control and Mic</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The presence of headphones, the remote control and the mic can be found by using the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() , <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>(), and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() functions, respectively. Various cases are listed below. Note that on the PSP-3000 and PSP-N1000 series systems that have built-in microphones, the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() function always returns 1.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>When the headphones, remote control, cradle, and video output cable are not connected to the PSP&trade;</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">On the PSP-1000 and PSP-2000 series systems and the PSP&trade; development tool, when the headphones, remote control (PSP-120, PSP-S120), cradle (PSP-S360, PSP-S410), and video output cable are not in use, <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() will all return 0.<br>On the PSP-3000 and PSP-N1000 series systems, <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() will return 0, but <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() will return 1.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>When the headphones are connected directly to the PSP&trade; </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The headphones (the PSP-130 or other commercially available headphones) can be connected directly to the PSP&trade; without using the remote control (PSP-120, PSP-S120) or cradle (PSP-S360,PSP-S410). In this case, <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() will return 1.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>When only the remote control is connected to the PSP&trade;</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If only the remote control (PSP-120, PSP-S120) is connected to the PSP&trade;, <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() will return 1. Note that there will be a momentary delay after the remote control is connected before the state of <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() changes, and during that interval, calling <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() to check for a normal headphone will return 1. However, once the remote control has been recognized, checking for a connected headphone using <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() will return 0.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_4"><h4>
+(4)&nbsp;<b>When the headphones are connected to the PSP&trade; via the remote control</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the remote control (PSP-120, PSP-S120) is connected to the PSP&trade; while the headphones (PSP-130) are connected, <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() will both return 1. Note that there will be a momentary delay after the remote control is connected before the state of <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() changes..<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_5"><h4>
+(5)&nbsp;<b>When the headset is connected to the PSP&trade; via the remote control</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If the remote control (PSP-120, PSP-S120) is connected to the PSP&trade; while the headset (PSP-270) is connected, <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() will all return 1. Note that there will be a momentary delay after the remote control is connected before the states of <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() change.<br>On the PSP-3000 and PSP-N1000 series systems, <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() always returns 1.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_6"><h4>
+(6)&nbsp;<b>When a video output cable is connected to the PSP&trade;</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When either an AV cable (PSP-S150 or PSP-N150), S video cable (PSP-S160), D terminal cable (PSP-S170 or PSP-N170), or component AV cable (PSP-S180 or PSP-N180) is connected to a PSP-2000, PSP-3000 or PSP-N1000 series PSP&trade; system, the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() functions return 0. However, there is a period when the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() function returns 1 for a moment when the video output cable is connected. The <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() function returns 0 on a PSP-2000 series system and returns 1 on a PSP-3000 or PSP-N1000 series system.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_7"><h4>
+(7)&nbsp;<b>When only the cradle is connected to the PSP&trade;</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When only the cradle (PSP-S360, PSP-S410) is connected to a PSP-2000 or PSP-3000 series PSP&trade; system, the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() function will return 0. Although <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() indicates that there is no remote control, you can still read button information from the infrared remote control by calling <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmReadLatch">sceHprmReadLatch</a>(). Note that when the cradle is first connected, it will not be recognized immediately and during that time the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() function will return 1 because it appears to be a normal headphone. After the cradle is recognized and it is determined that no headphone is connected to the cradle, the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() function will return 0.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_8"><h4>
+(8)&nbsp;<b>When the headphones are connected to the PSP&trade; via the cradle</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the headphones (PSP-130) are connected to a PSP-2000 or PSP-3000 series PSP&trade; system via the cradle (PSP-S360, PSP-S410), the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() function returns 1 and the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() function returns 0. Although <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() indicates that there is no remote control, you can still read button information from the infrared remote control by calling <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmReadLatch">sceHprmReadLatch</a>().<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_9"><h4>
+(9)&nbsp;<b>When the remote control is connected to the PSP&trade; via the cradle</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the remote control (PSP-120, PSP-S120) is connected to a PSP-2000 or PSP-3000 series PSP&trade; system via the cradle (PSP-S360, PSP-S410), the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() function returns 1. Note that there may be a momentary delay after the remote control is connected before the state of <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() changes and during that time the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() function will return 1 because the remote control appears to be a normal headphone. After the remote control is recognized and it is determined that no headphones are connected to the remote control, the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() function will return 0.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_10"><h4>
+(10)&nbsp;<b>When the headphones are connected to the PSP&trade; via the cradle and the remote control</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the remote control (PSP-120, PSP-S120) with connected headphones (PSP-130) is connected to a PSP-2000 or PSP-3000 series PSP&trade; system via the cradle (PSP-S360, PSP-S410), the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() functions both return 1. Note that there may be a momentary delay after the remote control is connected before the state of <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() changes.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_11"><h4>
+(11)&nbsp;<b>When the headset is connected to the PSP&trade; via the cradle and the remote control</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the remote control (PSP-120, PSP-S120) with a connected headset (PSP-270) is connected to a PSP-2000 or PSP-3000 series PSP&trade; system via the cradle (PSP-S360, PSP-S410), the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>(), and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() functions all return 1. Note that there may be a momentary delay after the remote control is connected before the states of <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>() and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() change.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_12"><h4>
+(12)&nbsp;<b>When a video output cable is connected to the PSP&trade; via the cradle</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When either an AV cable (PSP-S150), S video cable (PSP-S160), D terminal cable (PSP-S170), or component AV cable (PSP-S180) is connected to a PSP-2000 or PSP-3000 series PSP&trade; system via the cradle (PSP-S360, PSP-S410), the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>(), <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsRemoteExist">sceHprmIsRemoteExist</a>(), and <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsMicrophoneExist">sceHprmIsMicrophoneExist</a>() functions all return 0. However, there is a period when the <a href="../peripheral/HeadphoneRemote-Reference-English.htm#sceHprmIsHeadphoneExist">sceHprmIsHeadphoneExist</a>() function returns 1 for a moment when a video output cable is connected.<br><br></div>
+<div style="margin-left:50px;">As of June 2009, the above combinations of headphones, remote control, mic and video output cable can be connected to the PSP&trade; headphone/mic jack, but we cannot guarantee that other combinations will not be available in the future. Please take care to avoid writing code based on the assumption that specific combinations will or will not be used.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Undefined Buttons</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Make absolutely no reference to undefined button bits.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>HOLD Switch</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the remote control's HOLD switch is in the HOLD state, the headphone driver will treat all buttons other than the HOLD switch as being in the released state. It is not possible to acquire button press states until the HOLD switch is released.<br>Note that the remote control's HOLD state and the PSP&trade; HOLD state are independent.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Simultaneous Button Pressing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The simultaneous pressing of multiple buttons on the remote control is not guaranteed to be detected. Although the current remote control (PSP-120) as of August 2006 can detect when two buttons are pressed, be careful not to write program code that expects multiple buttons to be pressed simultaneously or expects three or more buttons to be pressed simultaneously.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

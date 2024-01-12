@@ -1,0 +1,531 @@
+<html lang="en">
+<head>
+<title>Network_Infrastructure_Mode-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Network Infrastructure Mode Processing Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">When a title uses infrastructure mode, the operations it needs to perform will vary depending on how infrastructure mode is used and the functions that the title needs to support. The combination of utilities used will also be different.<br><br>This document describes the services related to infrastructure mode that a title can use, showing actual cases, along with the processing that a title needs to perform and the order of operations for each case.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Hot Spot Service</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A wireless LAN connection service that is provided in a town or in a store can be used for communication over the Internet only after an ID and password are provided to authenticate the connection, and only if that authentication is successful. This kind of service is referred to in this document as a hot spot service.<br>The PSP&trade; system provides two types of hot spot service authentication using an ID and password. One type uses the Internet browser to perform authentication, and the other type performs authentication via a connection with a preset ID and password, without using the Internet browser (note that this type can only be used with certain hot spot services). For the latter type, authentication is performed using the network configuration utility only. <br>Both types of authentication are described below.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Authentication Using the Internet Browser</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_1">
+<div style="margin-left:40px;"><h4><b> Processing Flow for Connecting to a Hot Spot Service</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When connecting to a hot spot service using the Internet browser utility, a title can use either of two types of processing flows depending on it's objective for using the network.<br>The first type of processing flow is when the title provides a browser for using the network. This case can be supported by merely starting up the Internet browser utility when the title is first started. When a network connection is required, the appropriate network configuration utility is called internally to perform connection operations. Figure 1 shows this processing flow.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1 Processing Flow When the Title's Objective is to Provide a Browser</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">The second type of processing is when the title uses the Internet to perform title-specific communication. In this case, after a connection is completed by using the network configuration utility, the Internet browser utility is started up to establish a hot spot connection.<br>One of the configuration items in the network configuration is "browser startup" (browser_available) and when the network configuration utility establishes a connection and ends, the "browser startup" setting in the relevant network configuration is returned to the title. If "start up" is selected as the setting, it is considered to be a connection to a hot spot service, and the title starts up the Internet browser utility. Figure 2 shows this processing flow.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2 Processing Flow When the Title's Objective is to Perform Title-Specific Communication</b><br>
+</div>
+<br>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_1_2">
+<div style="margin-left:40px;"><h4><b>Browser Operation When Connecting to a Hot Spot Service</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When a URL is accessed with the Internet browser utility, hot spot service authentication is performed using the Internet browser by forcibly redirecting the browser to an authentication page. After authentication succeeds, the redirection is canceled, and the browser can access an arbitrary URL. Note that when a connection is made from the hot spot service, a different page will be displayed even if the title had specified a URL. Also, after hot spot authentication succeeds, the title is not necessarily redirected automatically to the URL that was originally targeted. In this case, the target URL can be accessed by a user action such as pressing the home icon.<br><br>To authenticate the hot spot service, an access URL to be redirected to first when the Internet browser utility is started up is required. The Internet browser utility provides a function to "open the network connection confirmation page" for this purpose. When this function is used, the network connection confirmation page provided by SCEI is accessed when the Internet browser utility is started up.<br>The network connection confirmation page contains text indicating that the connection to the Internet was successfully made, and if the browser can connect to this page, the user can then be notified that communication with the Internet is possible. Since this page can be assigned to the Home icon, after authentication succeeds, a notification that the Internet connection was successfully made can be displayed by selecting the Home icon when the hot spot service page is displayed.<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3 Browser Operation When the Hot Spot Service is Used</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Authentication Using the Network Configuration Utility (Only Available for Certain Hot Spot Services)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Some hot spot services allow authentication to be performed without the use of the Internet browser. This is done through a special transaction in which the ID and password are exchanged. In this case, hot spot authentication is performed internally by the network configuration utility.<br>If the network configuration has an item for "wireless hot spot support" (wifisvc_available) and "supported" is set for this item, the following occurs:<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> When the network connection configuration is created, a menu for "wireless hot spots" becomes available so that an ID and password can be entered to create a setting.
+<li> When the network connection configuration is selected, settings that support "wireless hot spots" can be selected by the user.
+</ul></div>
+<div style="margin-left:50px;">If the user selects a setting that supports "wireless hot spots", the system can connect to the corresponding hot spot service.<br>However, since HTTPS communication is used for hot spot service authentication, steps for using HTTPS must be performed before starting the network configuration utility.<br>The processing flow is shown below.<br><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+
+</div>
+<br>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-English004.gif">
+</div>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<br><b>Figure 4 Processing Flow When the Title's Objective is to Perform Title-Specific Communication</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Hot spot services supported by the network configuration utility for "wireless hot spots" vary depending on the region where the system is operating. If no wireless hot spots exist in a region in which a title is expected to be sold, then setting "support" for "wireless hot spot support" in the network configuration utility will be meaningless.<br>The following is a list of system regions and hot spot services that are supported by "wireless hot spots."<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>System Region</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Jurisdiction</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Hot Spot Service</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>SSID</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;North America&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCEA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;T-Mobile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;tmobile-share&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">A title that supports "wireless hot spots" can perform connection tests to various hot spots by using the above SSID. Specifically, if an access point that is connected to the Internet is set up and the above SSID is set to that access point, then it will simulate the behavior of that hot spot service. In an environment in which this access point is established, a connection can be established for a "wireless hot spot" setting.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Hot Spot Service Support in a Title</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Since a title must have enough free space in user memory to use both the Internet browser utility and the network configuration utility to connect to a hot spot service, support for the hot spot service by a title is not required.<br>A title can select whether or not to support hot spot service authentication.<br>Whether or not a title supports the hot spot service must be specified as a parameter when the network configuration utility is started up. Two types of parameters are available. One is "browser startup" and the other is "wireless hot spot support." If "not supported" is specified for "browser startup", a connection specified for "startup browser" cannot be selected in the network configuration utility. If "not supported" is specified for "wireless hot spot support", a connection that was created for wireless hot spots cannot be selected.<br>This is shown in Figure 5.<br><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+
+</div>
+<br>
+
+<div align=center>
+<p>
+<img src="gif/Network_Infrastructure_Mode-Overview-English005.gif">
+</div>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<br><b>Figure 5 Processing Flow When Hot Spot Service is Not Supported by the Title</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Title Processing Flow</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Situations in which a title uses infrastructure mode are divided into the following three cases.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1"><h4>
+(1)&nbsp;<b>Supporting hot spot service authentication using the Internet Browser</b><br></h4>
+</a></div>
+</ul>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1> Displaying a specific URL using the Internet browser utility</li>
+<li VALUE=2> Performing title-specific communication (when hot spot service authentification is supported)</li>
+</ol></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2"><h4>
+(2)&nbsp;<b>Supporting hot spot service authentication using the network configuration utility</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3"><h4>
+(3)&nbsp;<b>Performing title-specific communication (when hot spot service authentication is not supported) </b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>The processing flow performed by a title is explained below for each of the above cases.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Supporting Hot Spot Service Authentication Using the Internet Browser</b><br>
+</a>
+</h3>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Displaying a Specific URL Using the Internet Browser Utility</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the Internet browser utility is used to display a specific URL, the processing flow is as follows.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>Network modules are loaded.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following module sets are loaded.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET common module set
+<li> PSPNET infrastructure mode module set
+<li> libparse_uri module set
+<li> libparse_http module set
+<li> HTTP module set
+<li> SSL module set
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>Each network module is initialized.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>The Internet browser utility is started up.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following parameters are specified when the utility is started up.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> The target URL is set for the initial URL
+<li> The target URL is set for the Home icon
+<li> The user interface level is set to "limited UI"
+<li> The automatic disconnection setting is set to "automatically disconnect"
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_4"><h4>
+(4)&nbsp;<b>The Internet browser utility is terminated.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_5"><h4>
+(5)&nbsp;<b>Each network module is terminated.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_6"><h4>
+(6)&nbsp;<b>Each network module is unloaded.</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>When infrastructure mode is used, the network configuration utility must be used first to connect to the network. However, in this case, since the network configuration utility is started up within the Internet browser utility, the title need not be concerned with this.<br><br>For reference, a sample for this case has been placed in the following location of the Runtime Library.<br><br>/usr/local/psp/devkit/sample/utility/inet/browser/<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Performing Title-Specific Communication (When Hot Spot Service Authentication is Supported)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a title that performs title-specific communication supports hot spot service authentication using the Internet browser, the processing flow is as follows.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_1"><h4>
+(1)&nbsp;<b>Network modules are loaded.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following module sets are loaded.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET common module set
+<li> PSPNET infrastructure mode module set
+<li> libparse_uri module set
+<li> libparse_http module set
+<li> HTTP module set
+<li> SSL module set
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_2"><h4>
+(2)&nbsp;<b>Each network module is initialized.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_3"><h4>
+(3)&nbsp;<b>The network configuration utility is started up.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following parameters are specified when the utility is started up.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> "Infrastructure mode connection and configuration" or "infrastructure mode reconnection" is set for the startup type
+<li> "Browser startup is supported" is set for the browser startup support state
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_4"><h4>
+(4)&nbsp;<b>Connection succeeds, and the network configuration utility is terminated.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_5"><h4>
+(5)&nbsp;<b>If the browser startup setting of the configuration for which the connection was completed is "start up," the following processing is performed.</b><br></h4>
+</a></div>
+</ul>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1> The Internet browser utility is started up. The following parameters are specified when the utility is started up.</li>
+</ol></div>
+<div style="margin-left:70px;"><ul>
+<li> "Open network connection confirmation page" is set for the startup setting
+<li> The user interface level is set to "limited UI"
+<li> The automatic disconnection setting is set to "do not automatically disconnect"
+</ol></div>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=2> The Internet browser utility is terminated. At this time, access to the Internet is considered to be possible.</li>
+</ul>
+</ol></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_6"><h4>
+(6)&nbsp;<b>Title-specific communication is performed. Network disconnection errors are always monitored during this communication. If an error occurs, the cause of the error is displayed by the message dialog utility.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_7"><h4>
+(7)&nbsp;<b>When title-specific communication ends, each network module is terminated.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_3_8"><h4>
+(8)&nbsp;<b>Each network module is unloaded.</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>For reference, a sample for this case has been placed in the following location of the Runtime Library.<br><br>/usr/local/psp/devkit/sample/utility/inet/game_net/hotspot_support/<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Supporting Hot Spot Service Authentication Using the Network Configuration Utility</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a title that performs title-specific communication supports hot spot service authentication using the network configuration utility, the processing flow is as follows.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_1"><h4>
+(1)&nbsp;<b>Network modules are loaded.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following module sets are loaded.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET common module set
+<li> PSPNET infrastructure mode module set
+<li> libparse_uri module set
+<li> libparse_http module set
+<li> HTTP module set
+<li> SSL module set
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_2"><h4>
+(2)&nbsp;<b>Each network module is initialized.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_3"><h4>
+(3)&nbsp;<b>The network configuration utility is started up.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following parameters are specified when the utility is started up.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> "Infrastructure mode connection and configuration" or "infrastructure mode reconnection" is set for the startup type
+<li> "Wireless hot spot is supported" is set for the wireless hot spot support state
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_4"><h4>
+(4)&nbsp;<b>Connection succeeds, and the network configuration utility is terminated. At this time, the Internet is considered to be accessible.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_5"><h4>
+(5)&nbsp;<b>Title-specific communication is performed. Network disconnection errors are always monitored during this communication. If an error occurs, the cause of the error is displayed by the message dialog utility. </b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_6"><h4>
+(6)&nbsp;<b>When title-specific communication ends, each network module is terminated.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_4_7"><h4>
+(7)&nbsp;<b>Each network module is unloaded.</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>A sample for this case has been placed in the following location of the Runtime Library for reference.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>/usr/local/psp/devkit/sample/utility/inet/game_net/wifisvc_hotspot_support/
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Performing Title-Specific Communication (When Hot Spot Service Authentication is Not Supported)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a title that performs title-specific communication does not support hot spot service authentication, the processing flow is as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_1"><h4>
+(1)&nbsp;<b>Network modules are loaded.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following module sets are loaded.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSPNET common module set
+<li> PSPNET infrastructure mode module set
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_2"><h4>
+(2)&nbsp;<b>Each network module is initialized.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_3"><h4>
+(3)&nbsp;<b>The network configuration utility is started up.</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The following parameters are specified when the utility is started up.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> "Infrastructure mode connection and configuration" or "infrastructure mode reconnection" is set for the startup type
+<li> "Browser startup is not supported" is set for the browser startup support state
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_4"><h4>
+(4)&nbsp;<b>Connection succeeds, and the network configuration utility is terminated.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_5"><h4>
+(5)&nbsp;<b>Title-specific communication is performed. Network disconnection errors are always monitored during this communication. If an error occurs, the cause of the error is displayed by the message dialog utility.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_6"><h4>
+(6)&nbsp;<b>When title-specific communication ends, each network module is terminated.</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_5_7"><h4>
+(7)&nbsp;<b>Each network module is unloaded.</b><br></h4>
+</a></div>
+<div style="margin-left:50px;"><br>A sample for this case has been placed in the following location of the Runtime Library for reference.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+/usr/local/psp/devkit/sample/utility/inet/game_net/hotspot_unsupport/
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Hot Spot Service Authentication Test Methods</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A title that supports hot spot service authentication must verify actual hot spot service authentication during development.<br>Test methods are explained below for each type of hot spot service authentication.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Authentication Using the Internet Browser Utility</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">As described earlier, when the hot spot service is authenticated by using the Internet browser utility, a normal web page is accessed using HTTPS. Therefore, during development, you must verify that a general website can be browsed using HTTPS without any problems.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Authentication Using the Network Configuration Utility</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When hot spot service is authenticated by using the network configuration utility, the supported hot spot services are limited.<br>However, since it is difficult to verify actual authentication using these hot spot services, you must prepare a simulated environment. The procedure is given below.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Identify hot spot services of "wireless hot spots" that are supported in the sales region of the title and find their SSIDs. A list of hot spot services and their corresponding SSIDs was given in Chapter 2.</li>
+<li VALUE=2> Prepare an access point that is connected to the Internet and set it up with the SSID that you checked in step (1).</li>
+<li VALUE=3> Create a "wireless hot spot" setting for the hot spot service corresponding to the SSID that you set in step (2) in the title and connect to the access point using that setting.</li>
+<li VALUE=4> The network configuration utility identifies the access point that was prepared in step (2) as the target hot spot service and successfully performs authentication.</li>
+</ol></div>
+<div style="margin-left:50px;"><br>This method can be used to test "wireless hot spot" authentication for each hot spot service.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

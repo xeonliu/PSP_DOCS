@@ -1,0 +1,481 @@
+<html lang="jp">
+<head>
+<title>Patch-Packaging</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;パッチパッケージ作成ガイド
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>はじめに</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">このドキュメントは、PSP&reg;パッチパッケージの作成方法を順を追って説明したものです。PSP&reg;パッチパッケージとして配布するデータやプログラムの作成方法、パッケージングに必要なコンテンツ情報などの作成方法、パッケージの作成と動作テスト、そしてマスター提出について説明しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>PSP&reg;パッチパッケージとは</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;パッチパッケージとは、すでにリリースされているアプリケーションのデータやプログラムの更新が必要な場合に、新しいプログラム、データを弊社のパッチサーバーから配信するためのデータ形式です。コンテンツ情報の更新があれば、それらも含めることができます。<br>配信されたPSP&reg;パッチパッケージは、Memory Stick&trade;上にインストールされ、PSP&reg;システムソフトウェアのゲーム列に表示されます。インストールされたデータおよびプログラムは暗号化され、NPDRMのしくみによって管理されて、ユーザがデータを改竄できないように保護されています。起動プログラム、コンテンツ情報は、システムソフトウェアによって起動、表示されますが、その他のファイルについては、追加ゲームデータと同様に、アプリケーションがNPDRMライブラリを用いてアクセスする必要があります。詳細は「NPDRMライブラリ」ドキュメントを参照してください。<br><br>ユーザがPSP&reg;パッチパッケージをダウンロードするには、PSP&reg;を用います。<br>ユーザがシステムソフトウェアのメニューから、「アップデート」を選択すると、システムソフトウェアによってPSP&reg;パッチパッケージがMemory Stick&trade;にダウンロードされます。また、アプリケーションは、ゲームアップデートライブラリを用いることで、パッチの有無を確認することができます。ゲームアップデートライブラリについては、別ドキュメント「ゲームアップデートライブラリ」を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>作業の流れ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;パッチパッケージの作成作業は、おおよそ次の手順で進めます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_1"><h4>
+(1)&nbsp;<b>パッチの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">プログラムとデータを作成してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_2"><h4>
+(2)&nbsp;<b>パッケージングに必要なファイルの作成</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">PSP&reg;用のシステムファイルとコンテンツ情報ファイル、設定ファイルを作成してください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_3"><h4>
+(3)&nbsp;<b>パッケージングと動作テスト</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">必要なファイルを所定のディレクトリ構造にまとめてZIP形式でアーカイブし、弊社の提供するシンプルオーサリングサービスを用いて「開発用PSP&reg;パッチパッケージ」を作成してください。開発用PSP&reg;パッチパッケージをPSP&reg;開発ツールにインストールし、十分に動作テストを行ってください。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_4"><h4>
+(4)&nbsp;<b>マスター提出とQAテスト</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">テストの終了した開発用PSP&reg;パッチパッケージを、弊社の提供するTitle Patch Publishing Systemを用いて、サブミッションしてください。弊社でのQAテストの終了後、パッチパッケージは本番用パッチサーバーへ移すことができるようになります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>パッチ本体の作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;パッチパッケージに含めるデータ、プログラムファイルに関する規定は、PSP&reg;追加ゲームデータパッケージとほぼ同様です。「PSP&reg;追加ゲームデータパッケージ」ドキュメントをあわせて参照してください。<br>この章では、PSP&reg;パッチパッケージに特有の内容について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>データファイルの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;パッチパッケージに格納するデータファイルは、追加ゲームデータパッケージと異なり、NPDRM EDATA, SPRXファイルであっても、そのアクセス権は管理されません。したがって、パッケージをダウンロードしたユーザと別のユーザであっても、正しくファイルを読み出せます。内容の暗号化は、追加ゲームデータ同様、行われます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>起動プログラムファイルの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;パッチパッケージには、UMD&reg;またはダウンローダブルゲームの起動プログラムを置き換える、プログラムファイルを格納することができます。格納するプログラムファイルは、通常の起動プログラムと同様に作成し、ファイル名を"PBOOT.BIN"としておく必要があります。<br>起動プログラムの内容について注意すべき点を以下に列挙します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>ランタイムライブラリのバージョン</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">原則として、PBOOT.BINは、アプリケーション本体と同じバージョンのランタイムライブラリを使用してください。異なるバージョンのランタイムライブラリを使用する場合は、あらかじめ弊社パブリッシャーリレーション部までご連絡ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_2">
+<div style="margin-left:40px;"><h4><b>データファイルへのアクセス</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSP&reg;パッチパッケージは、Memory Stick&trade;上の次のディレクトリに格納されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ms0:/PSP/GAME/<i>(ハイフンなし品番)</i>/
+
+例） ms0:/PSP/GAME/SXXX01234/
+</font></pre></div>
+<div style="margin-left:67px;">パッケージ内のファイルにアクセスするために、この絶対パスをプログラムに埋め込んでおく必要があります。<br>また、NPDRM EDATAの内容を読み出したりNPDRM SPRXをロード・起動するには、NPDRMライブラリを用いて権利確認を行う必要があります。詳細は「NPDRMライブラリ」ドキュメントを参照してください。<br>なお、NPDRM EDATA/NPDRM SPRXファイルへのアクセス自体は特に制限されていません。sceIoOpen()で通常のファイルとしてオープンすることも可能で、その場合は内容が暗号化・圧縮された状態で読み出されます。書込みに対しても保護されていません。データの一部を上書きするとNPDRM EDATA/NPDRM SPRXファイルとして破損状態になり、復号できなくなりますので注意してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_3">
+<div style="margin-left:40px;"><h4><b>プログラムの動作テスト</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">パッチに含めるプログラムを開発する際には、そのプログラム自体が正しく動作するかどうかをテストするだけでなく、旧バージョンをそのプログラムでアップデートした後で正しく動作することを忘れずに確認してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>パッケージングに必要なファイルの作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、PSP&reg;追加ゲームデータパッケージを作成するために必要な、以下のファイルについて説明します。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSP&reg;用システムファイル（PARAM.SFO）
+<li> PSP&reg;用コンテンツ情報ファイル（ICON0.PNGほか）
+<li> 設定ファイル（NPDRM.CONF）
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>PSP&reg;用システムファイル（PARAM.SFO）</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">システムファイルPARAM.SFOは、ゲームのタイトル名や視聴年齢制限の値などPSP&reg;システムソフトウェアでの表示のために使用されるパラメータや、品番やディスクの通し番号など内部的に使用されるパラメータが格納されているファイルで、専用ツール「SystemFileEditor」を使って作成します。ゲームマスターディスク用のシステムファイルとは内容が異なり、PSP&reg;パッチパッケージ用として作成する必要がありますので注意してください。具体的には、MSGamepatch_SystemFile_Config.sfcをコンフィグファイルとして指定し、パラメータを以下のように指定してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_4">
+<div style="margin-left:40px;"><h4><b>TITLE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">タイトル名を設定してください。パッチパッケージがインストールされると、アプリケーション本体に格納されているパラメータより優先して表示されます。末尾のNULL文字を含めてUTF8で128bytesまでで、改行はできません。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+例）大草原の戦士
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>PARENTAL_LEVEL</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">パレンタルロックレベルを0～11の数字で設定してください。アプリケーション本体と同じ値でなければなりません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_6">
+<div style="margin-left:40px;"><h4><b>DISC_ID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーション本体の品番からハイフンを除いた文字列を設定してください。または、アプリケーション本体で、GAMEDATA_IDを設定した場合は、同じ値を設定してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+例）ABCD01234
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_7">
+<div style="margin-left:40px;"><h4><b>DISC_VERSION</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ディスクバージョンとして、X.XXのフォーマットで任意の番号を設定してください。設定しなくてもかまいません。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+例）1.00
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_8">
+<div style="margin-left:40px;"><h4><b>APP_VER</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">パッチのバージョンを入力します。 <br>適切に設定しないとアップデートが正しく行われなくなる場合がありますので注意して設定してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_9">
+<div style="margin-left:40px;"><h4><b>TARGET_APP_VER</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">差分パッチパッケージの場合、差分対象となるバージョンを入力します。 <br>適切に設定しないとアップデートが正しく行われなくなる場合がありますので注意して設定してください。 <br>省略すると、累積パッチパッケージとして扱われます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_10">
+<div style="margin-left:40px;"><h4><b>PBOOT_TITLE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アプリケーション本体と区別できるタイトル名を設定してください。システムソフトウェアで、パッチパッケージ単体で表示されるときに用いられます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+例）大草原の戦士　パッチ
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_11">
+<div style="margin-left:40px;"><h4><b>REGION, BOOTABLE, DRIVER_PATH, PSP_SYSTEM_VER, CATEGORY, ATTRIBUTE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">これらのパラメータはSystemFileEditorが表示するデフォルト値のまま変更しないでください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>PSP&reg;用コンテンツ情報ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;用コンテンツ情報ファイルは、パッチパッケージインストール後に、UMD&reg;またはダウンローダブルゲームのコンテンツ情報ファイルに代えてPSP&reg;システムソフトウェアの画面に表示するために使用されるアイコン画像などのファイルです。以下の5つのうち、静止画アイコンファイルは必ず作成してください。他のコンテンツ情報ファイルは、オプションです。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 静止画アイコンファイル：ICON0.PNG
+<li> 動画アイコンファイル：ICON1.PMF
+<li> コンテンツ説明画像ファイル：PIC0.PNG
+<li> コンテンツ情報背景画像ファイル：PIC1.PNG
+<li> BGMファイル：SND0.AT3
+</ul></div>
+<div style="margin-left:50px;">各ファイルのフォーマットや作成方法などの詳細に関しては、別ドキュメント「ゲームマスターディスク作成手順」の「コンテンツ情報ファイルの作成」の項目を参照してください。ただし、パッチパッケージでは、コンテンツ情報について、下記のパッチ特有の表示にご注意ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_12">
+<div style="margin-left:40px;"><h4><b>UMD&reg;に対するパッチ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">コンテンツ情報のうち、静止画アイコン(ICON0.PNG)のみ表示されます。静止画アイコン以外のコンテンツ情報(動画アイコンや背景画像、BGMなど)をパッチパッケージに含めても、静止画アイコン以外のコンテンツ情報は、システムソフトウェアには表示されません。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_13">
+<div style="margin-left:40px;"><h4><b>ダウンローダブルゲームに対するパッチ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">本体ゲームのコンテンツ情報と差し替わる形で、パッチパッケージに含めたコンテンツ情報が表示されます。例えば、本体ゲームに背景画像を含めていても、パッチパッケージに背景画像が含まれていないとシステムソフトウェア上では背景画像が表示されません。背景画像に更新がない場合は、本体ゲーム用に用意した背景画像をパッチパッケージにも含めるようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>設定ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">設定ファイルは、PlayStation&reg;Storeでコンテンツを識別するためのコンテントIDなど、PSP&reg;パッチパッケージの作成に必要なパラメータを記述したテキストファイルです。形式は次のとおりです。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Content-ID = <i>IV0002-NPXS00008_00-GAMEUPDATE000001</i>
+K-Licensee = <i>0x0123456789abcdef0123456789abcdef</i>
+PackageVersion = <i>01.00</i>
+PSPSystemVersion = <i>6.10</i>
+
+</font></pre></div>
+<div style="margin-left:50px;">1行目には、「Content-ID = 」に続けてコンテントID、すなわち弊社から発行されるサービスIDにハイフンと任意のラベル16桁を続けたものを記述してください。コンテントIDの詳細については、「PlayStation&reg;Network 概要」ドキュメントを参照してください。コンテントIDは、パッケージごとに異なっていなければなりません。サービスIDはタイトルごとに発行されますので、アプリケーション本体をPSP&reg;ダウンローダブルゲームパッケージで提供している場合や、PSP&reg;追加ゲームデータパッケージを提供している場合は、ラベルで区別してください。<br>2行目には、「K-Licensee = 」に続けて暗号鍵k_licenseeの値を、0xで始まる16進文字列として記述してください。k_licenseeは、あるユーザがアクセス権を持つNPDRM EDATA/SPRXファイルにそのユーザが起動したほかのプログラムが勝手にアクセスするのを防止する鍵になります。たとえばLinuxで次のコマンドを実行して得られるような、ユニークな値を記述してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例）head -c 16 /dev/random | xxd -g 16
+</font></pre></div>
+<div style="margin-left:50px;">3行目には、「PackageVersion = 」に続けてマスターパッケージバージョンを、整数部2桁小数点以下2桁の数字で記述してください。数値は「Technical Requirements Checklist for PSP&trade; (PlayStation&reg;Portable) Software」（TRC）に記載されているマスターバージョン番号の決め方に準拠して決めてください。<br>4行目には、「PSPSystemVersion = 」に続けて、アプリケーション本体に含まれるPARAM.SFOのPSP_SYSTEM_VERの値を指定してください。PSP_SYSTEM_VERの値は、マスターアップ後に変更されることがありますので、正確な値が不明な場合は、弊社パブリッシャーリレーション部までお問い合わせください。<br>設定ファイルのファイル名は、NPDRM.CONFとしてください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>パッケージングと動作テスト</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">この章では、用意したファイルをまとめてPSP&reg;パッチパッケージを作成する手順と、それを用いて動作テストを行う手順について説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>ZIPアーカイブの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">準備したファイルを以下に示すディレクトリ構成にまとめてください。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Packaging-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  オーサリング用のディレクトリ構成</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">パッケージのルートディレクトリの直下に、「PSP_PATCH」という名前のサブディレクトリを作成して、起動プログラム「PBOOT.BIN」を配置します。「PBOOT.BIN」は、あらかじめpsp-prx-stripに--strip-section-headerオプションを指定してセクションヘッダを削除してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例） % psp-prx-strip -o PBOOT.BIN --strip-section-header patch.prx
+</font></pre></div>
+<div style="margin-left:50px;">また、「PSP_DATA」という名前のサブディレクトリを作成して、その他のゲームデータとプログラムを配置します。保護するデータファイルの拡張子を.EDATにすること、プログラムファイルの拡張子を.SPRXにすることに注意してください。<br>同様に、「PSP_CONT」という名前のサブディレクトリを作成して、PSP&reg;用システムファイルおよび、PSP&reg;用コンテンツ情報ファイル群を配置します。最後に、ルートディレクトリの直下にNPDRM.CONFという名前で、設定ファイルを配置してください。<br><br>このようなディレクトリ全体をZIP形式でアーカイブし、"<i>コンテントID</i>.SRC.ZIP"というファイル名を付けてください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_14">
+<div style="margin-left:40px;"><h4><b>Linuxコマンドの実行例</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>% zip -ry IV0002-NPXS00008_00-GAMEUPDATE000001.SRC.ZIP .
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>オーサリング</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">弊社が提供するシンプルオーサリングサービスを用いて、作成したZIPアーカイブにオーサリングを行い、PSP&reg;パッチパッケージを作成してください。シンプルオーサリングサービスの利用方法の詳細は、「PlayStation&reg;Network SMT シンプルオーサリングサービスユーザガイド」ドキュメントを参照してください。<br>アップロードしたファイルに問題がある場合、下記のエラーコードが通知されます。下記以外のエラーが通知される場合、エラーコードと共に弊社にご連絡ください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_15">
+<div style="margin-left:40px;"><h4><b>パッチパッケージ オーサリングエラー一覧</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>コード</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>原因／対処方法</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;16&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;17&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PARAM.SFOが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;18&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;用ICON0.PNGが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;23&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;不要なファイルが含まれています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;24&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;大文字小文字の違いのみの名前を持つ複数ファイルが、同一ディレクトリに&nbsp;&nbsp;<br>&nbsp;&nbsp;含まれています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;25&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP_DATA/以下に、含めることのできないファイルが存在しています。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;31&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFの記述に不足あるいは誤りがあります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;33&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのContent-ID指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;35&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PARAM.SFOの異常を検出しました。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;36&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PARAM.PBPの生成に失敗しました。&nbsp;&nbsp;<br>&nbsp;&nbsp;PSP_CONT/以下のファイルに問題のある可能性があります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;37&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;処理対象のZIPファイル名に、NPDRM.CONFで指定されたContent-IDが&nbsp;&nbsp;<br>&nbsp;&nbsp;含まれていません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;39&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのK-Licensee指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;40&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのPackageVersion指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;41&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM SPRXファイルが含まれていますが、NPDRM.CONFにK-Licensee指定が&nbsp;&nbsp;<br>&nbsp;&nbsp;ありません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;42&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM SPRXファイルの変換処理に失敗しました。&nbsp;&nbsp;<br>&nbsp;&nbsp;不正なPRXファイルの可能性があります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;44&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PBOOT.BINが見つかりません。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;45&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PBOOT.BINファイルの変換処理に失敗しました。&nbsp;&nbsp;<br>&nbsp;&nbsp;不正なファイル、またはシンボル情報やセクションヘッダが除去されていない&nbsp;&nbsp;<br>&nbsp;&nbsp;起動ファイルである可能性があります。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;46&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONFのPSPSystemVersion指定が不正です。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">正しくオーサリングが行われると、次の2つのファイルが得られます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <i>コンテントID</i>.ZIP：PSP&reg;開発ツールで動作テストを行うためのZIPパッケージ
+<li> <i>コンテントID</i>.PKG：Title Patch Publishing SystemにアップロードするPKGパッケージ
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>開発ツールを用いたテスト</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ZIPパッケージをMemory Stick&trade;のルートディレクトリに展開して、そのMemory Stick&trade;をPSP&reg;開発ツールにセットしてください。<br>すると、パッチパッケージがインストールされた状態となりますので、意図したようにコンテンツ情報の表示が更新されることを確かめてください。また、PSP&reg;システムソフトウェアのコンテンツ情報チェック機能を用いて、PSP&reg;用コンテンツ情報が適切であることを確認してください(あらかじめPSP&reg;システムソフトウェアを適切なバージョンにアップデートしておく必要があります)。<br>また、パッチパッケージに含まれるプログラムの動作テストとデバッグを行ってください。<br><br>さらに、PKGパッケージを、Title Patch Publishing Systemを使って、開発用パッチサーバーにアップロードしてください。ここまでのテストを通過していれば問題はないはずですが、アップデートのテストとアップデート後のアプリケーションのテストを行ってください。 <br>特に、過去にリリースしたすべてのバージョンから意図したとおりに正しくアップデートできることを確認してください<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>パッケージの検査</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">シンプルオーサリングサービスから得られたPKGパッケージについて、make_package_npdrmコマンドを用いて、正当性の検査をすることができます。<br>正当性の検査をするには、--checkオプションを使用してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例） % make_package_npdrm  --check  IV0002-NPXS00004_00-0000111122223333.pkg
+</font></pre></div>
+<div style="margin-left:50px;"><br>また、--listオプションを使用することで、パッケージに含まれるファイルを表示することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>例） % make_package_npdrm  --list  IV0002-NPXS00004_00-0000111122223333.pkg
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>マスター提出とQAテスト</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>マスター提出</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">テストを終了したら、PKGパッケージのみをTitle Patch Publishing Systemを使って、QAへサブミッションしてください。バージョンの異なる複数のパッチパッケージを同時にサブミッションすることも可能です。<br><br>弊社でのQAテストが完了し、承認が済むと、パッチパッケージは本番用パッチサーバーへ移すことができるようになります。必要な時期に、Title Patch Publishing Systemを使って本番用パッチサーバーへ移してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>参考情報</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Memory Stick&trade;上でのディレクトリ構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Memory Stick&trade;にPSP&reg;パッチパッケージがインストールされたときのディレクトリ構成の例を示します。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Packaging-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2  PSP&reg;上でのディレクトリ構成の例</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">インストールされるディレクトリの名前は、PARAM.SFOで指定された品番に基づいて決められますので、コンテントIDに含まれる品番とは別になる場合があります。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

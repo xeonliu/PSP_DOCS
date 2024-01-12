@@ -1,0 +1,739 @@
+<html lang="en">
+<head>
+<title>GMO_Format-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; GMO 3D Converter</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+GMO Format Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Introduction</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This document describes file formats used for displaying basic 3D models.<br>The following information can be stored in a 3D model.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Hierarchical coordinate systems (matrix, TRS)
+<li> Shape data (polygon, curved surface, morphing, skin mesh)
+<li> Material (color, mapping information)
+<li> Texture (filename, file image)
+<li> Motion (hierarchical coordinate systems, material animation)
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Creation Method</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The GMO format files are created by a conversion from general 3D model data.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English001.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Display Method</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">These files contain data for driving the graphics API, and the 3D model can be displayed by calling the API using that data. However, they do not contain a memory image such as a DMA packet.<br>To reduce API call overhead, processing such as building the display list must be performed after the file is loaded.<br><br>The following figure shows the typical data flow.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Notational Conventions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In this document, data types are denoted as shown below. Byte order is Little Endian.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 32-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32-bit floating-point&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Data Structure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Hierarchical Structure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The 3D format has a hierarchical block structure as shown below.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English003.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Blocks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A block represents a single collection of data in the model data.<br>A block has a block type, block name, and an arbitrary number of arguments.<br>Block data can be included as a direct data array.<br>Commands and subblocks can be included as lower-level hierarchical structures.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English004.gif">
+</div>
+<div style="margin-left:50px;"><br>The block name is used for referencing the block from an external location.<br>At a given hierarchical level, the block name must be unique among blocks of the same type.<br>Arguments are used for representing information required in the block.<br>Arguments are mainly used for data block format information.<br><br>Example description:<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../graphics/GMO_Format-Reference-English.htm#Material">Material</a> "material-0" {		// Block
+	<a href="../graphics/GMO_Format-Reference-English.htm#Diffuse">Diffuse</a> 1.0 1.0 1.0 1.0		// Block command
+	<a href="../graphics/GMO_Format-Reference-English.htm#Specular">Specular</a> 0.0 0.0 0.0 1.0 0.0	// Block command
+	<a href="../graphics/GMO_Format-Reference-English.htm#Emission">Emission</a> 0.0 0.0 0.0 1.0	// Block command
+
+	<a href="../graphics/GMO_Format-Reference-English.htm#Layer">Layer</a> "layer-0" {		// Subblock
+		<a href="../graphics/GMO_Format-Reference-English.htm#SetTexture">SetTexture</a> "texture-0"	// Subblock command
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>Commands</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Commands represent element data of the block that contains them.<br>A command has a command type and an arbitrary number of arguments.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English005.gif">
+</div>
+<div style="margin-left:50px;"><br>Each command has a specified number of arguments and data types.<br>Arguments can have the following data types.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Example Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Single-precision floating point&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;string&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;"tex.bmp"&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ref&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Block reference&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;"bone-0"&nbsp;&nbsp;<br>&nbsp;&nbsp;"<a href="../graphics/GMO_Format-Reference-English.htm#Bone">Bone</a>::bone-0"&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;enum&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Enumerated constant&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VERTEX&nbsp;&nbsp;<br>&nbsp;&nbsp;VERTEX|NORMAL&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;void&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any of the above types&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;------------&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">A block reference is used to specify another block.<br>A block type can also be specified as "block-type::block-name."<br><br>An enumerated constant is a constant that can be used as an argument for a specific command.<br>Constants can be logically ORed together by connecting them with "|".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>Text Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In text format, a file header is placed on the first line of the file and blocks and commands are described on subsequent lines.<br><br>Example description:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>.GMS 1.00
+
+<a href="../graphics/GMO_Format-Reference-English.htm#Model">Model</a> "plate" {
+	<a href="../graphics/GMO_Format-Reference-English.htm#BoundingBox">BoundingBox</a> 0.00 0.00 0.00 0.50 0.50 0.00
+	<a href="../graphics/GMO_Format-Reference-English.htm#Bone">Bone</a> "Frame1_plate" {
+		<a href="../graphics/GMO_Format-Reference-English.htm#BoundingBox">BoundingBox</a> 0.00 0.00 0.00 0.50 0.50 0.50
+		<a href="../graphics/GMO_Format-Reference-English.htm#Translate">Translate</a> 1.00 1.00 1.00
+		<a href="../graphics/GMO_Format-Reference-English.htm#RotateYXZ">RotateYXZ</a> 0.00 0.00 0.00
+		<a href="../graphics/GMO_Format-Reference-English.htm#Scale">Scale</a> 1.00 1.00 1.00
+		<a href="../graphics/GMO_Format-Reference-English.htm#DrawPart">DrawPart</a> "Mesh_plate"
+	}
+	<a href="../graphics/GMO_Format-Reference-English.htm#Part">Part</a> "Mesh_plate" {
+		<a href="../graphics/GMO_Format-Reference-English.htm#Mesh">Mesh</a> "mesh-0" {
+			<a href="../graphics/GMO_Format-Reference-English.htm#SetMaterial">SetMaterial</a> "material-0"
+			<a href="../graphics/GMO_Format-Reference-English.htm#DrawArrays">DrawArrays</a> "arrays-0" TRIANGLE_STRIP 4 1  0 1 2 3
+		}
+		<a href="../graphics/GMO_Format-Reference-English.htm#Arrays">Arrays</a> "arrays-0" VERTEX|NORMAL|TEXCOORD 4 1 0 {
+			-0.50 0.50 0.00 0.00 0.00 1.00 0.00 0.00 
+			-0.50 -0.50 0.00 0.00 0.00 1.00 0.00 1.00
+			0.50 0.50 0.00 0.00 0.00 1.00 1.00 0.00 
+			0.50 -0.50 0.00 0.00 0.00 1.00 1.00 1.00
+		}
+	}
+	<a href="../graphics/GMO_Format-Reference-English.htm#Material">Material</a> "material-0" {
+		<a href="../graphics/GMO_Format-Reference-English.htm#Diffuse">Diffuse</a> 0.78 0.78 0.78 1.00
+		<a href="../graphics/GMO_Format-Reference-English.htm#Specular">Specular</a> 0.00 0.00 0.00 1.00 51.21
+		<a href="../graphics/GMO_Format-Reference-English.htm#Emission">Emission</a> 0.00 0.00 0.00 1.00
+		<a href="../graphics/GMO_Format-Reference-English.htm#Layer">Layer</a> "layer-0" {
+			<a href="../graphics/GMO_Format-Reference-English.htm#SetTexture">SetTexture</a> "texture-0"
+		}
+	}
+	<a href="../graphics/GMO_Format-Reference-English.htm#Texture">Texture</a> "texture-0" {
+		<a href="../graphics/GMO_Format-Reference-English.htm#FileName">FileName</a> "plate.bmp"
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>Binary Format</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The binary format structure resembles that of the text format.<br>In binary format, a 16-byte header is stored at the beginning of the file followed by model data stored in a hierarchical structure of chunks.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English006.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_1">
+<div style="margin-left:40px;"><h4><b>File Header</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The file header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_int signature ;	// <a href="../graphics/GMO_Format-Reference-English.htm#File">File</a> identifier ( '.GMO' )
+	u_int version ;	// Version number ( '1.00' )
+	u_int style ;		// Data style ( 'PSP' )
+	u_int option ;		// Option ( 0 )
+} GmoHeader ;
+
+</font></pre></div>
+<div style="margin-left:67px;">Data style is used to indicate that the data representation has been optimized for a specific API.<br>A data style of 'PSP' means that the data is stored in a format which conforms to the restrictions of the PSP&trade; library.<br>For more information, please see the &quot;PSP&trade; Library Restrictions&quot; section and the PSP&trade; library documentation.<br>A data style of zero is the same as text format.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_2">
+<div style="margin-left:40px;"><h4><b>Chunk Structure</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A chunk is a collection of data. In binary format, two types of chunks are defined, namely block chunks and command chunks. These correspond to blocks and commands, respectively.<br><br>A block chunk has the following data structure.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English007.gif">
+</div>
+<div style="margin-left:67px;"><br><br>A block chunk header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;			// Chunk type
+	u_short args_offs ;		// Offset of block argument
+	u_int next_offs ;		// Offset of next chunk
+	u_int child_offs ;		// Offset of lower-level chunk
+	u_int data_offs ;		// Offset of block data
+} GmoChunk ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>The beginning of each element contained in a chunk must be aligned on a 4-byte boundary.<br>The sizes and offsets contained in a block chunk header are all multiples of 4.<br>In binary format, the block name can be omitted since the block is referenced with a number.<br><br>A command chunk has the following data structure.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English008.gif">
+</div>
+<div style="margin-left:67px;"><br>A command chunk header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;		// Chunk type
+	u_short name ;		// Not used (always 0)
+	u_int next_offs ;		// Offset of next chunk
+} GmoChunk ;
+
+</font></pre></div>
+<div style="margin-left:67px;">These block chunks and command chunks are stored in a nested format.<br>Lower-level chunks are stored consecutively in a block chunk.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English009.gif">
+</div>
+<div style="margin-left:67px;"><br>Deciding whether one of the consecutive chunks is a command chunk or a block chunk can be done by examining the high-order bit (GMO_HALF_CHUNK) of the chunk type.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_3">
+<div style="margin-left:40px;"><h4><b>Data Representation</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">With binary format, data types are represented as follows.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Alignment</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Single-precision floating point&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;string&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String(null-terminated string)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ref&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Block reference(32-bit integer)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;enum&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Enumerated constant&nbsp;&nbsp;<br>&nbsp;&nbsp;(32-bit integer)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;void&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any of the &nbsp;&nbsp;<br>&nbsp;&nbsp;above types&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;----------------&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">Each argument must conform to the alignment specified in the table.<br>Padding is performed as needed.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_5_4">
+<div style="margin-left:40px;"><h4><b>Block Reference</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">In text format, a block reference is represented by a block name. However, in binary format, a block reference is represented by a block number.<br>A block reference has the following bit structure.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English010.gif">
+</div>
+<div style="margin-left:67px;"><br>Type represents the chunk type of the block that is referenced.<br>Level represents how many higher hierarchical levels exist.<br>Number represents the position among blocks of the same type.<br>When all bits are 1, the block reference is invalid.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Block Types</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>File Block</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A file block is the highest-level block representing the entire file. It can contain multiple model blocks. Its description is omitted in text format.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Model Block</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A model block is a block that represents the data for one model. It can contain the following kinds of blocks.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Bone block
+<li> Part block
+<li> Material block
+<li> Texture block
+<li> Motion block
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Bone Block</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">A bone block represents one hierarchical coordinate system in the model data. It controls the display position and display method of shape data.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_3_1">
+<div style="margin-left:63px;"><h4><b>Hierarchical Coordinate Calculations</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Calculations are based on the coordinate system of the parent bone and are performed according to the following procedure.<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> Pivot calculation (preprocessing)
+<li> Matrix multiplication or translation + rotation + scaling
+<li> Pivot calculation (postprocessing)
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_3_2">
+<div style="margin-left:63px;"><h4><b>Display Control</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Display control enables a specific part block (shape data) to be displayed.<br>The display can be turned on and off using a display switch.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_3_3">
+<div style="margin-left:63px;"><h4><b>Geometry Blending</b><br><br></h4></a></div>
+<div style="margin-left:80px;">When geometry blending of shape data is performed, the bone to be affected and offset matrix can be specified.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_3_4">
+<div style="margin-left:63px;"><h4><b>Morphing</b><br><br></h4></a></div>
+<div style="margin-left:80px;">When morphing of shape data is performed, the weight value of each morph can be specified.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Part Block</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">A part block represents the data for one shape in the model data.<br>Shape data includes surface data and vertex data.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_4_1">
+<div style="margin-left:63px;"><h4><b>Surface Data Block</b><br><br></h4></a></div>
+<div style="margin-left:80px;">A surface data block represents one collection of surface data for the shape data.<br>The following kinds of information can be specified in surface data.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> Material to be used
+<li> Selection of blending bones
+<li> Curved surface parameters
+<li> Surface primitives, etc.
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_4_2">
+<div style="margin-left:63px;"><h4><b>Vertex Data Block</b><br><br></h4></a></div>
+<div style="margin-left:80px;">A vertex data block represents one collection of vertex data for the shape data.<br>The following kinds of information can be specified in vertex data.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> Vertex vector
+<li> Normal vector
+<li> Vertex color
+<li> Point size
+<li> Texture coordinates
+<li> Vertex weight
+</ul></div>
+<div style="margin-left:80px;">Vertex weights are required to perform geometry blending.<br>To perform morphing, vertex data is required only for the number of morph shapes.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Material Block</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">A material block represents one drawing attribute for the model data. It is used to control the material color, mapping, etc.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_5_1">
+<div style="margin-left:63px;"><h4><b>Drawing State</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Drawing state specifies the lighting, whether fog is on or off, etc.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_5_2">
+<div style="margin-left:63px;"><h4><b>Material Color</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Material color specifies the basic color or parameters of the material.<br>
+</div>
+<div style="margin-left:70px;"><ul>
+<li> Diffuse reflection color
+<li> Specular reflection color
+<li> Emission color
+<li> Ambient color
+<li> Other parameters
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_5_3">
+<div style="margin-left:63px;"><h4><b>Layer Block</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Layer block specifies the texture mapping method.<br>
+</div>
+<div style="margin-left:70px;"><ul>
+<li> Texture to be used
+<li> Mapping method
+<li> Mapping factor
+</ul></div>
+<div style="margin-left:80px;">Although the detailed drawing method for mapping is determined by the display program, more detailed parameters can also be specified.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> Alpha blending mode
+<li> Texture function
+<li> Texture filter
+<li> Texture wraparound
+<li> Texture cropping
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Texture Block</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">A texture block represents one texture of the model data.<br>The texture's image filename or its image can be specified.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_1">
+<div style="margin-left:63px;"><h4><b>Image Filename</b><br><br></h4></a></div>
+<div style="margin-left:80px;">This is the image filename for creating the texture.<br>It is used to load an image file from an external location when the model data does not contain the image file image internally.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_6_2">
+<div style="margin-left:63px;"><h4><b>Image File Image</b><br><br></h4></a></div>
+<div style="margin-left:80px;">The image file for creating the texture can also be stored in the texture block.<br>When both the filename and file image are specified, the file image is normally used.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>Motion Block</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">A motion block represents one motion of the model data. It is used to animate another block's commands.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_7_1">
+<div style="margin-left:63px;"><h4><b>Playback Time</b><br><br></h4></a></div>
+<div style="margin-left:80px;">A motion's playback time is expressed in units of frames.<br>The playback time is controlled by the following parameters.<br></div>
+<div style="margin-left:70px;"><ul>
+<li> Loop range
+<li> Playback speed
+</ul></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_7_2">
+<div style="margin-left:63px;"><h4><b>Animation Calculations</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Function data is used to animate commands for a specified block.<br>Only commands that have numeric values for arguments can be animated.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_7_3">
+<div style="margin-left:63px;"><h4><b>Function Data Block</b><br><br></h4></a></div>
+<div style="margin-left:80px;">A function data block represents the data for one function for a motion.<br>Function data is represented using key frames.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>PSP&trade; Library Restrictions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The 'PSP' style binary format has the following types of limitations.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Model Blocks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If a model's vertex data is stored as integer vectors, the <a href="../graphics/GMO_Format-Reference-English.htm#VertexOffset">VertexOffset</a> command is output to the model block in order to convert the integer vectors to their original values. The vertex element arguments of the <a href="../graphics/GMO_Format-Reference-English.htm#VertexOffset">VertexOffset</a> command are represented in the vertex format of the PSP&trade; hardware.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Vertex Data Blocks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Within vertex data blocks, vertex data is stored in a format which is consistent with the PSP&trade; hardware.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Storage order and alignment comply with PSP&trade; format
+<li> 8-bit and 16-bit integer vectors, as well as 16-bit colors, can be used
+<li> Point sizes are not output
+<li> A maximum of 1 texture coordinate for each vertex
+<li> A maximum of 8 vertex weight values for each vertex
+<li> A maximum of 8 morph vertices for each vertex
+<li> Morph vertex format same as the basic vertex format
+</ul></div>
+<div style="margin-left:50px;"><br>Vertex format arguments are represented in the vertex format of the PSP&trade; hardware, with the vertex stride (number of bytes for one vertex) stored in the high-order 8 bits.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GMO_Format-Overview-English011.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Function Data Blocks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Key frame times and values can be stored as 16-bit floating point numbers in a function data block. In such cases, the SCEGSO_FCURVE_FLOAT16 bit in the format argument of the function data is set<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Primitive Commands</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When non-index vertex primitives are used, the SCEGMO_PRIM_SEQUENTIAL bit is set in the mode argument of the primitive commands shown below. For the index, only the first item is referenced, and drawing is performed using the successive vertices starting at that number.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#DrawArrays">DrawArrays</a>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#DrawParticle">DrawParticle</a>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#DrawBSpline">DrawBSpline</a>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#DrawRectMesh">DrawRectMesh</a>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#DrawRectPatch">DrawRectPatch</a>
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Color Commands</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For the color commands shown below, color data can also be stored as 32-bit colors.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#Diffuse">Diffuse</a>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#Specular">Specular</a>
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#Emission">Emission</a> 
+<li> <a href="../graphics/GMO_Format-Reference-English.htm#Ambient">Ambient</a><br>
+</ul></div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,1670 @@
+<html lang="jp">
+<head>
+<title>GIM_Format-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; GIM 2D Converter</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+GIMフォーマット・概要
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>はじめに</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">基本的なテクスチャ画像を格納するためのファイルフォーマットです。以下のような情報を格納することができます。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> イメージ
+<li> パレット
+<li> シーケンス
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>作成方法</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">一般的な画像ファイルを変換することで作成します。現在はBMP、TGA、TM2、DDS、AVI、PNGフォーマットに対応しています。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese001.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>表記について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">このドキュメントではデータ型を以下のように表記します。バイトオーダーはリトルエンディアンです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>型</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき8ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし8ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき16ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし16ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号つき32ビット整数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;符号なし32ビット整数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32ビット浮動小数点数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">記述されている「アラインメント」は必要最小値です。詳しくは「PSP&reg;ライブラリによる制限」の章を参照してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>格納形式</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">まずファイル先頭にファイルヘッダが格納され、それに続くチャンクの階層構造に画像データなどが格納されます。<br></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese002.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>ファイルヘッダ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイルヘッダにはファイルそのものに関する情報が格納されます。ファイルヘッダのデータ構造は以下のようになっています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_int signature ;	// ファイル識別子 ( '.GIM' )
+	u_int version ;		// バージョン番号 ( '1.00' )
+	u_int style ;		// データスタイル ( 'PSP' )
+	u_int option ;		// オプション ( 0 )
+} GimHeader ;
+</font></pre></div>
+<div style="margin-left:50px;"><br>データスタイルはデータ表現が特定のAPIに最適化されていることを表します。'PSP' スタイルではPSP&reg;ライブラリの制約にしたがった形式に限定されます。詳しくは「PSP&reg;ライブラリによる制限」の章を参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>チャンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">チャンクには任意のデータを格納することができ、さらに階層構造を持つこともできます。チャンクのレイアウトは以下のようになっています。パディング領域は0のバイト列でうめられます。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese003.gif">
+</div>
+<div style="margin-left:50px;"><br>チャンクヘッダのデータ構造は以下のようになっています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;		// チャンクタイプ
+	u_short unused ; 	// 使用しません（つねに0）
+	u_int next_offs ;	// 次のチャンクのオフセット
+	u_int child_offs ;	// 下位チャンクのオフセット
+	u_int data_offs ;	// チャンクデータのオフセット
+} GimChunk ;
+</font></pre></div>
+<div style="margin-left:50px;"><br>チャンクに含まれる各要素の先頭は4バイト単位でのアラインメントが必要です。そのためチャンクヘッダに含まれるオフセット値はすべて4の倍数となります。要素がない場合でもオフセット値は0にはなりません。アラインメントのためのパディングは0のバイト列でうめられます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>チャンク構造</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">チャンクの階層構造は以下のようになっています。<br></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese004.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ファイルチャンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイルチャンクはファイル全体を表す最上位チャンクです。複数のピクチャチャンクを格納することができます。チャンクデータはありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>ピクチャチャンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ピクチャチャンクは一つの画像データを表すチャンクです。ピクチャチャンクには以下のようなチャンクを格納することができます。各チャンクの個数は任意です。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> イメージチャンク
+<li> パレットチャンク
+<li> シーケンスチャンク
+</ul></div>
+<div style="margin-left:50px;"><br>チャンクデータはありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>イメージチャンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">イメージチャンクは同じピクセル数のイメージ配列を格納することができます。配列はミップマップやシーケンスとして使用できます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese005.gif">
+</div>
+<div style="margin-left:50px;"><br><br>ミップマップ使用時はレベルごとにピクセル数を(n+1)/2にすることができるほか、すべてのレベルに同じピクセル数のイメージを格納することもできます。<br><br>イメージチャンクデータのレイアウトは以下のようになっています。ただし各領域のうしろにはアラインメントのためのパディングが追加されることがあります。パディングは0のバイト列でうめられます。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese006.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_1">
+<div style="margin-left:40px;"><h4><b>イメージヘッダ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">イメージヘッダのデータ構造は以下のようになっています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short header_size ;	// ヘッダのサイズ（48）
+	u_short unused ;	// 使用しません（0）
+	u_short format ; 	// ピクセル形式（GIM_FORMAT_XXXX）
+	u_short order ;		// ピクセル格納形式（GIM_ORDER_XXXX）
+	u_short width ;		// 横幅のピクセル数
+	u_short height ;	// 高さのピクセル数
+	u_short bpp ;		// １ピクセルのビット数
+	u_short pitch_align ;	// 横幅のバイト数のアラインメント
+	u_short height_align ;	// 高さのピクセル数のアラインメント
+	u_short dim_count ; 	// イメージ配列の次元数（2）
+	u_short reserved ;	// 予約領域（0）
+	u_short reserved2 ;	// 予約領域（0）
+	u_int offsets ;		// オフセット配列へのオフセット
+	u_int images ;		// 先頭イメージへのオフセット
+	u_int total ;		// 合計サイズ
+	u_int plane_mask ;	// プレーンマスク
+	u_short level_type ;	// レベルのタイプ（GIM_TYPE_XXXX）
+	u_short level_count ;	// レベル数
+	u_short frame_type ;	// フレームのタイプ（GIM_TYPE_XXXX）
+	u_short frame_count ;	// フレーム数
+} GimImageHeader ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>header_sizeはヘッダのサイズを表します。48バイト以上必要です。<br>format、orderはイメージの形式を表します（詳細は別記）。<br>width、heightはイメージのピクセル数を表します（1以上）。<br>bppは1ピクセルの平均ビット数を表します（1以上）。<br>pitch_align、height_alignはアラインメントの単位を表します（1以上）。<br>dim_countはイメージ配列の次元数を表します（常に2）。<br>offsetsはイメージヘッダを起点としたオフセット配列へのオフセットです。<br>imagesはイメージヘッダを起点とした先頭イメージへのオフセットです。<br>totalはイメージチャンクデータ全体のサイズです。<br><br>plane_maskは少ないビット数のイメージを1枚のイメージに重ねて格納したときのプレーン構成を表します。隣接するプレーンごとにビット列を反転させます。最下位プレーンはプレーン数が偶数のときは0、奇数のときは１にします。formatがインデックス形式の場合のみ有効で、不要な場合は0にします。<br><br>例：<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese007.gif">
+</div>
+<div style="margin-left:67px;"><br>level_count、frame_countはイメージ数を表します（1以上）。<br>level_type、frame_typeはイメージ配列のタイプを表します。<br>level_typeにはGIM_TYPE_MIPMAPまたはMIPMAP2を指定します。<br>frame_typeにはGIM_TYPE_SEQUENCEを指定します（詳細は別記）。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_2">
+<div style="margin-left:40px;"><h4><b>ユーザデータ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">任意のバイト列を格納することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_3">
+<div style="margin-left:40px;"><h4><b>オフセット配列</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">イメージヘッダを起点とした各イメージへのオフセットをイメージ数だけ格納します。オフセットは4バイト整数です。4バイト単位でのアラインメントが必要です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_4">
+<div style="margin-left:40px;"><h4><b>イメージ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ピクセル配列を格納します。16バイト単位でのアラインメントが必要です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>パレットチャンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">パレットチャンクは、同じエントリ数のパレット配列を格納することができます。配列はミップマップやシーケンスとして使用できます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese008.gif">
+</div>
+<div style="margin-left:50px;"><br><br>パレットチャンクのチャンクデータのレイアウトおよびデータ構造はイメージチャンクと同じですが、以下のような制限があります。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> heightは常に1となります。
+<li> formatはGIM_FORMAT_RGBAXXXXのみです。
+<li> plane_maskは常に0となります。
+<li> level_typeはGIM_TYPE_MIPMAP2のみです。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>シーケンスチャンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">シーケンスチャンクは簡単なアニメーション情報を格納することができます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> イメージフレーム番号
+<li> パレットフレーム番号
+<li> イメージ矩形
+</ul></div>
+<div style="margin-left:50px;"><br>また、いろいろな設定情報を定数として格納することもできます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> アルファブレンディングモード
+<li> テクスチャファンクション
+<li> テクスチャフィルタ
+<li> テクスチャラップ
+</ul></div>
+<div style="margin-left:50px;"><br>シーケンスチャンクデータのレイアウトは以下のようになっています。各領域は4バイトのアラインメントが必要です。各領域のうしろにはアラインメントのためのパディングが追加されることがあります。パディングは0のバイト列でうめられます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese009.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_5">
+<div style="margin-left:40px;"><h4><b>シーケンスヘッダ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">シーケンスヘッダのデータ構造は以下のようになっています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short header_size ;	// ヘッダのサイズ（32）
+	u_short unused ;	// 使用しません（0）
+	u_short frame_start ;	// 開始フレーム
+	u_short frame_end ;	// 終了フレーム
+	u_short frame_rate ;	// フレームレート
+	u_short frame_repeat ; 	// 繰り返しモード（GIM_REPEAT_XXXX）
+	u_short n_constants ;	// 定数データ数
+	u_short n_functions ;	// 関数データ数
+	u_int constants ;  	// 定数データ配列へのオフセット
+	u_int functions ;  	// 関数データ配列へのオフセット
+	u_int keyframes ;  	// 先頭キーフレーム列へのオフセット
+	u_int total ;		// 合計サイズ
+} GimSequenceHeader ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>header_sizeはヘッダのサイズを表します。32バイト以上必要です。<br>frame_start、frame_endは再生範囲です（単位＝フレーム）。<br>frame_rateは再生速度です（単位＝フレーム／秒）。<br>frame_repeatは繰り返しモードです（詳細は別記）。<br>n_constantsは定数データの数を表します（0以上）。<br>n_functionsは関数データの数を表します（0以上）。<br>constantsはシーケンスヘッダを起点とした定数データ配列へのオフセットです。<br>functionsはシーケンスヘッダを起点とした関数データ配列へのオフセットです。<br>totalはシーケンスチャンクデータ全体のサイズです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_6">
+<div style="margin-left:40px;"><h4><b>ユーザデータ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">任意のバイト列を格納することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_7">
+<div style="margin-left:40px;"><h4><b>定数データ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">定数データはアニメーションされないパラメータの値を表します。定数データのデータ構造は以下のようになっています。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+typedef struct {
+	u_short param ;		// 対象パラメータ（GIM_PARAM_XXXX）
+	short value ;		// 値
+} GimConstant ;
+
+</font></pre></div>
+<div style="margin-left:67px;">paramは定数の値がセットされるパラメータを指定します（詳細は別記）。<br>valueは定数の値です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_8">
+<div style="margin-left:40px;"><h4><b>関数データ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">関数データはアニメーションされるパラメータをキーフレームで表します。関数データのデータ構造は以下のようになっています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short param ;		// 対象パラメータ（GIM_PARAM_XXXX）
+	u_short interp ;	// 補間方法（GIM_INTERP_XXXX）
+	u_int keyframes ;	// キーフレーム列へのオフセット
+} GimFunction ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>paramは関数の値がセットされるパラメータを指定します（詳細は別記）。<br>interpはキーフレーム間の補間方法を表します（詳細は別記）。<br>keyframesはシーケンスヘッダを起点としたキーフレーム列へのオフセットです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_9">
+<div style="margin-left:40px;"><h4><b>キーフレーム</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">キーフレームはある時刻における関数の値を表すデータです。キーフレームのデータ構造は以下のようになっており、連続するキーはまとめて格納されます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	short count ;		// キーフレーム間隔
+	short values[ n ] ; 	// キー値（可変個数）
+} GimKeyframe ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>countが0以上の場合は次のキーフレームとの間隔を表し、valuesは1つだけ格納されます。countが負の場合は-countだけキーが連続することを表し、valuesは-countだけ格納されます。<br><br>例：<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese010.gif">
+</div>
+<div style="margin-left:67px;"><br>最後のキーフレームはcountを0にします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>ファイル情報チャンク</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ファイル情報チャンクはファイルに関する情報を格納することができます。チャンクデータはヌル文字('\0')で区切られた複数の文字列です。<br><br>文字列の意味は以下のように定義されています。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ProjectName(作成元のファイル名)
+<li> UserName(ファイルを作成したユーザー名)
+<li> SavedDate(ファイルを作成した日時)
+<li> Originator(ファイルを作成したアプリケーション名)
+<li> Comment(任意)
+</ul></div>
+<div style="margin-left:67px;">・・・<br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>テキスト形式</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">テキスト形式はバイナリ形式と似た構造をもった可読形式であり、バイナリ形式と相互に変換することができるため編集やデバッグに利用することができます。<br><br>テキスト形式ではまずファイルの先頭行にファイルヘッダをが記述し、それ以降の行にブロックを階層的に記述します。ただし最上位ブロックであるファイルブロックは記述を省略します。<br><br>記述例：<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>.GIS 1.00
+
+Picture "picture-0" {
+	Image "image-0" {
+		Format INDEX4
+		Order NORMAL
+		Width 16
+		Height 16
+		PitchAlign 16
+		HeightAlign 1
+		PlaneMask 0x00000000
+		LevelType MIPMAP
+		LevelCount 1
+		FrameType SEQUENCE
+		FrameCount 1
+		Pixels "pixels-0" INDEX4 NORMAL 16 16 16 1 {
+			0xA7977AA4 0x000039A7 0x00000000 0x00000000
+			0xF9E9CCE8 0x00004DFA 0x00000000 0x00000000
+			0xE9E987E9 0x00014DED 0x00000000 0x00000000
+			0xD9E9DCE9 0x00015DDF 0x00000000 0x00000000
+			0xC9E9D9E9 0x00015DBE 0x00000000 0x00000000
+			0xC9D9DDE7 0x00015DAC 0x00000000 0x00000000
+			0x66656662 0x11114666 0x00000000 0x00000000
+			0x59A67A94 0x7A7A9787 0x00000000 0x00000000
+			0x9EDBCCE8 0x8E9FCAE9 0x00000000 0x00000000
+			0xADBCC9E9 0x7EBEBDF9 0x00000000 0x00000000
+			0xADBC77E9 0x5EDCBFF9 0x00000000 0x00000000
+			0xADBCDAE9 0x5EFBBEC9 0x00000000 0x00000000
+			0x7EE89EE7 0x5CF9BBB9 0x00000000 0x00000000
+			0x56655652 0x46655655 0x00000000 0x00000000
+			0x34434431 0x24433332 0x00000000 0x00000000
+			0x11111110 0x11111111 0x00000000 0x00000000
+		}
+	}
+	Palette "palette-0" {
+		Format RGBA8888
+		Order NORMAL
+		Width 16
+		Height 1
+		PitchAlign 16
+		HeightAlign 1
+		PlaneMask 0x00000000
+		LevelType MIPMAP2
+		LevelCount 1
+		FrameType SEQUENCE
+		FrameCount 1
+		Pixels "pixels-0" RGBA8888 NORMAL 16 1 16 1 {
+			0x01000000 0x3B000000 0x9D000000 0xD5000000
+			0xFF040302 0xFF0A0802 0xFF110F02 0xFF424001
+			0xFF6D6C02 0xFF7E7C01 0xFF8C8A01 0xFFA8A602
+			0xFFBDBC02 0xFFD4D102 0xFFE9E701 0xFFF9F701
+		}
+	}
+	Sequence "sequence-0" {
+		FrameStart 0
+		FrameEnd 12
+		FrameRate 12
+		FrameRepeat CYCLE
+		Constant WRAP_U CLAMP
+		Constant WRAP_V REPEAT
+		Function "function-0" CROP_V LINEAR {
+			0 0
+			12 16
+		}
+	}
+}
+
+FileInfo "fileinfo-0" {
+	ProjectName "icon.bmp"
+	UserName "guest"
+	SavedDate "2005/01/20 11:51:46"
+	Originator "GimConv 1.00"
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">テキスト形式で記述されるシンボル名は、定数マクロ名のプレフィクスを2つ省略したものです。<br>例：<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数マクロ名</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>シンボル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_GENERIC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GENERIC&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MIPMAP&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MIPMAP2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_SEQUENCE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SEQUENCE&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>ファイルヘッダ</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_10">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><i>signature version</i><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_11">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ファイル形式を識別するための行です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_12">
+<div style="margin-left:40px;"><h4><b>[引数]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>signature</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル識別子(".GIS")&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>version</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バージョン番号("1.00")&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ピクチャブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_13">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Picture "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_14">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ピクチャを表すブロックです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_15">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Image&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージブロック&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Palette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パレットブロック&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シーケンスブロック&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>イメージブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_16">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Image "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_17">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">イメージを表すブロックです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_18">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Format&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピクセル形式(GIM_FORMAT_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Order&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピクセル格納形式(GIM_ORDER_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Width&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;横幅のピクセル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Height&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;高さのピクセル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PitchAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;横幅のバイト数のアラインメント&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;HeightAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;高さのピクセル数のアラインメント&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PlaneMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;プレーンマスク&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LevelType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レベルのタイプ(GIM_TYPE_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LevelCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;レベル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フレームのタイプ(GIM_TYPE_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フレーム数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;UserData&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザーデータブロック&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Pixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピクセルデータブロック&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>パレットブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_19">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Palette "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_20">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">パレットを表すブロックです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_21">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">イメージブロックと同じ形式です。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>シーケンスブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_22">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Sequence "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_23">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">シーケンスを表すブロックです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_24">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameStart&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;開始フレーム&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameEnd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;終了フレーム&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フレームレート&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;繰り返しモード(GIM_REPEAT_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Constant&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;定数データ(GIM_PARAM_XXXX,値)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Function&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;関数データブロック&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>ファイル情報ブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_25">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>FileInfo "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_26">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ファイル情報を表すブロックです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_27">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ProjectName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;作成元のファイル名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Username&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルを作成したユーザー名&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SavedDate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルを作成した日時&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Originator&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルを作成したアプリケーション名&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>ピクセルデータブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_28">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Pixels "<i>name</i>" <i>format order width height pitch_align height_align</i> {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_29">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ピクセルデータを表すブロックです。<br>イメージ、パレットブロック内でのみ使用可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_30">
+<div style="margin-left:40px;"><h4><b>[引数]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>format</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピクセル形式(GIM_FORMAT_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>order</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ピクセル格納形式(GIM_ORDER_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>width</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;横幅のピクセル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>height</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;高さのピクセル数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pitch_align</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;横幅のバイト数のアラインメント&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>height_align</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;高さのピクセル数のアラインメント&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_31">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ピクセルデータのバイナリイメージを32ビット整数で記述します。<br>データサイズは4バイト単位で切り上げます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>関数データブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_32">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Function "<i>name</i>" <i>param</i> <i>interp</i> {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_33">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">関数データを表すブロックです。<br>シーケンスブロック内でのみ使用可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_34">
+<div style="margin-left:40px;"><h4><b>[引数]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>param</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象パラメータ(GIM_PARAM_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>interp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;補間方法(GIM_INTERP_XXXX)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_35">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">各キーフレームを時刻と値を表す数値のペアで記述します。<br>キーフレームは時刻によってソートされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_9">
+<h3>
+<a href="#Heading3_4"> 4. </a>9 
+<!-- hp1 --><b>ユーザーデータブロック</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_9_36">
+<div style="margin-left:40px;"><h4><b>[形式]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>UserData "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_9_37">
+<div style="margin-left:40px;"><h4><b>[解説]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ユーザーデータを表すブロックです。<br>イメージ、パレット、シーケンスブロック内でのみ使用可能です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_9_38">
+<div style="margin-left:40px;"><h4><b>[内容]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ユーザデータのバイナリイメージを32ビット整数で記述します。<br>データサイズは4バイト単位で切り上げます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>フォーマット定数</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>ピクセル形式</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_39">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA5650</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese011.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_40">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA5551</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese012.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_41">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA4444</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese013.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_42">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA8888</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese014.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_43">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_INDEX4, INDEX8, INDEX16, INDEX32</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese015.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_44">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_DXTn</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">S3TCテクスチャ圧縮形式です。この形式ではイメージ内のピクセルは4×4のブロックごとに格納されます。詳しくはS3TCに関するドキュメントを参照してください。<br>なおイメージヘッダに含まれるbppは1ブロックの合計ビット数の1／16です。またpitch_alignは4ラインで必要とされるアラインメントの1／4です。<br>ブロック内のメモリレイアウトは以下のようになります。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> GIM_FORMAT_DXT1, DXT1EXT
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese016.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> GIM_FORMAT_DXT3, DXT3EXT
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese017.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> GIM_FORMAT_DXT5, DXT5EXT
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese018.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>ピクセル格納形式</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2_45">
+<div style="margin-left:40px;"><h4><b>GIM_ORDER_NORMAL</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">最も一般的なピクセル格納形式です。左から右、上から下の順で格納されます。8ビット未満のピクセルは格納先の下位ビットから格納されます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese019.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2_46">
+<div style="margin-left:40px;"><h4><b>GIM_ORDER_PSPIMAGE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PSP&reg;においてテクスチャキャッシュに高速にロードできるピクセル格納形式です。横幅16バイト×高さ8ピクセルのブロックごとに格納されます。なおピクセル形式がS3TCのときはこの形式を指定できません。<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-Japanese020.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>イメージ配列タイプ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_GENERIC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;汎用的なイメージ配列&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ミップマップ配列（サイズ縮小）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ミップマップ配列（サイズ一定）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_SEQUENCE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;時系列イメージ配列&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>シーケンス補間モード</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_CONSTANT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;前のキー値を使用&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2つのキー値を線形補間&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">以下のフラグを論理和で指定することができます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_DISSOLVE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フレーム番号のアニメーションにおいて&nbsp;&nbsp;<br>&nbsp;&nbsp;ディゾルブ値を計算する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_EVENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;キーフレームを通過するごとにイベント&nbsp;&nbsp;<br>&nbsp;&nbsp;を発生する&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_5">
+<h3>
+<a href="#Heading3_5"> 5. </a>5 
+<!-- hp1 --><b>シーケンス繰り返しモード</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_REPEAT_HOLD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループ範囲を超えると停止&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_REPEAT_CYCLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ループ範囲を超えると循環&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_6">
+<h3>
+<a href="#Heading3_5"> 5. </a>6 
+<!-- hp1 --><b>シーケンス対象パラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_INDEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージのチャンク番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_PLANE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージのプレーン番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_LEVEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージのレベル番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_FRAME&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージのフレーム番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_PALETTE_INDEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パレットのチャンク番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_PALETTE_LEVEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パレットのレベル番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_PALETTE_FRAME&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パレットのフレーム番号&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_U&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージ矩形の左上Ｕ座標&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_V&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージ矩形の左上Ｖ座標&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_W&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージ矩形の横幅&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;イメージ矩形の高さ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_BLEND_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アルファブレンディングモード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FUNC_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;テクスチャファンクションモード&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FUNC_COMP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;テクスチャファンクション成分&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FILTER_MAG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;テクスチャ拡大フィルタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FILTER_MIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;テクスチャ縮小フィルタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_WRAP_U&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;テクスチャＵ方向ラップ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_WRAP_V&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;テクスチャＶ方向ラップ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_7">
+<h3>
+<a href="#Heading3_5"> 5. </a>7 
+<!-- hp1 --><b>アルファブレンディングモード</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_OFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cs&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_MIX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cd * ( 1-alpha ) + Cs * alpha&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_ADD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cd + Cs * alpha&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_SUB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cd - Cs * alpha&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_MIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;min( Cd, Cs )&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_MAX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;max( Cd, Cs )&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_ABS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;abs( Cd - Cs )&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_8">
+<h3>
+<a href="#Heading3_5"> 5. </a>8 
+<!-- hp1 --><b>テクスチャファンクションモード</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_MODULATE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MODULATE&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_DECAL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DECAL&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_9">
+<h3>
+<a href="#Heading3_5"> 5. </a>9 
+<!-- hp1 --><b>テクスチャファンクション成分</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_RGB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RGB&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_RGBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RGBA&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_10">
+<h3>
+<a href="#Heading3_5"> 5. </a>10 
+<!-- hp1 --><b>テクスチャフィルタモード</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_NEAREST&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NEAREST&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;LINEAR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_NEAREST_MIPMAP_NEAREST&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NEAREST + NEAREST&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_LINEAR_MIPMAP_NEAREST&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;LINEAR + NEAREST&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_NEAREST_MIPMAP_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NEAREST + LINEAR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_LINEAR_MIPMAP_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;LINEAR + LINEAR&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_11">
+<h3>
+<a href="#Heading3_5"> 5. </a>11 
+<!-- hp1 --><b>テクスチャラップモード</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>定数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_WRAP_REPEAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;REPEAT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_WRAP_CLAMP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CLAMP&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>PSP&reg;ライブラリによる制限</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>オフセットのアラインメント</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オフセット</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>必須</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>推奨</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ファイルヘッダからチャンク&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4byte&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16byte&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;チャンクからチャンクデータ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4byte&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16byte&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;チャンクから下位チャンク&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4byte&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16byte&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;イメージヘッダからユーザーデータ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4byte&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16byte&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;イメージヘッダからオフセット配列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4byte&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4byte&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;イメージヘッダからピクセル配列&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16byte&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16byte&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>イメージ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>パラメータ</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>条件</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>制約</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;width&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1～512&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;height&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1～512&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;pitch_align&nbsp;</td>
+<td valign="top">&nbsp;RGBA&nbsp;/&nbsp;INDEX&nbsp;</td>
+<td valign="top">&nbsp;16以上(2のべき乗)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;S3TC&nbsp;</td>
+<td valign="top">&nbsp;4以上(2のべき乗)&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  valign="top">&nbsp;height_align&nbsp;</td>
+<td valign="top">&nbsp;通常モード&nbsp;</td>
+<td valign="top">&nbsp;1以上(2のべき乗)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;高速モード&nbsp;</td>
+<td valign="top">&nbsp;8以上(2のべき乗)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;S3TC&nbsp;</td>
+<td valign="top">&nbsp;4以上(2のべき乗)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;level_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;MIPMAPまたはMIPMAP2&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;level_count&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1～8&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SEQUENCE&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_count&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1以上&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>パレット</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>パラメータ</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>条件</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>制約</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;width&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;16または256&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;height&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;pitch_align&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;16&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;height_align&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;level_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;MIPMAP2&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;level_count&nbsp;</td>
+<td valign="top">&nbsp;32bit&nbsp;256entries&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;16bit&nbsp;256entries&nbsp;</td>
+<td valign="top">&nbsp;1～2&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;32bit&nbsp;16entries&nbsp;</td>
+<td valign="top">&nbsp;1～8&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;16bit&nbsp;16entries&nbsp;</td>
+<td valign="top">&nbsp;1～8&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SEQUENCE&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_count&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1以上&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>シーケンス</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">制限なし<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

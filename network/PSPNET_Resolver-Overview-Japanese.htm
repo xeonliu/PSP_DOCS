@@ -1,0 +1,389 @@
+<html lang="jp">
+<head>
+<title>PSPNET_Resolver-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+pspnet_resolver
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>ライブラリ概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>機能の概要と特徴</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverは、TCP/IPプロトコルスタックであるpspnet_inetモジュール上で動作するDNSリゾルバライブラリです。本ライブラリを使用することで、ホスト名からIPアドレスへの変換、またIPアドレスからホスト名への変換を行なうことができます。たとえば、ユーザが接続先として指定したホスト名を、pspnet_resolverを用いてIPアドレスに変換し、pspnet_inetのソケットAPIに引数で指定するといった場合に使用します。<br>pspnet_inetの詳細については、PSP&reg;ネットワークライブラリを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_error.h&nbsp;&nbsp;<br>&nbsp;&nbsp;pspnet_resolver.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_resolver_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weakインポートスタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_resolver_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">リゾルバライブラリだけを単独で利用するようなケースは稀なため、pspnet_resolver単独のサンプルは用意していません。pspnet_inetのサンプルであるhttp_getがpspnet_resolverサンプルを兼ねています。http_getサンプルでは、引数で指定したホスト名をIPアドレスに変換する際にpspnet_resolverを利用しています。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>ライブラリ設計</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">pspnet_resolverでは、マルチスレッドセーフやエラーコードの粒度を考慮した独自APIを採用します。UNIXで一般に利用されているgethostbyname()、gethostbyaddr()は使用しません。<br>pspnet_resolver APIの特徴を以下に挙げます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>リゾルバコンテキスト</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーションはDNS名前解決を行なうためには、まずリゾルバコンテキストを作成する必要があります。各コンテキストには、"リゾルバID"が割り当てられ、名前解決の開始、停止にはリゾルバIDを指定します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>アプリケーション指定のバッファ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">DNS名前解決を行なうためには、DNSパケットの送受信バッファが必要になります。複数のスレッドが同時に名前解決を行なう場合は、各スレッドごとに独立したバッファが必要になります。<br>pspnet_resolverでは、このバッファはすべてアプリケーションが指定するものとします。ライブラリ内部では確保しません。<br>バッファはリゾルバIDごとに保持され、各スレッドが専用のリゾルバIDを使用することでバッファの独立性を保証します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>ブロッキングAPIとノンブロッキングAPIの提供</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">名前解決のAPIとしてはブロッキングAPIとノンブロッキングAPIを両方を提供します。<br>ブロッキングAPIである<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>()、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>()は、名前解決が正常終了もしくはエラーになるまで内部でブロックします。関数内でのブロックを解除するには、ブロック解除対象のリゾルバIDを指定して停止関数を呼び出します。<br>ノンブロッキングAPIは、名前解決開始関数である<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoAAsync">sceNetResolverStartNtoAAsync</a>()、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoNAsync">sceNetResolverStartAtoNAsync</a>()と、開始後の状態ポーリングを行なう<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>()があります。呼び出し側は、ノンブロッキングの名前解決開始関数を読んだ後は、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>()を定期的に呼び出して名前解決完了を待ちます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>シンプルな機能</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">名前解決の種類としては、ホスト名に対するIPアドレスを解決する「正引き」と、IPアドレスに対するホスト名を解決する「逆引き」をサポートします。<br>DNS では、名前に対応するレコードは複数存在する場合があります。しかし、一般には複数のレコードを必要とすることは稀なため、pspnet_resolver では、問い合わせに対する返答に複数のレコードが存在しても、第一レコードのみをアプリケーションに返すものとします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>再送間隔と再送回数</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">名前解決はUDPデータグラムの送受信であり、通信経路でパケットが喪失することが起こり得ます。そのため、名前解決ではタイムアウトによる再送をサポートする必要があります。pspnet_resolverでは、1回の名前解決ごとに、再送間隔と再送回数を指定します。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>使用手順の概略</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>モジュールのロード処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverのモジュールは、PSPNETインフラストラクチャモジュールセットに含まれています。モジュールセットのロード方法については、「PSPNET概要ドキュメント」および「ユーティリティ概要ドキュメント」をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>使用準備</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverを使用するには、事前にネットワーク接続が完了し、IPアドレスを取得済みである必要があります。接続に関する詳細は「PSP&reg;ネットワークライブラリドキュメント」を参照して下さい。<br>IPアドレス取得時に、名前解決問い合わせ先のプライマリDNSサーバー、セカンダリDNSサーバーがpspnet_inet内部に保持されます。pspnet_resolverは、そのネームサーバーを問い合わせ先とします。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>初期化処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">初期化関数は、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverInit">sceNetResolverInit</a>()です。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverInit">sceNetResolverInit</a>(void);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>リゾルバコンテキストの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">名前解決を実際に行なう前に、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverCreate">sceNetResolverCreate</a>()を使用してリゾルバコンテキストを作成し、リゾルバIDを取得します。<br>リゾルバコンテキスト作成の際には、このコンテキストで使用するバッファをアプリケーションから指定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverCreate">sceNetResolverCreate</a>(int *rid, void *buf, SceSize buflen);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>ブロッキングモードの名前解決</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_1">
+<div style="margin-left:40px;"><h4><b>名前解決の開始</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">リゾルバIDを取得したら、そのIDを指定して名前解決を開始します。ブロッキングモードの名前解決の開始は、正引きは<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>()、逆引きは<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>()を使用します。これらの関数では、この名前解決での問い合わせパケットの再送間隔と再送回数を指定します。<br>ブロッキングAPIなので、呼び出しスレッドが名前解決のパケット送受信を行ない、正常終了またはエラーになると関数から戻ります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>(
+    int rid,
+    const char *hostname,
+    struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    unsigned int timeout,
+    int retry);
+
+int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>(
+    int rid,
+    const struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    char *hostname,
+    SceSize hostname_len,
+    unsigned int timeout,
+    int retry);
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_2">
+<div style="margin-left:40px;"><h4><b>名前解決の停止</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ブロッキングの名前解決の場合は、他スレッドからブロックを解除するために停止関数<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStop">sceNetResolverStop</a>()が用意されています。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStop">sceNetResolverStop</a>(int rid);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>ノンブロッキングモードの名前解決</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_3">
+<div style="margin-left:40px;"><h4><b>名前解決の開始</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">リゾルバIDを取得したら、そのIDを指定して名前解決を開始します。ノンブロッキングモードの名前解決の開始は、正引きは<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoAAsync">sceNetResolverStartNtoAAsync</a>()、逆引きは<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoNAsync">sceNetResolverStartAtoNAsync</a>()を使用します。これらの関数では、この名前解決での問い合わせパケットの再送間隔と再送回数を指定します。<br>ノンブロッキングの名前解決開始関数内では、名前解決の準備をするだけで実際には送受信は行なわれません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoAAsync">sceNetResolverStartNtoAAsync</a>(
+    int rid,
+    const char *hostname,
+    struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    unsigned int timeout,
+    int retry
+    );
+
+int 
+<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoNAsync">sceNetResolverStartAtoNAsync</a>(
+    int rid,
+    const struct <a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetInAddr">SceNetInetInAddr</a> *addr,
+    char *hostname,
+    SceSize hostname_len,
+    unsigned int timeout,
+    int retry
+    );
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_4">
+<div style="margin-left:40px;"><h4><b>名前解決の完了待ち</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ノンブロッキングモードの名前解決を開始したら、完了を待ち合わせる必要があります。<br>完了を待ち合わせるには、ノンブロッキングAPIである<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>()を定期的に呼び出す方法と、完了までブロックする<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverWaitAsync">sceNetResolverWaitAsync</a>()を呼び出す方法があります。<br>pspnet_resolverでは内部スレッドを持っていないので、この完了待ち関数内部でノンブロッキングソケットを使った送受信が行なわれます。そのため、ノンブロッキングAPIである<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>()でも、厳密にはライブラリ内部でセマフォ待ちなどが発生しコンテキストスイッチが起こる場合があることに注意してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int
+<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverPollAsync">sceNetResolverPollAsync</a>(
+    int rid,
+    void *result
+    );
+
+int
+<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverWaitAsync">sceNetResolverWaitAsync</a>(
+    int rid,
+    void *result
+    );
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_5">
+<div style="margin-left:40px;"><h4><b>名前解決の停止</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ノンブロッキングの名前解決を停止するには、ブロッキングモードと同様に停止関数<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStop">sceNetResolverStop</a>()を呼びます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStop">sceNetResolverStop</a>(int rid);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>エラーコード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverは、エラーコードをすべて返り値で返します。エラーコードの詳細については、リファレンスドキュメントを参照してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_8">
+<h3>
+<a href="#Heading3_3"> 3. </a>8 
+<!-- hp1 --><b>リゾルバコンテキストの削除</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">スレッドがリゾルバの使用を終了する際、使用していたリゾルバコンテキストを削除します。これには<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverDelete">sceNetResolverDelete</a>()を使用します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int <a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverDelete">sceNetResolverDelete</a>(int rid);
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>使用リソース</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>内部スレッド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverでは、内部スレッドを生成しません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>ヒープ使用</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverでは、リゾルバコンテキストの管理のために、PSPNETのヒープ領域を使用します。<br>サイズの目安としては、１つのリゾルバコンテキストに対して28バイト使用しますので、同時使用リゾルバコンテキスト×28バイトとなります。<br>ただし、この概算は内部断片化を考慮していませんので、その分の余裕を持ってサイズを指定してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>送受信バッファ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverでは、送受信データ用のバッファとして、リゾルバコンテキストごとにメモリ領域を必要とします。このバッファは<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverCreate">sceNetResolverCreate</a>()で指定します。<br><a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>()、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>()それぞれに対する、バッファサイズの概算は以下の通りです。それぞれ、最大サイズが規定できます。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_1"><h4>
+(1)&nbsp;<b>sceNetResolverStartNtoA()</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">引数で指定するhostnameのサイズをlとします。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> hostnameに対応するIPアドレス(Aレコード)が存在する場合<br>必要なバッファサイズは(3 * l + 30)バイト程度です。<br>例) "foo.bar.org"がAレコードを持つ場合、3 * 12 + 30 = 66バイト程度
+<li> エイリアス名(CNAMEレコード)が存在する場合<br>必要なバッファサイズはCNAME名のサイズや、CNAMEの段数によって可変になります。<br>1段の場合は、(3 * l + 40 + CNAME名サイズ * 3)バイト程度です。<br>例) "foo.bar.org"が"realname.bar.org"のCNAMEであり、"realname.bar.org"がAレコードを持つ(1段のCNAME)の場合、"foo.bar.org"の名前解決では、<br>3 * 12 + 40 + 17 * 3 = 127バイト程度
+</ul></div>
+<div style="margin-left:67px;"><br>ただし、DNSの仕様上、必要なバッファサイズは最大でも(l+512)バイトになり、lは最大で256バイトなので、合計768バイトが最大サイズになります。<br>この値はpspnet_resolver.hにて、定数マクロSCE_PSPNET_RESOLVER_NTOA_BUFSIZE_MAXとして定義してあります。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_4_3_2"><h4>
+(2)&nbsp;<b>sceNetResolverStartAtoN()</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">必要なバッファサイズは(103 +ホスト名サイズ)バイト程度。<br>例) "100.101.102.103"に対応するホスト名が"foo.bar.org"であり、"100.101.102.103"を逆引きで問い合わせる場合、必要なバッファサイズは103 + 12 = 115バイト程度。<br><br>ただし、DNSの仕様上、必要なバッファサイズは最大でも359バイトになります。<br>この値はpspnet_resolver.hにて、定数マクロSCE_PSPNET_RESOLVER_ATON_BUFSIZE_MAXとして定義してあります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>API呼び出しに必要なスタックサイズについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverのAPI呼び出しに必要なスタックサイズは、5120バイト（SCE_NET_PSPNET_RESOLVER_LEAST_STACK_SIZE）です。スタックサイズが不足の場合は、<a href="../network/PSPNET_Error-Reference-Japanese.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a>のエラーが返ります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>名前解決したデータの格納場所</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>()による正引きの場合、解決したIPアドレスは引数で示された<a href="../network/PSPNET_Inet-Reference-Japanese.htm#SceNetInetInAddr">SceNetInetInAddr</a>構造体に格納されます。<br><a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>()による逆引きの場合、解決したホスト名は引数で指定された領域へコピーされます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>同一リゾルバコンテキストに対する同時操作</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">pspnet_resolverのリゾルバコンテキスト操作関数<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverDelete">sceNetResolverDelete</a>()、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartNtoA">sceNetResolverStartNtoA</a>()、<a href="../network/PSPNET_Resolver-Reference-Japanese.htm#sceNetResolverStartAtoN">sceNetResolverStartAtoN</a>()は、マルチスレッドセーフになっています。しかし、同一のリゾルバIDに対して複数スレッドから同時に操作をすることはサポートしていません。複数スレッドから同時にpspnet_resolverを使用する場合は、独立したリゾルバコンテキストを作成して下さい。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

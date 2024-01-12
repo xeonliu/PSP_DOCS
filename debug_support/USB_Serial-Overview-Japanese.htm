@@ -1,0 +1,663 @@
+<html lang="jp">
+<head>
+<title>USB_Serial-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+USBシリアルドライバ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>目的</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBシリアルドライバは、USBのCommunication Device Class(CDC)のAbstract Control Model(ACM)を利用することで、USBを介してTOOL(DTP-T1000、DTP-H1500)とPCの間でシリアル通信を行うためのドライバです。<br><br>Windows PCに接続した場合にはCOMポート、Linux PCに接続した場合には/dev/ttyACM0などに見え、通常のシリアル通信と同様にデータをやり取りすることができます。ZMODEMやKermitなどによる転送はサポートしていません。<br><br>USBシリアルドライバはTOOLでのみ使用することができ、PSP&reg;本体で使用することはできません。また、CDCの仕様上、USBカメラドライバやUSB GPSドライバなどの他のUSBドライバと同時に使用することはできません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>構成ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBシリアルドライバを使用するために必要なファイルは以下のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usbser.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;stubファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usbser_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>サンプルプログラム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBシリアルドライバのサンプルプログラムとして以下のものがありますので、参照してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> devkit/sample/tool/usbser/echoback<br>USBホストから送信されたデータをそのまま送り返すプログラムです。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>初期化・終了処理</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>TOOLの設定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBシリアルドライバを使用する場合には、システムソフトウェアの「Debug Settings」で「USB Serial」を有効にしてください。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> システムソフトウェアを起動する。</li>
+<li VALUE=2> 「設定」&rarr;「Debug Settings」&rarr;「USB Serial」の項目をONに設定する。</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>ドライバのロード</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">「Debug Settings」の「USB Serial」が有効になっている場合には、起動時にUSBシリアルドライバがロードされ常駐します。アプリケーションからドライバをロードする必要はありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>初期化処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerInit">sceUsbSerInit</a>()でUSBシリアルドライバを初期化してください。<br>この時、引数に<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SceUsbSerInitParam">SceUsbSerInitParam</a>を渡すことで、USBシリアルドライバが通信時に使用する読み込み用、書き込み用の内部バッファを外部から与えることができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define INTERNAL_BUF_SIZE (8 * 1024)
+static char readBuf[INTERNAL_BUF_SIZE];
+static char writeBuf[INTERNAL_BUF_SIZE];
+
+<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SceUsbSerInitParam">SceUsbSerInitParam</a> param;
+
+// sizeフィールドに構造体のサイズを設定
+param.size = sizeof(<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SceUsbSerInitParam">SceUsbSerInitParam</a>);
+
+// 読み込み用バッファとしてreadBufを使用する
+param.pReadBuf = readBuf;
+param.sizeReadBuf = INTERNAL_BUF_SIZE;
+
+// 書き込み用バッファとしてwriteBufを使用する
+param.pWriteBuf = writeBuf;
+param.sizeWriteBuf = INTERNAL_BUF_SIZE;
+
+// USBシリアルドライバの初期化
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerInit">sceUsbSerInit</a>(&amp;param);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">また、内部バッファを指定しなかった場合には、カーネル空間から各バッファにつき4KiBのメモリが確保され、内部バッファとして使用されます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// USBシリアルドライバの初期化
+// 内部バッファはドライバが確保するバッファを使用する
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerInit">sceUsbSerInit</a>(NULL);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">USBシリアルドライバは他のUSBドライバと同時に使用することはできないため、USBバスドライバが提供するsceUsbStart()を使用して始動したUSBドライバが存在する場合には、USBシリアルドライバを初期化することはできません。<br>USBシリアルドライバを使用する場合には、必ず全てのUSBドライバを停止してから、USBシリアルドライバを初期化してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>終了処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerEnd">sceUsbSerEnd</a>()でUSBシリアルドライバを終了してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// USBシリアルドライバの終了
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerEnd">sceUsbSerEnd</a>();
+if (ret &lt; 0) {
+	// エラー処理
+} 
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>通信処理</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>USBシリアルのポートを開く</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerOpen">sceUsbSerOpen</a>()でUSBシリアルのポートを開いてください。<br>この時、引数に指定する値によって、USBホストが通信可能な状態を表すDTR(Data Terminal Ready)がOFFの場合の挙動が異なります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_1">
+<div style="margin-left:40px;"><h4><b>DTRをチェックするモードの場合（SCE_USBSER_OPEN_MODE_CHECK_DTR）</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRead">sceUsbSerRead</a>() / <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>() / <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerFlush">sceUsbSerFlush</a>()を実行中にDTRがOFFになった場合、もしくはDTRがOFFの状態でこれらのAPIを実行した場合に<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a>のエラーが返ります。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// CHECK_DTRモードでポートを開く
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerOpen">sceUsbSerOpen</a>(<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OPEN_MODE_CHECK_DTR">SCE_USBSER_OPEN_MODE_CHECK_DTR</a>);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_2">
+<div style="margin-left:40px;"><h4><b>DTRを無視するモードの場合（SCE_USBSER_OPEN_MODE_IGNORE_DTR）</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a>のエラーは返りません。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// IGNORE_DTRモードでポートを開く
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerOpen">sceUsbSerOpen</a>(<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OPEN_MODE_IGNORE_DTR">SCE_USBSER_OPEN_MODE_IGNORE_DTR</a>);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">ポートを開くと、USBシリアルドライバがDCD(Data Carrier Detect)とDSR(Data Set Ready)をONにし、USBホストへ通信準備ができたことを通知します。ポートが開き、且つDTRがONになると、USBホストと通信することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>データの読み込み</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBホストから受信したデータは、一旦USBシリアルドライバの読み込み用の内部バッファに格納され、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRead">sceUsbSerRead</a>()を実行することで内部バッファからデータを読み込むことができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define BUF_SIZE  (8 * 1024)
+char buf[BUF_SIZE];
+int ret;
+
+// Blockingモード、タイムアウトなしでデータを読み込む
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRead">sceUsbSerRead</a>(buf, BUF_SIZE, <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>, -1);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRead">sceUsbSerRead</a>()は、第3引数で以下の3つのモードを指定することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Blockingモード（<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>）<br>指定したサイズのデータを読み込むまで待ち状態になります。
+<li> Blocking/Non-Blockingモード（<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_B_NB">SCE_USBSER_OP_MODE_B_NB</a>）<br>内部バッファにデータがない場合のみ、データを受信するまで待ち状態になります。データを受信して内部バッファに格納されると、内部バッファにあるデータのみを読み込み、終了します。
+<li> Non-Blockingモード（<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_NONBLOCKING">SCE_USBSER_OP_MODE_NONBLOCKING</a>）<br>内部バッファにあるデータのみを読み込み、終了します。内部バッファにデータがない場合には、データは読み込まれず0が返ります。
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">BlockingモードとBlocking/Non-Blockingモードの場合には、第4引数でμs単位の無通信タイムアウト時間を指定することで、指定した時間の間USBホストからデータを受信しなかった場合にタイムアウトさせることができます。指定する時間は<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRead">sceUsbSerRead</a>()を実行してからの時間ではない点に注意してください。第4引数に負の値を指定するとタイムアウトしなくなります。<br><br>DTRをチェックするモードでポートを開いている場合には、DTRがOFFの場合に<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a>のエラーが返ります。<br>DTRを無視するモードでポートを開いている場合には、DTRがONになるまでUSBホストからデータを受信することがないため、DTRがOFFの間はBlockingモードとBlocking/Non-Blockingモードはブロックし続け、Non-Blockingモードは0が返ります。<br><br>BlockingモードとBlocking/Non-Blockingモードの場合は、待ち状態に入っている間にコールバック通知の有無を確認する機能を追加した<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerReadCB">sceUsbSerReadCB</a>()を使用することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>データの書き込み</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>()でUSBホストへ送信するデータを書き込むことができます。書き込んだデータは一旦USBシリアルドライバの書き込み用の内部バッファに格納され、順次USBホストへ送信されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define BUF_SIZE  (8 * 1024)
+char buf[BUF_SIZE];
+int ret;
+
+memset(buf, 0xFF, BUF_SIZE);
+
+// Blockingモード、タイムアウトなしでデータを書き込む
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>(buf, BUF_SIZE, <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>, -1);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>()が終了しても、まだUSBホストへ送信されず、内部バッファにデータが残っている可能性がある点に注意してください。全てのデータがUSBホストへ送信されたことを保証したい場合にはフラッシュ処理を実行する必要があります。<br><br><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>()は、第3引数で以下の3つのモードを指定することができます。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Blockingモード（<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_BLOCKING">SCE_USBSER_OP_MODE_BLOCKING</a>）<br>指定したサイズのデータを書き込むまで待ち状態になります。
+<li> Blocking/Non-Blockingモード（<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_B_NB">SCE_USBSER_OP_MODE_B_NB</a>）<br>内部バッファに空きがない場合のみ、空きができるまで待ち状態になります。データを送信して内部バッファに空きができると、内部バッファの空きサイズ分だけデータを書き込み、終了します。
+<li> Non-Blockingモード（<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_OP_MODE_NONBLOCKING">SCE_USBSER_OP_MODE_NONBLOCKING</a>）<br>内部バッファの空きサイズ分だけデータを書き込み、終了します。内部バッファに空きがない場合には、データは書き込まれず0が返ります。
+</ul></div>
+<div style="margin-left:50px;"><br>BlockingモードとBlocking/Non-Blockingモードの場合には、第4引数でμs単位の無通信タイムアウト時間を指定することで、指定した時間の間USBホストへデータを送信できなかった場合にタイムアウトさせることができます。指定する時間は<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>()を実行してからの時間ではない点に注意してください。第4引数に負の値を指定するとタイムアウトしなくなります。<br><br>DTRをチェックするモードでポートを開いている場合には、DTRがOFFの場合に<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a>のエラーが返ります。<br>DTRを無視するモードでポートを開いている場合には、全てのデータを書き込んだことになり、指定したサイズと同じ値が返ります。しかし、DTRがOFFの間はUSBホストへデータを送信することができないため、書き込んだデータは送信されることなく破棄されます。<br><br>BlockingモードとBlocking/Non-Blockingモードの場合は、待ち状態に入っている間にコールバック通知の有無を確認する機能を追加した<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWriteCB">sceUsbSerWriteCB</a>()を使用することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>フラッシュ処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>()で書き込んだデータがUSBホストへ送信されたことを確認する方法として、以下の3つの方法があります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_3">
+<div style="margin-left:40px;"><h4><b>sceUsbSerFlush() / sceUsbSerFlushCB()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerFlush">sceUsbSerFlush</a>()で書き込み用内部バッファのデータが全てUSBホストへ送信されるまで待たせることができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// タイムアウトなしでデータが全て送信されるまで待つ
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerFlush">sceUsbSerFlush</a>(-1);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:67px;">引数にμs単位の時間を指定することで、指定した時間内にフラッシュできなかった場合にタイムアウトさせることができます。引数に負の値を指定するとタイムアウトしなくなります。<br><br>DTRをチェックするモードでポートを開いている場合には、DTRがOFFの場合に<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_ERROR_DTR_OFF">SCE_USBSER_ERROR_DTR_OFF</a>のエラーが返ります。<br>DTRを無視するモードでポートを開いている場合には、DTRがOFFの間は<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>()で書き込んだデータは破棄されるため、すぐに正常終了します。<br><br><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerFlushCB">sceUsbSerFlushCB</a>()は待ち状態に入っている間にコールバック通知の有無を確認する機能を追加した関数です。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_4">
+<div style="margin-left:40px;"><h4><b>sceUsbSerGetWriteDataSize()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerGetWriteDataSize">sceUsbSerGetWriteDataSize</a>()で書き込み用内部バッファのデータサイズが0になるまでポーリングすることで、データが全て送信されたことを確認することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+while (1) {
+	// 書き込み用内部バッファのデータサイズが0になるまでループ
+	if (<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerGetWriteDataSize">sceUsbSerGetWriteDataSize</a>() == 0) {
+		break;
+	}
+
+	// ビジーループにならないようにディレイを入れる
+	<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>(10 * 1000);
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_5">
+<div style="margin-left:40px;"><h4><b>sceUsbSerRegisterSentCallback()</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>()で書き込み用内部バッファの空きサイズが最大になった時にコールバックが通知されるようにすることで、データが全て送信されたことを確認することができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define INTERNAL_BUF_SIZE   (8 * 1024)
+
+// コールバック関数
+static int FlushCallback(int count, int arg, void *common)
+{
+	printf(&quot;Sent all data\n&quot;);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// コールバックを生成
+ret = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;FlushCallback&quot;, FlushCallback, NULL);
+if (ret &lt; 0) {
+	// エラー処理
+}
+cbId = ret;
+
+// 閾値に内部バッファのサイズを指定してコールバックを登録
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>(cbId, INTERNAL_BUF_SIZE);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+while (1) {
+	// CBつきAPIでコールバック通知の有無をチェック
+	<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>キャンセル処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerCancel">sceUsbSerCancel</a>()で実行中の<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRead">sceUsbSerRead</a>() / <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>() / <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerFlush">sceUsbSerFlush</a>()の処理をキャンセルすることができます。引数にキャンセルする処理を以下のマクロで指定してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CANCEL_MODE_READ">SCE_USBSER_CANCEL_MODE_READ</a>（読み込み処理）
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CANCEL_MODE_WRITE">SCE_USBSER_CANCEL_MODE_WRITE</a>（書き込み処理）
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CANCEL_MODE_FLUSH">SCE_USBSER_CANCEL_MODE_FLUSH</a>（フラッシュ処理）
+</ul></div>
+<div style="margin-left:50px;">また、論理和で指定することで、複数の処理を一度にキャンセルすることができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// 読み込み、書き込み、フラッシュ処理をキャンセル
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerCancel">sceUsbSerCancel</a>(<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CANCEL_MODE_READ">SCE_USBSER_CANCEL_MODE_READ</a> |
+			<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CANCEL_MODE_WRITE">SCE_USBSER_CANCEL_MODE_WRITE</a> |
+			<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CANCEL_MODE_FLUSH">SCE_USBSER_CANCEL_MODE_FLUSH</a>);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>内部バッファのクリア処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerClear">sceUsbSerClear</a>()で内部バッファをクリアすることができます。引数にクリアする内部バッファを以下のマクロで指定してください。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CLEAR_MODE_READ">SCE_USBSER_CLEAR_MODE_READ</a>（読み込み用内部バッファ）
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CLEAR_MODE_WRITE">SCE_USBSER_CLEAR_MODE_WRITE</a>（書き込み用内部バッファ）
+</ul></div>
+<div style="margin-left:50px;">また、論理和で指定することで、両方のバッファを一度にクリアすることができます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// 読み込み用と書き込み用の両方の内部バッファをクリア
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerClear">sceUsbSerClear</a>(<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CLEAR_MODE_READ">SCE_USBSER_CLEAR_MODE_READ</a> |
+			<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_CLEAR_MODE_WRITE">SCE_USBSER_CLEAR_MODE_WRITE</a>);
+if (ret &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>USBシリアルポートを閉じる</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerClose">sceUsbSerClose</a>()でUSBシリアルのポートを閉じてください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerClose">sceUsbSerClose</a>();
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">ポートを閉じると、USBシリアルドライバがDCDとDSRをOFFにすることで、USBホストへ通信できないことを通知し、USBシリアルドライバの内部バッファをクリアします。ポートが閉じている間にUSBホストから送られたデータは破棄されます。<br><br><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRead">sceUsbSerRead</a>() / <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerWrite">sceUsbSerWrite</a>() / <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerFlush">sceUsbSerFlush</a>()を実行中にポートを閉じた場合には、実行中の関数は<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_ERROR_CLOSED">SCE_USBSER_ERROR_CLOSED</a>のエラーが返ります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>状態取得</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>内部バッファの状態取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の関数を使用することで、内部バッファのデータサイズと空きサイズを取得することができます。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerGetReadDataSize">sceUsbSerGetReadDataSize</a>() : 読み込み用内部バッファのデータサイズを取得
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerGetReadFreeSize">sceUsbSerGetReadFreeSize</a>() : 読み込み用内部バッファの空きサイズを取得
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerGetWriteDataSize">sceUsbSerGetWriteDataSize</a>() : 書き込み用内部バッファのデータサイズを取得
+<li> <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerGetWriteFreeSize">sceUsbSerGetWriteFreeSize</a>() : 書き込み用内部バッファの空きサイズを取得
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>DTRの状態取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerGetDTR">sceUsbSerGetDTR</a>()で現在のDTRの状態を取得することができます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>コールバック</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>DTRの変化を通知するコールバック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">DTRの変化を通知するコールバックを<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterDTRCallback">sceUsbSerRegisterDTRCallback</a>()で登録、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerUnregisterDTRCallback">sceUsbSerUnregisterDTRCallback</a>()で登録解除することができます。<br>コールバック関数の第2引数<i>arg</i>には、DTRの状態を表す<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_DTR_ON">SCE_USBSER_DTR_ON</a>もしくは<a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_DTR_OFF">SCE_USBSER_DTR_OFF</a>が渡されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// コールバック関数
+static int DTRCallback(int count, int arg, void *common)
+{
+	printf(&quot;DTR %s\n&quot;, (arg == <a href="../debug_support/USB_Serial-Reference-Japanese.htm#SCE_USBSER_DTR_ON">SCE_USBSER_DTR_ON</a>) ? &quot;ON&quot; : &quot;OFF&quot;);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// コールバックを生成
+ret = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;DTRCallback&quot;, DtrCallback, NULL);
+if (ret &lt; 0) {
+	// エラー処理
+}
+cbId = ret;
+
+// コールバックを登録
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterDTRCallback">sceUsbSerRegisterDTRCallback</a>(cbId);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+while (1) {
+	// CBつきAPIでコールバック通知の有無をチェック
+	<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>データ受信を通知するコールバック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">データ受信を通知するコールバックを<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterRecvCallback">sceUsbSerRegisterRecvCallback</a>()で登録、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerUnregisterRecvCallback">sceUsbSerUnregisterRecvCallback</a>()で登録解除することができます。<br>第2引数で閾値を指定することができ、閾値以上のデータが読み込み用内部バッファへ格納された時にコールバックが通知されます。コールバック関数の引数<i>arg</i>には、内部バッファ内のデータサイズが渡されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define RECV_THRESHOLD  4  // 4バイト以上受信した時にコールバック通知する
+
+// コールバック関数
+static int ReceivedCallback(int count, int arg, void *common)
+{
+	printf(&quot;Data size : %d bytes\n&quot;, arg);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// コールバックを生成
+ret = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;ReceivedCallback&quot;, ReceivedCallback, NULL);
+if (ret &lt; 0) {
+	// エラー処理
+}
+cbId = ret;
+
+// コールバックを登録
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterRecvCallback">sceUsbSerRegisterRecvCallback</a>(cbId, RECV_THRESHOLD);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+while (1) {
+	// CBつきAPIでコールバック通知の有無をチェック
+	<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">一度コールバックが通知されると、一旦内部バッファ内のデータサイズが閾値より小さくなるまでは、閾値を超えていてもコールバックは通知されません。<br><br>また、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerSetRecvCBThreshold">sceUsbSerSetRecvCBThreshold</a>()で閾値を変更することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>データ送信を通知するコールバック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">データ送信を通知するコールバックを<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>()で登録、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerUnregisterSentCallback">sceUsbSerUnregisterSentCallback</a>()で登録解除することができます。<br>第2引数で閾値を指定することができ、データ送信により閾値以上の空きが書き込み用内部バッファにできた時にコールバックが通知されます。コールバック関数の引数<i>arg</i>には、内部バッファ内の空きサイズが渡されます。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#define SENT_THRESHOLD  4  // 4バイト以上空きができた時にコールバック通知する
+
+// コールバック関数
+static int SentCallback(int count, int arg, void *common)
+{
+	printf(&quot;Free space size : %d bytes\n&quot;, arg);
+	return 0;
+}
+
+
+SceUID cbId;
+
+// コールバックを生成
+ret = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>(&quot;SentCallback&quot;, SentCallback, NULL);
+if (ret &lt; 0) {
+	// エラー処理
+}
+cbId = ret;
+
+// コールバックを登録
+ret = <a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerRegisterSentCallback">sceUsbSerRegisterSentCallback</a>(cbId, SENT_THRESHOLD);
+if (ret &lt; 0) {
+	// エラー処理
+}
+
+while (1) {
+	// CBつきAPIでコールバック通知の有無をチェック
+	<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankCB">sceDisplayWaitVblankCB</a>();
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">一度コールバックが通知されると、一旦内部バッファ内の空きサイズが閾値より小さくなるまでは、閾値を超えていてもコールバックは通知されません。<br><br>また、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerSetSentCBThreshold">sceUsbSerSetSentCBThreshold</a>()で閾値を変更することができます。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>注意事項</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>マスター提出時の確認</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBシリアルドライバは、PSP&reg;本体で使用することはできません。マスター提出時には、必ずシステムソフトウェアで「Debug Settings」の「USB Serial」を無効にしても動作することを確認してください。<br><br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> システムソフトウェアを起動する。</li>
+<li VALUE=2> 「設定」&rarr;「Debug Settings」&rarr;「USB Serial」の項目をOFFに設定する。</li>
+</ol></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>参考情報</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>Windows PCに接続する場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Windows XP SP1以降のWindows PCで使用することができます。<br><br>Windows PCに接続する場合には、初めにdevkit/sample/tool/usbser/psp_usbser.infを使用して、ドライバをインストールする必要があります。Windows XPの場合のドライバのインストール方法を以下に示します。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> TOOL上でUSBシリアルドライバを使用するプログラムを実行し、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerInit">sceUsbSerInit</a>()でUSBシリアルドライバを初期化する。</li>
+<li VALUE=2> TOOLとPCをUSBケーブルで接続する。</li>
+<li VALUE=3> PC上にウィザードが起動するため、以下の項目を順番に選択する。<br>1.「いいえ、今回は接続しません」<br>2.「一覧または特定の場所からインストールする(詳細)」<br>3.「検索しないで、インストールするドライバを選択する」</li>
+<li VALUE=4> ドライバ選択画面が表示されるため、「ディスク使用」を選択し、psp_usbser.infファイルがあるフォルダを選択する。</li>
+<li VALUE=5> モデル名が「PSP USB Serial」となっているドライバが表示されるため、そのドライバを選択する。</li>
+<li VALUE=6> Windowsロゴテストに合格していない旨の警告が表示されますが、「続行」を選択する。</li>
+<li VALUE=7> インストール完了画面が表示される。</li>
+</ol></div>
+<div style="margin-left:50px;"><br>TOOLが接続されているポート番号を調べる方法を一つ紹介します。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> TOOL上でUSBシリアルドライバを使用するプログラムを実行し、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerInit">sceUsbSerInit</a>()でUSBシリアルドライバを初期化する。</li>
+<li VALUE=2> TOOLとPCをUSBケーブルで接続する。</li>
+<li VALUE=3> 「コントロールパネル」&rarr;「システム」を開き、「ハードウェア」タブの「デバイスマネージャ」を開く。</li>
+<li VALUE=4> 「ポート(COMとLPT)」のリストから「PSP USB Serial」という名前のポートを探す。</li>
+<li VALUE=5> 「PSP USB Serial (COM3)」のように、名前の後ろにポート番号が表示されている。</li>
+</ol></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>Linux PCを使用する場合</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USB CDC ACMがサポートされているLinux PCで使用することができます。<br><br>Linux標準のCDC ACMドライバはttyACM*というデバイスファイルを作成するため、カーネル2.6のLinux PCの場合には、以下の方法でTOOLが接続されているポート番号を調べることができます。<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> TOOL上でUSBシリアルドライバを使用するプログラムを実行し、<a href="../debug_support/USB_Serial-Reference-Japanese.htm#sceUsbSerInit">sceUsbSerInit</a>()でUSBシリアルドライバを初期化する。</li>
+<li VALUE=2> TOOLとPCをUSBケーブルで接続する。</li>
+<li VALUE=3> PC上で以下のコマンドを実行する。以下の例では/dev/ttyACM0にアクセスすることでTOOLと通信することができます。</li>
+</ol></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+# dmesg | grep ttyACM
+cdc_acm 5-2:1.0: ttyACM0: USB ACM device
+
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

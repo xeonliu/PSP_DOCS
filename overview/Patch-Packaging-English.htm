@@ -1,0 +1,480 @@
+<html lang="en">
+<head>
+<title>Patch-Packaging</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&trade; Patch Package Creation Guide
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Preface</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This document explains the procedure for creating a PSP&trade; patch package. It describes how to create the data and program to be distributed in the package, how to create content information required for packaging, how to create the package and perform operational testing, and how to submit the master.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>PSP&trade; Patch Package</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A PSP&trade; patch package is a data format for distributing a new program or data from the SCE patch server when the program or data of a previously released application must be updated. Updated content information may also be included in the PSP&trade; patch package.<br>The distributed PSP&trade; patch package is installed on a Memory Stick&trade; and displayed on the game list by PSP&trade; system software. Installed data and programs, which are encrypted and managed by the NPDRM mechanism, are protected so that users cannot tamper with the data. Although the system software launches the boot program and displays content information, the application must access the other files using the NPDRM library in a similar manner as is done with additional game data. For details, refer to the "NPDRM Library" documentation.<br><br>A PSP&trade; patch package can be downloaded by users from a PSP&trade; system.<br>When the user selects "Update" from the system software menu, the PSP&trade; patch package is downloaded to the Memory Stick&trade; by system software. In addition, the application can use the game update library to check whether or not a patch exists. For information about the game update library, refer to the "Game Update Library" documentation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Workflow</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The steps for creating a PSP&trade; patch package are normally performed in the following order.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_1"><h4>
+(1)&nbsp;<b>Create the patch</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Create the program and data.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_2"><h4>
+(2)&nbsp;<b>Create the files required for packaging</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Create the PSP&trade; system file, content information files and configuration file.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_3"><h4>
+(3)&nbsp;<b>Perform packaging and operational testing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Assemble the required files in the prescribed directory structure, archive them in ZIP format, and use the Simple Authoring Service provided by SCE to create a "PSP&trade; patch package for development." Install the PSP&trade; patch package for development on a PSP&trade; development tool, and perform sufficient operational testing.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_1_2_4"><h4>
+(4)&nbsp;<b>Submit the master and perform QA testing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the Title Patch Publishing System provided by SCE to submit the tested PSP&trade; patch package for development. After SCE finishes QA testing, the patch package can be moved to the production patch server.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Creating the Patch</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Rules governing the data or program files included in a PSP&trade; patch package are almost identical to those for a PSP&trade; additional game data package. Refer to the "PSP&trade; Additional Game Data Package" document together with this document.<br>This chapter explains items specific to PSP&trade; patch packages.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Creating Data Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The data files stored in PSP&trade; patch packages differ from those in additional game data packages in that access rights are not managed, even for NPDRM EDATA or SPRX files. Therefore, other users, in addition to the user who downloaded the patch package, can read the files correctly. As is true of additional game data, the contents are encrypted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Creating the Boot Program File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; patch package can contain a program file that will replace the boot program of the UMD&trade; or downloadable game. The stored program file, which is created in a similar manner as a normal boot program, must be named "PBOOT.BIN."<br>Points to consider concerning the contents of the boot program are listed below.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_1">
+<div style="margin-left:40px;"><h4><b>Runtime Library Version</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">As a general rule, the same version of the runtime library should be used for PBOOT.BIN as was used for the application. Contact the SCE Publisher Relations Department in advance if you need to use different versions of the runtime library.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_2">
+<div style="margin-left:40px;"><h4><b>Accessing Data Files</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A PSP&trade; patch package is stored in the following directory on a Memory Stick&trade;.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+ms0:/PSP/GAME/<i>(product number without hyphens)</i>/
+
+Example) ms0:/PSP/GAME/SXXX01234/
+</font></pre></div>
+<div style="margin-left:67px;">This absolute path must be embedded in the program in advance to access files in the package.<br>Also, to read the contents of an NPDRM EDATA file or to load and start up an NPDRM SPRX file, the NPDRM library must be used to verify access rights. For details, refer to the "NPDRM Library" documentation.<br>Note that there are no particular access restrictions on NPDRM EDATA or NPDRM SPRX files. They can also be opened as normal files using sceIoOpen(), but in that case, the contents are read in an encrypted/compressed state. Also, the files are not write-protected so that if part of the data is overwritten, the NPDRM EDATA or NPDRM SPRX file will become corrupted and impossible to decode.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_2_3">
+<div style="margin-left:40px;"><h4><b>Operational Testing of the Program</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When developing the program that will be included in the patch, do not just test that program by itself. Be sure to also test the application after it is updated by the program to make sure that it runs correctly.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Creating Files Required for Packaging</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the following files required to create a PSP&trade; patch package.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> PSP&trade; system file (PARAM.SFO)
+<li> PSP&trade; content information files (ICON0.PNG, etc.)
+<li> Configuration file (NPDRM.CONF)
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>PSP&trade; System File (PARAM.SFO)</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The system file PARAM.SFO is a file that stores parameters that PSP&trade; system software uses to display information (ex: game title names or parental control values) or parameters for internal use (ex: the product or disc serial number). The dedicated tool for creating PARAM.SFO is called the SystemFileEditor. PARAM.SFO differs in content from the system file used for the game master disc, and it must be created for a PSP&trade; patch package. Specify MSGamepatch_SystemFile_Config.sfc as the configuration file, and specify parameters as follows.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_4">
+<div style="margin-left:40px;"><h4><b>TITLE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Specify the title name. When the patch package is installed, the value of this parameter is given display preference over the parameter stored in the application. It can contain up to 128 bytes (including the terminating NULL) in UTF-8, and must not include newline characters.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Example) Prairie Warrior
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_5">
+<div style="margin-left:40px;"><h4><b>PARENTAL_LEVEL</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Set the parental lock level to a number from 0 to 11. The value must be the same as that for the application.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_6">
+<div style="margin-left:40px;"><h4><b>DISC_ID</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Set a character string consisting of the application product number with the hyphens removed. Or, if GAMEDATA_ID was set in the application, set the same value here. <br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Example) ABCD01234
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_7">
+<div style="margin-left:40px;"><h4><b>DISC_VERSION</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The DISC_VERSION is in the format X.XX, where X can be any arbitrary number. Setting the disc version is optional.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Example) 1.00
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_8">
+<div style="margin-left:40px;"><h4><b>APP_VER</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Enter the patch version. <br>Set this parameter carefully because an incorrect setting could prevent the application from being updated correctly.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_9">
+<div style="margin-left:40px;"><h4><b>TARGET_APP_VER</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">For a differential patch package, enter the differential target version. <br>Set this parameter carefully because an incorrect setting could prevent the application from being updated correctly.  <br>If this parameter is omitted, the package will be handled as a cumulative patch package.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_10">
+<div style="margin-left:40px;"><h4><b>PBOOT_TITLE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Set a title name that is different from that of the application. System software will use this title name for displaying the title of the patch package by itself.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Example) Prairie Warrior Patch
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_1_11">
+<div style="margin-left:40px;"><h4><b>REGION, BOOTABLE, DRIVER_PATH, PSP_SYSTEM_VER, CATEGORY, ATTRIBUTE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">For these parameters, do not change the default values that are displayed by the SystemFileEditor.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>PSP&trade; Content Information Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&trade; content information files are files such as icon images that are used for displays on PSP&trade; system software screens. After the PSP&trade; patch package is installed, the content information files in the package are used instead of the content information files of the UMD&trade; or downloadable game. Of the following five types of content information files, the still image icon file must be created. The others are optional.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Still image icon file:  ICON0.PNG
+<li> Video icon file:  ICON1.PMF
+<li> Content description image file:  PIC0.PNG
+<li> Content information background image file:  PIC1.PNG
+<li> BGM file:  SND0.AT3
+</ul></div>
+<div style="margin-left:50px;">For details concerning the format of these files or how to create them, refer to "Content Information File Creation" in the separate document "Game Master Disc Creation Procedure." However, be careful of the following points specific to patching, concerning the display of content information in the patch package.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_12">
+<div style="margin-left:40px;"><h4><b>Patch for a UMD&trade; game</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Only the still image icon (ICON0.PNG) will be displayed. This is true even if the patch package contains other kinds of content information (such as a video icon, background image, or BGM). No content information other than the still image icon will be displayed by system software.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_2_13">
+<div style="margin-left:40px;"><h4><b>Patch for a downloadable game</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">When content information in the patch package is displayed, it replaces the content information of the actual game. For example, if the patch package does not contain a background image, no background image will be displayed by system software, even if the actual game contains a background image. If there are no updates for the background image, make sure that the patch package also contains the background image that was provided for the actual game.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Configuration File</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The configuration file is a text file that defines the parameters required for creating a PSP&trade; patch package, such as the content ID used to identify content in the PlayStation&reg;Store. The format is shown below.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+Content-ID = <i>IV0002-NPXS00008_00-GAMEUPDATE000001</i>
+K-Licensee = <i>0x0123456789abcdef0123456789abcdef</i>
+PackageVersion = <i>01.00</i>
+PSPSystemVersion = <i>6.10</i>
+
+</font></pre></div>
+<div style="margin-left:50px;">On the first line, specify "Content-ID = " followed by the content ID, which consists of the service ID issued by SCE followed by a hyphen and an arbitrary 16-digit label. For details about the content ID, refer to the "PlayStation&reg;Network Overview" document. The content ID must be different for each package. A service ID is issued for each title. Therefore, when an application is made available as a PSP&trade; downloadable game package or when a PSP&trade; additional game data package is provided, use this as the label to distinguish them.<br>On the second line, specify "K-Licensee = " followed by the value of the encryption key k_licensee defined as a hexadecimal string beginning with 0x. k_licensee is a key that prevents an arbitrary program started by a user from freely accessing NPDRM EDATA, or SPRX files for which that user was granted access rights by a different program. Specify a unique value, such as the one obtained by executing the following command in Linux.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example) head -c 16 /dev/random | xxd -g 16
+</font></pre></div>
+<div style="margin-left:50px;">On the third line, specify "PackageVersion = " followed by the master package version, which is a two-digit integer followed by two decimal digits. Determine the numerical value so that it conforms to the method of determining the master version number described in the "Technical Requirements Checklist for PSP&trade; (PlayStation&reg;Portable) Software" (TRC).<br>On the fourth line, specify "PSPSystemVersion = " followed by the value of PSP_SYSTEM_VER in the PARAM.SFO file that is contained in the application. The value of PSP_SYSTEM_VER may change after the master is updated, so contact the SCE Publisher Relations Department if you do not know the exact value.<br>Use NPDRM.CONF as the name of the configuration file.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Performing Packaging and Operational Testing</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">This chapter describes the procedure for collecting together the prepared files to create a PSP&trade; patch package and the procedure for using it to perform operational testing.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Creating a ZIP Archive</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Arrange the prepared files in the directory structure shown below.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Patch-Packaging-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Directory Structure for Authoring</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Create a subdirectory called "PSP_PATCH" directly under the root directory of the package, and place the boot program "PBOOT.BIN" in this subdirectory. Delete the section header from "PBOOT.BIN" in advance by invoking psp-prx-strip with the --strip-section-header option.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example) % psp-prx-strip -o PBOOT.BIN --strip-section-header patch.prx
+</font></pre></div>
+<div style="margin-left:50px;">Also, create a subdirectory called "PSP_DATA," and place the other game data and programs there. Note that the data and program files to be protected must have extensions of .EDAT and .SPRX, respectively.<br>Similarly, create a subdirectory called "PSP_CONT" and place the PSP&trade; system file and PSP&trade; content information files there. Finally, place the configuration file "NPDRM.CONF" directly under the root directory.<br><br>Archive this entire directory structure in ZIP format and assign the filename "<i>contentID</i>.SRC.ZIP."<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_14">
+<div style="margin-left:40px;"><h4><b>Linux command example</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>% zip -ry IV0002-NPXS00008_00-GAMEUPDATE000001.SRC.ZIP .
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Authoring</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Using the Simple Authoring Service provided by SCE, create a PSP&trade; patch package by performing authoring on the ZIP archive that you created. For details about how to use the Simple Authoring Service, refer to the "PlayStation&reg;Network SMT Simple Authoring Service Users Guide" document.<br>If there is a problem in the uploaded file, one of the following error codes will be reported. If any other error code is reported, contact SCE and notify us of the error code.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_15">
+<div style="margin-left:40px;"><h4><b>List of Patch Package Authoring Errors</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Code</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Cause or Response</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;16&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM.CONF was not found.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;17&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PARAM.SFO was not found.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;18&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ICON0.PNG for the PSP&trade; was not found.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;23&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;An unnecessary file is included.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;24&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The same directory contains multiple files having the same name and differing only with respect to capitalization.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;25&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A file exists that cannot be included under PSP_DATA/.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;31&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The description of NPDRM.CONF is insufficient or invalid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;33&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The Content-ID specification in NPDRM.CONF is invalid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;35&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A problem was detected in PARAM.SFO.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;36&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PARAM.PBP generation failed.&nbsp;&nbsp;<br>&nbsp;&nbsp;There may be a problem in a file under PSP_CONT/.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;37&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The ZIP file to be processed does not contain a Content-ID that is specified in NPDRM.CONF.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;39&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The K-Licensee specification in NPDRM.CONF is invalid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;40&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The PackageVersion specification in NPDRM.CONF is invalid.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;41&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Although a NPDRM SPRX file is included, NPDRM.CONF has no K-Licensee specification.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;42&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPDRM SPRX file conversion processing failed.&nbsp;&nbsp;<br>&nbsp;&nbsp;There may be an invalid PRX file.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;44&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PBOOT.BIN was not found.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;45&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PBOOT.BIN file conversion processing failed.&nbsp;&nbsp;<br>&nbsp;&nbsp;It may be an invalid file or a startup file from which symbol information or the section header was not removed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;46&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The PSPSystemVersion specification in NPDRM.CONF is invalid.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">When authoring is correctly performed, the following two files are obtained.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <i>contentID</i>.ZIP: ZIP package for performing operational testing using the PSP&trade; development tool
+<li> <i>contentID</i>.PKG:PKG package for uploading to the Title Patch Publishing System
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Testing Using the Development Tool</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Unzip the ZIP package in the root directory of a Memory Stick&trade; and insert that <br>Memory Stick&trade; into the PSP&trade; development tool.<br>This will install the patch package, so verify that the display of content information has been updated as intended. Also, use the content information check feature of the PSP&trade; system software to verify that the PSP&trade; content information is appropriate (for example, that it is necessary to update the PSP&trade; system software in advance to the appropriate version).<br>Also, perform operational testing and debugging of programs that are contained in the patch package.<br><br>In addition, use the Title Patch Publishing System to upload the PKG package to the development patch server. If all tests thus far have been successful, there should be no problems, but be sure to test the update and also to test the updated application. <br>In particular, verify that all versions released in the past can be properly updated.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Inspecting the Package</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The make_package_npdrm command can be used to check the legitimacy of a PKG package obtained from the Simple Authoring Service.<br>To check the legitimacy of a package, use the --check option.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example) % make_package_npdrm  --check  IV0002-NPXS00004_00-0000111122223333.pkg
+</font></pre></div>
+<div style="margin-left:50px;"><br>The --list option can also be used to display the files that are contained in the package.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>Example) % make_package_npdrm  --list  IV0002-NPXS00004_00-0000111122223333.pkg
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Submitting the Master and Performing QA Testing</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Submitting the Master</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">After testing is finished, use the Title Patch Publishing System to submit only the PKG package to QA. You can also submit different versions of the patch package at the same time.<br><br>When SCE has completed QA testing and the patch package has been approved, it can be moved to the production patch server. Use the Title Patch Publishing System to move the patch package to the production patch server when necessary.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Reference Information</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Directory Structure on the Memory Stick&trade; </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When a PSP&trade; patch package is installed on a Memory Stick&trade;, the directory structure is as follows.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Patch-Packaging-English002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Example Directory Structure on a PSP&trade; System</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">The name of the directory where the patch package is installed is determined based on the product number specified in PARAM.SFO, so it may be different from the product number in the content ID.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

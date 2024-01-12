@@ -1,0 +1,176 @@
+<html lang="en">
+<head>
+<title>libgmo_Model-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgmo_model Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgmo is a library for handling 3D model data. It provides functions for parsing 3D model data files into model structures having bone, part, and material subblocks, functions for animating model structures, and functions for creating display lists based on model structures in conjunction with libgu.<br>The only display list output that libgmo performs is to pass drawing command sequences to libgu. The application should manage display lists and perform image output by controlling libgu appropriately.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libgmo.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gmo/gmo_model.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgmo_model.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Since libgmo calls libgum functions internally, files related to libgum and libgu are also required. <br>To internally access structures such as SceGmoModel, be sure to include gmo/gmo_protected.h.<br>Source files are publicly available for libgmo. Refer to devkit/src/gmo_model/.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/graphics/model</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample program loads sample model data from a file, displays three copies of the data, and uses the controller to rotate and translate each of the copies. A mechanism is also provided to perform animation, and turn lighting, fog, and textures on and off using the controller.<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Reference Materials</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GMO_Format-Overview<br>GMO_Format-Reference<br>GMO Converter<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following code is the main part of a program example showing how to use libgmo.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;gmo/gmo_model.h&gt;
+
+// Load model data
+SceGmoModel *model = <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelCreate">sceGmoModelCreate</a>( 0 ) ;
+<a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelLoadFile">sceGmoModelLoadFile</a>( model, data, size, 0 ) ;
+SceGmoModel *copy =<a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelDuplicate">sceGmoModelDuplicate</a>( model, SCEGMO_DUPLICATE_AUTOMATIC ) ;
+<a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelSetCurrentMotion">sceGmoModelSetCurrentMotion</a>( copy, 0, 0.0f ) ;
+
+for ( ; ; ) {
+	//  Start display list
+	. . .
+	//  Display model data
+	<a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelSetWorldMatrix">sceGmoModelSetWorldMatrix</a>( copy, &amp;world_matrix ) ;
+	<a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelAnimate">sceGmoModelAnimate</a>( copy, 1.0f / 60.0f ) ;
+	<a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelUpdate">sceGmoModelUpdate</a>( copy ) ;
+	<a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelDraw">sceGmoModelDraw</a>( copy ) ;
+	. . .
+	//  End display list
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Although libgmo itself does not need to be initialized, the following callback functions must be registered.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Function for allocating / freeing memory for model structures
+<li> Function for allocating / freeing memory for DMA transfers such as for vertex arrays (not needed if the function for allocating / freeing memory for model structures also provides this function)
+<li> Function for registering / getting image data to be used as a texture
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Read model data file</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use an appropriate method to read a model data file and store the binary image in an arbitrary buffer in memory.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Create a model structure and load the model data</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">First, use <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelCreate">sceGmoModelCreate</a>() to create a model structure (SceGmoModel) and then use <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelLoadFile">sceGmoModelLoadFile</a>() to load the model data in the file image into the model structure.<br>If <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelGetChunk">sceGmoModelGetChunk</a>() is first used to get a pointer to the model data (SceGmoChunk) from the binary image of the model data file, the model structure can be created and the model data can be loaded into it at the same time by passing that pointer to <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelCreate">sceGmoModelCreate</a>().<br><a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelLoad">sceGmoModelLoad</a>() can also be used to load model data into an existing model structure.<br>In addition, <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelDuplicate">sceGmoModelDuplicate</a>() can be used to make a copy of a model structure that was previously created and loaded.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Set drawing options</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use a function such as <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelSetWorldMatrix">sceGmoModelSetWorldMatrix</a>() or <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelSetEnableBits">sceGmoModelSetEnableBits</a>() to set parameters required for drawing, and use <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelSetCurrentMotion">sceGmoModelSetCurrentMotion</a>() to select the motion.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>Start building the display list</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Allocate an appropriate amount of memory for the display list and use <a href="../graphics/libgu-Reference-English.htm#sceGuStart">sceGuStart</a>() to start building the display list. Any display list mode setting can be used.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>Update and draw model data</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelAnimate">sceGmoModelAnimate</a>() to advance the animation time, and if necessary, use a function such as <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoBoneSetTranslate">sceGmoBoneSetTranslate</a>() to arbitrarily change the model state according to physics calculations, collision detections, or user operations.<br>Use <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelUpdate">sceGmoModelUpdate</a>() to reflect the changed model state in the model structure, and call <a href="../graphics/libgmo_Model-Reference-English.htm#sceGmoModelDraw">sceGmoModelDraw</a>() to insert a drawing command sequence in the display list. In IMMEDIATE mode, the image is output as-is, and in LIST mode or CALL mode, a display list is created.<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

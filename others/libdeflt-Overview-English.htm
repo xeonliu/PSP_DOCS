@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>libdeflt-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libdeflt Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libdeflt is a library for expanding data in zlib format, deflate format, and gzip format, which are defined in RFC 1950, RFC 1951, and RFC 1952. Compressing and storing data and then expanding it at the time of use enables the efficient use of memory, a reduction in data loading times, etc.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The files which are required in order to use libdeflt are as follows.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Static link library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PRX module file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libdeflt.prx&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/deflt/fileio/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is sample code which expands a file that has been compressed in GZIP format.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_2">
+<div style="margin-left:40px;"><h4><b>devkit/sample/deflt/zip/</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is sample code which expands a file that has been archived and compressed in ZIP format.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>gzip Data Expansion</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Expanding a so-called .gz file with a header is performed in a manner such as that shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+
+char dstbuf[BUFSIZE];
+unsigned int uiCrc32;
+int res;
+
+res = <a href="../others/libdeflt-Reference-English.htm#sceGzipDecompress">sceGzipDecompress</a>(dstbuf, sizeof(dstbuf), gzipdata, &amp;uiCrc32);
+</font></pre></div>
+<div style="margin-left:67px;"><br>When using libdeflt, initialization is not necessary. Expansion is performed by simply using the <a href="../others/libdeflt-Reference-English.htm#sceGzipDecompress">sceGzipDecompress</a>() function as shown above. However, the .gz file must first be loaded into the gzipdata[] array in the above code using a file IO function or the like. (The same also applies below.) The <a href="../others/libdeflt-Reference-English.htm#sceGzipDecompress">sceGzipDecompress</a>() function returns a negative value if there was an error, or the size of the expanded data if it completed normally.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>deflate Data Expansion</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In HTTP/1.1, data is sometimes compressed using the deflate format. In that case, the deflate-format compressed data alone is provided as-is, without an added gzip header or zlib header. In such cases the data can be expanded using the <a href="../others/libdeflt-Reference-English.htm#sceDeflateDecompress">sceDeflateDecompress</a>() function.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;libdeflt.h&gt;
+
+char dstbuf[BUFSIZE];
+int res;
+res = <a href="../others/libdeflt-Reference-English.htm#sceDeflateDecompress">sceDeflateDecompress</a>(dstbuf, sizeof(dstbuf), infdata, NULL);
+</font></pre></div>
+<div style="margin-left:67px;"><br>The <a href="../others/libdeflt-Reference-English.htm#sceDeflateDecompress">sceDeflateDecompress</a>() function returns a negative value if there was an error, or the size of the expanded data if it completed normally.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>zlib Data Expansion</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To expand data stored in the zlib format (with a zlib header), such as PNG raster data, use the <a href="../others/libdeflt-Reference-English.htm#sceZlibDecompress">sceZlibDecompress</a>() function.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+#include &lt;libdeflt.h&gt;
+
+char dstbuf[BUFSIZE];
+unsigned int uiAdler32;
+int res;
+res = <a href="../others/libdeflt-Reference-English.htm#sceZlibDecompress">sceZlibDecompress</a>(dstbuf, sizeof(dstbuf), infdata, &amp;uiAdler32);
+
+</font></pre></div>
+<div style="margin-left:67px;">The <a href="../others/libdeflt-Reference-English.htm#sceZlibDecompress">sceZlibDecompress</a>() function returns a negative value if there was an error, or the size of the expanded data if it completed normally.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Precautions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libdeflt cannot begin to perform expansion unless the entire bit stream is ready. In addition, when expansion is performed, all of the data is expanded unconditionally. There is no functionality to perform, for instance, partial expansion. Consequently, an output buffer which is at least the size of the expanded data must be prepared beforehand. <br>If these considerations present a problem, employ a method wherein, for example, data is broken into smaller segments when it is compressed.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

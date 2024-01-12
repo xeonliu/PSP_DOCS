@@ -1,0 +1,462 @@
+<html lang="jp">
+<head>
+<title>System_Memory_Manager-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;システムメモリマネージャ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceKernelMemoryBlockOptParam"></a>
+<table width="100%"><td width="70%"><font size=6>SceKernelMemoryBlockOptParam<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メモリブロックの付加データ<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+typedef struct SceKernelMemoryBlockOptParam {
+	SceSize <i>size</i>;
+} <b>SceKernelMemoryBlockOptParam</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;この構造体のサイズ(sizeof(SceKernelMemoryBlockOptParam)の値)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/System_Memory_Manager-Reference-Japanese.htm#sceKernelAllocMemoryBlock">sceKernelAllocMemoryBlock</a>()でメモリブロックを確保する場合に与える付加データを格納するために使用する構造体です。<br>将来の拡張のために用意されています。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../kernel/System_Memory_Manager-Reference-Japanese.htm#sceKernelAllocMemoryBlock">sceKernelAllocMemoryBlock</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelAllocMemoryBlock"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelAllocMemoryBlock<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[メモリブロック機能]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メモリブロックの確保<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelAllocMemoryBlock</b>(
+	const char *<i>name</i>,
+	SceKernelSysMemAlloc_t <i>type</i>,
+	SceSize <i>size</i>,
+	const <a href="../kernel/System_Memory_Manager-Reference-Japanese.htm#SceKernelMemoryBlockOptParam">SceKernelMemoryBlockOptParam</a> *<i>optParam</i>
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="top">&nbsp;<i>name</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;メモリブロックの名前を指定します。&nbsp;<br>&nbsp;デバッグ時にオペレータがみて識別する目的で使うので、&nbsp;<br>&nbsp;ユニークな名前であるかのチェックは特にしません。&nbsp;<br>&nbsp;名前の最大長は31バイトです。&nbsp;<br>&nbsp;NULLを指定してはいけません。&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  valign="top">&nbsp;<i>type</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;メモリブロックの割り当てタイプを指定します。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_KERNEL_SMEM_LOW&nbsp;</td>
+<td valign="top">&nbsp;低位アドレスから空きエリアを探す。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;SCE_KERNEL_SMEM_HIGH&nbsp;</td>
+<td valign="top">&nbsp;高位アドレスから空きエリアを探す。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>size</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;メモリブロックのサイズ(バイト数)を指定します。&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;<i>optParam</i>&nbsp;</td>
+<td colspan= 2  valign="top">&nbsp;将来の拡張用の引数です。NULLを指定して下さい。&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;mbid(mbid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリブロックのID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_ERROR<br>SCE_KERNEL_ERROR_ILLEGAL_ADDR<br>SCE_KERNEL_ERROR_ILLEGAL_ARGUMENT<br>SCE_KERNEL_ERROR_ILLEGAL_MEMBLOCKTYPE<br>SCE_KERNEL_ERROR_MEMBLOCK_ALLOC_FAILED<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">メモリブロックを確保します。<br>メモリブロックの割り当てタイプとして、SCE_KERNEL_SMEM_LOWとSCE_KERNEL_SMEM_HIGHを指定することができます。<br>SCE_KERNEL_SMEM_LOWを指定した場合、低位アドレスの空きエリアからメモリブロックが割り当てられます。SCE_KERNEL_SMEM_HIGHを指定した場合、高位アドレスの空きエリアからメモリブロックが割り当てられます。<br><i>size</i>バイト以上の空きエリアが見付からなかった場合は、エラーとなります。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelFreeMemoryBlock"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelFreeMemoryBlock<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[メモリブロック機能]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メモリブロックの解放<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelFreeMemoryBlock</b>(
+	SceUID <i>mbid</i>
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;削除するメモリブロックのIDを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_UNKNOWN_UID<br>SCE_KERNEL_ERROR_ILLEGAL_PERM<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">メモリブロックを解放します。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelGetMemoryBlockAddr"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelGetMemoryBlockAddr<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[メモリブロック機能]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>メモリブロックのアドレスを取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelGetMemoryBlockAddr</b>(
+	SceUID <i>mbid</i>,
+	void **<i>blockp</i>
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mbid</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アドレスを取得するメモリブロックのIDを指定します。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>blockp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリブロックのアドレスが入る変数へのポインタを指定します。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_UNKNOWN_UID<br>SCE_KERNEL_ERROR_ILLEGAL_PERM<br>SCE_KERNEL_ERROR_ILLEGAL_ADDR<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">メモリブロックをのアドレスを取得します。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelTotalFreeMemSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelTotalFreeMemSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[メモリ情報取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ユーザが確保可能な領域の合計サイズの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelTotalFreeMemSize</b>(
+	void
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">空き領域の合計サイズ<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ユーザが確保することができる全ての空き領域のサイズを合計した値を返します。<br>この関数は、デバッグの支援のために用意されたものですので、アプリケーションでは使用しないようにして下さい。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelMaxFreeMemSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelMaxFreeMemSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[メモリ情報取得]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ユーザが確保可能な領域の中で最も大きな連続領域のサイズの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;sysmem.h&gt;
+int <b>sceKernelMaxFreeMemSize</b>(
+	void
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">なし<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">最も大きな連続空き領域のサイズ<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ユーザが確保することができる領域の中でも、最もサイズの大きな連続領域のサイズを返します。<br>この関数は、デバッグの支援のために用意されたものですので、アプリケーションでは使用しないようにして下さい。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelSetCompiledSdkVersion"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelSetCompiledSdkVersion<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[SDK情報の登録]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>アプリケーションがコンパイルされたSDKバージョンの登録<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelSetCompiledSdkVersion</b>(
+	unsigned int
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">アプリケーションがコンパイルされたSDKバージョンの値。<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_OK<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">アプリケーション自身がコンパイルされたSDKのバージョンを、システムソフトウェアに通知します。システムソフトウェアがSDKのバージョンに対応した処理を行う必要があるため、必ずバージョン番号を指定してください。なお、標準的なCRTを利用する場合は、内部で<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+sceKernelSetCompiledSdkVersion(SCE_DEVKIT_VERSION)
+
+</font></pre></div>
+<div style="margin-left:50px;">を呼び出しています。独自のcrtコードを利用される場合には、同様な方法でAPIを呼び出してください。<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelSetCompilerVersion"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelSetCompilerVersion<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[SDK情報の登録]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>アプリケーションがコンパイルされたコンパイラバージョンの登録<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;kernel.h&gt;
+int <b>sceKernelSetCompilerVersion</b>(
+	unsigned int
+); 
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し可能<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">アプリケーションがコンパイルされたコンパイラバージョンの値。<br><br></div>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCE_KERNEL_ERROR_OK<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">アプリケーション自身がコンパイルされたコンパイラのバージョンを、システムソフトウェアに通知します。現在、特に利用されておりません。なお、標準的なCRTを利用する場合は、内部で<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+sceKernelSetCompilerVersion((__GNUC__ &lt;&lt;16) | 
+			(__GNUC_MINOR__ &lt;&lt; 8) | 
+			__GNUC_PATCHLEVEL__)
+
+</font></pre></div>
+<div style="margin-left:50px;">を呼び出しています。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

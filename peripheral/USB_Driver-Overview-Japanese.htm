@@ -1,0 +1,457 @@
+<html lang="jp">
+<head>
+<title>USB_Driver-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+USBドライバ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>目的</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBドライバとは、PSP&reg;のUSBインタフェースを制御するためのドライバ群です。<br>USBドライバは、USBバスドライバとUSBプロトコルドライバで構成されています。図 1のようにUSBバスドライバにUSBプロトコルドライバがプラグインされる構造です。<br>USBバスドライバがプラグインされた複数のUSBプロトコルドライバを取りまとめ、1つのUSBデバイスとしてUSBホストとの通信を行います。このとき、複数のプロトコルドライバがプラグインされていると、ホストから複数のインタフェースをもったデバイスに見えます。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1 USBドライバ構造</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br>本資料ではUSBドライバのベースとなるUSBバスドライバを中心に説明しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>主な機能</b><br>
+</a>
+</h3>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> USB Specification Rev.2.0に準拠しています。
+<li> USBプロトコルドライバの始動（プラグイン）/停止（プラグアウト）
+<li> USBデバイスの始動/停止
+<li> USBデバイスの状態取得
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>構成ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBバスドライバを使用するために必要なファイルは以下のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usb.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;stubファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;usb_stub.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>使用方法</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>基本的な使用手順の概略図</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">下図はPSP&reg;をUSBデバイスとして使用する時のUSBドライバ使用手順を簡単に表したものです。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-Japanese002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 2 USBドライバ使用手順の概略図</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>USBデバイスの始動処理手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;のUSBを用いて通信を行うためには、以下の手順でまずUSBデバイスを始動してください。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>USBバスドライバのロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">USBバスドライバは、システム起動時に自動的にロードされます。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>USBプロトコルドライバモジュールのロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">必要なUSBプロトコルドライバのモジュールをロードしてください。ロードが行われると自動的にUSBバスドライバへ、該当のUSBプロトコルドライバをロードしたことが通知されます（USBバスドライバは、ロード済みUSBプロトコルドライバのリストを保持しており、通知されたUSBプロトコルドライバはそのリストに登録されます）。<br>なお、USBプロトコルドライバモジュールのロードは、どのタイミングでも行うことができます。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> USBデバイスはPower OFF状態です。
+<li> USBケーブルを繋いでもホストには認識されません。
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbGetState">sceUsbGetState</a>()とUSBバスドライバの始動以外の機能は使用できません。
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>USBバスドライバの始動</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">引数<i>name</i>に<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a>を指定し、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>()関数を呼び出してください。USBバスドライバが始動します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>(<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a>, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_4"><h4>
+(4)&nbsp;<b>USBプロトコルドライバの始動（プラグイン）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">引数<i>name</i>にUSBプロトコルドライバの名前を指定し、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>()関数を呼び出してください。USBプロトコルドライバがUSBバスドライバへプラグインされて始動します。<br>USBプロトコルドライバの名前は各USBプロトコルドライバのヘッダファイルや資料を参照してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>(SCE_USBXXX_NAME, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>USBプロトコルドライバによっては引数にドライバ名以外にもう一つデータを渡すことができる場合があります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>SceUsbXXXStartData data;
+
+// ドライバ名以外にデータを指定できるプロトコルドライバの場合
+if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStart">sceUsbStart</a>(SCE_USBXXX_NAME, sizeof(SceUsbXXXStartData), &amp;data) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_5"><h4>
+(5)&nbsp;<b>USBデバイスの始動</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">引数<i>idProduct</i> にプロダクトIDを指定し、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbActivate">sceUsbActivate</a>()関数を呼び出してください。USBデバイスが始動します。<br>プロダクトIDは各プロトコルのヘッダファイルに定義されていますので、その値を使用してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbActivate">sceUsbActivate</a>(SCE_USB_PID_XXX) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> USBデバイスを始動するためには、１つ以上のUSBプロトコルドライバが始動されている必要があります。
+<li> USBデバイスが始動すると、USBプロトコルドライバを始動/停止（プラグイン/プラグアウト）することができません。
+<li> USBデバイスが始動中でも、USBプロトコルドライバモジュールのロードや始動（プラグイン）していないUSBプロトコルドライバモジュールのアンロードは可能です。
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>USBデバイスの停止処理手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;のUSBによる通信を終了する時は、以下の手順でUSBデバイスを停止することができます。<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_1"><h4>
+(1)&nbsp;<b>USBデバイスの停止</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbDeactivate">sceUsbDeactivate</a>()関数を呼び出してください。USBデバイスが停止します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbDeactivate">sceUsbDeactivate</a>() &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>USBデバイスが停止すると、ホスト側から見たときにUSBケーブルを抜かれたときと同じ状態になっています。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> この時点で、USBプロトコルドライバを始動/停止（プラグイン/プラグアウト）が可能になります。別のUSBプロトコルドライバに入れ替え、再びUSBデバイスを始動することで先程とは別のUSBデバイスにすることができます。
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_2"><h4>
+(2)&nbsp;<b>USBプロトコルドライバの停止（プラグアウト）</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">引数<i>name</i>にUSBプロトコルドライバの名前を指定し、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>()関数を呼び出してください。USBプロトコルドライバが停止（プラグアウト）されます。<br>USBプロトコルドライバによっては引数にドライバ名以外にもう一つデータを渡すことができる場合があります。詳細は各USBプロトコルドライバの資料を参照してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>(SCE_USBXXX_NAME, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_3"><h4>
+(3)&nbsp;<b>USBバスドライバの停止</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">引数<i>name</i>に<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a>を指定し、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>()関数を呼び出してください。USBバスドライバが停止します。<br>USBバスドライバを停止するためには、すべてのUSBプロトコルドライバが停止されている必要があります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbStop">sceUsbStop</a>(<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME"><a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_BUS_DRIVER_NAME">SCE_USB_BUS_DRIVER_NAME</a></a>, 0, NULL) &lt; 0) {
+	// エラー処理
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_3_4"><h4>
+(4)&nbsp;<b>USBプロトコルドライバモジュールのアンロード</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">USBプロトコルドライバモジュールをアンロードしてください。自動的にUSBバスドライバに通知され、該当USBプロトコルドライバの登録が解除されます。<br>ドライバが始動している間は、そのドライバのモジュールをアンロードすることはできません。<br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_4">
+<h3>
+<a href="#Heading3_2"> 2. </a>4 
+<!-- hp1 --><b>USBデバイスの状態取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBデバイスの状態を取得したい時は、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbGetState">sceUsbGetState</a>()関数を呼び出してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>unsigned int state;
+
+state = <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbGetState">sceUsbGetState</a>();
+</font></pre></div>
+<div style="margin-left:50px;"><br>デバイスの状態は以下の状態の論理和で表されています。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>状態</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マスク定数</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_ACTIVATED">SCE_USB_ACTIVATED</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_DEACTIVATED">SCE_USB_DEACTIVATED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;USBデバイスの始動状態&nbsp;&nbsp;<br>&nbsp;&nbsp;USBデバイスの停止状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_ACT_MASK">SCE_USB_ACT_MASK</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_DISCONNECTED">SCE_USB_DISCONNECTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#USBケーブルの接続状態">USBケーブルの接続状態</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;USBケーブルの非接続状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_CONN_MASK">SCE_USB_CONN_MASK</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_DEFAULT">SCE_USB_DEFAULT</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_CONFIGURED">SCE_USB_CONFIGURED</a>&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_SUSPENDED">SCE_USB_SUSPENDED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Default及びAddressステート&nbsp;&nbsp;<br>&nbsp;&nbsp;Configuredステート&nbsp;&nbsp;<br>&nbsp;&nbsp;Suspendedステート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_STATE_MASK">SCE_USB_STATE_MASK</a>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">各状態の詳しい説明は次章の「USBデバイスの状<u>態</u>」で説明します。また各状態の取得用にマスクを用意していますので、適宜利用してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_5">
+<h3>
+<a href="#Heading3_2"> 2. </a>5 
+<!-- hp1 --><b>指定したUSBデバイスの状態待ち</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">指定したUSBデバイスの状態を監視し、その状態遷移によって異なる動作をさせる場合には<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitState">sceUsbWaitState</a>() / <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>()関数を使用します。<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitState">sceUsbWaitState</a>()関数は指定したUSBデバイスの状態へ遷移するまで待ち状態になる関数です。<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>()はコールバック関数が実行可能な待ち状態となります。後記の「USBデバイスの状態」で説明する状態を論理和で指定することができ、その指定した状態のAND待ちかOR待ちかも指定できます。また、引数<i>timeout</i>にNULLを指定すると、指定された状態になるか、キャンセルされるまで無限に待ちます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// USBケーブルが接続されるか、キャンセルされるのを無限に待つ場合
+if (<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitState">sceUsbWaitState</a>(<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>, SCE_KERNEL_EW_AND, NULL) &lt; 0) {
+	// エラー処理
+	return -1;
+}
+printf("USB cable is connected\n");
+</font></pre></div>
+<div style="margin-left:50px;"><br><a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitState">sceUsbWaitState</a>() / <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>()の待ち状態をキャンセルするには、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitCancel">sceUsbWaitCancel</a>()関数を使用してください。<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitCancel">sceUsbWaitCancel</a>()関数を呼び出すと、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitState">sceUsbWaitState</a>() / <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitStateCB">sceUsbWaitStateCB</a>()関数の待ち状態となっている、すべてのスレッドの待ち状態がキャンセルされます。特定のスレッドのみキャンセルすることはできません。<br>特定のスレッドの待ち状態のみを終了させたい場合には、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitState">sceUsbWaitState</a>()の引数<i>timeout</i>に適当な値を指定し、タイムアウトした時に待ち状態の終了か継続かの判断を行い、終了させたい場合には再び待ち状態に入らないようにする、などの方法で対処してください。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#define TIMEOUT   1000000   // 1 sec
+unsigned int timeout = TIMEOUT;
+int ret
+static int cancel = 0;  // 終了フラグ。終了（キャンセルと同じ状態）にする場合に、ここでは他のスレッドから変更されることを想定
+
+while (1) {
+	// USBケーブルが接続されるのを待つ場合
+	ret = <a href="../peripheral/USB_Driver-Reference-Japanese.htm#sceUsbWaitState">sceUsbWaitState</a>(<a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>, SCE_KERNEL_EW_AND, &amp;timeout);
+	if (ret &lt; 0) {
+		if (cancel) {
+			// 終了（キャンセル）処理
+			printf("canceled\n");
+			break;
+		} else if (ret == <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_ERROR_TIMEOUT">SCE_USB_ERROR_TIMEOUT</a>) {
+			// 待ち状態継続処理
+			timeout = TIMEOUT;
+		} else {
+			// エラー処理
+			return -1;
+		}
+	} else {
+		// 指定状態に遷移した後の処理
+		printf("USB cable is connected\n");
+		break;
+	}
+}
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>動作解説</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>USBデバイスの状態</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">USBデバイスの状態は図 3～図 5に示す3つの状態の論理和で表されます。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_1">
+<div style="margin-left:63px;"><h4><b>USBデバイスの始動/停止状態</b><br><br></h4></a></div>
+<div style="margin-left:80px;">デバイスが始動しているかどうかを表します。<br></div>
+</ul>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_ACTIVATED">SCE_USB_ACTIVATED</a>　　 : USBデバイスが始動している
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_DEACTIVATED">SCE_USB_DEACTIVATED</a>　: USBデバイスが停止している
+</ul></div>
+<div style="margin-left:80px;"><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-Japanese003.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 3 USBデバイスの始動/停止状態</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_2">
+<div style="margin-left:63px;"><h4><b>USBケーブルの接続状態</b><br><br></h4></a></div>
+<div style="margin-left:80px;">USBケーブルが接続されているかどうかを表します。ケーブルが接続されていてもUSBデバイスの始動/停止状態がACTIVATEDでなければ、ホストには認識されません。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_CONNECTED">SCE_USB_CONNECTED</a>　　: USBケーブルが接続されている
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_DISCONNECTED">SCE_USB_DISCONNECTED</a> : USBケーブルが接続されていない
+</ul></div>
+<div style="margin-left:80px;"><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-Japanese004.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 4 USBケーブルの接続状態</b><br>
+</div>
+<br>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_3">
+<div style="margin-left:63px;"><h4><b>USB仕様上の状態</b><br><br></h4></a></div>
+<div style="margin-left:80px;">USBの仕様(USB Specification Rev.2.0)で定義されている状態を表します。この状態はUSBデバイスの始動/停止状態がACTIVATED、<a href="../peripheral/USB_Driver-Reference-Japanese.htm#USBケーブルの接続状態">USBケーブルの接続状態</a>がCONNECTEDである場合のみ有効です。それ以外の場合にはDEFAULTとなります。<br></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_DEFAULT">SCE_USB_DEFAULT</a>　　 : Default及びAddressステート
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_CONFIGURED">SCE_USB_CONFIGURED</a> : Configuredステート
+<li> <a href="../peripheral/USB_Driver-Reference-Japanese.htm#SCE_USB_SUSPENDED">SCE_USB_SUSPENDED</a>　: Suspendedステート
+</ul></div>
+<div style="margin-left:80px;"><b>※ Suspendedステートとは<a href="../peripheral/USB_Driver-Reference-Japanese.htm#USB仕様上の状態">USB仕様上の状態</a>であり、PSP&reg;のシステムのサスペンドとは異なります。</b><br><br></div>
+
+
+<div align=center>
+<p>
+<img src="gif/USB_Driver-Overview-Japanese005.gif">
+</div>
+<br>
+<br>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 5 USB仕様上の状態</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>サスペンド / レジューム時の挙動</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;のシステムのサスペンド / レジュームには、USBデバイスは以下のように動作します。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> サスペンド時<br>USBケーブルが抜かれた場合と同じ状態となります。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> レジューム時<br>USBケーブルが接続されていれば、USBケーブルが挿された時と同じ状態となります。接続されていなければ、USBケーブルが抜かれた状態のままとなります。
+</ul></div>
+<div style="margin-left:50px;"><br>そのため、USBケーブルが接続された状態でサスペンド / レジュームが行われた場合には、アプリケーションからはUSBケーブルが抜かれ、再び挿された場合と同じ状況となります。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

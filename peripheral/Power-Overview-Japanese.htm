@@ -1,0 +1,691 @@
+<html lang="jp">
+<head>
+<title>Power-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+パワーサービス
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">パワーサービスは、PSP&reg;の以下のようなパワーマネージメント関係の制御をするためのカーネルモードサービスです。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> バッテリ残容量割合の取得
+<li> サスペンドモードへの遷移、サスペンドモードからのレジューム
+<li> ハイバネーション状態への遷移および、ハイバネーション状態からのレジューム(本体にフラッシュメモリを内蔵したPSP-N1000シリーズのみ)
+<li> 電源の自動制御
+<li> POWERスイッチ操作時の制御
+<li> PSP&reg;システムチップの動的な動作クロック周波数の切り替え
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>関連ファイル</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">パワーサービスを使用するために必要なファイルは、次のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>カテゴリ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ファイル名</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタブライブラリファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;power_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ヘッダファイル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;powersvc.h&nbsp;&nbsp;<br>&nbsp;&nbsp;kernel.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>バッテリアイコンの表示について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">バッテリアイコンの表示、情報取得に関する情報は、インポーズドライバをご覧ください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>コールバック関数によるバッテリ情報取得</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>概要</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">パワーサービスは、コールバック関数により以下の情報を定期的に取得することができます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;スタンバイ処理中状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_STANDINGBY">SCE_POWER_CALLBACKARG_STANDINGBY</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;レジューム完了状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_RESUME_COMP">SCE_POWER_CALLBACKARG_RESUME_COMP</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;レジューム処理中状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_RESUMING">SCE_POWER_CALLBACKARG_RESUMING</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サスペンド処理中状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_SUSPENDING">SCE_POWER_CALLBACKARG_SUSPENDING</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;外部電源供給状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_POWERONLINE">SCE_POWER_CALLBACKARG_POWERONLINE</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ローバッテリ状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_LOWBATTERY">SCE_POWER_CALLBACKARG_LOWBATTERY</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;バッテリ装着状態&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_BATTERYEXIST">SCE_POWER_CALLBACKARG_BATTERYEXIST</a>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;バッテリ残量(%)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;――&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">SCE_POWER_CALLBACKARG_XXXで定義されていないビットについては参照しないでください。<br><br>コールバックは、コールバックを生成したスレッドのコンテキストで呼ばれます。実際にコールバック呼び出しが発生するのは、コールバックを生成したスレッドが<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelWaitSemaCB">sceKernelWaitSemaCB</a>(), <a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankStartCB">sceDisplayWaitVblankStartCB</a>()など、CBサフィックスつきの関数で待ち状態に入ったときになります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>使用手順</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>ライブラリの初期化</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">パワーサービスは暗黙のうちに初期化されています。明示的な初期化を行う必要はありません。<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>コールバックの登録</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">パワーサービスに対して、電源関係の事象に変化が発生したとき通知を受け取るコールバックを登録します。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+SceUID uidCb;
+uidCb = <a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>("POWER", CallbackFunc, cookie);
+<a href="../peripheral/Power-Reference-Japanese.htm#scePowerRegisterCallback">scePowerRegisterCallback</a>(0, uidCb);
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>コールバック処理</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">コールバック処理については、パワーサービスリファレンスの<a href="../peripheral/Power-Reference-Japanese.htm#powercallback">powercallback</a>()関数の説明をご参照ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelCreateCallback">sceKernelCreateCallback</a>()で生成されたコールバック関数は、コールバック要因が発生していたとき、CBつきの待ち関数が呼び出されたタイミングで呼び出されますが、このときコールバック関数の中からさらにCBつきの待ち関数を呼び出すと、コールバック関数がネスト呼び出しされます。<br>多重ネストによりが繰り返されると、スレッドのスタックをオーバーフローした場合にクラッシュの原因となります。また、ネストレベルが全て復帰するまでそのスレッドの元の処理には復帰しないため、コードのフローが複雑になってしまう可能性があります。<br>スタックオーバーフローの危険を減らすために、コールバック関数内ではCBつきの待ち関数を使用しないことを推奨します。<br><br>後述する「POWERスイッチ制御」、「電源の自動制御」、「ハイバネーションのための電源制御」は、実行環境の差によってさまざまにタイミングが変化する可能性があります。<br>アプリケーションにタイミング依存の問題が潜在していると、サスペンド/レジューム、ハイバネーションなどをきっかけに発現することがあるため、十分に注意してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>専用関数でのバッテリ情報取得</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">コールバック以外にも、専用の関数を使用することで以下のバッテリ情報を取得することができます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>関数</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#scePowerIsPowerOnline">scePowerIsPowerOnline</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;外部電源の接続状態を取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#scePowerIsLowBattery">scePowerIsLowBattery</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ローバッテリ状態を取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#scePowerIsBatteryExist">scePowerIsBatteryExist</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バッテリの装着状態を取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#scePowerIsBatteryCharging">scePowerIsBatteryCharging</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バッテリの充電中状態を取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetBatteryLifePercent">scePowerGetBatteryLifePercent</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;満充電状態に対するバッテリ残容量の割合を100分率&nbsp;&nbsp;<br>&nbsp;&nbsp;で取得。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetBatteryLifeTime">scePowerGetBatteryLifeTime</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;バッテリ予測持続残り時間を取得。&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>ローバッテリ状態の取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/Power-Reference-Japanese.htm#scePowerIsLowBattery">scePowerIsLowBattery</a>()関数を使用することで、ローバッテリ状態になっているか、なっていないかを調べることができます。<br>ローバッテリ状態とは、バッテリ残量が少ないことを示します。ローバッテリ状態となる割合はバッテリ容量によって変わります。ローバッテリのとき、PSP&reg;本体のPOWER LEDが点滅します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>バッテリ残容量率の取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetBatteryLifePercent">scePowerGetBatteryLifePercent</a>()関数を使用することで、バッテリの残容量率を概算値で取得することができます。成功すると、返り値に満充電状態に対する割合を0～100の数値で返します。<br>残容量率の確認、バッテリ装着状態などのポーリングは低頻度で行われています。AC電源の接続状態やバッテリ装着状態に変化が発生してから、残容量割合や残り時間が取得できるようになるまでは多少の時間差があることにご注意ください。この間、SCE_POWER_ERROR_DETECTING（バッテリ情報取得中）や、SCE_POWER_ERROR_NO_BATTERY（バッテリ未装着）などの、取得エラーなどが返ることがあります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>バッテリ予測持続残り時間を取得</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetBatteryLifeTime">scePowerGetBatteryLifeTime</a>()関数を使用することで、バッテリ持続の残り時間を予測して分(min)単位で取得することができます。<br>外部電源(ACアダプタ)から電源供給が行われている場合は、持続時間の予測を行う事ができないため、<a href="../peripheral/Power-Reference-Japanese.htm#scePowerGetBatteryLifeTime">scePowerGetBatteryLifeTime</a>()関数は0を返します。<br>また、バッテリまたはACの接続状態が変わった直後は、SCE_POWER_ERROR_DETECTINGエラーが発生します。その後しばらくの間は、予測値が安定してないことがあります。ご注意ください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>POWERスイッチ制御</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">パワーサービスは、PSP&reg;本体のPOWERスイッチを制御しています。<br>スライド動作により、電源ON、スタンバイ、サスペンド、レジュームの遷移動作を行います。<br>POWERスイッチによるサスペンド／スタンバイ処理は、パワーサービス内で自動的に処理されます。<br>なお、物理的にHOLDスイッチも兼ねていますが、システムからはPOWERスイッチと別物と判断されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>POWERスイッチによる状態遷移</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">POWERスイッチによるPSP&reg;の状態は、電源ON、スタンバイ、サスペンドの３種類があります。<br>それぞれ、以下のような操作で状態が遷移します。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_1_1">
+<div style="margin-left:63px;"><h4><b>電源ON操作</b><br><br></h4></a></div>
+<div style="margin-left:80px;">電源OFFの状態でPOWERスイッチ操作をすると、電源ON（コールドブート）処理を行います。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_1_2">
+<div style="margin-left:63px;"><h4><b>スタンバイ操作</b><br><br></h4></a></div>
+<div style="margin-left:80px;">電源ONの状態で、2秒以上POWERスイッチ操作をすると、スタンバイに入り電源OFF処理を行います。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_1_3">
+<div style="margin-left:63px;"><h4><b>サスペンド操作</b><br><br></h4></a></div>
+<div style="margin-left:80px;">電源ON状態の時、2秒以内でPOWERスイッチ操作をすると、電源OFF処理を行います。<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_4_1_4">
+<div style="margin-left:63px;"><h4><b>レジューム操作</b><br><br></h4></a></div>
+<div style="margin-left:80px;">サスペンド状態の時、POWERスイッチを操作すると、レジューム処理を行います。<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/Power-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:80px;"><br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>電源の自動制御</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">パワーサービスでは、POWERスイッチ以外の要因でも、電源制御を行います。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>プログラムによるサスペンド要求</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">RTCサービスのRTCアラームと組み合わせて使用するために、パワーサービスはプログラムによるサスペンド要求を受け付けます。RTCサービスの<a href="../peripheral/RTC-Reference-Japanese.htm#sceRtcSetAlarmTick">sceRtcSetAlarmTick</a>()関数で起床予定時刻を指定し、パワーサービスの<a href="../peripheral/Power-Reference-Japanese.htm#scePowerRequestSuspend">scePowerRequestSuspend</a>()関数と組み合わせることで、指定した時間までサスペンド状態にする間欠動作をさせることができます。<a href="../peripheral/Power-Reference-Japanese.htm#scePowerRequestSuspend">scePowerRequestSuspend</a>()関数はRTCアラームと組み合わせた場合以外では使用しないで下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>自動サスペンド</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の要因で、パワーサービスは自動的にサスペンドします。<br>自動サスペンドは、PSP&reg;にAC電源に接続されていない場合にのみ発生します。開発TOOLでこれらの動作をテストする場合には、バッテリエミュレータを使用してください。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> PSP&reg;がバッテリで動作中、ユーザが予めPSP&reg;システムソフトウェアで設定した自動スリープの時間だけ、PSP&reg;が放置されていた場合（ただし現在の実装では、ゲームプログラムの動作中にはこの機能は有効になっていません）
+<li> PSP&reg;のバッテリ残容量が残り少なくなってきた場合
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>自動スタンバイ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の要因で、パワーサービスは自動的にスタンバイ処理します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> サスペンド状態のまま電池切れになった場合
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>ハイバネーションのための電源制御</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">本体にフラッシュメモリを内蔵したPSP-N1000シリーズではハイバネーション機能を搭載します。<br>通常のサスペンド/レジュームと同様、ハイバネーション機能のための制御はパワーサービス内で処理され、アプリケーションからは通常のサスペンド/レジュームと区別はつきません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>ユーザー操作によるハイバネーション要求</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP-N1000シリーズでは、ゲーム中にPSボタン押し下げで表示されるインポーズ画面で「ゲームを中断する」を選択すると、動作中のゲームの状態をハイバネーションデータとして内蔵フラッシュメモリに書き出してシステムソフトウェアに戻るハイバネーション機能が動作します。<br>このとき、通常のサスペンド処理と同じサスペンドシーケンスが起動され、アプリケーションに対しても<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_SUSPENDING">SCE_POWER_CALLBACKARG_SUSPENDING</a>等のコールバック通知が行われます。<br>ゲーム終了ではないため、<a href="../kernel/Loadexec-Reference-Japanese.htm#sceKernelRegisterExitCallback">sceKernelRegisterExitCallback</a>()関数に登録した終了コールバックの通知ではないことに注意してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>ハイバネーション状態からのレジューム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームを中断しハイバネーション動作を行うと、PSP&reg;システムソフトウェアの画面上に「ゲームを再開する」アイコンが現れます。ユーザーがこのアイコンを選択すると、システムソフトウェアを終了し、パワーサービスは内蔵フラッシュメモリに記録されていたハイバネーションデータを使ってレジューム動作を行います。<br>このとき、通常のレジューム処理と同じレジュームシーケンスが起動され、アプリケーションに対しても<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_RESUMING">SCE_POWER_CALLBACKARG_RESUMING</a>, <a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_RESUME_COMP">SCE_POWER_CALLBACKARG_RESUME_COMP</a>等のコールバック通知が行われます。なお、ハイバネーションデータはレジューム時に自動的に削除されます。<br>通常のサスペンド状態からのレジュームと異なり、ハイバネーション状態からのレジュームでは<a href="../peripheral/RTC-Reference-Japanese.htm#sceRtcGetCurrentNetworkTick">sceRtcGetCurrentNetworkTick</a>()関数で取得されるネットワーク時刻が無効化された状態に戻ります。<br><br>なお、ここで表示されるアイコンは、ハイバネーション時に表示されていたフレームバッファから生成されます。たとえば、アプリケーションが<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_SUSPENDING">SCE_POWER_CALLBACKARG_SUSPENDING</a>等のコールバック検出したとき、意図的にフレームバッファに表示させるデータを黒画面データにすると黒画面がアイコンになることがあります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>自動ハイバネーション</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">以下の要因で、パワーサービスは自動的にハイバネーションします。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> バッテリ残容量が残り少なくなってきた場合
+</ul></div>
+<div style="margin-left:50px;"><br>自動ハイバネーションは、PSP-N1000シリーズにAC電源が接続されていない場合で、かつハイバネーションデータが存在していない場合にのみ発生します。もし、ハイバネーションデータが残ったままだった場合、自動ハイバネーションは発生しません。<br><br>自動ハイバネーションは、通常のサスペンドによってサスペンド状態になっていた場合にも発生することがあります。サスペンド状態のままバッテリ残容量が少なくなってきたとき、自動的にPSP&reg;の電源がONになり、ハイバネーションデータの書き出しを行った後スタンバイ状態に遷移します。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>パワーロック</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Memory Stick&trade;へのアクセス中などに、電源が遮断されることを防ぐため、パワーロックによってサスペンド/電源OFF（スタンバイ）処理の起動を遅延させる事ができます。デバイスドライバでは、自動的にロック/アンロックを処理しますが、アプリケーションでも同様にロック/アンロックを行う事ができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_1">
+<h3>
+<a href="#Heading3_7"> 7. </a>1 
+<!-- hp1 --><b>sceKernelPowerLock() / sceKernelPowerUnlock()関数によるロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">アプリケーション側で、<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerLock">sceKernelPowerLock</a>()関数にてロックを設定し、<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerUnlock">sceKernelPowerUnlock</a>()関数にてロックを解除することができます。ネスト動作しますので、<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerLock">sceKernelPowerLock</a>()関数と<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerUnlock">sceKernelPowerUnlock</a>()関数必ずペアで使用します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerLock">sceKernelPowerLock</a>(SCE_KERNEL_POWER_LOCK_DEFAULT);
+	:
+// 電源遮断されたくない処理
+	:
+<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerUnlock">sceKernelPowerUnlock</a>(SCE_KERNEL_POWER_LOCK_DEFAULT);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_2">
+<h3>
+<a href="#Heading3_7"> 7. </a>2 
+<!-- hp1 --><b>sceIoOpen()関数によるロック</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">また、sceIoOpen()関数でファイルをオープンするとき、SCE_O_PWLOCKを指定すると、そのファイルがクローズされるまでパワーロック状態になります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// ファイル作成中の電源断を防止
+fd = sceIoOpen(pszFileName, SCE_O_CREAT | SCE_O_WRONLY | SCE_O_TRUNC | SCE_O_PWLOCK);
+sceIoWrite(fd, buf, size):
+sceIoClose(fd);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_7_3">
+<h3>
+<a href="#Heading3_7"> 7. </a>3 
+<!-- hp1 --><b>注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ロック状態が長時間続くと、その間ユーザがPOWERスイッチで電源を遮断する事ができなくなっているため、著しくユーザビリティが低下します。とくに、ロック状態ではバッテリ残量の欠乏時にシステムによって自動的に起動される強制サスペンドも機能しなくなります。<br>たとえば、プレーヤーからのキー入力を待つような画面でロックをかけっぱなしにする使い方は不適切と言えます。<br>ロック状態は、Memory Stick&trade;への書き込みを保護する目的など、適切な使用を心がけて濫用しないようにしてください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>パワーセーブの抑制</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;システムソフトウェアでは、一定時間コントローラからの操作がなかった場合に自動的にバックライトを暗くしたり、自動的にスリープ（サスペンド）状態に遷移させたりするためのパワーセーブ設定があります。<br>パワーサービスでは、パワーセーブ設定にある起動するまでのタイマをキャンセルすることで、以下のような場合にパワーセーブへ移行することを抑制する事ができます。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> ムービー再生時、長時間キー入力がなくてもバックライトを消灯したくない
+<li> WLAN通信によって他のPSP&reg;から接続があった場合、消灯していたバックライトを点灯させたい
+</ul></div>
+<div style="margin-left:50px;"><br>パワーセーブの抑制は<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>()関数を使用します。ただし、<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>()関数ではタイマをキャンセルするだけです。継続的にパワーセーブされたくない状況を持続させる場合には、その間定期的に(たとえば1V単位で) <a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>()関数を呼び出してください。<br><br>なお、コントローラサービス内部には、ボタン入力状態に変化があった場合に<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>()関数を自動的に呼び出す処理が組み込まれています。その他、ヘッドホンの着脱やMemory Stick&trade;の挿抜時なども自動的に処理されます。それ以外の要因でも明示的にアプリケーションからも<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>()関数を呼び出すかどうかは、個々のアプリケーションの判断にまかされています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>LCDパワーセーブ、自動サスペンドの抑制</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">通常のパワーセーブ抑制は<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_DEFAULT">SCE_KERNEL_POWER_TICK_DEFAULT</a>を使用してください。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// パワーセーブを阻止
+<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>(<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_DEFAULT">SCE_KERNEL_POWER_TICK_DEFAULT</a>);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_2">
+<h3>
+<a href="#Heading3_8"> 8. </a>2 
+<!-- hp1 --><b>LCDパワーセーブの抑制</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">LCDバックライトのパワーセーブのみを抑制したい場合には、<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_LCDONLY">SCE_KERNEL_POWER_TICK_LCDONLY</a>を使用してください。アイドル状態が続いた時にLCDバックライトを消灯するタイマのみをキャンセルし、自動サスペンドを行わせるタイマはキャンセルしません。<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+// LCDバックライトのパワーセーブを阻止
+<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>(<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_LCDONLY">SCE_KERNEL_POWER_TICK_LCDONLY</a>);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_3">
+<h3>
+<a href="#Heading3_8"> 8. </a>3 
+<!-- hp1 --><b>自動スリープの抑制</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">自動スリープによるサスペンドのみを抑制したい場合には、<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_SUSPENDONLY">SCE_KERNEL_POWER_TICK_SUSPENDONLY</a>を使用します。アイドル状態が続いた時に自動サスペンドさせるタイマのみをキャンセルし、LCD消灯を行わせるタイマはキャンセルしません。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// 自動サスペンドのパワーセーブを阻止
+<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelPowerTick">sceKernelPowerTick</a>(<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_SUSPENDONLY">SCE_KERNEL_POWER_TICK_SUSPENDONLY</a>);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_4">
+<h3>
+<a href="#Heading3_8"> 8. </a>4 
+<!-- hp1 --><b>注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">自動スリープのためのタイマは、PSP&reg;システムソフトウェアの省電力設定の自動スリープに対応しています。ただし、現在の実装ではゲームプログラムの動作中には自動スリープの機能は有効にならないため、<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_SUSPENDONLY">SCE_KERNEL_POWER_TICK_SUSPENDONLY</a>を使用しなくてはならない局面はありません。通常のゲームプログラムは<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_DEFAULT">SCE_KERNEL_POWER_TICK_DEFAULT</a>または<a href="../peripheral/Power-Reference-Japanese.htm#SCE_KERNEL_POWER_TICK_LCDONLY">SCE_KERNEL_POWER_TICK_LCDONLY</a>のいずれかを使用してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>揮発性メモリの排他制御</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;では、サスペンド状態のときPSP&reg;システムチップに内蔵されている4MiBのeDRAMが揮発してしまうため、その内容を保存する目的でメインメモリから、4MiBのメモリを予約しています。eDRAMの保存と復帰は、サスペンドとレジューム時にシステムソフトウェアによって自動的に行われます。<br>つまり、この4MiBのメモリは、サスペンド時にのみ上記の目的で使用されます。<br>そこで、揮発してもよいという条件付きで、サスペンド時以外の時に、別の目的のために使用する事ができるようになっています。通常はユーティリティが使用していますが、ユーティリティ以外の目的でも使用することができるように、排他制御のための仕組みを提供しています。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>揮発性メモリエリアの使用を宣言</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">揮発性メモリエリアを使用する場合、<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemLock">sceKernelVolatileMemLock</a>()関数を使用します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>void *pBuf;
+unsigned int uiSize;
+
+uidCb = <a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemLock">sceKernelVolatileMemLock</a>(SCE_KERNEL_VOLATILE_MEM_DEFAULT, &amp;pBuf, &amp;uiSize);
+memset(pBuf, 0x00, uiSize);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>揮発性メモリエリアの使用を停止</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">揮発性メモリエリアの使用を停止する場合、<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemUnlock">sceKernelVolatileMemUnlock</a>()関数を使用します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemUnlock">sceKernelVolatileMemUnlock</a>();
+</font></pre></div>
+<div style="margin-left:50px;"><br><a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemUnlock">sceKernelVolatileMemUnlock</a>()関数の呼び出し後、当該アドレスへのアクセスはできなくなります。<br><a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemUnlock">sceKernelVolatileMemUnlock</a>()関数の呼び出しは、<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemLock">sceKernelVolatileMemLock</a>()関数または<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemTryLock">sceKernelVolatileMemTryLock</a>()関数で使用権を得ている場合のみに限られます。対にならない呼び出しが発生すると排他制御が破綻し、どのような動作結果になるかわかりません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_3">
+<h3>
+<a href="#Heading3_9"> 9. </a>3 
+<!-- hp1 --><b>注意</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemLock">sceKernelVolatileMemLock</a>()関数によって本来の目的以外の使用を行っている間は、ユーザがPOWERスイッチ操作しても直ちに反映されない状態になっています。ユーザビリティを低下させないため、ユーザがPOWERスイッチ操作したり、省電力タイマによって自動スリープが動作したりして<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_SUSPENDING">SCE_POWER_CALLBACKARG_SUSPENDING</a>コールバックまたは<a href="../peripheral/Power-Reference-Japanese.htm#SCE_POWER_CALLBACKARG_STANDINGBY">SCE_POWER_CALLBACKARG_STANDINGBY</a>コールバックが発生した場合、可及的速やかに<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemUnlock">sceKernelVolatileMemUnlock</a>()関数を呼び出さなくてはなりません。<br><br>なお、揮発性メモリをUMD&reg;からの直接読み込みバッファとして使用することは禁止します。UMD&reg;からの読み込みは、シークが発生した場合や、内部的なリトライが発生した場合に、最悪時の最長サイズを保証する事ができません。速やかに<a href="../peripheral/Power-Reference-Japanese.htm#sceKernelVolatileMemUnlock">sceKernelVolatileMemUnlock</a>()を呼び出すという動作を実現するのは困難であるため、UMD&reg;から揮発性メモリに直接読み込みを行うことは避けてください。<br>揮発性メモリをUMD&reg;読み込みのキャッシュメモリとして使用する場合は、いったん通常のメモリに読み込みを行った後に、メモリコピーするなどして下さい。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_10">
+<h2>
+ 10 <!-- hp --><b>クロック制御</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_1">
+<h3>
+<a href="#Heading3_10"> 10. </a>1 
+<!-- hp1 --><b>PSP&reg;システムチップのクロック周波数について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;システムチップでは、PLLクロック周波数、ALLEGREX CPUクロック周波数、バスクロック周波数の3系統について周波数を変えることができます。各クロックの周波数は非同期的に設定できますが、以下のような制約条件があります。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> PLLクロック周波数は、190MHz, 222MHz, 266MHz, 333MHzのいずれかから設定する事が出来るようになっています。起動時の初期値は、222MHzで動作しています。PSP-1000ではWLAN使用中は、266MHz,333MHzで動作させる事はできません。
+<li> ALLEGREX CPUコアのCPUクロック周波数は、1～333MHzの範囲で設定する事が出来ます。ただし、PLLクロック周波数より高くすることはできません。起動時の初期値は、222MHzで動作しています。
+<li> バスクロック周波数は、PLLクロック周波数の1/2で動作させます。バスクロック周波数を細かく変化させる機能は、3.50以降で仕様から削除されました。
+</ul></div>
+<div style="margin-left:50px;"><br>パワーサービスの各関数はこの制約条件の中でクロック周波数を設定します。バックグラウンドで動作するデバイスドライバ等が設定している内容によっては、ユーザアプリケーションからの指定されたとおりの周波数にできない可能性があることにご注意ください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_2">
+<h3>
+<a href="#Heading3_10"> 10. </a>2 
+<!-- hp1 --><b>PLLクロックで動作するハードウェア</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PLLクロックで動作するハードウェアは、以下の通りです。これらは最大333MHzで動作します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> DDRメモリ
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_3">
+<h3>
+<a href="#Heading3_10"> 10. </a>3 
+<!-- hp1 --><b>PLLクロック周波数の変更</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PLLクロック周波数を変更する場合、<a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetClockFrequency">scePowerSetClockFrequency</a>()にクロック周波数をMHz単位で指定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetClockFrequency">scePowerSetClockFrequency</a>(333, 333, 166);
+
+</font></pre></div>
+<div style="margin-left:50px;"><a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetClockFrequency">scePowerSetClockFrequency</a>()関数ではPLLクロックだけではなく、CPUクロックおよびバスクロックの変更もセットで行います。各クロック周波数は、上で述べたような制約条件を満たした設定になっている必要があります。第3引数については、バスクロック周波数の指定ですが、ここには常にPLLクロックの半分の値を指定してください。(PLLクロック周波数が222MHzのとき111、266MHzのとき133、333MHzのとき166)<br><a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetClockFrequency">scePowerSetClockFrequency</a>()関数自身の実行にかかる時間は、機種により増減する可能性があることに注意してください。機種ごとの差異をなるべく小さくするためには、頻繁なPLL周波数の変更は避けてください。CPUクロックだけの変更を行う<a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetCpuClockFrequency">scePowerSetCpuClockFrequency</a>()関数であれば、<a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetClockFrequency">scePowerSetClockFrequency</a>()関数よりは高速に実行することができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_4">
+<h3>
+<a href="#Heading3_10"> 10. </a>4 
+<!-- hp1 --><b>WLANと共存可能なPLLクロック周波数について</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">WLAN動作中に設定可能なPLLクロック周波数は、PSP-1000とPSP-2000以降の機種で動作に違いがあります。<br>PSP-1000では、WLAN動作中のPLLクロック周波数は最高222MHzまでに制約されます。266MHz、333MHzを設定する場合はWLAN動作を停止させてください。<br>PSP-2000以降の機種では、WLAN動作中のPLLクロック周波数として266MHz、333MHzも設定することが出来ます。<br><br>どちらの機種で動作しているかは、<a href="../peripheral/Power-Reference-Japanese.htm#scePowerCheckWlanCoexistenceClock">scePowerCheckWlanCoexistenceClock</a>()で判別することができます。<a href="../peripheral/Power-Reference-Japanese.htm#scePowerCheckWlanCoexistenceClock">scePowerCheckWlanCoexistenceClock</a>()関数はこの目的以外には使用してはいけません。<br><br>PSP&reg;開発ツールDTP-T1000等では、起動時のブートパラメータbit 11によってPSP-1000またはPSP-2000以降の機種どちらの条件で動作させるかを選択することができます。PLLクロック切り替えを使用するプログラムでは、かならず両方の設定で動作確認をおこなってください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_5">
+<h3>
+<a href="#Heading3_10"> 10. </a>5 
+<!-- hp1 --><b>CPUクロックで動作するハードウェア</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ALLEGREX CPUコア内で、CPUクロックで動作する部分は、以下の通りです。これらは最大333MHzで動作します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> 整数演算パイプライン
+<li> FPUパイプライン
+<li> VFPUパイプライン
+<li> Iキャッシュ
+<li> Dキャッシュ
+</ul></div>
+<div style="margin-left:50px;"><br>ただし、ALLEGREX CPUのバスインタフェースがシステムバスに対してアクセスを行う場合、バスアクセスが完了するまでの間、バスインタフェース部を除いたALLEGREX CPUコアの動作がPLLクロック周波数での動作に切り替わります。この切り替えは自動的で、バスアクセスが完了するとALLEGREX CPUの動作クロックはもとのCPUクロックに戻ります。<br><br>PSP&reg;カーネルでは、他の全てのスレッドがWAIT状態になったときにのみ実行される特殊なスレッドとしてアイドルスレッドがありますが、アイドルスレッドに遷移するとCPUクロックを停止する特殊な命令が実行されます。つまり、アイドルスレッドの実行中はCPUクロックが停止しています。<br><a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetCpuClockFrequency">scePowerSetCpuClockFrequency</a>()関数でCPUクロック周波数を遅くすると、アイドルスレッドを実行している時間が短くなりますので、そのぶんCPUクロックが停止している時間が短くなります。つまり、ビジーループ等を行わず、処理がない場合は速やかにスレッドをWAIT状態にするようにしていれば、<a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetCpuClockFrequency">scePowerSetCpuClockFrequency</a>()関数でCPUクロックを落とさなくても消費電力は必要最小限になっています。明示的に<a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetCpuClockFrequency">scePowerSetCpuClockFrequency</a>()関数でクロック周波数を下げる必要はありません。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_6">
+<h3>
+<a href="#Heading3_10"> 10. </a>6 
+<!-- hp1 --><b>CPUクロック周波数の変更</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">CPUクロック周波数を変更する場合、<a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetCpuClockFrequency">scePowerSetCpuClockFrequency</a>()にクロック周波数をMHz単位で指定します。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Power-Reference-Japanese.htm#scePowerSetCpuClockFrequency">scePowerSetCpuClockFrequency</a>(111);
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_7">
+<h3>
+<a href="#Heading3_10"> 10. </a>7 
+<!-- hp1 --><b>バスクロックで動作するハードウェア</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">バスクロックで動作するハードウェアは、以下の通りです。これらは最大166MHzで動作します。<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> VFPUライトバッファ
+<li> スクラッチパッド
+<li> Graphic EngineおよびGraphic EngineのeDRAM
+<li> 汎用メモリコピーのためのDMA転送
+<li> Memory Stick&trade;, WLAN, USB, LCD,オーディオ等のためのDMA転送
+<li> MediaEngineへの転送のためのDMA転送
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_8">
+<h3>
+<a href="#Heading3_10"> 10. </a>8 
+<!-- hp1 --><b>バスクロック周波数の変更</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">バスクロック周波数は、常にPLLクロック周波数の1/2で動作します。従来のバージョンにあったscePowerSetBusClockFrequency()関数は削除されました。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_10_9">
+<h3>
+<a href="#Heading3_10"> 10. </a>9 
+<!-- hp1 --><b>CPUのビジーループについて</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;カーネルではアイドルスレッドに遷移するとCPUクロックを停止する特殊な命令が実行されます。スレッドをWAIT状態に遷移させず、ビジーループによってタイミングを取るようなコーディングをしていると、アイドルスレッドに遷移しないためCPUクロックが停止せず、消費電力が増えます。また、アプリケーションより低いプライオリティで動作しているデバイスドライバのスレッドに十分にスケジュールされないと、サスペンド/レジューム処理が遅延またはデッドロックする原因となることがあります。<br><br>たとえば、VSYNC待ちは<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>while (<a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayIsVblank">sceDisplayIsVblank</a>()==0);
+</font></pre></div>
+<div style="margin-left:50px;">と書くのではなく、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../peripheral/Display-Reference-Japanese.htm#sceDisplayWaitVblankStart">sceDisplayWaitVblankStart</a>();
+</font></pre></div>
+<div style="margin-left:50px;">のように記述する事が推奨されます。<br><br>非同期ファイルI/Oの完了待ちは、sceIoPollAsync()関数を用いて<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>res = sceIoReadAsync(fd, buf, size);
+if (!(res &lt; 0)) {
+   while (1) {
+        res = sceIoPollAsync(fd, &amp;result);
+        if (res &lt; 0) {
+            break;
+        } else if (res==1) {
+            res = result;
+            break;
+        }
+   }
+}
+</font></pre></div>
+<div style="margin-left:50px;">と書くのではなく、<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>res = sceIoReadAsync(fd, buf, size);
+if (!(res &lt; 0)) {
+    res = sceIoWaitAsync(fd, &amp;result);
+    if !((res &lt; 0)) {
+        res = result;
+    }
+}
+</font></pre></div>
+<div style="margin-left:50px;">のようにsceIoWaitAsync()関数を使用して記述する事が推奨されます。どうしてもsceIoPollAsync()関数によるポーリングを用いたい場合には、適宜<a href="../kernel/Thread_Manager-Reference-Japanese.htm#sceKernelDelayThread">sceKernelDelayThread</a>()関数等を挿入してスレッドがCPU時間を無駄に消費しないようにしてください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_11">
+<h2>
+ 11 <!-- hp --><b>UMD&reg;ドライブの消費電力について</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;開発TOOLでは、バッテリエミュレータを使用することで予想される消費電力をモニタすることができます。ただし、DVDを使用している場合、ディスクアクセスに必要な電力は計測されません。<br>一般にUMD&reg;へのアクセスではシーク発生時に電力を消費します。消費電力を最小限に抑えるためには、なるべく読み込みが連続アクセスになるようにセクタ配置を最適化しておくことが効果的です。また、（特にストリーミング再生などを行う場合）細かな読み込み処理を分割して行うのではなく、大きな単位で読み込みが行えるよう、入力バッファを大きくとることも有効です。<br>これらによりバッテリ駆動時間を延ばすだけでなく、ロード時間を短くすることができ、ユーザビリティを大きく改善できます。<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

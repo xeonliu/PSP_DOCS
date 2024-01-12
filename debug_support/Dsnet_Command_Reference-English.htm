@@ -1,0 +1,2575 @@
+<html lang="en">
+<head>
+<title>Dsnet_Command_Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+dstdb Command Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Line Input</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">When entering commands, the following editing keys can be used besides the arrow keys.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Editing Key</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-P&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Move to the previous line&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-N&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Move to the next line&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-B&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Move back to the previous character (left)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-F&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Move forward to the next character (right)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-A&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Move to the start of the current line&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-E&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Move to the end of the current line&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BS, DEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete the previous character&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-D&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete the current character&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete the entire current line&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-U&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete the entire current line&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-K&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete from the current character to the end of the current line&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-C&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Suspend input (with ^C echo)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-G&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Suspend input (without ^G echo)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LF, CR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;End input and execute current line as a command&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TAB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Complete command name, file name, or symbol name&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-R&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reverse search&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-S&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Forward search&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CTRL-Y&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Insert string that was deleted by CTRL-K&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">TAB can be used to complete a line, but only when the TAB is input at the end of the line. This applies to the following four cases. <br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> String that does not contain a space <br>Attempts to complete as a command name.</li>
+<li VALUE=2> Argument of the set command <br>Attempts to complete as an option name.</li>
+<li VALUE=3> Argument of the help command <br>Attempts to complete as a help keyword.</li>
+<li VALUE=4> Argument of other commands <br>If the string contains a "/" or ".", attempts to complete as a filename. Otherwise, attempts to complete as as a symbol.</li>
+</ol></div>
+<div style="margin-left:50px;">During program execution, entering CTRL-C sends a break command to the target. Entering CTRL-G does not sent a break command, but simply returns control to dstdb. <br>The RETURN key enables the previously executed command (such as display memory contents or perform step execution) to be reexecuted. When the command is reexecuted (such as display memory contents), the address is incremented at the same time.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Expressions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The following expressions (expr) can be used for command arguments that take a general value other than a filename.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Expression</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Hexadecimal number&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# 0x can be omitted as long as the value does not duplicate a symbol&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;symbol&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Symbol&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;fname&gt;:&lt;lineno&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Specification by line number &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;fname&gt;:&lt;func&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Specification of static function with duplicate name &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Current address (dot address)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;.&lt;digit&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Numeric value (octal, decimal, or hexadecimal) in any&nbsp;&nbsp;<br>&nbsp;&nbsp;of the formats used in the C language&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$&lt;reg&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Current register value or user variable value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(expr)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Parentheses used in a formula&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;+expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Explicit plus sign&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Sign inversion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;~expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Bit inversion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;*expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Indirect address specification (destination pointed to by&nbsp;&nbsp;<br>&nbsp;&nbsp;address is always a word)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Equivalent to *(expr1 + ((expr2) &lt;&lt; 2))&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,b]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1 + ((expr2) &lt;&lt; 0) indirect address specification (byte)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,h]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1 + ((expr2) &lt;&lt; 1) indirect address specification (half)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,w]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1 + ((expr2) &lt;&lt; 2) indirect address specification (word)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,d]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1 + ((expr2) &lt;&lt; 3) indirect address specification (double)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,q]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# expr1 + ((expr2) &lt;&lt; 4) indirect address specification (quad)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1[expr2,expr3]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Address indirect specification (expr3 is byte count)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;!expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Logical inversion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 || expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Logical OR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &amp;&amp; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Logical AND&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 | expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Bitwise OR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 ^ expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Bitwise XOR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &amp; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Bitwise AND&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 == expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# True (= 1) when expressions are equal; false (= 0) otherwise&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 != expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# True (= 1) when expressions are not equal; false (= 0) otherwise&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &lt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Unsigned comparison (less than)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &lt;= expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Unsigned comparison (less than or equal)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &gt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Unsigned comparison (greater than)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &gt;= expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Unsigned comparison (greater than or equal)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &gt;&gt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Shift expr1 to the right by expr2 bits (both values are unsigned)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 &lt;&lt; expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Shift expr1 to the left by expr2 bits (both values are unsigned)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 + expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Arithmetic addition of expr1 and expr2 (both values are unsigned)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 - expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Arithmetic subtraction of expr1 and expr2 (both values are unsigned)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 * expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Arithmetic multiplication of expr1 and expr2 (both values are unsigned)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 / expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Arithmetic division of expr1 and expr2 (both values are unsigned)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr1 % expr2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;# Arithmetic modulus of expr1 and expr2 (both values are unsigned)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">The precedence of parentheses and unary and binary operators is the same as in C, as shown below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Parentheses and Unary and Binary Operators</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Priority</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;() []&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;High&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;! + - ~ * (unary operators)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;* / %&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;+ - (binary operators)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;&lt; &gt;&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; &lt;= &gt; &gt;=&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;== !=&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&amp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;^&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;|&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&amp;&amp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&uarr;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;||&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Low&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">Unless otherwise specified, a numeric value within an expression (expr) is interpreted as a hexadecimal number. Exceptions are the "10" of $10 or a line number within a symbol.<br><br>The definition of a hexadecimal number is [0[xX]][0-9a-fA-F]+. No distinction is made between uppercase and lowercase letters. To specify a decimal number at a location where a hexadecimal number can be used, place a "." before the digits. To specify an octal number, prefix it with ".0".<br>No space can be inserted between "." and the digit.<br><br>  Either of the following can be used for the symbol specification format.<br><br></div>
+</ol>
+<div style="margin-left:65px;"><ol type="a">
+<li VALUE=1>  &lt;symbol&gt;</li>
+<li VALUE=2>  :&lt;symbol&gt;</li>
+</ol></div>
+<div style="margin-left:67px;"><br>An error occurs for a value that can be interpreted as a hexadecimal number or as a symbol such as "a123" if that symbol actually exists. In this case, be sure to explicitly indicate which it is by prefixing the value with "0x" if it is a hexadecimal number or prefixing it with ":" as in ":a123" if it is a symbol.<br><br>Besides a symbolic expression such as "$a0," a numeric specification such as "$4" can also be used for a register name. The numeric value portion in a register number specification is a decimal number.<br><br>A "." within an expression is a special symbol that has the value of the "current address" during the execution of various commands such as di, as, and commands that display and set memory. After these commands complete, the &quot;.&quot; takes on the value of "next address".<br><br>The following are examples showing how expressions are used.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+db 80100000
+di main+0x100
+di (main + 100 + *(1002 + 4) * 5)
+di $epc-8
+db $t0+0x124+$v0+buf
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>List of Commands</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Command</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_1">dr [-hf] [&lt;reg&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_2">sr [&lt;reg&gt; [&lt;val&gt;]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_3">rload &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Load register&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_4">rsave &lt;fname&gt; [&lt;reg&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Save registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_5">dq [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_5">dd [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_5">dw [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_5">dh [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_5">db [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_5">db [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display memory contents (quad)&nbsp;&nbsp;<br>&nbsp;&nbsp;Display memory contents (double)&nbsp;&nbsp;<br>&nbsp;&nbsp;Display memory contents (word)&nbsp;&nbsp;<br>&nbsp;&nbsp;Display memory contents (half)&nbsp;&nbsp;<br>&nbsp;&nbsp;Display memory contents (byte)&nbsp;&nbsp;<br>&nbsp;&nbsp;Display memory contents (float)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_6">sq &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_6">sd &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_6">sw &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_6">sh &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_6">sb &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_6">sb &lt;adr&gt; &lt;val&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set memory contents (quad)&nbsp;&nbsp;<br>&nbsp;&nbsp;Set memory contents (double)&nbsp;&nbsp;<br>&nbsp;&nbsp;Set memory contents (word)&nbsp;&nbsp;<br>&nbsp;&nbsp;Set memory contents (half)&nbsp;&nbsp;<br>&nbsp;&nbsp;Set memory contents (byte)&nbsp;&nbsp;<br>&nbsp;&nbsp;Set memory contents (float)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_7">bload &lt;fname&gt; &lt;adr&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Load binary data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_8">bloadp &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Load PSP&trade; boot code&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_9">start &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Load PSP&trade; boot code and reset target&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_10">bsave &lt;fname&gt; &lt;adr&gt; &lt;cnt&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Save binary data&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_11">di [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Disassemble and display&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_12">as &lt;adr&gt; &lt;inst&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;One line simple assembler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_13">list [&lt;adr&gt; [&lt;cnt&gt; [&lt;back&gt;]]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display source lines&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_14">bt [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display back trace&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_15">bp [&lt;adr&gt;[,&lt;cnt&gt;]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_16">ub [all|&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cancel breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_17">be [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Enable breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_18">bd [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Disable breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_19">hbp pc&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;]]]...</a></u>&nbsp;&nbsp;<br>&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_19">hbp pc&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;]]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set hardware breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_20">hub {pc|da|dr|dw}...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Remove hardware breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_21">cont [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Continue target program&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_22">step [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Step execute target program&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_23">next [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Next execute target program&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_24">lstep [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Step execute by source lines&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_25">lnext [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Next execute by source lines&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_26">until &lt;adr&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Execute up to specified address using temporary breakpoint &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_27">break</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Suspend target program&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_28">wait</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Wait for target program to stop&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_29">gdi [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Disassemble and display a display list&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_30">gbp [&lt;adr&gt;[,&lt;cnt&gt;]]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set display list breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_31">gub [all|&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cancel display list breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_32">gbe [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Enable display list breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_33">gbd [&lt;adr&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Disable display list breakpoints&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_34">gcont [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Continue display list&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_22">step [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Step execute display list&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_23">next [&lt;cnt&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Next execute display list&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_26">until &lt;adr&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Execute display list up to specified &nbsp;&nbsp;<br>&nbsp;&nbsp;address using temporary breakpoint &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_38">reset [-i] [&lt;sbootp&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reset the target&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_39">trace [get|discard|[option]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set sample profiler&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_42">pon</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Power-on the target&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_43">poff</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Power-off the target&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_44">powsw [&lt;time&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Operate target power switch&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_45">suspend</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set target to suspend state&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_46">standby</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Set target to standby state&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_47">set [all] [&lt;var&gt;[=&lt;val&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display and set options or user &nbsp;&nbsp;<br>&nbsp;&nbsp;variables&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_48">alias [-r] [&lt;name&gt; [&lt;value&gt;]]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display, set, or delete alias&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_49">subst [-r] [&lt;pattern&gt; &lt;replace&gt;...]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display, set, or delete command input &nbsp;&nbsp;<br>&nbsp;&nbsp;line substitution&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_50">source &lt;fname&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Execute command from file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_51">![&lt;cmd&gt; [&lt;args&gt;]...]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Call shell&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_52">cd [&lt;directory&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Change current directory&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_53">printf "&lt;fmt&gt;" [&lt;args&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Output formatted message&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_54">record [[-a] &lt;fname&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start and end recording of screen output contents&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_55">if &lt;expr&gt; &lt;cmd&gt; [elif &lt;expr&gt; &lt;cmd&gt;]... [else &lt;cmd&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Execute commands conditionally&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_56">repeat [-c &lt;cnt&gt;] [-i &lt;sec&gt;] [-while &lt;expr&gt;] &lt;cmd&gt;...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Repeatedly execute commands&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_57">sleep &lt;sec&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Wait for interval to elapse&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_58">show [&lt;show_args&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display internal information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_59">mload &lt;fname&gt; [&lt;args&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Load target program module&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_60">mstart [-d] [&lt;fname&gt; [&lt;args&gt;]...]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Execute target program module&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_61">mremove &lt;id&gt;</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete module&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_62">minfo [-i] [-a] [-uk] [&lt;id&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display information on module&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_63">memlist [-s] [-f] [-a &lt;adr&gt;] [-r &lt;range&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display list of memory blocks&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_64">sload [-id &lt;id&gt;] [-b &lt;base&gt;] [&lt;fname&gt;]</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Load only program symbols&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_65">help [&lt;keyword&gt;]...</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display help message&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_4_66">quit</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Terminate dstdb&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Command Details</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>dr [-hf] [&lt;reg&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">For &lt;reg&gt;, specify a register name or register group name. <br>The following register group names can be specified.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Register Group Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;all&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;gpr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;General Purpose Registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;hl&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;HI, LO&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;scc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;System Coprocessor Registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fpr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FPU registers (c1r)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fcr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;FPU control registers (c1c)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fpu&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All FPU registers (cop1, cp1)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vfr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VFPU registers (c2r)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vfc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;VFPU control registers (c2c)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;vfpu&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All VFPU registers (cop2, cp2)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All Graphics Engine registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_reg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine control registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_cmd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine command registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_bone&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine bone matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_world&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine world matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_view&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine view matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_proj&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine projection matrix registers&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ge_tgen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Graphics Engine texture generation matrix registers&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Note that register number format can be used for a general-purpose register (example: $a0 is $4), and for a VFPU matrix register, scalar format (example: s000), vector format (example: c000, r000), or matrix format (example: m000, e000) can be used.<br>If &lt;reg&gt; is omitted, the general-purpose registers and $lo, $hi, $PC, $bada, and the instructions before and after the $PC are disassembled and displayed.<br>$PC is a pseudo register that holds a program counter value that was calculated from the values of the two registers $epc and $cause.<br>To display a VFPU matrix register in s*** / c*** / r*** / m*** / e*** formats, enter the commands shown below. For formats other than scalar, if no dimension is specified and it is not self evident, it will be 4D by default.<br>    Examples:<br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr s000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr c000&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&rarr; Displayed as 4D&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr r000.p&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&larr; 2D specification&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr m000.t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&larr; 3D specification&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dstdb 0R0&gt; dr e000.q&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&larr; 4D specification&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">The -h or -f option can be specified when displaying register values using a register group specification.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display 32-bit values by using hexadecimal numbers. [default]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-f &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display 32-bit values as hexadecimal numbers and&nbsp;&nbsp;<br>&nbsp;&nbsp;floating-point numbers. (fpr, vfr, gpr)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">For a VFPU matrix register, floating-point can be set as the default display by setting vfpu_display_float in .dstdbrc. Also, the -v option displays the vfr* register corresponding to each element of a vector or matrix.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>sr [&lt;reg&gt; [&lt;val&gt;]]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The value &lt;val&gt; is set for the register specified by &lt;reg&gt;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>rload &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Load register values from the specified file &lt;fname&gt;. Generally, the filename of a file that was saved by using the rsave command is specified.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>rsave &lt;fname&gt; [&lt;reg&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Saves the register names and values of the specified registers &lt;reg&gt;... in the specified file &lt;fname&gt;.<br>If &lt;reg&gt;... is omitted, the same registers as the ones described when &lt;reg&gt;... is omitted in the dr command are saved.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>dq [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>dd [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>dw [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>dh [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>db [&lt;adr&gt; [&lt;cnt&gt;]]</b><br><b>df [&lt;adr&gt; [&lt;cnt&gt;]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Memory contents are displayed beginning with the specified address &lt;adr&gt;.<br>The default &lt;adr&gt; is the dot address (current address).<br>&lt;cnt&gt; indicates the number of bytes to be displayed at one time. If a fraction is specified with the dq command, for example, it is rounded up. If a command other than dw is used to access an I/O register by an amount other than 32 bits, the value of the I/O register will be unpredictable.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>sq &lt;adr&gt; &lt;val&gt;...</b><br><b>sd &lt;adr&gt; &lt;val&gt;...</b><br><b>sw &lt;adr&gt; &lt;val&gt;...</b><br><b>sh &lt;adr&gt; &lt;val&gt;...</b><br><b>sb &lt;adr&gt; &lt;val&gt;...</b><br><b>sf &lt;adr&gt; &lt;fval&gt;...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The specified data values &lt;val&gt;... are stored in memory beginning with the specified address &lt;adr&gt;.<br>Only the following floating-point expressions can be specified for &lt;fval&gt; when the sf command is used.<br></div>
+<div style="margin-left:80px;">&lt;floating_point_number&gt;<br>(&lt;fexpr&gt;)<br>+&lt;fexpr&gt;<br>-&lt;fexpr&gt;<br>*&lt;fexpr&gt;<br>&lt;fexpr1&gt; + &lt;fexpr2&gt;<br>&lt;fexpr1&gt; - &lt;fexpr2&gt;<br>&lt;fexpr1&gt; * &lt;fexpr2&gt;<br>&lt;fexpr1&gt; / &lt;fexpr2&gt;<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>bload &lt;fname&gt; &lt;adr&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The contents of the file named &lt;fname&gt; are loaded into memory as binary data in the area specified by the starting address &lt;adr&gt;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>bloadp &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The contents of the file named &lt;fname&gt; in which the boot code is stored are loaded into memory as binary data in the stipulated area.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_9">
+<h3>
+<a href="#Heading3_4"> 4. </a>9 
+<!-- hp1 --><b>start &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The contents of the file named &lt;fname&gt; in which the boot code is stored are loaded into memory as binary data in the stipulated area and the target is reset.<br>Issuing this command is equivalent to executing the bloadp command and the reset command.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_10">
+<h3>
+<a href="#Heading3_4"> 4. </a>10 
+<!-- hp1 --><b>bsave &lt;fname&gt; &lt;adr&gt; &lt;cnt&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The contents of the area having a size in bytes indicated by &lt;cnt&gt; beginning at the address &lt;adr&gt; are saved as binary data in the file named &lt;fname&gt;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_11">
+<h3>
+<a href="#Heading3_4"> 4. </a>11 
+<!-- hp1 --><b>di [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Instructions are disassembled and displayed beginning with the specified address &lt;adr&gt;. <br>The default &lt;adr&gt; is the dot address (current address). <br>&lt;cnt&gt; indicates the number of instructions to be displayed at one time. The default is 20 instructions.<br>If -m &lt;mark&gt; is specified, the marker "-&gt;" is displayed at the line corresponding to address &lt;mark&gt;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_12">
+<h3>
+<a href="#Heading3_4"> 4. </a>12 
+<!-- hp1 --><b>as &lt;adr&gt; &lt;inst&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The instruction &lt;inst&gt; is written to the specified address &lt;adr&gt;. <br>For example, the following can be specified.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb &gt; as 10000 lw $v0,10($s0)
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_13">
+<h3>
+<a href="#Heading3_4"> 4. </a>13 
+<!-- hp1 --><b>list [&lt;adr&gt; [&lt;cnt&gt; [&lt;back&gt;]]] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Source lines before and after the line corresponding to the specified address &lt;adr&gt; are displayed.<br>The default value of &lt;adr&gt; is $PC.<br>&lt;cnt&gt; indicates the number of source lines to be displayed. The default is 21 lines.<br>&lt;back&gt; is the difference between the source line at the specified address and the starting line that is displayed. The default is 10 (display starts 10 lines before the specified line).<br>If a return is entered after the list command is executed, the same number of source lines are displayed as during the previous invocation of the command beginning with the source line following the source line that was displayed last.<br>The marker "-&gt;" displayed at the left side of the source line indicates the source line corresponding to $PC.<br>To display source lines, the executable file must have been created using gcc -g.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_14">
+<h3>
+<a href="#Heading3_4"> 4. </a>14 
+<!-- hp1 --><b>bt [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Stack frames are backtraced beginning with the current program counter. The program counter values for each stack frame are displayed.<br>To display a specific number of stack frames, specify a value for &lt;cnt&gt; is specified. If &lt;cnt&gt; is not specified, all stack frames are displayed.<br>When a backtrace is displayed, the following pseudo variables are set and can be referenced by subsequent commands.<br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Pseudo Variable</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$BT&lt;n&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Backtrace address&nbsp;&nbsp;<br>&nbsp;&nbsp;When &lt;n&gt; is greater than or equal to 1, this is the address of&nbsp;&nbsp;<br>&nbsp;&nbsp;the instruction where the function was called from that stack&nbsp;&nbsp;<br>&nbsp;&nbsp;frame. When &lt;n&gt; is 0, it is the same as the $PC value.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$SFA&lt;n&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stack frame address&nbsp;&nbsp;<br>&nbsp;&nbsp;Minimum value of the &lt;n&gt;-th stack frame.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$SFS&lt;n&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stack frame size&nbsp;&nbsp;<br>&nbsp;&nbsp;Difference when minimum value is subtracted from maximum&nbsp;&nbsp;<br>&nbsp;&nbsp;value of &lt;n&gt;-th stack frame.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">For example, to set a breakpoint at the location returned in the 2nd stack frame position, specify bp $BT2+0x8.<br><br>To use the subst command to define and execute an instruction named dsf that will use the dw command to dump the &lt;n&gt;-th stack frame, specify the following<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb &gt; subst "^dsf  *\([0-9][0-9]*\) *$" dw $SFA\1 $SFS\1
+dstdb &gt; dsf 2
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_15">
+<h3>
+<a href="#Heading3_4"> 4. </a>15 
+<!-- hp1 --><b>bp [&lt;adr&gt;[,&lt;cnt&gt;]]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A breakpoint is set at the specified address &lt;adr&gt;.<br>If the argument is omitted, all breakpoints that are currently set will be displayed.<br>The count value &lt;cnt&gt; indicates the specified number of times the breakpoint is passed. The default value is 1.<br>When a breakpoint is set, its address is set in the breakpoint pseudo variable $BP&lt;n&gt; that corresponds to that address, and the variable $BP&lt;n&gt; can be specified in subsequent ub and other commands.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_16">
+<h3>
+<a href="#Heading3_4"> 4. </a>16 
+<!-- hp1 --><b>ub [all|&lt;adr&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The breakpoint at the specified address &lt;adr&gt; is canceled.<br>If the argument is omitted or all is specified, all breakpoints are canceled.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_17">
+<h3>
+<a href="#Heading3_4"> 4. </a>17 
+<!-- hp1 --><b>be [&lt;adr&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The breakpoint at the specified address &lt;adr&gt; is enabled.<br>If &lt;adr&gt; is omitted, all breakpoints are enabled.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_18">
+<h3>
+<a href="#Heading3_4"> 4. </a>18 
+<!-- hp1 --><b>bd [&lt;adr&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The breakpoint at the specified address &lt;adr&gt; is disabled.<br>If &lt;adr&gt; is omitted, all breakpoints are disabled.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_19">
+<h3>
+<a href="#Heading3_4"> 4. </a>19 
+<!-- hp1 --><b>hbp pc&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;]]]...</b><br><b>hbp {da|dr|dw}&lt;nt&gt;[:&lt;adr&gt;[,&lt;amsk&gt;][=&lt;val&gt;[,&lt;vmsk&gt;]]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Displays the hardware breakpoint settings and status for the specified address &lt;adr&gt;.<br>If all the arguments are omitted, the current hardware breakpoints will be displayed.<br>pc,da,dr,dw are access types for the hardware breakpoints and their meaning is shown below.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Program counter   &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(during DF stage)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;da&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data access        &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(dr or dw)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data read access   &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(during DF stage)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;dw&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data write access   &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;(during WB stage)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">Only one of da,dr,dw can be specified at a time.<br><br>&lt;amsk&gt; is the mask value for the specified address.<br>(The default value is 0xffffffff which means that all values are compared with &lt;adr&gt;)<br>&lt;nt&gt; specifies whether or not a trigger signal will be generated and if a break exception will occur.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Not specified&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A break exception will occur. A trigger signal will not be generated.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A break exception will occur and a trigger signal will be generated.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;nt&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A break exception will not occur, but a trigger signal will be generated.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">If &lt;adr&gt; is omitted, the previous address value for that type will be used.<br>If da, dr or dw is used, the specified data value &lt;val&gt; and its associated mask value &lt;vmsk&gt; can be specified.<br>The hbp and hub commands can be used only with the dstdb which was started first.<br><br>Example: Data read to address 0x08000000 <br></div>
+        <div style="margin-left:80px;"><pre><font size=3>  dstdb &gt; hbp dr:0x08000000
+
+</font></pre></div>
+<div style="margin-left:50px;">If execution is stopped by a hardware breakpoint, it cannot be re-executed by cont.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_20">
+<h3>
+<a href="#Heading3_4"> 4. </a>20 
+<!-- hp1 --><b>hub {pc|da|dr|dw}...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Removes hardware breakpoints of the specified type {pc|da|dr|dw}.<br>If all the arguments are omitted, all hardware breakpoints will be removed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_21">
+<h3>
+<a href="#Heading3_4"> 4. </a>21 
+<!-- hp1 --><b>cont [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Continuous execution of the target program is performed starting from the current state.<br>The debugger waits until a breakpoint is reached or some exception is generated.<br>The argument &lt;cnt&gt; specifies the continuation count. The default is 1.<br>Standard output from the target program will be displayed on the screen.<br>To suspend the target program, enter CTRL-C. To return control to the debugger without suspending the target program, enter CTRL-G.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_22">
+<h3>
+<a href="#Heading3_4"> 4. </a>22 
+<!-- hp1 --><b>step [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Step execution is performed the number of times specified by &lt;cnt&gt; (default is 1) beginning with the current $PC.<br>The step count matches the number of CPU instructions. Even if delayed branch instructions are included, step execution will be performed directly in the order that the CPU executes them.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_23">
+<h3>
+<a href="#Heading3_4"> 4. </a>23 
+<!-- hp1 --><b>next [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Next execution is performed the number of times specified by &lt;cnt&gt; (default is 1) beginning with the current $PC.<br>The next count matches the number of CPU instructions. Even if delayed branch instructions are included, next execution will be performed directly in the order that the CPU executes them.<br>The only difference between next and step execution is with step execution, instruction tracing will be performed into a function which is entered using the jal or jalr instructions.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_24">
+<h3>
+<a href="#Heading3_4"> 4. </a>24 
+<!-- hp1 --><b>lstep [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Step execution is performed the number of times specified by &lt;cnt&gt; (default is 1) beginning with the current $PC.<br>If $PC does not contain a line number when a command is executed or after internal step execution of one instruction, a message indicating this is displayed, and the command ends (default).<br>If the option variable lstep_stop_at_no_line is set, an error does not occur even at a location that does not contain line number information and step execution is performed internally until a location is reached that contains line number information.<br>To perform lstep, the executable file must be created with gcc -g.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_25">
+<h3>
+<a href="#Heading3_4"> 4. </a>25 
+<!-- hp1 --><b>lnext [&lt;cnt&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Next execution is performed the number of times specified by &lt;cnt&gt; (default is 1) beginning with the current $PC.<br>If $PC does not contain a line number when a command is executed or after internal next execution of one instruction, a message indicating this is displayed, and the command ends (default).<br>If the option variable lstep_stop_at_no_line is set, an error does not occur even at a location that does not contain line number information and next execution is performed internally until a location is reached that contains line number information.<br>To perform lnext, the executable file must be created with gcc -g.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_26">
+<h3>
+<a href="#Heading3_4"> 4. </a>26 
+<!-- hp1 --><b>until &lt;adr&gt;... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Temporary breakpoints are used to perform continuous execution from the current $PC until the specified addresses &lt;adr&gt;... in the order they are specified. The until command is not affected by breakpoints that were set by the bp command.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_27">
+<h3>
+<a href="#Heading3_4"> 4. </a>27 
+<!-- hp1 --><b>break </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Program execution is suspended.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_28">
+<h3>
+<a href="#Heading3_4"> 4. </a>28 
+<!-- hp1 --><b>wait </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The debugger waits for an exception to be generated while the program is being executed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_29">
+<h3>
+<a href="#Heading3_4"> 4. </a>29 
+<!-- hp1 --><b>gdi [-m &lt;mark&gt;] [&lt;adr&gt; [&lt;cnt&gt;]] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Instructions are disassembled and displayed as a Graphics Engine display list beginning with the specified address &lt;adr&gt;. <br>The default &lt;adr&gt; is the dot address (current address). <br>&lt;cnt&gt; indicates the number of instructions to be displayed at one time. The default is 20 instructions.<br>If -m &lt;mark&gt; is specified, the marker "-&gt;" is displayed on the line corresponding to the &lt;mark&gt; address.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_30">
+<h3>
+<a href="#Heading3_4"> 4. </a>30 
+<!-- hp1 --><b>gbp [&lt;adr&gt;[,&lt;cnt&gt;]]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A display list breakpoint is set at the specified address &lt;adr&gt;.<br>If the argument is omitted, all breakpoints that are currently set will be displayed.<br>The count value &lt;cnt&gt; indicates the specified number of times the breakpoint is passed. The default value is 1.<br>When a breakpoint is set, its address is set in the breakpoint pseudo variable $GBP&lt;n&gt; that corresponds to that address, and $GBP&lt;n&gt; can be used in specifications in subsequent gub and other commands.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_31">
+<h3>
+<a href="#Heading3_4"> 4. </a>31 
+<!-- hp1 --><b>gub [all|&lt;adr&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The display list breakpoint at the specified address &lt;adr&gt; is canceled.<br>If the argument is omitted or all is specified, all breakpoints are canceled.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_32">
+<h3>
+<a href="#Heading3_4"> 4. </a>32 
+<!-- hp1 --><b>gbe [&lt;adr&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The display list breakpoint at the specified address &lt;adr&gt; is enabled.<br>If &lt;adr&gt; is omitted, all breakpoints are enabled.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_33">
+<h3>
+<a href="#Heading3_4"> 4. </a>33 
+<!-- hp1 --><b>gbd [&lt;adr&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The display list breakpoint at the specified address &lt;adr&gt; is disabled.<br>If &lt;adr&gt; is omitted, all breakpoints are disabled.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_34">
+<h3>
+<a href="#Heading3_4"> 4. </a>34 
+<!-- hp1 --><b>gcont [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Continuous execution of the display list is performed starting from the current state.<br>The debugger waits until a breakpoint is reached or some kind of exception occurs.<br>The argument &lt;cnt&gt; specifies the continuation count. The default is 1.<br>Standard output from the target program will be displayed on the screen.<br>To interrupt the target program, enter CTRL-C. To return control to the debugger without interrupting the target program, enter CTRL-G.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_35">
+<h3>
+<a href="#Heading3_4"> 4. </a>35 
+<!-- hp1 --><b>gstep [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Step execution is performed the number of times specified by &lt;cnt&gt; (default is 1) beginning with the current $ge_madr.<br>The step count roughly matches the number of display list instructions.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_36">
+<h3>
+<a href="#Heading3_4"> 4. </a>36 
+<!-- hp1 --><b>gnext [&lt;cnt&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Next execution is performed the number of times specified by &lt;cnt&gt; (default is 1) beginning with the current $ge_madr.<br>The next count roughly matches the number of display list instructions.<br>The only difference between next and step execution is with next execution, subroutines will not be traced when the CMD_CALL instruction is executed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_37">
+<h3>
+<a href="#Heading3_4"> 4. </a>37 
+<!-- hp1 --><b>guntil &lt;adr&gt;... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Temporary breakpoints are used to perform continuous execution from the current $ge_madr until the specified addresses &lt;adr&gt;... in the order they are specified. The guntil command is not affected by breakpoints that were set by the gbp command.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_38">
+<h3>
+<a href="#Heading3_4"> 4. </a>38 
+<!-- hp1 --><b>reset [-i] [&lt;sbootp&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">All targets are reset after all breakpoints are disabled and symbol information is cleared.<br><br>If the -i option is specified, the value of the variable initial_sbootp is assigned to the variable current_sbootp. If the boot parameter &lt;sbootp&gt; is specified, its value is set for current_sbootp.<br>The value of the current_sbootp variable is used for the target boot parameter.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_38_1">
+<div style="margin-left:40px;"><h4><b>Boot Parameters</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>bit</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 10&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory selection 32MiB/64MiB switching bit&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = 32MiB&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = 64MiB&nbsp;&nbsp;<br>&nbsp;&nbsp;Note that within the memory area described above, 8 MiB are also&nbsp;&nbsp;<br>&nbsp;&nbsp;used by the system. Also, in 64 MiB mode, an additional 8 MiB are&nbsp;&nbsp;<br>&nbsp;&nbsp;set aside as a reserved area. Therefore, in each mode, the size that&nbsp;&nbsp;<br>&nbsp;&nbsp;can be freely used by the user is 24 MiB when this is OFF and 48&nbsp;&nbsp;<br>&nbsp;&nbsp;MiB when it is ON.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Startup switching bit for PLL clock that can coexist with WLAN&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = 222 MHz (corresponds to PSP-1000)&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = 333 MHz (corresponds to PSP-2000 and later)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 12&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&trade; cache switching bit&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Disable UMD&trade; cache&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Enable UMD&trade; cache&nbsp;&nbsp;<br>&nbsp;&nbsp;Note that the bit 12 setting is disabled when bit 10 is 1.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 15&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ether over DECI2p switching bit&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Use WLAN&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Use Ether over DECI2p&nbsp;&nbsp;<br>&nbsp;&nbsp;If Ether over DECI2p is selected, Ethernet packets will be sent and&nbsp;&nbsp;<br>&nbsp;&nbsp;received via DECI2p instead of via the WLAN.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 17&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory Stick&trade; LOCK switch emulation according to GPI6&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = No LOCK switch emulation&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = LOCK switch emulation is enabled &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 18&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Read speed when using DVD&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Read speed is equivalent to UMD&trade;&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Use maximum speed of DVD drive&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 19&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UMD&trade;/DVD read random delay&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = No random delay&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Random delay&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 20&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;WLAN packet loss&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = No random packet loss&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Random packet loss&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 22&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Profiler mode switching bit&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Global mode (thread manager does not manage profiler register)&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Thread mode (profiler register is managed for each thread)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 23&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Profiler enable/disable switching bit&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Profiler disable&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Profiler enable&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 24&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory block overflow check enable/disable switching bit&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Disable overflow check&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = Enable overflow check&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;bit 29&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Development environment/system software switching bit&nbsp;&nbsp;<br>&nbsp;&nbsp;0 = Development environment&nbsp;&nbsp;<br>&nbsp;&nbsp;1 = System software&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Other bits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Reserved&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">If the argument of the reset command is omitted, the setting that was specified the last time reset was executed, which is maintained by dsnetm_psp that is running on the TOOL, is used directly.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_39">
+<h3>
+<a href="#Heading3_4"> 4. </a>39 
+<!-- hp1 --><b>trace [get|discard|[option]]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Sets the trace and sample profiler.<br>If all arguments are omitted, the current trace and sample profiler settings are displayed.<br>trace get displays records that have been recorded up to the present.<br>trace none stops the profiler. Since records have been saved, they can be displayed using trace get.<br>trace discard discards records that have been recorded up to the present and stops the profiler.<br><br>The following trace and sample profiler settings can be specified for &lt;option&gt;.<br>More than one option can be specified for &lt;option&gt;.<br></div>
+<div style="margin-left:67px;"> [bs &lt;bs&gt;]<br></div>
+<div style="margin-left:80px;">Specifies the size of the buffer for recording trace and sample profiler information in bytes. <br></div>
+<div style="margin-left:67px;">[ew]<br></div>
+<div style="margin-left:80px;">Specifies that a test of the profiler buffer is to be performed in ring buffer format.<br></div>
+<div style="margin-left:67px;">[sc &lt;sc&gt;]<br></div>
+<div style="margin-left:80px;">Specifies the timer interrupt cycle for $pc sampling in usecs. The default is a 40usec period.<br></div>
+<div style="margin-left:67px;">[ctxsw|thread|syscall|intr|ge|tmrepc|tmrprof|tmrge|none]<br></div>
+<div style="margin-left:80px;">Specifies the information to be recorded by the trace and sample profiler. If ctxsw is specified, thread context switching history is recorded. If thread is specified, thread creation and deletion history is recorded. If syscall is specified, the call history of kernel and library functions that are provided in kernel mode is recorded. If intr is specified, interrupt generation history is recorded. If ge is specified, the Graphics Engine display list operation history is recorded. If tmrepc is specified, the $epc register is recorded when timer interrupts occur. If tmrprof is specified, the profiler is recorded when a timer interrupt occurs. If tmrge is specified, the Graphics Engine registers are recorded when a timer interrupt occurs.<br>If none is specified, trace and sample profiler operation is stopped.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_40">
+<h3>
+<a href="#Heading3_4"> 4. </a>40 
+<!-- hp1 --><b>vcp [save|freeze|bgcolor]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Controls DTP-T1000 video capture.<br>vcp save captures the image that is currently being displayed and saves it in BMP format.<br>vcp freeze controls whether to freeze or unfreeze the picture that is currently being displayed.<br>vcp bgcolor is used to set the background color.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_41">
+<h3>
+<a href="#Heading3_4"> 4. </a>41 
+<!-- hp1 --><b>footsw [autosave|autobreak|freeze|disable]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Controls the DTP-T1000 foot switch.<br>footsw autosave automatically saves the screen capture each time the foot switch is pressed. A prefix can be specified for the filename by using the automatic_prefix_screenshot variable.<br>footsw autobreak controls (break/cont) target execution each time the foot switch is pressed.<br>footsw freeze freezes or unfreezes the image each time the foot switch is pressed. This is the default operation.<br>footsw disable disables foot switch operation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_42">
+<h3>
+<a href="#Heading3_4"> 4. </a>42 
+<!-- hp1 --><b>pon </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Unlike a normal reset operation, performs only a power-on of the target.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_43">
+<h3>
+<a href="#Heading3_4"> 4. </a>43 
+<!-- hp1 --><b>poff</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Performs only a power-off of the target.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_44">
+<h3>
+<a href="#Heading3_4"> 4. </a>44 
+<!-- hp1 --><b>powsw [&lt;time&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Emulates the operation of the power switch on the target.<br>time (ms) specifies the duration in ms that the power switch is to be pressed. The default value is 500 (ms).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_45">
+<h3>
+<a href="#Heading3_4"> 4. </a>45 
+<!-- hp1 --><b>suspend</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Sets the target to suspend state. A fixed value of 500 (ms) is set internally for the duration that the power switch is pressed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_46">
+<h3>
+<a href="#Heading3_4"> 4. </a>46 
+<!-- hp1 --><b>standby</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Sets the target to standby state. A fixed value of 5000 (ms) is set internally for the duration that the power switch is pressed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_47">
+<h3>
+<a href="#Heading3_4"> 4. </a>47 
+<!-- hp1 --><b>set [all] [&lt;var&gt;[=&lt;val&gt;]] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">To display only the options that have been changed from their default values, specify only set. To display all options, specify set all.<br>To set an option to a string or numeric value, specify: set &lt;var&gt;=&lt;val&gt;.<br>To set an option to a Boolean value, specifying set &lt;var&gt; to set the option to true, and specify  set no&lt;var&gt; to set the option to false.<br>For the meaning of each option, see Chapter 5 &quot;List of Options&quot; and Chapter 6 &quot;Option Details&quot;.<br><br>The set command also has functions for displaying and setting user variables.<br>Any variable name can be used as a user variable if it is not included in the option names and is not a dstdb register name. A user variable always has a 32-bit numeric value as its value and is always displayed even when all is not specified. A user variable can be referenced in $&lt;var&gt; format in an expression.<br>If &lt;val&gt; is omitted for a user variable such as in set &lt;var&gt;=, that user variable is deleted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_48">
+<h3>
+<a href="#Heading3_4"> 4. </a>48 
+<!-- hp1 --><b>alias [-r] [&lt;name&gt; [&lt;value&gt;]] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the specified alias &lt;name&gt; is used as a command name, the command string &lt;value&gt; is executed.<br>To display all aliases that are currently set, specify only alias.<br>To delete all aliases that are currently set, specify alias -r.<br>To display only the setting of alias &lt;name&gt;, specify alias &lt;name&gt;.<br>To set the new alias &lt;name&gt; to &lt;value&gt;, specify alias &lt;name&gt; &lt;value&gt;. The specifications ${*} and ${N}, which can only be used with this alias command, can be used within &lt;value&gt;. ${*} is expanded to include all of the specified arguments at execution time, and ${N} is expanded up to the Nth specified argument at execution time.<br><br>To specify multiple commands within &lt;value&gt;, specify these as alias dr2 (dr;dr).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_49">
+<h3>
+<a href="#Heading3_4"> 4. </a>49 
+<!-- hp1 --><b>subst [-r] [&lt;pattern&gt; &lt;replace&gt;...]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The command input line is handled as a string, and all patterns indicated by &lt;pattern&gt; contained within that string are replaced by the replacement strings indicated by &lt;replace&gt;.<br>To display all replacements that have currently been set, specify only subst.<br>To delete all replacements that have currently been set, specify subst -r.<br>To delete the replacements indicated by &lt;pattern&gt; &lt;replace&gt;..., which are currently set, specify subst -r &lt;pattern&gt; &lt;replace&gt;....<br>This command differs from alias in that the previous setting is not deleted even if a replacement was set for the same &lt;pattern&gt;. Also, when &lt;replace&gt;... is omitted, the setting will be replaced by a blank string (in other words, it will be deleted).<br>If there are multiple substitution definitions, they are all applied in the order they were specified.<br><br>Although &lt;pattern&gt; is generally specified by using a string that is enclosed in double quotes, if the string does not have any embedded spaces, the surrounding double quotes may be omitted.<br>&lt;pattern&gt; is specified by using the following regular expressions.<br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Character X (when X is not included in the following representations)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Character X (when X is not "(" or ")")&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;.&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Arbitrary one character&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;X*&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Repetition of X (including zero repetitions)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;[abc]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any one character of "a", "b", and "c".&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;[x-y]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Any one character from "x" to "y".&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;[^abc]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;One character that is not "a", "b", or "c".&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;^&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Beginning of a line (matches only at the beginning of &lt;pattern&gt;)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;$&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;End of a line (matches only at the end of &lt;pattern&gt;)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\(&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Start recording of tag&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;End recording of tag&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Besides normal strings, the following special characters can also be specified for &lt;replace&gt;...<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\X&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Character X (when X is not "1"-"9")&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&amp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Entire currently matched string&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1st tag&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2nd tag&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;...&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;\9&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;9th tag&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">Some example specifications are shown below.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Set that breakpoint numbers can be entered by using $bn&lt;n&gt;
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+dstdb&gt; subst "$bp\([0-9]* \)" $BP\1
+
+</font></pre></div>
+<div style="margin-left:40px;"><ul>
+<li> Set that show history can be executed by using only history
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>dstdb&gt; subst "^ *history *$" show history
+
+</font></pre></div>
+<div style="margin-left:50px;">When a command input line begins with "\", no substitution processing will be performed.<br>If a setting such as subst ".*" is made by mistake, quit can always be executed by entering \quit, for example.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_50">
+<h3>
+<a href="#Heading3_4"> 4. </a>50 
+<!-- hp1 --><b>source &lt;fname&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The contents of the specified file &lt;fname&gt; are executed as a command string.<br>If the file contains lines ending with "\", they are concatenated with the next line.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_51">
+<h3>
+<a href="#Heading3_4"> 4. </a>51 
+<!-- hp1 --><b>![&lt;cmd&gt; [&lt;args&gt;]...]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The command &lt;cmd&gt; and arguments &lt;args&gt;... that follow "!" are passed to the shell and executed. &lt;cmd&gt; and &lt;args&gt; are directly passed to the shell without any evaluation being performed. The shell that is used is determined by the environment variable SHELL. If SHELL has not been set, "/bin/sh" will be used.<br>If &lt;cmd&gt; is omitted, only the shell is called.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_52">
+<h3>
+<a href="#Heading3_4"> 4. </a>52 
+<!-- hp1 --><b>cd [&lt;directory&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The current directory is changed to &lt;directory&gt;. If the argument is omitted, the current directory is changed to the directory indicated by the environment variable HOME.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_53">
+<h3>
+<a href="#Heading3_4"> 4. </a>53 
+<!-- hp1 --><b>printf "&lt;fmt&gt;" [&lt;args&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A message is output to the screen.<br>The same formats as those that are used with printf(3) can be used for &lt;fmt&gt;. However, the floating-related (e, E, f, and g) formats and %n are not supported. &lt;args&gt; is always evaluated as an expression and its value is used.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_54">
+<h3>
+<a href="#Heading3_4"> 4. </a>54 
+<!-- hp1 --><b>record [[-a] &lt;fname&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The subsequent screen output contents are saved in the specified file &lt;fname&gt;.<br>If &lt;fname&gt; is omitted, recording ends.<br>If the -a option is specified, the screen output contents are written to the file in append mode.<br>If the next record command is specified without ending recording, the previous file is automatically closed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_55">
+<h3>
+<a href="#Heading3_4"> 4. </a>55 
+<!-- hp1 --><b>if &lt;expr&gt; &lt;cmd&gt; [elif &lt;expr&gt; &lt;cmd&gt;]... [else &lt;cmd&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A command is executed conditionally.<br>First, the expression &lt;expr&gt; of if &lt;expr&gt; &lt;cmd&gt; is evaluated, and if its value is not 0, &lt;cmd&gt; is executed.<br>If the value of the expression &lt;expr&gt; of if &lt;expr&gt; &lt;cmd&gt; is 0, the elif or else part is evaluated. For else, &lt;cmd&gt; is executed unconditionally, and for elif, &lt;cmd&gt; is executed conditionally.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_56">
+<h3>
+<a href="#Heading3_4"> 4. </a>56 
+<!-- hp1 --><b>repeat [-c &lt;cnt&gt;] [-i &lt;sec&gt;] [-while &lt;expr&gt;] &lt;cmd&gt;...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The specified commands &lt;cmd&gt;... are repeatedly executed.<br>If the repetition count &lt;cnt&gt; is specified by the -c option, the commands are repeated only the specified number of times. If no repetition count is specified, the commands are repeated indefinitely until an error occurs or CTRL-C is entered.<br><br>Processing such as packet send/receive is performed once between repeated executions.<br>If no packet send/receive is performed or no keyboard entry is made within the interval in seconds specified by &lt;sec&gt; (default value is 1 [second]) according to the -i option, the next repetition begins.<br>If packet send/receive is performed or a keyboard entry is made, the next repetition is executed without waiting for that interval.<br>If the -while &lt;expr&gt; option is specified, &lt;expr&gt; is evaluated at such a time before the commands &lt;cmd&gt;... are executed, and if its value is 0, the repeat command ends. Also, if the -while option is specified and the -i option is not specified, the timeout interval will be 0.<br>To execute multiple commands repeatedly, use a format such as repeat (dr;dr).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_57">
+<h3>
+<a href="#Heading3_4"> 4. </a>57 
+<!-- hp1 --><b>sleep &lt;sec&gt; </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The debugger waits for the specified number of seconds &lt;sec&gt;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_58">
+<h3>
+<a href="#Heading3_4"> 4. </a>58 
+<!-- hp1 --><b>show [&lt;show_args&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The DECI2 packet send/receive log is displayed by the show log ... command.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>show log [[-]&lt;option&gt;]...
+
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>&lt;option&gt;</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;l[ong]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display time differences, IP addresses, and other information.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;n[um]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display all DECI2 packets in hexadecimal.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;r[emove]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete all log data.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;a[ll]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display all data (in contrast to tail and head)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;t[ail] &lt;N&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only the last &lt;N&gt; data.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;h[ead] &lt;N&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only the first &lt;N&gt; data.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;i[d] &lt;ID&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only data related to &lt;ID&gt;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;m[sg] &lt;msg&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only data related to &lt;msg&gt;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;p[roto] &lt;proto&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only data related to protocol &lt;proto&gt;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;s[rc] &lt;src&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only data related to source node &lt;src&gt;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;d[st] &lt;dst&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only data related to destination node &lt;dst&gt;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;v[erbose]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display data in verbose mode.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">long and num specify display formats, remove specifies data deletion, and all, tail, and head specify the number of data values to be displayed. The other options specify display conditions. Multiple specifications are always interpreted as being combined by a logical AND.<br>The internal status is displayed by the show status ... command.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>show status [-m] [-d]
+</font></pre></div>
+<div style="margin-left:50px;">If -m is specified, the memory status is displayed.<br>If -d is specified, the statuses of all connections that handle DECI2 packets are displayed.<br>If both -m and -d are omitted, both types of status information are displayed.<br>The input lines that were entered in the past are displayed by the show history command.<br>The configuration information that was passed from the target is displayed by the show dbconf command.<br>Symbol information is displayed by the show symbol [&lt;str&gt;] command. If &lt;str&gt; is omitted, all information is displayed. If &lt;str&gt; is specified, only information where &lt;str&gt; is contained in name is displayed.<br>DWARF information is displayed by the show dwarf ... command.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+show dwarf [&lt;option&gt;]... [&lt;key&gt;]
+
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>&lt;option&gt;</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-id &lt;id&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only information for module ID &lt;id&gt;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-ba[se] &lt;base&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only information for base address &lt;base&gt;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-al[l]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle all section display bits&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-ar[anges]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle the Aranges section display bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-pu[bnames]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle the Pubnames section display bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-in[fo]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle the Info section display bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-ab[brev]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle the Abbrev section display bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-li[ne]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle the Line section display bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-fr[ame]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle the Frame section display bit&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-st[r]&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Toggle the Str section display bit&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">A thread list is displayed using show thr [-[acdefhrqstuvw]*] [&lt;tid&gt;].<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;No arguments&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display the list of threads.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display details about the context.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-a&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display all threads.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display threads in RUN state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-r&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display threads in READY state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-w&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display threads in WAIT state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-s&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display threads in SUSPEND state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-u&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display threads in WAIT-SUSPEND state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-d&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display threads in DORMANT state.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-q&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display the thread ready queues.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Denote floating-point registers in hexadecimal notation when &nbsp;&nbsp;<br>&nbsp;&nbsp;displaying details.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-f&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Denote floating-point registers in floating-point notation when &nbsp;&nbsp;<br>&nbsp;&nbsp;displaying details. [default]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Initialize the number of times that a thread is in RUN state, &nbsp;&nbsp;<br>&nbsp;&nbsp;which is indicated by count, to 0.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display the thread backtrace.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;tid&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display the details of the context of the thread specified by &lt;tid&gt;.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Display semaphore information using show sem [-v] [&lt;semid&gt;].<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;No arguments&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display all semaphores.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;semid&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only the semaphore specified by &lt;semid&gt;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display the waiting thread IDs.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Display interrupt handler information using show int [-v] [&lt;intrcode&gt;].<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;No arguments&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display information on all interrupt handlers.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;intrcode&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display information on the specified interrupt handler.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display the total, minimum, and maximum CPU &nbsp;&nbsp;<br>&nbsp;&nbsp;clock usage times and the GP register value.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Display event handler information using show evf [-v] [&lt;id&gt;].<br><br>Display mutex information using show mtx [-v] [&lt;id&gt;].<br><br>Display lightweight mutex information using show lwmtx [-v] [&lt;id&gt;]<br><br>Display message box information using show mbx [-v] [&lt;id&gt;].<br><br>Display variable length memory pool information using show vpl [-v] [&lt;id&gt;].<br><br>Display fixed length memory pool information using show fpl [-v] [&lt;id&gt;].<br><br>Display TLS memory pool information using show tlspl [-v] [&lt;id&gt;].<br><br>Display message pipe information using show mpp [-v] [&lt;id&gt;].<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;No arguments&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display all information.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display the waiting thread IDs.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;id&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display only the information specified by &lt;id&gt;.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">Display callback information using show cb [-v] [&lt;id&gt;].<br><br>Display thread event handler information using show thevh [-v] [&lt;id&gt;].<br><br>Display alarm information using show alarm [-v] [&lt;id&gt;].<br><br>Display virtual timer information using show vtimer [-v] [&lt;id&gt;].<br><br>Display display list queuing information using show gelist [-v] [&lt;id&gt;].<br><br>Display open file descriptor information using show fd [-v] [&lt;id&gt;].<br><br>Display memory block and heap usage conditions using show mem [-g].<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_59">
+<h3>
+<a href="#Heading3_4"> 4. </a>59 
+<!-- hp1 --><b>mload &lt;fname&gt; [&lt;args&gt;]...</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The specified executable file &lt;fname&gt; is loaded into the target's memory and information such as the starting address is saved within the debugger. The values &lt;args&gt;... are passed as arguments to the target program during execution.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_60">
+<h3>
+<a href="#Heading3_4"> 4. </a>60 
+<!-- hp1 --><b>mstart [-d] [&lt;fname&gt; [&lt;args&gt;]...]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The program module's entry point is called. If mload has already been executed, the entry point is called without arguments. If mload has not been executed, the program module is loaded and the entry point is called by specifying the filename for the arguments.<br><br>If the -d option is appended, the entry point is called in debug mode.<br>Specifically, a breakpoint is set, the entry point is called, CTRL-C is entered to suspend the program or CTRL-G is entered to return control to the debugger without suspending the program.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_61">
+<h3>
+<a href="#Heading3_4"> 4. </a>61 
+<!-- hp1 --><b>mremove &lt;id&gt;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The module specified by &lt;id&gt; is deleted.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_62">
+<h3>
+<a href="#Heading3_4"> 4. </a>62 
+<!-- hp1 --><b>minfo [-i] [-a] [-uk] [&lt;id&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Information about modules that are resident in the target memory is displayed.<br>If &lt;id&gt; is specified, all information about the specified module is displayed.<br>If &lt;id&gt; is not specified a list of modules is displayed.<br><br>If the -i option is specified, only a list of modules that were loaded by the mload or mstart command is displayed.<br>If the -a option is specified, the list is displayed in address order.<br>If the -a option is not specified, the list is displayed in ID order.<br>If the -u option is specified, the list display contains only user modules.<br>If the -k option is specified, the list display contains only kernel modules.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_63">
+<h3>
+<a href="#Heading3_4"> 4. </a>63 
+<!-- hp1 --><b>memlist [-s] [-f] [-a &lt;adr&gt;] [-r &lt;range&gt;] </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A list of memory blocks that exist on the target is displayed.<br>If the -s option is specified, module names are not displayed.<br>If the -f option is specified, only empty memory blocks are displayed.<br>A memory range for which the list is to be displayed can also be specified by using -a &lt;adr&gt; and -r &lt;range&gt;. If the -r option is not specified, the value of &lt;range&gt; is 1 [byte].<br>If the -a option is specified, only memory blocks that are included in that memory range are displayed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_64">
+<h3>
+<a href="#Heading3_4"> 4. </a>64 
+<!-- hp1 --><b>sload [-id &lt;id&gt;] [-b &lt;base&gt;] [&lt;fname&gt;]</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The symbol information of the specified executable file &lt;fname&gt; is added to the internal symbol information of the debugger. The executable file is not loaded into the target memory.<br>If &lt;fname&gt; is omitted, all symbol information in the debugger will be cleared.<br>The possible combinations of the -id &lt;id&gt; option and -b &lt;base&gt; option and their meanings are as follows.<br></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sload &lt;fname&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The module base address is determined by sending an&nbsp;&nbsp;<br>&nbsp;&nbsp;inquiry to the target according to the module name &nbsp;&nbsp;<br>&nbsp;&nbsp;and version within the module file &lt;fname&gt;.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sload -id &lt;id&gt; &lt;fname&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The module base address according to the specified &nbsp;&nbsp;<br>&nbsp;&nbsp;module ID &lt;id&gt; is used. An error occurs if the module &nbsp;&nbsp;<br>&nbsp;&nbsp;name and version within the module file &lt;fname&gt; do &nbsp;&nbsp;<br>&nbsp;&nbsp;not match the information maintained by the target.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;sload -b &lt;base&gt; &lt;fname&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The specified module base address &lt;base&gt; is used &nbsp;&nbsp;<br>&nbsp;&nbsp;without sending an inquiry to the target.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">The -id option and -b option cannot be specified at the same time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_65">
+<h3>
+<a href="#Heading3_4"> 4. </a>65 
+<!-- hp1 --><b>help [&lt;keyword&gt;]... </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If &lt;keyword&gt; is omitted, a list of dstdb commands is displayed.<br>If the keyword &lt;keyword&gt; is specified, only help related to that keyword is displayed.<br>The following can be specified for the keyword &lt;keyword&gt;.<br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;cmd&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Help related to the command name &lt;cmd&gt; is displayed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;reg&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Register groups that can be specified are displayed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;edit&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Keys that can be used for line editing are displayed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;var&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A list of option variables that can be set with the set command is &nbsp;&nbsp;<br>&nbsp;&nbsp;displayed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt;var&gt;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Help related to the option variable &lt;var&gt;, which can be set with the set &nbsp;&nbsp;<br>&nbsp;&nbsp;command is displayed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;expr&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Help related to expressions that can be used is displayed.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;keyword&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;All keywords that can be specified with the help command are displayed.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_66">
+<h3>
+<a href="#Heading3_4"> 4. </a>66 
+<!-- hp1 --><b>quit</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">dstdb is terminated.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>List of Options</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Option Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value Format</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_1">target_name</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Host name and port of dsnetm_psp (OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_2">file_priority</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Remote File Access priority (OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_3">reset_on_start</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Boolean&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Whether or not to reset on startup (OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_4">check_manager_version</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Boolean&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Whether or not to check the manager &nbsp;&nbsp;<br>&nbsp;&nbsp;version (OPTION)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_5">target_exec_ctl_config</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Target execution control status&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_6">target_exec_ctl_override</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Target execution control override&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_7">dr_default_format</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dr command default display format specification&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_8">dr_default_di</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;di execution contents specification when dr&nbsp;&nbsp;<br>&nbsp;&nbsp;command is executed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_10">ex_default_dr</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;dr execution contents specification when&nbsp;&nbsp;<br>&nbsp;&nbsp;exception is generated&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_12">lstep_default_list</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;list execution specification after lstep or&nbsp;&nbsp;<br>&nbsp;&nbsp;lnext execution&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_13">lstep_stop_at_no_line</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stop when there is no line number when&nbsp;&nbsp;<br>&nbsp;&nbsp;executing lstep or lnext&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_14">source_directories</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Source search directory list specification&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_15">initial_sbootp</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Boot parameter initial value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_15">initial_sbootp</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Boot parameter current value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_16">boot_filename</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename of boot code to be loaded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_17">automatic_prefix_breakpoint</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Boolean&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Automatic prefix in breakpoint number&nbsp;&nbsp;<br>&nbsp;&nbsp;format&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_18">describe_ub_all</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Boolean&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Delete all only when all is specified in ub&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_19">di_address</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address display mode for di command&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_20">di_instruction_word</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Instruction word display mode for di&nbsp;&nbsp;<br>&nbsp;&nbsp;command&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_21">di_branch_address</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Branch address display mode for di&nbsp;&nbsp;<br>&nbsp;&nbsp;command&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_22">di_macro</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Macro instruction control for di or as command&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_23">help_lang</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Help display language&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_24">help_pager</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pager to be used for help display&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_25">hex_radix</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Boolean&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Treat numeric value as hexadecimal number &nbsp;&nbsp;<br>&nbsp;&nbsp;without 0x&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_26">log_total_size</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Maximum total number of bytes in&nbsp;&nbsp;<br>&nbsp;&nbsp;send/receive log&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_27">log_packet_size</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Maximum number of bytes in each&nbsp;&nbsp;<br>&nbsp;&nbsp;send/receive log packet&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_28">histfile</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;String&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;History save filename&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_29">histfilesize</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of history entries to be saved&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_30">histsize</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Upper bound for number of history entries&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<u><a href="../debug_support/Dsnet_Command_Reference-English.htm#Heading4_6_31">tty_max_size</a></u>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Numeric value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Maximum number of pending bytes in TTY packet&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">On startup, dstdb checks for the existence of ~/.dstdbrc and ./.dstdbrc, and if these files exist, it executes them as auto-execution-on-startup files in the order they are detected.<br>Since the options for which (OPTION) is written among the options listed above can only be set by an option statement within these auto-execution files and are meaningful only after startup, they cannot be changed at a later time.<br>The option statement has the same arguments as the set command.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Option Details</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>target_name</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Any of the following four methods can be used to set the host name and port of dsnetm_psp.<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Value of environment variable "DSNETM_PSP"</li>
+<li VALUE=2> Value of environment variable "DSNETM"</li>
+<li VALUE=3> option statement within auto-execution-on-startup file</li>
+<li VALUE=4> dstdb startup option -d &lt;host&gt;[:&lt;port&gt;]</li>
+</ol></div>
+<div style="margin-left:50px;">If more than one of these is specified, the setting is overridden in the order 1) -&gt; 2) -&gt; 3) -&gt; 4).<br>The default value of this option, which is "" (null string), has the meaning of the default port specification of the same host on which dstdb was executed.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>file_priority</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option sets whether or not Remote File Access from the target is to be handled by dstdb. If Remote File Access from the target is not to be handled by dstdb, specify -1.<br>The default value of this option is 0xd0.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>reset_on_start</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies whether or not to reset the target when dstdb is started up. <br>This specification is effective when neither the -r nor the -nr command line option has been specified. The default value of this option is false.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>check_manager_version</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies whether or not to check dsnetm_psp version information when dstdb is started up. If this option is true, a check is performed, and if the versions differ, the debugger ends with an error. If this option is false, the version information is not checked.<br>The default value of this option is false. If -cmv is specified on the command line, it is overridden to true.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>target_exec_ctl_config </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option indicates the execution control status of an execution command such as cont, step, or next.<br>When it is 0, it means host-side control. Otherwise, it means target-side control.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_6">
+<h3>
+<a href="#Heading3_6"> 6. </a>6 
+<!-- hp1 --><b>target_exec_ctl_override </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies an override for the target_exec_ctl_config value. That value is overridden when the value of this option is greater than or equal to 0.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_7">
+<h3>
+<a href="#Heading3_6"> 6. </a>7 
+<!-- hp1 --><b>dr_default_format </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The default value, which is option dr_default_format="", means that the internal display format of the debugger is always used. An explicit setting that is equivalent to this is as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>option dr_default_format="\
+at=%at  v0-1=%v0,%v1  a0-3=%a0,%a1,%a2,%a3\n\
+t0-7=%t0,%t1,%t2,%t3, %t4,%t5,%t6,%t7\n\
+s0-7=%s0,%s1,%s2,%s3, %s4,%s5,%s6,%s7\n\
+t8=%t8 t9=%t9   k0=%k0 k1=%k1   gp=%gp sp=%sp\n\
+fp=%fp ra=%ra   lo=%lo hi=%lo   PC=%PC bada=%bada\n\
+$cr=0x%cr [%symcr]\n\
+$fcr31=0x%fcr31 [%symfcr31]\n\
+$sr=0x%sr [%symsr]\n"
+</font></pre></div>
+<div style="margin-left:50px;"><br>Values that are subject to conversion are limited as follows.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>%%          - Means "%".
+
+%&lt;reg&gt;      - Displays the register name &lt;reg&gt; according to printf("%08x",...).
+</font></pre></div>
+<div style="margin-left:50px;">None of the following can be specified for &lt;reg&gt;.<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Register group name
+<li> Value corresponding to the numeric value representation $&lt;n&gt;
+<li> Pseudo register name
+<li> Prefix of "$"
+<li> Prefix of "_" 
+<li> sr -&gt; status alias (dstdb)
+</ul></div>
+<div style="margin-left:50px;"><br>If a name that cannot be specified is specified, %&lt;reg&gt; is displayed without conversion.<br>%symcr, %symsr, and %symfcr31 can be specified for the symbolic display of the cause, status, and fcr31 registers as in the example shown above. One space is always displayed before and after them.<br>Also, a 128-bit register other than %08x or 16-bit display is not supported, and no dstdb setting option exists for dr -vu[01].<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_8">
+<h3>
+<a href="#Heading3_6"> 6. </a>8 
+<!-- hp1 --><b>dr_default_di </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the dr command is specified without an argument, the instructions before and after the current $PC are disassembled and displayed. The display method to be used is determined by the value of this option.<br>The default value used when there is no setting for this option is "\\di -m $PC $PC-8 7" (where the leading "\" is a specification that no alias expansion is to be performed).<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_9">
+<h3>
+<a href="#Heading3_6"> 6. </a>9 
+<!-- hp1 --><b>drge_default_gdi</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the -ge option is specified in the dr command, instructions before and after the current $ge_madr are disassembled and displayed as a display list. The display method to be used is determined by the value of this option.<br>The default value used when there is no setting for this option is "\\gdi -m $ge_madr $_ge_madr-10 8."<br>(The leading '\' specifies not to expand the alias.)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_10">
+<h3>
+<a href="#Heading3_6"> 6. </a>10 
+<!-- hp1 --><b>ex_default_dr </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When execution that was started by a command such as cont, step, or next is stopped due to a breakpoint or the generation of an exception, the dr information is displayed. The display method to be used is determined by the value of this option. The default value used when there is no setting for this option is "\\dr".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_11">
+<h3>
+<a href="#Heading3_6"> 6. </a>11 
+<!-- hp1 --><b>exge_default_drge</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When execution is started by the cont, step, or next commands, and then stopped by a display list breakpoint, dr -ge is displayed. The display method to be used is determined by the value of this option. The default value used when there is no setting for this option is "\\ dr -ge."<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_12">
+<h3>
+<a href="#Heading3_6"> 6. </a>12 
+<!-- hp1 --><b>lstep_default_list </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the list display method to be executed when lstep or lnext is normally terminated.<br>The default value used when there is no setting for this option is "\\list".<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_13">
+<h3>
+<a href="#Heading3_6"> 6. </a>13 
+<!-- hp1 --><b>lstep_stop_at_no_line </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies whether or not to terminate the command at a location where $PC has no line number during execution or at the start of lstep or lnext.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;When this option is 0:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;step or next operation is continued internally up to a location that has a line number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;When this option is 1:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;A message is displayed and the command is terminated. (default)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_14">
+<h3>
+<a href="#Heading3_6"> 6. </a>14 
+<!-- hp1 --><b>source_directories </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the source file search directories that are to be referenced by the di and list commands.<br>If the beginning of the source filename included in the debug data of the executable file is "/" (absolute path) or if the source_directories variable is "", only the source filename is referenced directly.<br>Otherwise, a reference is attempted by appending one or more (delimited by ":") directory names in front of the source filename. An empty delimiter means an empty prefix. For example, ".:" corresponds to a "" prefix following ".".<br>When the specified directory name starts with "@", the "@" part is replaced by the directory name converted to the absolute path of the object file name.<br>The default value of this option is "".<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Specification example for only the directory in which the object exists
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>set source_directories="@"
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Specification example for the order:  current directory -&gt; object position -&gt; ABC -&gt; DEF
+</ul></div>
+        <div style="margin-left:80px;"><pre><font size=3>set source_directories=".:@:ABC:DEF"
+</font></pre></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_15">
+<h3>
+<a href="#Heading3_6"> 6. </a>15 
+<!-- hp1 --><b>initial_sbootp/current_sbootp</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">These options are boot parameter values that are referenced by the reset command. <br>For the meaning of each of these options, see the explanation of the reset command.<br>The default value of initial_sbootp is "-1".<br>The default value of current_sbootp is "-1".<br>("-1" means that the current value is not changed.)<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_16">
+<h3>
+<a href="#Heading3_6"> 6. </a>16 
+<!-- hp1 --><b>boot_filename</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the filename of the boot code to be loaded to reset the target when dstdb is started up.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_17">
+<h3>
+<a href="#Heading3_6"> 6. </a>17 
+<!-- hp1 --><b>automatic_prefix_breakpoint</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Although the argument of the ub, be, or bd command is an address, a pseudo register having $BP&lt;n&gt; format can be specified within an expression in that address specification.<br>If this automatic_prefix_breakpoint variable is true, "$BP" is automatically appended as a prefix when the argument of the ub, be, or bd command consists only of a decimal numeric value.<br>The default value is false.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_18">
+<h3>
+<a href="#Heading3_6"> 6. </a>18 
+<!-- hp1 --><b>describe_ub_all </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If the argument is omitted in the ub command, it indicates that all breakpoints will be deleted. However, if the describe_ub_all variable is true, the deletion of all breakpoints is prohibited.<br>The default value is false.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_19">
+<h3>
+<a href="#Heading3_6"> 6. </a>19 
+<!-- hp1 --><b>di_address </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the display mode for the address (label) part of the di command.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x0"&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display addresses by using both a hexadecimal number and symbol.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x1:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display addresses by using only a hexadecimal number.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x2:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display addresses by using only a symbol if a symbol exists; otherwise,&nbsp;&nbsp;<br>&nbsp;&nbsp; display addresses by using a hexadecimal number.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x3:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display addresses only once on an independent line in relation to the same symbol.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x4:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display line number in addition to the display described for 0x0.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x5:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display line number in addition to the display described for 0x1.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x6:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display line number in addition to the display described for 0x2.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x7:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also displays line number in addition to the display described for 0x3.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x8:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display source line in addition to the display described for 0x4.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0x9:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display source line in addition to the display described for 0x5.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0xa:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display source line in addition to the display described for 0x6.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0xb:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Also display source line in addition to the display described for 0x3.&nbsp;&nbsp;<br>&nbsp;&nbsp;When source line cannot be accessed, this is the same as described for 0x7 (default).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<div style="margin-left:50px;">To display the line number of source line, be sure to create an executable file by using gcc -g.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_20">
+<h3>
+<a href="#Heading3_6"> 6. </a>20 
+<!-- hp1 --><b>di_instruction_word </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the display mode for the instruction word part of the di command.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Instruction word is displayed as a hexadecimal number (default).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 1:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Instruction word is not displayed as a hexadecimal number.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_21">
+<h3>
+<a href="#Heading3_6"> 6. </a>21 
+<!-- hp1 --><b>di_branch_address </b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the display mode for the branch address part of the di command.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display branch address by using both a hexadecimal number and symbol. (default)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 1:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display branch address by using only a hexadecimal number.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 2:&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Display branch address by using only a symbol if a symbol &nbsp;&nbsp;<br>&nbsp;&nbsp;exists; otherwise, display branch address by using a &nbsp;&nbsp;<br>&nbsp;&nbsp;hexadecimal number.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_22">
+<h3>
+<a href="#Heading3_6"> 6. </a>22 
+<!-- hp1 --><b>di_macro</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies whether or not a macro instruction such as li or move is to be handled by the di or as command.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 0: &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Macro instructions are not handled.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;For 1: &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;The li, move, b, bal, and dmove macro instructions are &nbsp;&nbsp;<br>&nbsp;&nbsp;handled. (default)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_23">
+<h3>
+<a href="#Heading3_6"> 6. </a>23 
+<!-- hp1 --><b>help_lang</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the language used for displaying help output by the help command.<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"eng" : &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;English (default)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"euc" : &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Japanese (EUC)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"jis" : &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Japanese (JIS)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"sjis": &nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Japanese (shift JIS)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;"utf-8":&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Japanese (UTF-8)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_24">
+<h3>
+<a href="#Heading3_6"> 6. </a>24 
+<!-- hp1 --><b>help_pager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option specifies the pager used for displaying help output by the help command.<br>The default is "" (NULL string), which means that a pager is not used.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_25">
+<h3>
+<a href="#Heading3_6"> 6. </a>25 
+<!-- hp1 --><b>hex_radix</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option sets the method of interpreting a numeric value specification in dstdb.<br>The default value is true, and a numeric value is interpreted as a hexadecimal number without 0x.<br>If false is specified, a hexadecimal number must be prefixed by 0x as in C.<br>If there are no symbols, true is more convenient. However, if db abc is specified, for example, when there are symbols and if the symbol abc also exists, this must be reentered as db 0xabc, and some ambiguity remains. If false is specified, since only symbols will be searched for db abc, there is no need to reenter the specification depending on the situation.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_26">
+<h3>
+<a href="#Heading3_6"> 6. </a>26 
+<!-- hp1 --><b>log_total_size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">By default, the DECI2 packet log is saved with a maximum total number of bytes of 128 kilobytes. If the send/receive log is unnecessary, set 0.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_27">
+<h3>
+<a href="#Heading3_6"> 6. </a>27 
+<!-- hp1 --><b>log_packet_size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">By default, up to 128 bytes of data from the beginning of a packet is saved in the log. To save all data in the log, set a value of at least 65535.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_28">
+<h3>
+<a href="#Heading3_6"> 6. </a>28 
+<!-- hp1 --><b>histfile</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">By default, this option is "~/.dstdb_history". A history entry is saved in the file indicated by this string when dstdb is terminated, and the history is loaded from that file when dstdb is started up.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_29">
+<h3>
+<a href="#Heading3_6"> 6. </a>29 
+<!-- hp1 --><b>histfilesize</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option indicates the number of history entries to be saved in histfile. The default value is 256.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_30">
+<h3>
+<a href="#Heading3_6"> 6. </a>30 
+<!-- hp1 --><b>histsize</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option indicates the upper bound for the number of history entries to be stored during command operations. The default value is 256.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_31">
+<h3>
+<a href="#Heading3_6"> 6. </a>31 
+<!-- hp1 --><b>tty_max_size</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">This option indicates the maximum number of pending bytes in a TTY packet to be sent by dstdb. The default value is 8 MiB.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

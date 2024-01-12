@@ -1,0 +1,1236 @@
+<html lang="en">
+<head>
+<title>libgiq_Picture-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgiq_picture Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Features</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgiq_picture is a lightweight version of libgim_picture. It provides an almost identical API as libgim_picture but can display GIM files with less CPU load.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use libgiq_picture.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;giq/giq_picture.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libgiq_picture.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:40px;"><ul>
+<li> libgu and libgum are required to draw in the standard context.
+<li> To use internal functions, be sure to include giq/giq_protected.h.
+<li> Source code is located in devkit/src/giq_picture/.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Program</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_3_1">
+<div style="margin-left:40px;"><h4><b>devkit/sample/graphics/picture_giq</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This sample displays image data using libgim_picture and libgiq_picture.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_4">
+<h3>
+<a href="#Heading3_1"> 1. </a>4 
+<!-- hp1 --><b>Reference Materials</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">GIM_Format-Overview<br>GIM-Converter<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The main parts of a sample program using libgiq_picture are shown below.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>#include &lt;giq/giq_picture.h&gt;
+
+// Initialization
+···
+
+// Load picture data
+SceGiqPicture *picture = <a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureCreate">sceGiqPictureCreate</a>() ;
+<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureLoadFile">sceGiqPictureLoadFile</a>( picture, data, size, 0 ) ;
+SceGiqPicture *copy =<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureDuplicate">sceGiqPictureDuplicate</a>( picture, SCEGIQ_DUPLICATE_AUTOMATIC ) ;
+
+for ( ; ; ) {
+	//  Start display list
+	<a href="../graphics/libgu-Reference-English.htm#sceGuStart">sceGuStart</a>( SCEGU_LIST_CACHED, pkt, pkt_size ) ;
+
+	//  Display picture data
+	<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureAnimate">sceGiqPictureAnimate</a>( copy, 1.0f / 60.0f ) ;
+	<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureActivate">sceGiqPictureActivate</a>( copy ) ;
+	<a href="../graphics/libgum-Reference-English.htm#sceGumDrawArray">sceGumDrawArray</a>( prim, format, 4, 0, verts ) ;
+	. . .
+	//  Finish display list
+	<a href="../graphics/libgu-Reference-English.htm#sceGuFinish">sceGuFinish</a>() ;
+	<a href="../graphics/libgu-Reference-English.htm#sceGuSendList">sceGuSendList</a>( SCEGU_QUEUE_TAIL, pkt, 0, 0, 0 ) ;
+}
+
+//  Delete picture data
+<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureDelete">sceGiqPictureDelete</a>( picture ) ;
+<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureDelete">sceGiqPictureDelete</a>( copy ) ;
+
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialization</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Register callback functions as necessary.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Functions for allocating and freeing ordinary memory
+<li> Functions for allocating and freeing memory for DMA transfers
+<li> Functions for allocating and freeing memory in high-speed eDRAM
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Load picture data</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureCreate">sceGiqPictureCreate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Create picture structure.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureLoadFile">sceGiqPictureLoadFile</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Load data in picture structure.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureDuplicate">sceGiqPictureDuplicate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Create copy of picture structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Start display list</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Display picture data</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureAnimate">sceGiqPictureAnimate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Advance animation time.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureActivate">sceGiqPictureActivate</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Create display list for setting up textures.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgum-Reference-English.htm#sceGumDrawArray">sceGumDrawArray</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Create display list for drawing polygons.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>Finish display list</b><br></h4>
+</a></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_6"><h4>
+(6)&nbsp;<b>Delete picture data</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureDelete">sceGiqPictureDelete</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Release picture structure.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Additional Processing</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Add the following processing as necessary.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>Set various parameters</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureSetEnableBits">sceGiqPictureSetEnableBits</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Set enable bits.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureSetImageCrop">sceGiqPictureSetImageCrop</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Set image cropping.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;···&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>Load cache</b><br></h4>
+</a></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureLoadCache">sceGiqPictureLoadCache</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Allocate high-speed memory.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureUnloadCache">sceGiqPictureUnloadCache</a>()&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;: Release high-speed memory.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Restrictions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Notes</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> Memory clusters, which are used for allocating groups of memory blocks, are now generated implicitly.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Internal Data</b><br>
+</a>
+</h3>
+<div style="margin-left:40px;"><ul>
+<li> Data structures were changed as follows.
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> Image and Palette blocks are registered in linked lists to improve performance.
+<li> Animation information is stored in the Sequence block.
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> Drawing data was changed as follows.
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> Texture configuration packets are created and used implicitly when possible.
+<li> Image pixel data is stored with 128-byte alignment.
+</ul></div>
+</ul>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Extended Functions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>Memory Manager</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Additional functions that perform alignment and delayed release of memory have been implemented for the memory manager. These functions can be executed by the memory manager or by user-provided memory management functions as before.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Memory Mutex</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The memory manager can now be protected from access by multiple threads.<br>For information about thread-safeness, see Chapter 5.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Picture Duplication</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Pixel data can now be duplicated. This was not supported previously.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Thread-Safeness</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Thread-Safeness</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libgiq_picture is designed so that pictures share internal data, consequently, libgiq_picture is not multithread safe.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgiq_Picture-Overview-English001.gif">
+</div>
+<div style="margin-left:50px;"><br><br>Even if a picture is not duplicated and does not share internal data with another picture, some kind of access protection is still needed because memory manager state is stored in global variables.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgiq_Picture-Overview-English002.gif">
+</div>
+<div style="margin-left:50px;"><br><br>To perform multithreaded processing, the following conditions must be satisfied.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> A picture that is accessed by a sub-thread must not share internal data with another picture
+<li> The memory manager must be protected by a mutex
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>File Loading</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If file loading is executed in a sub-thread, for example, the picture that was just loaded will not share internal data with another picture. This is considered to be relatively easy to implement.<br><br>Consider the following sub-thread processing example.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> File loading is performed asynchronously with respect to the main thread
+<li> The main thread is notified synchronously when file loading has completed
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/libgiq_Picture-Overview-English003.gif">
+</div>
+<div style="margin-left:50px;"><br><br>The following is an example of the sub-thread program.<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>
+void *data = 0 ;
+size_t size = 0 ;
+LoadFile( "dog.gim", &amp;data, &amp;size ) ;
+
+SceGiqPicture *picture = <a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureCreate">sceGiqPictureCreate</a>() ;
+<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureLoadFile">sceGiqPictureLoadFile</a>( picture, data, size, 0 ) ;
+<a href="../graphics/libgiq_Picture-Reference-English.htm#sceGiqPictureLoadCache">sceGiqPictureLoadCache</a>( picture ) ;
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>List of Functions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">The following functions are supported by libgim_picture.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Global</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Note</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryManager&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Argument was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryManager2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Argument was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryManager3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Argument was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetMemoryMutex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureOpenMemoryCluster&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureOpenMemoryCluster2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureOpenMemoryCluster3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCloseMemoryCluster&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCloseMemoryCluster2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCloseMemoryCluster3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureTouchMemory&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCleanMemory&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryInfo&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCheckFileHeader&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetChunkCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetRootChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCountChildChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureFindChildChunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureAddMetrics&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSizeEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSize2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSize2Ex&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetMemoryClusterSizes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Not supported&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Picture Object</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureCreate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Argument was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureDelete&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureDuplicate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadFile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadGim&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadTm2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadTga&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadBmp&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoad&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;For compatibility&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureUnload&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadCache&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureLoadCacheEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureUnloadCache&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureUnloadCacheEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureAnimate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureAnimateEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureActivate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureActivateEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Picture Parameters</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetEnableBits&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImageCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImageCrop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetBlend&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetBlend&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFunc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFunc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFilter&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFilter&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetWrap&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetWrap&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPalette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetActiveImage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetActivePalette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImagePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPalettePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImagePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPalettePixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureReallocImage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureReallocImageEx&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureReallocPalette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImagePlaneCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImagePlane&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImagePlane&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPaletteOffset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPaletteOffset&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureHasAnimation&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetSequenceCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetSequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Return value was changed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetCurrentSequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetCurrentSequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureSetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PictureGetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>Image Parameters</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetNext&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetUsage&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetFormat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetOrder&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBPP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetWidth&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetHeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPitch&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufWidth&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufHeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetTexWidth&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetTexHeight&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPitchAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufWidthAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetBufHeightAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPlaneMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetLevelCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetFrameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetLevelType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetFrameType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetUserData&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetUserDataSize&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ImageGetPixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Yes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_5">
+<h3>
+<a href="#Heading3_6"> 6. </a>5 
+<!-- hp1 --><b>Sequence Parameters</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Function</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Status</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetConstantCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFunctionCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetConstant&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFunction&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrameLoop&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetImageFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetImageFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetPaletteFrame&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetPaletteFrame2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceSetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SequenceGetDissolve&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;New&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

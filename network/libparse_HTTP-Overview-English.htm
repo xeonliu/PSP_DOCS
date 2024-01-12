@@ -1,0 +1,233 @@
+<html lang="en">
+<head>
+<title>libparse_HTTP-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libparse_http Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">libparse_http is a library for parsing the status line of HTTP response headers and for retrieving the values corresponding to arbitrary key strings in HTTP headers.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required in order to use libparse_http.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_http.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_http_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;libparse_http_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Sample Programs</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">devkit/sample/net/libhttp/parse_http/<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Load the libparse_http module using the module utility API.<br>No particular initialization is necessary in order to use libparse_http.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Parsing the Status Line of an HTTP Response</b><br></h4>
+</a></div>
+<div style="margin-left:67px;"><br>The status line of an HTTP response has the format shown below.<br><br>HTTP-Version SP Status-Code SP Reason-Phrase CRLF<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;HTTP-Version&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= &quot;HTTP&quot; &quot;/&quot; 1*DIGIT &quot;.&quot; 1*DIGIT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Status-code&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= 3DIGIT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Reason-Phrase&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= &lt;text not including CR, LF&gt;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:67px;">A status line can be parsed using the following procedure. The input string need not be null-terminated, but a status line must end with CRLF or LF. Also, memory is not allocated within libparse_http, so after parsing, the reason phrase is expressed in terms of the starting location of the reason phrase within the string provided as input, along with the length of the reason phrase.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a>	*status_line  = &quot;HTTP/1.0 404 Not Found\r\n&quot;;
+SceSize line_len = strlen(status_line);
+<a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a> http_major_ver, http_minor_ver, response_code, ret;
+const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> *reason_phrase, *buf;
+SceSize *phrase_len;
+
+ret = <a href="../network/libparse_HTTP-Reference-English.htm#sceParseHttpStatusLine">sceParseHttpStatusLine</a> (status_line,line_len, &amp;http_major_ver, 
+&amp;http_minor_ver, 
+	&amp;response_code, &amp;reason_phrase, &amp;phrase_len);
+if (ret &lt; 0) ERROR;
+buf = (<a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a>)malloc (phrase_len + 1);
+if (buf == NULL) ERROR;
+memcpy(buf, reason_phrase, phrase_len);
+buf[phrase_len] = '\0';
+printf(&quot;http ver: %d.%d response code: %d reason phrase: %s&quot;,
+	http_major_ver, http_minor_ver, response_code, buf);
+/*Expected Result &quot;http_ver: 10 response code: 404 reason phrase: 
+Not Found&quot; */
+</font></pre></div>
+<div style="margin-left:67px;"><br>By using the <a href="../network/libparse_HTTP-Reference-English.htm#sceParseHttpStatusLine">sceParseHttpStatusLine</a>() function in the above manner, parsing of HTTP status lines is performed.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Parsing HTTP Message Headers</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">HTTP message headers have the following format.<br><br>*(message-header CRLF)<br>CRLF<br><br></div>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;message-header&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= field-name &quot;:&quot; [field-value]&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;field-name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= token&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;token&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= US-ASCII characters except separators and control characters&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;separators&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= "(" | ")" | "&lt;" | "&gt;" | "@" | "," | ";" | ":" | "\" | &lt;"&gt; | "/" | "[" | "]" &nbsp;&nbsp;<br>&nbsp;&nbsp;  | "?" | "=" | "{" | "}" | SP | HT (horizontal tab)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;field-value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= *(field-content | LWS)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;field-content&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= *(token | separators)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LWS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;= [CRLF] 1*(SP | HT)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+        <div style="margin-left:80px;"><pre><font size=3>Example:
+Date: Wed, 25 Aug 2004 06:00:00 GMT\r\n
+Content-Length: 644\r\n
+ETag: "23efe4-2c0-405a7e36"\r\n
+Accept-Ranges: bytes\r\n
+foo: aaaaaa\r\n
+ bbbbb\r\n        /* If first character of line is SP or HT, this is a continuation
+of the previous line */
+Content-Length: 704\r\n
+\r\n
+</font></pre></div>
+<div style="margin-left:67px;"><br>Sample code is shown below which retrieves the field-value for a desired field-name from within a response header retrieved by libhttp. Also, memory is not allocated within libparse_http, so after parsing, the field value is expressed in terms of the starting location of the field value within the string provided as input, along with the length of the field value.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3><a href="../kernel/Types-Reference-English.htm#SceInt32">SceInt32</a>	ret;
+<a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a>	*header, *buf;
+const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a>	*field_name = &quot;Date&quot;, *field_value;
+SceSize	header_len, value_len;
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/libhttp-Reference-English.htm#sceHttpGetAllHeader">sceHttpGetAllHeader</a>(request_id, &amp;header, &amp;header_len);
+if (ret &lt; 0) ERROR;
+ret = <a href="../network/libparse_HTTP-Reference-English.htm#sceParseHttpResponseHeader">sceParseHttpResponseHeader</a>(header, header_len, field_name,
+	&amp;field_value, &amp;value_len);
+if (ret &lt; 0) ERROR;
+buf = (<a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a>*)malloc(value_len + 1);
+memcpy(buf, field_value, value_len);
+buf[value_len + 1];
+printf(&quot;field value: %s\n&quot;, field_value); /*field value: Wed, 25 Aug 2004 
+06:00:00 GMT */
+</font></pre></div>
+<div style="margin-left:67px;"><br>By using the <a href="../network/libparse_HTTP-Reference-English.htm#sceParseHttpResponseHeader">sceParseHttpResponseHeader</a>() function in the above manner, parsing of HTTP message headers is performed.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Required Stack Size When Calling the API</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The required stack size when calling the libparse_http API is 1024 bytes (SCE_PARSE_HTTP_LEAST_STACK_SIZE). If the stack size is not big enough, an <a href="../network/PSPNET_Error-Reference-English.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a> error will be returned.<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2007 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+<title>Display-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+Display Service Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The display service is used to control flipping of the display frame buffer so that it is synchronized with the LCD display on the PSP&trade; and the VBLANK interrupt.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following files are required to use the display service.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;display_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;displaysvc.h&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Basic Usage Procedure</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>Initialize the library</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Since the display service runs as the default module, it does not need to be explicitly initialized.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>Set the screen output mode</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the <a href="../peripheral/Display-Reference-English.htm#sceDisplaySetMode">sceDisplaySetMode</a>() function to set the display format.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+res = <a href="../peripheral/Display-Reference-English.htm#sceDisplaySetMode">sceDisplaySetMode</a>(<a href="../peripheral/Display-Reference-English.htm#SCE_DISPLAY_MODE_LCD">SCE_DISPLAY_MODE_LCD</a>, 480, 272);
+</font></pre></div>
+<div style="margin-left:67px;"><br>The display area for the LCD is fixed at 480x272.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_3"><h4>
+(3)&nbsp;<b>Set the frame buffer type </b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the <a href="../peripheral/Display-Reference-English.htm#sceDisplaySetFrameBuf">sceDisplaySetFrameBuf</a>() function to set the start address, horizontal pixel count, and display pixel format of the frame buffer to display. Set the frame buffer's horizontal pixel count to an integer multiple of 64.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>int res;
+
+res = <a href="../peripheral/Display-Reference-English.htm#sceDisplaySetFrameBuf">sceDisplaySetFrameBuf</a>(pFrameBuf, 512, <a href="../peripheral/Display-Reference-English.htm#SCE_DISPLAY_PIXEL_RGBA8888">SCE_DISPLAY_PIXEL_RGBA8888</a>,
+SCE_DISPLAY_UPDATETIMING_NEXTVSYNC);
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_4"><h4>
+(4)&nbsp;<b>Wait for VBLANK</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the <a href="../peripheral/Display-Reference-English.htm#sceDisplayWaitVblankStartCB">sceDisplayWaitVblankStartCB</a>() function to synchronize processing with the VSYNC (vertical synchronization) interval. A number of peripheral display services run in multiple threads on the PSP&trade;, so you must not use polling to wait for the start of the VBLANK (vertical blanking) interval. The thread which calls the <a href="../peripheral/Display-Reference-English.htm#sceDisplayWaitVblankStartCB">sceDisplayWaitVblankStartCB</a>() function will enter a WAIT state until the start of the next vertical blanking interval, so execution rights can be passed to another thread. <br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Main loop
+while (1) {
+
+	// Wait until the start of a VBLANK interval
+	<a href="../peripheral/Display-Reference-English.htm#sceDisplayWaitVblankStartCB">sceDisplayWaitVblankStartCB</a>();
+
+	// Key input, calculation, drawing …
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_5"><h4>
+(5)&nbsp;<b>Schedule when to flip the display frame buffer</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Use the <a href="../peripheral/Display-Reference-English.htm#sceDisplaySetFrameBuf">sceDisplaySetFrameBuf</a>() function to specify the start address of the frame buffer to display. The <i>iMode</i> argument can be used to select whether to have the display address update performed immediately upon the next HSYNC (SCE_DISPLAY_UPDATETIMING_NEXTHSYNC), or to schedule the update for the next VBLANK interrupt (SCE_DISPLAY_UPDATETIMING_NEXTVSYNC). <br>However, if the frame buffer's horizontal pixel count or pixel format are modified, it will not be possible to perform the update immediately (SCE_DISPLAY_UPDATETIMING_NEXTHSYNC). In this case, be sure to specify SCE_DISPLAY_UPDATETIMING_NEXTVSYNC for <i>imode</i> so that the frame buffer switch will happen at the next VBLANK.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Display Output Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Of the various PSP&trade; models, the PSP-1000 series is only capable of LCD output, while the PSP-2000, PSP-3000 and PSP-N1000 series can output to the LCD or they can output 480p video to an external monitor. The PSP&trade; development tool can output a VESA 1A (VGA) signal using a rear-panel VGA connector. <br><br>The <a href="../peripheral/Display-Reference-English.htm#sceDisplaySetMode">sceDisplaySetMode</a>() function is used to set the display output mode.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_1"><h4>
+(1)&nbsp;<b>LCD Output (SCE_DISPLAY_MODE_LCD)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Ordinary LCD-output mode. This is the only valid mode for the PSP&trade; system. With the PSP&trade; development tool, the display on the LCD and monitor will be the same. The video signal output to VGA is generated by converting the signal to the LCD, so some delay or jitter may occur.<br>The vertical sync frequency with LCD output is 59.94005995 Hz (theoretical); this is the same frequency as that of NTSC. Although the effective resolution is 272 lines, the length of 1V including the VBLANK interval is 286 lines.<br>When a D terminal cable (PSP-S170) or a component AV cable (PSP-S180) is used with a PSP-2000 series system, or when either an AV cable (PSP-S150 or PSP-N150), S terminal cable (PSP-S160), D terminal cable (PSP-S170 or PSP-N170), or component AV cable (PSP-S180 or PSP-N180) is used with a PSP-3000 or PSP-N1000 series system, the video from a game can be displayed on an external monitor. However, even in these cases, <a href="../peripheral/Display-Reference-English.htm#SCE_DISPLAY_MODE_LCD">SCE_DISPLAY_MODE_LCD</a> is still used for the screen output mode. With a PSP-2000 series system, a 480p signal is sent to the external monitor, and a 480x272 image is displayed dot-by-dot in the center of the 720x480 area. With a PSP-3000 or PSP-N1000 series system, either a 480p or 480i signal will be sent to the external monitor, depending on the cable that is connected and the system software settings. In either case, there is no change in the vertical sync frequency. There is no way for the application to know whether the current output mode is LCD or external display.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_2"><h4>
+(2)&nbsp;<b>VESA 1A Output (SCE_DISPLAY_MODE_VESA1A)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is the output mode for the VESA 1A (VGA) signal. This mode cannot be used on the PSP&trade; system. It can only be used with the PSP&trade; development tool. If this mode is selected on the PSP&trade; development tool, no output will be sent to the LCD.<br><br>The vertical sync frequency for VESA 1A (VGA) output is 59.94047618 Hz (theoretical). Therefore the frame rate will be different from that for LCD output.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_2_3"><h4>
+(3)&nbsp;<b>Pseudo VGA Output (SCE_DISPLAY_MODE_PSEUDO_VGA)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">This is a non-standard pseudo-VGA output mode. This mode cannot be used on the PSP&trade; system. It can only be used with the PSP&trade; development tool. If this mode is selected on the PSP&trade; development tool, no output will be sent to the LCD.<br><br>This mode outputs a pseudo-VGA signal. While it deviates from the strict VESA standard, it has the same vertical sync frequency as LCD output - that is, 59.94005995 Hz (theoretical). However, because the dot-clock frequency differs from the standard VESA 1A signal, the pixel aspect ratio will also be different.<br></div>
+<div style="margin-left:50px;"><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

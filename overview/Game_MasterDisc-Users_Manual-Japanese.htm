@@ -1,0 +1,624 @@
+<html lang="jp">
+<head>
+<title>Game_MasterDisc-Users_Manual</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Game Master Disc Package</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+ゲームマスターディスク作成手順
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>作業の流れ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">ゲームUMD&reg;を作成する大まかな手順を説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>必要なファイルの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームUMD&reg;の作成のためには下記ファイルが必要になります。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ゲームプログラム、データ
+<li> システムファイル(全て大文字)：PARAM.SFO
+<li> コンテンツ情報ファイル(全て大文字)：ICON0.PNG, ICON1.PMF, PIC0.PNG, PIC1.PNG, SND0.AT3
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_1_1_1">
+<div style="margin-left:40px;"><h4><b>注意</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">前バージョンのマスターディスク作成ツールで作られたPARAM.SFOは、現バージョンでは使用できません。必ず現バージョンを用いて新たに作成し直してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>DVD-Rの作成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg; Image Generatorを用いて上記ファイルをDVD-Rに書き込みます。このとき、各ファイルはそれぞれ決まったディレクトリに置かれる必要があります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>システムファイルの作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">システムファイルについて説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>システムファイルとは？</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ゲームのタイトル名、視聴年齢制限の値など、PSP&reg;システムソフトウェアでの表示のために使用されるパラメータや、品番、ディスクの通し番号など、内部的に使用されるパラメータが格納されているファイルです。UMD&reg;のコンテンツ別（GAME/VIDEO/AUDIO）、Memory Stick&trade;のコンテンツなど、それぞれで格納されるパラメータが異なります。<br>ファイル名はPARAM.SFO(全て大文字)、内容はシステムファイルフォーマットで書かれています。<br>SystemFileEditorを使用して作成します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>必要なパラメータ</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>キー</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>種別</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値の説明</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>設定例</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;TITLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ゲームタイトル名&nbsp;&nbsp;<br>&nbsp;&nbsp;文字コード：UTF8&nbsp;&nbsp;<br>&nbsp;&nbsp;長さ：128bytesまで (NULL含む)&nbsp;&nbsp;<br>&nbsp;&nbsp;改行などはできません。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;大草原の戦士&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PARENTAL_LEVEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;パレンタルロックレベル&nbsp;&nbsp;<br>&nbsp;&nbsp;設定値：0～11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;品番&nbsp;&nbsp;<br>&nbsp;&nbsp;使用可能文字：A～Z 0～9&nbsp;&nbsp;<br>&nbsp;&nbsp;長さ：13bytesまで (NULL含む)&nbsp;&nbsp;<br>&nbsp;&nbsp;必ず設定してください。&nbsp;&nbsp;<br>&nbsp;&nbsp;<b>※ハイフン"－"は入りません。</b>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ABCD01234&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_TOTAL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスク総数&nbsp;&nbsp;<br>&nbsp;&nbsp;複数枚タイトルの場合、ディスク&nbsp;&nbsp;<br>&nbsp;&nbsp;総数を書き込んでおけます。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_NUMBER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;総数に対するディスク番号&nbsp;&nbsp;<br>&nbsp;&nbsp;複数枚タイトルの場合、何枚目の&nbsp;&nbsp;<br>&nbsp;&nbsp;ディスクかを書き込んでおけます。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DISC_VERSION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ディスクバージョン&nbsp;&nbsp;<br>&nbsp;&nbsp;以下のフォーマットで番号を自由に&nbsp;&nbsp;<br>&nbsp;&nbsp;設定できます。&nbsp;&nbsp;<br>&nbsp;&nbsp;フォーマット：X.XX（X…0～9）&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1.00&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;REGION&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リージョン&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（SystemFileEditorの&nbsp;&nbsp;<br>&nbsp;&nbsp;デフォルト値から変更する&nbsp;&nbsp;<br>&nbsp;&nbsp;必要はありません。）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;BOOTABLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ブートするかしないか&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（SystemFileEditorの&nbsp;&nbsp;<br>&nbsp;&nbsp;デフォルト値から変更する&nbsp;&nbsp;<br>&nbsp;&nbsp;必要はありません。）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;DRIVER_PATH&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;デバイスドライバのパス名&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（SystemFileEditorの&nbsp;&nbsp;<br>&nbsp;&nbsp;デフォルト値から変更する&nbsp;&nbsp;<br>&nbsp;&nbsp;必要はありません。）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PSP_SYSTEM_VER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;実行に必要なPSP&reg;システムソフト&nbsp;&nbsp;<br>&nbsp;&nbsp;ウェアのバージョン&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（SystemFileEditorの&nbsp;&nbsp;<br>&nbsp;&nbsp;デフォルト値から変更する&nbsp;&nbsp;<br>&nbsp;&nbsp;必要はありません。）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;CATEGORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;システムファイルカテゴリ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;（SystemFileEditorの&nbsp;&nbsp;<br>&nbsp;&nbsp;デフォルト値から変更する&nbsp;&nbsp;<br>&nbsp;&nbsp;必要はありません。）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;USE_USB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;USB周辺機器を使用しているか&nbsp;&nbsp;<br>&nbsp;&nbsp;どうか&nbsp;&nbsp;<br>&nbsp;&nbsp;使用している：1&nbsp;&nbsp;<br>&nbsp;&nbsp;使用していない：0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;APP_VER&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必須&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アプリケーションのバージョンを&nbsp;&nbsp;<br>&nbsp;&nbsp;示します。&nbsp;&nbsp;<br>&nbsp;&nbsp;バージョンのつけ方については&nbsp;&nbsp;<br>&nbsp;&nbsp;「パッチ概要」をご覧ください。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;01.00&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GAMEDATA_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;任意&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;複数のディスクで共通のパッチ&nbsp;&nbsp;<br>&nbsp;&nbsp;（起動バイナリ）を使用する際に&nbsp;&nbsp;<br>&nbsp;&nbsp;設定します（複数枚組タイトルなど）。&nbsp;&nbsp;<br>&nbsp;&nbsp;詳細は「パッチ概要」をご覧ください。&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ABCD01234&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_3">
+<h3>
+<a href="#Heading3_2"> 2. </a>3 
+<!-- hp1 --><b>SystemFileEditor</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">必要なパラメータの値を指定して、システムファイルを作成するツールがSystemFileEditorです。使い方の詳細は「SystemFileEditor」ドキュメントを参照してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_2">
+<div style="margin-left:40px;"><h4><b>コンフィグファイル</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">SystemFileEditorで使用するコンフィグファイルは、ゲームUMD&reg;用のUMDGame_SystemFile_Config.sfcを使用します。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_3">
+<div style="margin-left:40px;"><h4><b>ファイル名についての注意</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">SystemFileEditorではシステムファイルの出力ファイル名が自動的にPARAM.SFOにはなりません。(任意).sfoとなります。ゲームマスターディスクで使用する場合は、.sfoファイルをPARAM.SFOに変名して下さい。また、コンフィグファイル（.sfc）、システムソースファイル（.sfs）はシステムファイルとして使用できません。ディスクには、必ず.sfoファイルをPARAM.SFOに変名して書き込んで下さい。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_2_3_4">
+<div style="margin-left:40px;"><h4><b>UMD&reg; Image GeneratorによるPARAM.SFOの自動更新について</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ゲームマスターディスクに含まれるPARAM.SFOのPSP_SYSTEM_VERパラメータは、UMD&reg; Image Generatorによるイメージ作成時に、ブートファイルがビルドされたSDKのバージョンに自動的に置き換えられます。このとき特別な操作は必要ありません。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>コンテンツ情報ファイルの作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">コンテンツ情報ファイルについて説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>コンテンツ情報ファイルとは？</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コンテンツの内容を代表して表現する画像や映像、BGMをコンテンツ情報と呼びます。主にPSP&reg;システムソフトウェアでの表示に使用されます。画面構成は「9 Appendix」を参照して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>ファイル構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">複数のファイルで構成されます。ファイル名は全て大文字です。<br></div>
+<div style="margin-left:40px;"><ul>
+<li> 静止画アイコン：ICON0.PNG
+<li> 動画アイコン：ICON1.PMF
+<li> コンテンツ説明画像：PIC0.PNG
+<li> コンテンツ情報背景画像：PIC1.PNG
+<li> BGM：SND0.AT3
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>静止画アイコン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">静止画のアイコンです。動画アイコンが表示できないタイミングや、設定されていない場合の代替アイコンとして表示されます。<br>静止画アイコンはユーザの選択したシステムソフトウェアの言語設定とは無関係に表示され、言語別の静止画アイコンはサポートされておりません。<br>必須のファイルとなります。必ず作成してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_5">
+<div style="margin-left:40px;"><h4><b>画サイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">144×80ピクセル<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_6">
+<div style="margin-left:40px;"><h4><b>画像フォーマット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PNG(24bit)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_7">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ICON0.PNG(全て大文字)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_8">
+<div style="margin-left:40px;"><h4><b>作成ツール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">市販のツールなどを使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>動画アイコン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">動画をアイコンとして表示できます。<br>音声付き、音声無しどちらでも構いません。<br>再生が終了すると最初から再生が始まりますが、音声が途切れてしまう場合があります。音声を途切れなくループさせる場合はBGMを使用して下さい。ただし、BGMは動画アイコンに同期しません。<br>音声付き動画であっても、BGMがある場合は、音声はBGMのみ再生されます。<br>動画アイコンはユーザの選択したシステムソフトウェアの言語設定とは無関係に表示され、言語別の動画アイコンはサポートされておりません。<br>オプション扱いなので、必要ない場合は省略することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_9">
+<div style="margin-left:40px;"><h4><b>画サイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">144×80ピクセル<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_10">
+<div style="margin-left:40px;"><h4><b>映像</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;フォーマット&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;AVCのみでエンコードされたIDR-Picture, P-Pictureで構成&nbsp;&nbsp;<br>&nbsp;&nbsp;(Main Profile Level2.1(最大ビットレート4.8Mbps))&nbsp;&nbsp;<br>&nbsp;&nbsp;※ゲーム用と一緒&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;フレームレート&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;29.97fps progressive&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_11">
+<div style="margin-left:40px;"><h4><b>音声（音声付き動画の場合）</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;フォーマット&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サンプリング周波数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;44.1kHz&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;チャンネル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2 channel stereo&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_12">
+<div style="margin-left:40px;"><h4><b>多重化</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">フォーマット：PSMF<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_13">
+<div style="margin-left:40px;"><h4><b>ファイルサイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">BGMファイルと合わせて最大500キロバイト<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_14">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ICON1.PMF(全て大文字)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_4_15">
+<div style="margin-left:40px;"><h4><b>作成ツール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">弊社提供のUMD&reg; Stream Composer(for Game Movie)及びPSMF composerをご使用下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>コンテンツ説明画像</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">コンテンツの内容を表す画像です。タイトルイメージやコンテンツ概要などの文章を表示するのに使用します。32bit画像となっており透明を表現できます。コンテンツ情報背景（下記参照）の上に重ねて合成表示されます。<br>コンテンツ説明画像はユーザの選択したシステムソフトウェアの言語設定とは無関係に表示され、言語別の画像ファイルはサポートされておりません。<br>オプション扱いなので、必要ない場合は省略することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_16">
+<div style="margin-left:40px;"><h4><b>画サイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">310×180ピクセル<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_17">
+<div style="margin-left:40px;"><h4><b>画像フォーマット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PNG(32bit)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_18">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PIC0.PNG(全て大文字)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_19">
+<div style="margin-left:40px;"><h4><b>作成ツール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">市販のツールなどを使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>コンテンツ情報背景</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">背景となる画像です。<br>コンテンツ情報背景はユーザの選択したシステムソフトウェアの言語設定とは無関係に表示され、言語別の背景画像ファイルはサポートされておりません。<br>オプション扱いなので、必要ない場合は省略することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_20">
+<div style="margin-left:40px;"><h4><b>画サイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">480×272ピクセル<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_21">
+<div style="margin-left:40px;"><h4><b>画像フォーマット</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PNG (24bit)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_22">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">PIC1.PNG(全て大文字)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_6_23">
+<div style="margin-left:40px;"><h4><b>作成ツール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">市販のツールなどを使用します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_7">
+<h3>
+<a href="#Heading3_3"> 3. </a>7 
+<!-- hp1 --><b>BGM</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">音声です。ループ範囲を指定されている場合、途切れなくループ再生することができます。<br>BGMはユーザの選択したシステムソフトウェアの言語設定とは無関係に再生され、言語別のBGMはサポートされておりません。<br>オプション扱いなので、必要ない場合は省略することができます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_7_24">
+<div style="margin-left:40px;"><h4><b>音声フォーマット</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;フォーマット&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ATRAC3plus&trade;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;サンプリング周波数&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;44.1kHz&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;チャンネル&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2 channel stereo&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_7_25">
+<div style="margin-left:40px;"><h4><b>ファイルサイズ</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">動画アイコンファイルと合わせて最大500キロバイト<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_7_26">
+<div style="margin-left:40px;"><h4><b>ファイル名</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">SND0.AT3(全て大文字)<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_7_27">
+<div style="margin-left:40px;"><h4><b>作成ツール</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">弊社提供のat3toolをご使用下さい。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>ゲームUMD&reg;のディレクトリ構造</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">UMD&reg;上のファイル、ディレクトリはISO9660 level2規格に従う必要があります。<br>その規格内で、ゲームUMD&reg;は以下のディレクトリ構造を持ちます。<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Game_MasterDisc-Users_Manual-Japanese001.gif">
+</div>
+<div style="margin-left:50px;"><br>全てのファイルはPSP_GAMEディレクトリ以下に置かれます。ROOT Directoryには何も書く必要がありません（ただし、UMD&reg; Image Generatorが自動的に書き込むファイルは除きます）。<br>PSP_GAMEディレクトリにはシステムファイル、コンテンツ情報ファイル置かれます。PSP_GAME以下のディレクトリについては、SYSDIRディレクトリにはゲームブート関連のファイルが、USRDIRディレクトリにはゲームのデータファイルなどが置かれます。<br><br>注意：ディレクトリ名、ファイル名は図の通りにして下さい。指定されている名前に、例えば小文字が含まれていてはいけません。ゲームデータファイルのファイル名については任意となります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>SYSDIRディレクトリ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">SYSDIRディレクトリには、ゲームブート関連のファイルが置かれます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>UMD&reg; Image Generatorでのブートファイル指定</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">作成したゲームのブートファイルは、以下の手順でブートファイル指定を行います。<br></div>
+</ul>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> SYSDIRディレクトリに、作成したブートファイルをBOOT.BINという名前で置きます。</li>
+<li VALUE=2> そのBOOT.BINをブートファイルとして設定します。</li>
+<li VALUE=3> 自動的にSYSDIRディレクトリにEBOOT.BINが作成されます。</li>
+</ol></div>
+<div style="margin-left:50px;"><br>詳細は「UMD&reg; Image Generator」ドキュメントを参照して下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>UPDATEディレクトリ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;システムソフトウェアのアップデートデータが保存されるディレクトリです。別途作業は必要ありません。このディレクトリにファイルなどを置かないで下さい。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>USRDIRディレクトリ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">USRDIRディレクトリにはゲームのデータファイルなどが置かれます。<br>サブディレクトリの作成は自由で特に制限はありませんが、ディレクトリの深さやファイル名の長さはISO9660 level2規格に従う必要があります。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>ディレクトリについての注意点</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">ブートファイル（BOOT.BIN）とディレクトリが異なっている点にご注意ください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_7">
+<h2>
+ 7 <!-- hp --><b>INSDIRディレクトリ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">INSDIRディレクトリにはゲームデータインストールユーティリティでインストールされるゲームのデータファイルなどが置かれます。<br>詳細に関しては、「ゲームデータインストールユーティリティ」概要ドキュメントの「インストール元のデータ構造」の章を参照して下さい。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_8">
+<h2>
+ 8 <!-- hp --><b>UMD&reg; Image Generatorを使用してDVD-Rを作成</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">DVD-R作成手順は「UMD&reg; Image Generator」ドキュメントを参照下さい。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_8_1">
+<h3>
+<a href="#Heading3_8"> 8. </a>1 
+<!-- hp1 --><b>注意事項</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_8_1_28">
+<div style="margin-left:40px;"><h4><b>Layerについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">以下のファイルは必ずLayer0に置いてください。Layer1にまたがるのも避けてください。<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> ゲームブートファイル：BOOT.BIN
+<li> システムファイル：PARAM.SFO
+<li> コンテンツ情報ファイル：ICON0.PNG, ICON1.PMF, PIC0.PNG, PIC1.PNG, SND0.AT3
+</ul></div>
+<div style="margin-left:67px;">Layer0かLayer1かはUMD&reg; Image GeneratorのLayout画面で確認できます。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_8_1_29">
+<div style="margin-left:40px;"><h4><b>BOOT.BINのサイズについて</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">ゲームブートファイルBOOT.BINの最大サイズは24641535（0x177FFFF）バイトです。<br>このサイズを超えた（24641536（0x1780000）バイト以上）BOOT.BINは、PSP&reg;本体（PSP-1000/PSP-2000シリーズ）及び、開発機（DTP-T1000(A) / DTP-H1500(A)の32MBモード）では起動できませんので、最大サイズ以下になるようにBOOT.BINを作成してください。<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_9">
+<h2>
+ 9 <!-- hp --><b>Appendix</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_1">
+<h3>
+<a href="#Heading3_9"> 9. </a>1 
+<!-- hp1 --><b>PSP&reg;システムソフトウェアでのコンテンツ情報画面構成</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Game_MasterDisc-Users_Manual-Japanese002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_9_1_30">
+<div style="margin-left:40px;"><h4><b>注意：</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">アイコンや画像に関して、データの配置は永続的には保証されないので、相互の配置に依存した内容にはしないようにしてください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_9_2">
+<h3>
+<a href="#Heading3_9"> 9. </a>2 
+<!-- hp1 --><b>PSP&reg;システムソフトウェアでのコンテンツ情報表示順序</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">UMD&reg;アイコンがフォーカスされると、コンテンツ情報を構成する全てのファイルの読み込みが開始されます。読み込みが全て完了した時点で、最初にコンテンツ情報背景が表示されます。その後ワンテンポ置いて、コンテンツ説明画像の表示（フェードイン）、動画アイコンの再生（フェードイン）、BGMの再生がほぼ同時に行われます。動画アイコンとBGMの再生が完全に同時に行われる保証はありません。多少のタイムラグが発生する場合があります。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

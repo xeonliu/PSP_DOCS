@@ -1,0 +1,943 @@
+<html lang="en">
+<head>
+<title>libssl-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libssl Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslInit"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslInit<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Initialize libssl<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslInit</b> ( 
+	SceSize <i>pool_size</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Canbe called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pool_size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Size of heap memory to be used during SSL communications&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435020&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_ALREADY_INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<a href="../network/libhttp-Reference-English.htm#sceHttpInit">sceHttpInit</a>() was called a second time without calling <a href="../network/libhttp-Reference-English.htm#sceHttpEnd">sceHttpEnd</a>()&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Zero was specified for the <i>pool_size</i>&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function initializes libssl. It must be called before libhttp is to be used to perform https communication. pool_size specifies the heap size used for SSL communications.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>#define SSL_POOLSIZE 	(150 * 1024U)
+ret = sceSslInit(SSL_POOLSIZE);
+if(ret &lt; 0){
+	/* Error handling */
+}
+
+</font></pre></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-English.htm#sceSslEnd">sceSslEnd</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslEnd"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslEnd<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Terminate libssl<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslEnd</b> ( 
+	void
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Not multithread safe <br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function terminates libssl and releases resources that had been allocated.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a> ()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetUsedMemoryMax"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetUsedMemoryMax<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get maximum memory size used so far<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslGetUsedMemoryMax</b> ( 
+	SceSize *<i>p_max</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>p_max</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to variable for storing maximum amount of memory used so far.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for<i> p_max</i>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function stores the maximum amount of memory used by libssl so far in the memory location specified by p_max. Note that, because of internal fragmentation, it is possible that allocating memory in amounts less than the maximum memory size specified with <a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a>() may fail.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-English.htm#sceSslGetUsedMemoryCurrent">sceSslGetUsedMemoryCurrent</a>(), <a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetUsedMemoryCurrent"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetUsedMemoryCurrent<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get amount of memory currently in use<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceSslGetUsedMemoryCurrent</b> ( 
+	SceSize *<i>p_current</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>p_current</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to memory for storing the current amount of memory used.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for<i> p_current</i>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function stores the amount of memory currently in use by libssl at the address specified by p_current.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/libssl-Reference-English.htm#sceSslGetUsedMemoryMax">sceSslGetUsedMemoryMax</a>(), <a href="../network/libssl-Reference-English.htm#sceSslInit">sceSslInit</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetSerialNumber"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetSerialNumber<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get certificate serial number<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetSerialNumber</b> ( 
+	const SceSslCert *<i>ssl_cert,</i>
+	const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> **<i>sbo_data</i>,
+	SceSize *<i>sbo_len</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the certificate for which the serial number is to be obtained.&nbsp;&nbsp;<br>&nbsp;&nbsp;The pointer to the certificate is obtained using the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(). (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sbo_data</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies memory location where the starting address of the serial number will be stored. &nbsp;&nbsp;<br>&nbsp;&nbsp;Serial numbers are stored in big-endian format (OUT).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>sbo_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specifies the memory address where the length of the serial number is stored (OUT).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for<i> ssl_cert, sbo_data </i>or<i> sbo_len</i>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is used for obtaining the serial number of a certificate object. The certificate object is obtained as an argument of the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>() in the HTTP library. The memory area where the serial number is stored is freed immediately after the callback function ends, so be sure to copy the serial number to a separate memory area within the callback function if you will need to reference it later.<br></div>
+<br>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetSubjectName"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetSubjectName<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get subject name of certificate<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+const SceSslCertName *<b>sceSslGetSubjectName</b> ( 
+	const SceSslCert *<i>ssl_cert</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the certificate for which the subject name is to be obtained.&nbsp;&nbsp;<br>&nbsp;&nbsp;The pointer to the certificate is obtained using the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(). (IN)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If the function completes normally, a pointer to the SceSslCertName object is returned. If the subject name cannot be obtained, NULL is returned. <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is used for obtaining the name object of the subject of a certificate object. The certificate object is obtained as an argument of the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>() in the HTTP library. To obtain details on the subject name object, first get the number of subject name entries using <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>(), and then use <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>() to get information for each name entry.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetIssuerName"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetIssuerName<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get information on certificate issuer<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+const SceSslCertName *<b>sceSslGetIssuerName</b> ( 
+	const SceSslCert *<i>ssl_cert</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the certificate for which issuer information is to be obtained.&nbsp;&nbsp;<br>&nbsp;&nbsp;The pointer to the certificate is obtained using the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(). (IN)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">If the function completes normally, a pointer to the SceSslCertName object is returned. If the issuer information cannot be obtained, NULL is returned. <br><br></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is used for obtaining an SSL name object for the issuer information of a certificate object. The certificate object is obtained as an argument of the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>() in the HTTP library. To obtain details on the name object, first get the number of name entries using <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>(), and then use <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryInfo">sceSslGetNameEntryInfo</a>() to get information for each name entry.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNameEntryCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNameEntryCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get number of name entries<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNameEntryCount</b> ( 
+	const SceSslCertName *<i>cert_name</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the SSL name object for which the number of name entries is to be obtained. (IN)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Positive value	Number of name entries contained in <i>cert_name</i>.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for<i> ssl_cert, sbo_data </i>or<i> sbo_len</i>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is used for obtaining the number of name entries contained in an SSL name object. The SSL name object can be obtained by using functions such as <a href="../network/libssl-Reference-English.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>() or <a href="../network/libssl-Reference-English.htm#sceSslGetIssuerName">sceSslGetIssuerName</a>().<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNameEntryInfo"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNameEntryInfo<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get name entry information<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNameEntryInfo</b> ( 
+	const SceSslCertName *<i>cert_name,</i>
+	int <i>entry_num</i>,
+	const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> <i>**oidname</i>,
+	const <a href="../kernel/Types-Reference-English.htm#SceUChar8">SceUChar8</a> <i>**value</i>,
+	SceSize <i>*value_len</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>cert_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the SSL name object for which the entry is to be obtained. (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>entry_num</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of the entry to be obtained. The number of entries stored in the SSL&nbsp;&nbsp;<br>&nbsp;&nbsp;name object can be obtained using <a href="../network/libssl-Reference-English.htm#sceSslGetNameEntryCount">sceSslGetNameEntryCount</a>() (IN).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>oidname</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;An ASCIZ string representing the entry's object ID. If set to NULL, it signifies&nbsp;&nbsp;<br>&nbsp;&nbsp;an unknown object ID (OUT).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>value</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory location where the starting address of the entry values will be stored. Not in ASCIZ format (OUT).&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>value_len</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Memory address where the size of <i>value </i>is stored<i> </i>(OUT).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Positive value	Number of name entries contained in <i>cert_name</i>.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for<i>oid_name, value, </i>or<i> value_len</i>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is used for obtaining the number of name entries contained in an SSL name object. The SSL name object can be obtained by using functions such as <a href="../network/libssl-Reference-English.htm#sceSslGetSubjectName">sceSslGetSubjectName</a>() or <a href="../network/libssl-Reference-English.htm#sceSslGetIssuerName">sceSslGetIssuerName</a>(). The memory used to store the value fetched using this function is freed as soon as the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>() ends, so be sure to copy the value to a separate memory area within the callback function if you wish to save it for later use.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNotAfter"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNotAfter<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get the ending time of a certificate's effective period<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNotAfter</b> ( 
+	const SceSslCert *<i>ssl_cert,</i>
+	<a href="../peripheral/RTC-Reference-English.htm#SceRtcTick">SceRtcTick</a> *<i>limit</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the certificate for which the ending time of the effective period is to be obtained.&nbsp;&nbsp;<br>&nbsp;&nbsp;The pointer to the certificate is obtained using the callback function set by &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(). (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>limit</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address in memory where the ending time of the effective period is to be stored (OUT).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Positive value	Number of name entries contained in <i>cert_name</i>.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for<i> ssl_cert </i>or<i> limit</i>.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435108&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Could not get ending time from certificate specified by <i>ssl_cert</i>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is used to get the ending time for the effective period of a certificate object. The certificate object is obtained as an argument of the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>() in the HTTP library.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetNotBefore">sceSslGetNotBefore</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceSslGetNotBefore"></a>
+<table width="100%"><td width="70%"><font size=6>sceSslGetNotBefore<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get starting time of a certificate's effective period<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;libssl.h&gt;
+int <b>sceSslGetNotBefore</b> ( 
+	const SceSslCert *<i>ssl_cert,</i>
+	<a href="../peripheral/RTC-Reference-English.htm#SceRtcTick">SceRtcTick</a> *<i>begin</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Can be called from an interrupt handler<br>Can be called from a thread (does not depend on interrupt-disabled or -enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>ssl_cert</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pointer to the certificate for which the starting time of the effective period is to be obtained.&nbsp;&nbsp;<br>&nbsp;&nbsp;The pointer to the certificate is obtained using the callback function set by &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(). (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>begin</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Address in memory where the starting time of the effective period is to be stored (OUT).&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Positive value	Number of name entries contained in <i>cert_name</i>.<br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_OK&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_BEFORE _INITED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Library not initialized&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x804351FE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_VALUE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NULL was specified for<i> ssl_cert </i>or<i> limit</i>.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0x80435108&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SCE_SSL_INVALID_FORMAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Could not get starting time from certificate specified in <i>ssl_cert</i>.&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is used to get the starting time for the effective period of a certificate object. The certificate object is obtained as an argument of the callback function set by <a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>() in the HTTP library.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/HTTPS-Reference-English.htm#sceHttpsSetSslCallback">sceHttpsSetSslCallback</a>(), <a href="../network/libssl-Reference-English.htm#sceSslGetNotAfter">sceSslGetNotAfter</a>()<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>FATMS-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+FAT Filesystem For Memory Stick&trade; Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The PSP&trade; FAT Filesystem for Memory Stick&trade; driver module (below, FAT ForMS) is a library for accessing the FAT filesystem on a Memory Stick&trade; inserted in the built-in Memory Stick&trade;  slot on the PSP&trade;.<br>This function is under the control of the IO/File Manager. <br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Related Files</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The following file is required to use FAT ForMS.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fatms.h&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Usage Procedure</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Basically, there are no particular operations to be performed prior to using FAT ForMS.<br>FAT ForMS does not need to be explicitly initialized as it is initialized implicitly. <br>After performing an open operation using the <a href="../peripheral/FATMS-Reference-English.htm#sceIoOpen">sceIoOpen</a>() function, perform access operations using the <a href="../peripheral/FATMS-Reference-English.htm#sceIoRead">sceIoRead</a>() function, the <a href="../peripheral/FATMS-Reference-English.htm#sceIoWrite">sceIoWrite</a>() function, etc. For information regarding the use of these functions, refer to the reference documentation. <br>The assign and unassign operations detect insertion and extraction of the Memory Stick&trade; and are automatically performed. <br>The assigned name for the Memory Stick&trade; is &quot;ms0:&quot;.<br>After the media is inserted, FAT ForMS can be accessed using this assigned name. This assigned name should not be unassigned.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Precautions</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Formatting (Initializing) the Memory Stick&trade;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Do not format the Memory Stick&trade; using the Windows standard formatting tool (the method of formatting from My Computer).<br>Proper operation cannot be guaranteed for a Memory Stick&trade; on which the Windows standard formatting tool has been used.<br>Please reformat with the formatting feature of a device which supports the Memory Stick&trade;, or with the Memory Stick&trade; Formatter.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Memory Alignment</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">With <a href="../peripheral/FATMS-Reference-English.htm#sceIoRead">sceIoRead</a>() and <a href="../peripheral/FATMS-Reference-English.htm#sceIoWrite">sceIoWrite</a>(), when the read destination data address and write source data address are not aligned on a 64-byte boundary, the reading speed and writing speed sometimes decreases due to the system restrictions. Similarly, when a point that is not aligned on a 64-byte boundary is specified with <a href="../peripheral/FATMS-Reference-English.htm#sceIoLseek">sceIoLseek</a>(), the reading speed and the writing speed sometimes decreases.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Inserting and Removing the Memory Stick&trade;</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When the Memory Stick&trade; is inserted, assignment is automatically performed. When the Memory Stick&trade; is removed, unassignment is automatically performed. <br>Be absolutely sure not to remove the Memory Stick&trade; while it is being accessed. Doing so may cause loss of data or damage to the device.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Synchronization</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"><a href="../peripheral/FATMS-Reference-English.htm#sceIoSync">sceIoSync</a>() explicitly performs synchronization by writing out the Memory Stick&trade; buffer, FAT filesystem management information, and write schedule data to the FLASH memory of the Memory Stick&trade;.<br>Processing requests issued to the FAT filesystem are serviced in the order they were called. Synchronization processing is executed last by calling <a href="../peripheral/FATMS-Reference-English.htm#sceIoSync">sceIoSync</a>() at the desired synchronization time. <a href="../peripheral/FATMS-Reference-English.htm#sceIoSync">sceIoSync</a>() guarantees that prior processing calls will be synchronized. Also, because operations are device-dependent, call <a href="../peripheral/FATMS-Reference-English.htm#sceIoGetstat">sceIoGetstat</a>() to find the actual size of the file that was written.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>File and Full Path Specifications</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">When using IO/File manager interface functions, Memory Stick&trade; filenames and full path names should be specified as UTF-8 encoded strings (no BOM). The <a href="../peripheral/FATMS-Reference-English.htm#sceIoDread">sceIoDread</a>() function also returns the filename as a UTF-8 encoded string (no BOM). These strings have the following restrictions.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Maximum lengths <br>Maximum length of a filename (including terminating NULL):  256 characters <br>Maximum length of a full pathname (including terminating NULL):  260 characters
+<li> Characters that cannot be used in filenames.<br>Half-width symbols:  \ " / : &lt; &gt; | * ?<br>Surrogate pairs (characters represented in 4 bytes in UTF-16)
+<li> Searches during file references are not case sensitive for ASCII characters.
+<li> UTF-8 (no BOM) can be used for filenames and full path names starting in SDK 3.95.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>Short Filenames</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Starting with SDK 3.95, the character code specified by <br>   Settings &gt; System Settings &gt; Character Set<br>is used to represent short filenames that are saved on the Memory Stick&trade;. Consequently, if a filename contains non-ASCII characters and one character set is specified when the file is saved, but a different character set is specified when the file is accessed, the access may fail.<br>This problem can be avoided by using long filenames when handling filenames that contain non-ASCII characters.<br><br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,889 @@
+<html lang="en">
+<head>
+<title>NPDRM-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NPDRM Library Reference
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceNpDrmKey"></a>
+<table width="100%"><td width="70%"><font size=6>SceNpDrmKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Structure]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Encryption key structure<br></div><br>
+
+<!-- Structure -->
+<div style="margin-left:10px;"><b>Structure</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+typedef struct {
+	unsigned char <i>keydata</i>[16];
+} <b>SceNpDrmKey</b>;
+
+</font></pre></div>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This structure specifies the licensee-specified key (<i>k_licensee</i>), which is required for handling the NPDRM EDATA and NPDRM PRX files with keys.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmSetLicenseeKey"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmSetLicenseeKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Set licensee-specified encryption key<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmSetLicenseeKey </b>(
+	const <a href="../network/NPDRM-Reference-English.htm#SceNpDrmKey">SceNpDrmKey</a> *<i>k_licensee</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>k_licensee</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Key specified when the subject file was created&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Processing was successful&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error value (for details, see the <a href="../network/NPDRM-Reference-English.htm#List of Error Codes">List of Error Codes</a>)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Besides providing access rights management, the NPDRM library also maintains an encryption key called <i>k_licensee</i> that is determined arbitrarily by the licensee.<br>If <i>k_licensee</i> is specified when an NPDRM EDATA file is created, the file will be locked, preventing it from being read by another program. To access a locked NPDRM EDATA file, you must first use this function to set the correct value of <i>k_licensee</i>, and then call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() (or <a href="../network/NPDRM-Reference-English.htm#sceNpDrmOpen">sceNpDrmOpen</a>()).<br><br><i>k_licensee</i> must be specified when an NPDRM SPRX file is created. To load an NPDRM SPRX file, you must first call this function to set the correct <i>k_licensee</i> and then call <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>() or <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>().<br><br>The value of <i>k_licensee</i> set by this function is valid until the NPDRM library is unloaded or until the value is explicitly cleared by using <a href="../network/NPDRM-Reference-English.htm#sceNpDrmClearLicenseeKey">sceNpDrmClearLicenseeKey</a>().<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function is not thread safe. Normally, the implementation is such that there is only one <i>k_licensee</i> per title, and it is assumed that this function will be called only once during the initialization sequence, right after the NPDRM library is loaded.<br>To set a different <i>k_licensee</i> for each NPDRM file in one title, have the application perform exclusive control from the time this function is called until functions that use <i>k_licensee</i> finish (these include <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>(), <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>(), and <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>()).<br><br>If an NPDRM EDATA file is created without setting <i>k_licensee</i>, the <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() (or <a href="../network/NPDRM-Reference-English.htm#sceNpDrmOpen">sceNpDrmOpen</a>()) function will set a decryption key regardless of whether or not sceNpDrmSetLicenseeKey() is used to set <i>k_licensee</i>.<br>In other words, if a user has access rights to an NPDRM EDATA file that was created without a key, the file can be read by other programs that are started up on that PSP&trade; system.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-English.htm#sceNpDrmClearLicenseeKey">sceNpDrmClearLicenseeKey</a>(), <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>(), <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadModuleNpDrm">sceKernelLoadModuleNpDrm</a>(), <a href="../network/NPDRM-Reference-English.htm#sceKernelLoadExecNpDrm">sceKernelLoadExecNpDrm</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmClearLicenseeKey"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmClearLicenseeKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Clear licensee-specified encryption key<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmClearLicenseeKey </b>(
+	void
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Not multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">None<br><br></div>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Processing was successful&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function clears the value of <i>k_licensee</i> previously set with <a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>().<br>The result is equivalent to calling <a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>() and setting an all-zero key for <i>k_licensee</i>.<br>Not many scenarios exist for using this function.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>(), <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmRenameCheck"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmRenameCheck<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Detect renaming of an NPDRM-managed file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmRenameCheck </b>(
+	const char *<i>file_name</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file_name</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Path name of file to check (case sensitive)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Processing was successful&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error value (for details, see the <a href="../network/NPDRM-Reference-English.htm#List of Error Codes">List of Error Codes</a>)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function performs a simple check to determine the validity of an NPDRM file by checking that the file has not been renamed. The hash value of the filename, which was embedded in the file when it was created, is compared against the hash value obtained from the current filename. If they do not match, the function returns an <a href="../network/NPDRM-Reference-English.htm#SCE_NP_DRM_ERROR_FILENAME">SCE_NP_DRM_ERROR_FILENAME</a> error. Before loading an NPDRM SPRX file, use this function to easily check that the file is not some other program file that has just been renamed.<br>Although this function can also be used to check an NPDRM EDATA file, we recommend that the data that was read from the file be checked at the same time.<br><br>This function does not check <i>k_licensee</i> compatibility or file ownership.<br>Since the directory part of the path is not checked either, this function cannot determine whether an NPDRM file with the same name has been copied from another directory. To distinguish two files with the same name, set the private key <i>k_licensee</i> and detect whether an error occurs when the access rights are verified.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Although the FAT filesystem of a Memory Stick&trade; does not distinguish between upper and lower case in filenames, the filename set for the argument of this function is case sensitive. This was done in order to represent the filename that was set when the NPDRM file was created. For example, although the same file is checked when "ms0:/PSP/GAME/ABCD12345/sample.edat" is specified and when "ms0:/PSP/GAME/ABCD12345/SAMPLE.EDAT" is specified, the results may differ.<br>Be especially careful when the filename to be checked is obtained by a file search and is not embedded in the program. We recommend that you determine normalization rules in advance such as handling names as all uppercase both when creating files and verifying filenames.<br><br>You do not need to use this function for verifying filenames.<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmEdataSetupKey"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmEdataSetupKey<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Verify access rights and set decryption key<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmEdataSetupKey </b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when NPDRM EDATA file was opened&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value </b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Processing was successful (file access rights were obtained)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error value (for details, see the <a href="../network/NPDRM-Reference-English.htm#List of Error Codes">List of Error Codes</a>)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function references the NPDRM rights information file to verify that the user has access rights to the specified file and sets the required decryption key so the file can be accessed.<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+<div style="margin-left:50px;">For <i>fd</i>, you must specify the file descriptor that was obtained when sceIoOpen() was called with SCE_FGAMEDATA logically ORed into the <i>flag</i> argument. If you specify an <i>fd</i> that was opened without having specified SCE_FGAMEDATA, then <a href="../network/NPDRM-Reference-English.htm#SCE_NP_DRM_ERROR_ARG">SCE_NP_DRM_ERROR_ARG</a> will be returned.<br>If the return value from this function indicates that processing was successful, then use sceIoRead() or sceIoLseek() to access the file just as with an ordinary file. The data will be automatically decrypted when it is read. When you have finished accessing the file, call sceIoClose().<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The NPDRM rights information file is ms0:/PSP/LICENSE/<i>content-id</i>.rif. If this file exists, the user is considered to have access rights. If the file does not exist, the function will return an <a href="../network/NPDRM-Reference-English.htm#SCE_NP_DRM_ERROR_NO_ENTITLEMENT">SCE_NP_DRM_ERROR_NO_ENTITLEMENT</a> error. This error can be used to test the behavior of the application for cases when the user does not have access rights.<br><br>Up to eight files that have SCE_FGAMEDATA specified in the <i>flag</i> argument of sceIoOpen() can be open simultaneously. Note that the number of files that can be open simultaneously is also limited by the FAT filesystem. Since this function accesses the NPDRM rights information file, one additional file on the Memory Stick&trade; is temporarily opened.<br><br>During normal usage, an NPDRM EDATA file always has an extension of ".edat." Uppercase and lowercase variations (such as .EDAT or .Edat) are also permitted.<br><br>If this function returns a value indicating that processing was successful, the NPDRM module may be unloaded. NPDRM files can still be accessed even after the NPDRM module is unloaded.<br><br></div>
+
+<!-- Example -->
+<div style="margin-left:10px;"><b>Example</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int ret;
+SceUID fd;
+const char* filename = "ms0:/PSP/GAME/AAAA12345/test_edata.dat";
+char read_buf[1024];
+
+fd = sceIoOpen(filename, SCE_O_RDONLY|SCE_FGAMEDATA, 0);
+if (fd &lt; 0) {
+	printf("open error: 0x%08x\n", fd); 
+	return fd;
+}
+
+ret = sceNpDrmEdataSetupKey(fd);
+if (ret &lt; 0) {
+	printf("access rights error: 0x%08x\n", ret); 
+	sceIoClose(fd);
+	return ret;
+}
+
+ret = sceIoRead(fd, read_buf, sizeof(read_buf));
+
+	(Normal file access:  omitted)
+
+ret = sceIoClose(fd);
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmEdataGetDataSize"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmEdataGetDataSize<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Get size of decrypted NPDRM EDATA file<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_drm.h&gt;
+int <b>sceNpDrmEdataGetDataSize </b>(
+	SceUID <i>fd</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>fd</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor obtained when NPDRM EDATA file was opened&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&gt;= 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data size after decryption&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error value (for details, see <a href="../network/NPDRM-Reference-English.htm#List of Error Codes">List of Error Codes</a>)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function returns the net data size of an NPDRM EDATA file after the encryption envelope has been removed.<br>Call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() first to verify the access rights and setting of the decryption key before calling this function.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><br>When data is read with sceIoRead() the data size is not explicitly verified, however, it must be in the allowed range of valid data sizes. A similar restriction also holds for the seek range that is valid with sceIoLseek().<br>When sceIoGetstat() is called with the target filename, the file size obtained includes the encryption envelope.<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpDrmOpen"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpDrmOpen<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Open NPDRM EDATA file (inline function)<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np_drm_inline.h&gt;
+__inline__ int <b>sceNpDrmOpen</b>(
+	const char* <i>filename</i>, 
+	int <i>flag</i>, 
+	SceMode <i>mode</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>filename</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename of NPDRM EDATA file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flag</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File open mode&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>mode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Mode of file to be created (ignored)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fd (fd &gt; 0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File descriptor&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error value (for details, see <a href="../network/NPDRM-Reference-English.htm#List of Error Codes">List of Error Codes</a>)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This is an inline function that combines together the following operations: SCE_FGAMEDATA is logically ORed in with the specified <i>flag</i>, the file specified by <i>filename</i> is opened, and the access rights of the file are verified with <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>().<br>For<i> filename,</i> specify the name of a file on the Memory Stick&trade;.<br>For <i>flag</i>, specify SCE_O_RDONLY. Thread exclusive control can also be specified. For details, refer to the "IO/File Manager Reference."<br><br>Since it is not possible to recover from an error related to access rights when such an error is returned by this function, there is a risk that an infinite loop may occur if unlimited retries are attempted as is the case with sceIoOpen(). If you want to perform retries for a file open error or you want to process a callback notification during open processing, use sceIoOpen() or <a href="../kernel/IO_File_Manager-Reference-English.htm#sceIoOpenCB">sceIoOpenCB</a>() in conjunction with <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>() instead of this function.<br><br>For information about the rights information file that is used to verify access rights or for the limit on the number of files that can be open simultaneously, see the description of <a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>().<br><br>A file can be accessed by specifying the fd that was obtained as the return value from this function, in functions such as sceIoRead() or sceIoLseek(). When processing is finished, use sceIoClose() to close the file.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">During normal usage, an NPDRM EDATA file always has an extension of ".edat." Uppercase and lowercase variations (such as .EDAT or .Edat) are also permitted.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-English.htm#sceNpDrmEdataSetupKey">sceNpDrmEdataSetupKey</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadModuleNpDrm"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadModuleNpDrm<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Load an NPDRM SPRX module<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;modulemgr.h&gt;
+int <b>sceKernelLoadModuleNpDrm </b>(
+	const char *<i>path</i>,
+	int <i>flags</i>,
+	const <a href="../kernel/Module_Manager-Reference-English.htm#SceKernelLMOption">SceKernelLMOption</a> *<i>pOpt</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>path</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename of module to be loaded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>flags</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Flag (unused: specify 0)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pOpt</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Specification of optional operation during loading&nbsp;&nbsp;<br>&nbsp;&nbsp;(if not used, specify NULL)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;modid (modid&gt;0)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;UID of module that was loaded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error value (for details, see <a href="../network/NPDRM-Reference-English.htm#List of Error Codes">List of Error Codes</a>)&nbsp;&nbsp;<br>&nbsp;&nbsp;Also returns errors from <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelLoadModule">sceKernelLoadModule</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function loads an NPDRM SPRX module.<br>Before calling this function, you must call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>() to set <i>k_licensee</i>.<br>Other precautions concerning use of this function are almost the same as those of <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelLoadModule">sceKernelLoadModule</a>(). For details, refer to the "PSP&trade; Module Manager Reference."<br><br>During normal usage, an NPDRM SPRX module always has an extension of ". sprx." Uppercase and lowercase variations (such as .SPRX or .Sprx) are also permitted.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>(), <a href="../kernel/Module_Manager-Reference-English.htm#sceKernelLoadModule">sceKernelLoadModule</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceKernelLoadExecNpDrm"></a>
+<table width="100%"><td width="70%"><font size=6>sceKernelLoadExecNpDrm<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Function]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Restart system and execute an NPDRM SPRX program<br></div><br>
+
+<!-- Syntax -->
+<div style="margin-left:10px;"><b>Syntax</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;loadexec.h&gt;
+int <b>sceKernelLoadExecNpDrm </b>(
+	const char *<i>file</i>, 
+	const <a href="../kernel/Loadexec-Reference-English.htm#SceKernelLoadExecParam">SceKernelLoadExecParam</a> *<i>pParam</i>
+);
+
+</font></pre></div>
+
+<!-- Calling Conditions -->
+<div style="margin-left:10px;"><b>Calling Conditions</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Cannot be called from an interrupt handler<br>Can be called from a thread (must be called in an interrupt-enabled state)<br>Multithread safe<br><br></div>
+
+<!-- Arguments -->
+<div style="margin-left:10px;"><b>Arguments</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename of the program to execute after the system is restarted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pParam</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Parameters specifying behavior when system is restarted (if not used, &nbsp;&nbsp;<br>&nbsp;&nbsp;specify NULL)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- Return Value -->
+<div style="margin-left:10px;"><b>Return Value</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;&lt; 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error value (for details, see <a href="../network/NPDRM-Reference-English.htm#List of Error Codes">List of Error Codes</a>)&nbsp;&nbsp;<br>&nbsp;&nbsp;Also returns errors of <a href="../kernel/Loadexec-Reference-English.htm#sceKernelLoadExec">sceKernelLoadExec</a>()&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- Description -->
+<div style="margin-left:10px;"><b>Description</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">This function first verifies that the user has access rights for the NPDRM SPRX file specified by <i>file</i>, and then it restarts the PSP&trade; system and executes the NPDRM SPRX program. If the program executes normally, control does not return from this function.<br>Before calling this function, you must call <a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>() to set <i>k_licensee</i>.<br>Other precautions concerning use of this function are almost the same as those of <a href="../kernel/Loadexec-Reference-English.htm#sceKernelLoadExec">sceKernelLoadExec</a>(). For details, refer to the "PSP&trade; Module Manager Reference."<br><br>During normal usage, an NPDRM SPRX module always has an extension of ". sprx." Uppercase and lowercase variations (such as .SPRX or .Sprx) are also permitted.<br><br></div>
+
+<!-- Notes -->
+<div style="margin-left:10px;"><b>Notes</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">The NPDRM library is unloaded when the system is restarted. If the NPDRM SPRX program that is executed after the restart needs to access an NPDRM file, the NPDRM library must be reinitialized and <i>k_licensee</i> must be set again.<br><br>In the current implementation, some game disc must be inserted in the UMD&trade;/DVD drive even during development if the program is started up remotely from the debugger. If the drive is empty, the target program will fail to start up, and control will return to system software.<br><br></div>
+
+<!-- See Also -->
+<div style="margin-left:10px;"><b>See Also</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NPDRM-Reference-English.htm#sceNpDrmSetLicenseeKey">sceNpDrmSetLicenseeKey</a>(), <a href="../kernel/Loadexec-Reference-English.htm#sceKernelLoadExec">sceKernelLoadExec</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="List of Error Codes"></a>
+<table width="100%"><td width="70%"><font size=6>List of Error Codes<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[Error Codes]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>Error codes returned by the NPDRM library<br></div><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_OK">SCE_OK</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Normal completion&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_ARG">SCE_NP_DRM_ERROR_ARG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550901&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Invalid argument&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_UNEXPECTED">SCE_NP_DRM_ERROR_UNEXPECTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550902&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Hardware error, etc.&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_ACT_SIGN">SCE_NP_DRM_ERROR_ACT_SIGN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550903&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device authentication &nbsp;&nbsp;<br>&nbsp;&nbsp;information is corrupted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_RIF_SIGN">SCE_NP_DRM_ERROR_RIF_SIGN</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550904&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Rights information file is &nbsp;&nbsp;<br>&nbsp;&nbsp;corrupted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_DIFF_ACCT_ID">SCE_NP_DRM_ERROR_DIFF_ACCT_ID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550905&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Rights information file owner &nbsp;&nbsp;<br>&nbsp;&nbsp;differs from device &nbsp;&nbsp;<br>&nbsp;&nbsp;authentication information&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_UNKNOWN_VERSION">SCE_NP_DRM_ERROR_UNKNOWN_VERSION</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550906&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unknown version was detected&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_FILE_IO">SCE_NP_DRM_ERROR_FILE_IO</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550907&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Some other error occurred &nbsp;&nbsp;<br>&nbsp;&nbsp;related to the reading of the &nbsp;&nbsp;<br>&nbsp;&nbsp;rights information file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_DIFF_MG_ID">SCE_NP_DRM_ERROR_DIFF_MG_ID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550908&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error caused by the media ID&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_DIFF_PRODUCT_ID">SCE_NP_DRM_ERROR_DIFF_PRODUCT_ID</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550909&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Error caused by the product ID &nbsp;&nbsp;<br>&nbsp;&nbsp;in the rights information file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_NO_ENTITLEMENT">SCE_NP_DRM_ERROR_NO_ENTITLEMENT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550910&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;No rights information file was &nbsp;&nbsp;<br>&nbsp;&nbsp;found&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_BAD_ACT">SCE_NP_DRM_ERROR_BAD_ACT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550911&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Device has not been &nbsp;&nbsp;<br>&nbsp;&nbsp;authenticated&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_BAD_PERM">SCE_NP_DRM_ERROR_BAD_PERM</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550912&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;An NPDRM EDATA file for &nbsp;&nbsp;<br>&nbsp;&nbsp;development was accessed on a &nbsp;&nbsp;<br>&nbsp;&nbsp;PSP&trade; system&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_ILLEGAL_FORMAT">SCE_NP_DRM_ERROR_ILLEGAL_FORMAT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550913&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File is corrupted&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_TIME_LIMIT">SCE_NP_DRM_ERROR_TIME_LIMIT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550914&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Valid period set in the rights &nbsp;&nbsp;<br>&nbsp;&nbsp;information file has passed&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_SERVICE_NOT_STARTED">SCE_NP_DRM_ERROR_SERVICE_NOT_STARTED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550915&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Valid period set in the rights &nbsp;&nbsp;<br>&nbsp;&nbsp;information file has not started&nbsp;&nbsp;<br>&nbsp;&nbsp;yet&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_K_LICENSEE">SCE_NP_DRM_ERROR_K_LICENSEE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550916&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>k_licensee</i> value has not been set&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_NP_DRM_ERROR_FILENAME">SCE_NP_DRM_ERROR_FILENAME</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550917&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Filename specified in &nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NPDRM-Reference-English.htm#sceNpDrmRenameCheck">sceNpDrmRenameCheck</a>() &nbsp;&nbsp;<br>&nbsp;&nbsp;differs from the name set when &nbsp;&nbsp;<br>&nbsp;&nbsp;the file was created (names are &nbsp;&nbsp;<br>&nbsp;&nbsp;case sensitive)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>The following error may be returned when a valid period is set in the rights information file.<br><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_ERROR_NOT_INITIALIZED">SCE_ERROR_NOT_INITIALIZED</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80000001&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Although a valid period has been set, the &nbsp;&nbsp;<br>&nbsp;&nbsp;clock has not been initialized&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>Besides normal file access errors, the following errors may be returned when the I/O File manager interface is used to access an NPDRM EDATA file.<br><br>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Value</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Description</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_INVALID_ARG">SCE_GAMEDATA_ERROR_INVALID_ARG</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510201&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Argument is outside the valid &nbsp;&nbsp;<br>&nbsp;&nbsp;range&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_MFILE">SCE_GAMEDATA_ERROR_MFILE</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510202&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Too many files are open &nbsp;&nbsp;<br>&nbsp;&nbsp;simultaneously as game data &nbsp;&nbsp;<br>&nbsp;&nbsp;files&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_INVALID_FORMAT">SCE_GAMEDATA_ERROR_INVALID_FORMAT</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510204&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File format is invalid&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<a name="SCE_GAMEDATA_ERROR_BROKEN_DATA">SCE_GAMEDATA_ERROR_BROKEN_DATA</a>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80510207&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Data is corrupted&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

@@ -1,0 +1,701 @@
+<html lang="jp">
+<head>
+<title>Compiler-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+PSP&reg;コンパイラ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>概要</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">このドキュメントでは、PSP&reg;カーネル上で実行するプログラムを開発するためのツールについて説明します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>PSP&reg;ツールチェイン</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;ツールチェインはGCCをPSP&reg;向けに最適化したもので、psp-gcc 1.xはGCC3.3.xを、psp-gcc 2.xはGCC4.0.xをそれぞれベースにしています。<br>主なツールは以下のとおりです。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>名称</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-ar&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アーカイバ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-as&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アセンブラ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-gcc&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cコンパイラ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-g++&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;C++コンパイラ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-ld&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リンカ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-nm&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクト中のシンボル一覧を出力するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-size&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクトの各セクションのサイズを表示するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-objcopy&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクトファイルの形式を変換するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-objdump&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクトファイルの種々の情報を表示するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-ranlib&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アーカイブのインデックス情報を作成するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-prx-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;リロケータブル実行形式(.prx)のオブジェクトから&nbsp;&nbsp;<br>&nbsp;&nbsp;シンボル情報を削除するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psp-gnu-strip&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;elf形式リロケータブルオブジェクトからシンボル情報を削除するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;pspfixup&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;elf形式リロケータブルオブジェクトを&nbsp;&nbsp;<br>&nbsp;&nbsp;PSP&reg;リロケータブル実行形式(.prx)に変換するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;psplibgen&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;オブジェクト間のリンクに必要な情報(スタブ)を生成するツール&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;prxinfo&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;PSP&reg;リロケータブル実行形式(.prx)のオブジェクトの各種情報を表示するツール&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">PSP&reg;ツールチェインの推奨環境（動作確認済み環境）は、CentOS 4.7(x86)およびMicrosoft Windows Vistaです。その他、動作確認しているLinuxディストリビューションにはCentOS 5.4があります。Microsoft Windows環境に関しては、cygwinが動作している必要があります。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>プログラム開発の手順</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>コンパイルの手順</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;リロケータブル実行形式(.prx)のプログラムを作成するには、伝統的なコンパイル・リンク手順の最後の段階でプログラムのアドレスを決定する代わりに、リンカのパーシャルリンク機能でオブジェクトをひとつにまとめ、psp-fixupユーティリティを用いてPSP&reg;リロケータブル実行形式へ変換するという手順を踏みます。<br></div>
+
+<div align=center>
+<p>
+<img src="gif/Compiler-Overview-Japanese001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>図 1  PSP&reg;リロケータブルプログラムのコンパイル手順例</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">PSP&reg;リロケータブルプログラムをコンパイルするためのコマンドは、たとえば次のようになります。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gcc -c xxx1.c
+$ psp-gcc -c xxx2.c
+$ psp-ld -r -dc -o xyz.o xxx1.o xxx2.o -lyyy
+$ psp-fixup -o xyz.prx xyz.o
+
+</font></pre></div>
+<div style="margin-left:50px;">上記をもっと簡単に済ますには次のようにします。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gcc -c xxx1.c
+$ psp-gcc -c xxx2.c
+$ psp-gcc -o xyz.prx xxx1.o xxx2.o -lyyy
+
+</font></pre></div>
+<div style="margin-left:50px;">さらに簡単にすると、次の1コマンドで済ませることができます。<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>$ psp-gcc -o xyz.prx xxx1.c xxx2.c -lyyy
+
+</font></pre></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>PSP&reg;コンパイラ</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">PSP&reg;コンパイラ(psp-gcc)はGCCをPSP&reg;向けに最適化したコンパイラです。psp-gcc 1.xはGCC3.3.xを、psp-gcc 2.xはGCC4.0.xをそれぞれベースにしています。<br>以下にPSP&reg;コンパイラの特徴を示します。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>データサイズ</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">PSP&reg;コンパイラでは、Cの基本型は以下のサイズを取ります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>データ型</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>サイズ (バイト数)</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;double&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;8&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ポインタ&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>レジスタの使用方法</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">PSP&reg;コンパイラはMIPS組み込みABIに従ったコード生成を行い、関数呼び出しに関して、以下のようにレジスタを使用します。引数の受け渡しに使用するレジスタは8個です。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>レジスタ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>用途</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0レジスタ(常に0を保持している)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R1&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;アセンブラが一時的に使用する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R2&nbsp;&nbsp;<br>&nbsp;&nbsp; - R3&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;関数からの返り値&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R4&nbsp;&nbsp;<br>&nbsp;&nbsp; - R11&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;関数へ渡す引数&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R12&nbsp;&nbsp;<br>&nbsp;&nbsp; - R15&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;非保存レジスタ&nbsp;&nbsp;<br>&nbsp;&nbsp;(関数呼び出しの前後で値が保存されないレジスタ)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R16&nbsp;&nbsp;<br>&nbsp;&nbsp; - R23&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;保存レジスタ&nbsp;&nbsp;<br>&nbsp;&nbsp;(関数呼び出しの前後で値が保存されるレジスタ)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R24&nbsp;&nbsp;<br>&nbsp;&nbsp; - R25&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コンパイラが使用する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R26&nbsp;&nbsp;<br>&nbsp;&nbsp; - R27&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;カーネル専用レジスタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R28&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GP(Global Pointer)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R29&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;スタックポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R30&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;フレームポインタ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;R31&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リターンアドレスレジスタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>PSP&reg;コンパイラの既定義オプション</b><br>
+</a>
+</h3>
+<div style="margin-left:67px;">PSP&reg;コンパイラの実行時には、以下のオプションが指定されているとみなされます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-EL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;リトルエンディアン用コードを生成する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-G 0&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GP(Global Pointer)を使用しないコードを生成する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mabi=eabi&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;組み込みABIを使用する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-D__SCE__&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シンボル__SCE__を定義する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-D__psp__&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;シンボル__psp__を定義する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-D__psp_gcc_=0x??????&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;psp-gccバージョンに応じたシンボル__psp__を定義する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mips2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MIPS2 ISAに対応したコードを生成する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-msingle-float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;単精度浮動小数点用コードを生成する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-gdwarf-2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DWARF2に対応したデバッグ情報を生成する&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:67px;">psp-gcc 2.x.xでは、以下のオプションもデフォルトで指定されます。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-fshort-wchar&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;wchar_tのサイズを16ビットにします&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>PSP&reg;開発に利用する代表的なGCCのオプション</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">gcc本来のオプションのうち、以下のものがPSP&reg;のプログラムをコンパイルする上で有用なことがあります。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>オプション</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>機能</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-t&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;読み込むオブジェクトとライブラリのファイル名を表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-v&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コンパイル手順の詳細を表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-nostdlib&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;標準ライブラリのリンクを抑制する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-print-libgcc-file-name&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gccが参照するlibgcc.aのフルパスを表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-print-file-name=<i>file</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;gccのサーチパスからfileを探してフルパスで表示する&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-mstats&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コンパイル中の各関数のスタックサイズなどを表示する&nbsp;&nbsp;<br>&nbsp;&nbsp;(MIPS固有のオプション)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;-H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;コンパイル時にincludeしたヘッダファイル名を表示する&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>psp-gccに固有のオプション</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">psp-gccでは、GCCが持つオプションの他に幾つかのオプションを拡張しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_1">
+<div style="margin-left:40px;"><h4><b>-mulsw / -mno-ulsw</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">非アラインメントロードストア命令(LWL, LWR, SWL,SWR命令)を使用したコード生成を行うかどうか指定します。-mulswを指定すると非アラインメントロードストア命令が使用されます。デフォルトは-mulswです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_2">
+<div style="margin-left:40px;"><h4><b>-mext / -mno-ext</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Allegrex CPUのEXT命令,INS命令を使用した最適化を行うかどうか指定します。-mextを指定すると最適化が有効になります。デフォルトは-mextです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_3">
+<div style="margin-left:40px;"><h4><b>-mmad / -mno-mmad</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Allegrex CPUの積和演算命令(MADD, MADDU, MSUB, MSUBU命令)を使用した最適化を行うかどうか指定します。-mmaddを指定すると最適化が有効になります。デフォルトは-mmaddです。<br><br></div>
+<div style="margin-left:50px;">psp-gcc 2.xでは、加えて以下のオプションを拡張しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_4">
+<div style="margin-left:40px;"><h4><b>-minline-float-load/ -mno-inline-float-load</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">実数の定数値をFPUレジスタまたはVFPUレジスタに設定する場合、ロード命令(LWC1, LV.S命令)を使用せず、なるべくGPRに即値を用意してレジスタ間転送を行わせるようにする最適化を行うかどうか指定します。-minline-float-loadを指定すると最適化が有効になります。この最適化はコードサイズに対するトレードオフがあることがあります。デフォルトは-mno-inline-float-loadです。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_5">
+<div style="margin-left:40px;"><h4><b>-mfloat-varargs / -mno-float-varargs</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">可変引数を持つ関数でFPRを使用して引数を受け取る可能性があるとき、正しくABI通りのコード生成を行うかどうか指定します。-mfloat-varargsを指定すると、ABIどおりのコード生成が行われます。デフォルトは-mno-float-varargsであり、FPRを使用する引数が正しく受け取る事ができません。MIPS EABIでは可変長引数にFPRが使用されるのは、サイズが32ビットの構造体内にfloatのメンバを持つ構造体を引数として渡した場合だけに限られます。<br><br></div>
+<div style="margin-left:50px;">また、psp-gccではVFPUイントリンジックを有効にするために、以下のオプションを拡張しています。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_6">
+<div style="margin-left:40px;"><h4><b>-menable-vfpu=m0-m7</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">VFPUレジスタをpsp-gccのレジスタアロケーション管理下に置いてVFPUイントリンジックを使用できるようにします。詳しくはpsp-gcc VFPUイントリンジックマニュアルを参照してください。<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>サブルーチンコール</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">パラメータレジスタの割当は下記のように個別に行われます(整数／浮動小数)。<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>レジスタ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;general-purpose&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r4－r11&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;floating point&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;f12－f19&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">レジスタ仕様：<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>パラメータ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>レジスタ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;fixed 0 value&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;volatile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r1－r15, r24, r25&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;non-volatile&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r16－r23, r30&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;kernel reserved&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r26, r27&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;gp (SDA base)&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r28&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;stack pointer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r29&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;frame pointer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r30 (if needed)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;return address&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r31&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(Stack alignment&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bytes)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;(Homing area&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;none)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<div style="margin-left:50px;">構造体は、サイズが32ビット以下なら値として、それ以上ならポインタとして渡されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>スタックフレーム</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/Compiler-Overview-Japanese002.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>レジスタに対するパラメータ割当て</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">関数呼出しのパラメータは、左(最初のパラメータ)から右に並んでいると考えてください。<br>このアルゴリズムにおいて、FRは、次に利用可能な浮動小数点レジスタの数を含みます。GRは、次に利用可能な汎用レジスタの数を含みます。STARGは、次に利用可能なスタックパラメータ言語のアドレスです。<br>パラメータのレジスタ割当てアルゴリズムは以下のようになります。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_7">
+<div style="margin-left:40px;"><h4><b>INITIALIZE:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">GR=r4、FR=f12に設定して、STARGが"Parameter Word 1"を指すように設定してください。<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_8">
+<div style="margin-left:40px;"><h4><b>SCAN:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">パラメータがない場合、終了してください。<br>そうでない場合、次のパラメータのタイプに従って以下から1つ選択してください。<br><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> FLOAT:<br>FR &gt; f19の場合、STACKに移動してください。<br>そうでない場合、パラメータ値を浮動小数点レジスタFRにロードし、FRを次の浮動小数点レジスタ(または、32ビットモードのレジスタペア)に進めてください。<br>次に、SCANに移動してください。
+</ul></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> SIMPLE ARG:<br>SIMPLE ARGは、以下のうちの1つです。
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> 汎用レジスタに収まるシンプル整数タイプの1つ
+<li> 任意のタイプのオブジェクトに対するポインタ
+<li> レジスタに収まるほど小さな構造体または共用体(32ビット以下)
+<li> オブジェクトまたはオブジェクトのコピーに対するポインタとして扱われる大きな構造体または共用体(コピーが作られる場合については下記を参照)
+</ul></div>
+</ul>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:80px;">GR &gt; r11の場合、STACKに移動してください。<br>そうでない場合、パラメータ値を汎用レジスタGRにロードし、GRを次の汎用レジスタに進めてください。<br>レジスタのサイズより小さな値は、符号付きか符号なしかによって、符号拡張またはゼロ拡張されます。<br>次に、SCANに移動してください。<br></div>
+<div style="margin-left:50px;"><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> DOUBLE and LONG LONG:<br>GR &gt; r10の場合、STACKに移動してください。<br>そうでない場合、GRが奇数なら、GRを次のレジスタに進めてください。<br>64ビットのLONG LONG値をレジスタペアGRおよびGR+1にロードしてください。<br>GRをGR+2に進めて、SCANに移動してください。
+</ul></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_9">
+<div style="margin-left:40px;"><h4><b>STACK:</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">上記で処理されないパラメータは、呼出し元のスタックフレームのパラメータ言語として渡されます。上記で定義されているように、SIMPLE ARGは汎用レジスタのサイズと等しいサイズおよびアラインメントを有すると考えられています。汎用レジスタのサイズより小さなSIMPLE ARGは汎用レジスタの幅まで符号拡張またはゼロ拡張されます。<br>float引数は、浮動小数点レジスタのサイズと等しいサイズおよびアラインメントを有すると考えられています。<br>doubleおよびlong longは、64ビットのサイズおよびアラインメントを有すると考えられています。<br>パラメータのアラインメント必要条件の倍数までSTARGを切り上げ、引数をバイト単位でSTARG、STARG+1、...STARG+size-1にコピーしてください。<br>STARをSTARG+sizeに設定し、SCANに移動してください。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>構造体を渡す</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">上記のように、値によって構造体および共用体を渡すコードが、特別に実行されています(このセクションにおいて、構造体および共用体を含めて「構造体」と呼びます)。単一のレジスタ、またはレジスタサイズのスタックフレームスロットにおいて、レジスタに収まるほど小さな構造体は、値によって渡されます。<br>大きな構造体は、構造体のアドレスを渡すことによって処理されます。大きな構造体を値によって渡したいのなら、構造体のコピーが作られます。<br><br>大きな構造体のコピーは、以下のルールの下で作られます。<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>ANSIモード</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>K&amp;Rモード</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Normal param&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;必要に応じて&nbsp;&nbsp;<br>&nbsp;&nbsp;呼び出し先がコピー&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;呼び出し元がコピー&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Varargs (...) param&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;呼び出し元がコピー&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;呼び出し元がコピー&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">ANSIモードの通常の(varargsでない)大きな構造体のパラメータの場合、構造体のコピーが渡されるのと同じ効果を出し、値によって渡すという意味を保つ責任は、呼出し先にあります。<br>これは、呼出し先にコピーを作らせることで達成できますが、同じ結果を出すためにコピーは必要ではないという決断を呼出し先が下す場合もあります。このような場合、呼出し先はパラメータのコピーを作ることを避けるという選択を行うことができます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Varargs処理</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">レジスタより大きな構造体パラメータにはコピーが必要だということを呼出し元が知っていること以外に、varargsパラメータを処理するのに特別な変更は必要ありません(上記を参照)。<br></div>
+<br>
+<div style="margin-left:50px;">varargsマクロは、2つの部分に分けられるレジスタ保存領域(1つの部分は汎用レジスタ用、もう1つの部分は浮動小数点レジスタ用)を準備し、これらの2つの領域に対するポインタと、スタックパラメータ領域に対するポインタとを維持します。レジスタ保存領域は、呼出し元の<br>スタックフレーム領域と、呼出し先のスタックフレーム領域との間にあります。<br></div>
+<br>
+<div style="margin-left:50px;">ソフトウェア浮動小数点の場合、保存する必要があるのは汎用レジスタのみです。保存領域が2つのスタックフレームの間にあるので、保存されたレジスタパラメータはスタックに渡されたパラメータと隣接します。これによって、varargsマクロは、よりシンプルになることができます。必要なポインタは1つだけで、このポインタは、レジスタ保存領域から呼出し元のスタックフレームへと進みます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>関数返り値</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>タイプ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>レジスタ</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;long long&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2－r3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;f0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;double&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;r2－r3&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;struct/union&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;see below&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">2つの汎用レジスタに収まる構造体／共用体は、r2 (必要ならばr2－r3)として戻されます。<br>これらの構造体／共用体は、プロセッサのエンディアンによってレジスタ内に整列させられます。例えば、ビッグエンディアンプロセッサの場合、構造体の最初のバイトはr2の最上位バイトとして返されます。リトルエンディアンプロセッサの場合、最初のバイトはr2の最下位バイトとして返されます。<br>大きな構造体／共用体は、「隠れた」最初の引数として、戻り値を受け取るために割当てられたスペースに対するポインタを渡す呼出し元によって処理されます。<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>double</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">doubleはソフトウェア浮動小数点インプリメンテーションによって処理されます。また、long longのように渡され、返されるべきです。<br>これは、doubleが偶数／奇数のレジスタペアによって渡されることを意味します。<br>これと同様に、doubleはレジスタペアr2－r3によって返されます。<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2010 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

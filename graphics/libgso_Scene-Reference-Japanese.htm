@@ -1,0 +1,1426 @@
+<html lang="jp">
+<head>
+<title>libgso_Scene-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+libgso_scene
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SceGsoChunk"></a>
+<table width="100%"><td width="70%"><font size=6>SceGsoChunk<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[構造体]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンクを表す構造体<br></div><br>
+
+<!-- 構造 -->
+<div style="margin-left:10px;"><b>構造</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;gso/gso_format.h&gt;
+typedef struct SceGsoChunk {
+	unsigned short <i>type</i> ;
+	unsigned short <i>args_offs</i> ;
+	unsigned int <i>next_offs</i> ;
+	unsigned int <i>child_offs</i> ;
+	unsigned int <i>data_offs</i> ;
+} <b>SceGsoChunk</b>;
+
+</font></pre></div>
+
+<!-- メンバ -->
+<div style="margin-left:10px;"><b>メンバ</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクタイプ&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>args_offs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンク引数へのオフセット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>next_offs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;次のチャンクへのオフセット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>child_offs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;子チャンクへのオフセット&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>data_offs</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクデータへのオフセット&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">フォーマットを構成する各階層のデータブロックを表す構造体です。<br><br></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンクがハーフチャンクならば <i>child_offs</i>, <i>data_offs</i> メンバは含まれません。<br>チャンク構造の詳細についてはフォーマットドキュメントを参照してください。<br>チャンクの要素にアクセスするにはチャンク操作マクロを使用してください。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGsoSceneCheckFileHeader"></a>
+<table width="100%"><td width="70%"><font size=6>sceGsoSceneCheckFileHeader<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ファイルヘッダの確認<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>bool <b>sceGsoSceneCheckFileHeader</b>( 
+	const void *<i>buf</i>,
+	int <i>size</i> 
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのサイズ（不明ならば0）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">成功したときはtrue、失敗したときはfalseを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">シーンファイルのヘッダを確認するための関数です。<br><i>buf</i>と<i>size</i>で指定された領域に適切なヘッダが存在すればtrue、存在しなければfalseを返します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>if ( sceGsoSceneCheckFileHeader( buf, size ) == false ) return ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneGetChunkCount">sceGsoSceneGetChunkCount</a>(), <a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneGetChunk">sceGsoSceneGetChunk</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGsoSceneGetChunkCount"></a>
+<table width="100%"><td width="70%"><font size=6>sceGsoSceneGetChunkCount<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>シーンチャンク数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceGsoSceneGetChunkCount</b>(
+	const void *<i>buf</i>,
+	int <i>size</i> 
+) ;
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのサイズ（不明ならば0）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">シーンチャンク数を返します。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">シーンファイルに含まれるシーンチャンク数を取得するための関数です。<br><i>buf</i>と<i>size</i>で指定された領域に存在するシーンチャンクの個数を返します。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int count = sceGsoSceneGetChunkCount( buf, size ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneCheckFileHeader">sceGsoSceneCheckFileHeader</a>(), <a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneGetChunk">sceGsoSceneGetChunk</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGsoSceneGetChunk"></a>
+<table width="100%"><td width="70%"><font size=6>sceGsoSceneGetChunk<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>シーンチャンクの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<b>sceGsoSceneGetChunk</b>( 
+	const void *<i>buf</i>,
+	int <i>size</i>,
+	int <i>index</i> 
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのサイズ（不明ならば0）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>index</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイル内でのシーン番号&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">シーンチャンクへのポインタを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">シーンファイルに含まれるシーンチャンクを取得するための関数です。<br><i>buf</i>と<i>size</i>で指定された領域にある<i>index</i>番目のシーンチャンクへのポインタを返します。<br>該当するシーンチャンクが存在しないときは 0 を返します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *chunk = sceGsoSceneGetChunk( buf, size, 0 ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneCheckFileHeader">sceGsoSceneCheckFileHeader</a>(), <a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneGetChunkCount">sceGsoSceneGetChunkCount</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGsoSceneGetRootChunk"></a>
+<table width="100%"><td width="70%"><font size=6>sceGsoSceneGetRootChunk<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ルートチャンクの取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<b>sceGsoSceneGetRootChunk</b>( 
+	const void *<i>buf</i>,
+	int <i>size</i>,
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>buf</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>size</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ファイルイメージのサイズ（不明ならば0）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ルートチャンクへのポインタを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">シーンファイルに含まれるルートチャンクへのポインタを取得します。<br>ルートチャンクが存在しないときは 0 を返します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *chunk = sceGsoSceneGetRootChunk( buf, size ) ;
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGsoSceneCountChildChunk"></a>
+<table width="100%"><td width="70%"><font size=6>sceGsoSceneCountChildChunk<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>子チャンク数の取得<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>int <b>sceGsoSceneCountChildChunk</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>,
+	int <i>type</i> 
+) ;
+</font></pre></div>
+<div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;子チャンクのタイプ（０ならば任意）&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">子チャンク数を返します。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">子チャンクの個数を取得します。タイプに０以外を指定すると指定されたタイプの子チャンクの個数を返します。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int count = sceGsoSceneCountChildChunk( chunk, SCEGSO_SCENE ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneFindChildChunk">sceGsoSceneFindChildChunk</a>()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceGsoSceneFindChildChunk"></a>
+<table width="100%"><td width="70%"><font size=6>sceGsoSceneFindChildChunk<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>子チャンクの検索<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<b>sceGsoSceneFindChildChunk</b>( 
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>,
+	int <i>type</i>,
+	int <i>index</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>type</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;子チャンクのタイプ（０ならば任意）&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>index</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;子チャンクの番号&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">子チャンクへのポインタを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">Ｎ番目の子チャンクへのポインタを取得します。タイプに０以外を指定すると、指定されたタイプの子チャンクのうちでＮ番目へのポインタを返します。<br>該当するチャンクが存在しないときは 0 を返します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *chunk = sceGsoSceneFindChildChunk( chunk, SCEGSO_SCENE, 0 ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../graphics/libgso_Scene-Reference-Japanese.htm#sceGsoSceneCountChildChunk">sceGsoSceneCountChildChunk</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_ISHALF"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_ISHALF<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ハーフチャンク判定<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ bool <b>SCEGSO_CHUNK_ISHALF</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">ハーフチャンクならばtrueを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクがハーフチャンクかどうかを調べます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>if ( SCEGSO_CHUNK_ISHALF( chunk ) ) return ;
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_TYPE"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_TYPE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンクタイプ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ int <b>SCEGSO_CHUNK_TYPE</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンクタイプを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンクタイプを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int type = SCEGSO_CHUNK_TYPE( chunk ) ;
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_NEXT"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_NEXT<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>次のチャンク<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<b>SCEGSO_CHUNK_NEXT</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">次のチャンクへのポインタを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクの同じレベルの次のチャンクへのポインタを取得します。指定されたチャンクが最後のチャンクの場合は上位レベルのチャンクの次のチャンクへのポインタを返します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *next = SCEGSO_CHUNK_NEXT( chunk ) ;
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_CHILD"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_CHILD<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>子チャンク<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<b>SCEGSO_CHUNK_CHILD</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">最初の子チャンクへのポインタを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクの最初の子チャンクへのポインタを取得します。指定されたチャンクが子チャンクを持たない場合は次のチャンクへのポインタを返します。指定されたチャンクが子チャンク名を持つかどうかを調べるにはSCEGSO_CHUNK_CHILDSIZE()でサイズを取得してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3><a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *child = SCEGSO_CHUNK_CHILD( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_CHILDSIZE()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_NAME"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_NAME<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンク名<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ char *<b>SCEGSO_CHUNK_NAME</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンク名へのポインタを返します。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンク名へのポインタを取得します。指定されたチャンクがチャンク名を持たない場合は返り値は無効です。指定されたチャンクがチャンク名を持つかどうかを調べるにはSCEGSO_CHUNK_NAMESIZE()でサイズを取得してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>const char *name = SCEGSO_CHUNK_NAME( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_NAMESIZE()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_ARGS"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_ARGS<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンク引数<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ void *<b>SCEGSO_CHUNK_ARGS</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンク引数へのポインタを返します。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンク引数へのポインタを取得します。指定されたチャンクがチャンク引数を持たない場合は返り値は無効です。指定されたチャンクがチャンク引数を持つかどうかを調べるにはSCEGSO_CHUNK_ARGSSIZE()でサイズを取得してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>void *args = SCEGSO_CHUNK_ARGS( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_ARGSSIZE()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_DATA"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_DATA<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンクデータ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ void *<b>SCEGSO_CHUNK_DATA</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンクデータへのポインタを返します。<br></div>
+        <div style="margin-left:50px;"><pre><font size=3>
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンクデータへのポインタを取得します。指定されたチャンクがチャンクデータを持たない場合は返り値は無効です。指定されたチャンクがチャンクデータを持つかどうかを調べるにはSCEGSO_CHUNK_DATASIZE()でサイズを取得してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>void *data = SCEGSO_CHUNK_DATA( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_DATASIZE()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_SIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_SIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンクのサイズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ int <b>SCEGSO_CHUNK_SIZE</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンクのサイズを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのサイズを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int size = SCEGSO_CHUNK_SIZE( chunk ) ;
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_TAGSIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_TAGSIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンクタグのサイズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ int <b>SCEGSO_CHUNK_TAGSIZE</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンクタグのサイズを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンクタグのサイズを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int size = SCEGSO_CHUNK_TAGSIZE( chunk ) ;
+
+</font></pre></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_NAMESIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_NAMESIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンク名のサイズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ int <b>SCEGSO_CHUNK_NAMESIZE</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンク名のサイズを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンク名のサイズを取得します。<br>サイズはアラインメントのためのパディングを含みます。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int size = SCEGSO_CHUNK_NAMESIZE( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_NAME()<br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_ARGSSIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_ARGSSIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンク引数のサイズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ int <b>SCEGSO_CHUNK_ARGSSIZE</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンク引数のサイズを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンク引数のサイズを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int size = SCEGSO_CHUNK_ARGSSIZE( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_ARGS()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_DATASIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_DATASIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>チャンクデータサイズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ int <b>SCEGSO_CHUNK_DATASIZE</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">チャンクデータのサイズを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクのチャンクデータのサイズを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int size = SCEGSO_CHUNK_DATASIZE( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_DATA()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_CHILDSIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_CHILDSIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>子チャンクの合計サイズ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ int <b>SCEGSO_CHUNK_CHILDSIZE</b>(
+	const <a href="../graphics/libgso_Scene-Reference-Japanese.htm#SceGsoChunk">SceGsoChunk</a> *<i>chunk</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>chunk</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;チャンクのアドレス&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">子チャンクの合計サイズを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">指定されたチャンクの子チャンクの合計サイズを取得します。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int size = SCEGSO_CHUNK_CHILDSIZE( chunk ) ;
+
+</font></pre></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">SCEGSO_CHUNK_CHILD()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCEGSO_CHUNK_SKIPSTRING"></a>
+<table width="100%"><td width="70%"><font size=6>SCEGSO_CHUNK_SKIPSTRING<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[チャンク操作マクロ]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>文字列をスキップ<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>static __inline__ void *<b>SCEGSO_CHUNK_SKIPSTRING</b>(
+	const char *<i>str</i>,
+	int <i>align</i>
+) ;
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能（割り込み禁止 / 許可状態に依存しない）<br>マルチスレッドセーフでない<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>str</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;文字列引数のアドレス&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>align</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;次の引数のアラインメント&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">次の引数へのポインタを返します。<br><br></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">文字列引数の次の引数へのポインタを取得します。<br>アラインメントには２のべき乗を指定してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>char *str_arg = (char *)SCEGSO_CHUNK_ARGS( chunk ) ;
+int *int_arg = (float *)SCEGSO_CHUNK_SKIPSTRING( str_arg, sizeof( int ) ) ;
+</font></pre></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2005 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

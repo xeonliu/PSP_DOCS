@@ -1,0 +1,1670 @@
+<html lang="en">
+<head>
+<title>GIM_Format-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; GIM 2D Converter</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+GIM Format Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Introduction</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The 2D file format is used to store basic texture images. 2D format files can contain the following kinds of information:<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> Images
+<li> Palettes
+<li> Sequences
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Creation</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">2D format files are created by converting generic image files. BMP, TGA, TM2, DDS, AVI and PNG are the currently supported source file formats. <br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English001.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_3">
+<h3>
+<a href="#Heading3_1"> 1. </a>3 
+<!-- hp1 --><b>Notational Conventions</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">In this document, data types are denoted as shown below. Byte order is Little Endian.<br><br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Type</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 8-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_char&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 8-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 16-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_short&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 16-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Signed 32-bit integer&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;u_int&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Unsigned 32-bit integer&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;float&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;32-bit floating-point&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The specified "alignment" is the minimum required value. For details, see &quot;Restrictions Imposed by the PSP&trade; Library&quot;.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Storage Format</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">A 2D format file consists of a file header followed by image data arranged in a hierarchical structure of chunks.<br></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English002.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>File Header</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The file header contains information about the file itself. It has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_int signature ;	// File identifier ( '.GIM' )
+	u_int version ;		// Version number ( '1.00' )
+	u_int style ;		// Data style ( 'PSP')
+	u_int option ;		// Option (0)
+} GimHeader ;
+</font></pre></div>
+<div style="margin-left:50px;"><br>Data style is used to indicate that the data representation has been optimized for a specific API. The 'PSP' style indicates that this format is for use only with the PSP&trade; library. For more details, see &quot;Restrictions Imposed by the PSP&trade; Library&quot;.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Chunks</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A chunk can store any type of data. Chunks can also have hierarchical structures. The layout of a chunk is shown below. The padding area is filled with zeroes.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English003.gif">
+</div>
+<div style="margin-left:50px;"><br>The chunk header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short type ;		// Chunk type
+	u_short unused ; 	// Unused (always 0)
+	u_int next_offs ;	// Offset of next chunk 
+	u_int child_offs ;	// Offset of lower-level chunks
+	u_int data_offs ;	// Offset of chunk data 
+} GimChunk ;
+</font></pre></div>
+<div style="margin-left:50px;"><br>The start of each element in a chunk must be aligned on a 4-byte boundary. As a result, all the offsets in a chunk header are multiples of 4. An offset is never 0 even if there is no corresponding element. Zeroes are added as padding bytes in order to align the data.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Chunk Structure</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Chunks have the following hierarchical structure.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English004.gif">
+</div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>File Chunk</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A file chunk is the highest level chunk; it represents the entire file. A file chunk can contain multiple picture chunks, however, it does not contain any chunk data itself.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Picture Chunk</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A picture chunk represents the data for one picture. A picture chunk can contain the following kinds of chunks. The number of each chunk is arbitrary.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Image chunk
+<li> Palette chunk
+<li> Sequence chunk
+</ul></div>
+<div style="margin-left:50px;"><br>A picture chunk does not contain any chunk data itself.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_3">
+<h3>
+<a href="#Heading3_3"> 3. </a>3 
+<!-- hp1 --><b>Image Chunk</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">An image chunk can store an array of images; each image contains the same number of pixels. The array can be used as a mipmap or a sequence.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English005.gif">
+</div>
+<div style="margin-left:50px;"><br><br>Mipmaps enable the number of pixels to be (n+1)/2 for each level. They also allow images with the same number of pixels to be stored in all levels.<br><br>The layout of image chunk data is shown below. Note that each area may be padded with zeroes at the end to ensure proper alignment.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English006.gif">
+</div>
+<div style="margin-left:50px;"><br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_1">
+<div style="margin-left:40px;"><h4><b>Image Header</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The image header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short header_size ;	// Header size (48)
+	u_short unused ;	// Unused (0)
+	u_short format ; 	// Pixel format (GIM_FORMAT_XXXX)
+	u_short order ;		// Pixel storage format (GIM_ORDER_XXXX)
+	u_short width ;		// Width of images in pixels
+	u_short height ;	// Height of images in pixels
+	u_short bpp ;		// Number of bits per pixel
+	u_short pitch_align ;	// Width alignment (number of bytes)
+	u_short height_align ;	// Height alignment (number of pixels)
+	u_short dim_count ; 	// Number of dimensions in image array (2)
+	u_short reserved ;	// Reserved area (0)
+	u_short reserved2 ;	// Reserved area (0)
+	u_int offsets ;		// Offset to offset array
+	u_int images ;		// Offset to first image
+	u_int total ;		// Total size
+	u_int plane_mask ;	// Plane mask
+	u_short level_type ;	// Level type (GIM_TYPE_XXXX)
+	u_short level_count ;	// Level count
+	u_short frame_type ;	// Frame type (GIM_TYPE_XXXX)
+	u_short frame_count ;	// Frame count	
+} GimImageHeader ;
+</font></pre></div>
+<div style="margin-left:50px;"><br></div>
+<div style="margin-left:67px;">header_size indicates the header size. It must be at least 48 bytes.<br>format and order indicate the image format (details elsewhere).<br>width and height indicate the number of pixels in the images (min. 1).<br>bpp indicates the average number of bits per pixel (min. 1).<br>pitch_align and height_align indicate the units of alignment (min. 1).<br>dim_count indicates the number of dimensions in the image array (must be 2).<br>offsets is the offset into the offset array using the image header as the origin.<br>images is the offset to the first image using the image header as the origin.<br>total is the total size of the image chunk data.<br><br>plane_mask indicates the plane configuration when images having a small number of bits are stored so that they are stacked on top of each other. Bit sequences for each adjacent plane are inverted. The lowest level plane is set to 0 when the number of planes is even and 1 when the number of planes is odd. plane_mask is valid only when the format member specifies an index format. It should be set to 0 if it is not used.<br><br>Example:<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English007.gif">
+</div>
+<div style="margin-left:67px;"><br>level_count and frame_count indicate the number of images (min. 1)<br>level_type and frame_type indicate the type of image array.<br>Set level_type to either GIM_TYPE_MIPMAP or MIPMAP2.<br>Set frame_type to GIM_TYPE_SEQUENCE (details elsewhere).<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_2">
+<div style="margin-left:40px;"><h4><b>User Data</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Can be any arbitrary byte sequence.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_3">
+<div style="margin-left:40px;"><h4><b>Offset Array</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Contains offsets to each image using the image header as the origin. The number of offsets is equal to the number of images. Offsets are four-byte integers and must be four-byte aligned.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_3_4">
+<div style="margin-left:40px;"><h4><b>Image</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">An image is an array of pixels. Images must be 16-byte aligned.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_4">
+<h3>
+<a href="#Heading3_3"> 3. </a>4 
+<!-- hp1 --><b>Palette Chunk</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A palette chunk can store an array of palettes; each palette contains the same number of entries. The array can be used as a mipmap or a sequence. <br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English008.gif">
+</div>
+<div style="margin-left:50px;"><br><br>The layout of chunk data and the data structure for a palette chunk are basically the same as for an image chunk, however, the following restrictions apply.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> height is always 1.
+<li> The only format is GIM_FORMAT_RGBAXXXX.
+<li> plane_mask is always 0.
+<li> The only level_type is GIM_TYPE_MIPMAP2.
+</ul></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_5">
+<h3>
+<a href="#Heading3_3"> 3. </a>5 
+<!-- hp1 --><b>Sequence Chunk</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Sequence chunks contain simple animation information such as:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Image frame number
+<li> Palette frame number
+<li> Image rectangle
+</ul></div>
+<div style="margin-left:50px;"><br>Sequence chunks also contain constants used for various settings such as:<br></div>
+<div style="margin-left:40px;"><ul>
+<li> Alpha blending mode
+<li> Texture function
+<li> Texture filter
+<li> Texture wraparound
+</ul></div>
+<div style="margin-left:50px;"><br>The layout of sequence chunk data is shown below. Each area must be four-byte aligned. Note that each area may be padded with zeroes at the end to ensure proper alignment.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English009.gif">
+</div>
+<div style="margin-left:50px;"><br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_5">
+<div style="margin-left:40px;"><h4><b>Sequence Header</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The sequence header has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short header_size ;	// Header size (32)
+	u_short unused ;	// Unused (0)
+	u_short frame_start ;	// Starting frame
+	u_short frame_end ;	// Ending frame
+	u_short frame_rate ;	// Frame rate
+	u_short frame_repeat ; 	// Repeat mode(GIM_REPEAT_XXXX)
+	u_short n_constants ;	// Number of constants
+	u_short n_functions ;	// Number of functions
+	u_int constants ;  	// Offset into constant data array
+	u_int functions ;  	// Offset into function data array
+	u_int keyframes ;  	// Offset to first keyframe sequence
+	u_int total ;		// Total size
+} GimSequenceHeader ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>header_size indicates the header size. It must be at least 32 bytes.<br>frame_start and frame_end indicate the playback range (in frames).<br>frame_rate indicates the playback speed (in frames/second).<br>frame_repeat indicates the repeat mode (described in detail later).<br>n_constants indicates the number of constants (&gt;= 0).<br>n_functions indicates the number of functions (&gt;= 0).<br>constants is an offset into the constant data array using the sequence header as the origin.<br>functions is an offset into the function data array using the sequence header as the origin.<br>total is the total size of the sequence chunk data.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_6">
+<div style="margin-left:40px;"><h4><b>User Data</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Can be any arbitrary byte sequence.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_7">
+<div style="margin-left:40px;"><h4><b>Constant Data</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Constant data is used to represent parameters that are not animated. Constant data has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short param ;		// Parameter (GIM_PARAM_XXXX)
+	short value ;		// Value
+} GimConstant ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>param specifies a parameter that is set with a constant value. value represents that value (details elsewhere).<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_8">
+<div style="margin-left:40px;"><h4><b>Function Data</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Function data represents parameters that are animated with keyframes. Function data has the following data structure.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	u_short param ;		// Parameter (GIM_PARAM_XXXX)
+	u_short interp ;	// Interpolation method (GIM_INTERP_XXXX)
+	u_int keyframes ;	// Offset into keyframe sequence
+} GimFunction ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>param specifies a parameter for which the value of the function is set. (details elsewhere).<br>interp indicates the method of interpolating between keyframes (details elsewhere).<br>keyframes is an offset into the keyframe sequence using the sequence header as the origin.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_3_5_9">
+<div style="margin-left:40px;"><h4><b>Keyframe</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">A keyframe represents the value of a function at a specific time. A keyframe has the following data structure. Consecutive keys are stored together.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>typedef struct {
+	short count ;		// Keyframe spacing
+	short values[ n ] ; 	// Key values (variable number)
+} GimKeyframe ;
+</font></pre></div>
+<div style="margin-left:67px;"><br>If count is greater than or equal to 0, its value indicates the spacing to the next keyframe, and the values array will only contain one entry. If count is less than 0, it means that the number of consecutive keys is -count. In this case, the values array will contain -count entries.<br><br>Example:<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English010.gif">
+</div>
+<div style="margin-left:67px;"><br>count is set to 0 for the last keyframe.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_6">
+<h3>
+<a href="#Heading3_3"> 3. </a>6 
+<!-- hp1 --><b>File Information Chunk</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Information related to a file can be stored in a file information chunk.<br>The chunk data consists of multiple strings separated by NULL characters ('\0').<br><br>The meanings of the strings are defined as follows.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> ProjectName (name of file for which information is created)
+<li> UserName (name of user who created file)
+<li> SavedDate (date and time file was created)
+<li> Originator (name of application that created file)
+<li> Comment (arbitrary)
+</ul></div>
+<div style="margin-left:67px;"><b>. . .</b><br></div>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>Text Format</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Text format is a human-readable format that has a structure similar to binary format. It can be used for editing or debugging since it can be converted easily to and from binary format.<br><br>In text format, the file header is described first on the first line of the file, and then blocks are described hierarchically on subsequent lines. However, the description is omitted for the file block, which is the highest block.<br><br>Example:<br></div>
+        <div style="margin-left:80px;"><pre><font size=3>.GIS 1.00
+
+Picture "picture-0" {
+	Image "image-0" {
+		Format INDEX4
+		Order NORMAL
+		Width 16
+		Height 16
+		PitchAlign 16
+		HeightAlign 1
+		PlaneMask 0x00000000
+		LevelType MIPMAP
+		LevelCount 1
+		FrameType SEQUENCE
+		FrameCount 1
+		Pixels "pixels-0" INDEX4 NORMAL 16 16 16 1 {
+			0xA7977AA4 0x000039A7 0x00000000 0x00000000
+			0xF9E9CCE8 0x00004DFA 0x00000000 0x00000000
+			0xE9E987E9 0x00014DED 0x00000000 0x00000000
+			0xD9E9DCE9 0x00015DDF 0x00000000 0x00000000
+			0xC9E9D9E9 0x00015DBE 0x00000000 0x00000000
+			0xC9D9DDE7 0x00015DAC 0x00000000 0x00000000
+			0x66656662 0x11114666 0x00000000 0x00000000
+			0x59A67A94 0x7A7A9787 0x00000000 0x00000000
+			0x9EDBCCE8 0x8E9FCAE9 0x00000000 0x00000000
+			0xADBCC9E9 0x7EBEBDF9 0x00000000 0x00000000
+			0xADBC77E9 0x5EDCBFF9 0x00000000 0x00000000
+			0xADBCDAE9 0x5EFBBEC9 0x00000000 0x00000000
+			0x7EE89EE7 0x5CF9BBB9 0x00000000 0x00000000
+			0x56655652 0x46655655 0x00000000 0x00000000
+			0x34434431 0x24433332 0x00000000 0x00000000
+			0x11111110 0x11111111 0x00000000 0x00000000
+		}
+	}
+	Palette "palette-0" {
+		Format RGBA8888
+		Order NORMAL
+		Width 16
+		Height 1
+		PitchAlign 16
+		HeightAlign 1
+		PlaneMask 0x00000000
+		LevelType MIPMAP2
+		LevelCount 1
+		FrameType SEQUENCE
+		FrameCount 1
+		Pixels "pixels-0" RGBA8888 NORMAL 16 1 16 1 {
+			0x01000000 0x3B000000 0x9D000000 0xD5000000
+			0xFF040302 0xFF0A0802 0xFF110F02 0xFF424001
+			0xFF6D6C02 0xFF7E7C01 0xFF8C8A01 0xFFA8A602
+			0xFFBDBC02 0xFFD4D102 0xFFE9E701 0xFFF9F701
+		}
+	}
+	Sequence "sequence-0" {
+		FrameStart 0
+		FrameEnd 12
+		FrameRate 12
+		FrameRepeat CYCLE
+		Constant WRAP_U CLAMP
+		Constant WRAP_V REPEAT
+		Function "function-0" CROP_V LINEAR {
+			0 0
+			12 16
+		}
+	}
+}
+
+FileInfo "fileinfo-0" {
+	ProjectName "icon.bmp"
+	UserName "guest"
+	SavedDate "2005/01/20 11:51:46"
+	Originator "GimConv 1.00"
+}
+
+</font></pre></div>
+<div style="margin-left:50px;">The symbol names that are described in text format are the macro definition names with two prefixes omitted as shown below.<br>Example:<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Macro Definition Name</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Symbol Name</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_GENERIC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;GENERIC&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MIPMAP&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MIPMAP2&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_SEQUENCE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;SEQUENCE&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_1">
+<h3>
+<a href="#Heading3_4"> 4. </a>1 
+<!-- hp1 --><b>File Header</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_10">
+<div style="margin-left:40px;"><h4><b>[Syntax] </b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"><i>signature version</i><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_11">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a line for identifying the file format.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_1_12">
+<div style="margin-left:40px;"><h4><b>[Arguments]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>signature</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;File identifier (".GIS")&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>version</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Version number ("1.00")&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_2">
+<h3>
+<a href="#Heading3_4"> 4. </a>2 
+<!-- hp1 --><b>Picture Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_13">
+<div style="margin-left:40px;"><h4><b>[Syntax]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Picture "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_14">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing a picture.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_2_15">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Image&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Palette&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Palette block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Sequence&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Sequence block&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_3">
+<h3>
+<a href="#Heading3_4"> 4. </a>3 
+<!-- hp1 --><b>Image Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_16">
+<div style="margin-left:40px;"><h4><b>[Syntax]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Image "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_17">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing an image.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_3_18">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Format&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pixel format (GIM_FORMAT_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Order&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pixel storage format (GIM_ORDER_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Width&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of pixels in width&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Height&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of pixels in height&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PitchAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Width alignment in bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;HeightAlign&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Height alignment in pixels&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;PlaneMask&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Plane mask&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LevelType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Level type (GIM_TYPE_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;LevelCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of levels&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameType&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Frame type (GIM_TYPE_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameCount&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of frames&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;UserData&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;User data block&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Pixels&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pixel data block&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_4">
+<h3>
+<a href="#Heading3_4"> 4. </a>4 
+<!-- hp1 --><b>Palette Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_19">
+<div style="margin-left:40px;"><h4><b>[Syntax] </b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Palette "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_20">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing a palette.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_4_21">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">These contents have the same format as the image block.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_5">
+<h3>
+<a href="#Heading3_4"> 4. </a>5 
+<!-- hp1 --><b>Sequence Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_22">
+<div style="margin-left:40px;"><h4><b>[Syntax] </b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Sequence "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_23">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing a sequence.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_5_24">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameStart&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Starting frame&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameEnd&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Ending frame&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameRate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Frame rate&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;FrameRepeat&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Repeat mode (GIM_REPEAT_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Constant&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Constant data (GIM_PARAM_XXXX, value)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Function&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Function data block&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_6">
+<h3>
+<a href="#Heading3_4"> 4. </a>6 
+<!-- hp1 --><b>File Information Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_25">
+<div style="margin-left:40px;"><h4><b>[Syntax] </b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>FileInfo "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_26">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing file information.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_6_27">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;ProjectName&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Name of file for which information is created&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Username&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Name of user who created file&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SavedDate&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Date and time file was created&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Originator&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Name of application that created file&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_7">
+<h3>
+<a href="#Heading3_4"> 4. </a>7 
+<!-- hp1 --><b>Pixel Data Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_28">
+<div style="margin-left:40px;"><h4><b>[Syntax]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Pixels "<i>name</i>" <i>format order width height pitch_align height_align</i> {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_29">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing pixel data.<br>It can only be used within an image or palette block.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_30">
+<div style="margin-left:40px;"><h4><b>[Arguments]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>format</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pixel format (GIM_FORMAT_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>order</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Pixel storage format (GIM_ORDER_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>width</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of pixels in width&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>height</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Number of pixels in height&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>pitch_align</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Width alignment in bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>height_align</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Height alignment in pixels&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_7_31">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The pixel data binary image is described by using 32-bit integers.<br>The data size is rounded up in terms of 4-byte units.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_8">
+<h3>
+<a href="#Heading3_4"> 4. </a>8 
+<!-- hp1 --><b>Function Data Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_32">
+<div style="margin-left:40px;"><h4><b>[Syntax]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>Function "<i>name</i>" <i>param</i> <i>interp</i> {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_33">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing function data.<br>It can only be used within a sequence block.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_34">
+<div style="margin-left:40px;"><h4><b>[Arguments]</b><br><br></h4></div></a>
+
+<div style="margin-left:90px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>param</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Relevant parameters (GIM_PARAM_XXXX)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>interp</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Interpolation method (GIM_INTERP_XXXX)&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_8_35">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">Each key frame is described by a pair of numerical values representing the time and value.<br>Key frames are sorted by time.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_4_9">
+<h3>
+<a href="#Heading3_4"> 4. </a>9 
+<!-- hp1 --><b>User Data Block</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_9_36">
+<div style="margin-left:40px;"><h4><b>[Syntax]</b><br><br></h4></div></a>
+
+        <div style="margin-left:80px;"><pre><font size=3>UserData "<i>name</i>" {
+	<i>body</i>
+}
+</font></pre></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_9_37">
+<div style="margin-left:40px;"><h4><b>[Description]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is a block representing user data.<br>It can only be used within an image, palette, or sequence block.<br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_4_9_38">
+<div style="margin-left:40px;"><h4><b>[Contents]</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">The user data binary image is described by using 32-bit integers.<br>The data size is rounded up in terms of 4-byte units.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Format Constants</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Pixel Format</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_39">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA5650</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English011.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_40">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA5551</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English012.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_41">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA4444</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English013.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_42">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_RGBA8888</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English014.gif">
+</div>
+<div style="margin-left:67px;"><br><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_43">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_INDEX4, INDEX8, INDEX16, INDEX32</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English015.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_1_44">
+<div style="margin-left:40px;"><h4><b>GIM_FORMAT_DXTn</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is the S3TC texture compression format. In this format, pixels within the image are stored for each 4(4 block. For details, refer to documentation related to S3TC.<br>Note that the bpp that is contained in the image header is 1/16 of the total number of bits in one block. Also, pitch_align is 1/4 of the alignment that is required for 4 lines.<br>The memory layout within a block is shown below.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> GIM_FORMAT_DXT1, DXT1EXT
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English016.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> GIM_FORMAT_DXT3, DXT3EXT
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English017.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+<div style="margin-left:40px;"><ul>
+<li> GIM_FORMAT_DXT5, DXT5EXT
+</ul></div>
+<div style="margin-left:67px;"></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English018.gif">
+</div>
+<div style="margin-left:67px;"><br><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>Pixel Storage Format</b><br>
+</a>
+</h3>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2_45">
+<div style="margin-left:40px;"><h4><b>GIM_ORDER_NORMAL</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This is the most generic pixel storage format. Pixels are stored sequentially from left to right and from top to bottom. Pixels less than 8 bits are stored from the low-order bits of the storage destination.<br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English019.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_title -->
+<a Name ="HeadingT_5_2_46">
+<div style="margin-left:40px;"><h4><b>GIM_ORDER_PSPIMAGE</b><br><br></h4></div></a>
+
+<div style="margin-left:67px;">This pixel storage format can be loaded rapidly into the texture cache of the PSP&trade;. Pixels are stored in blocks that are 16 bytes wide by 8 pixels high. Note that this format cannot be specified when the pixel format is S3TC.<br><br></div>
+
+<div style="margin-left:67px;">
+<p>
+<img src="gif/GIM_Format-Overview-English020.gif">
+</div>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Image Array Type</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_GENERIC&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generic image array&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Mipmap array (reduced size)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_MIPMAP2&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Mipmap array (fixed size)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_TYPE_SEQUENCE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Time-series image array&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_4">
+<h3>
+<a href="#Heading3_5"> 5. </a>4 
+<!-- hp1 --><b>Sequence Interpolation Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_CONSTANT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Use previous key value&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Linearly interpolate two key values&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">The logical OR of the following flags can be specified.<br></div>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_DISSOLVE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Calculates the dissolve value used in a frame number animation&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_INTERP_EVENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Generates an event each time a key frame is passed through&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_5">
+<h3>
+<a href="#Heading3_5"> 5. </a>5 
+<!-- hp1 --><b>Sequence Repeat Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_REPEAT_HOLD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Stop if loop range is exceeded&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_REPEAT_CYCLE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cycle if loop range is exceeded&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_6">
+<h3>
+<a href="#Heading3_5"> 5. </a>6 
+<!-- hp1 --><b>Sequence Target Parameter</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_INDEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image chunk number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_PLANE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image plane number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_LEVEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image level number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_IMAGE_FRAME&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image frame number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_PALETTE_INDEX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Palette chunk number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_PALETTE_LEVEL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Palette level number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_PALETTE_FRAME&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Palette frame number&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_U&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image rectangle upper-left U coordinate &nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_V&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image rectangle upper-left V coordinate&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_W&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image rectangle width&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_CROP_H&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Image rectangle height&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_BLEND_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Alpha blending mode&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FUNC_MODE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture function mode&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FUNC_COMP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture function components&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FILTER_MAG&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture magnification filter&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_FILTER_MIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture reduction filter&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_WRAP_U&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture U-direction flag&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_PARAM_WRAP_V&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Texture V-direction flag&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_7">
+<h3>
+<a href="#Heading3_5"> 5. </a>7 
+<!-- hp1 --><b>Alpha Blending Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_OFF&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cs&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_MIX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cd * ( 1-alpha ) + Cs * alpha&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_ADD&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cd + Cs * alpha&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_SUB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;Cd - Cs * alpha&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_MIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;min( Cd, Cs )&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_MAX&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;max( Cd, Cs )&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_BLEND_ABS&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;abs( Cd - Cs )&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_8">
+<h3>
+<a href="#Heading3_5"> 5. </a>8 
+<!-- hp1 --><b>Texture Function Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_MODULATE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;MODULATE&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_DECAL&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;DECAL&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_9">
+<h3>
+<a href="#Heading3_5"> 5. </a>9 
+<!-- hp1 --><b>Texture Function Components</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_RGB&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RGB&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FUNC_RGBA&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;RGBA&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_10">
+<h3>
+<a href="#Heading3_5"> 5. </a>10 
+<!-- hp1 --><b>Texture Filter Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_NEAREST&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NEAREST&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;LINEAR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_NEAREST_MIPMAP_NEAREST&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NEAREST + NEAREST&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_LINEAR_MIPMAP_NEAREST&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;LINEAR + NEAREST&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_NEAREST_MIPMAP_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NEAREST + LINEAR&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_FILTER_LINEAR_MIPMAP_LINEAR&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;LINEAR + LINEAR&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_11">
+<h3>
+<a href="#Heading3_5"> 5. </a>11 
+<!-- hp1 --><b>Texture Wrap Mode</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Constant</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Meaning</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_WRAP_REPEAT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;REPEAT&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;GIM_WRAP_CLAMP&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;CLAMP&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_6">
+<h2>
+ 6 <!-- hp --><b>Restrictions Imposed by the PSP&trade; Library</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_1">
+<h3>
+<a href="#Heading3_6"> 6. </a>1 
+<!-- hp1 --><b>Offset Alignment</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Offset</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Required</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Recommended</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Chunk from file header&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 bytes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Chunk data from chunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 bytes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Lower chunk from chunk&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 bytes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;User data from image header&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 bytes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Offset array from image header&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 bytes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;4 bytes&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Pixel array from image header&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bytes&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;16 bytes&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_2">
+<h3>
+<a href="#Heading3_6"> 6. </a>2 
+<!-- hp1 --><b>Image</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Parameter</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Condition</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Restriction</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;width&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;to&nbsp;512&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;height&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;to&nbsp;512&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 2  valign="top">&nbsp;pitch_align&nbsp;</td>
+<td valign="top">&nbsp;RGBA&nbsp;/&nbsp;INDEX&nbsp;</td>
+<td valign="top">&nbsp;&gt;=&nbsp;16&nbsp;(power&nbsp;of&nbsp;2)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;S3TC&nbsp;</td>
+<td valign="top">&nbsp;&gt;=&nbsp;4&nbsp;&nbsp;(power&nbsp;of&nbsp;2)&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 3  valign="top">&nbsp;height_align&nbsp;</td>
+<td valign="top">&nbsp;Normal&nbsp;mode&nbsp;</td>
+<td valign="top">&nbsp;&gt;=&nbsp;1&nbsp;&nbsp;(power&nbsp;of&nbsp;2)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;High-speed&nbsp;mode&nbsp;</td>
+<td valign="top">&nbsp;&gt;=&nbsp;8&nbsp;&nbsp;(power&nbsp;of&nbsp;2)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;S3TC&nbsp;</td>
+<td valign="top">&nbsp;&gt;=&nbsp;4&nbsp;&nbsp;(power&nbsp;of&nbsp;2)&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;level_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;MIPMAP&nbsp;or&nbsp;MIPMAP2&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;level_count&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;to&nbsp;8&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SEQUENCE&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_count&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&gt;=&nbsp;1&nbsp;&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_3">
+<h3>
+<a href="#Heading3_6"> 6. </a>3 
+<!-- hp1 --><b>Palette</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Parameter</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Condition</b>&nbsp;</td>
+<td bgcolor="#cccccc" valign="top">&nbsp;<b>Restriction</b>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;width&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;16&nbsp;or&nbsp;256&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;height&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;pitch_align&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;16&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;height_align&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;level_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;MIPMAP2&nbsp;</td>
+</tr>
+<tr>
+<td rowspan= 4  valign="top">&nbsp;level_count&nbsp;</td>
+<td valign="top">&nbsp;32&nbsp;bit&nbsp;256&nbsp;entries&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;16&nbsp;bit&nbsp;256&nbsp;entries&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;to&nbsp;2&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;32&nbsp;bit&nbsp;16&nbsp;entries&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;to&nbsp;8&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;16&nbsp;bit&nbsp;16&nbsp;entries&nbsp;</td>
+<td valign="top">&nbsp;1&nbsp;to&nbsp;8&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_type&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;SEQUENCE&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;frame_count&nbsp;</td>
+<td valign="top">&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">&nbsp;&gt;=&nbsp;1&nbsp;</td>
+</tr></table>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_6_4">
+<h3>
+<a href="#Heading3_6"> 6. </a>4 
+<!-- hp1 --><b>Sequence</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">No restrictions<br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2008 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

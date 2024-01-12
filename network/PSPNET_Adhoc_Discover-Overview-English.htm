@@ -1,0 +1,534 @@
+<html lang="en">
+<head>
+<title>PSPNET_Adhoc_Discover-Overview</title>
+<meta http-equiv="Content-Type" content= text/html; charset=iso-8859-1>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&trade; Programmer Tool Runtime Library Release 6.3.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+pspnet_adhoc_discover Overview
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+
+<!-- sce_hd3 -->
+<a name="Heading3_1">
+<h2>
+ 1 <!-- hp --><b>Library Overview</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_1">
+<h3>
+<a href="#Heading3_1"> 1. </a>1 
+<!-- hp1 --><b>Functional Overview</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The Ad hoc Discover library (pspnet_adhoc_discover) provides functions that enable different peers which are each running a copy of the library, to search, discover and connect with each other over an ad hoc network.<br><br>Searching for a neighboring peer using the Ad hoc Discover library can be done without consuming much power by intermittently operating the WLAN module. A function is also provided that allows the search to be performed while the PSP&trade; (PlayStation&reg; Portable) is in suspend state, which consumes even less power. <br><br>By executing the library in the background, it can be used to search for another player while a game is running, or for exchanging messages with a neighboring peer that is running the same game.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English001.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 1  Ad hoc Discovery Library Function Example 1 (While Game is Running)</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English002.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 2  Ad hoc Discover Library Function Example 2 (Suspend State)</b><br>
+</div>
+<br>
+<div style="margin-left:50px;">Peers can discover each other even if one is searching while a game is running and the other is searching while in suspend state.<br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English003.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 3  Ad hoc Discover Library Function Example 3 (One Peer Running a Game and the Other in Suspend State)</b><br>
+</div>
+<br>
+
+<!-- sce_hd4 -->
+<a name="Heading4_1_2">
+<h3>
+<a href="#Heading3_1"> 1. </a>2 
+<!-- hp1 --><b>Required Files</b><br>
+</a>
+</h3>
+<div style="margin-left:90px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Category</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>Filename</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Header file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc_discover.h&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;Stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc_discover_stub.a&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;weak import stub library file&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;pspnet_adhoc_discover_stub_weak.a&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div style="margin-left:50px;">For information on example usage, look at the following sample programs.<br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> HostDiscover mode (examples of searching while a game is running)
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> devkit/sample/net/adhoc/adhoc_discover/moonball
+<li> devkit/sample/net/adhoc/adhoc_discover/stars
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> WoL mode (example of searching while in suspend state)
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> devkit/sample/net/adhoc/adhoc_discover/wol_picture
+</ul></div>
+</ul>
+<div style="margin-left:50px;"><br>The library API reference can be found in the Ad hoc Discover Library (pspnet_adhoc_discover) Reference document.<br><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_2">
+<h2>
+ 2 <!-- hp --><b>Operation Overview</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Internally, the Ad hoc Discover library operates according to the following two phases.<br></div>
+</ol>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Searching for neighboring peer phase</li>
+</ol></div>
+<div style="margin-left:70px;"><ul>
+<li> HostDiscover mode
+<li> WoL mode
+</ol></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=2> Connecting to the ad hoc network phase</li>
+</ul>
+</ol></div>
+<div style="margin-left:50px;">There exist two modes for searching for a neighboring peer, with the search mode specified from the application. The operating phases used in the Ad hoc Discover library, and the search modes that can be used during the search phase, are explained below together with examples.<br><br>During the search phase, the operation and examples differ depending on the specified mode. However, during the connecting to the ad hoc network phase, operation is the same for both search modes, once a neighboring peer is discovered during the search phase.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_1">
+<h3>
+<a href="#Heading3_2"> 2. </a>1 
+<!-- hp1 --><b>Searching for a Neighboring Peer Phase</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The two modes that can be used to search for a neighboring peer are 1) HostDiscover mode, in which the search is performed while a game is running, and 2) WoL mode, in which the search is performed while the PSP&trade; is in suspend state. The search mode is specified from the application when the library is started up.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_1"><h4>
+(1)&nbsp;<b>HostDiscover mode: search for peers while a game is running</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">HostDiscover mode enables a search for a neighboring peer to be performed in the background while a game is running. The following two situations can be considered as examples of this mode.<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Searching for another player while a game is running in 1P mode, and when a player is discovered, switching to 2P mode to start the gameplay.</li>
+<li VALUE=2> Searching for another peer which is running the same game, and when one is discovered, exchanging messages, scores, or game data.</li>
+</ol></div>
+<div style="margin-left:67px;"><br>Figures 4 and 5 show the operation and usage flow of the Ad hoc Discover library for the examples described above. The search for a neighboring peer begins when the library is started up. When a neighboring peer is discovered, the library enters the connection phase, and a connection to the ad hoc network is established. Then the library enters an end-of-operation state. After the application starts up the library, it can stand by until the library enters the end-of-operation state, and then it will be in a state in which it can use the connection that was established by the library to perform the required communication processing and communicate with the neighboring peer.<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English004.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 4  HostDiscover Mode Example (1)</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English005.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 5  HostDiscover Mode Example (2)</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_2_1_2"><h4>
+(2)&nbsp;<b>WoL mode: search for peers while PSP&trade; is in suspend state</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">In WoL mode, the PSP&trade; is placed in suspend state but the WLAN module remains powered up so that a search can be performed for a neighboring peer even though the PSP&trade; is suspended. The following situation can be considered as an example of this mode.<br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Suspend the PSP&trade; and search for another peer which is running the same game or is also suspended because it is performing a WoL mode search from the same game in (the user may be absent here).</li>
+<li VALUE=2> When a relevant peer is discovered, exchange messages, scores, or game data.</li>
+<li VALUE=3> After processing is completed, suspend the PSP&trade; again.</li>
+<li VALUE=4> When the user resumes the PSP&trade;, he or she learns that data has been exchanged.</li>
+</ol></div>
+<div style="margin-left:67px;"><br>If a neighboring peer is discovered during a search in WoL mode, the PSP&trade; is automatically resumed and the library enters phase 2 (connecting to the ad hoc network).<br><br>When a search is started in WoL mode and the PSP&trade; enters suspend state, the user is assumed to be absent. To reduce power consumption after communication processing for exchanging data with another peer that was discovered by the WoL mode search is completed, the PSP&trade; must be suspended again. To suspend the PSP&trade; in this kind of situation, the Ad hoc Discover library provides a function that enables the PSP&trade; to be suspended by an API call from the application. For details, see "Issuing a suspend from an API call" in "Functions and Processing That Should be Implemented When Creating an Application."<br><br>Figure 6 shows an example of operation and usage flow for the Ad hoc Discover library in WoL mode.<br><br></div>
+<div style="margin-left:50px;"></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English006.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 6  WoL Mode Example</b><br>
+</div>
+<br>
+<div style="margin-left:67px;">Besides two peers searching in the same mode, a peer searching in HostDiscover mode and a peer searching in WoL mode can also discover each other.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_2_2">
+<h3>
+<a href="#Heading3_2"> 2. </a>2 
+<!-- hp1 --><b>Connecting to the Ad hoc Network Phase</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">If a neighboring peer is discovered while search mode is being executed, the search phase ends, and the PSP&trade; switches to the phase for connecting to the ad hoc network.<br><br>In this phase, the Ad hoc Discover library alternately Creates and Scans the ad hoc network with the group name specified by the application at random time intervals. If the network having the target group name is found as a result of the scan, the Ad hoc Discover library connects to that network (Join).<br><br>When <a href="../network/PSPNET_Adhocctl-Reference-English.htm#sceNetAdhocctlGetPeerList">sceNetAdhocctlGetPeerList</a>() is used to obtain a list of information for one or more peers after a connection was made to the ad hoc network, the Ad hoc Discover library considers that a "connection is established." When a connection is established, the library enters an end-of-operation state and returns status indicating that processing was successful (<a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_OK">SCE_NET_ADHOC_DISCOVER_RESULT_OK</a>) while maintaining the connection to the ad hoc network.<br><br>During this phase, when a connection is made to the ad hoc network, if the connection cannot be established within the interval that was specified from the application when the library was started up, the library enters an end-of-operation state and returns a status indicating that the search and connection operation must be retried (<a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN">SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN</a>).<br><br>If some sort of connection error occurs such as the WLAN switch being turned off, the library enters the end-of-operation state and returns an error code.<br><br>The connection can also be disconnected by calling an API. If such a request is made, the library enters an end-of-operation state and returns status indicating that library execution was canceled (<a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_CANCELED">SCE_NET_ADHOC_DISCOVER_RESULT_CANCELED</a>).<br><br>Since the library internally repeats Create and Scan operations during the connection phase, if the application has registered an adhocctl event handler, adhocctl events such as SCE_NET_ADHOCCTL_EVENT_SCAN, SCE_NET_ADHOCCTL_EVENT_CONNECT, SCE_NET_ADHOCCTL_EVENT_DISCONNECT are reported while the Ad hoc Discover library is running. Since these events are handled internally by the Ad hoc Discover library, they do not need to be handled by the application. The application only needs to handle the status that is returned when the Ad hoc Discover library enters an end-of-operation state.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English007.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 7  Connecting to the Ad hoc Network Phase (Connection Successfully Established)</b><br>
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_3">
+<h2>
+ 3 <!-- hp --><b>Overview of Usage Procedure</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">Before the Ad hoc Discover library can be used, preparations for using the ad hoc mode communication protocol must be completed (initialization of pspnet, pspnet_adhoc, and pspnet_adhocctl modules).<br>For information about initialization processing related to the use of the ad hoc mode communication protocol, refer to the &quot;PSP&trade; Network Library Overview&quot; document.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_1">
+<h3>
+<a href="#Heading3_3"> 3. </a>1 
+<!-- hp1 --><b>Procedure From Library Startup to Library Termination</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Generally speaking, an application that uses the Ad hoc Discover library should perform the following four types of processing.<br><br></div>
+<div style="margin-left:55px;"><ol>
+<li VALUE=1> Library initialization and startup processing <br><a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverInitStart">sceNetAdhocDiscoverInitStart</a>();</li>
+<li VALUE=2> Per-frame processing and status acquisition <br>while () {<br>  <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverGetStatus">sceNetAdhocDiscoverGetStatus</a>();<br>  <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverUpdate">sceNetAdhocDiscoverUpdate</a>();<br>}</li>
+<li VALUE=3> Processing for the end-of-operation state<br>// Processing for checking the return value</li>
+<li VALUE=4> Library termination processing <br><a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverTerm">sceNetAdhocDiscoverTerm</a>();<br>// If <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN">SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN</a> is returned in step (3), <br>// processing can be retried by first performing library termination processing, then    // restarting the process beginning with step (1)..</li>
+</ol></div>
+<div style="margin-left:50px;"><br>Details are presented below for the four types of processing described above and for library interruption processing.<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_1"><h4>
+(1)&nbsp;<b>Library initialization and startup</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Call <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverInitStart">sceNetAdhocDiscoverInitStart</a>() to initialize and start up the library. At the same time, set the parameters shown below as arguments.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>struct <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SceNetAdhocDiscoverParam">SceNetAdhocDiscoverParam</a> {
+	int mode;
+    struct <a href="../network/PSPNET_Adhocctl-Reference-English.htm#SceNetAdhocctlGroupName">SceNetAdhocctlGroupName</a> group_name;
+	unsigned int timeout;
+    int result;
+};
+</font></pre></div>
+<div style="margin-left:67px;"><br></div>
+</ol>
+<div style="margin-left:40px;"><ul>
+<li> mode<br>Search mode to be executed during the search phase
+</ul></div>
+<div style="margin-left:70px;"><ul>
+<li> <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_MODE_HOSTDISCOVER">SCE_NET_ADHOC_DISCOVER_MODE_HOSTDISCOVER</a>
+<li> <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_MODE_WOL">SCE_NET_ADHOC_DISCOVER_MODE_WOL</a>
+</ol></div>
+<div style="margin-left:40px;"><ul>
+<li> group_name<br>Group name of ad hoc network to be searched for and connected to
+<li> timeout<br>Interval (seconds) until the connection phase times out. If a connection cannot be established within the specified interval, the library enters an end-of-operation state and returns <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN">SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN</a>. If <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN">SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN</a> is returned, try to initialize and start up the library again.
+<li> result<br>Return value when the library enters an end-of-operation state
+</ul>
+</ul></div>
+<div style="margin-left:67px;"><br>The following program example starts up the library with WoL mode specified as the search mode.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// Up to here, it is assumed that the required library initialization processing 
+// has been completed in ad hoc mode
+
+struct <a href="../network/PSPNET_Adhocctl-Reference-English.htm#SceNetAdhocctlGroupName">SceNetAdhocctlGroupName</a>  group_name;
+struct <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SceNetAdhocDiscoverParam">SceNetAdhocDiscoverParam</a> param;
+
+// It is assumed that an appropriate group name has been set for group_name
+
+// Initialize and start up the library
+param.mode = <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_MODE_WOL">SCE_NET_ADHOC_DISCOVER_MODE_WOL</a>; 
+memcpy(param.group_name, group_name, sizeof(group_name));
+param.timeout = DISCOVER_TIMEOUT;
+
+ret = <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverInitStart">sceNetAdhocDiscoverInitStart</a>(&amp;param);
+if (ret &lt; 0) {
+	// Error handling
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_2"><h4>
+(2)&nbsp;<b>Per-frame processing and status acquisition</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After the library is started up, perform per-frame processing in a processing loop.<br>The application should call <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverGetStatus">sceNetAdhocDiscoverGetStatus</a>() to monitor library status, and wait for the end-of-operation state (<a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_STATUS_FINISHED">SCE_NET_ADHOC_DISCOVER_STATUS_FINISHED</a> is returned). If the library status is running (<a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_STATUS_RUNNING">SCE_NET_ADHOC_DISCOVER_STATUS_RUNNING</a>), per-frame processing is performed by calling <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverUpdate">sceNetAdhocDiscoverUpdate</a>().<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>while (1) {
+	int status;
+
+	status = <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverGetStatus">sceNetAdhocDiscoverGetStatus</a>();
+	if (status == <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_STATUS_RUNNING">SCE_NET_ADHOC_DISCOVER_STATUS_RUNNING</a>) {
+		<a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverUpdate">sceNetAdhocDiscoverUpdate</a>();
+		continue;
+	}
+	if (status == <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_STATUS_FINISHED">SCE_NET_ADHOC_DISCOVER_STATUS_FINISHED</a>) {
+		// Processing for end-of-operation state (see next step)
+		// Library termination processing (see step after next step)
+	}
+}
+</font></pre></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_3"><h4>
+(3)&nbsp;<b>Processing for end-of-operation state</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">When the library enters the end-of-processing state, the application should reference the result parameter.<br></div>
+<div style="margin-left:40px;"><ul>
+<li> <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_OK">SCE_NET_ADHOC_DISCOVER_RESULT_OK</a><br>Processing was successful (a peer was discovered). Control returns and the connection to the ad hoc network is maintained.
+<li> <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_CANCELED">SCE_NET_ADHOC_DISCOVER_RESULT_CANCELED</a><br>Processing was canceled by a request.
+<li> <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN">SCE_NET_ADHOC_DISCOVER_RESULT_TRY_AGAIN</a><br>Although a neighboring peer was discovered, a connection could not be established within the timeout period. <br>To start the search again, restart the process from library initialization and startup.
+<li> <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_ABORTED_SEARCH_BY_NORMAL_RESUME">SCE_NET_ADHOC_DISCOVER_RESULT_ABORTED_SEARCH_BY_NORMAL_RESUME</a><br>During a WoL mode search, the PSP&trade; was resumed and the search was interrupted by a non-WoL cause (such as the power switch being pressed).
+<li> result &lt; 0<br>This will be the error code of a pspnet_adhocctl ERROR event that occurred during Ad hoc Discover library operation.
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_4"><h4>
+(4)&nbsp;<b>Library termination processing</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">After the library enters the end-of-operation state, call <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverTerm">sceNetAdhocDiscoverTerm</a>().<br><br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_1_5"><h4>
+(5)&nbsp;<b>Library interruption</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">To interrupt search and connection processing while the library is running, call <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverStop">sceNetAdhocDiscoverStop</a>(). This will perfom interruption processing and place the library in an end-of-operation state. The application should wait for the library to enter the end-of-operation state, and then <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverTerm">sceNetAdhocDiscoverTerm</a>() should be called to terminate the library.<br></div>
+
+<!-- sce_hd6 -->
+<a name="Heading6_3_1_5_1">
+<div style="margin-left:63px;"><h4><b>Interrupting a WoL mode search</b><br><br></h4></a></div>
+<div style="margin-left:80px;">Since the PSP&trade; is in suspend state during a WoL mode search, the search cannot be interrupted by an API call. However, if the power switch is pressed during a WoL mode search, a resume will occur, the WoL mode search will be automatically interrupted, and the library will transition to an end-of-processing state. At that time, a WOL_ABORT event is reported to the adhocctl event handler and <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_ABORTED_SEARCH_BY_NORMAL_RESUME">SCE_NET_ADHOC_DISCOVER_RESULT_ABORTED_SEARCH_BY_NORMAL_RESUME</a> is returned as the library termination status.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_3_2">
+<h3>
+<a href="#Heading3_3"> 3. </a>2 
+<!-- hp1 --><b>Functions and Processing That Should be Implemented When Creating an Application</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">Searching for a neighboring peer and connecting to the ad hoc network can be completed by using only the operations described in the previous section entitled "Procedure From Library Startup to Library Termination." This section explains functions and processing that are assumed to be required when creating an application.<br><br>Refer to the sample program for this library (devkit/sample/net/adhoc/adhoc_discover/wol_picture) while reading this section.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_1"><h4>
+(1)&nbsp;<b>Method of knowing that a neighboring peer was discovered</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">If a pspnet_adhocctl event handler has been registered, then when a neighboring peer is discovered while the Ad hoc Discover library is running, the application can receive an event indicating that the peer was discovered. Examples are shown below of events and event handlers for each search mode.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> HostDiscover mode:  SCE_NET_ADHOCCTL_EVENT_HOSTDISCOVER
+<li> WoL mode:  SCE_NET_ADHOCCTL_EVENT_WOL
+</ul></div>
+<div style="margin-left:67px;"><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>// pspnet_adhocctl event handler
+void adhocctl_handler(int event, int error, void *arg)
+{
+	if (event == SCE_NET_ADHOCCTL_EVENT_ERROR) {
+	}
+	else if ( ...
+	
+	}
+	else if (event == SCE_NET_ADHOCCTL_EVENT_HOSTDISCOVER) {
+		// A search was performed in HostDiscover mode and a neighboring peer 
+		// was discovered.
+		// The Ad hoc Discover library enters the connection phase.
+	}
+	else if (event == SCE_NET_ADHOCCTL_EVENT_WOL) {
+		// A search was performed in WoL mode and a neighboring peer			// was discovered.
+		// The Ad hoc Discover library enters the connection phase,
+	}
+}
+</font></pre></div>
+<div style="margin-left:67px;"><br>The application can use this to change the processing such as the message display when searching and when performing connection processing.<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English008.gif">
+</div>
+<br>
+<div style="margin-left:67px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 8  adhocctl Event That is Reported When a Nearby Peer is Discovered</b><br>
+</div>
+<br>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_2"><h4>
+(2)&nbsp;<b>Distinguishing between a WoL resume and a resume due to a non-WoL cause (such as the power switch)</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Whether the PSP&trade; was resumed when a neighboring peer was discovered by a WoL mode search or the PSP&trade; was resumed by the user pressing the power switch before a neighboring peer was discovered during a WoL mode search can be distinguished according to the value of the termination status that is returned when the Ad hoc Discover library enters the end-of-operation state.<br><br>If the PSP&trade; is resumed when a neighboring peer is discovered by a WoL mode search, the subsequent connection phase elapses and a status indicating whether or not the connection was established successfully is returned.<br>If the PSP&trade; is resumed by the user pressing the power switch during a WoL mode search, then at the same time that the library reports an SCE_NET_ADHOCCTL_EVENT_WOL_ABORT event, it will transition to the end-of-operation state and return a status of <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#SCE_NET_ADHOC_DISCOVER_RESULT_ABORTED_SEARCH_BY_NORMAL_RESUME">SCE_NET_ADHOC_DISCOVER_RESULT_ABORTED_SEARCH_BY_NORMAL_RESUME</a><br><br>To know that a neighboring peer was discovered by a WoL mode search, the SCE_NET_ADHOCCTL_EVENT_WOL event is received via the pspnet_adhocctl handler as described in the previous section. When the SCE_NET_ADHOCCTL_EVENT_WOL event is received, it indicates that the resume was generated by WoL (a neighboring peer was discovered).<br><br>The application can use this to change the processing that is performed when a neighboring peer is discovered or when the search is interrupted by a user operation before a neighboring peer is discovered.<br><br>In the sample program (devkit/sample/net/adhoc/adhoc_discover/wol_picture), if a WoL resume occurs, picture data is exchanged with the discovered peer. If the PSP&trade; is resumed because the power switch was pressed, the message "No communication target could be found. Interrupting search for a communication target." is displayed and control returns to the game.<br></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_3_2_3"><h4>
+(3)&nbsp;<b>Issuing a suspend from an API call</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">The PSP&trade; can be suspended from an application by calling <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverRequestSuspend">sceNetAdhocDiscoverRequestSuspend</a>(). A suspend due to this API is similar to a suspend due to the manual pressing of the power switch without a WoL setting being made.<br><br></div>
+        <div style="margin-left:80px;"><pre><font size=3>ret = <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverRequestSuspend">sceNetAdhocDiscoverRequestSuspend</a>();
+if (ret &lt; 0) {
+	// Error handling
+}
+
+// The PSP&trade; is suspended
+</font></pre></div>
+<div style="margin-left:67px;"><br>When a WoL mode search is used, the user is considered to be absent when the neighboring peer is discovered. In this situation, a normal suspend mode must be entered to reduce power consumption after some kind of processing is performed with the discovered peer following the WoL mode search (Figure 6). <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverRequestSuspend">sceNetAdhocDiscoverRequestSuspend</a>() is assumed to be used in this kind of situation.<br>Therefore, a suspend due to <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverRequestSuspend">sceNetAdhocDiscoverRequestSuspend</a>() can be executed only after the Ad hoc Discover library was first used to perform a WoL mode search, the PSP&trade; was resumed when a neighboring peer was discovered, and the library was terminated by calling <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverTerm">sceNetAdhocDiscoverTerm</a>().<br><br>In the sample program (devkit/sample/net/adhoc/adhoc_discover/wol_picture), after the exchange of pictures with the discovered peer is completed, the message "Entering normal suspend mode after 30 seconds." is displayed, and if there is no user operation within 30 seconds, suspend mode is entered. When the PSP&trade; is subsequently resumed by the user pressing the power switch, the fact that a peer was discovered and pictures were exchanged is displayed.<br></div>
+
+<!-- sce_hd3 -->
+<a name="Heading3_4">
+<h2>
+ 4 <!-- hp --><b>adhocctl Internal State Transitions</b>
+<hr noshade>
+</h2>
+
+<div style="margin-left:50px;">When the Ad hoc Discover library is used to start a search in HostDiscover mode or WoL mode, the adhocctl internal state must be DISCONNECTED. When a search is started in HostDiscover mode or WoL mode, the state transitions from DISCONNECTED to HOSTDISCOVER or WOL, respectively.<br><br>If a neighboring peer is discovered in HOSTDISCOVER state or WOL state, an SCE_NET_ADHOCCTL_EVENT_HOSTDISCOVER or SCE_NET_ADHOCCTL_EVENT_WOL event is reported, and the state returns to DISCONNECTED. If the search is canceled, a DISCONNECT event is reported and the state returns to DISCONNECTED. If an error occurs during the search, an error event is reported, and the state returns to DISCONNECTED. Also, if during a WoL mode search, the search is interrupted for some reason such as the power switch being pressed, an SCE_NET_ADHOCCTL_EVENT_WOL_ABORT event is reported, and the state returns to DISCONNECTED.<br><br>Figure 9 represents the adhocctl internal state transitions for a HostDiscover mode search and a WoL mode search. Refer to this figure together with Figure 2 in the "PSPNET Overview" (pspnet_adhocctl Status Transition Diagram).<br><br></div>
+
+<div align=center>
+<p>
+<img src="gif/PSPNET_Adhoc_Discover-Overview-English009.gif">
+</div>
+<br>
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_fignum -->
+<div align=center>
+<p>
+<b>Figure 9  adhocctl Internal State Transitions for a HostDiscover Mode or WoL Mode Search</b><br>
+</div>
+<br>
+
+<!-- sce_hd3 -->
+<a name="Heading3_5">
+<h2>
+ 5 <!-- hp --><b>Notes</b>
+<hr noshade>
+</h2>
+
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_1">
+<h3>
+<a href="#Heading3_5"> 5. </a>1 
+<!-- hp1 --><b>Stack Size Required for API Calls</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">The stack size required for calling Ad hoc Discover library APIs is 4096 bytes (SCE_NET_PSPNET_ADHOC_DISCOVER_LEAST_STACK_SIZE). If the stack size is insufficient, the <a href="../network/PSPNET_Error-Reference-English.htm#SCE_ERROR_NET_INSUFFICIENT_STACKSIZE">SCE_ERROR_NET_INSUFFICIENT_STACKSIZE</a> error is returned.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_2">
+<h3>
+<a href="#Heading3_5"> 5. </a>2 
+<!-- hp1 --><b>sceNetAdhocDiscoverRequestSuspend() Usage Restriction</b><br>
+</a>
+</h3>
+<div style="margin-left:50px;">A restriction has been established for the <a href="../network/PSPNET_Adhoc_Discover-Reference-English.htm#sceNetAdhocDiscoverRequestSuspend">sceNetAdhocDiscoverRequestSuspend</a>() call, which can suspend the PSP&trade; from an application. This function can only be used when it is necessary to avoid consuming power while the user is absent, after communication processing has been performed with a peer that was discovered by a WoL mode search.<br></div>
+
+<!-- sce_hd4 -->
+<a name="Heading4_5_3">
+<h3>
+<a href="#Heading3_5"> 5. </a>3 
+<!-- hp1 --><b>Battery Consumption During a HostDiscover Mode or WoL Mode Search</b><br>
+</a>
+</h3>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_1"><h4>
+(1)&nbsp;<b>HostDiscover mode search</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Since a search in HostDiscover mode is performed while a game is running, the battery consumption during the search depends on the application. For reference, the time until a low battery state occurs when a HostDiscover mode search is started for a fully charged 1800mAh battery is shown below for the indicated program and execution conditions.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Executed program:  devkit/sample/net/adhoc/adhoc_discover/moonball
+<li> Execution conditions:  Automatic backlight OFF function is disabled
+<li> Continuous searchable time:  6 hours, 42 minutes, 53 seconds
+</ul></div>
+
+<!-- sce_hd5 -->
+<div style="margin-left:40px;"><a name="Heading5_5_3_2"><h4>
+(2)&nbsp;<b>WoL mode search</b><br></h4>
+</a></div>
+<div style="margin-left:67px;">Since a WoL mode search is performed while the PSP&trade; is suspended, the battery consumption during the search does not depend on the application, and a search can always be performed with a constant consumption. For reference, the time until a low battery state occurs when a WoL mode search is started for a fully charged 1800mAh battery is shown below.<br><br></div>
+<div style="margin-left:40px;"><ul>
+<li> Continuous searchable time:  46 hours, 16 minutes, 02 seconds<br>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>

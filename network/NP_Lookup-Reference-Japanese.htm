@@ -1,0 +1,735 @@
+<html lang="jp">
+<head>
+<title>NP_Lookup-Reference</title>
+<meta http-equiv="Content-Type" content= text/html; charset=Shift_JIS>
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="Text/css>
+<meta name="Author"Content=" Sony Computer Entertainment Inc.">
+</head>
+<body bgcolor="#ffffff" text="#000000" >
+<a name=TOP></a>
+<table WIDTH="100%">
+<tr><td>
+<h3>PSP&reg; Programmer Tool Runtime Library Release 6.6.0</h3>
+</td>
+</tr>
+</table>
+<hr noshade size=6>
+<center><h1>
+NPルックアップ
+</h1></center>
+</a>
+<!-- sce_hd1 -->
+<div style="margin-left:50px;"><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupCreateTransactionCtx"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupCreateTransactionCtx<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NPルックアップトランザクションコンテキストの作成<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupCreateTransactionCtx</b>(
+	const <a href="../network/NP_Common-Reference-Japanese.htm#SceNpCommunicationId">SceNpCommunicationId</a> *<i>commId</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>commId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPコミュニケーションIDへのポインタ&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合はNPルックアップトランザクションコンテキストのID(&gt;0)を返します。<br>エラーの場合は負の値を返します。主なエラーコードを以下に示しますが、これ以外のエラーコードが返された場合でも破綻しないようにプログラミングしてください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_serviceライブラリ初期化前&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()でnp_serviceライブラリ&nbsp;&nbsp;<br>&nbsp;&nbsp;初期化後に呼び出してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリの空き容量が足りない&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で指定した&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリプールサイズを使用しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()の&nbsp;&nbsp;<br>&nbsp;&nbsp;呼び忘れがないか確認してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>commId</i>にNULLを指定した&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>()以外の通信&nbsp;&nbsp;<br>&nbsp;&nbsp;処理関数は正規のNPコミュニケーションIDを&nbsp;&nbsp;<br>&nbsp;&nbsp;指定しなくても動作しますが、運用管理のため&nbsp;&nbsp;<br>&nbsp;&nbsp;正式タイトルでNPルックアップライブラリの&nbsp;&nbsp;<br>&nbsp;&nbsp;機能を使用する場合は&nbsp;&nbsp;<br>&nbsp;&nbsp;PSP&reg; Developer Networkから申請し&nbsp;&nbsp;<br>&nbsp;&nbsp;NPコミュニケーションIDを取得してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPにサインインしていない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">NPルックアップライブラリで使用するトランザクションコンテキストを作成する関数です。<br>トランザクションコンテキストは、NP IDの取得やユーザプロファイルの取得などの通信処理関数1回ごとに使い捨てるコンテキストで、それらの関数を使用する前に必ず作成しておく必要があります。また、使用し終わったコンテキストは<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()で削除する必要があります。<br><a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceTerm">sceNpServiceTerm</a>()を呼ぶ前にすべてのトランザクションを明示的に削除してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupDestroyTransactionCtx"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupDestroyTransactionCtx<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NPルックアップトランザクションコンテキストの破棄<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupDestroyTransactionCtx</b> (
+	int32_t <i>transId</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPルックアップトランザクションコンテキストID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は0を返します。<br>エラーの場合は負の値を返します。主なエラーコードを以下に示しますが、これ以外のエラーコードが返された場合でも破綻しないようにプログラミングしてください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_serviceライブラリ初期化前&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()でnp_service&nbsp;&nbsp;<br>&nbsp;&nbsp;ライブラリ初期化後に呼び出してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>で指定したIDは存在しない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">使い終わったトランザクションコンテキストを破棄する関数です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupAbortTransaction"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupAbortTransaction<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>通信処理の中断<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupAbortTransaction</b>(
+	int32_t <i>transId,</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPルックアップトランザクションコンテキストID&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は0を返します。<br>エラーの場合は負の値を返します。主なエラーコードを以下に示しますが、これ以外のエラーコードが返された場合でも破綻しないようにプログラミングしてください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_serviceライブラリ初期化前&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で&nbsp;&nbsp;<br>&nbsp;&nbsp;np_serviceライブラリ初期化後に&nbsp;&nbsp;<br>&nbsp;&nbsp;呼び出してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;transIdで指定したIDは存在しない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">通信処理を中断する関数です。<br><i>transId</i>には、中断したい通信処理のトランザクションコンテキストIDを指定してください。<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupNpId"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupNpId<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>NP IDの検索（同期）<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupNpId</b> (
+	int32_t <i>transId</i>,
+	const <a href="../network/NP_Common-Reference-Japanese.htm#SceNpOnlineId">SceNpOnlineId</a> *<i>onlineId</i>,
+	<a href="../network/NP_Common-Reference-Japanese.htm#SceNpId">SceNpId</a> *<i>npId</i>,
+	void *<i>option</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPルックアップトランザクションコンテキストID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>onlineId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象のオンラインID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>npId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得したNP IDを格納する構造体へのポインタ (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;将来の拡張のためのオプション。必ずNULLを指定すること&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は0を返します。<br>エラーの場合は負の値を返します。主なエラーコードを以下に示しますが、これ以外のエラーコードが返された場合でも破綻しないようにプログラミングしてください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_serviceライブラリ初期化前&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で&nbsp;&nbsp;<br>&nbsp;&nbsp;np_serviceライブラリ初期化後に&nbsp;&nbsp;<br>&nbsp;&nbsp;呼び出してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリの空き容量が足りない&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で指定した&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリプールサイズを使用しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()の&nbsp;&nbsp;<br>&nbsp;&nbsp;呼び忘れがないか確認してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550704&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>にNULL以外を指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_ABORTED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550707&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トランザクションが&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()または&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;により中断された&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>onlineId</i>または<i>npId</i>にNULLを指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>で指定したIDは存在しない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPにサインインしていない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_SERVER_ERROR_NO_SUCH_USER_NPID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055081b&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザが存在しない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">オンラインID文字列を指定してユーザを検索し、NP IDを取得する関数です。<br>この関数は同期処理を行います。つまり、通信が完了してNP IDが取得できるまでブロックされます。この関数からリターンしたら、使用したトランザクションコンテキストを<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()を呼び出して破棄してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupUserProfile"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupUserProfile<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>ユーザプロファイルの取得（同期）<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int32_t <b>sceNpLookupUserProfile</b> (
+	int32_t <i>transId</i>,
+	const <a href="../network/NP_Common-Reference-Japanese.htm#SceNpId">SceNpId</a> *<i>npId</i>,
+	<a href="../network/NP_Common-Reference-Japanese.htm#SceNpUserInfo">SceNpUserInfo</a><i> </i>*<i>userInfo</i>,
+	<a href="../network/NP_Common-Reference-Japanese.htm#SceNpAboutMe">SceNpAboutMe</a> *<i>aboutMe</i>,
+	<a href="../network/NP_Common-Reference-Japanese.htm#SceNpMyLanguages">SceNpMyLanguages</a> *<i>languages</i>,
+	<a href="../network/NP_Common-Reference-Japanese.htm#SceNpCountryCode">SceNpCountryCode</a> *<i>countryCode</i>,
+	void *<i>option</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPルックアップトランザクションコンテキストID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>npId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;対象のNP ID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>userInfo</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得したユーザ情報を格納するための構造体へのポインタ (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>aboutMe</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得した自己紹介を格納するための構造体へのポインタ (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>languages</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得したよく使う言語を格納するための構造体へのポインタ (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>countryCode</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;取得した国または地域を格納するための構造体へのポインタ (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;将来の拡張のためのオプション。必ずNULLを指定すること&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は0を返します。<br>エラーの場合は負の値を返します。主なエラーコードを以下に示しますが、これ以外のエラーコードが返された場合でも破綻しないようにプログラミングしてください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_serviceライブラリ初期化前&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で&nbsp;&nbsp;<br>&nbsp;&nbsp;np_serviceライブラリ初期化後に&nbsp;&nbsp;<br>&nbsp;&nbsp;呼び出してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリの空き容量が足りない&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で指定した&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリプールサイズを使用しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;の呼び忘れがないか確認してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550704&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>にNULL以外を指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_ABORTED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550707&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トランザクションが&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()または&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;により中断された&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>npId</i>にNULLを指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>で指定したIDは存在しない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPにサインインしていない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_SERVER_ERROR_NO_SUCH_USER_NPID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055081b&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;ユーザが存在しない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">NP IDを指定してユーザのプロファイル情報をサーバーから取得する関数です。<br><i>userInfo</i>, <i>aboutMe</i>, <i>languages</i>, <i>countryCode</i>が、不要な場合はNULLを指定することができます。<br>この関数は同期処理を行います。つまり、通信が完了してプロファイル情報が取得できるまでブロックされます。この関数からリターンしたら、使用したトランザクションコンテキストを<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()を呼び出して破棄してください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()<br><br></div>
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="sceNpLookupTitleSmallStorage"></a>
+<table width="100%"><td width="70%"><font size=6>sceNpLookupTitleSmallStorage<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[関数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>タイトルスモールストレージの取得（同期）<br></div><br>
+
+<!-- 形式 -->
+<div style="margin-left:10px;"><b>形式</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+int <b>sceNpLookupTitleSmallStorage</b> (
+	int32_t <i>transId</i>,
+	void *<i>data</i>,
+	size_t <i>maxSize</i>,
+	size_t *<i>contentLength</i>,
+	void *<i>option</i>
+);
+
+</font></pre></div>
+
+<!-- 呼出条件 -->
+<div style="margin-left:10px;"><b>呼出条件</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">割り込みハンドラから呼び出し不可<br>スレッドから呼び出し可能(割り込み許可状態で呼ぶこと)<br>マルチスレッドセーフである<br><br></div>
+
+<!-- 引数 -->
+<div style="margin-left:10px;"><b>引数</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">
+<table border=0>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPルックアップトランザクションコンテキストID (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>data</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;タイトルスモールストレージデータを格納するためのメモリへのポインタ(OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>maxSize</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>data</i>で指定したメモリのサイズ。最大64KB (IN)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>contentLength</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>data</i>に格納されたデータサイズ (OUT)&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;将来の拡張のためのオプション。必ずNULLを指定すること&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+
+<!-- 返り値 -->
+<div style="margin-left:10px;"><b>返り値</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">正常終了の場合は0を返します。<br>エラーの場合は負の値を返します。主なエラーコードを以下に示しますが、これ以外のエラーコードが返された場合でも破綻しないようにプログラミングしてください。<br><br></div>
+<div style="margin-left:50px;">
+<table border=1>
+<tr>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>マクロ</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>値</b>&nbsp;&nbsp;</td>
+<td valign="TOP" bgcolor="#cccccc">&nbsp;&nbsp;<b>説明</b>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550702&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;np_serviceライブラリ初期化前&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で&nbsp;&nbsp;<br>&nbsp;&nbsp;np_serviceライブラリ初期化後に&nbsp;&nbsp;<br>&nbsp;&nbsp;呼び出してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_OUT_OF_MEMORY&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550703&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;メモリの空き容量が足りない&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Service-Reference-Japanese.htm#sceNpServiceInit">sceNpServiceInit</a>()で指定した&nbsp;&nbsp;<br>&nbsp;&nbsp;メモリプールサイズを使用しています。&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;の呼び忘れがないか確認してください。&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550704&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>option</i>にNULL以外を指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_ABORTED&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550707&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;トランザクションが&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()または&nbsp;&nbsp;<br>&nbsp;&nbsp;<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()&nbsp;&nbsp;<br>&nbsp;&nbsp;により中断された&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_BODY_TOO_LARGE&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550709&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>maxSize</i>で指定したサイズ以上の&nbsp;&nbsp;<br>&nbsp;&nbsp;データがサーバーに設置されていた&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070c&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>data</i>にNULLを指定した&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_INVALID_ID&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x8055070e&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;<i>transId</i>で指定したIDは存在しない&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td valign="TOP">&nbsp;&nbsp;SCE_NP_COMMUNITY_ERROR_NO_LOGIN&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;0x80550705&nbsp;&nbsp;</td>
+<td valign="TOP">&nbsp;&nbsp;NPにサインインしていない&nbsp;&nbsp;</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">NPコミュニケーションIDごとに設置できるデータ(最大64KBの1ファイル)をNPサーバーから取得するためのAPIです。サーバー上のデータが<i>maxSize</i>で指定したバイト数以下の時に、<i>data</i>で指定したメモリにデータを格納し<i>contentLength</i>に取得したデータの総サイズを格納します。<i>data</i>で指定するメモリは<i>maxSize</i>で指定したサイズ以上を必ず確保するようにしてください。<br>この関数は同期処理を行います。つまり、全データの取得が完了するまでブロックされます。この関数からリターンしたら、使用したトランザクションコンテキストを<a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>()を呼び出して破棄してください。<br><br></div>
+
+<!-- 使用例 -->
+<div style="margin-left:10px;"><b>使用例</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+        <div style="margin-left:50px;"><pre><font size=3>int32_t ret;
+int32_t transId;
+void *data=NULL;
+size_t dataSize=0;
+
+// transId,には適切な値が格納されているものとする
+// 別スレッドでcellSysutilCheckCallback()がポーリングされているものとする
+
+data = malloc(<a href="../network/NP_Lookup-Reference-Japanese.htm#SCE_NET_NP_TSS_MAX_SIZE">SCE_NET_NP_TSS_MAX_SIZE</a>);
+if (data == NULL){
+	// エラー処理
+}
+
+ret = sceNpLookupTitleSmallStorage(transId, 
+					data,
+					<a href="../network/NP_Lookup-Reference-Japanese.htm#SCE_NET_NP_TSS_MAX_SIZE">SCE_NET_NP_TSS_MAX_SIZE</a>,
+					&amp;dataSize,
+					NULL);
+If (ret &lt; 0){
+	// エラー処理
+}
+// 取得したデータの使用。バッファオーバーフローに注意
+
+</font></pre></div>
+
+<!-- 備考 -->
+<div style="margin-left:10px;"><b>備考</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">サーバーにファイルが設置されていなかった場合は、0バイトのファイルが設置されていたものとして処理されます。具体的には、<i>contentLength</i>に0が設定され正常終了として返り値に0が返ります。運用のミスによっても発生する状況ですので、この状況でも破綻しないようにプログラミングしてください。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupCreateTransactionCtx">sceNpLookupCreateTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupDestroyTransactionCtx">sceNpLookupDestroyTransactionCtx</a>(), <a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupAbortTransaction">sceNpLookupAbortTransaction</a>()<br><br></div>
+
+<!-- sce_hd2 -->
+<!-- sce_funcname -->
+<hr noshade Size=6 >
+<a name="SCE_NET_NP_TSS_MAX_SIZE"></a>
+<table width="100%"><td width="70%"><font size=6>SCE_NET_NP_TSS_MAX_SIZE<br></font></a></td>
+<td width="30%"valign="center"align="right"><b><font size=4>[定数]</font></b></td></table>
+<hr noshade Size=4 >
+<!-- sce_function -->
+<!-- hp -->
+<div align=right>タイトルスモールストレージの最大サイズ<br></div><br>
+
+<!-- 定義 -->
+<div style="margin-left:10px;"><b>定義</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><pre><font size=3>#include &lt;np/np_lookup.h&gt;
+
+#define <b>SCE_NET_NP_TSS_MAX_SIZE</b>	(64 * 1024U)
+
+</font></pre></div>
+
+<!-- 解説 -->
+<div style="margin-left:10px;"><b>解説</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;">タイトルスモールストレージの最大バイト数を表す定数です。<br><br></div>
+
+<!-- 関連項目 -->
+<div style="margin-left:10px;"><b>関連項目</b></div>
+<hr noshade align="left" size=2 width=20%>
+<br>
+<div style="margin-left:50px;"><a href="../network/NP_Lookup-Reference-Japanese.htm#sceNpLookupTitleSmallStorage">sceNpLookupTitleSmallStorage</a>()<br><br></div>
+<p><p><hr>
+<div ALIGN="right">
+    &copy;2009 Sony Computer Entertainment Inc.  All Rights Reserved.<br>
+    SCE CONFIDENTIAL
+</div>
+</body>
+</html>
